@@ -22,10 +22,16 @@ pimcore.settings.user.user.workspaces = Class.create({
 
     getPanel: function () {
 
+
+
         this.panel = new Ext.Panel({
             title: t("workspaces")
         });
 
         return this.panel;
+    },
+
+    getValues: function () {
+        return {};
     }
 });
