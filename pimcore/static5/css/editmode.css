@@ -202,11 +202,11 @@
 
 .pimcore_tag_snippet .x5-panel-body {
 	background:none;
-	overflow:hidden !important;	
+	overflow:hidden !important;
 }
 
 .pimcore_tag_renderlet .x5-panel-body {
-	overflow:hidden !important;	
+	overflow:hidden !important;
 	background:none;
 }
 
@@ -563,14 +563,14 @@
     color: #fff;
 }
 
-.x5-menu-item-active .x5-menu-item, .x5-menu-item:hover {
-    text-decoration: none;
-    color: #000;
-}
+/*.x5-menu-item-active .x5-menu-item, .x5-menu-item:hover {*/
+    /*text-decoration: none;*/
+    /*color: #000;*/
+/*}*/
 
-.x5-menu-item-text {
+/*.x5-menu-item-text {*/
 
-}
+/*}*/
 
 .x5-menu-item-icon {
     position: absolute;
@@ -1020,6 +1020,27 @@
 .x5-toolbar-default {
     background-image: none;
     background: #000;
+}
+
+
+
+.x5-form-trigger-default {
+    background-image: url(/pimcore/static5/img/icon/bullet_arrow_down.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-color: #000000;
+}
+
+.x5-menu-item-default.x5-menu-item-active {
+    background-image: none;
+    background-color: #FFFFFF;
+    background-image: none;
+    border-radius: 3px;
+    border-color: #FFFFFF;
+}
+
+.x5-menu-item-default.x5-menu-item-active .x5-btn-text {
+    color: #FFF !important;
 }
 
 
