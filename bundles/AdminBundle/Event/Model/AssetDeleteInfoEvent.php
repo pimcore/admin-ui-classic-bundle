@@ -13,11 +13,17 @@
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Event\Admin\Login;
+namespace Pimcore\Bundle\AdminBundle\Event\Model;
+
+use Pimcore\Bundle\AdminBundle\Event\Traits\ElementDeleteInfoEventTrait;
+use Pimcore\Event\Model\AssetEvent;
 
 /**
- * @deprecated and will be removed in Pimcore 11. Use Pimcore\Bundle\AdminBundle\Event\Login\LoginFailedEvent instead
+ * Class AssetDeleteInfoEvent
+ *
+ * @package Pimcore\Event\Model
  */
-class LoginFailedEvent extends \Pimcore\Bundle\AdminBundle\Event\Login\LoginFailedEvent
+class AssetDeleteInfoEvent extends AssetEvent implements ElementDeleteInfoEventInterface
 {
+    use ElementDeleteInfoEventTrait;
 }
