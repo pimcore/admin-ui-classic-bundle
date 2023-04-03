@@ -11,15 +11,15 @@
  * @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-pimcore.registerNS("pimcore.report.webmastertools.settings");
-pimcore.report.webmastertools.settings = Class.create({
+pimcore.registerNS("pimcore.report.webadmintools.settings");
+pimcore.report.webadmintools.settings = Class.create({
 
     initialize: function (parent) {
         this.parent = parent;
     },
 
     getKey: function () {
-        return "webmastertools";
+        return "webadmintools";
     },
 
     getLayout: function () {
@@ -79,8 +79,8 @@ pimcore.report.webmastertools.settings = Class.create({
                     name: "verification",
                     labelWidth: 250,
                     width: 650,
-                    value: this.parent.getValue("webmastertools.sites." + key + ".verification"),
-                    id: "report_settings_webmastertools_verification_" + id
+                    value: this.parent.getValue("webadmintools.sites." + key + ".verification"),
+                    id: "report_settings_webadmintools_verification_" + id
                 }
             ]
         };
@@ -102,7 +102,7 @@ pimcore.report.webmastertools.settings = Class.create({
             }
 
             sitesData[key] = {
-                verification: Ext.getCmp("report_settings_webmastertools_verification_" + id).getValue()
+                verification: Ext.getCmp("report_settings_webadmintools_verification_" + id).getValue()
             };
         }, this);
 
@@ -115,4 +115,4 @@ pimcore.report.webmastertools.settings = Class.create({
 });
 
 
-pimcore.report.settings.broker.push("pimcore.report.webmastertools.settings");
+pimcore.report.settings.broker.push("pimcore.report.webadmintools.settings");
