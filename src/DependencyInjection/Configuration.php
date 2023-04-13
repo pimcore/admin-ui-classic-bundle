@@ -279,9 +279,6 @@ final class Configuration implements ConfigurationInterface
         // add session attribute bag config
         $this->addAdminSessionAttributeBags($rootNode);
 
-        // unauthenticated routes won't be double checked for authentication in AdminControllerListener
-        $this->addRoutesChild($rootNode, 'unauthenticated_routes');
-
         $rootNode
             ->children()
                 ->arrayNode('translations')

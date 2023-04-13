@@ -31,7 +31,7 @@ use Symfony\Component\Translation\Exception\InvalidArgumentException;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-abstract class AdminController extends Controller implements AdminControllerInterface
+abstract class AdminController extends Controller
 {
     protected TokenStorageUserResolver $tokenResolver;
 
@@ -69,22 +69,6 @@ abstract class AdminController extends Controller implements AdminControllerInte
         $services['pimcore_admin.serializer'] = '?Pimcore\\Admin\\Serializer';
 
         return $services;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function needsSessionDoubleAuthenticationCheck(): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function needsStorageDoubleAuthenticationCheck(): bool
-    {
-        return true;
     }
 
     /**
