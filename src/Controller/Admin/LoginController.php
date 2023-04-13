@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\Login\LoginRedirectEvent;
 use Pimcore\Bundle\AdminBundle\Event\Login\LostPasswordEvent;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\System\AdminConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\KernelResponseEventInterface;
@@ -312,6 +313,7 @@ class LoginController extends AdminController implements KernelControllerEventIn
     {
         return [
             'config' => $config,
+            'adminSettings' => AdminConfig::get(),
             'pluginCssPaths' => $this->bundleManager->getCssPaths(),
         ];
     }
