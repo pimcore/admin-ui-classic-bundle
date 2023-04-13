@@ -1,4 +1,4 @@
-# Pimcore Admin Classic Bundle
+# Pimcore Admin Classic Bundlefff
 
 The Admin Classic Bundle provides a Backend UI for Pimcore.
 It is based on the [ExtJS](https://www.sencha.com/products/extjs/) framework.
