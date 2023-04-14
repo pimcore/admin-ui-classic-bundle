@@ -1,7 +1,7 @@
 {
   "AdminBundle/build/admin.js": "/bundles/pimcoreadmin/build/admin/admin.js",
   "AdminBundle/build/runtime.js": "/bundles/pimcoreadmin/build/admin/runtime.js",
-  "AdminBundle/build/404.css": "/bundles/pimcoreadmin/build/admin/404.css",
+  "AdminBundle/build/835.css": "/bundles/pimcoreadmin/build/admin/835.css",
   "AdminBundle/build/images/spritesheet.svg": "/bundles/pimcoreadmin/build/admin/images/spritesheet.a4e0eb7a.svg",
   "AdminBundle/build/images/spritesheet-2x.png": "/bundles/pimcoreadmin/build/admin/images/spritesheet-2x.7ea3a6d4.png",
   "AdminBundle/build/images/marker-icon-2x.png": "/bundles/pimcoreadmin/build/admin/images//marker-icon-2x.png",
