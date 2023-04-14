@@ -24,6 +24,8 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Bundle\AdminBundle\System\Config as SystemConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Maintenance\Executor;
@@ -82,6 +84,8 @@ class IndexController extends AdminController implements KernelResponseEventInte
         $perspectiveConfig = new \Pimcore\Bundle\AdminBundle\Perspective\Config();
         $templateParams = [
             'config' => $config,
+            'systemSettings' => SystemConfig::get(),
+            'adminSettings' => AdminConfig::get(),
             'perspectiveConfig' => $perspectiveConfig,
         ];
 
@@ -177,8 +181,9 @@ class IndexController extends AdminController implements KernelResponseEventInte
 
     protected function buildPimcoreSettings(Request $request, array &$templateParams, User $user, KernelInterface $kernel, ExecutorInterface $maintenanceExecutor, CsrfProtectionHandler $csrfProtection): static
     {
-        $config                = $templateParams['config'];
-        $dashboardHelper       = new Dashboard($user);
+        $config = $templateParams['config'];
+        $systemSettings = $templateParams['systemSettings'];
+        $dashboardHelper = new Dashboard($user);
         $customAdminEntrypoint = $this->getParameter('pimcore_admin.custom_admin_route_name');
 
         try {
@@ -203,19 +208,19 @@ class IndexController extends AdminController implements KernelResponseEventInte
             'language'         => $request->getLocale(),
             'websiteLanguages' => Admin::reorderWebsiteLanguages(
                 $this->getAdminUser(),
-                $config['general']['valid_languages'],
+                $systemSettings['general']['valid_languages'],
                 true
             ),
 
             // flags
             'showCloseConfirmation'          => true,
-            'debug_admin_translations'       => (bool)$config['general']['debug_admin_translations'],
+            'debug_admin_translations'       => (bool)$systemSettings['general']['debug_admin_translations'],
             'document_generatepreviews'      => (bool)$config['documents']['generate_preview'],
             'asset_disable_tree_preview'     => (bool)$config['assets']['disable_tree_preview'],
             'chromium'                       => \Pimcore\Image\Chromium::isSupported(),
             'videoconverter'                 => \Pimcore\Video::isAvailable(),
             'asset_hide_edit'                => (bool)$config['assets']['hide_edit_image'],
-            'main_domain'                    => $config['general']['domain'],
+            'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
             'timezone'                       => $config['general']['timezone'],
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
@@ -261,7 +266,7 @@ class IndexController extends AdminController implements KernelResponseEventInte
         $this
             ->addSystemVarSettings($settings)
             ->addMaintenanceSettings($settings, $maintenanceExecutor)
-            ->addMailSettings($settings, $config)
+            ->addMailSettings($settings, $config, $systemSettings)
             ->addCustomViewSettings($settings)
             ->addNotificationSettings($settings, $config);
 
@@ -322,12 +327,12 @@ class IndexController extends AdminController implements KernelResponseEventInte
         return $this;
     }
 
-    protected function addMailSettings(array &$settings, Config $config): static
+    protected function addMailSettings(array &$settings, Config $config, array $systemSettings): static
     {
         //mail settings
         $mailIncomplete = false;
-        if (isset($config['email'])) {
-            if (\Pimcore::inDebugMode() && empty($config['email']['debug']['email_addresses'])) {
+        if (isset($config['email']) && $systemSettings['email']) {
+            if (\Pimcore::inDebugMode() && empty($systemSettings['email']['debug']['email_addresses'])) {
                 $mailIncomplete = true;
             }
             if (empty($config['email']['sender']['email'])) {
