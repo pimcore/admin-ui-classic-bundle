@@ -619,14 +619,6 @@
                              });
                          }
  
-                         if (perspectiveCfg.inTreeContextMenu("asset.add.uploadFromUrl")) {
-                             menuItems.push({
-                                 text: t("import_from_url"),
-                                 handler: this.importFromUrl.bind(this, tree, record),
-                                 iconCls: "pimcore_icon_world pimcore_icon_overlay_add"
-                             });
-                         }
- 
                          if (menuItems.length > 0) {
                              menu.add(new Ext.menu.Item({
                                  text: t('add_assets'),
@@ -1320,39 +1312,6 @@
          });
  
          this.uploadWindow.show();
-     },
- 
-     importFromUrl: function (tree, record) {
- 
-         Ext.MessageBox.prompt(t("import_from_url"), ' ', function (button, value, object) {
-             if (button == "ok") {
-                 var win = new Ext.Window({
-                     html: t("please_wait"),
-                     closable: false,
-                     bodyStyle: "padding: 10px;",
-                     modal: true
-                 });
-                 win.show();
- 
-                 Ext.Ajax.request({
-                     url: Routing.generate('pimcore_admin_asset_importurl'),
-                     method: 'POST',
-                     params: {
-                         id: record.data.id,
-                         url: value
-                     },
-                     success: function () {
-                         win.close();
-                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
- 
-                     }.bind(this),
-                     failure: function() {
-                         win.close();
-                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
-                     }
-                 });
-             }
-         }.bind(this), null, false, 'https://');
      },
  
      addAssetComplete: function (tree, record, config, file, response) {
