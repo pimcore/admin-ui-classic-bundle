@@ -25,7 +25,7 @@ use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
-use Pimcore\Bundle\AdminBundle\System\Config as SystemConfig;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Maintenance\Executor;
@@ -84,7 +84,7 @@ class IndexController extends AdminController implements KernelResponseEventInte
         $perspectiveConfig = new \Pimcore\Bundle\AdminBundle\Perspective\Config();
         $templateParams = [
             'config' => $config,
-            'systemSettings' => SystemConfig::get(),
+            'systemSettings' => SystemSettingsConfig::get(),
             'adminSettings' => AdminConfig::get(),
             'perspectiveConfig' => $perspectiveConfig,
         ];
@@ -183,6 +183,7 @@ class IndexController extends AdminController implements KernelResponseEventInte
     {
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
+        $adminSettings = $templateParams['adminSettings'];
         $dashboardHelper = new Dashboard($user);
         $customAdminEntrypoint = $this->getParameter('pimcore_admin.custom_admin_route_name');
 
@@ -216,10 +217,10 @@ class IndexController extends AdminController implements KernelResponseEventInte
             'showCloseConfirmation'          => true,
             'debug_admin_translations'       => (bool)$systemSettings['general']['debug_admin_translations'],
             'document_generatepreviews'      => (bool)$config['documents']['generate_preview'],
-            'asset_disable_tree_preview'     => (bool)$config['assets']['disable_tree_preview'],
+            'asset_disable_tree_preview'     => (bool)$adminSettings['assets']['disable_tree_preview'],
             'chromium'                       => \Pimcore\Image\Chromium::isSupported(),
             'videoconverter'                 => \Pimcore\Video::isAvailable(),
-            'asset_hide_edit'                => (bool)$config['assets']['hide_edit_image'],
+            'asset_hide_edit'                => (bool)$adminSettings['assets']['hide_edit_image'],
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
             'timezone'                       => $config['general']['timezone'],

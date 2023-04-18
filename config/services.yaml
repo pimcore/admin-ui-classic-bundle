@@ -79,13 +79,6 @@ services:
     Pimcore\Bundle\AdminBundle\Service\Workflow\ActionsButtonService: ~
 
     #
-    # System Config Services
+    # Admin Config Services
     #
-    Pimcore\Bundle\AdminBundle\System\Config: ~
     Pimcore\Bundle\AdminBundle\System\AdminConfig: ~
-
-
-    #
-    # System Config Helper Service
-    #
-    Pimcore\Bundle\AdminBundle\Helper\SystemConfig: ~

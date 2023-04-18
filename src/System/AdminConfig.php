@@ -16,9 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\System;
 
-use Pimcore\Bundle\AdminBundle\Helper\SystemConfig;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config\LocationAwareConfigRepository;
+use Pimcore\Helper\SystemConfig;
 
 /**
  * @internal
@@ -27,7 +27,9 @@ final class AdminConfig
 {
     private const CONFIG_ID = 'admin_system_settings';
 
-    private const DATA_KEY = 'branding';
+    private const BRANDING = 'branding';
+
+    private const ASSETS = 'assets';
 
     private const SCOPE = 'pimcore_admin_system_settings';
 
@@ -39,7 +41,8 @@ final class AdminConfig
     {
         if (!self::$locationAwareConfigRepository) {
             $containerConfig = \Pimcore::getContainer()->getParameter('pimcore_admin.config');
-            $config[self::CONFIG_ID][self::DATA_KEY] = $containerConfig[self::DATA_KEY];
+            $config[self::CONFIG_ID][self::BRANDING] = $containerConfig[self::BRANDING];
+            $config[self::CONFIG_ID][self::ASSETS] = $containerConfig[self::ASSETS];
             $storageConfig = $containerConfig['config_location'][self::CONFIG_ID];
 
             self::$locationAwareConfigRepository = new LocationAwareConfigRepository(
@@ -64,12 +67,17 @@ final class AdminConfig
     {
         $repository = self::getRepository();
 
-        $data[self::DATA_KEY] = [
+        $data[self::BRANDING] = [
             'login_screen_invert_colors' => $values['branding.login_screen_invert_colors'],
             'color_login_screen' => $values['branding.color_login_screen'],
             'color_admin_interface' => $values['branding.color_admin_interface'],
             'color_admin_interface_background' => $values['branding.color_admin_interface_background'],
             'login_screen_custom_image' => str_replace('%', '%%', $values['branding.login_screen_custom_image']),
+        ];
+
+        $data[self::ASSETS] = [
+            'hide_edit_image' => $values['assets.hide_edit_image'],
+            'disable_tree_preview' => $values['assets.disable_tree_preview'],
         ];
 
         $repository->saveConfig(self::CONFIG_ID, $data, function ($key, $data) {
