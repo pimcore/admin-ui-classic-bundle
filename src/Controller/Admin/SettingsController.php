@@ -483,7 +483,7 @@ class SettingsController extends AdminController
         CoreCacheHandler $cache,
         Filesystem $filesystem,
         CacheClearer $symfonyCacheClearer,
-        SystemConfig $config
+        SystemSettingsConfig $config
     ): JsonResponse {
         $this->checkPermission('system_settings');
 
