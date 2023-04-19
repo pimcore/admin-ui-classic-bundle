@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Service\Workflow\ActionsButtonService;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Model\Asset;
@@ -44,7 +44,7 @@ use Symfony\Component\Workflow\Workflow;
  *
  * @internal
  */
-class WorkflowController extends AdminController implements KernelControllerEventInterface
+class WorkflowController extends AdminAbstractController implements KernelControllerEventInterface
 {
     private ConcreteObject|Document|Asset|null $element;
 

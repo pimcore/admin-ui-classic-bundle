@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Db;
@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @internal
  */
-class ElementController extends AdminController
+class ElementController extends AdminAbstractController
 {
     /**
      * @Route("/element/lock-element", name="pimcore_admin_element_lockelement", methods={"PUT"})
@@ -136,7 +136,7 @@ class ElementController extends AdminController
         }
     }
 
-    protected function processNoteTypesFromParameters(string $parameterName): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+    protected function processNoteTypesFromParameters(string $parameterName): JsonResponse
     {
         $config = $this->getParameter($parameterName);
         $result = [];
@@ -154,9 +154,9 @@ class ElementController extends AdminController
      *
      * @param Request $request
      *
-     * @return \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse|JsonResponse
+     * @return JsonResponse
      */
-    public function noteTypes(Request $request): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse|JsonResponse
+    public function noteTypes(Request $request): JsonResponse
     {
         switch ($request->get('ctype')) {
             case 'document':
@@ -403,9 +403,9 @@ class ElementController extends AdminController
      *
      * @param Request $request
      *
-     * @return \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
-    public function getReplaceAssignmentsBatchJobsAction(Request $request): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+    public function getReplaceAssignmentsBatchJobsAction(Request $request): JsonResponse
     {
         $element = null;
 

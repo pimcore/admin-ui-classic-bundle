@@ -18,14 +18,14 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Doctrine\DBAL\Connection;
 use Exception;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
+use Pimcore\Extension\Bundle\PimcoreBundleManager;
 use Pimcore\Maintenance\Executor;
 use Pimcore\Maintenance\ExecutorInterface;
 use Pimcore\Model\Asset;
@@ -37,6 +37,7 @@ use Pimcore\Model\User;
 use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -49,7 +50,7 @@ use Symfony\Contracts\Translation\LocaleAwareInterface;
 /**
  * @internal
  */
-class IndexController extends AdminController implements KernelResponseEventInterface
+class IndexController extends AdminAbstractController implements KernelResponseEventInterface
 {
     private EventDispatcherInterface $eventDispatcher;
 
@@ -76,7 +77,8 @@ class IndexController extends AdminController implements KernelResponseEventInte
         KernelInterface $kernel,
         Executor $maintenanceExecutor,
         CsrfProtectionHandler $csrfProtection,
-        Config $config
+        Config $config,
+        PimcoreBundleManager $bundleManager,
     ): Response {
         $user = $this->getAdminUser();
         $perspectiveConfig = new \Pimcore\Bundle\AdminBundle\Perspective\Config();
@@ -87,7 +89,7 @@ class IndexController extends AdminController implements KernelResponseEventInte
 
         $this
             ->addRuntimePerspective($templateParams, $user)
-            ->addPluginAssets($templateParams);
+            ->addPluginAssets($bundleManager, $templateParams);
 
         $this->buildPimcoreSettings($request, $templateParams, $user, $kernel, $maintenanceExecutor, $csrfProtection);
 
@@ -156,10 +158,10 @@ class IndexController extends AdminController implements KernelResponseEventInte
         return $this;
     }
 
-    protected function addPluginAssets(array &$templateParams): static
+    protected function addPluginAssets(PimcoreBundleManager $bundleManager, array &$templateParams): static
     {
-        $templateParams['pluginJsPaths'] = $this->bundleManager->getJsPaths();
-        $templateParams['pluginCssPaths'] = $this->bundleManager->getCssPaths();
+        $templateParams['pluginJsPaths'] = $bundleManager->getJsPaths();
+        $templateParams['pluginCssPaths'] = $bundleManager->getCssPaths();
 
         return $this;
     }

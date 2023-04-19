@@ -51,7 +51,6 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
 
         $loader->load('security_services.yaml');
         $loader->load('event_listeners.yaml');
-        $loader->load('serializer.yaml');
         $loader->load('export.yaml');
 
         //Set Config for GDPR data providers to container parameters

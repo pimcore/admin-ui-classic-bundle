@@ -16,9 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller;
 
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
-use Pimcore\Bundle\AdminBundle\Security\User\TokenStorageUserResolver;
-use Pimcore\Bundle\AdminBundle\Security\User\User as UserProxy;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Pimcore\Security\User\TokenStorageUserResolver;
+use Pimcore\Security\User\User as UserProxy;
 use Pimcore\Controller\Controller;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
 use Pimcore\Logger;

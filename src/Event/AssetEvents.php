@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Pimcore
@@ -14,10 +13,14 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\AdminBundle\Security\User\Exception;
+namespace Pimcore\Bundle\AdminBundle\Event;
 
-use Symfony\Component\Security\Core\Exception\AccountStatusException;
-
-class InvalidUserException extends AccountStatusException
+class AssetEvents
 {
+    /**
+     * @Event("Pimcore\Bundle\AdminBundle\Event\Model\AssetDeleteInfoEvent")
+     *
+     * @var string
+     */
+    const DELETE_INFO = 'pimcore.asset.deleteInfo';
 }
