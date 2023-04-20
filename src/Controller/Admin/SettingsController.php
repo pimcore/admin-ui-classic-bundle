@@ -18,7 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
-use Pimcore\Bundle\AdminBundle\System\Config as SystemConfig;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Cache;
 use Pimcore\Cache\Core\CoreCacheHandler;
 use Pimcore\Cache\Symfony\CacheClearer;
@@ -384,11 +384,11 @@ class SettingsController extends AdminController
      * @Route("/get-system", name="pimcore_admin_settings_getsystem", methods={"GET"})
      *
      * @param Request $request
-     * @param SystemConfig $config
+     * @param SystemSettingsConfig $config
      *
      * @return JsonResponse
      */
-    public function getSystemAction(Request $request, SystemConfig $config): JsonResponse
+    public function getSystemAction(Request $request, SystemSettingsConfig $config): JsonResponse
     {
         $this->checkPermission('system_settings');
         $config = $config->getSystemSettingsConfig();
@@ -483,7 +483,7 @@ class SettingsController extends AdminController
         CoreCacheHandler $cache,
         Filesystem $filesystem,
         CacheClearer $symfonyCacheClearer,
-        SystemConfig $config
+        SystemSettingsConfig $config
     ): JsonResponse {
         $this->checkPermission('system_settings');
 

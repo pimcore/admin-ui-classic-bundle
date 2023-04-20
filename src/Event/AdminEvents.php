@@ -83,15 +83,6 @@ class AdminEvents
     const INDEX_ACTION_SETTINGS = 'pimcore.admin.indexAction.settings';
 
     /**
-     * The SAVE_SYSTEM_SETTINGS event is triggered when the system settings are saved.
-     *
-     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
-     *
-     * @var string
-     */
-    const SAVE_ACTION_SYSTEM_SETTINGS = 'pimcore.admin.saveAction.system.settings';
-
-    /**
      * Fired before the request params are parsed. This event apply to the grid list.
      *
      * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController

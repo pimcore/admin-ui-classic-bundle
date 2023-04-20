@@ -95,7 +95,7 @@ pimcore.settings.appearance = Class.create({
                     {
                             xtype: 'fieldset',
                             title: t('colors'),
-                            collapsible: false,
+                            collapsible: true,
                             width: "100%",
                             autoHeight: true,
                             items: [{
@@ -130,7 +130,7 @@ pimcore.settings.appearance = Class.create({
                         }, {
                             xtype: 'fieldset',
                             title: t('custom_logo'),
-                            collapsible: false,
+                            collapsible: true,
                             width: "100%",
                             autoHeight: true,
                             items: [{
@@ -174,7 +174,7 @@ pimcore.settings.appearance = Class.create({
                         }, {
                             xtype: 'fieldset',
                             title: t('custom_login_background_image'),
-                            collapsible: false,
+                            collapsible: true,
                             width: "100%",
                             layout: 'hbox',
                             autoHeight: true,
@@ -227,7 +227,30 @@ pimcore.settings.appearance = Class.create({
                                     urlToCustomImageField.setValue('');
                                 }
                             }]
-                        }
+                        },  {
+                        xtype: 'fieldset',
+                        title: t('assets'),
+                        collapsible: true,
+                        collapsed: false,
+                        autoHeight: true,
+                        labelWidth: 250,
+                        defaultType: 'textfield',
+                        defaults: {width: 600},
+                        items: [
+                            {
+                                boxLabel: t("hide_edit_image_tab"),
+                                xtype: "checkbox",
+                                name: "assets.hide_edit_image",
+                                checked: this.getValue("assets.hide_edit_image")
+                            },
+                            {
+                                boxLabel: t("disable_tree_preview"),
+                                xtype: "checkbox",
+                                name: "assets.disable_tree_preview",
+                                checked: this.getValue("assets.disable_tree_preview")
+                            }
+                        ]
+                    }
                 ]
             });
 
