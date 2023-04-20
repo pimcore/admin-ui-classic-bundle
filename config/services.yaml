@@ -4,15 +4,6 @@ services:
         autoconfigure: true
 
     #
-    # Notification Services
-    #
-
-    Pimcore\Model\Notification\Service\NotificationService:
-        public: true
-
-    Pimcore\Model\Notification\Service\UserService: ~
-
-    #
     # CONTROLLERS
     #
 
