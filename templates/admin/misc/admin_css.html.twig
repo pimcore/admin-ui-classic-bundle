@@ -43,8 +43,8 @@
 {% endif %}
 
 {# CUSTOM BRANDING #}
-{% if config is defined and config['branding']['color_admin_interface'] is defined %}
-    {% set interfaceColor = config['branding']['color_admin_interface'] %}
+{% if adminSettings is defined and adminSettings['branding']['color_admin_interface'] is defined %}
+    {% set interfaceColor = adminSettings['branding']['color_admin_interface'] %}
 #pimcore_signet {
     background-color: {{ interfaceColor }} !important;
 }
