@@ -729,7 +729,7 @@ class SettingsController extends AdminAbstractController
                 'rootId' => 1,
                 'domains' => '',
                 'rootPath' => '/',
-                'domain' => $this->translator->trans('main_site' [], 'admin'),
+                'domain' => $this->translator->trans('main_site', [], 'admin'),
             ];
         }
 
