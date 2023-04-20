@@ -46,17 +46,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @internal
  */
 class IndexController extends AdminAbstractController implements KernelResponseEventInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
+        protected TranslatorInterface $translator
+    )
     {
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -88,6 +89,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         ];
 
         $this
+            ->setAdminLanguage($request, $user)
             ->addRuntimePerspective($templateParams, $user)
             ->addPluginAssets($bundleManager, $templateParams);
 

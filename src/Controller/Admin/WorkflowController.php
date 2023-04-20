@@ -38,6 +38,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\Workflow;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/workflow")
@@ -47,6 +48,10 @@ use Symfony\Component\Workflow\Workflow;
 class WorkflowController extends AdminAbstractController implements KernelControllerEventInterface
 {
     private ConcreteObject|Document|Asset|null $element;
+
+    public function __construct(protected TranslatorInterface $translator)
+    {
+    }
 
     /**
      * Returns a JSON of the available workflow actions to the admin panel
@@ -337,11 +342,11 @@ class WorkflowController extends AdminAbstractController implements KernelContro
         $dot = Console::getExecutable('dot');
 
         if (!$php) {
-            throw new \InvalidArgumentException($this->trans('workflow_cmd_not_found', ['php']));
+            throw new \InvalidArgumentException($this->translator->trans('workflow_cmd_not_found', ['php'], 'admin'));
         }
 
         if (!$dot) {
-            throw new \InvalidArgumentException($this->trans('workflow_cmd_not_found', ['dot']));
+            throw new \InvalidArgumentException($this->translator->trans('workflow_cmd_not_found', ['dot'], 'admin'));
         }
 
         $cmd = $php . ' ' . PIMCORE_PROJECT_ROOT . '/bin/console pimcore:workflow:dump ${WNAME} ${WPLACES} | ${DOT} -Tsvg';

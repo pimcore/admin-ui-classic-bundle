@@ -59,6 +59,10 @@ class SettingsController extends AdminAbstractController
 
     private const CUSTOM_LOGO_PATH = 'custom-logo.image';
 
+    public function __construct(protected TranslatorInterface $translator)
+    {
+    }
+
     /**
      * @Route("/display-custom-logo", name="pimcore_settings_display_custom_logo", methods={"GET"})
      *
@@ -725,7 +729,7 @@ class SettingsController extends AdminAbstractController
                 'rootId' => 1,
                 'domains' => '',
                 'rootPath' => '/',
-                'domain' => $this->trans('main_site'),
+                'domain' => $this->translator->trans('main_site' [], 'admin'),
             ];
         }
 

@@ -58,6 +58,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
     public function __construct(
         protected ResponseHelper $responseHelper,
         protected TranslatorInterface $translator,
+        protected PimcoreBundleManager $bundleManager,
     ) {
     }
 
@@ -97,7 +98,6 @@ class LoginController extends AdminAbstractController implements KernelControlle
         CsrfProtectionHandler $csrfProtection,
         Config $config,
         EventDispatcherInterface $eventDispatcher,
-        PimcoreBundleManager $bundleManager,
     ): RedirectResponse|Response {
         if ($request->get('_route') === 'pimcore_admin_login_fallback') {
             return $this->redirectToRoute('pimcore_admin_login', $request->query->all(), Response::HTTP_MOVED_PERMANENTLY);
@@ -110,7 +110,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
             return $this->redirectToRoute('pimcore_admin_index');
         }
 
-        $params = $this->buildLoginPageViewParams($bundleManager, $config);
+        $params = $this->buildLoginPageViewParams($config);
 
         $session_gc_maxlifetime = ini_get('session.gc_maxlifetime');
         if (empty($session_gc_maxlifetime)) {
@@ -312,20 +312,20 @@ class LoginController extends AdminAbstractController implements KernelControlle
     /**
      * @return array{config: Config, pluginCssPaths: string[]}
      */
-    protected function buildLoginPageViewParams(PimcoreBundleManager $bundleManager, Config $config): array
+    protected function buildLoginPageViewParams(Config $config): array
     {
         return [
             'config' => $config,
-            'pluginCssPaths' => $bundleManager->getCssPaths(),
+            'pluginCssPaths' => $this->bundleManager->getCssPaths(),
         ];
     }
 
     /**
      * @Route("/login/2fa", name="pimcore_admin_2fa")
      */
-    public function twoFactorAuthenticationAction(Request $request, Config $config, PimcoreBundleManager $bundleManager): Response
+    public function twoFactorAuthenticationAction(Request $request, Config $config): Response
     {
-        $params = $this->buildLoginPageViewParams($bundleManager, $config);
+        $params = $this->buildLoginPageViewParams($config);
 
         if ($request->hasSession()) {
             $session = $request->getSession();
@@ -349,9 +349,9 @@ class LoginController extends AdminAbstractController implements KernelControlle
         Request $request,
         Config $config,
         GoogleAuthenticatorInterface $twoFactor,
-        PimcoreBundleManager $bundleManager): Response
+    ): Response
     {
-        $params = $this->buildLoginPageViewParams($bundleManager, $config);
+        $params = $this->buildLoginPageViewParams($config);
         $params['setup'] = true;
 
         $user = $this->getAdminUser();
