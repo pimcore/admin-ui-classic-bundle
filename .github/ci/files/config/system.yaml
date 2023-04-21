@@ -5,7 +5,9 @@ pimcore:
         domain: pimcore-test.dev
         redirect_to_maindomain: false
         language: en
-        valid_languages: 'en,de'
+        valid_languages:
+            - en
+            - de
         fallback_languages:
             en: ''
             de: ''
@@ -63,3 +65,6 @@ pimcore_admin:
         color_login_screen: ''
         color_admin_interface: ''
         login_screen_custom_image: ''
+    translations:
+        path: "@PimcoreCoreBundle/translations"
+
