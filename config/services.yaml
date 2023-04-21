@@ -56,6 +56,11 @@ services:
 
     Pimcore\Bundle\AdminBundle\Helper\GridHelperService: ~
 
+    #
+    # User Helper Service
+    #
+
+    Pimcore\Bundle\AdminBundle\Helper\User: ~
 
     #
     # Default Preview Generator
