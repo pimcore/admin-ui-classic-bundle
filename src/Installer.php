@@ -17,7 +17,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Schema\Schema;
 use Pimcore\Extension\Bundle\Installer\SettingsStoreAwareInstaller;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 class Installer extends SettingsStoreAwareInstaller
 {
@@ -43,6 +46,15 @@ class Installer extends SettingsStoreAwareInstaller
               KEY `language` (`language`)
             ) DEFAULT CHARSET=utf8mb4;"
     ];
+
+    protected ?Schema $schema = null;
+
+    public function __construct(
+        protected BundleInterface $bundle,
+        protected Connection $db
+    ) {
+        parent::__construct($bundle);
+    }
 
     protected function addPermissions(): void
     {
@@ -110,5 +122,10 @@ class Installer extends SettingsStoreAwareInstaller
     {
         $this->removePermissions();
         parent::uninstall();
+    }
+
+    protected function getSchema(): Schema
+    {
+        return $this->schema ??= $this->db->createSchemaManager()->introspectSchema();
     }
 }

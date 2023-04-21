@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
+use Pimcore\Bundle\AdminBundle\Perspective\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -384,7 +385,6 @@ class UserController extends AdminAbstractController implements KernelController
      * @Route("/user/get", name="pimcore_admin_user_get", methods={"GET"})
      *
      * @param Request $request
-     * @param TranslatorInterface $translator
      *
      * @return JsonResponse
      *
@@ -473,7 +473,7 @@ class UserController extends AdminAbstractController implements KernelController
         unset($userData['twoFactorAuthentication']['secret']);
         $userData['hasImage'] = $user->hasImage();
 
-        $availablePerspectives = \Pimcore\Bundle\AdminBundle\Perspective\Config::getAvailablePerspectives(null);
+        $availablePerspectives = Config::getAvailablePerspectives(null);
 
         return $this->adminJson([
             'success' => true,
@@ -754,7 +754,7 @@ class UserController extends AdminAbstractController implements KernelController
         $availableUserPermissions = $availableUserPermissionsList->load();
         $availableUserPermissions = array_map($replaceFn, $availableUserPermissions);
 
-        $availablePerspectives = \Pimcore\Bundle\AdminBundle\Perspective\Config::getAvailablePerspectives(null);
+        $availablePerspectives = Config::getAvailablePerspectives(null);
 
         return $this->adminJson([
             'success' => true,

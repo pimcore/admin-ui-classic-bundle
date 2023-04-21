@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Security;
 
+use Pimcore\Security\User\User;
 use Scheb\TwoFactorBundle\Security\TwoFactor\AuthenticationContextInterface;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Condition\TwoFactorConditionInterface;
 
@@ -32,7 +33,7 @@ class PimcoreUserTwoFactorCondition implements TwoFactorConditionInterface
 
         $user = $context->getUser();
 
-        if (!$user instanceof \Pimcore\Bundle\AdminBundle\Security\User\User) {
+        if (!$user instanceof User) {
             return false;
         }
 
