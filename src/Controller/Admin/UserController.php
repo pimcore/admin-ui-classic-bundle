@@ -1120,9 +1120,7 @@ class UserController extends AdminController implements KernelControllerEventInt
      */
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
-        $data = UserHelper::getDefaultKeyBindings();
-
-        return $this->adminJson(['success' => true, 'data' => $data]);
+        return $this->adminJson(['success' => true, 'data' => UserHelper::getDefaultKeyBindings()]);
     }
 
     /**
