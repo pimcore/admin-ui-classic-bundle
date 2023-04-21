@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminController;
 use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -367,7 +368,7 @@ class UserController extends AdminController implements KernelControllerEventInt
                 $tmpArray[] = json_decode($item, true);
             }
             $tmpArray = array_values(array_filter($tmpArray));
-            $tmpArray = User::strictKeybinds($tmpArray);
+            $tmpArray = UserHelper::strictKeybinds($tmpArray);
             $tmpArray = json_encode($tmpArray);
 
             $user->setKeyBindings($tmpArray);
@@ -637,7 +638,7 @@ class UserController extends AdminController implements KernelControllerEventInt
         $userData = $user->getObjectVars();
         $contentLanguages = Tool\Admin::reorderWebsiteLanguages($user, Tool::getValidLanguages());
         $userData['contentLanguages'] = $contentLanguages;
-        $userData['keyBindings'] = $user->getKeyBindings();
+        $userData['keyBindings'] = $user->getKeyBindings() ?? UserHelper::getDefaultKeyBindings();
 
         unset($userData['password']);
         $userData['twoFactorAuthentication'] = $user->getTwoFactorAuthentication();
@@ -1120,7 +1121,7 @@ class UserController extends AdminController implements KernelControllerEventInt
      */
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
-        $data = User::getDefaultKeyBindings();
+        $data = UserHelper::getDefaultKeyBindings();
 
         return $this->adminJson(['success' => true, 'data' => $data]);
     }
