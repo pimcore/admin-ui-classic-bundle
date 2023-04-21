@@ -60,8 +60,7 @@ services:
     # User Helper Service
     #
 
-    Pimcore\Bundle\AdminBundle\Helper\UserHelper: ~
-
+    Pimcore\Bundle\AdminBundle\Helper\User: ~
 
     #
     # Default Preview Generator
