@@ -27,7 +27,7 @@ use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Codeception\Stub;
 
-class AssetControllerTest extends ModelTestCase
+class AssetControllerPermissionsTest extends ModelTestCase
 {
     protected Asset\Folder $permissionfoo;
 

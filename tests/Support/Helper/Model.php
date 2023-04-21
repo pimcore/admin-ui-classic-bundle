@@ -18,6 +18,10 @@ namespace Pimcore\Bundle\AdminBundle\Tests\Support\Helper;
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
-class Model extends \Codeception\Module
+class Model extends \Pimcore\Tests\Support\Helper\Model
 {
+    public function initializeDefinitions() : void
+    {
+        $this->setupPimcoreClass_Unittest();
+    }
 }
