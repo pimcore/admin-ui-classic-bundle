@@ -28,7 +28,7 @@ use Pimcore\Tests\Support\Test\ModelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
-class DocumentControllerPermissionsTest extends ModelTestCase
+class ModelDocumentPermissionsTest extends ModelTestCase
 {
     protected Document\Folder $permissionfoo;
 

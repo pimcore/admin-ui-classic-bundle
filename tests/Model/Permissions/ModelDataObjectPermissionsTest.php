@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Pimcore\Model\DataObject;
 
-class DataObjectControllerPermissionsTest Extends ModelTestCase
+class ModelDataObjectPermissionsTest Extends ModelTestCase
 {
 
     protected DataObject\Folder $permissionfoo;
