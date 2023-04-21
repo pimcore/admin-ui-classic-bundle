@@ -368,7 +368,6 @@ class UserController extends AdminController implements KernelControllerEventInt
                 $tmpArray[] = json_decode($item, true);
             }
             $tmpArray = array_values(array_filter($tmpArray));
-            $tmpArray = UserHelper::strictKeybinds($tmpArray);
             $tmpArray = json_encode($tmpArray);
 
             $user->setKeyBindings($tmpArray);
@@ -638,7 +637,7 @@ class UserController extends AdminController implements KernelControllerEventInt
         $userData = $user->getObjectVars();
         $contentLanguages = Tool\Admin::reorderWebsiteLanguages($user, Tool::getValidLanguages());
         $userData['contentLanguages'] = $contentLanguages;
-        $userData['keyBindings'] = $user->getKeyBindings() ?? UserHelper::getDefaultKeyBindings();
+        $userData['keyBindings'] = UserHelper::getDefaultKeyBindings($user);
 
         unset($userData['password']);
         $userData['twoFactorAuthentication'] = $user->getTwoFactorAuthentication();
