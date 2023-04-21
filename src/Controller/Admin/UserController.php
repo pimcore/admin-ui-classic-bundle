@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
+
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -368,7 +370,6 @@ class UserController extends AdminAbstractController implements KernelController
                 $tmpArray[] = json_decode($item, true);
             }
             $tmpArray = array_values(array_filter($tmpArray));
-            $tmpArray = User::strictKeybinds($tmpArray);
             $tmpArray = json_encode($tmpArray);
 
             $user->setKeyBindings($tmpArray);
@@ -639,7 +640,7 @@ class UserController extends AdminAbstractController implements KernelController
         $userData = $user->getObjectVars();
         $contentLanguages = Tool\Admin::reorderWebsiteLanguages($user, Tool::getValidLanguages());
         $userData['contentLanguages'] = $contentLanguages;
-        $userData['keyBindings'] = $user->getKeyBindings();
+        $userData['keyBindings'] = UserHelper::getDefaultKeyBindings($user);
 
         unset($userData['password']);
         $userData['twoFactorAuthentication'] = $user->getTwoFactorAuthentication();
@@ -1123,9 +1124,7 @@ class UserController extends AdminAbstractController implements KernelController
      */
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
-        $data = User::getDefaultKeyBindings();
-
-        return $this->adminJson(['success' => true, 'data' => $data]);
+        return $this->adminJson(['success' => true, 'data' => UserHelper::getDefaultKeyBindings()]);
     }
 
     /**
