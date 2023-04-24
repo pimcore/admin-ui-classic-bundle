@@ -9,15 +9,17 @@
       "*": "dist"
     }
   },
+  "prefer-stable": true,
+  "minimum-stability": "dev",
   "require": {
     "pimcore/pimcore": "^11.0",
     "symfony/webpack-encore-bundle": "^1.7",
     "cbschuld/browser.php": "^1.9.6"
   },
   "require-dev": {
-    "codeception/codeception": "^4.1.12 || ^5.0.3",
+    "codeception/codeception": "^5.0.10",
     "codeception/module-asserts": "^2",
-    "codeception/module-symfony": "^1.6.0 || ^3.1.0",
+    "codeception/module-symfony":"^3.1.1",
     "codeception/phpunit-wrapper": "^9",
     "phpstan/phpstan": "1.10.5",
     "phpstan/phpstan-symfony": "^1.2.20",
@@ -31,7 +33,10 @@
   "autoload-dev": {
     "psr-4": {
       "Pimcore\\Bundle\\AdminBundle\\Tests\\": "tests"
-    }
+    },
+    "files": [
+      "kernel/Kernel.php"
+    ]
   },
   "extra": {
     "pimcore": {
