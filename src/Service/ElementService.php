@@ -40,22 +40,4 @@ class ElementService
 
         return null;
     }
-
-    /**
-     * Returns the first perspective name
-     *
-     * @internal
-     */
-    public function getFirstAllowedPerspective(): string
-    {
-        $perspectives = $this->getMergedPerspectives();
-        if (!empty($perspectives)) {
-            return $perspectives[0];
-        } else {
-            // all perspectives are allowed
-            $perspectives = \Pimcore\Bundle\AdminBundle\Perspective\Config::getAvailablePerspectives($this);
-
-            return $perspectives[0]['name'];
-        }
-    }
 }
