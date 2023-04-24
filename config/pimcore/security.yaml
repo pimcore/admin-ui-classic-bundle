@@ -1,0 +1,4 @@
+security:
+  providers:
+    pimcore_admin:
+      id: Pimcore\Security\User\UserProvider

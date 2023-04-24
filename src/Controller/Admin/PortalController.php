@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Model\Asset;
@@ -32,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @internal
  */
-class PortalController extends AdminController implements KernelControllerEventInterface
+class PortalController extends AdminAbstractController implements KernelControllerEventInterface
 {
     protected ?Dashboard $dashboardHelper = null;
 

@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Db;
@@ -32,12 +32,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  *
  * @internal
  */
-class ElementController extends AdminController
+class ElementController extends AdminAbstractController
 {
     /**
      * @Route("/element/lock-element", name="pimcore_admin_element_lockelement", methods={"PUT"})
@@ -136,7 +137,7 @@ class ElementController extends AdminController
         }
     }
 
-    protected function processNoteTypesFromParameters(string $parameterName): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+    protected function processNoteTypesFromParameters(string $parameterName): JsonResponse
     {
         $config = $this->getParameter($parameterName);
         $result = [];
@@ -154,9 +155,9 @@ class ElementController extends AdminController
      *
      * @param Request $request
      *
-     * @return \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse|JsonResponse
+     * @return JsonResponse
      */
-    public function noteTypes(Request $request): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse|JsonResponse
+    public function noteTypes(Request $request): JsonResponse
     {
         switch ($request->get('ctype')) {
             case 'document':
@@ -403,9 +404,9 @@ class ElementController extends AdminController
      *
      * @param Request $request
      *
-     * @return \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
-    public function getReplaceAssignmentsBatchJobsAction(Request $request): \Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse
+    public function getReplaceAssignmentsBatchJobsAction(Request $request): JsonResponse
     {
         $element = null;
 
@@ -804,10 +805,11 @@ class ElementController extends AdminController
      * @Route("/element/get-predefined-properties", name="pimcore_admin_element_getpredefinedproperties", methods={"GET"})
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return JsonResponse
      */
-    public function getPredefinedPropertiesAction(Request $request): JsonResponse
+    public function getPredefinedPropertiesAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $properties = [];
         $type = $request->get('elementType');
@@ -816,11 +818,11 @@ class ElementController extends AdminController
 
         if (in_array($type, $allowedTypes, true)) {
             $list = new Model\Property\Predefined\Listing();
-            $list->setFilter(function (Model\Property\Predefined $predefined) use ($type, $query) {
+            $list->setFilter(function (Model\Property\Predefined $predefined) use ($type, $query, $translator) {
                 if (!str_contains($predefined->getCtype(), $type)) {
                     return false;
                 }
-                if ($query && stripos($this->trans($predefined->getName()), $query) === false) {
+                if ($query && stripos($translator->trans($predefined->getName(), [], 'admin'), $query) === false) {
                     return false;
                 }
 
