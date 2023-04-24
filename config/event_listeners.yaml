@@ -4,12 +4,6 @@ services:
         autoconfigure: true
 
     #
-    # System Settings
-    #
-
-    Pimcore\Bundle\AdminBundle\EventListener\AdminConfigListener: ~
-
-    #
     # SECURITY
     #
 
