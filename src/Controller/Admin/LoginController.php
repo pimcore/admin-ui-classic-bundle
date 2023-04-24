@@ -60,7 +60,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
     public function __construct(
         protected ResponseHelper $responseHelper,
         protected TranslatorInterface $translator,
-        protected PimcoreBundleManager $bundleManager,
+        protected PimcoreBundleManager $bundleManager
     ) {
     }
 
@@ -351,7 +351,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
     public function twoFactorSetupAuthenticationAction(
         Request $request,
         Config $config,
-        GoogleAuthenticatorInterface $twoFactor,
+        GoogleAuthenticatorInterface $twoFactor
     ): Response
     {
         $params = $this->buildLoginPageViewParams($config);

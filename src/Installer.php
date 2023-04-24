@@ -121,6 +121,8 @@ class Installer extends SettingsStoreAwareInstaller
     public function uninstall(): void
     {
         $this->removePermissions();
+        $this->uninstallTables();
+
         parent::uninstall();
     }
 
