@@ -21,7 +21,7 @@ namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 use Codeception\Stub;
 use Pimcore\Model\Document\Page;
 use Pimcore\Tests\Support\Util\TestHelper;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Pimcore\Model\Document;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;

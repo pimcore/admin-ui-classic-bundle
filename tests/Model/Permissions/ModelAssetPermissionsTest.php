@@ -23,7 +23,7 @@ use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Codeception\Stub;
 
