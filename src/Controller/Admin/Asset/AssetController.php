@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -280,7 +281,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->hasChildren()) {
             if ($allParams['view']) {
-                $cv = \Pimcore\Model\Element\Service::getCustomViewById($allParams['view']);
+                $cv = ElementService::getCustomViewById($allParams['view']);
             }
 
             // get assets
