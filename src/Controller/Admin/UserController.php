@@ -16,8 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
+use Pimcore\Bundle\AdminBundle\Perspective\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -32,14 +33,16 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @internal
  */
-class UserController extends AdminController implements KernelControllerEventInterface
+class UserController extends AdminAbstractController implements KernelControllerEventInterface
 {
     /**
      * @Route("/user/tree-get-children-by-id", name="pimcore_admin_user_treegetchildrenbyid", methods={"GET"})
@@ -274,7 +277,7 @@ class UserController extends AdminController implements KernelControllerEventInt
      *
      * @throws \Exception
      */
-    public function updateAction(Request $request): JsonResponse
+    public function updateAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         /** @var User|User\Role|null $user */
         $user = User\UserRole::getById($request->request->getInt('id'));
@@ -338,7 +341,7 @@ class UserController extends AdminController implements KernelControllerEventInt
                     $newWorkspaces = [];
                     foreach ($spaces as $space) {
                         if (in_array($space['path'], $processedPaths[$type])) {
-                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['path'] .'" in '.$this->trans((string)$type) . 's');
+                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['path'] .'" in '.$translator->trans((string)$type, [],'admin') . 's');
                         }
 
                         $element = Element\Service::getElementByPath($type, $space['path']);
@@ -367,7 +370,6 @@ class UserController extends AdminController implements KernelControllerEventInt
                 $tmpArray[] = json_decode($item, true);
             }
             $tmpArray = array_values(array_filter($tmpArray));
-            $tmpArray = User::strictKeybinds($tmpArray);
             $tmpArray = json_encode($tmpArray);
 
             $user->setKeyBindings($tmpArray);
@@ -470,7 +472,7 @@ class UserController extends AdminController implements KernelControllerEventInt
         unset($userData['twoFactorAuthentication']['secret']);
         $userData['hasImage'] = $user->hasImage();
 
-        $availablePerspectives = \Pimcore\Bundle\AdminBundle\Perspective\Config::getAvailablePerspectives(null);
+        $availablePerspectives = Config::getAvailablePerspectives(null);
 
         return $this->adminJson([
             'success' => true,
@@ -637,7 +639,7 @@ class UserController extends AdminController implements KernelControllerEventInt
         $userData = $user->getObjectVars();
         $contentLanguages = Tool\Admin::reorderWebsiteLanguages($user, Tool::getValidLanguages());
         $userData['contentLanguages'] = $contentLanguages;
-        $userData['keyBindings'] = $user->getKeyBindings();
+        $userData['keyBindings'] = UserHelper::getDefaultKeyBindings($user);
 
         unset($userData['password']);
         $userData['twoFactorAuthentication'] = $user->getTwoFactorAuthentication();
@@ -751,7 +753,7 @@ class UserController extends AdminController implements KernelControllerEventInt
         $availableUserPermissions = $availableUserPermissionsList->load();
         $availableUserPermissions = array_map($replaceFn, $availableUserPermissions);
 
-        $availablePerspectives = \Pimcore\Bundle\AdminBundle\Perspective\Config::getAvailablePerspectives(null);
+        $availablePerspectives = Config::getAvailablePerspectives(null);
 
         return $this->adminJson([
             'success' => true,
@@ -923,33 +925,34 @@ class UserController extends AdminController implements KernelControllerEventInt
      * @Route("/user/get-token-login-link", name="pimcore_admin_user_gettokenloginlink", methods={"GET"})
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return JsonResponse
      *
      * @throws \Exception
      */
-    public function getTokenLoginLinkAction(Request $request): JsonResponse
+    public function getTokenLoginLinkAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $user = User::getById((int) $request->get('id'));
 
         if (!$user) {
             return $this->adminJson([
                 'success' => false,
-                'message' => $this->trans('login_token_invalid_user_error'),
+                'message' => $translator->trans('login_token_invalid_user_error', [], 'admin'),
             ], Response::HTTP_NOT_FOUND);
         }
 
         if ($user->isAdmin() && !$this->getAdminUser()->isAdmin()) {
             return $this->adminJson([
                 'success' => false,
-                'message' => $this->trans('login_token_as_admin_non_admin_user_error'),
+                'message' => $translator->trans('login_token_as_admin_non_admin_user_error', [], 'admin'),
             ], Response::HTTP_FORBIDDEN);
         }
 
         if (empty($user->getPassword())) {
             return $this->adminJson([
                 'success' => false,
-                'message' => $this->trans('login_token_no_password_error'),
+                'message' => $translator->trans('login_token_no_password_error', [], 'admin'),
             ], Response::HTTP_FORBIDDEN);
         }
 
@@ -1120,21 +1123,20 @@ class UserController extends AdminController implements KernelControllerEventInt
      */
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
-        $data = User::getDefaultKeyBindings();
-
-        return $this->adminJson(['success' => true, 'data' => $data]);
+        return $this->adminJson(['success' => true, 'data' => UserHelper::getDefaultKeyBindings()]);
     }
 
     /**
      * @Route("/user/invitationlink", name="pimcore_admin_user_invitationlink", methods={"POST"})
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return JsonResponse
      *
      * @throws \Exception
      */
-    public function invitationLinkAction(Request $request): JsonResponse
+    public function invitationLinkAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $success = false;
         $message = '';
@@ -1173,7 +1175,7 @@ class UserController extends AdminController implements KernelControllerEventInt
                     $mail->send();
 
                     $success = true;
-                    $message = sprintf($this->trans('invitation_link_sent'), $user->getEmail());
+                    $message = sprintf($translator->trans('invitation_link_sent', [], 'admin'), $user->getEmail());
                 } catch (\Exception $e) {
                     $message .= 'could not send email';
                 }

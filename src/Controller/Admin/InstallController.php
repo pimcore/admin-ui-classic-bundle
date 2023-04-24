@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Doctrine\DBAL\Connection;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Tool\Requirements;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @internal
  */
-class InstallController extends AdminController
+class InstallController extends AdminAbstractController
 {
     /**
      * @Route("/check", name="pimcore_admin_install_check", methods={"GET", "POST"})

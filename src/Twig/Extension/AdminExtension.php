@@ -17,7 +17,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Twig\Extension;
 
-use Pimcore\Bundle\AdminBundle\Security\User\UserLoader;
+use Pimcore\Security\User\UserLoader;
 use Pimcore\Bundle\AdminBundle\Tool;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Tool\Admin;

@@ -51,7 +51,6 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
 
         $loader->load('security_services.yaml');
         $loader->load('event_listeners.yaml');
-        $loader->load('serializer.yaml');
         $loader->load('export.yaml');
 
         //Set Config for GDPR data providers to container parameters
@@ -66,6 +65,7 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
         $container->setParameter('pimcore_admin.admin_languages', $config['admin_languages']);
         $container->setParameter('pimcore_admin.custom_admin_path_identifier', $config['custom_admin_path_identifier']);
         $container->setParameter('pimcore_admin.custom_admin_route_name', $config['custom_admin_route_name']);
+        $container->setParameter('pimcore_admin.user', $config['user']);
 
         $container->setParameter('pimcore_admin.config', $config);
 

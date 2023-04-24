@@ -16,9 +16,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
-use Pimcore\Bundle\AdminBundle\HttpFoundation\JsonResponse;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
 use Pimcore\Logger;
@@ -31,17 +30,19 @@ use Pimcore\Tool\Session;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/class", name="pimcore_admin_dataobject_class_")
  *
  * @internal
  */
-class ClassController extends AdminController implements KernelControllerEventInterface
+class ClassController extends AdminAbstractController implements KernelControllerEventInterface
 {
     /**
      * @Route("/get-document-types", name="getdocumenttypes", methods={"GET"})
@@ -2081,10 +2082,11 @@ class ClassController extends AdminController implements KernelControllerEventIn
      * @Route("/video-supported-types", name="videosupportedTypestypes")
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return Response
      */
-    public function videoAllowedTypesAction(Request $request): Response
+    public function videoAllowedTypesAction(Request $request, TranslatorInterface $translator): Response
     {
         $videoDef = new DataObject\ClassDefinition\Data\Video();
         $res = [];
@@ -2092,7 +2094,7 @@ class ClassController extends AdminController implements KernelControllerEventIn
         foreach ($videoDef->getSupportedTypes() as $type) {
             $res[] = [
                 'key' => $type,
-                'value' => $this->trans($type),
+                'value' => $translator->trans($type, [], 'admin'),
             ];
         }
 
