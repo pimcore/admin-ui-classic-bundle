@@ -55,6 +55,7 @@ final class User
                 }
             }
         }
+
         return json_encode($defaultKeyBindings);
     }
 }

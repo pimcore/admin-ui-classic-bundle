@@ -44,7 +44,7 @@ class Installer extends SettingsStoreAwareInstaller
               `userModification` int(11) unsigned DEFAULT NULL,
               PRIMARY KEY (`key`,`language`),
               KEY `language` (`language`)
-            ) DEFAULT CHARSET=utf8mb4;"
+            ) DEFAULT CHARSET=utf8mb4;",
     ];
 
     protected ?Schema $schema = null;

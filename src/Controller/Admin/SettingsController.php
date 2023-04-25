@@ -18,7 +18,6 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
-use Pimcore\SystemSettingsConfig;
 use Pimcore\Cache;
 use Pimcore\Cache\Core\CoreCacheHandler;
 use Pimcore\Cache\Symfony\CacheClearer;
@@ -33,6 +32,7 @@ use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\Property;
 use Pimcore\Model\WebsiteSetting;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;

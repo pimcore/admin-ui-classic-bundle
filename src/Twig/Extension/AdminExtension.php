@@ -17,9 +17,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Twig\Extension;
 
-use Pimcore\Security\User\UserLoader;
 use Pimcore\Bundle\AdminBundle\Tool;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
+use Pimcore\Security\User\UserLoader;
 use Pimcore\Tool\Admin;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Extension\AbstractExtension;

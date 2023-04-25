@@ -24,7 +24,6 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
-use Pimcore\SystemSettingsConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
@@ -36,6 +35,7 @@ use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\User;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
@@ -58,8 +58,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
         protected TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     /**

@@ -20,7 +20,7 @@ namespace Pimcore\Bundle\AdminBundle\Tests\Support\Helper;
 
 class Model extends \Pimcore\Tests\Support\Helper\Model
 {
-    public function initializeDefinitions() : void
+    public function initializeDefinitions(): void
     {
         $this->setupPimcoreClass_Unittest();
         $this->setupPimcoreClass_Inheritance();

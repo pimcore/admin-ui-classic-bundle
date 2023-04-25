@@ -15,7 +15,6 @@
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
-
 use Pimcore\Bundle\AdminBundle\CustomView\Config;
 
 class ElementService

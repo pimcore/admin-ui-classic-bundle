@@ -11,14 +11,14 @@ declare(strict_types=1);
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
-
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
+use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
@@ -26,11 +26,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Pimcore\Model\DataObject;
 
-class ModelDataObjectPermissionsTest Extends ModelTestCase
+class ModelDataObjectPermissionsTest extends ModelTestCase
 {
-
     protected DataObject\Folder $permissionfoo;
 
     protected DataObject\Folder $permissionbar;
@@ -62,7 +60,6 @@ class ModelDataObjectPermissionsTest Extends ModelTestCase
     protected DataObject\AbstractObject $grouptestobject;
 
     protected DataObject\AbstractObject $hiddenobject;
-
 
     public function setUp(): void
     {
@@ -205,9 +202,9 @@ class ModelDataObjectPermissionsTest Extends ModelTestCase
         $object->setPublished(true);
 
         $object->save();
+
         return $object;
     }
-
 
     /**
      * @param DataObject\AbstractObject $element
@@ -538,5 +535,4 @@ class ModelDataObjectPermissionsTest Extends ModelTestCase
 
         return $dataObjectController;
     }
-
 }

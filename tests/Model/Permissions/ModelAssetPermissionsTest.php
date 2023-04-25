@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
+use Codeception\Stub;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
 use Pimcore\Model\User;
@@ -25,7 +26,6 @@ use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Codeception\Stub;
 
 class ModelAssetPermissionsTest extends ModelTestCase
 {
@@ -155,6 +155,7 @@ class ModelAssetPermissionsTest extends ModelTestCase
         $folder->setParentId($parentId);
         $folder->setProperties($properties);
         $folder->save();
+
         return $folder;
     }
 
@@ -182,7 +183,6 @@ class ModelAssetPermissionsTest extends ModelTestCase
             $admin,
             [$this->bars->getFullpath()]
         );
-
 
         $this->doTestTreeGetChildrenById( //did not work before (count vs. total)
             $this->permissionfoo,

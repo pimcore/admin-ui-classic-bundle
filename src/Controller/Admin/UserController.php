@@ -27,13 +27,13 @@ use Pimcore\Model\Element;
 use Pimcore\Model\User;
 use Pimcore\Tool;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -341,7 +341,7 @@ class UserController extends AdminAbstractController implements KernelController
                     $newWorkspaces = [];
                     foreach ($spaces as $space) {
                         if (in_array($space['path'], $processedPaths[$type])) {
-                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['path'] .'" in '.$translator->trans((string)$type, [],'admin') . 's');
+                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['path'] .'" in '.$translator->trans((string)$type, [], 'admin') . 's');
                         }
 
                         $element = Element\Service::getElementByPath($type, $space['path']);

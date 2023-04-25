@@ -35,6 +35,7 @@ trait UserNameTrait
     {
         $this->translator = $translator;
     }
+
     /**
      * @param int $userId The User ID.
      *

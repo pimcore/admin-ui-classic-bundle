@@ -23,9 +23,9 @@ use Pimcore\Model\Notification\Service\NotificationService;
 use Pimcore\Model\Notification\Service\NotificationServiceFilterParser;
 use Pimcore\Model\Notification\Service\UserService;
 use Pimcore\Model\User;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**

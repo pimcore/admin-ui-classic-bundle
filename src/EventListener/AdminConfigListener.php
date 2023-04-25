@@ -32,7 +32,7 @@ class AdminConfigListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            SystemEvents::GET_SYSTEM_CONFIGURATION => 'updateSystemConfiguration'
+            SystemEvents::GET_SYSTEM_CONFIGURATION => 'updateSystemConfiguration',
         ];
     }
 

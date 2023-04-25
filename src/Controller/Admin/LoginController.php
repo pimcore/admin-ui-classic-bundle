@@ -352,8 +352,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         Request $request,
         Config $config,
         GoogleAuthenticatorInterface $twoFactor
-    ): Response
-    {
+    ): Response {
         $params = $this->buildLoginPageViewParams($config);
         $params['setup'] = true;
 

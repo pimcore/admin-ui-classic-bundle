@@ -11,21 +11,20 @@ declare(strict_types=1);
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
+ *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
-
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
-use Pimcore\Model\Document\Page;
-use Pimcore\Tests\Support\Util\TestHelper;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Pimcore\Model\Document;
+use Pimcore\Model\Document\Page;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
+use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ModelDocumentPermissionsTest extends ModelTestCase
@@ -342,5 +341,4 @@ class ModelDocumentPermissionsTest extends ModelTestCase
             []
         );
     }
-
 }
