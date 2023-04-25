@@ -30,6 +30,7 @@ use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
+use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool;
 use Pimcore\Tool\Storage;
 use Pimcore\Version;
@@ -335,14 +336,14 @@ class DataObjectHelperController extends AdminAbstractController
                 $gridConfigId = $savedGridConfig->getId();
                 $gridConfig = $savedGridConfig->getConfig();
                 $gridConfig = json_decode($gridConfig, true);
-                $gridConfigName = $savedGridConfig->getName();
+                $gridConfigName = SecurityHelper::convertHtmlSpecialChars($savedGridConfig->getName());
                 $owner = $savedGridConfig->getOwnerId();
                 $ownerObject = User::getById($owner);
                 if ($ownerObject instanceof User) {
                     $owner = $ownerObject->getName();
                 }
                 $modificationDate = $savedGridConfig->getModificationDate();
-                $gridConfigDescription = $savedGridConfig->getDescription();
+                $gridConfigDescription = SecurityHelper::convertHtmlSpecialChars($savedGridConfig->getDescription());
                 $sharedGlobally = $savedGridConfig->isShareGlobally();
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
@@ -922,11 +923,11 @@ class DataObjectHelperController extends AdminAbstractController
                 }
 
                 if ($metadata) {
-                    $gridConfig->setName($metadata['gridConfigName']);
-                    $gridConfig->setDescription($metadata['gridConfigDescription']);
+                    $gridConfig->setName(SecurityHelper::convertHtmlSpecialChars($metadata['gridConfigName']));
+                    $gridConfig->setDescription(SecurityHelper::convertHtmlSpecialChars($metadata['gridConfigDescription']));
                     $gridConfig->setShareGlobally($metadata['shareGlobally'] && $this->getAdminUser()->isAdmin());
                     $gridConfig->setSetAsFavourite($metadata['setAsFavourite'] && $this->getAdminUser()->isAdmin());
-                    $gridConfig->setSaveFilters($metadata['saveFilters']);
+                    $gridConfig->setSaveFilters($metadata['saveFilters'] ?? false);
                 }
 
                 $gridConfigData = json_encode($gridConfigData);
@@ -940,8 +941,8 @@ class DataObjectHelperController extends AdminAbstractController
 
                 $settings = $this->getShareSettings($gridConfig->getId());
                 $settings['gridConfigId'] = (int)$gridConfig->getId();
-                $settings['gridConfigName'] = $gridConfig->getName();
-                $settings['gridConfigDescription'] = $gridConfig->getDescription();
+                $settings['gridConfigName'] = SecurityHelper::convertHtmlSpecialChars($gridConfig->getName());
+                $settings['gridConfigDescription'] = SecurityHelper::convertHtmlSpecialChars($gridConfig->getDescription());
                 $settings['shareGlobally'] = $gridConfig->isShareGlobally();
                 $settings['setAsFavourite'] = $gridConfig->isSetAsFavourite();
                 $settings['saveFilters'] = $gridConfig->isSaveFilters();
