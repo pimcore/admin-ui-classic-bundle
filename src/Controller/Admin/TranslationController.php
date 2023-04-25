@@ -28,7 +28,7 @@ use Pimcore\Tool;
 use Pimcore\Tool\Session;
 use Pimcore\Translation\Translator;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +46,7 @@ class TranslationController extends AdminAbstractController
     protected const PLACEHOLDER_NAME = 'placeHolder';
 
     public function __construct(
-        protected HtmlSanitizer $pimcoreTranslationSanitizer
+        protected HtmlSanitizerInterface $pimcoreTranslationSanitizer
     ) {
     }
 
