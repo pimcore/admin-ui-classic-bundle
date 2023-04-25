@@ -37,7 +37,7 @@ final class AdminConfig
 
     private static ?SystemConfig $systemConfigService = null;
 
-    public static function getRepository(): LocationAwareConfigRepository
+    private static function getRepository(): LocationAwareConfigRepository
     {
         if (!self::$locationAwareConfigRepository) {
             $containerConfig = \Pimcore::getContainer()->getParameter('pimcore_admin.config');
@@ -58,9 +58,7 @@ final class AdminConfig
     public static function get(): array
     {
         $repository = self::getRepository();
-        $service = self::getSystemConfigService();
-
-        return $service::get($repository, self::CONFIG_ID);
+        return SystemConfig::getConfigDataByKey($repository, self::CONFIG_ID);
     }
 
     public function save(array $values): void
@@ -110,14 +108,5 @@ final class AdminConfig
     public function setAdminSystemSettingsConfig(array $config): void
     {
         RuntimeCache::set('pimcore_admin_system_settings_config', $config);
-    }
-
-    private static function getSystemConfigService(): SystemConfig
-    {
-        if (!self::$systemConfigService) {
-            self::$systemConfigService = new SystemConfig();
-        }
-
-        return self::$systemConfigService;
     }
 }
