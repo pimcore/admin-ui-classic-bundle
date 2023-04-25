@@ -35,8 +35,6 @@ final class AdminConfig
 
     private static ?LocationAwareConfigRepository $locationAwareConfigRepository = null;
 
-    private static ?SystemConfig $systemConfigService = null;
-
     private static function getRepository(): LocationAwareConfigRepository
     {
         if (!self::$locationAwareConfigRepository) {
