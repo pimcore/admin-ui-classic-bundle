@@ -13,6 +13,9 @@
 
 pimcore.registerNS("pimcore.htmlSanitizer");
 
+/**
+ * @internal
+ */
 pimcore.htmlSanitizer = Class.create({
     allowedTags: {},
 
