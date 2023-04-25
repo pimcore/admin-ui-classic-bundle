@@ -23,7 +23,7 @@ pimcore.settings.translation.editor = Class.create({
             window.destroy();
         });
 
-        this.htmlSanitizer = new pimcore.sanitizer.htmlSanitizer();
+        this.htmlSanitizer = new pimcore.htmlSanitizer.translationSanitizer();
         this.field = field;
         this.context = context;
         this.value = this.htmlSanitizer.sanitize(field.getValue());

@@ -1,6 +1,6 @@
-pimcore.registerNS("pimcore.sanitizer.htmlSanitizer");
+pimcore.registerNS("pimcore.htmlSanitizer.translationSanitizer");
 
-pimcore.sanitizer.htmlSanitizer = Class.create(pimcore.sanitizer, {
+pimcore.htmlSanitizer.translationSanitizer = Class.create(pimcore.htmlSanitizer, {
     allowedTags: {
         span: [ 'class', 'style', 'id' ],
         p: [ 'class', 'style', 'id' ],
