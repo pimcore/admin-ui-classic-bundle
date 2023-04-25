@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Security\Authenticator;
 
 use Pimcore\Bundle\AdminBundle\Security\Authentication\Token\TwoFactorRequiredToken;
-use Pimcore\Bundle\AdminBundle\Security\User\User;
+use Pimcore\Security\User\User;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Model\User as UserModel;
 use Pimcore\Tool\Admin;

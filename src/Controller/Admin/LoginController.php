@@ -18,7 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\Login\LoginRedirectEvent;
 use Pimcore\Bundle\AdminBundle\Event\Login\LostPasswordEvent;
@@ -27,6 +27,7 @@ use Pimcore\Bundle\AdminBundle\System\AdminConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\KernelResponseEventInterface;
+use Pimcore\Extension\Bundle\PimcoreBundleManager;
 use Pimcore\Http\ResponseHelper;
 use Pimcore\Logger;
 use Pimcore\Model\User;
@@ -49,14 +50,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @internal
  */
-class LoginController extends AdminController implements KernelControllerEventInterface, KernelResponseEventInterface
+class LoginController extends AdminAbstractController implements KernelControllerEventInterface, KernelResponseEventInterface
 {
     public function __construct(
         protected ResponseHelper $responseHelper,
+        protected TranslatorInterface $translator,
+        protected PimcoreBundleManager $bundleManager
     ) {
     }
 
@@ -344,7 +348,11 @@ class LoginController extends AdminController implements KernelControllerEventIn
     /**
      * @Route("/login/2fa-setup", name="pimcore_admin_2fa_setup")
      */
-    public function twoFactorSetupAuthenticationAction(Request $request, Config $config, GoogleAuthenticatorInterface $twoFactor): Response
+    public function twoFactorSetupAuthenticationAction(
+        Request $request,
+        Config $config,
+        GoogleAuthenticatorInterface $twoFactor
+    ): Response
     {
         $params = $this->buildLoginPageViewParams($config);
         $params['setup'] = true;

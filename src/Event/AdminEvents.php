@@ -85,7 +85,7 @@ class AdminEvents
     /**
      * Fired before the request params are parsed. This event apply to the grid list.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - requestParams | contains the request parameters
      *
@@ -98,7 +98,7 @@ class AdminEvents
     /**
      * Allows you to modify the object list before it is loaded. This is a global event (search list, grid list, tree list, ...).
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | the object list
      *  - context | contains contextual information
@@ -112,7 +112,7 @@ class AdminEvents
     /**
      * Allows you to modify the object list before it is prepared for export.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | the object list
      *  - context | contains contextual information
@@ -126,7 +126,7 @@ class AdminEvents
     /**
      * Allows you to modify the object list before it is exported.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | the object list
      *  - context | contains contextual information
@@ -140,7 +140,7 @@ class AdminEvents
     /**
      * Allows you to modify the result after the list was loaded. This event apply to the grid list.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | raw result as an array
      *  - context | contains contextual information
@@ -154,7 +154,7 @@ class AdminEvents
     /**
      * Fired before the request params are parsed. This event apply to both the folder content preview list and the grid list.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - requestParams | contains the request parameters
      *
@@ -167,7 +167,7 @@ class AdminEvents
     /**
      * Allows you to modify the asset list before it is loaded. This is a global event (folder content preview list, grid list, tree list, ...).
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | the object list
      *  - context | contains contextual information
@@ -195,7 +195,7 @@ class AdminEvents
     /**
      * Allows you to modify the result after the list was loaded. This event apply to both the folder content preview list and the grid list.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | raw result as an array
      *  - context | contains contextual information
@@ -209,7 +209,7 @@ class AdminEvents
     /**
      * Allows you to modify the data from the listfolder grid before it gets processed
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - data | raw data as an array
      *  - processed | true to stop processing
@@ -223,7 +223,7 @@ class AdminEvents
     /**
      * Allows you to modify the batch update data from the listfolder grid before it gets processed
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - params |
      *  - processed | true to stop processing
@@ -237,7 +237,7 @@ class AdminEvents
     /**
      * Fired before the request params are parsed. This event apply to the seo panel tree.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - requestParams | contains the request parameters
      *
@@ -250,7 +250,7 @@ class AdminEvents
     /**
      * Allows you to modify the document list before it is loaded. This is a global event (seo panel tree, tree list, ...).
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | the object list
      *  - context | contains contextual information
@@ -264,7 +264,7 @@ class AdminEvents
     /**
      * Allows you to modify the result after the list was loaded. This event apply to the seo panel tree.
      *
-     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminController
+     * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
      * Arguments:
      *  - list | raw result as an array
      *  - context | contains contextual information
@@ -437,21 +437,6 @@ class AdminEvents
      * @var string
      */
     const RESOLVE_ELEMENT_ADMIN_STYLE = 'pimcore.admin.resolve.elementAdminStyle';
-
-    /**
-     * Allows you to modify whether a permission on an element is granted or not
-     *
-     * Subject: \Pimcore\Model\Element\AbstractElement
-     * Arguments:
-     *  - isAllowed | bool | the original "isAllowed" value as determined by pimcore. This can be modfied
-     *  - permissionType | string | the permission that is checked
-     *  - user | \Pimcore\Model\User | user the permission is checked for
-     *
-     * @Event("Pimcore\Event\Model\ElementEvent")
-     *
-     * @var string
-     */
-    const ELEMENT_PERMISSION_IS_ALLOWED = 'pimcore.admin.permissions.elementIsAllowed';
 
     /**
      * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\Asset\AssetController

@@ -17,7 +17,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Helper;
 
 use Pimcore;
-use Pimcore\Bundle\AdminBundle\Security\User\User as UserProxy;
+use Pimcore\Security\User\User as UserProxy;
 
 /**
  * @internal
@@ -28,8 +28,6 @@ final class User
 
     /**
      * @internal
-     *
-     * @return string
      */
     public static function getDefaultKeyBindings(Pimcore\Model\User|UserProxy|null $user = null): string
     {

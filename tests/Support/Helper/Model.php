@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Pimcore
@@ -14,11 +13,16 @@ declare(strict_types=1);
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\AdminBundle\Controller;
+namespace Pimcore\Bundle\AdminBundle\Tests\Support\Helper;
 
-/**
- * Tagging interface defining controller as admin controller.
- */
-interface AdminControllerInterface extends DoubleAuthenticationControllerInterface
+// here you can define custom actions
+// all public methods declared in helper class will be available in $I
+
+class Model extends \Pimcore\Tests\Support\Helper\Model
 {
+    public function initializeDefinitions() : void
+    {
+        $this->setupPimcoreClass_Unittest();
+        $this->setupPimcoreClass_Inheritance();
+    }
 }

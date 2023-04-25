@@ -18,9 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Asset;
 
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Model\GridConfig;
@@ -53,7 +51,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  *
  * @internal
  */
-class AssetHelperController extends AdminController
+class AssetHelperController extends AdminAbstractController
 {
     public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType): array
     {

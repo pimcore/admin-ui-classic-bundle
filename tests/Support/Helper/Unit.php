@@ -13,27 +13,11 @@
  *  @license    http://www.pimcore.org/license     GPLv3 and PCL
  */
 
-namespace Pimcore\Bundle\AdminBundle\Support;
+namespace Pimcore\Bundle\AdminBundle\Tests\Support\Helper;
 
-trait BundleAdminSupportTrait
+// here you can define custom actions
+// all public methods declared in helper class will be available in $I
+
+class Unit extends \Codeception\Module
 {
-    public function getJsPaths(): array
-    {
-        return [];
-    }
-
-    public function getCssPaths(): array
-    {
-        return [];
-    }
-
-    public function getEditmodeJsPaths(): array
-    {
-        return [];
-    }
-
-    public function getEditmodeCssPaths(): array
-    {
-        return [];
-    }
 }
