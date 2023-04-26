@@ -95,7 +95,7 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
                 new FileLocator(__DIR__ . '/../../config')
             );
 
-            $loader->load('services.yaml');
+            $loader->load('security_listener.yaml');
         }
     }
 }
