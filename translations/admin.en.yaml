@@ -80,7 +80,6 @@ exactmatch: 'exact match'
 desktop: Desktop
 drag_me: 'Drag Me'
 serverVars: 'Server Variables'
-attributes: Attributes
 code: Code
 tag: Tag
 tags: Tags

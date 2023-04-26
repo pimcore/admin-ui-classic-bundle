@@ -2002,14 +2002,6 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
             value: data["class"]
         });
     }
-    if (!disabledFields.includes('attributes')) {
-        advancedFields.push({
-            fieldLabel: t('attributes') + ' (key="value")',
-            name: 'attributes',
-            width: 300,
-            value: data["attributes"]
-        });
-    }
     const advancedTab = advancedFields.length === 0 ? null : {
         title: t('advanced'),
         layout: 'form',

@@ -28,8 +28,7 @@ pimcore.document.editables.link = Class.create(pimcore.document.editable, {
             rel: "",
             tabindex: "",
             target: "",
-            "class": "",
-            attributes: ""
+            "class": ""
         };
 
         this.data = mergeObject(this.defaultData, data ?? {});
