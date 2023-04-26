@@ -23,10 +23,9 @@ pimcore.settings.translation.editor = Class.create({
             window.destroy();
         });
 
-        this.htmlSanitizer = new pimcore.htmlSanitizer.translationSanitizer();
         this.field = field;
         this.context = context;
-        this.value = this.htmlSanitizer.sanitize(field.getValue());
+        this.value = field.getValue();
 
         let bbar = [];
 
