@@ -88,5 +88,14 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
             'output_path' => false,
             'builds' => $builds,
         ]);
+
+        if ($container->has('security.event_dispatcher.pimcore_admin')) {
+            $loader = new YamlFileLoader(
+                $container,
+                new FileLocator(__DIR__ . '/../../config')
+            );
+
+            $loader->load('logout_listener.yaml');
+        }
     }
 }
