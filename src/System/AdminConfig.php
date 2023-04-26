@@ -56,6 +56,7 @@ final class AdminConfig
     public static function get(): array
     {
         $repository = self::getRepository();
+
         return SystemConfig::getConfigDataByKey($repository, self::CONFIG_ID);
     }
 
