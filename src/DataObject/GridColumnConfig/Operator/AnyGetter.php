@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator;
 use Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\ResultContainer;
 use Pimcore\Model\AbstractModel;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool\Admin;
 
 /**
@@ -46,8 +47,8 @@ final class AnyGetter extends AbstractOperator
 
         parent::__construct($config, $context);
 
-        $this->attribute = $config->attribute ?? '';
-        $this->param1 = $config->param1 ?? '';
+        $this->attribute = SecurityHelper::convertHtmlSpecialChars($config->attribute ?? '');
+        $this->param1 = SecurityHelper::convertHtmlSpecialChars($config->param1 ?? '');
         $this->isArrayType = $config->isArrayType ?? false;
 
         $this->forwardAttribute = $config->forwardAttribute ?? '';
@@ -158,7 +159,7 @@ final class AnyGetter extends AbstractOperator
 
     public function setAttribute(string $attribute): void
     {
-        $this->attribute = $attribute;
+        $this->attribute = SecurityHelper::convertHtmlSpecialChars($attribute);
     }
 
     public function getParam1(): string
@@ -168,7 +169,7 @@ final class AnyGetter extends AbstractOperator
 
     public function setParam1(string $param1): void
     {
-        $this->param1 = $param1;
+        $this->param1 = SecurityHelper::convertHtmlSpecialChars($param1);
     }
 
     public function getForwardAttribute(): string
