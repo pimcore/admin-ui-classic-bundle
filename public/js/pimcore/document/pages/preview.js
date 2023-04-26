@@ -82,11 +82,10 @@ Ext.define('pimcore.document.pages.preview', {
 
                             linkParams.push("pimcore_preview=true");
                             linkParams.push("_dc=" + date.getTime());
-
                             // add target group parameter if available
-                            if (this["edit"] && this.element.edit["targetGroup"]) {
-                                if(this.element.edit.targetGroup && this.element.edit.targetGroup.getValue()) {
-                                    linkParams.push("_ptg=" + this.element.edit.targetGroup.getValue());
+                            if (this.element["edit"] && this.element.edit.areaToolBar) {
+                                if(this.element.edit.areaToolBar.targetGroup && this.element.edit.areaToolBar.targetGroup.getValue()) {
+                                    linkParams.push("_ptg=" + this.element.edit.areaToolBar.targetGroup.getValue());
                                 }
                             }
 
@@ -220,7 +219,6 @@ Ext.define('pimcore.document.pages.preview', {
     },
 
     loadCurrentPreview: function () {
-
         var device = this.mode;
 
         var date = new Date();
@@ -229,9 +227,9 @@ Ext.define('pimcore.document.pages.preview', {
         path = this.element.data.path + this.element.data.key + "?pimcore_preview=true&time=" + date.getTime() + "&forceDeviceType=" + device + "&pimcore_override_output_timestamp=" + (this.previewTime.getTime() / 1000);
 
         // add target group parameter if available
-        if(this.element["edit"] && this.element.edit["targetGroup"]) {
-            if(this.element.edit.targetGroup && this.element.edit.targetGroup.getValue()) {
-                path += "&_ptg=" + this.element.edit.targetGroup.getValue();
+        if(this.element["edit"] && this.element.edit.areaToolBar) {
+            if(this.element.edit.areaToolBar.targetGroup && this.element.edit.areaToolBar.targetGroup.getValue()) {
+                path += "&_ptg=" + this.element.edit.areaToolBar.targetGroup.getValue();
             }
         }
 
