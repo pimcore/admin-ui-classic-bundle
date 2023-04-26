@@ -275,10 +275,6 @@
     background: url(/bundles/pimcoreadmin/img/flat-white-icons/qr-code.svg) center center no-repeat !important;
 }
 
-.pimcore_nav_icon_usergroup {
-    background: url(/bundles/pimcoreadmin/img/flat-white-icons/targetgroup.svg) center center no-repeat !important;
-}
-
 .pimcore_nav_icon_marketing_settings {
     background: url(/bundles/pimcoreadmin/img/flat-white-icons/settings.svg) center center no-repeat !important;
 }
@@ -636,10 +632,6 @@
 
 .pimcore_icon_user {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/person-circle.svg) center center no-repeat !important;
-}
-
-.pimcore_icon_usergroup {
-    background: url(/bundles/pimcoreadmin/img/flat-color-icons/targetgroup.svg) center center no-repeat !important;
 }
 
 .pimcore_icon_save_and_share {
@@ -1048,16 +1040,6 @@
 
 .pimcore_icon_menu_clear_thumbnails {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/flash_on.svg) center center no-repeat !important;
-}
-
-.pimcore_icon_target_group,
-.pimcore_icon_target_groups,
-.pimcore_icon_targetGroup,
-.pimcore_icon_targetGroupMultiselect,
-.pimcore_icon_personas,
-.pimcore_icon_persona,
-.pimcore_icon_personamultiselect {
-    background: url(/bundles/pimcoreadmin/img/flat-color-icons/targetgroup.svg) center center no-repeat !important;
 }
 
 .pimcore_icon_highlight {
