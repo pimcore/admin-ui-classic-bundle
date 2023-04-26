@@ -72,7 +72,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
             self::MEDIA_OPT => "'self' data:",
             self::SCRIPT_OPT => "'self' 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
             self::STYLE_OPT => "'self' 'unsafe-inline'",
-            self::FRAME_OPT => "'self'",
+            self::FRAME_OPT => "'self' data:",
             self::CONNECT_OPT => "'self' blob:",
             self::FONT_OPT => "'self'",
         ]);
