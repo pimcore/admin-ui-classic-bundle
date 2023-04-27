@@ -29,7 +29,7 @@ class Installer extends SettingsStoreAwareInstaller
     const USER_PERMISSIONS = [
         'admin_translations',
         'gdpr_data_extractor',
-        'system_appearance_settings'
+        'system_appearance_settings',
     ];
 
     private array $tablesToInstall = [
