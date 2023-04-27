@@ -485,6 +485,7 @@ pimcore.settings.user.user.settings = Class.create({
         var itemsPerSection = [];
         var sectionArray = [];
         for (var i = 0; i < this.data.availablePermissions.length; i++) {
+
             let section = this.data.availablePermissions[i].category ? 'bundles' : 'default';
 
             if (!itemsPerSection[section]) {
@@ -503,8 +504,7 @@ pimcore.settings.user.user.settings = Class.create({
                     boxLabel: boxLabel,
                     name: "permission_" + this.data.availablePermissions[i].key,
                     checked: this.data.permissions[this.data.availablePermissions[i].key],
-                    labelWidth: 200,
-                    category: category
+                    labelWidth: 200
                 },
             );
         }
