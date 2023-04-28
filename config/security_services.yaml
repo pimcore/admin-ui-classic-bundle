@@ -31,4 +31,6 @@ services:
         tags:
             - { name: monolog.logger, channel: security }
 
-    pimcore_admin_bundle.content_security_policy_handler: '@Pimcore\Bundle\AdminBundle\Security\ContentSecurityPolicyHandler'
+    pimcore_admin_bundle.content_security_policy_handler:
+        alias: Pimcore\Bundle\AdminBundle\Security\ContentSecurityPolicyHandler
+        public: true
