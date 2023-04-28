@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\DependencyInjection;
 
+use Pimcore\Bundle\CoreBundle\DependencyInjection\ConfigurationHelper;
 use Pimcore\Config\LocationAwareConfigRepository;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -88,6 +89,12 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
             'output_path' => false,
             'builds' => $builds,
         ]);
+
+        // set firewall settings to container parameters
+        if (!$container->hasParameter('pimcore_admin_bundle.firewall_settings')) {
+            $containerConfig = ConfigurationHelper::getConfigNodeFromSymfonyTree($container, 'pimcore_admin');
+            $container->setParameter('pimcore_admin_bundle.firewall_settings', $containerConfig['security_firewall']);
+        }
 
         if ($container->has('security.event_dispatcher.pimcore_admin')) {
             $loader = new YamlFileLoader(

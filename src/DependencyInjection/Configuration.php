@@ -299,6 +299,11 @@ final class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end();
+
+        $rootNode
+            ->children()
+                ->variableNode('security_firewall')->end()
+            ->end();
     }
 
     private function addAdminSessionAttributeBags(ArrayNodeDefinition $adminNode): void
