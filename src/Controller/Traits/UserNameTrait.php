@@ -17,12 +17,25 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Controller\Traits;
 
 use Pimcore\Model\User;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @internal
  */
 trait UserNameTrait
 {
+    protected TranslatorInterface $translator;
+
+    /**
+     * @required
+     *
+     * @param TranslatorInterface $translator
+     */
+    public function setTranslator(TranslatorInterface $translator): void
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param int $userId The User ID.
      *
@@ -36,7 +49,7 @@ trait UserNameTrait
         if (empty($user)) {
             $data = [
                 'userName' => '',
-                'fullName' => $this->trans('user_unknown'),
+                'fullName' => $this->translator->trans('user_unknown', [], 'admin'),
             ];
         } else {
             $data = [

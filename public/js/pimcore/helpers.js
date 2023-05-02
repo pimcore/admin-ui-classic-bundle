@@ -22,6 +22,17 @@ pimcore.helpers.sanitizeUrlSlug = function (slug) {
     return slug.replace(/[^a-z0-9-_+/]/gi, '');
 };
 
+pimcore.helpers.htmlEncodeTextField = function (textField) {
+    if(textField.getValue()) {
+        textField.suspendEvent('change');
+        const decodedValue = Ext.util.Format.htmlDecode(textField.getValue());
+        textField.setValue(
+            Ext.util.Format.htmlEncode(decodedValue)
+        );
+        textField.resumeEvent('change');
+    }
+};
+
 pimcore.helpers.registerKeyBindings = function (bindEl, ExtJS) {
 
     if (!ExtJS) {
@@ -1989,14 +2000,6 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
             name: 'class',
             width: 300,
             value: data["class"]
-        });
-    }
-    if (!disabledFields.includes('attributes')) {
-        advancedFields.push({
-            fieldLabel: t('attributes') + ' (key="value")',
-            name: 'attributes',
-            width: 300,
-            value: data["attributes"]
         });
     }
     const advancedTab = advancedFields.length === 0 ? null : {

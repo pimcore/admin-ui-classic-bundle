@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -57,6 +58,7 @@ use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/asset")
@@ -279,7 +281,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->hasChildren()) {
             if ($allParams['view']) {
-                $cv = \Pimcore\Model\Element\Service::getCustomViewById($allParams['view']);
+                $cv = ElementService::getCustomViewById($allParams['view']);
             }
 
             // get assets
@@ -589,12 +591,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      * @Route("/replace-asset", name="pimcore_admin_asset_replaceasset", methods={"POST", "PUT"})
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return JsonResponse
      *
      * @throws \Exception
      */
-    public function replaceAssetAction(Request $request): JsonResponse
+    public function replaceAssetAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
 
@@ -605,7 +608,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($newType != $asset->getType()) {
             return $this->adminJson([
                 'success' => false,
-                'message' => sprintf($this->trans('asset_type_change_not_allowed', [], 'admin'), $asset->getType(), $newType),
+                'message' => sprintf($translator->trans('asset_type_change_not_allowed', [], 'admin'), $asset->getType(), $newType),
             ]);
         }
 
@@ -2208,10 +2211,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      * @Route("/import-zip", name="pimcore_admin_asset_importzip", methods={"POST"})
      *
      * @param Request $request
+     * @param TranslatorInterface $translator
      *
      * @return Response
      */
-    public function importZipAction(Request $request): Response
+    public function importZipAction(Request $request, TranslatorInterface $translator): Response
     {
         $jobId = uniqid();
         $filesPerJob = 5;
@@ -2269,7 +2273,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         } else {
             return $this->adminJson([
                 'success' => false,
-                'message' => $this->trans('could_not_open_zip_file'),
+                'message' => $translator->trans('could_not_open_zip_file', [], 'admin'),
             ]);
         }
     }
@@ -2345,107 +2349,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson([
             'success' => true,
         ]);
-    }
-
-    /**
-     * @Route("/import-server", name="pimcore_admin_asset_importserver", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function importServerAction(Request $request): JsonResponse
-    {
-        $success = true;
-        $filesPerJob = 5;
-        $jobs = [];
-        $importDirectory = str_replace('/fileexplorer', PIMCORE_PROJECT_ROOT, $request->get('serverPath'));
-        if (preg_match('@^' . preg_quote(PIMCORE_PROJECT_ROOT, '@') . '@', $importDirectory) && is_dir($importDirectory)) {
-            $this->checkForPharStreamWrapper($importDirectory);
-            $files = rscandir($importDirectory . '/');
-            $count = count($files);
-            $jobFiles = [];
-
-            for ($i = 0; $i < $count; $i++) {
-                if (is_dir($files[$i])) {
-                    continue;
-                }
-
-                $jobFiles[] = preg_replace('@^' . preg_quote($importDirectory, '@') . '@', '', $files[$i]);
-
-                if (count($jobFiles) >= $filesPerJob || $i >= ($count - 1)) {
-                    $relativeImportDirectory = preg_replace('@^' . preg_quote(PIMCORE_PROJECT_ROOT, '@') . '@', '', $importDirectory);
-                    $jobs[] = [[
-                        'url' => $this->generateUrl('pimcore_admin_asset_importserverfiles'),
-                        'method' => 'POST',
-                        'params' => [
-                            'parentId' => $request->get('parentId'),
-                            'serverPath' => $relativeImportDirectory,
-                            'files' => implode('::', $jobFiles),
-                        ],
-                    ]];
-                    $jobFiles = [];
-                }
-            }
-        }
-
-        return $this->adminJson([
-            'success' => $success,
-            'jobs' => $jobs,
-        ]);
-    }
-
-    /**
-     * @Route("/import-server-files", name="pimcore_admin_asset_importserverfiles", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function importServerFilesAction(Request $request): JsonResponse
-    {
-        $assetFolder = Asset::getById((int) $request->get('parentId'));
-        if (!$assetFolder) {
-            throw $this->createNotFoundException('Parent asset not found');
-        }
-        $serverPath = PIMCORE_PROJECT_ROOT . $request->get('serverPath');
-        $files = explode('::', $request->get('files'));
-
-        foreach ($files as $file) {
-            $absolutePath = $serverPath . $file;
-            $this->checkForPharStreamWrapper($absolutePath);
-            if (is_file($absolutePath)) {
-                $relFolderPath = str_replace('\\', '/', dirname($file));
-                $folder = Asset\Service::createFolderByPath($assetFolder->getRealFullPath() . $relFolderPath);
-                $filename = basename($file);
-
-                // check for duplicate filename
-                $filename = Element\Service::getValidKey($filename, 'asset');
-                $filename = $this->getSafeFilename($folder->getRealFullPath(), $filename);
-
-                if ($assetFolder->isAllowed('create')) {
-                    $asset = Asset::create($folder->getId(), [
-                        'filename' => $filename,
-                        'sourcePath' => $absolutePath,
-                        'userOwner' => $this->getAdminUser()->getId(),
-                        'userModification' => $this->getAdminUser()->getId(),
-                    ]);
-                } else {
-                    Logger::debug('prevented creating asset because of missing permissions ');
-                }
-            }
-        }
-
-        return $this->adminJson([
-            'success' => true,
-        ]);
-    }
-
-    protected function checkForPharStreamWrapper(string $path): void
-    {
-        if (stripos($path, 'phar://') !== false) {
-            throw $this->createAccessDeniedException('Using PHAR files is not allowed!');
-        }
     }
 
     /**

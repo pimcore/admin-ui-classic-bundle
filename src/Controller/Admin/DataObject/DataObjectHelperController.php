@@ -18,9 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Model\GridConfig;
@@ -32,6 +30,7 @@ use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
+use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool;
 use Pimcore\Tool\Storage;
 use Pimcore\Version;
@@ -51,7 +50,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  *
  * @internal
  */
-class DataObjectHelperController extends AdminController
+class DataObjectHelperController extends AdminAbstractController
 {
     const SYSTEM_COLUMNS = ['id', 'fullpath', 'key', 'published', 'creationDate', 'modificationDate', 'filename', 'classname'];
 
@@ -337,17 +336,24 @@ class DataObjectHelperController extends AdminController
                 $gridConfigId = $savedGridConfig->getId();
                 $gridConfig = $savedGridConfig->getConfig();
                 $gridConfig = json_decode($gridConfig, true);
-                $gridConfigName = $savedGridConfig->getName();
+                $gridConfigName = SecurityHelper::convertHtmlSpecialChars($savedGridConfig->getName());
                 $owner = $savedGridConfig->getOwnerId();
                 $ownerObject = User::getById($owner);
                 if ($ownerObject instanceof User) {
                     $owner = $ownerObject->getName();
                 }
                 $modificationDate = $savedGridConfig->getModificationDate();
-                $gridConfigDescription = $savedGridConfig->getDescription();
+                $gridConfigDescription = SecurityHelper::convertHtmlSpecialChars($savedGridConfig->getDescription());
                 $sharedGlobally = $savedGridConfig->isShareGlobally();
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
+
+                foreach($gridConfig['columns'] as &$column) {
+                    if (array_key_exists('isOperator', $column) && $column['isOperator']) {
+                        $colAttributes = &$column['fieldConfig']['attributes'];
+                        SecurityHelper::convertHtmlSpecialCharsArrayKeys($colAttributes, ['label', 'attribute', 'param1']);
+                    }
+                }
             }
         }
 
@@ -924,11 +930,11 @@ class DataObjectHelperController extends AdminController
                 }
 
                 if ($metadata) {
-                    $gridConfig->setName($metadata['gridConfigName']);
-                    $gridConfig->setDescription($metadata['gridConfigDescription']);
+                    $gridConfig->setName(SecurityHelper::convertHtmlSpecialChars($metadata['gridConfigName']));
+                    $gridConfig->setDescription(SecurityHelper::convertHtmlSpecialChars($metadata['gridConfigDescription']));
                     $gridConfig->setShareGlobally($metadata['shareGlobally'] && $this->getAdminUser()->isAdmin());
                     $gridConfig->setSetAsFavourite($metadata['setAsFavourite'] && $this->getAdminUser()->isAdmin());
-                    $gridConfig->setSaveFilters($metadata['saveFilters']);
+                    $gridConfig->setSaveFilters($metadata['saveFilters'] ?? false);
                 }
 
                 $gridConfigData = json_encode($gridConfigData);
@@ -942,8 +948,8 @@ class DataObjectHelperController extends AdminController
 
                 $settings = $this->getShareSettings($gridConfig->getId());
                 $settings['gridConfigId'] = (int)$gridConfig->getId();
-                $settings['gridConfigName'] = $gridConfig->getName();
-                $settings['gridConfigDescription'] = $gridConfig->getDescription();
+                $settings['gridConfigName'] = SecurityHelper::convertHtmlSpecialChars($gridConfig->getName());
+                $settings['gridConfigDescription'] = SecurityHelper::convertHtmlSpecialChars($gridConfig->getDescription());
                 $settings['shareGlobally'] = $gridConfig->isShareGlobally();
                 $settings['setAsFavourite'] = $gridConfig->isSetAsFavourite();
                 $settings['saveFilters'] = $gridConfig->isSaveFilters();

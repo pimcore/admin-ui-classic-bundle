@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
@@ -163,7 +164,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $cv = [];
         if ($document->hasChildren()) {
             if ($allParams['view']) {
-                $cv = Service::getCustomViewById($allParams['view']);
+                $cv = ElementService::getCustomViewById($allParams['view']);
             }
 
             $db = Db::get();

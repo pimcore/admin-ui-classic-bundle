@@ -421,18 +421,6 @@ pimcore.settings.system = Class.create({
                                 },
                                 width: 400,
                                 minValue: 0
-                            },
-                            {
-                                boxLabel: t("hide_edit_image_tab"),
-                                xtype: "checkbox",
-                                name: "assets.hide_edit_image",
-                                checked: this.getValue("assets.hide_edit_image")
-                            },
-                            {
-                                boxLabel: t("disable_tree_preview"),
-                                xtype: "checkbox",
-                                name: "assets.disable_tree_preview",
-                                checked: this.getValue("assets.disable_tree_preview")
                             }
                         ]
                     }

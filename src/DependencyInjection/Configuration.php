@@ -245,7 +245,15 @@ final class Configuration implements ConfigurationInterface
 
         $assetsNode
             ->addDefaultsIfNotSet()
-            ->append($this->buildEventsNode());
+            ->append($this->buildEventsNode())
+            ->children()
+                ->booleanNode('hide_edit_image')
+                    ->defaultFalse()
+                ->end()
+                ->booleanNode('disable_tree_preview')
+                    ->defaultTrue()
+                ->end()
+            ->end();
 
         return $assetsNode;
     }

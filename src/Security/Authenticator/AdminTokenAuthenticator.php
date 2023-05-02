@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Security\Authenticator;
 
-use Pimcore\Bundle\AdminBundle\Security\User\User;
+use Pimcore\Security\User\User;
 use Pimcore\Tool\Authentication;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;

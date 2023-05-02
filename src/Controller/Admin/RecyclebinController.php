@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\Recyclebin;
@@ -28,7 +28,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @internal
  */
-class RecyclebinController extends AdminController implements KernelControllerEventInterface
+class RecyclebinController extends AdminAbstractController implements KernelControllerEventInterface
 {
     /**
      * @Route("/recyclebin/list", name="pimcore_admin_recyclebin_list", methods={"POST"})

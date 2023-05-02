@@ -16,7 +16,8 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Bundle\AdminBundle\System\AdminConfig;
 use Pimcore\Bundle\AdminBundle\Tool as AdminTool;
 use Pimcore\Config;
 use Pimcore\Controller\Config\ControllerDataProvider;
@@ -37,7 +38,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  *
  * @internal
  */
-class MiscController extends AdminController
+class MiscController extends AdminAbstractController
 {
     /**
      * @Route("/get-available-controller-references", name="pimcore_admin_misc_getavailablecontroller_references", methods={"GET"})
@@ -206,7 +207,7 @@ class MiscController extends AdminController
 
         $response = $this->render('@PimcoreAdmin/admin/misc/admin_css.html.twig', [
             'customviews' => $cvData,
-            'config' => $config,
+            'adminSettings' => AdminConfig::get(),
             'languages' => $languages,
         ]);
         $response->headers->set('Content-Type', 'text/css; charset=UTF-8');
