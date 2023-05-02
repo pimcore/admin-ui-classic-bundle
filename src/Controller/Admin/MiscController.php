@@ -143,11 +143,15 @@ class MiscController extends AdminAbstractController
      */
     public function scriptProxyAction(Request $request): Response
     {
-        if ($storageFile = $request->get('storageFile')) {
-            $fileExtension = pathinfo($storageFile, PATHINFO_EXTENSION);
-            $storage = Storage::get('admin');
-            $scriptsContent = $storage->read($storageFile);
+        $storageFile = $request->get('storageFile');
+        if(!$storageFile) {
+            throw new \InvalidArgumentException('The parameter storageFile is required');
         }
+
+        $fileExtension = pathinfo($storageFile, PATHINFO_EXTENSION);
+        $storage = Storage::get('admin');
+        $scriptsContent = $storage->read($storageFile);
+
         if (!empty($scriptsContent)) {
             $contentType = 'text/javascript';
             if ($fileExtension == 'css') {
