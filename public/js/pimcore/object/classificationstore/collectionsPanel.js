@@ -144,7 +144,7 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
                         var colId = data.data.colId;
                         var groupId = data.data.groupId;
 
-                        Ext.Msg.confirm(t('delete'), sprintf(t('delete_message_advanced'), t('classificationstore_collection_relation'), data.data.groupName), function(btn) {
+                        Ext.Msg.confirm(t('delete'), sprintf(t('delete_message_advanced'), t('classificationstore_collection_relation'), Ext.util.Format.htmlEncode(data.data.groupName)), function(btn) {
                             if (btn == 'yes') {
                                 Ext.Ajax.request({
                                     url: Routing.generate('pimcore_admin_dataobject_classificationstore_deletecollectionrelation'),
@@ -318,7 +318,7 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
                         this.relationsGrid.hide();
                         this.relationsPanel.disable();
 
-                        Ext.Msg.confirm(t('delete'), sprintf(t('delete_message_advanced'), t('classificationstore_collection'), data.data.name), function(btn) {
+                        Ext.Msg.confirm(t('delete'), sprintf(t('delete_message_advanced'), t('classificationstore_collection'), Ext.util.Format.htmlEncode(data.data.name)), function(btn) {
                             if (btn == 'yes') {
                                 Ext.Ajax.request({
                                     url: Routing.generate('pimcore_admin_dataobject_classificationstore_deletecollection'),
@@ -413,8 +413,7 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
     },
 
     addFieldComplete: function (button, value, object) {
-
-        value = value.trim();
+        value = Ext.util.Format.htmlEncode(value).trim();
         if (button == "ok" && value.length > 1) {
             Ext.Ajax.request({
                 url: Routing.generate('pimcore_admin_dataobject_classificationstore_createcollection'),

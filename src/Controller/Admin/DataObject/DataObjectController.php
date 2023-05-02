@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
@@ -100,7 +101,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $offset = (int)$request->get('start');
             $limit = (int)$request->get('limit', 100000000);
             if ($view = $request->get('view', '')) {
-                $cv = Element\Service::getCustomViewById($request->get('view'));
+                $cv = ElementService::getCustomViewById($request->get('view'));
             }
 
             if (!is_null($filter)) {
@@ -188,7 +189,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         // custom views start
         if ($view) {
-            $cv = Element\Service::getCustomViewById($view);
+            $cv = ElementService::getCustomViewById($view);
 
             if (!empty($cv['classes'])) {
                 $cvConditions = [];

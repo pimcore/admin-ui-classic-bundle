@@ -79,7 +79,6 @@ exactmatch: 'exact match'
 desktop: Desktop
 drag_me: 'Drag Me'
 serverVars: 'Server Variables'
-attributes: Attributes
 code: Code
 tag: Tag
 tags: Tags
@@ -144,7 +143,6 @@ the_system_is_in_maintenance_mode_please_wait: 'The system is in maintenance mod
 activate: Activate
 image_is_too_small: 'Image is too small, please choose a bigger one.'
 name_is_not_allowed: 'Name is not allowed'
-import_from_server: 'Import from Server'
 upload_files: 'Upload Files'
 upload_zip: 'Upload ZIP Archive'
 document_root: 'Document Root'

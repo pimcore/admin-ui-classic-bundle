@@ -31,7 +31,7 @@ pimcore.document.edit = Class.create({
             link += "&unminified_js";
         }
 
-        if (pimcore.bundle.personalization) {
+        if (pimcore.bundle && pimcore.bundle.personalization) {
             if (this.areaToolBar && this.areaToolBar.targetGroup && this.areaToolBar.targetGroup.getValue()) {
                 link += "&_ptg=" + this.areaToolBar.targetGroup.getValue();
             }
@@ -101,7 +101,7 @@ pimcore.document.edit = Class.create({
                 handler: cleanupFunction.bind(this)
             }];
 
-            if (pimcore.bundle.personalization) {
+            if (pimcore.bundle && pimcore.bundle.personalization) {
                 this.areaToolBar = new pimcore.bundle.personalization.document.areatoolbar(this.document, lbar);
             }
 

@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
 use Pimcore\Model\DataObject;
@@ -25,6 +25,7 @@ use Pimcore\Model\DataObject\Classificationstore;
 use Pimcore\Model\Translation;
 use Pimcore\Model\Translation\Listing;
 use Pimcore\Model\User;
+use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool\Admin;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @internal
  */
-class ClassificationstoreController extends AdminController implements KernelControllerEventInterface
+class ClassificationstoreController extends AdminAbstractController implements KernelControllerEventInterface
 {
     /**
      * @Route("/delete-collection", name="deletecollection", methods={"DELETE"})
@@ -138,7 +139,7 @@ class ClassificationstoreController extends AdminController implements KernelCon
     {
         $this->checkPermission('classificationstore');
 
-        $name = $request->get('name');
+        $name = SecurityHelper::convertHtmlSpecialChars($request->get('name'));
         $storeId = (int) $request->get('storeId');
         $config = Classificationstore\GroupConfig::getByName($name, $storeId);
 
@@ -167,7 +168,7 @@ class ClassificationstoreController extends AdminController implements KernelCon
     {
         $this->checkPermission('classificationstore');
 
-        $name = $request->get('name');
+        $name = SecurityHelper::convertHtmlSpecialChars($request->get('name'));
 
         $config = Classificationstore\StoreConfig::getByName($name);
 
@@ -195,7 +196,7 @@ class ClassificationstoreController extends AdminController implements KernelCon
     {
         $this->checkPermission('classificationstore');
 
-        $name = $request->get('name');
+        $name = SecurityHelper::convertHtmlSpecialChars($request->get('name'));
         $storeId = (int) $request->get('storeId');
         $config = Classificationstore\CollectionConfig::getByName($name, $storeId);
 

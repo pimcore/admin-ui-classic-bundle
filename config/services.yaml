@@ -4,15 +4,6 @@ services:
         autoconfigure: true
 
     #
-    # Notification Services
-    #
-
-    Pimcore\Model\Notification\Service\NotificationService:
-        public: true
-
-    Pimcore\Model\Notification\Service\UserService: ~
-
-    #
     # CONTROLLERS
     #
 
@@ -21,6 +12,15 @@ services:
         resource: '../src/Controller'
         public: true
         tags: ['controller.service_arguments']
+
+    #
+    # COMMANDS
+    #
+
+    # auto-register all commands as services
+    Pimcore\Bundle\AdminBundle\Command\:
+        resource: '../src/Command'
+        tags: [ 'console.command' ]
 
     #
     # TRANSLATIONS
@@ -56,6 +56,11 @@ services:
 
     Pimcore\Bundle\AdminBundle\Helper\GridHelperService: ~
 
+    #
+    # User Helper Service
+    #
+
+    Pimcore\Bundle\AdminBundle\Helper\User: ~
 
     #
     # Default Preview Generator
@@ -79,13 +84,6 @@ services:
     Pimcore\Bundle\AdminBundle\Service\Workflow\ActionsButtonService: ~
 
     #
-    # System Config Services
+    # Admin Config Services
     #
-    Pimcore\Bundle\AdminBundle\System\Config: ~
     Pimcore\Bundle\AdminBundle\System\AdminConfig: ~
-
-
-    #
-    # System Config Helper Service
-    #
-    Pimcore\Bundle\AdminBundle\Helper\SystemConfig: ~

@@ -18,9 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Asset;
 
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
-use PhpOffice\PhpSpreadsheet\Reader\Csv;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Pimcore\Bundle\AdminBundle\Controller\AdminController;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Model\GridConfig;
@@ -35,6 +33,7 @@ use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\User;
+use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool\Session;
 use Pimcore\Tool\Storage;
 use Pimcore\Version;
@@ -53,7 +52,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  *
  * @internal
  */
-class AssetHelperController extends AdminController
+class AssetHelperController extends AdminAbstractController
 {
     public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType): array
     {
@@ -922,9 +921,10 @@ class AssetHelperController extends AdminController
             if (!in_array($uniqueKey, $tmp) && !in_array($item->getName(), $defaultMetadataNames)) {
                 $tmp[] = $uniqueKey;
                 $item->expand();
+                $name = SecurityHelper::convertHtmlSpecialChars($item->getName());
                 $metadataItems[] = [
-                    'title' => $item->getName(),
-                    'name' => $item->getName(),
+                    'title' => $name,
+                    'name' => $name,
                     'subtype' => $item->getTargetSubtype(),
                     'datatype' => 'data',
                     'fieldtype' => $item->getType(),
