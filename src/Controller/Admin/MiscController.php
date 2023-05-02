@@ -138,6 +138,8 @@ class MiscController extends AdminAbstractController
      * @param Request $request
      *
      * @return Response
+     *
+     * @internal
      */
     public function scriptProxyAction(Request $request): Response
     {
@@ -145,28 +147,7 @@ class MiscController extends AdminAbstractController
             $fileExtension = pathinfo($storageFile, PATHINFO_EXTENSION);
             $storage = Storage::get('admin');
             $scriptsContent = $storage->read($storageFile);
-        } else {
-            trigger_deprecation('pimcore/pimcore', '10.1', 'Calling /admin/misc/script-proxy without the parameter storageFile is deprecated and will not work in Pimcore 11.');
-            $allowedFileTypes = ['js', 'css'];
-            $scripts = explode(',', $request->get('scripts'));
-
-            if ($request->get('scriptPath')) {
-                $scriptPath = PIMCORE_WEB_ROOT . $request->get('scriptPath');
-            } else {
-                $scriptPath = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/';
-            }
-
-            $scriptsContent = '';
-            foreach ($scripts as $script) {
-                $filePath = $scriptPath . $script;
-                if (is_file($filePath) && is_readable($filePath) && in_array(pathinfo($script, PATHINFO_EXTENSION), $allowedFileTypes)) {
-                    $scriptsContent .= file_get_contents($filePath);
-                }
-            }
-
-            $fileExtension = pathinfo($scripts[0], PATHINFO_EXTENSION);
         }
-
         if (!empty($scriptsContent)) {
             $contentType = 'text/javascript';
             if ($fileExtension == 'css') {
