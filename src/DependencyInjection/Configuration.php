@@ -394,31 +394,6 @@ final class Configuration implements ConfigurationInterface
             ->end();
     }
 
-    /**
-     * Add a route prototype child
-     */
-    private function addRoutesChild(ArrayNodeDefinition $parent, string $name): void
-    {
-        $node = $parent->children()->arrayNode($name);
-
-        /** @var ArrayNodeDefinition $prototype */
-        $prototype = $node->prototype('array');
-        $prototype
-            ->beforeNormalization()
-                ->ifNull()->then(function () {
-                    return [];
-                })
-            ->end()
-            ->children()
-                ->scalarNode('path')->defaultFalse()->end()
-                ->scalarNode('route')->defaultFalse()->end()
-                ->scalarNode('host')->defaultFalse()->end()
-                ->arrayNode('methods')
-                    ->prototype('scalar')->end()
-                ->end()
-            ->end();
-    }
-
     protected function addNotificationsNode(): ArrayNodeDefinition|NodeDefinition
     {
         $treeBuilder = new TreeBuilder('notifications');
