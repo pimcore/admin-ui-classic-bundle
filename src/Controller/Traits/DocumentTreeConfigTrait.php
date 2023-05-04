@@ -63,7 +63,7 @@ trait DocumentTreeConfigTrait
             'leaf' => true,
         ];
 
-        $permissions =  $childDocument->getUserPermissions($this->getAdminUser());
+        $permissions =  $childDocument->getUserPermissions($this->getPimcoreUser());
 
         $treeNodePermissionTypes = [
             'view',
