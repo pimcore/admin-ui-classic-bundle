@@ -170,16 +170,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     protected function addDataToDocument(Request $request, Model\Document $document): void
     {
         if ($document instanceof Model\Document\PageSnippet) {
-            // if a target group variant get's saved, we have to load all other editables first, otherwise they will get deleted
-
-            if ($request->get('appendEditables')) {
-                // ensure editable are loaded
-                $document->getEditables();
-            } else {
-                // ensure no editables (e.g. from session, version, ...) are still referenced
-                $document->setEditables(null);
-            }
-
             if ($request->get('data')) {
                 $data = $this->decodeJson($request->get('data'));
                 foreach ($data as $name => $value) {
