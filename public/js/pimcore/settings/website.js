@@ -84,7 +84,7 @@ pimcore.settings.website = Class.create({
                         var input = field;
                         var proxy = this.store.getProxy();
                         proxy.extraParams.filter = input.getValue();
-                        this.store.load();
+                        this.store.loadPage(1);
                     }
                 }.bind(this)
             }
