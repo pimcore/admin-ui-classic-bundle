@@ -2352,53 +2352,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/import-url", name="pimcore_admin_asset_importurl", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
-     * @throws \Exception
-     */
-    public function importUrlAction(Request $request): JsonResponse
-    {
-        $success = true;
-
-        $data = Tool::getHttpData($request->request->get('url'));
-        $filename = basename($request->request->get('url'));
-        $parentId = $request->request->getInt('id');
-        $parentAsset = Asset::getById($parentId);
-
-        if (!$parentAsset) {
-            throw $this->createNotFoundException('Parent asset not found');
-        }
-
-        $filename = Element\Service::getValidKey($filename, 'asset');
-        $filename = $this->getSafeFilename($parentAsset->getRealFullPath(), $filename);
-
-        if (empty($filename)) {
-            throw new \Exception('The filename of the asset is empty');
-        }
-
-        // check for duplicate filename
-        $filename = $this->getSafeFilename($parentAsset->getRealFullPath(), $filename);
-
-        if ($parentAsset->isAllowed('create')) {
-            $asset = Asset::create($parentId, [
-                'filename' => $filename,
-                'data' => $data,
-                'userOwner' => $this->getAdminUser()->getId(),
-                'userModification' => $this->getAdminUser()->getId(),
-            ]);
-            $success = true;
-        } else {
-            Logger::debug('prevented creating asset because of missing permissions');
-        }
-
-        return $this->adminJson(['success' => $success]);
-    }
-
-    /**
      * @Route("/clear-thumbnail", name="pimcore_admin_asset_clearthumbnail", methods={"POST"})
      *
      * @param Request $request
