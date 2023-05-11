@@ -1212,8 +1212,14 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 ]);
             }
 
-            $thumbnailConfig->setQuality($config['quality']);
-            $thumbnailConfig->setFormat($config['format']);
+            if (!empty($config['format']) && $config['quality'] <= 100 && $config['quality'] > 0) {
+                $thumbnailConfig->setQuality($config['quality']);
+            }
+
+            if (!empty($config['format'])) {
+                $thumbnailConfig->setFormat($config['format']);
+            }
+
             $thumbnailConfig->setRasterizeSVG(true);
 
             if ($thumbnailConfig->getFormat() == 'JPEG') {
