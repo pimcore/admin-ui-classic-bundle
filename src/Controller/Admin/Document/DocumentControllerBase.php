@@ -170,13 +170,14 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
     protected function addDataToDocument(Request $request, Model\Document $document): void
     {
-        if($request->get('appendEditables') || (interface_exists(TargetingDocumentInterface::class) && $document instanceof TargetingDocumentInterface)) {
-            $document->getEditables();
-        } else {
-            // ensure no editables (e.g. from session, version, ...) are still referenced
-            $document->setEditables(null);
-        }
         if ($document instanceof Model\Document\PageSnippet) {
+            if($request->get('appendEditables') || (interface_exists(TargetingDocumentInterface::class) && $document instanceof TargetingDocumentInterface)) {
+                $document->getEditables();
+            } else {
+                // ensure no editables (e.g. from session, version, ...) are still referenced
+                $document->setEditables(null);
+            }
+            
             if ($request->get('data')) {
                 $data = $this->decodeJson($request->get('data'));
                 foreach ($data as $name => $value) {
