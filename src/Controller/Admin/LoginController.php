@@ -430,7 +430,6 @@ class LoginController extends AdminAbstractController implements KernelControlle
         return $supported;
     }
 
-
     private function dispatchLoginRedirect(array $routeParams = []): string
     {
         $event = new LoginRedirectEvent('pimcore_admin_login', $routeParams);
