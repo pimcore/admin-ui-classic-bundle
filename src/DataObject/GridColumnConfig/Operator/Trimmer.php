@@ -81,7 +81,7 @@ final class Trimmer extends AbstractOperator
             if ($isArrayType) {
                 $result->value = $valueArray;
             } else {
-                $result->value = $valueArray[0];
+                $result->value = $valueArray[0] ?? null;
             }
         }
 
