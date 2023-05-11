@@ -60,7 +60,8 @@ class LoginController extends AdminAbstractController implements KernelControlle
     public function __construct(
         protected ResponseHelper $responseHelper,
         protected TranslatorInterface $translator,
-        protected PimcoreBundleManager $bundleManager
+        protected PimcoreBundleManager $bundleManager,
+        protected EventDispatcherInterface $eventDispatcher
     ) {
     }
 
@@ -98,11 +99,16 @@ class LoginController extends AdminAbstractController implements KernelControlle
         Request $request,
         AuthenticationUtils $authenticationUtils,
         CsrfProtectionHandler $csrfProtection,
-        Config $config,
-        EventDispatcherInterface $eventDispatcher
+        Config $config
     ): RedirectResponse|Response {
+        $queryParams = $request->query->all();
         if ($request->get('_route') === 'pimcore_admin_login_fallback') {
-            return $this->redirectToRoute('pimcore_admin_login', $request->query->all(), Response::HTTP_MOVED_PERMANENTLY);
+            return $this->redirectToRoute('pimcore_admin_login', $queryParams, Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        $redirectUrl = $this->dispatchLoginRedirect($queryParams);
+        if ($this->generateUrl('pimcore_admin_login', $queryParams) != $redirectUrl) {
+            return new RedirectResponse($redirectUrl);
         }
 
         $csrfProtection->regenerateCsrfToken($request->getSession());
@@ -144,7 +150,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
             'request' => $request,
         ]);
 
-        $eventDispatcher->dispatch($event, AdminEvents::LOGIN_BEFORE_RENDER);
+        $this->eventDispatcher->dispatch($event, AdminEvents::LOGIN_BEFORE_RENDER);
         $params = $event->getArgument('parameters');
 
         $params['login_error'] = $authenticationUtils->getLastAuthenticationError();
@@ -179,23 +185,16 @@ class LoginController extends AdminAbstractController implements KernelControlle
      *
      * @Route("/login/login", name="pimcore_admin_login_check")
      */
-    public function loginCheckAction(Request $request, EventDispatcherInterface $dispatcher): RedirectResponse
+    public function loginCheckAction(Request $request): RedirectResponse
     {
-        $event = new LoginRedirectEvent('pimcore_admin_login', [
-            'perspective' => strip_tags($request->get('perspective', '')),
-        ]);
-        $dispatcher->dispatch($event, AdminEvents::LOGIN_REDIRECT);
-
-        $url = $this->generateUrl($event->getRouteName(), $event->getRouteParams());
-
         // just in case the authenticator didn't redirect
-        return new RedirectResponse($url);
+        return new RedirectResponse($this->generateUrl('pimcore_admin_login', ['perspective' => strip_tags($request->get('perspective', ''))]));
     }
 
     /**
      * @Route("/login/lostpassword", name="pimcore_admin_login_lostpassword")
      */
-    public function lostpasswordAction(Request $request, CsrfProtectionHandler $csrfProtection, Config $config, EventDispatcherInterface $eventDispatcher, RateLimiterFactory $resetPasswordLimiter): Response
+    public function lostpasswordAction(Request $request, CsrfProtectionHandler $csrfProtection, Config $config, RateLimiterFactory $resetPasswordLimiter): Response
     {
         $params = $this->buildLoginPageViewParams($config);
         $error = null;
@@ -234,7 +233,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
                 try {
                     $event = new LostPasswordEvent($user, $loginUrl);
-                    $eventDispatcher->dispatch($event, AdminEvents::LOGIN_LOSTPASSWORD);
+                    $this->eventDispatcher->dispatch($event, AdminEvents::LOGIN_LOSTPASSWORD);
 
                     // only send mail if it wasn't prevented in event
                     if ($event->getSendMail()) {
@@ -274,7 +273,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
     /**
      * @Route("/login/deeplink", name="pimcore_admin_login_deeplink")
      */
-    public function deeplinkAction(Request $request, EventDispatcherInterface $eventDispatcher): Response
+    public function deeplinkAction(Request $request): Response
     {
         // check for deeplink
         $queryString = $_SERVER['QUERY_STRING'];
@@ -284,26 +283,22 @@ class LoginController extends AdminAbstractController implements KernelControlle
             $perspective = strip_tags($request->get('perspective', ''));
 
             if (strpos($queryString, 'token')) {
-                $event = new LoginRedirectEvent('pimcore_admin_login', [
+                $url = $this->dispatchLoginRedirect([
                     'deeplink' => $deeplink,
                     'perspective' => $perspective,
                 ]);
-                $eventDispatcher->dispatch($event, AdminEvents::LOGIN_REDIRECT);
-
-                $url = $this->generateUrl($event->getRouteName(), $event->getRouteParams());
                 $url .= '&' . $queryString;
 
                 return $this->redirect($url);
             } elseif ($queryString) {
-                $event = new LoginRedirectEvent('pimcore_admin_login', [
+                $url = $this->dispatchLoginRedirect([
                     'deeplink' => 'true',
                     'perspective' => $perspective,
                 ]);
-                $eventDispatcher->dispatch($event, AdminEvents::LOGIN_REDIRECT);
 
                 return $this->render('@PimcoreAdmin/admin/login/deeplink.html.twig', [
                     'tab' => $deeplink,
-                    'redirect' => $this->generateUrl($event->getRouteName(), $event->getRouteParams()),
+                    'redirect' => $url,
                 ]);
             }
         }
@@ -433,5 +428,14 @@ class LoginController extends AdminAbstractController implements KernelControlle
         }
 
         return $supported;
+    }
+
+
+    private function dispatchLoginRedirect(array $routeParams = []): string
+    {
+        $event = new LoginRedirectEvent('pimcore_admin_login', $routeParams);
+        $this->eventDispatcher->dispatch($event, AdminEvents::LOGIN_REDIRECT);
+
+        return $this->generateUrl($event->getRouteName(), $event->getRouteParams());
     }
 }
