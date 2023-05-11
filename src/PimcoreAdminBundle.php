@@ -22,13 +22,14 @@ use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\ImportExportLocators
 use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\SerializerPass;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\TranslatorPass;
 use Pimcore\Bundle\AdminBundle\GDPR\DataProvider\DataProviderInterface;
+use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 use Pimcore\HttpKernel\Bundle\DependentBundleInterface;
 use Pimcore\HttpKernel\BundleCollection\BundleCollection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
-class PimcoreAdminBundle extends Bundle implements DependentBundleInterface
+class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundleInterface
 {
     /**
      * {@inheritdoc}
@@ -55,5 +56,10 @@ class PimcoreAdminBundle extends Bundle implements DependentBundleInterface
     public static function registerDependentBundles(BundleCollection $collection): void
     {
         $collection->addBundle(new WebpackEncoreBundle());
+    }
+
+    public function getInstaller(): ?Installer
+    {
+        return $this->container->get(Installer::class);
     }
 }
