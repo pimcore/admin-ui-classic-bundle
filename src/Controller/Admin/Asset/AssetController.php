@@ -1212,7 +1212,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 ]);
             }
 
-            if (!empty($config['format']) && $config['quality'] <= 100 && $config['quality'] > 0) {
+            if (!empty($config['quality']) && $config['quality'] <= 100 && $config['quality'] > 0) {
                 $thumbnailConfig->setQuality($config['quality']);
             }
 
