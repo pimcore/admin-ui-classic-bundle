@@ -73,9 +73,6 @@ pimcore.settings.user.role.settings = Class.create({
         var sectionArray = [];
         for (var i = 0; i < this.data.availablePermissions.length; i++) {
             let section = this.data.availablePermissions[i].category ? 'bundles' : 'default';
-            if(!section){
-                section = "default";
-            }
             if (!itemsPerSection[section]) {
                 itemsPerSection[section] = [];
             }
