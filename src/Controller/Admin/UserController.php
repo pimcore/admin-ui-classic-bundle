@@ -441,7 +441,7 @@ class UserController extends AdminAbstractController implements KernelController
         // get available permissions
         $availableUserPermissionsList = new User\Permission\Definition\Listing();
         $availableUserPermissionsList->setOrderKey('category');
-        $availableUserPermissions = $availableUserPermissionsList->load();$
+        $availableUserPermissions = $availableUserPermissionsList->load();
 
         $availableUserPermissionsData = [];
         if (is_array($availableUserPermissions)) {
