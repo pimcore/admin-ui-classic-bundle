@@ -74,30 +74,6 @@ pimcore.object.classes.data.dateRange = Class.create(pimcore.object.classes.data
             },
         ];
 
-        if (!inEncryptedField) {
-            const columnTypeField = new Ext.form.ComboBox({
-                name: 'columnType',
-                mode: 'local',
-                autoSelect: true,
-                forceSelection: true,
-                editable: false,
-                fieldLabel: t('column_type'),
-                value: datax.columnType !== 'bigint(20)' && datax.columnType !== 'date' ? 'bigint(20)' : datax.columnType,
-                store: new Ext.data.ArrayStore({
-                    fields: [
-                        'id',
-                        'label',
-                    ],
-                    data: [['bigint(20)', 'BIGINT'], ['date', 'DATE']],
-                }),
-                triggerAction: 'all',
-                valueField: 'id',
-                displayField: 'label',
-            });
-
-            specificItems.push(columnTypeField);
-        }
-
         return specificItems;
     },
 
