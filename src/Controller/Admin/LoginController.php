@@ -61,7 +61,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         protected ResponseHelper $responseHelper,
         protected TranslatorInterface $translator,
         protected PimcoreBundleManager $bundleManager,
-        protected EventDispatcherInterface $eventDispatcher,
+        protected EventDispatcherInterface $eventDispatcher
     ) {
     }
 
@@ -185,10 +185,10 @@ class LoginController extends AdminAbstractController implements KernelControlle
      *
      * @Route("/login/login", name="pimcore_admin_login_check")
      */
-    public function loginCheckAction(Request $request, EventDispatcherInterface $dispatcher): RedirectResponse
+    public function loginCheckAction(Request $request): RedirectResponse
     {
         // just in case the authenticator didn't redirect
-        return new RedirectResponse($this->generateUrl('pimcore_admin_login'));
+        return new RedirectResponse($this->generateUrl('pimcore_admin_login', ['perspective' => strip_tags($request->get('perspective', ''))]));
     }
 
     /**
