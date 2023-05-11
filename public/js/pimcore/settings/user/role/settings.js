@@ -72,24 +72,34 @@ pimcore.settings.user.role.settings = Class.create({
         var itemsPerSection = [];
         var sectionArray = [];
         for (var i = 0; i < this.data.availablePermissions.length; i++) {
-            let section = this.data.availablePermissions[i].category;
+            let section = this.data.availablePermissions[i].category ? 'bundles' : 'default';
             if(!section){
                 section = "default";
             }
             if (!itemsPerSection[section]) {
                 itemsPerSection[section] = [];
             }
-            itemsPerSection[section].push({
-                xtype: "checkbox",
-                boxLabel: t(this.data.availablePermissions[i].key),
-                name: "permission_" + this.data.availablePermissions[i].key,
-                checked: this.data.permissions[this.data.availablePermissions[i].key],
-                labelWidth: 200
-            });
+
+            let boxLabel = t(this.data.availablePermissions[i].key);
+            let category = this.data.availablePermissions[i].category;
+            if(section === 'bundles') {
+                boxLabel ='<span style="color:grey">' + category + '</span> - ' + boxLabel;
+            }
+
+            itemsPerSection[section].push(
+                {
+                    xtype: "checkbox",
+                    boxLabel: boxLabel,
+                    name: "permission_" + this.data.availablePermissions[i].key,
+                    checked: this.data.permissions[this.data.availablePermissions[i].key],
+                    labelWidth: 200,
+                    category: category
+                },
+            );
         }
         for (var key in itemsPerSection) {
             let title = t("permissions");
-            if (key && key != "default") {
+            if (key && key !== "default") {
                 title += " " + t(key);
             }
 
