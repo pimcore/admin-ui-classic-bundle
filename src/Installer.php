@@ -115,7 +115,7 @@ class Installer extends SettingsStoreAwareInstaller
                 continue;
             }
 
-            $this->getSchema()->dropTable($table);
+            $this->db->executeQuery("DROP TABLE IF EXISTS $table");
         }
     }
 

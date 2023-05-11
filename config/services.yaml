@@ -3,6 +3,11 @@ services:
         autowire: true
         autoconfigure: true
 
+    Pimcore\Bundle\AdminBundle\Installer:
+        public: true
+        arguments:
+            $bundle: "@=service('kernel').getBundle('PimcoreAdminBundle')"
+
     #
     # CONTROLLERS
     #
