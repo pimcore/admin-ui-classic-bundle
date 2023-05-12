@@ -587,6 +587,9 @@ class UserController extends AdminAbstractController implements KernelController
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
                         $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['new_password']);
                     } else {
+                        if (!$oldPasswordCheck) {
+                            return $this->adminJson(['success' => false, 'message' => 'incorrect_password']);
+                        }
                         return $this->adminJson(['success' => false, 'message' => 'password_cannot_be_changed']);
                     }
                 }
