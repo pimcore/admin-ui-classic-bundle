@@ -17,7 +17,6 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator;
 
 use Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\ConfigElementInterface;
-use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool;
 
 abstract class AbstractOperator implements OperatorInterface

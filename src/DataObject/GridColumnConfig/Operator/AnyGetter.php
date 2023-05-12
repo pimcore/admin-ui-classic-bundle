@@ -19,7 +19,6 @@ namespace Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator;
 use Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\ResultContainer;
 use Pimcore\Model\AbstractModel;
 use Pimcore\Model\Element\ElementInterface;
-use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool\Admin;
 
 /**
