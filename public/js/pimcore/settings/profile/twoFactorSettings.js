@@ -42,7 +42,7 @@ pimcore.settings.profile.twoFactorSettings = Class.create({
                         url: Routing.generate('pimcore_admin_user_reset_my_2fa_secret'),
                         method: 'PUT',
                         success: function (response) {
-                            document.getElementById('pimcore_logout_form').submit();
+                            window.location.href = Routing.generate('pimcore_admin_2fa_setup');
                         }.bind(this)
                     });
                 }.bind(this)
