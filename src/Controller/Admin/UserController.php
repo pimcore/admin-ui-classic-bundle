@@ -590,6 +590,7 @@ class UserController extends AdminAbstractController implements KernelController
                         if (!$oldPasswordCheck) {
                             return $this->adminJson(['success' => false, 'message' => 'incorrect_password']);
                         }
+
                         return $this->adminJson(['success' => false, 'message' => 'password_cannot_be_changed']);
                     }
                 }
