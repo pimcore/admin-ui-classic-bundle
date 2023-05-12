@@ -378,7 +378,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
             $config->save();
 
-            return $this->adminJson(['success' => true, 'data' => $config]);
+            return $this->adminJson(['success' => true, 'data' => $this->getConfigItem($config)]);
         }
 
         return $this->adminJson(['success' => false]);
@@ -540,7 +540,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
             $config->save();
 
-            return $this->adminJson(['success' => true, 'data' => $config]);
+            return $this->adminJson(['success' => true, 'data' => $this->getConfigItem($config)]);
         }
 
         return $this->adminJson(['success' => false]);
@@ -1321,7 +1321,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
         $data = [];
         foreach ($configList as $config) {
-            $item = $this->getConfigItem($config);
+            $item = $this->getKeyConfigItem($config);
             $data[] = $item;
         }
         $rootElement['data'] = $data;
@@ -1357,7 +1357,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
             }
 
             $config->save();
-            $item = $this->getConfigItem($config);
+            $item = $this->getKeyConfigItem($config);
 
             return $this->adminJson(['success' => true, 'data' => $item]);
         }
@@ -1365,26 +1365,16 @@ class ClassificationstoreController extends AdminAbstractController implements K
         return $this->adminJson(['success' => false]);
     }
 
-    protected function getConfigItem(Classificationstore\KeyConfig $config): array
+    protected function getConfigItem(Classificationstore\KeyConfig|Classificationstore\CollectionConfig|Classificationstore\GroupConfig $config): array
     {
         $name = $config->getName();
 
-        $groupDescription = null;
         $item = [
             'storeId' => $config->getStoreId(),
             'id' => $config->getId(),
             'name' => $name,
             'description' => $config->getDescription(),
-            'type' => $config->getType() ? $config->getType() : 'input',
-            'definition' => $config->getDefinition(),
         ];
-
-        if ($config->getDefinition()) {
-            $definition = json_decode($config->getDefinition(), true);
-            if ($definition) {
-                $item['title'] = $definition['title'];
-            }
-        }
 
         if ($config->getCreationDate()) {
             $item['creationDate'] = $config->getCreationDate();
@@ -1392,6 +1382,23 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
         if ($config->getModificationDate()) {
             $item['modificationDate'] = $config->getModificationDate();
+        }
+
+        return $item;
+    }
+
+    protected function getKeyConfigItem(Classificationstore\KeyConfig $config): array
+    {
+        $item = $this->getConfigItem($config);
+        $item['type'] = $config->getType() ? $config->getType() : 'input';
+        $definition = $config->getDefinition();
+        $item['definition'] = $definition;
+
+        if ($definition) {
+            $definition = json_decode($definition, true);
+            if ($definition) {
+                $item['title'] = $definition['title'];
+            }
         }
 
         return $item;
