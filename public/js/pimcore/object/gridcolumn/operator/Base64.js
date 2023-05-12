@@ -26,7 +26,6 @@ pimcore.object.gridcolumn.operator.base64 = Class.create(pimcore.object.gridcolu
     iconCls: "pimcore_icon_operator_base64",
     defaultText: "Base64",
 
-
     getConfigTreeNode: function (configAttributes) {
         if (configAttributes) {
             var nodeLabel = this.getNodeLabel(configAttributes);
@@ -90,7 +89,8 @@ pimcore.object.gridcolumn.operator.base64 = Class.create(pimcore.object.gridcolu
             fieldLabel: t('label'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.label
+            value: this.node.data.configAttributes.label,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         var mode = this.node.data.configAttributes.mode;

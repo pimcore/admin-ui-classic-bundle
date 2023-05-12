@@ -115,11 +115,7 @@ pimcore.settings.website = Class.create({
                 flex: 100,
                 editable: true,
                 sortable: true,
-                editor: new Ext.form.TextField({
-                    listeners: {
-                        'change': pimcore.helpers.htmlEncodeTextField
-                    }
-                })
+                editor: new Ext.form.TextField()
             },
             {
                 text: t('language'),
@@ -138,14 +134,14 @@ pimcore.settings.website = Class.create({
                 dataIndex: 'data',
                 flex: 300,
                 editable: true,
-                editor: new Ext.form.TextField({
-                    listeners: {
-                        'change': pimcore.helpers.htmlEncodeTextField
-                    }
-                }),
+                editor: new Ext.form.TextField(),
                 renderer: this.getCellRenderer.bind(this),
             },
-            {text: t("site"), flex: 100, sortable:true, dataIndex: "siteId",
+            {
+                text: t("site"),
+                flex: 100,
+                sortable: true,
+                dataIndex: "siteId",
                 editor: new Ext.form.ComboBox({
                     store: pimcore.globalmanager.get("sites"),
                     valueField: "id",
@@ -161,9 +157,12 @@ pimcore.settings.website = Class.create({
                     }
                     return null;
                 }
-            }
-            ,
-            {text: t("creationDate"), sortable: true, dataIndex: 'creationDate', editable: false,
+            },
+            {
+                text: t("creationDate"),
+                sortable: true,
+                dataIndex: 'creationDate',
+                editable: false,
                 hidden: true,
                 renderer: function(d) {
                     if (d !== undefined) {
@@ -173,9 +172,12 @@ pimcore.settings.website = Class.create({
                         return "";
                     }
                 }
-            }
-            ,
-            {text: t("modificationDate"), sortable: true, dataIndex: 'modificationDate', editable: false,
+            },
+            {
+                text: t("modificationDate"),
+                sortable: true,
+                dataIndex: 'modificationDate',
+                editable: false,
                 hidden: true,
                 renderer: function(d) {
                     if (d !== undefined) {
@@ -185,8 +187,7 @@ pimcore.settings.website = Class.create({
                         return "";
                     }
                 }
-            }
-            ,
+            },
             {
                 xtype:'actioncolumn',
                 menuText:t('empty'),
@@ -196,9 +197,7 @@ pimcore.settings.website = Class.create({
                 handler:function (grid, rowIndex) {
                     grid.getStore().getAt(rowIndex).set("data","");
                 }.bind(this)
-
-            }
-            ,
+            },
             {
                 xtype:'actioncolumn',
                 menuText: t('delete'),
@@ -207,13 +206,12 @@ pimcore.settings.website = Class.create({
                 icon:"/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
                 handler:function (grid, rowIndex) {
                     let data = grid.getStore().getAt(rowIndex);
-                    pimcore.helpers.deleteConfirm(t('website_settings'), data.data.name, function () {
+                    pimcore.helpers.deleteConfirm(t('website_settings'), Ext.util.Format.htmlEncode(data.data.name), function () {
                         grid.getStore().removeAt(rowIndex);
                     }.bind(this));
                 }.bind(this)
             }
         ];
-
 
         var propertyTypes = new Ext.data.SimpleStore({
             fields: ['id', 'name'],
