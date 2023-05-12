@@ -21,6 +21,7 @@ use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Bundle\PersonalizationBundle\Model\Document\Targeting\TargetingDocumentInterface;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Logger;
@@ -170,16 +171,13 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     protected function addDataToDocument(Request $request, Model\Document $document): void
     {
         if ($document instanceof Model\Document\PageSnippet) {
-            // if a target group variant get's saved, we have to load all other editables first, otherwise they will get deleted
-
-            if ($request->get('appendEditables')) {
-                // ensure editable are loaded
+            if($request->get('appendEditables') || (interface_exists(TargetingDocumentInterface::class) && $document instanceof TargetingDocumentInterface)) {
                 $document->getEditables();
             } else {
                 // ensure no editables (e.g. from session, version, ...) are still referenced
                 $document->setEditables(null);
             }
-
+            
             if ($request->get('data')) {
                 $data = $this->decodeJson($request->get('data'));
                 foreach ($data as $name => $value) {
