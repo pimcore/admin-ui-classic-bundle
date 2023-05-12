@@ -892,6 +892,7 @@ class UserController extends AdminAbstractController implements KernelController
     public function resetMy2FaSecretAction(Request $request): JsonResponse
     {
         $user = $this->getAdminUser();
+        $user->setTwoFactorAuthentication('required', true);
         $user->setTwoFactorAuthentication('enabled', false);
         $user->setTwoFactorAuthentication('secret', '');
         $user->save();
