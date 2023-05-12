@@ -57,12 +57,14 @@ pimcore.settings.profile.panel = Class.create({
         this.currentUser = pimcore.currentuser;
 
         var passwordCheck = function (el) {
-            if (/^(?=.*\d)(?=.*[a-zA-Z]).{6,100}$/.test(el.getValue())) {
+            if (pimcore.helpers.isValidPassword(el.getValue())) {
                 el.getEl().addCls("password_valid");
                 el.getEl().removeCls("password_invalid");
+                passwordHint.hide();
             } else {
                 el.getEl().addCls("password_invalid");
                 el.getEl().removeCls("password_valid");
+                passwordHint.show();
             }
         };
 
@@ -171,6 +173,14 @@ pimcore.settings.profile.panel = Class.create({
             }
         });
 
+        var passwordHint = new Ext.Container({
+            xtype: "container",
+            itemId: "password_hint",
+            html: t("password_hint"),
+            style: "color: red;",
+            hidden: true
+        });
+
         generalItems.push({
             xtype: "fieldset",
             title: t("change_password"),
@@ -220,7 +230,7 @@ pimcore.settings.profile.panel = Class.create({
                         }.bind(this)
                     }
                 ]
-            }, retypePasswordField]
+            }, retypePasswordField, passwordHint]
         });
 
         var twoFactorSettings = new pimcore.settings.profile.twoFactorSettings(this.currentUser.twoFactorAuthentication);
@@ -317,12 +327,21 @@ pimcore.settings.profile.panel = Class.create({
         var values = this.basicPanel.getForm().getFieldValues();
         var contentLanguages = this.editorSettings.getContentLanguages();
         values.contentLanguages = contentLanguages;
+        let canBeSaved = true;
 
         if (values["new_password"]) {
-            if (!pimcore.helpers.isValidPassword(values["new_password"]) || values["new_password"] != values["retype_password"]) {
+            if (!pimcore.helpers.isValidPassword(values["new_password"])) {
                 delete values["new_password"];
                 delete values["retype_password"];
                 Ext.MessageBox.alert(t('error'), t("password_was_not_changed"));
+                canBeSaved = false;
+            }
+
+            if(canBeSaved && values["new_password"] !== values["retype_password"]) {
+                delete values["new_password"];
+                delete values["retype_password"];
+                Ext.MessageBox.alert(t('error'), t("password_does_not_match"));
+                canBeSaved = false;
             }
         }
 
@@ -333,43 +352,44 @@ pimcore.settings.profile.panel = Class.create({
         }
 
 
+        if (canBeSaved) {
+            Ext.Ajax.request({
+                url: Routing.generate('pimcore_admin_user_updatecurrentuser'),
+                method: "PUT",
+                params: {
+                    id: this.currentUser.id,
+                    data: Ext.encode(values),
+                    keyBindings: keyBindings
+                },
+                success: function (response) {
+                    try {
+                        var res = Ext.decode(response.responseText);
+                        if (res.success) {
 
-        Ext.Ajax.request({
-            url: Routing.generate('pimcore_admin_user_updatecurrentuser'),
-            method: "PUT",
-            params: {
-                id: this.currentUser.id,
-                data: Ext.encode(values),
-                keyBindings: keyBindings
-            },
-            success: function (response) {
-                try {
-                    var res = Ext.decode(response.responseText);
-                    if (res.success) {
+                            if (this.forceReloadOnSave) {
+                                this.forceReloadOnSave = false;
 
-                        if (this.forceReloadOnSave) {
-                            this.forceReloadOnSave = false;
+                                Ext.MessageBox.confirm(t("info"), t("reload_pimcore_changes"), function (buttonValue) {
+                                    if (buttonValue == "yes") {
+                                        window.location.reload();
+                                    }
+                                }.bind(this));
+                            }
 
-                            Ext.MessageBox.confirm(t("info"), t("reload_pimcore_changes"), function (buttonValue) {
-                                if (buttonValue == "yes") {
-                                    window.location.reload();
-                                }
-                            }.bind(this));
+                            pimcore.helpers.showNotification(t("success"), t("saved_successfully"), "success");
+                            if (contentLanguages) {
+                                pimcore.settings.websiteLanguages = contentLanguages;
+                                pimcore.currentuser.contentLanguages = contentLanguages.join(',');
+                            }
+                        } else {
+                            pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error", t(res.message));
                         }
-
-                        pimcore.helpers.showNotification(t("success"), t("saved_successfully"), "success");
-                        if (contentLanguages) {
-                            pimcore.settings.websiteLanguages = contentLanguages;
-                            pimcore.currentuser.contentLanguages = contentLanguages.join(',');
-                        }
-                    } else {
-                        pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error", t(res.message));
+                    } catch (e) {
+                        pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                     }
-                } catch (e) {
-                    pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
-                }
-            }.bind(this)
-        });
+                }.bind(this)
+            });
+        }
     },
 
     activate: function () {

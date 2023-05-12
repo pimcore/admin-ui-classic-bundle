@@ -23,6 +23,8 @@ usermodification: 'User Modification'
 userowner: Owner
 languages: Languages
 password_was_not_changed: "Password wasn't changed because it isn't secure enough"
+password_does_not_match: "New password and confirm password doesn't match"
+incorrect_password: "Given password is incorrect"
 marketing: Marketing
 clear_content_of_current_view: 'Clear content of current view'
 highlight_editable_elements: 'Highlight editable elements'
