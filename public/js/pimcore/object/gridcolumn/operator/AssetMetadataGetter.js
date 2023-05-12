@@ -85,7 +85,8 @@ pimcore.object.gridcolumn.operator.assetmetadatagetter = Class.create(pimcore.ob
             fieldLabel: t('label'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.label
+            value: this.node.data.configAttributes.label,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         var data = [];
@@ -104,7 +105,8 @@ pimcore.object.gridcolumn.operator.assetmetadatagetter = Class.create(pimcore.ob
             fieldLabel: t('metadata_field'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.metaField
+            value: this.node.data.configAttributes.metaField,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         var options = {

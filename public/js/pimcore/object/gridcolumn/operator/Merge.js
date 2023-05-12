@@ -82,7 +82,8 @@ pimcore.object.gridcolumn.operator.merge = Class.create(pimcore.object.gridcolum
         this.textField = new Ext.form.TextField({
             fieldLabel: t('label'),
             labelWidth: 200,
-            value: this.node.data.configAttributes.label
+            value: this.node.data.configAttributes.label,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         this.flattenField = new Ext.form.Checkbox({
@@ -96,7 +97,6 @@ pimcore.object.gridcolumn.operator.merge = Class.create(pimcore.object.gridcolum
             labelWidth: 200,
             value: this.node.data.configAttributes.unique
         });
-
 
         this.configPanel = new Ext.Panel({
             layout: "form",

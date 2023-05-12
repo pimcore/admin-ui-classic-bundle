@@ -47,8 +47,8 @@ final class AnyGetter extends AbstractOperator
 
         parent::__construct($config, $context);
 
-        $this->attribute = SecurityHelper::convertHtmlSpecialChars($config->attribute ?? '');
-        $this->param1 = SecurityHelper::convertHtmlSpecialChars($config->param1 ?? '');
+        $this->attribute = $config->attribute ?? '';
+        $this->param1 = $config->param1 ?? '';
         $this->isArrayType = $config->isArrayType ?? false;
 
         $this->forwardAttribute = $config->forwardAttribute ?? '';
@@ -159,7 +159,7 @@ final class AnyGetter extends AbstractOperator
 
     public function setAttribute(string $attribute): void
     {
-        $this->attribute = SecurityHelper::convertHtmlSpecialChars($attribute);
+        $this->attribute = $attribute;
     }
 
     public function getParam1(): string
@@ -169,7 +169,7 @@ final class AnyGetter extends AbstractOperator
 
     public function setParam1(string $param1): void
     {
-        $this->param1 = SecurityHelper::convertHtmlSpecialChars($param1);
+        $this->param1 = $param1;
     }
 
     public function getForwardAttribute(): string

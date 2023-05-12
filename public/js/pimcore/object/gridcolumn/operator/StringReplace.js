@@ -27,7 +27,6 @@ pimcore.object.gridcolumn.operator.stringreplace = Class.create(pimcore.object.g
     defaultText: "String Replace",
     group: "string",
 
-
     getConfigTreeNode: function(configAttributes) {
         if(configAttributes) {
             var node = {
@@ -88,23 +87,25 @@ pimcore.object.gridcolumn.operator.stringreplace = Class.create(pimcore.object.g
             fieldLabel: t('label'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.label
+            value: this.node.data.configAttributes.label,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         this.searchField = new Ext.form.TextField({
             fieldLabel: t('search'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.search
+            value: this.node.data.configAttributes.search,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         this.replaceField = new Ext.form.TextField({
             fieldLabel: t('replace'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.replace
+            value: this.node.data.configAttributes.replace,
+            renderer: Ext.util.Format.htmlEncode
         });
-
 
         this.insensitiveField = new Ext.form.Checkbox({
             fieldLabel: t('insensitive'),

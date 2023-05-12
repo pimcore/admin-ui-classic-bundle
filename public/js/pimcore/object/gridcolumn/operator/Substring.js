@@ -87,7 +87,8 @@ pimcore.object.gridcolumn.operator.substring = Class.create(pimcore.object.gridc
             fieldLabel: t('label'),
             length: 255,
             width: 200,
-            value: this.node.data.configAttributes.label
+            value: this.node.data.configAttributes.label,
+            renderer: Ext.util.Format.htmlEncode
         });
 
         this.startField = new Ext.form.NumberField({
@@ -104,7 +105,6 @@ pimcore.object.gridcolumn.operator.substring = Class.create(pimcore.object.gridc
             width: 200,
             value: this.node.data.configAttributes.length
         });
-
 
         this.ellipsesField = new Ext.form.Checkbox({
             fieldLabel: t('ellipses'),
