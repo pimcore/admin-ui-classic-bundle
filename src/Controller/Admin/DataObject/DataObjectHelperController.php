@@ -1480,7 +1480,7 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @Route("/get-batch-jobs", name="getbatchjobs", methods={"GET"})
+     * @Route("/get-batch-jobs", name="getbatchjobs", methods={"POST"})
      *
      *
      */
