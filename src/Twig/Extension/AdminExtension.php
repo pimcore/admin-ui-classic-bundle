@@ -109,6 +109,7 @@ class AdminExtension extends AbstractExtension
             str_replace(PIMCORE_WEB_ROOT, '', $icon)
         );
     }
+
     public function twemojiVariantIcon(string $icon): string
     {
         return sprintf('<img title="%s" data-imgpath="%s" />',
