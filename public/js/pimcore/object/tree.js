@@ -786,7 +786,7 @@ pimcore.registerNS("pimcore.object.tree");
 
                      let currentSortMethod = record.data.sortBy;
 
-                     if (currentSortMethod !== "key" || user.admin || user.isAllowed("objects_sort_method")) {
+                     if (currentSortMethod === "key" || user.admin || user.isAllowed("objects_sort_method")) {
                          sortByItems.push({
                              text: t('by_key'),
                              iconCls: "pimcore_icon_alphabetical_sorting_az",
@@ -799,7 +799,7 @@ pimcore.registerNS("pimcore.object.tree");
                          });
                      }
 
-                     if (currentSortMethod !== "index" || user.admin || user.isAllowed("objects_sort_method")) {
+                     if (currentSortMethod === "index" || user.admin || user.isAllowed("objects_sort_method")) {
                          sortByItems.push({
                              text: t('by_index'),
                              iconCls: "pimcore_icon_index_sorting",
