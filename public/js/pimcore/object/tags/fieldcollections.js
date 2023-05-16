@@ -107,7 +107,7 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
 
 
     postSaveObject: function(e) {
-        if (e.detail.object.id === this.object.id) {
+        if (this.component.items && (e.detail.object.id === this.object.id)) {
             for (var itemIndex = 0; itemIndex < this.component.items.items.length; itemIndex++) {
                 var item = this.component.items.items[itemIndex];
                 item["pimcore_oIndex"] = itemIndex;
