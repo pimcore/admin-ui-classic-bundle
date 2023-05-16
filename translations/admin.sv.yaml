@@ -1,0 +1,1088 @@
+---
+unsupported_feature: "Funktionen saknar st\xF6d! Kontrollera systemkraven!"
+screen_size_to_small: "Din sk\xE4rm \xE4r f\xF6r liten f\xF6r att visa den \xF6nskade
+  f\xF6rhandsvisningen."
+too_many_children_for_recyclebin: "Detta element inneh\xE5ller f\xF6r m\xE5nga barn
+  f\xF6r att flyttas till papperskorgen."
+default: "Standardv\xE4rde"
+metadata: Metadata
+email_address: E-postadress
+OK: OK
+optional: Valfri
+search_replace_assignments_error: "V\xE4nligen v\xE4lj de artiklar att ers\xE4tta
+  och en ny m\xE5lartikel."
+replace_assignments_in_selected_elements: "Ers\xE4tt tilldelningar i valda element"
+search_replace_assignments: "S\xF6k & ers\xE4tt uppgifter"
+imageadvanced: Avancerad bild
+filter_active_message: "Vill du endast exportera filtrerade v\xE4rden?"
+close_others: "St\xE4ng alla andra"
+close_all: "St\xE4ng alla"
+close_unmodified: "St\xE4ng alla icke \xE4ndrade"
+classid: Klass-ID
+parentid: "F\xF6r\xE4lder-ID"
+mimetype: MIME-typ
+creationdate: Skapad
+usermodification: "Anv\xE4ndarf\xF6r\xE4ndring"
+userowner: "\xC4gare"
+languages: "Spr\xE5k"
+password_was_not_changed: "L\xF6senordet kunde inte \xE4ndras p\xE5 grund av att det
+  inte \xE4r tillr\xE4ckligt s\xE4kert"
+marketing: "Marknadsf\xF6ring"
+clear_content_of_current_view: "T\xF6m inneh\xE5ll f\xF6r vyn"
+highlight_editable_elements: "Markera element som g\xE5r att f\xF6r\xE4ndra"
+continue: "Forts\xE4tt"
+you_have_unsaved_changes: "Du har \xE4ndringar som inte \xE4r sparade."
+shared_translations: "Delade \xF6vers\xE4ttningar"
+textfield: "Textf\xE4lt"
+add_data: "L\xE4gg till data"
+add_hotspot: "L\xE4gg till hotspot"
+add_marker_or_hotspots: "L\xE4gg till mark\xF6r eller hotspot"
+custom_reports: Anpassade rapporter
+start_date: Startdatum
+start_date_relative: Startdatum (relativt dagens datum)
+end_date: Slutdatum
+end_date_relative: Slutdatum (relativt dagens datum)
+relative_date_description: "Exempelvis -1m, +1d (d\xE4r d=dagar, m=m\xE5nader, y=\xE5r)"
+source_definition: "Definitioner f\xF6r k\xE4lla"
+clear_thumbnails: Rensa miniatyrer
+recipients: Mottagare
+object_filter: Objektfilter
+crm: CRM
+notes_events: "Noteringar &amp; h\xE4ndelser"
+delete_folder: Radera mapp
+home: Hem
+subject: "\xC4mne"
+poster_image: Affisch-bild
+tablet: Surfplatta
+hardlink: "H\xE5rdl\xE4nk"
+convert_to: Konvertera till
+replace: "Ers\xE4tt"
+paste_inheritance: Klistra in (med arv)
+are_you_sure: "\xC4r du s\xE4ker?"
+all_content_will_be_lost: "Allt inneh\xE5ll kommer f\xF6rloras"
+overwrite: "Skriv \xF6ver"
+click_right_to_overwrite: "H\xF6gerklicka f\xF6r att skriva \xF6ver"
+open_document_by_id: "\xD6ppna dokument"
+open_asset_by_id: "\xD6ppna tillg\xE5ng"
+open_object_by_id: "\xD6ppna objekt"
+element_not_found: Elementet hittades inte
+do_you_really_want_to_leave_the_editmode: "Vill du verkligen l\xE4mna redigeringsl\xE4ge
+  (NEJ!)"
+or_specify_an_asset_image_below: "eller ange en bild h\xE4r under"
+medium: Medium
+saved_successfully: Sparad
+qr_codes: QR-koder
+element: Element
+details_for_selected_event: "Detaljer f\xF6r det valda elementet"
+fields: "F\xE4lt"
+not_possible_with_paging: "Detta \xE4r inte m\xF6jligt f\xF6r element som \xE4r paginerade,
+  prova att strukturera om ditt data f\xF6r att undvika sidbrytning"
+inherited: "\xC4rvda"
+length: "L\xE4ngd"
+show_in_tree: "Visa i tr\xE4dstrukturen"
+exactmatch: Exakt matching
+desktop: Dator
+drag_me: Dra mig
+serverVars: Server-variabler
+code: Kod
+tag: "M\xE4rk"
+tags: "M\xE4rken"
+Click here to proceed: "Klicka h\xE4r f\xF6r att forts\xE4tta"
+Your browser is not supported. Please install the latest version of one of the following browsers.: "Din
+  webbl\xE4sare st\xF6ds inte. Installera den senaste versionen av n\xE5gon av f\xF6ljande
+  webbl\xE4sare."
+open_in_new_window: "\xD6ppna i nytt f\xF6nster"
+limit_reached: "Gr\xE4nsv\xE4rde uppn\xE5tt"
+casesensitive: "skiftl\xE4gesk\xE4nsliga"
+path_aliases: "Alias f\xF6r s\xF6kv\xE4gar"
+pretty_url: Snygga URL:er
+pretty_url_label: "Snygga URL:er (f\xE5r f\xF6retr\xE4de j\xE4mtemot s\xF6kv\xE4g
+  fr\xE5n tr\xE4dstrukturen)"
+password_cannot_be_changed: "L\xF6senordet kan inte \xE4ndras"
+old_password: "Gammalt l\xF6senord"
+new_password: "Nytt l\xF6senord"
+retype_password: "Repetera l\xF6senordet"
+reports: Rapporter
+roles: Roller
+Password: "L\xF6senord"
+Forgot your password: "Gl\xF6mt ditt l\xF6senord?"
+Back to Login: Tillbaka till Logga in
+Enter your username and pimcore will send a login link to your email address: "Skriv
+  in ditt anv\xE4ndarnamn f\xF6r att f\xE5 en inloggningsl\xE4nk skickad till din
+  e-post"
+Please check your mailbox.: "V\xE4nligen kontrollera din e-post."
+Login: Logga in
+Submit: Skicka
+A temporary login link has been sent to your email address.: "En tempor\xE4r inloggningsl\xE4nk
+  har skickats till din e-post."
+user_inactive: "Anv\xE4ndaren \xE4r inte aktiv"
+user_no_email_address: "Anv\xE4ndaren har ingen e-postadress"
+user_no_password: "Anv\xE4ndaren har inget l\xF6senord"
+user_unknown: "Ok\xE4nd anv\xE4ndare"
+lost_password_email_error: "Det gick inte att skicka e-postmeddelande f\xF6r l\xF6senords\xE5terst\xE4llning"
+use_current_player_position_as_preview: "Anv\xE4nd nuvarande position som f\xF6rhandsgranskning."
+select_image_preview: "V\xE4lj f\xF6rhansvisning av bild"
+preview_not_available: "F\xF6rhandsvisning ej tillg\xE4nglig"
+status: Status
+video_preview_in_progress: "F\xF6rhandsvisning f\xF6r videon p\xE5g\xE5r"
+php_cli_binary_and_or_ffmpeg_binary_setting_is_missing: "PHP-CLI bin\xE4r eller FFMPEG
+  \xE4r inte tillg\xE4nglig, se till att b\xE5da \xE4r installerade och konfigurerade
+  under systeminst\xE4llningar!"
+video_thumbnails: "Tumnaglar f\xF6r filmer"
+do_you_really_want_to_close_pimcore: "Vill du verklingen st\xE4nga Pimcore?"
+drop_element_here: "Sl\xE4pp elementet h\xE4r"
+select_specific_area_of_image: "Markera specifikt omr\xE5de av bilden"
+paste_recursive_updating_references: Klistra in rekursivt, uppdatera referenser
+add_hardlink: "L\xE4gg till absolut l\xE4nk"
+source_path: "S\xF6kv\xE4g till k\xE4lla"
+properties_from_source: "Anv\xE4nd inst\xE4llningar fr\xE5n k\xE4lldokument"
+children_from_source: "Anv\xE4nd barn fr\xE5n k\xE4lldokument"
+click_right_for_more_options: "H\xF6gerklicka f\xF6r fler alternativ"
+move_to_tab: Flytta till flik
+not_supported: "St\xF6ds inte"
+edit_link: "Justera l\xE4nk"
+resize: "\xC4ndra storlek"
+scalebyheight: "Skala efter h\xF6jd"
+scalebywidth: Skala efter bredd
+crop: "Besk\xE4r"
+cleanup: Rensa upp
+this_element_cannot_be_edited: Detta element kan inte redigeras
+details: Detaljer
+cannot_save_object_please_try_to_edit_the_object_in_detail_view: "Kan inte spara objektet!
+  V\xE4nligen redigera objektet i detaljvyn."
+size: Storlek
+select_a_file: "V\xE4lj en fil"
+upload_compatibility_mode: "Ladda upp en fil (kompabilitetsl\xE4ge)"
+the_system_is_in_maintenance_mode_please_wait: "Systemet \xE4r i underh\xE5llningsl\xE4ge,
+  v\xE4nligen v\xE4nta"
+activate: Aktivera
+image_is_too_small: "Bilden \xE4r f\xF6r liten, v\xE4lj en st\xF6rre."
+name_is_not_allowed: "Namnet \xE4r otill\xE5tet"
+upload_files: Ladda upp filer
+upload_zip: Ladda upp ZIP-fil
+document_root: Dokumentrot
+batch_change_selected: "M\xE5ngduppdatering vald"
+download_as_zip: Ladda ned som ZIP-fil
+locked: "L\xE5st"
+element_cannot_be_move_because_it_is_locked: "Elementet kan inte flyttas f\xF6r att
+  det \xE4r l\xE5st."
+element_cannot_be_moved: Elementet kan inte flyttas hit
+element_cannot_be_moved_because_target_is_paginated: "Elementet kan inte dras p\xE5
+  ett paginerat tr\xE4d/mapp med manuell indexering (Sortera efter index). \xC4ndra
+  sorteringsmetoden eller anv\xE4nd alternativet \"S\xF6k och flytta\" under \"Avancerat\"
+  snabbmenyn f\xF6r m\xE5let f\xF6r att flytta elementen."
+no_collections_allowed: "Inga anslutningar till\xE5tna"
+filter_condition: Filtervillkor
+all_types: Alla typer
+audio: Ljud
+video: Film
+archive: Arkiv
+unknown: "Ok\xE4nt"
+class: Klass
+page: Sida
+objectbrick: Objekttegel
+field_collection: "F\xE4ltsamling"
+snippet: Utdrag
+folder: Mapp
+your_selection: Ditt val
+double_click_to_add_item_to_selection: "Dubbelklicka p\xE5 ett element f\xF6r att
+  l\xE4gga till i ditt val"
+label: Etikett
+error_auth_failed: "Inloggning misslyckades!<br />F\xF6rs\xF6k igen."
+error_session_expired: "Sessionen har upph\xF6rt!<br />Logga in igen."
+site: Sajt
+descending: Fallande
+ascending: Stigande
+sort: Sortera
+results: Resultat
+dimension: Dimensioner
+metric: Metrisk
+segment: Segmentet
+data_explorer: Data-utforskaren
+navigation: Navigering
+entrances: "Ing\xE5ngssida"
+exits: Avslutssida
+restore: "\xC5terst\xE4ll"
+amount: Antal
+flush_recyclebin: "T\xF6m papperskorgen"
+recyclebin: Papperskorg
+deletedby: Raderad av
+open_select_editor: "\xD6ppna inst\xE4llningar f\xF6r markering"
+ignore: Ignorera
+email_log: E-postlogg
+email_log_resend: Skicka om e-post
+email_log_resend_window_msg: "V\xE4nligen bekr\xE4fta att du vill skicka om e-postmeddelandet
+  till alla mottagare."
+select_site: "V\xE4lj sajt"
+main_site: Huvudsajt
+filename: Filnamn
+unsupported_filetype: "Filtypen st\xF6ds ej"
+email_log_resend_window_success_message: E-postmeddelandet har skickats till alla
+  mottagare
+email_log_resend_window_error_message: "N\xE5got gick fel. E-postmeddelandet har inte
+  skickats om."
+error_jobs: "F\xF6ljande processer kunde inte slutf\xF6ras"
+batch_change: Batchuppgift
+batch_edit_field: "Redigera batchf\xE4lt"
+published: Publicerad
+all: alla
+items_per_page: Poster per sida
+reload_pimcore_changes: "Du m\xE5ste ladda om Pimcore f\xF6r att \xE4ndringarna ska
+  tr\xE4da i kraft. Vill du starta om nu?"
+info: Info
+or: eller
+paste_contents: "Klistra endast in inneh\xE5ll"
+paste_as_child: Klistra in som underliggande
+paste_recursive_as_child: Klistra in som barn (rekursiv)
+view_original: Visa original
+feed: "Fl\xF6de"
+no_items_found: "Inga f\xF6rem\xE5l hittades"
+public_url: Offentlig URL
+pageviews: Sidvisningar
+visits: "Bes\xF6k"
+detail: Info
+report_settings: "Rapportinst\xE4llningar"
+overview: "\xD6versikt"
+visitor_overview: "Bes\xF6ks\xF6versikt"
+other: Andra
+google_analytics: Google Analytics
+reports_and_marketing: "Marknadsf\xF6ring & rapporter"
+save_only_scheduled_tasks: Spara endast schemalagda uppdrag
+modified_assets: "\xC4ndrade assets"
+modification_statistic: "\xC4ndringar de senaste 31 dagarna"
+add_portlet: "L\xE4gg till komponent"
+modified_documents: Modifierade dokument
+modified_objects: Modifierade objekt
+welcome: "V\xE4lkommen"
+save_and_publish: Spara & publicera
+delete: Radera
+save: Spara
+add_assets: "L\xE4gg till asset(s)"
+preview: "F\xF6rhandsgranska"
+advanced: Avancerat
+basic: "Grundl\xE4ggande"
+list: Visa i lista
+view: Visa
+publish: Publicera
+rename: "D\xF6p om"
+settings: "Inst\xE4llningar"
+properties: Egenskaper
+versions: Versioner
+add: "L\xE4gg till"
+date: Datum
+user: "Anv\xE4ndare"
+note: Anteckning
+email_cc: Cc
+email_bcc: Hemlig kopia
+email_settings: "Inst\xE4llningar f\xF6r e-post"
+email_settings_receiver_description: "Flera mottagare kan anges genom att separera
+  e-postadresserna med ett semikolon.<br />Exempel: mottagare1@exempel.se; mottagare2@exempel.se<br
+  />F\xF6r 'Fr&aring;n' kan du anv\xE4nda <i>Mitt namn&lt;mitt-namn@exempel.se&gt;<i>"
+email_logs: Antal skickade
+email_log_sent_Date: Skickades datum
+predefined_document_type: "F\xF6rdefinierad dokumenttyp"
+controller: Kontroller
+action: Handling
+actions: Handlingar
+template: Mall
+staticroute: Statisk rutt
+static_generator: Statisk sidgenerator
+static_generator_enable: "Aktivera statisk rendering p\xE5 serversidan"
+static_generator_lifetime: "Livstid (i minuter) f\xF6r statisk sida (valfritt)"
+last_generated: Senast genererade
+key: Nyckel
+id: ID
+name: Namn
+title: Titel
+description: Beskrivning
+unpublish: "\xC5ngra publicering"
+target: "M\xE5l"
+type: Typ
+please_enter_the_new_name: Var god fyll i ett nytt namn
+add_page: "L\xE4gg till sida"
+add_snippet: "L\xE4gg till snippet"
+add_email: "L\xE4gg till e-postmeddelande"
+add_link: "L\xE4gg till l\xE4nk"
+copy: Kopiera
+paste: Klistra in
+close_all_tabs: "St\xE4ng alla flikar"
+search: "S\xF6k"
+import: Importera
+export: Exportera
+document_type: Dokumenttyp
+document_types: Dokumenttyper
+predefined_properties: "F\xF6rdefinierade egenskaper"
+users: "Anv\xE4ndare"
+profile: "Anv\xE4ndarprofil"
+my_profile: Min profil
+documentation: Dokumentation
+report_bugs: Rapportera fel
+about: Om
+file: Fil
+extras: "\xD6vrigt"
+help: "Hj\xE4lp"
+configuration: "Inst\xE4llningar"
+value: "V\xE4rde"
+add_a_custom_property: "L\xE4gg till en anpassad egenskap"
+custom: "Best\xE4llnings"
+general: Generellt
+language: "Spr\xE5k"
+quality: Kvalitet
+format: Formatera
+documents: Dokument
+assets: "Tillg\xE5ngar"
+upload: Ladda upp
+width: Bredd
+height: "H\xF6jd"
+empty: Tom
+workflow: "Arbetsfl\xF6de"
+modify: "Modifiera\_"
+create: "Skapa\_"
+edit: Redigera
+logout: Logga ut
+refresh: Uppdatera
+input: Inmatning
+checkbox: Kryssruta
+textarea: "Textf\xE4lt"
+image: Bild
+select: Rullgardinsmeny
+base: Bas
+add_object: "L\xE4gg till objekt"
+border: Ram
+document: Dokument
+asset: "Tillg\xE5ng"
+object: Objekt
+remove: Radera
+hidden_dependencies: "Det finns ytterligare beroenden som din anv\xE4ndare inte har
+  beh\xF6righet att se."
+open: "\xD6ppna"
+days: Dagar
+seemode: "Visningsl\xE4ge"
+edit_current_page: Redigera denna sida
+close: "St\xE4ng"
+name_already_in_use: "Namnet \xE4r upptaget, v\xE4lj ett annat."
+name_and_key_must_be_defined: "Namn och typ m\xE5ste anges"
+mandatory_field_empty: "Var god fyll i alla obligatoriska f\xE4lt"
+reload: Ladda om
+schedule: "Schemal\xE4gg"
+time: Tid
+version: Version
+active: Aktiv
+success: Lyckades
+translations: "\xD6vers\xE4ttningar"
+translation_simple: Enkel text
+translation_custom: ICU-format
+firstname: "F\xF6rnamn"
+lastname: Efternamn
+email: E-post
+cant_move_node_to_target: Noden kan ej flyttas
+error_moving_object: Objektet kunde inte flyttas
+translations_are_not_configured: "\xD6vers\xE4ttning \xE4r ej konfigurerad"
+read_more_here: "L\xE4s mer om h\xE4r"
+publish_version: Publicera version
+start: Start
+session_error_text: "Det verkar vara problem med din session. Vi rekommenderar att
+  du laddar om hela sidan f\xF6r att spara, men du kan f\xF6rs\xF6ka spara dina \xE4ndringar
+  f\xF6rst."
+session_error: Sessionsfel
+please_wait: "Var god v\xE4nta..."
+download: Ladda ned
+inheritable: "\xC4rftlig"
+redirects: Omdirigeringar
+source: "K\xE4lla"
+link: "L\xE4nk"
+abbr: "F\xF6rkortn."
+stop: "St\xE4ng av"
+dependencies: Beroenden
+requires: "Kr\xE4ver"
+required_by: "Kr\xE4vs av"
+search_edit: "S\xF6k, redigera och exportera"
+subtype: Undertyp
+initializing: Startar...
+please_select_a_type: "Var god v\xE4lj en typ"
+filter: Filtrera
+field: "F\xE4lt"
+operator: "Operat\xF6r"
+apply: "Applicera \xE4ndringar"
+show: Visa
+public: Offentlig
+maximum_2_versions: "Du kan j\xE4mf\xF6ra max tv\xE5 versioner"
+error: Fel
+element_is_locked: "Elementet anv\xE4nds av en annan person"
+element_lock_question: "Vill du \xF6ppna \xE4nd\xE5?"
+since: Sedan
+longitude: Longitud
+latitude: Latitud
+geopoint: Geografisk punkt
+cancel: Avbryt
+open_search_editor: "Visa alternativ f\xF6r s\xF6kning"
+parameters: Parametrar
+anchor: Ankare
+accesskey: Accessnyckel
+relation: Relation
+tabindex: Tabbindex
+not_set: inte konfigurerat
+export_csv: Exportera CSV
+import_csv: Importera CSV
+show_welcome_screen: "Visa v\xE4lkomstsk\xE4rm vid uppstart"
+importFileHasHeadRow: "f\xF6rsta raden = rubrik"
+overwrite_object_with_same_key_description: "N\xE4r 'Skriv \xF6ver' \xE4r f\xF6rkryssad,
+  kommer objekt med samma namn att ers\xE4ttas ist\xE4llet f\xF6r att skapas p\xE5
+  nytt. Befintliga objekt i din importmapp med nyckelbegrepp som inte finns i importfilen,
+  kommer att vara of\xF6r\xE4ndrade. V\xE4nligen observera att alla objekt som har
+  matchande nycklar i importfilen, kommer att ers\xE4ttas i m\xE5lmappen. Detta g\xE4ller
+  ocks\xE5 f\xF6r objekt som baseras p\xE5 en annan klass eller t.o.m. objektmappar.
+  Objektf\xE4lt som \xE4r satta till ignorera i f\xE4ltmappningen, kommer att beh\xE5lla
+  sitt gamla v\xE4rde."
+object_import_filename_description: "V\xE4lj det f\xE4lt som ska anv\xE4ndas f\xF6r
+  att generera objektets nyckel"
+save_pubish_close: "Spara, publicera och st\xE4ng"
+save_close: "Spara och st\xE4ng"
+error_general: "Det uppstod ett tillf\xE4lligt fel - kunde inte utf\xF6ra operationen.
+  Prova att ladda om administrationsgr\xE4nssnittet och g\xF6r ett nytt f\xF6rs\xF6k."
+owner_class: "\xC4gande klass"
+owner_field: "\xC4ngande f\xE4lt"
+nonownerobject_warning: "Detta objektet \xE4ger inte dessa relationerna. Att \xE4ndra
+  det h\xE4r kan g\xF6ra att det g\xE5r l\xE5ngsamt n\xE4r du ska spara objektet."
+element_implicit_edit_question: "Vill du implicit \xE4ndra detta med denna operationen?"
+element_open_message: "Elementet \xE4r redan \xF6ppnat f\xF6r redigering"
+nonownerobjects_self_selection: "I icke-\xE4garobjekt \xE4r en relation till mig sj\xE4lv
+  inte m\xF6jlig, anv\xE4nd originalf\xE4lt ist\xE4llet f\xF6r icke-\xE4garef\xE4lt."
+warning: Varning
+csv_object_export_warning: "Observera att CSV-exporten inte st\xF6der alla datatyper.
+  F\xF6ljaktligen kan \xE5terimport av en exporterad CSV till pimcore leda till dataf\xF6rlust.
+  Tryck p\xE5 OK f\xF6r att forts\xE4tta med exporten."
+navigation_exclude: "Exkludera fr\xE5n navigationen"
+variants: Varianter
+variant: Variant
+add_variant: "L\xE4gg till variant"
+delete_message_dependencies: "Det finns beroenden till detta element, vill du \xE4nd\xE5
+  ta bort det?"
+delete_message: Vill du verkligen ta bort detta element?
+delete_message_advanced: Vill du verkligen ta bort %s '%s'?
+delete_message_batch: Vill du verkligen ta bort dessa element?
+delete_group_message: "Vill du verkligen ta bort den h\xE4r gruppen och allt dess
+  inneh\xE5ll?"
+no_further_objectbricks_allowed: "Det till\xE5ts inga fler objektbrickor"
+grid_current_language: "Nuvarande spr\xE5k"
+object_columns: Objektkolumner
+system_columns: Systemkolumner
+columns: Kolumner
+children_grid: Barnmatris
+only_children: endast direkta barnobjekt
+cut: Klipp ut
+paste_cut_element: Klipp ut/klistra in element
+memorize_tabs: "Kom ih\xE5g \xF6ppna flikar"
+element_history: "Nyligen \xF6ppande element"
+dashboards: "\xD6versiktssida"
+portlet_customreport: Anpassningsbar rapport
+clear_marker_or_hotspots: "Radera mark\xF6rer, hotspots och besk\xE4rningar"
+hotspots_cleared: "Hotspots, mark\xF6rer och besk\xE4rningar \xE4r raderade"
+deeplink: "Djupl\xE4nk"
+click_to_open: "(klicka f\xF6r att \xF6ppna)"
+add_metadata: "L\xE4gg till metadata"
+pimcore_icon_edit_pdf_text: Redigera textversion
+chapter: Kapitel
+search_and_move: "S\xF6k och flytta"
+searching: "S\xF6ker..."
+predefined_asset_metadata: "F\xF6rdefinierad metadata f\xF6r asset"
+add_predefined_metadata_definitions: "L\xE4gg till f\xF6rdefinierade definitioner"
+scheduled: Schemalagd
+naming_requirements_3chars: "Namn m\xE5ste vara alfanumeriska och minst tre tecken
+  l\xE5nga"
+there_are_more_columns: "Det finns fler kolumner \xE4n de som visas"
+merge_csv: Importera &amp; Sammanfoga CSV
+translation_merger_current: Nuvarande text
+translation_merger_csv: "Text fr\xE5n CSV"
+nothing_to_merge: "Det finns inget att sl\xE5 ihop"
+csv_seperated_options: CSV-separerade alternativ
+csv_seperated_options_info: "Listan \xF6ver tillg\xE4ngliga alternativ kan anges som
+  kommaseparerad lista, som enkolumnv\xE4rden eller blandad. F\xF6r enkelkolumns\xE4ttet
+  kommer nyckeln ocks\xE5 att anv\xE4ndas som v\xE4rde."
+first_page: "F\xF6rsta sidan"
+previous_page: "F\xF6reg\xE5ende sida"
+next_page: "N\xE4sta sida"
+last_page: Sista sidan
+no_data_to_display: Ingen data att visa
+classificationstore_property: Fast egendom
+classificationstore_group: Grupp
+classificationstore_relation: Relation
+classificationstore_collection: Samling
+classificationstore_collection_relation: "Samlingsf\xF6rh\xE5llande"
+classificationstore_no_groups: Inga grupper hittades
+classificationstore_no_keys: Inga nycklar hittades
+remove_group: Radera grupp
+classificationstore_no_collections: Inga samlingar
+reference: Referens
+element_tag_configuration: "M\xE4rkeskonfiguration"
+element_tag_all_tags: "Alla m\xE4rkningar"
+enter_new_name_of_the_tag: "Skriv in nytt namn p\xE5 m\xE4rket"
+assigned_tags: "Kopplade m\xE4rken"
+filter_tags: "Filtrera m\xE4rken"
+consider_child_tags: "Beakta barn-m\xE4rken ocks\xE5"
+tags_assignment: "M\xE4rkestilldelning"
+tags_search: "S\xF6k m\xE4rkningar"
+batch_applied: "M\xE4ngdapplicerade"
+apply_tags: "Applicera p\xE5 barn"
+remove_and_apply_tags: "Ta bort och applicera m\xE4rken p\xE5 barnen"
+batch_assignment: "M\xE4ngdapplicering av m\xE4rken"
+batch_assignment_error: "Fel vid m\xE4ngdapplicering av m\xE4rken"
+no_children_found: Inga barn hittades.
+asset_search: "S\xF6k bland tillg\xE5ngar"
+document_search: "S\xF6k dokument"
+object_search: "S\xF6k objekt"
+more: Mer
+open_translation: "\xD6ppna \xF6vers\xE4ttning"
+link_existing_document: "L\xE4nka existerande dokument"
+using_inheritance: "Anv\xE4nd arv"
+new_document: Nytt dokument
+update_available: "Uppdaterign tillg\xE4nglig"
+target_document_needs_language: "M\xE5ldokumentet m\xE5ste ha ett spr\xE5k inst\xE4llt"
+tools: Verktyg
+perspectives: Perspektiv
+filter_active: Filter aktivt!
+reset_config: "\xC5terst\xE4ll \xE4ndringar"
+reset_config_tooltip: "Detta kommer att \xE5terst\xE4lla (och spara) konfigurationen
+  f\xF6r rutn\xE4tskolumnen f\xF6r detta element till dess standard"
+error_resetting_config: "Fel vid \xE5terst\xE4llning av konfigureringen"
+marketing_settings: "Marknadsf\xF6ringsinst\xE4llningar"
+cross_tree_moves_not_supported: "Tv\xE4rtr\xE4dsr\xF6relser st\xF6ds \xE4nnu inte"
+add_printpage: "L\xE4gg till utskriftssida"
+add_printcontainer: "L\xE4gg till PrintContainer"
+web2print_preview_pdf: "Skapa & f\xF6rhandsgranska PDF"
+web2print_cancel_pdf_creation: Avbryt PDF-skapande
+web2print_generate_pdf: Skapa PDF
+web2print_download_pdf: Ladda ner PDF
+web2print_last-generated: Skapades senast
+web2print_last-generate-message: Senaste Generera-meddelandet
+web2print: Webb-till-utskrift
+web2print_prepare_pdf_generation: "F\xF6rbered PDF-skapade"
+web2print_start_html_rendering: "P\xE5b\xF6rja HTML-rendering"
+web2print_finished_html_rendering: Avslutade HTML-rendering
+web2print_saved_html_file: Sparade HTML-fil
+web2print_pdf_conversion: PDF-konvertering
+web2print_saving_pdf_document: Spara PDF-dokument
+web2print_author: "F\xF6rfattare"
+web2print_printermarks: "Utskriftsm\xE4rken"
+web2print_bookmarks: "Bokm\xE4rken"
+close_tab: "St\xE4ng flik"
+web2print_only_published: "Enbart m\xF6jligt med publicerade dokument."
+web2print_documents_changed: "Dokument som har \xE4ndrats sen senaste PDF skapades"
+about_pimcore: OM PIMCORE-PLATTFORMEN
+phone: Telefon
+workflow_additional_info: Mer information
+workflow_perform_action: "G\xF6r handling"
+workflow_notes_required: "Anteckningar (kr\xE4vs)"
+workflow_notes_optional: Anteckningar (valfritt)
+please_enter_the_id_of_the_asset: "Ange tillg\xE5ngens ID eller s\xF6kv\xE4g (t.ex.
+  /images/logo.jpg)."
+please_enter_the_id_of_the_object: "V\xE4nligen ange ID eller s\xF6kv\xE4g f\xF6r
+  objektet"
+please_enter_the_id_of_the_document: "Ange ID, s\xF6kv\xE4g eller URL (\xE4ven http://)
+  f\xF6r dokumentet"
+element_has_unsaved_changes: "Elementet har osparade \xE4ndringar"
+element_unsaved_changes_message: "Alla osparade \xE4ndringar kommer att g\xE5 f\xF6rlorade,
+  \xE4r du verkligen s\xE4ker?"
+add_object_mbx_title: Skapa nytt objekt av typen %s
+mode: "L\xE4ge"
+custom_download: Anpassad nedladdning
+original_file: Originalfil
+web_format: Webbformat
+print_format: Utskriftsformat
+office_format: Office-format
+change_password: "\xC4ndra l\xF6senord"
+file_is_bigger_that_upload_limit: "F\xF6ljande fil \xE4r st\xF6rre \xE4n den faktiska
+  uppladdningsgr\xE4nsen f\xF6r din server:"
+send_test_email_success: "Ditt testmeddelande har skickats. Vill du beh\xE5lla det
+  h\xE4r f\xF6nstret \xF6ppet f\xF6r att skicka meddelandet igen?"
+press_crtl_and_select_to_compare: "J\xE4mf\xF6r: H\xE5ll inne CTRL + klicka"
+clear_filters: "T\xF6m filter"
+tags_configuration: "M\xE4rkeskonfiguration"
+export_csv_include_headers: CSV-export med rubriker
+open_data_object: "\xD6ppna dataobjekt"
+data_objects: Dataobjekt
+asset_type_change_not_allowed: "<strong>Endast tillg\xE5ngar av samma typ \xE4r till\xE5tna
+  h\xE4r.</strong><br/>[ typ av uppladdad tillg\xE5ng: \"%s\" | typ av befintlig tillg\xE5ng:
+  \"%s\" ]"
+clear_content_of_selected_target_group: "Rensa inneh\xE5ll f\xF6r vald m\xE5lgrupp"
+visitors_of_this_page_will_be_automatically_associated_with_the_selected_target_groups: "Bes\xF6kare
+  p\xE5 den h\xE4r sidan kommer automatiskt att kopplas till de valda m\xE5lgrupperna"
+assign_target_group: "Koppla m\xE5lgrupp"
+assign_target_groups: "Koppla m\xE5lgrupper"
+target_group: "M\xE5lgrupp"
+edit_content_for_target_group: "Redigera inneh\xE5ll f\xF6r m\xE5lgrupp"
+email_reply_to: Svara till
+element_tag_filtered_tags: "Filtrerade m\xE4rken"
+web2print_addOverprint: "\xD6vertryck"
+analyze_permissions: "Analysera beh\xF6righeter"
+unique: Unika
+glue: Lim
+date_format: Datumformat
+attribute: Attribut
+forward_attribute: Forward Attribut
+upper: "\xD6vre"
+lower: Undre
+disabled: "Avst\xE4ngd"
+capitalization: "Skiftl\xE4ge"
+restrict_to_locales: "Begr\xE4nsa till lokaliteter"
+predefined: "F\xF6rdefinierade"
+save_as_copy: Spara som kopia
+set_as_favourite: "St\xE4ll in som favorit"
+grid_configuration: "Rutn\xE4tskonfiguration"
+shared_users: "Delade anv\xE4ndare"
+shared_roles: Delade roller
+save_and_share: Spara & dela
+save_copy_and_share: Spara kopia & dela
+locale: Lokalitet
+ellipses: Ellipser
+insensitive: "Ok\xE4nsligt"
+yes_value: "Ja-v\xE4rde"
+no_value: "Nej-v\xE4rde"
+count_empty: "R\xE4kna tomma"
+as_array: Som array
+metadata_field: "Metadata-f\xE4lt"
+only_count: Bara som summa
+parameter: Parameter
+forward_parameter: "Parameter fram\xE5t"
+is_array: 'Typ: Array'
+php_class: PHP-class
+additional_data: Ytterligare data
+flatten: Platta
+return_last_result: Returnera sista resultatet
+skip_null: "Hoppa \xF6ver null"
+expand_children: Expandera barn
+collapse_children: Kollapsa barn
+multiply: Multiplicera
+divide: Dividera
+apply_to_all_objects: "Applicera p\xE5 alla"
+apply_to_all_objects_msg: "Det finns andra objekt som redan har sina egna favoritinst\xE4llningar.
+  Vill du till\xE4mpa den h\xE4r konfigurationen p\xE5 dessa ocks\xE5?"
+encode: Koda
+decode: Avkoda
+serialize: Serialisera
+unserialize: Avserialisera
+offset: "F\xF6rskjutning"
+col_attribute: Samlingsattribut
+brick_attribute: Brick-attribut
+csv_column_configuration: Kolumn-konfiguration
+column: Kolumn
+resolver_strategy: Resolverstrategi
+resolver_settings: "Resolverinst\xE4llningar"
+csv_settings: "CSV-inst\xE4llningar"
+skipheadrow: "Hoppa \xF6ver rubrikraden"
+csv_file_preview: "F\xF6rhandsvisning av CSV-fil"
+save_as: Spara som
+import_export_configuration: Importera exporterade konfigurationer
+brick_type: Brick-typ
+renderer: "\xC5tergivare"
+getter: Getter
+string: "Str\xE4ng"
+row: Rad
+import_report: Importera rapport
+import_errors: Vissa fel uppstod. Kontrollera importrapporten!
+import_is_done: Import klar!
+import_file_prefix: "Prefix f\xF6r nya filer"
+create_parents: "Skapa f\xF6r\xE4ldrar"
+fullpath: "Full s\xF6kv\xE4g"
+create_on_demand: "Skapa p\xE5 beg\xE4ran"
+get_by_resolver: "H\xE4mta via attribut"
+direct: Direkt
+skip_empty_values: "Ignorera tomma v\xE4rden"
+do_not_overwrite: "Skriv inte \xF6ver"
+never: Aldrig
+if_not_empty: Om inte tom
+always: Alltid
+delimiter: "Begr\xE4nsare"
+share_globally: Dela globalt
+gdpr_data_extractor: GDPR-dataextraherare
+no_configuration: Ingen konfiguration
+share_configurations: Dela konfigurationer
+enable_inheritance: Aktivera arv
+object_settings: "Objektinst\xE4llningar"
+drop_me_here: "Dra ett objekt fr\xE5n tr\xE4det och sl\xE4pp det h\xE4r"
+clear_hotspots_msg: "Den h\xE4r bilden inneh\xE5ller ytterligare data som mark\xF6rer
+  eller hotspots. Vill du rensa dem ocks\xE5?"
+restore_failed: "\xC5terst\xE4llning misslyckades"
+subtract: Subtrahera
+batch_append_all: "Batch l\xE4gg till alla"
+batch_append_selected: "Batch l\xE4gg till valda"
+batch_append_to: "L\xE4gg till data till alla"
+login_token_invalid_user_error: "Felaktig anv\xE4ndare."
+login_token_as_admin_non_admin_user_error: "Endast adminanv\xE4ndare f\xE5r logga
+  in som adminanv\xE4ndare."
+login_token_no_password_error: "Anv\xE4ndaren har inte st\xE4llt in l\xF6senord."
+sort_children_by: Sortera barn efter
+by_key: Nyckel (alfabetiskt)
+by_index: Index (manuell ordning)
+successful_object_change_children_sort_to_index: "\xC4ndrade sortering av objekt underordnade
+  till Index"
+successful_object_change_children_sort_to_key: "\xC4ndrade objektssortering av barn
+  till nyckel"
+successful_publish_document: Dokumentet har publicerats
+successful_publish_object: Objektet har publicerats
+successful_unpublish_document: Dokumentet har avpublicerats
+successful_unpublish_object: Objektet har avpublicerats
+error_object_change_children_sort_to_index: "Sortera barn efter index \xE4r inte m\xF6jligt
+  p\xE5 sidad mapp/tr\xE4d."
+error_object_change_children_sort_to_key: "Det g\xE5r inte att \xE4ndra objektssortering
+  av underordnade objekt till nyckel"
+error_publish_document: Dokumentet kunde inte publiceras
+error_publish_object: Objektet kunde inte publiceras
+error_unpublish_document: Dokumentet kunde inte avpubliceras
+error_unpublish_object: Objektet kunde inte avpubliceras
+edit_as_html: Redigera som HTML
+edit_as_plain_text: Redigera som ren text
+error_empty_file_upload: "Filen \xE4r tom!"
+type_column: Kolumntyp
+keep: "Beh\xE5ll"
+clear_version_message: Vill du verkligen ta bort alla icke-publicerade versioner av
+  detta element?
+clear_all: "T\xF6m alla"
+unlink_existing_document: "Avl\xE4nka existerande dokument"
+grid_options: Tabellalternativ
+save_grid_options: Spara tabellalternativ
+download_selected_as_zip: Ladda ner valda som ZIP
+please_select_items_to_download: "V\xE4lj objekt att ladda ner i listan"
+key_bindings: Knappkopplingar
+keybinding_openClassEditor: "\xD6ppna Class-redigerare "
+keybinding_showMetaInfo: Visa metainfo
+keybinding_clearAllCaches: "T\xF6m alla cache:ar"
+keybinding_clearDataCache: "T\xF6m data-cache"
+scheduled_block_delete_all_in_past: "Radera alla \xE4ldre inl\xE4gg"
+scheduled_block_really_delete_past: "Vill du verkligen radera alla \xE4ldre inl\xE4gg?"
+scheduled_block_delete_all: "Radera alla inl\xE4gg"
+scheduled_block_really_delete_all: Vill du verkligen ta bort alla schemalagda poster,
+  inklusive framtida poster?
+2fa_disable: "St\xE4ng av 2FA"
+renew_2fa_secret: "F\xF6rnya tv\xE5faktorshemlighet"
+two_factor_authentication: "Tv\xE5faktorsautentisiering"
+2fa_alert_text: "Skanna QR-koden och l\xE4gg till den i din Google Authenticator.
+  <br>Om du inte har Google Authenticator-appen installerad p\xE5 din mobiltelefon,
+  ladda ner den fr\xE5n App Store/Play Store.<br><br> Du m\xE5ste ladda om Pimcore
+  och ange koden som visas i appen efter\xE5t!"
+2fa_alert_submit: Ladda om Pimcore & fyll i koden
+setup_two_factor: "St\xE4ll in tv\xE5faktorsautentisiering"
+2fa_setup_message: "Tv\xE5faktorsautentisering kr\xE4vs f\xF6r ditt konto! Du m\xE5ste
+  st\xE4lla in det i dina profilinst\xE4llningar, annars kommer du inte att kunna
+  logga in igen."
+set_focal_point: Set fokuspunkt
+quicksearch: "Snabbs\xF6k"
+standard_preview: "Standardf\xF6rhandsvisning"
+upload_new_version: Ladda upp ny version
+360_viewer: "360\xB0-visare"
+invalid_name: Ogiltigt namn
+clone: Klona
+enter_the_name_of_the_new_item: "Fyll i namnet p\xE5 nya enheten"
+html_tags: HTML-taggar
+clear_temporary_files: "Rensa tillf\xE4lliga filer"
+error_pasting_item: Kunde inte klistra in enhet
+modificationdate: "\xC4ndringsdatum"
+blank: Tom
+message: Meddelande
+from: "Fr\xE5n"
+to: Till
+html: HTML
+text: Text
+create_folder: "L\xE4gg till mapp"
+error_deleting_item: Kunde inte radera enhet
+error_renaming_item: "Det uppstod ett fel n\xE4r objektet skulle bytas om."
+revert: "\xC5terst\xE4ll"
+parent: "F\xF6r\xE4lder"
+merge_translations: "Sl\xE5 samman \xF6vers\xE4ttningar"
+prefix: Prefix
+load: Ladda
+saving_failed: Misslyckades att spara!
+failed_to_create_new_item: "Det gick inte att skapa nytt objekt, f\xF6rs\xF6k igen."
+bundle: Bunt
+product: Produkt
+index_field_selection_field: "Val av indexf\xE4lt"
+indexFieldSelectionField: "Val av indexf\xE4lt"
+indexFieldSelectionField_settings: "Inst\xE4llningar (Multi Index Field Selection
+  Field)"
+indexFieldSelectionFieldMulti: "Val av flera indexf\xE4lt"
+index_field_selection_combo: "Indexf\xE4lt Combobox"
+indexFieldSelectionCombo: "Indexf\xE4lt Combobox"
+indexFieldSelectionCombo_settings: "Inst\xE4llningar (Indexf\xE4lt Combobox)"
+specificPriceField: "Specifikt prisf\xE4lt"
+showAllFields: "Visa alla f\xE4lt"
+considerTenants: "Beakta g\xE4ster"
+category: Kategori
+ecommerce: E-commerce
+preSelectMode: "F\xF6rvalt l\xE4ge"
+remote_single: "Enkel V\xE4lj fr\xE5n fj\xE4rrkontroll"
+remote_multi: "Multi V\xE4lj fr\xE5n fj\xE4rrkontrollen"
+local_single: "Enkel V\xE4lj fr\xE5n f\xF6rdefinierad lista"
+local_multi: "Multi V\xE4lj fr\xE5n f\xF6rdefinierad lista"
+indexFieldSelection: "Indexf\xE4ltval"
+indexFieldSelection_settings: "Inst\xE4llningar f\xF6r val av indexf\xE4lt"
+filtergroups: Filtergrupper
+preSelect: "F\xF6rvalt"
+predefined_pre_select_options: "F\xF6rdefinierade f\xF6rvalda val"
+path: "S\xF6kv\xE4g"
+thumbnail: Tumnagelbild
+download_thumbnail: Ladda ner tumnagelbild
+no_thumbnail_selected: Ingen tumnagelbild vald
+list_thumbnail_in_download_section_on_image_detail_view: "Lista som alternativ i nedladdningssektionen
+  p\xE5 bilddetaljvy"
+there_are_more_items: "Det finns fler objekt \xE4n som visas"
+workflow_actions: Handlingar
+workflow_notes_requred_field_message: "\"%s\"-f\xE4ltet kr\xE4vs."
+workflow_transition_applied_successfully: Handling applicerades lyckat
+workflow_change_email_notification_subject: "Arbetsfl\xF6desuppdatering f\xF6r %s
+  i arbetsfl\xF6det '%s'"
+workflow_details: "Arbetsfl\xF6desdetaljer"
+workflow_graph: "Arbetsfl\xF6desgraf"
+workflow_current_state: "Nuvarande tillst\xE5nd"
+workflow_cmd_not_found: "Installera \"%s\"-konsolens k\xF6rbara program p\xE5 servern
+  f\xF6r att \xE5terge arbetsfl\xF6desdiagrammet."
+unit_width: Breddenhet
+permission_missing: "Du beh\xF6ver beh\xF6righeten '%s' f\xF6r att g\xF6ra detta"
+paste_as_language_variant: "Klistra in som ny spr\xE5kvariant"
+select_language_for_new_document: "V\xE4lj spr\xE5k f\xF6r nytt dokument"
+source_document_language_missing: "St\xE4ll in Spr\xE5k (Egenskaper) i k\xE4lldokumentet"
+open_preview_in_new_window: "\xD6ppna f\xF6rhandsvisning i nytt f\xF6nster"
+data: Data
+links: "L\xE4nkar"
+notes: Anteckningar
+bool: Boolesk
+consent: "Godk\xE4nnande"
+add_marker: "L\xE4gg till mark\xF6r"
+identifier_warning: "Var f\xF6rsiktig med den unika identifieraren eftersom tabellnamn
+  endast kan inneh\xE5lla upp till 64 tecken."
+unique_identifier: Unik identifierare
+invalid_identifier: Felaktig identifierare
+identifier_already_exists: Identifieraren finns redan
+content: "Inneh\xE5ll"
+send: Skicka
+you_can_only_drop_one_element_here: "Du kan bara sl\xE4ppa ett element h\xE4r!"
+translation: "\xD6vers\xE4ttning"
+delete_error_batch: "F\xF6ljande objekt kan inte raderas, vill du forts\xE4tta med
+  att radera de \xE5terst\xE5ende?"
+delete_error: 'Objektet kan inte raderas. Anledning:'
+batch_edit_field_selected: "Batchredigera valt f\xE4lt"
+batch_append_selected_to: "L\xE4gg till data till valda"
+enable_batch_edit_columns: "Aktivera batchredigering f\xF6r kolumner"
+delete_all: Radera alla
+open_linked_element: "\xD6ppna l\xE4nkat element"
+mark_as_read: "Markera som l\xE4st"
+sender: "Avs\xE4ndare"
+notifications: Meddelanden
+notifications_send: Skicka meddelanden
+group: Grupp
+attachment: Bilaga
+notification_has_been_sent: Meddelande har skickats
+recipient: Mottagare
+this_field_is_required: "Detta f\xE4lt m\xE5ste fyllas i"
+paste_recursive_as_language_variant: "Klistra in som ny spr\xE5kvariant (rekursiv)"
+paste_no_new_language_error: "Alla systemspr\xE5k \xE4r redan l\xE4nkade till k\xE4llelementet."
+embedded_meta_data: "Inb\xE4ddad metainformation"
+duration: "L\xE4ngd"
+custom_metadata: Anpassad metadata
+group_icon_class: Gruppikonklass
+custom_report_permissions: "Beh\xF6righet"
+visible_to_users: "Synlig f\xF6r anv\xE4ndare"
+visible_to_roles: "Synlig f\xF6r roller"
+open_url: "\xD6ppna URL"
+document_language_overview: "\xD6versikt \xF6ver dokumentspr\xE5k"
+create_translation_inheritance: "Skapa \xF6vers\xE4ttning (med arv)"
+create_translation: "Skapa \xF6vers\xE4ttning"
+document_translation_parent_not_found: "Det \xF6verordnade dokumentet har ingen \xF6vers\xE4ttning.
+  Skapa en \xF6vers\xE4ttning f\xF6r f\xF6r\xE4ldern f\xF6rst."
+paste_recursive_as_language_variant_updating_references: "Klistra in spr\xE5k (rekursivt),
+  uppdatera referenser"
+redirects_expired_cleanup: "Rensa upp utg\xE5ngna omdirigeringar"
+redirects_cleanup_warning: "Vill du verkligen rensa upp utg\xE5ngna omdirigeringar?"
+redirects_cleanup_error: "Ett fel uppstod vid upprensningen av utg\xE5ngna omdirigeringar"
+all_translations: "Alla \xF6vers\xE4ttningar"
+only_unreferenced: Enbart orefererade
+split_view_settings: "Inst\xE4llningar f\xF6r delad vy"
+enable_split_view: Aktivera delad vy
+disable_split_view: Inaktivera Split View
+split_view_object_dirty_title: "V\xE4nligen bekr\xE4fta"
+split_view_object_dirty_msg: "Det finns osparade \xE4ndringar. Du kommer att f\xF6rlora
+  alla \xE4ndringar. \xC4r du s\xE4ker?"
+converter_service: Konverteringsservice
+auto_convert: Automatisk konvertering
+web2print_enableDebugMode: "Aktivera fels\xF6kningsl\xE4ge"
+set_to_null: "Tom (inst\xE4lld p\xE5 null)"
+bundles: Paket
+target_document_invalid: "V\xE4lj ett m\xE5ldokument med ett giltigt spr\xE5k"
+metainfo_copy_id: Kopiera ID till urklipp
+metainfo_copy_fullpath: "Kopiera hela s\xF6kv\xE4gen till urklipp"
+metainfo_copy_deeplink: "Kopiera djupl\xE4nk till urklipp"
+plain_text: Ren text
+plain_text_email_part: E-post ren text del
+error_message: Felmeddelande
+access_denied: "TIllg\xE5ng nekad!"
+access_denied_description: "Du har inte tillr\xE4ckliga beh\xF6righeter f\xF6r att
+  \xF6ppna elementet eller utf\xF6ra \xF6nskad \xE5tg\xE4rd."
+validation_failed: Validering misslyckades!
+export_xlsx: XLSX-export
+object_export_warning: "Observera att exporten inte st\xF6der alla datatyper. Tryck
+  p\xE5 OK f\xF6r att forts\xE4tta med exporten."
+web2print_enableLenientHttpsMode: "Aktivera mild HTTPS-l\xE4ge"
+web2print_enableLenientHttpsMode_txt: "Aktivera det h\xE4r alternativet om PDFreactor
+  inte lyckas ansluta via HTTPS"
+paste_clipboard: "Klistra in fr\xE5n urklipp"
+paste_here: "Klistra in dina urklippsdata h\xE4r"
+asset_metadata: "Metadata f\xF6r tillg\xE5ngar"
+predefined_metadata: "F\xF6rdefinierad metadata"
+default_metadata: Standardmetadata
+asset_export_warning: "Observera att exporten inte st\xF6der vissa f\xE4lt (t.ex.
+  f\xF6rhandsgranskning, storlek). Tryck p\xE5 OK f\xF6r att forts\xE4tta med exporten."
+share_via_notifications: Dela via notifieringar
+cannot_save_metadata_please_try_to_edit_the_metadata_in_asset: "<b>Kan inte spara
+  metadata!</b><br />F\xF6rs\xF6k att redigera metadata i tillg\xE5ng."
+email_log_forward: Vidarebefordra e-post
+sum: Summa
+area_brick_assign_info_message: "Anv\xE4nd dra och sl\xE4pp f\xF6r att tilldela en
+  kloss till \xF6nskat block"
+batch_remove_all: "Batch bort fr\xE5n alla"
+batch_remove_selected: "Batch ta bort fr\xE5n valda"
+batch_remove_from: "Ta bort data fr\xE5n alla"
+batch_remove_selected_from: "Ta bort data fr\xE5n valda"
+unit_tooltip: Alternativa enheter verktygstips
+available_sites: "Tillg\xE4ngliga sajter"
+fallback: Reserv
+add_site: "L\xE4gg till sajt"
+domain_label_width: Sajtetikettens bredd
+complete_required_fields: "Fyll i f\xF6ljande obligatoriska f\xE4lt f\xF6r att publicera
+  dokumentet:"
+Uncategorized: Okategoriserad
+skip_if_exists: Ignorera rad om den finns
+php_class_or_service: Klass- eller servicenamn
+redirect_performance_warning: "Att anv\xE4nda den h\xE4r funktionen har mycket d\xE5liga
+  effekter p\xE5 prestandan f\xF6r hela applikationen, vill du verkligen forts\xE4tta?"
+test_url: Test-URL
+create_redirects: "Skapa omdirigeringar f\xF6r att h\xE5lla webbadresser fungerande
+  (inkl. barn)?"
+auto_create: Autoskapa
+methods: Metoder
+batch_operation: "M\xE4ngdoperation"
+move: Flytta
+property_name: Egenskapsnamn
+force_value: "Forcera v\xE4rde"
+enable_grid_locking: "Aktivera matrisl\xE5sning"
+export_configuration: Exportera konfiguration som JSON
+composite_indices: Kompositindex
+default_value_generator: "Standardv\xE4rdesgeneratortj\xE4nst / klass"
+no_value_set: "Inget v\xE4rde satt"
+replace_assignments_in_all_elements: Byt ut uppdrag i alla moment
+fieldlookup: "F\xE4lts\xF6kning"
+show_fieldlookup: "Visa f\xE4lts\xF6kning"
+different_number_of_columns: Olika antal kolumner
+brick_limit_reached: "Gr\xE4nsen ({bricklimit}) n\xE5dd f\xF6r tegelsten: {brickname}"
+generate_type_declarations: Generera typdeklarationer
+batch_change_language: "M\xE4ngduppdatera spr\xE5k"
+preview_item: "F\xF6rhandsgranska"
+by_key_reverse: "Nyckel (\xD6 till A)"
+deprecated: Utfasad
+version_currently_saved_in_database: "F\xF6r n\xE4rvarande sparad i databasen (men
+  inte publicerad)"
+deprecated_feature: "<span style='color: orange;'>F\xF6r\xE5ldrad funktion. Anv\xE4nd
+  %s ist\xE4llet</span>"
+edit_as_custom_text: Redigera som anpassad text
+symfony_translation_link: "\xD6vers\xE4ttningsformat: https://symfony.com/doc/current/translation/message_format.html"
+no_action_available: "Ingen \xE5tg\xE4rd tillg\xE4nglig"
+bricks: Tegelstenar
+draft: "F\xF6rslag"
+auto_save: Automatisk sparning
+save_draft: Spara utkast
+selected_grid_columns: Valda matriskolumner
+ungrouped: ogrupperade
+reindex_warning: "Om du \xE4ndrar den fr\xE5n alfabetisk sorteringsordning till index
+  kommer alla objekt att indexeras igen. Vill du forts\xE4tta?"
+filter_by_relation: Filtrera efter relation
+filter_by_relation_field: "Filtrera efter relationsf\xE4lt"
+clear_relation_filter: Rensa aktivt relationsfilter
+apply_filter: "Anv\xE4nd filter"
+config_not_writeable: "Ej skrivbar, detta kan ha flera anledningar. F\xF6r detaljer,
+  ta en titt i dokumenten."
+sites: Webbplatser
+file_exists: filen finns redan
+asset_upload_want_to_overwrite: "Vill du skriva \xF6ver filen %s?"
+asset_upload_overwrite: "Skriva \xF6ver"
+asset_upload_keep_both: "Beh\xE5ll b\xE5da filerna"
+asset_upload_apply_to_all: "Applicera p\xE5 alla"
+asset_upload_skip: Hoppa
+could_not_open_zip_file: "Den uppladdade ZIP-filen kunde inte \xF6ppnas."
+objects_sort_method: "\xC4ndra sorteringsmetod f\xF6r dataobjekt"
+link_recursion_error: "L\xE4nken omdirigerar till sig sj\xE4lv, vilket orsakar en
+  o\xE4ndlig loop"
+no_further_classes_allowed: "Inga ytterligare klasser till\xE5tna"
+address_not_found: Den angivna adressen hittades inte
+possible_causes: "M\xF6jliga orsaker"
+postal_code_format_error: "Postnummerformat, t.ex. anv\xE4nd \"5020 Salzburg, S\xF6llheimer
+  Stra\xDFe 16\" ist\xE4llet f\xF6r \"A-5020 Salzburg, S\xF6llheimer Stra\xDFe 16\""
+delete_data_from_it: "Detta kommer ocks\xE5 att radera all data fr\xE5n den."
+display_mode: "Visningsl\xE4ge"
+display_mode_grid: "Rutn\xE4tsvy"
+display_mode_combo: "M\xE4rkesf\xE4lt"
+batch_confirmation: "Du h\xE5ller p\xE5 att uppdatera %s dataObjects. Vill du forts\xE4tta
+  ?"
+field_collections: "F\xE4ltsamlingar"
+display_mode_display: "Visa s\xF6kv\xE4gsreferens"
+display_mode_inline_search: "Inline-s\xF6kning"
+gdpr_dataSource_dataObjects: Dataobjekt
+parent_id: "F\xF6r\xE4lders ID"
+modificationDate: "\xC4ndringsdatum"
+creationDate: Skapelsedagen
+classificationstore_tag_col_group: Grupp
+none: Ingen
+redirects_type_path: "V\xE4g"
+email_subject: "\xC4mne"
+gdpr_dataSource_sentMail: Skickade mejl
+email_log_subject: "\xC4mne"
+gdpr_data_extractor_label_email: E-postadress
+workflow_notes: Anteckningar
+2fa_code: Koda
+password: "L\xF6senord"
+show_metainfo: Info
+email_log_from: "Fr\xE5n"
+email_from: "Fr\xE5n"
+log_search_from: "Fr\xE5n"
+email_log_to: Till
+email_to: Till
+log_search_to: Till
+structuredtable_type_text: Text
+objectsMetadata_type_text: Text
+gdpr_data_extractor_label_id: ID
+navigation_target: "M\xE5l"
+log_type: Typ
+gdpr_dataSource_export: Exportera
+classificationstore_configuration: Konfiguration
+gdpr_dataSource_assets: "Tillg\xE5ngar"
+structuredtable_type_bool: Kryssruta
+objectsMetadata_type_select: "V\xE4lj"
+objectsMetadata_type_bool: Bool
+gdpr_data_extractor_label_firstname: "F\xF6rnamn"
+gdpr_data_extractor_label_lastname: Efternamn
+log_source: "K\xE4lla"
+classificationstore_error_addgroup_title: Fel
+classificationstore_error_addkey_title: Fel
+element_lock_message: "Det \xF6nskade elementet \xF6ppnas f\xF6r n\xE4rvarande av
+  en annan person:"
+log_message: Meddelande
+operator_substring_settings: "inst\xE4llningar"
+delete_gridconfig_dblcheck: "Vill du verkligen ta bort det h\xE4r objektet?"
+email_log_cc: Cc
+email_log_bcc: Hemlig kopia
+cols: Kolumner
+log_search_message: Meddelande
+batch_export_confirmation: "Du h\xE5ller p\xE5 att exportera %s dataobjekt. Vill du
+  forts\xE4tta ?"
+header: Rubrik
+no_header: Ingen rubrik
+url-slug-invalid-chars: "Tillhandah\xF6ll ogiltigt tecken i URL-slug"
+delete_entire_folder_question: "Denna operation tar bort hela f\xF6r\xE4ldern/mappen.
+  Du kanske inte kan \xE5ngra den h\xE4r \xE5tg\xE4rden helt."
+allow_to_clear_relation: "Till\xE5t att rensa alla relationer i detta f\xE4lt"
+allow_asset_inline_download: "Till\xE5t inline nedladdning"
+email_blocklist: Email Blocklist
+password_does_not_match: New password and confirm password doesn't match
+incorrect_password: Given password is incorrect
+content_main_document: Content-Main Document
+2fa_wrong: Wrong code entered!
+language_main: Main
+system_appearance_settings: Appearance & Branding
+...
