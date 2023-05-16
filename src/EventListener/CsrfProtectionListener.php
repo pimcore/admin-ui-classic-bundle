@@ -60,7 +60,9 @@ class CsrfProtectionListener implements EventSubscriberInterface
             return;
         }
 
-        $this->csrfProtectionHandler->generateCsrfToken($event->getRequest()->getSession());
+        if ($event->getRequest()->hasSession()) {
+            $this->csrfProtectionHandler->generateCsrfToken($event->getRequest()->getSession());
+        }
 
         if ($request->isMethodCacheable()) {
             return;
