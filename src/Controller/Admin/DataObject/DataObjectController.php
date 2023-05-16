@@ -572,10 +572,12 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             DataObject\Service::removeElementFromSession('object', $object->getId(), $request->getSession()->getId());
 
-            $layoutArray = json_decode($this->encodeJson($data['layout']), true);
-            $this->classFieldDefinitions = json_decode($this->encodeJson($object->getClass()->getFieldDefinitions()), true);
-            $this->injectValuesForCustomLayout($layoutArray);
-            $data['layout'] = $layoutArray;
+            if ($data['layout'] ?? false) {
+                $layoutArray = json_decode($this->encodeJson($data['layout']), true);
+                $this->classFieldDefinitions = json_decode($this->encodeJson($object->getClass()->getFieldDefinitions()), true);
+                $this->injectValuesForCustomLayout($layoutArray);
+                $data['layout'] = $layoutArray;
+            }
 
             return $this->adminJson($data);
         }
