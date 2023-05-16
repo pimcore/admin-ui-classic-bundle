@@ -282,7 +282,7 @@ class UserController extends AdminAbstractController implements KernelController
         /** @var User|User\Role|null $user */
         $user = User\UserRole::getById($request->request->getInt('id'));
         $currentUserIsAdmin = $this->getAdminUser()->isAdmin();
-        
+
         if (!$user) {
             throw $this->createNotFoundException();
         }
