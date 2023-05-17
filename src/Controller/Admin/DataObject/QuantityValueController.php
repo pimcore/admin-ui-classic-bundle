@@ -176,8 +176,6 @@ class QuantityValueController extends AdminAbstractController
      */
     public function unitListAction(Request $request): JsonResponse
     {
-        $this->checkPermission('quantityValueUnits');
-
         $list = new Unit\Listing();
         $list->setOrderKey(['baseunit', 'factor', 'abbreviation']);
         $list->setOrder(['ASC', 'ASC', 'ASC']);
