@@ -9,8 +9,6 @@
       "*": "dist"
     }
   },
-  "prefer-stable": true,
-  "minimum-stability": "dev",
   "require": {
     "pimcore/pimcore": "^11.0",
     "symfony/webpack-encore-bundle": "^1.7",
