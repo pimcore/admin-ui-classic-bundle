@@ -20,6 +20,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\Login\LogoutEvent as PimcoreLogoutEvent;
 use Pimcore\Model\Element\Editlock;
 use Pimcore\Model\User;
+use Pimcore\Tool\Authentication;
 use Pimcore\Tool\Session;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
@@ -80,7 +81,7 @@ class LogoutListener implements EventSubscriberInterface, LoggerAwareInterface
         $event = Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) use ($request) {
             $event = null;
 
-            $user = $adminSession->get('user');
+            $user = Authentication::authenticateSession($request);
             if ($user && $user instanceof User) {
                 $event = new PimcoreLogoutEvent($request, $user);
                 $this->eventDispatcher->dispatch($event, AdminEvents::LOGIN_LOGOUT);
