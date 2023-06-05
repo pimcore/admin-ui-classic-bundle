@@ -1126,7 +1126,7 @@ Ext.define('Ext.local.grid.filters.filter.TriFilter', {
             operator: 'in',
             type: 'numeric',
             value: (!stateful && value && value.in) || null
-        }, 'eq');
+        }, 'in');
         me.filter = filter;
         if (me.active) {
             me.setColumnActive(true);
@@ -1194,7 +1194,9 @@ Ext.define('Ext.local.grid.filters.filter.TriFilter', {
             }
             if ('in' in value) {
                 v = value.in;
-                if (v || v === 0) {
+                if (typeof v === "object" && v[0][0] == '') {
+                    remove.push(filters.in);
+                } else if (v || v === 0) {
                     add.push(filters.in);
                     filters.in.setValue(v);
                 } else {

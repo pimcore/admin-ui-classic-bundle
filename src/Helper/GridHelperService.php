@@ -204,15 +204,22 @@ class GridHelperService
                     } elseif ($filter['type'] == 'boolean') {
                         $operator = '=';
                         $filter['value'] = (int)$filter['value'];
-                    } elseif ($filterOperator == 'in') {
+                    } elseif ($filterOperator == 'in' && is_array($filter['value'])) { // quantityValue field
+                        $operator = 'in';
+                        $matches = preg_split('/[^0-9\.]+/', $filter['value'][0][0] ?? [], -1, PREG_SPLIT_NO_EMPTY);
+                        if (is_array($matches) && count($matches) > 0) {
+                            $filter['value'][0][0] = implode(',', array_unique($matches));
+                        } else {
+                            continue;
+                        }
+                    } elseif ($filterOperator == 'in' && !is_array($filter['value'])) {
                         $operator = 'in';
 
-                        $matches = preg_split('/[^0-9]+/', $filter['value'], -1, PREG_SPLIT_NO_EMPTY);
+                        $matches = preg_split('/[^0-9\.]+/', $filter['value'], -1, PREG_SPLIT_NO_EMPTY);
                         if (is_array($matches) && count($matches) > 0) {
                             $filter['value'] = implode(',', array_unique($matches));
                         } else {
-                            $operator = '=';
-                            $filter['value'] = (int)$filter['value'];
+                            continue;
                         }
                     } else {
                         if ($filterOperator == 'lt') {
