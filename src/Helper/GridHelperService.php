@@ -208,16 +208,15 @@ class GridHelperService
                         $operator = 'in';
                         $matches = preg_split('/[^0-9\.]+/', $filter['value'][0][0] ?? [], -1, PREG_SPLIT_NO_EMPTY);
                         if (is_array($matches) && count($matches) > 0) {
-                            $filter['value'][0][0] = implode(',', array_unique($matches));
+                            $filter['value'][0][0] = implode(',', array_unique(array_map(floatval(...), $matches)));
                         } else {
                             continue;
                         }
                     } elseif ($filterOperator == 'in' && !is_array($filter['value'])) {
                         $operator = 'in';
-
                         $matches = preg_split('/[^0-9\.]+/', $filter['value'], -1, PREG_SPLIT_NO_EMPTY);
                         if (is_array($matches) && count($matches) > 0) {
-                            $filter['value'] = implode(',', array_unique($matches));
+                            $filter['value'] = implode(',', array_unique(array_map(floatval(...), $matches)));
                         } else {
                             continue;
                         }
@@ -343,6 +342,8 @@ class GridHelperService
                             $conditionPartsFilters[] = '`key` ' . $operator . ' ' . $db->quote('%' . $filter['value'] . '%');
                         } elseif ($filterField == 'id' && $operator !== 'in') {
                             $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
+                        } elseif ($filterField == 'id' && $operator === 'in') {
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filter['value'] . ')';
                         } else {
                             $filterField = $db->quoteIdentifier($filterField);
                             if ($filter['type'] == 'date' && $operator == '=') {
@@ -354,11 +355,7 @@ class GridHelperService
                                 if ($filter['type'] === 'boolean') {
                                     $filterField = 'IFNULL(' . $filterField . ', 0)';
                                 }
-                                if ($operator === 'in') {
-                                    $conditionPartsFilters[] = $filterField . ' ' . $operator . ' (' . $filter['value'] . ')';
-                                } else {
-                                    $conditionPartsFilters[] = $filterField . ' ' . $operator . ' ' . $db->quote($filter['value']);
-                                }
+                                $conditionPartsFilters[] = $filterField . ' ' . $operator . ' ' . $db->quote($filter['value']);
                             }
                         }
                     }
