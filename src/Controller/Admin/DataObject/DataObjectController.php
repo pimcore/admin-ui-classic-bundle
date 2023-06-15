@@ -585,7 +585,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         throw $this->createAccessDeniedHttpException();
     }
 
-    private function injectValuesForCustomLayout(array &$layout): void
+    private function injectValuesForCustomLayout(?array &$layout): void
     {
         foreach ($layout['children'] as &$child) {
             if ($child['datatype'] === 'layout') {
