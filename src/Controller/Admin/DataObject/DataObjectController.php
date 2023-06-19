@@ -587,7 +587,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     private function injectValuesForCustomLayout(?array &$layout): void
     {
-        foreach ($layout['children'] as &$child) {
+        foreach ($layout['children'] ?? [] as &$child) {
             if ($child['datatype'] === 'layout') {
                 $this->injectValuesForCustomLayout($child);
             } else {
