@@ -20,6 +20,9 @@ use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
+use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\User;
+use Pimcore\Security\User\User as UserProxy;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -34,7 +37,7 @@ class AssetService
     )
     {
     }
-    public   function getTreeNodeConfig($element, $user): array {
+    public   function getTreeNodeConfig(ElementInterface $element, UserProxy|User|null $user): array {
 
         /** @var Asset $asset */
         $asset = $element;
