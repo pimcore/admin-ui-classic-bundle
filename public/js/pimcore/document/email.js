@@ -118,6 +118,9 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
         }
 
         this.tabbar = new Ext.TabPanel({
+            tabBar: {
+                cls: 'pimcore_editor_tabbar'
+            },
             tabPosition: "top",
             region:'center',
             deferredRender:true,

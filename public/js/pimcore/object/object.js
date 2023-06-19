@@ -22,6 +22,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         this.id = intval(id);
         this.options = options;
         this.addLoadingPanel();
+        this.debug = 'pimcore.object.object';
 
         const preOpenObject = new CustomEvent(pimcore.events.preOpenObject, {
             detail: {
@@ -375,6 +376,9 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
 
         this.tabbar = Ext.create('Ext.tab.Panel', {
+            tabBar: {
+                cls: 'pimcore_editor_tabbar'
+            },
             tabPosition: "top",
             region: 'center',
             enableTabScroll: true,

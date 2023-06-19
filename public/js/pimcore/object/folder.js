@@ -333,6 +333,9 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         }
 
         this.tabbar = new Ext.TabPanel({
+            tabBar: {
+                cls: 'pimcore_editor_tabbar'
+            },
             tabPosition: "top",
             region:'center',
             deferredRender:true,

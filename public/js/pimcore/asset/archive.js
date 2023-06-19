@@ -88,6 +88,9 @@ pimcore.asset.archive = Class.create(pimcore.asset.asset, {
         }
 
         this.tabbar = new Ext.TabPanel({
+            tabBar: {
+                cls: 'pimcore_editor_tabbar'
+            },
             tabPosition: "top",
             region:'center',
             deferredRender:true,

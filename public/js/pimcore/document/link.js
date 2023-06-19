@@ -314,6 +314,9 @@ pimcore.document.link = Class.create(pimcore.document.document, {
         }
 
         this.tabbar = new Ext.TabPanel({
+            tabBar: {
+                cls: 'pimcore_editor_tabbar'
+            },
             tabPosition: "top",
             region: 'center',
             deferredRender: true,
