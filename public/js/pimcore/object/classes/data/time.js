@@ -49,6 +49,10 @@ pimcore.object.classes.data.time = Class.create(pimcore.object.classes.data.data
 
         $super();
         this.specificPanel.removeAll();
+
+        var widthItems = this.getWidthPanelItems(this.datax);
+        this.specificPanel.add(widthItems);
+
         var specificItems = this.getSpecificPanelItems(this.datax);
         this.specificPanel.add(specificItems);
 
@@ -134,6 +138,15 @@ pimcore.object.classes.data.time = Class.create(pimcore.object.classes.data.data
         return specificItems;
 
 
+    },
+
+    getWidthPanelItems: function (datax) {
+        return [{
+            xtype: "textfield",
+            fieldLabel: t("width"),
+            name: "width",
+            value: datax.width
+        }];
     },
 
     applySpecialData: function(source) {
