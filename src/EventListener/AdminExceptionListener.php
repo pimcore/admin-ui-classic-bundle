@@ -61,6 +61,7 @@ class AdminExceptionListener implements EventSubscriberInterface
 
             $data = [
                 'success' => false,
+                'traceString' => ''
             ];
 
             if (!\Pimcore::inDebugMode()) {
@@ -79,7 +80,6 @@ class AdminExceptionListener implements EventSubscriberInterface
                 $data['type'] = 'ValidationException';
                 $code = 422;
 
-                $data['traceString'] = $data['traceString'] ?? '';
                 $this->recursiveAddValidationExceptionSubItems($ex->getSubItems(), $message, $data['traceString']);
             }
 
