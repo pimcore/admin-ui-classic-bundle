@@ -433,14 +433,6 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
             }
 
             if(rdata && rdata.success) {
-
-                const postElementChangeKey = new CustomEvent(pimcore.events.postElementChangeKey, {
-                    detail: {
-                        options: options
-                    }
-                });
-                document.dispatchEvent(postElementChangeKey);
-
                 // removes loading indicator added in the applyNewKey method
                 pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
             }
@@ -504,15 +496,6 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                 try {
                     var rdata = Ext.decode(response.responseText);
                     if (rdata && rdata.success) {
-
-                        const postElementChangeKey = new CustomEvent(pimcore.events.postElementChangeKey, {
-                            detail: {
-                                options: options
-                            }
-                        });
-                        document.dispatchEvent(postElementChangeKey);
-
-
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
@@ -595,14 +578,6 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                     }
 
                     if(rdata && rdata.success) {
-
-                        const postElementChangeKey = new CustomEvent(pimcore.events.postElementChangeKey, {
-                            detail: {
-                                options: options
-                            }
-                        });
-                        document.dispatchEvent(postElementChangeKey);
-
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
                     }
