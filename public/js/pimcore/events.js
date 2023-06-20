@@ -198,8 +198,13 @@
   * node item is passed as parameter
   */
  pimcore.events.prepareOnObjectTreeNodeClick = "pimcore.objectTreeNode.onClick";
- 
- /**
+
+/**
+ * extends the affected nodes array on pimcore.elementservice.getAffectedNodes()
+ */
+pimcore.events.prepareAffectedNodes = "pimcore.treeNode.prepareAffectedNodes";
+
+/**
   * before the data object grid folder configuration is loaded from the server.
   * request configuration is passed as parameter
   */
