@@ -1073,16 +1073,15 @@ batch_export_confirmation: "Du h\xE5ller p\xE5 att exportera %s dataobjekt. Vill
   forts\xE4tta ?"
 header: Rubrik
 no_header: Ingen rubrik
-url-slug-invalid-chars: "Tillhandah\xF6ll ogiltigt tecken i URL-slug"
 delete_entire_folder_question: "Denna operation tar bort hela f\xF6r\xE4ldern/mappen.
   Du kanske inte kan \xE5ngra den h\xE4r \xE5tg\xE4rden helt."
 allow_to_clear_relation: "Till\xE5t att rensa alla relationer i detta f\xE4lt"
 allow_asset_inline_download: "Till\xE5t inline nedladdning"
-email_blocklist: Email Blocklist
-password_does_not_match: New password and confirm password doesn't match
-incorrect_password: Given password is incorrect
-content_main_document: Content-Main Document
-2fa_wrong: Wrong code entered!
-language_main: Main
-system_appearance_settings: Appearance & Branding
+email_blocklist: "Blocklista f\xF6r epost"
+password_does_not_match: "L\xF6senorden matchar inte"
+incorrect_password: "Inmatat l\xF6senord \xE4r fel"
+content_main_document: "Inneh\xE5llets huvuddokument"
+2fa_wrong: Felaktig kod inmatad!
+language_main: "Huvudspr\xE5k"
+system_appearance_settings: Utseende & profilering
 ...
