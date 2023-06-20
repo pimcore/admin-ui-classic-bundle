@@ -61,6 +61,7 @@ class AdminExceptionListener implements EventSubscriberInterface
 
             $data = [
                 'success' => false,
+                'traceString' => ''
             ];
 
             if (!\Pimcore::inDebugMode()) {
