@@ -1458,6 +1458,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     public function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getDocumentTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
     }
 }

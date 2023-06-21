@@ -730,7 +730,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getAssetTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
     }
 
     /**
