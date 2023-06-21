@@ -38,6 +38,32 @@ class ElementService
 {
     use AdminStyleTrait;
 
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator
+    ) {
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return array|null
+     *
+     * @internal
+     */
+    public static function getCustomViewById(string $id): ?array
+    {
+        $customViews = Config::get();
+        if($customViews) {
+            foreach($customViews as $customView) {
+                if($customView['id'] == $id) {
+                    return $customView;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public function getElementTreeNodeConfig(ElementInterface $element, UserProxy|User|null $user): array
     {
         $tmpNode = [
@@ -243,7 +269,7 @@ class ElementService
         }
     }
 
-    public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset): array
+    public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset)
     {
 
         if ($asset instanceof Asset\Image) {
@@ -282,9 +308,10 @@ class ElementService
     {
         $container = \Pimcore::getContainer();
         /** @var Config $config */
-        $config = $container->get(Config::class);
+       // $config = $container->get(Config::class);
 
         // PREVIEWS temporary disabled, need's to be optimized some time
+        /*
         if ($document instanceof Document\Page && isset($config['documents']['generate_preview'])) {
             $thumbnailFile = $document->getPreviewImageFilesystemPath();
             // only if the thumbnail exists and isn't out of time
@@ -295,7 +322,7 @@ class ElementService
                 );
             }
         }
-
+*/
         $tmpDocument['cls'] = '';
 
         if ($document instanceof Document\Page) {

@@ -445,8 +445,4 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $data['userModificationFullname'] = $userModificationName['fullName'];
     }
 
-    public function getTreeNodeConfig(Model\Document $document): array
-    {
-        return $this->elementService->getDocumentTreeNodeConfig($document, $this->getAdminUser());
-    }
 }
