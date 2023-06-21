@@ -311,7 +311,6 @@ class ElementService
         $config = $container->get(Config::class);
 
         // PREVIEWS temporary disabled, need's to be optimized some time
-        /*
         if ($document instanceof Document\Page && isset($config['documents']['generate_preview'])) {
             $thumbnailFile = $document->getPreviewImageFilesystemPath();
             // only if the thumbnail exists and isn't out of time
@@ -322,7 +321,7 @@ class ElementService
                 );
             }
         }
-*/
+
         $tmpDocument['cls'] = '';
 
         if ($document instanceof Document\Page) {
