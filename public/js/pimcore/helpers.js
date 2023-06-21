@@ -3370,7 +3370,22 @@ pimcore.helpers.priorityCompare = function(a, b) {
     return 0;
 }
 
-
 pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
     return pimcore.settings.document_types_configuration[documentType][role];
+}
+
+pimcore.helpers.getTabBar = function (attributes) {
+    let tabAttr = Object.assign(attributes, {
+        tabBar: {
+            cls: 'pimcore_editor_tabbar'
+        },
+        tabPosition: 'top',
+        region:'center',
+        deferredRender:true,
+        enableTabScroll:true,
+        border: false,
+        activeTab: 0
+    });
+
+    return new Ext.TabPanel(tabAttr);
 }

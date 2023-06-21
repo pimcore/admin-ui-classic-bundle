@@ -118,23 +118,7 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabBar: {
-                cls: 'pimcore_editor_tabbar'
-            },
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            tabConfig: {
-                margin: 0
-            },
-            activeTab: 0
-        });
-
-        return this.tabbar;
+        return pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
     },
 
     getSaveData : function (only) {

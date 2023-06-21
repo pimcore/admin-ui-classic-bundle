@@ -117,19 +117,7 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabBar: {
-                cls: 'pimcore_editor_tabbar'
-            },
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-        return this.tabbar;
+        return pimcore.helpers.getTabBar({items: items});
     },
 
     getSaveData : function (only) {
