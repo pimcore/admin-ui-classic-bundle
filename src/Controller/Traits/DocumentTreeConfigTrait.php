@@ -32,6 +32,7 @@ trait DocumentTreeConfigTrait
 
     /**
      * @required
+     * @param ElementService $elementService
      */
     public function setElementService(ElementService $elementService): void
     {
@@ -47,6 +48,6 @@ trait DocumentTreeConfigTrait
      */
     public function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getElementTreeNodeConfig($element);
+        return $this->elementService->getElementTreeNodeConfig($element, $this->getPimcoreUser());
     }
 }
