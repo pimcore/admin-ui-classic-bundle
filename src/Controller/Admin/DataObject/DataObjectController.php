@@ -240,7 +240,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getDataObjectTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
     }
 
     /**
