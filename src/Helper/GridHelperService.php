@@ -491,7 +491,7 @@ class GridHelperService
     public function prepareListingForGrid(array $requestParams, string $requestedLanguage, User $adminUser): DataObject\Listing\Concrete
     {
         $folder = Model\DataObject::getById((int) $requestParams['folderId']);
-        $class = ClassDefinition::getById($requestParams['classId']);
+        $class = ClassDefinition::getById((string) $requestParams['classId']);
         $className = $class->getName();
 
         $listClass = '\\Pimcore\\Model\\DataObject\\' . ucfirst($className) . '\\Listing';

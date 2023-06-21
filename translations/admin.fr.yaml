@@ -1096,7 +1096,6 @@ batch_export_confirmation: "Vous \xEAtes sur le point d'exporter %s objets de do
   Voulez-vous continuer ?"
 header: "Ent\xEAte"
 no_header: "Aucune ent\xEAte"
-url-slug-invalid-chars: "Caract\xE8re non valide fourni dans le slug d'URL"
 delete_entire_folder_question: "Cette op\xE9ration supprimera l'int\xE9gralit\xE9
   du parent/dossier. Vous ne pourrez peut-\xEAtre pas annuler compl\xE8tement cette
   op\xE9ration."

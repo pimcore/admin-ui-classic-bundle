@@ -20,7 +20,7 @@ system_performance_stability_warning: "Veuillez ne pas effectuer cette action, s
   action peut avoir un impact majeur sur la stabilit\xE9 et les performances de l'ensemble
   du syst\xE8me, et peut causer une surcharge ou crash complet du serveur !</b><br
   /><br />Etes-vous s\xFBr ?"
-login_screen: Ecran de connexion
+login_screen: "\xC9cran de connexion"
 color_description: "Utiliser le format HTML hexad\xE9cimal, par exemple #ffffff"
 colors: Couleurs
 media: "M\xE9dias"
@@ -52,8 +52,8 @@ static: Statique
 object_regex_info: "Expression r\xE9guli\xE8re sans d\xE9limiteur, doit fonctionner
   avec PHP et Javascript"
 regex_validation: "Validation d'expression r\xE9guli\xE8re"
-test_string: "Test cha\xEEne"
-regex: RegEx
+test_string: "Cha\xEEne de test"
+regex: "Expression r\xE9guli\xE8re"
 regex_flags: Drapeaux RegEx
 select_presetting: "S\xE9lectionnez un pr\xE9-r\xE9glage"
 good: Bon
@@ -64,7 +64,7 @@ best: Meilleur
   condition"
 average: Moyen
 enter_media_query: "Veuillez saisir une requ\xEAte m\xE9dia CSS valide"
-add_media_query: "Ajouter une requ\xEAte M\xE9dia"
+add_media_query: "Ajouter une requ\xEAte m\xE9dia"
 add_media_segment: "Ajouter un segment m\xE9dia"
 enter_media_segment: "Veuillez saisir un d\xE9bit valide (par exemple 400k, 1500k,
   1M) pour le segment vid\xE9o"
@@ -75,8 +75,8 @@ login_as_this_user_description: "Le lien suivant est un lien temporaire qui vous
   de vous connecter comme utilisateur dans diff\xE9rents navigateur :"
 login_as_this_user: Se connecter en tant que cet utilisateur dans un autre navigateur
 allowed_types_to_create: "types autoris\xE9s \xE0 \xEAtre cr\xE9\xE9s"
-defaults_to_all: defaut pour tous
-use_different_email_delivery_settings: "Utiliser une configuration d'envoi d'E-mail
+defaults_to_all: "Applicable par d\xE9faut \xE0 tous"
+use_different_email_delivery_settings: "Utiliser une configuration d'envoi d'e-mail
   diff\xE9rente pour la newsletter"
 action_scope: Champ d'action
 hit: Toucher
@@ -89,9 +89,9 @@ default_language: "Langue par d\xE9faut"
 wildcards_are_supported: Les wildcards sont pris en charge
 localization_and_internationalization: Localisation &amp; Internationalisation
 assign_target_group_weight: Poids
-target_group: Group Cible
-target_group_multiselect: Groupe Cible Multiselect
-select_a_target_group: "S\xE9lectionner un Groupe Cible"
+target_group: Group cible
+target_group_multiselect: "Multis\xE9lection de groupes cible"
+select_a_target_group: "S\xE9lectionner un groupe cible"
 turn_off_usage_statistics: "D\xE9sactiver les statistiques d'utilisation"
 children: Enfants
 elements_to_export: "\xC9l\xE9ments \xE0 exporter"
@@ -115,7 +115,7 @@ use_original_tiff_description: Utiliser le TIFF original lorsque la source est a
   format image TIFF -> ne pas le modifier.
 port: Port
 delivery_settings: "Param\xE8tres d'envoi"
-generate_previews: "G\xE9n\xE9rer les apercus"
+generate_previews: "G\xE9n\xE9rer les aper\xE7us"
 invalid_class_name: Nom de classe invalide
 redirect_unknown_domains_to_main_domain: "Rediriger vos domaines inconnus (non utilis\xE9
   pour un site et pour les redirections, ...) vers le domaine principal (ci-dessus)"
@@ -123,11 +123,11 @@ hours: Heures
 minutes: Minutes
 seconds: Secondes
 operating_system: "Syst\xE8me d'exploitation"
-hardware_platform: "Plate-forme Mat\xE9rielle"
+hardware_platform: "Plate-forme mat\xE9rielle"
 time_on_site: "Temps pass\xE9 sur le site"
-visited_pages_before_number: "Visit\xE9 n-pages avant"
+visited_pages_before_number: "N-pages visit\xE9es pr\xE9c\xE9demment"
 number: "Num\xE9ro"
-visited_page_before: "Page visit\xE9e avant"
+visited_page_before: "Page visit\xE9e pr\xE9c\xE9demment"
 searchengine: Moteur de recherche
 referrer: "R\xE9f\xE9rent"
 referring_site: "Site r\xE9f\xE9rent"
@@ -145,7 +145,7 @@ short_url: URL courte
 width_and_height_must_be_an_even_number: "La largeur et la hauteur doivent \xEAtre
   un nombre entier"
 this_filter_has_no_settings: "ce filtre n'a pas de param\xE8tres"
-mute: Muet
+mute: Sourdine
 effect: Effet
 colorChannelMixer: "M\xE9langeur de canaux de couleur"
 setframerate: "D\xE9finir la fr\xE9quence d'images"
@@ -163,15 +163,15 @@ show_close_warning: Montrer la notification de fermeture
 matching_text: Texte correspondant
 any: Tout
 http_method: Methode HTTP
-url_pattern: 'Format d''URL<br />(Expression rationnelle ex: @success@i)'
+url_pattern: "Format d'URL<br />(Expression r\xE9guli\xE8re ex: @success@i)"
 beginning: "D\xE9but"
-element_css_selector: "El\xE9ment (selecteur CSS)"
-insert_position: "Ins\xE9rer la Position"
+element_css_selector: "\xC9l\xE9ment (s\xE9lecteur CSS)"
+insert_position: "Ins\xE9rer la position"
 robots_txt_exists_on_filesystem: "Le fichier robots.txt existe d\xE9j\xE0 \xE0 la
   racine des fichiers"
 save_error: Impossible de sauvegarder
-all_roles: "Tous les R\xF4les"
-add_role: "Ajouter un R\xF4le"
+all_roles: "Tous les r\xF4les"
+add_role: "Ajouter un r\xF4le"
 role_creation_error: "Le r\xF4le n'a pas \xE9t\xE9 cr\xE9\xE9"
 workspaces: Zone de travail
 Username: Login
@@ -294,7 +294,7 @@ objects: Objets
 allow_inherit: "Autoriser l'h\xE9ritage"
 parent_php_class: Classe PHP Parent
 implements_interfaces: "Impl\xE9mente interface(s)"
-use_traits: Use (traits)
+use_traits: Utiliser (attributs)
 general_settings: "Param\xE8tres g\xE9n\xE9raux"
 layout_settings: Configurations de la mise en page (Admin Pimcore)
 region: "R\xE9gion"
@@ -376,7 +376,7 @@ position: Position
 objectsMetadata_allowed_class: "Classes autoris\xE9es"
 objectsMetadata_visible_fields: Champs visibles
 objectsMetadata_type_columnbool: "Colonne bool\xE9en"
-objectsMetadata_type_multiselect: Multiselect
+objectsMetadata_type_multiselect: "S\xE9lection multiple"
 file_explorer_saved_file_error: Impossible de sauvegarder le fichier
 reserved_field_names_error: "Svp n'utilisez pas les noms r\xE9serv\xE9s suivants :"
 use_current_date: Utiliser la date du jour
@@ -643,13 +643,13 @@ expanded: Etendu
 display_type: Type d'affichage
 custom_report_class: Classe rapport
 hide: Cacher
-clear_full_page_cache: "Vider le cache page enti\xE8re"
+clear_full_page_cache: "Vider le cache de la page enti\xE8re"
 all_caches: Tous les caches
 admin_translations: Traductions Admin
 lock: Verrouiller
 unlock: "D\xE9verrouiller"
-lock_and_propagate_to_children: Lock and propagate to children
-unlock_and_propagate_to_children: "D\xE9verrouiller et propager aux enfants"
+lock_and_propagate_to_children: Verrouiller et transmettre aux enfants
+unlock_and_propagate_to_children: "D\xE9verrouiller et transmettre aux enfants"
 data_cache: "Cache de donn\xE9es"
 listing_use_traits: Listing Use (traits)
 listing_parent_php_class: Listing Classe PHP Parent
@@ -696,23 +696,23 @@ asset_type_changed: "Le type d'asset a \xE9t\xE9 modifi\xE9 entre-temps. Veuille
 numeric_range: "Plage num\xE9rique"
 date_range: Plage de dates
 quantityValueRange_field: "Plage de valeurs de quantit\xE9"
-allowed_targets: Allowed Targets
-disabled_fields: Disabled Fields
-predefined_metadata_definitions_error_name_exists_msg: Definition with this name already
-  exists
+allowed_targets: "Cibles autoris\xE9es"
+disabled_fields: "Champs d\xE9sactiv\xE9s"
+predefined_metadata_definitions_error_name_exists_msg: "Ce nom est d\xE9j\xE0 utilis\xE9
+  pour une autre d\xE9finition"
 quantityValueUnits: Quantity Value Units
-numeric: Number
-structuredtable_type_number: Number
-objectsMetadata_type_number: Number
-username: Username
-localized_fields: Localized Fields
+numeric: "Num\xE9ro"
+structuredtable_type_number: "Num\xE9ro"
+objectsMetadata_type_number: "Num\xE9ro"
+username: Nom d'utilisateur
+localized_fields: "Champs localis\xE9s"
 field_collections: Collections de champs
-special_settings_tooltip: Special Settings
+special_settings_tooltip: "Param\xE8tres sp\xE9ciaux"
 application_logging: Application Logger
-log_search_component: Component
+log_search_component: Composant
 classificationstore: Classification Store
-classificationstore_mbx_enterkey_prompt: Enter name
+classificationstore_mbx_enterkey_prompt: Saisir un nom
 classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
-log_refresh_seconds: Seconds
+log_refresh_seconds: Secondes
 ...
