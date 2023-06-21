@@ -257,17 +257,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
         }
 
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
-        return this.tabbar;
+        return pimcore.helpers.getTabBar({items: items});
     },
 
     getMetaInfo: function() {

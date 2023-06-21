@@ -1540,57 +1540,57 @@ span.warning {
     border-right: 0;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default {
+.pimcore_editor_tabbar {
     background: #393C3F;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab-bar-body {
+.pimcore_editor_tabbar .x-tab-bar-body {
     padding-top: 3px;
 }
 
 /* TODO here */
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab {
+.pimcore_editor_tabbar .x-tab {
     background: #393C3F;
     border-left: 1px solid #616467;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-active + .x-tab, .pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab:first-child {
+.pimcore_editor_tabbar .x-tab.x-tab-active + .x-tab, .pimcore_editor_tabbar .x-tab:first-child {
     border-color: #393C3F;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab .x-tab-inner-default {
+.pimcore_editor_tabbar .x-tab .x-tab-inner-default {
     color: #B2B4B6;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-active {
+.pimcore_editor_tabbar .x-tab.x-tab-active {
     background-color: #f6f6f6;
     opacity: 1;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-active .x-tab-inner-default {
+.pimcore_editor_tabbar .x-tab.x-tab-active .x-tab-inner-default {
     color: #000 !important;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-active .pimcore_material_icon {
+.pimcore_editor_tabbar .x-tab.x-tab-active .pimcore_material_icon {
     filter: invert(100%);
 }
 
-.x-ie11 .pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-active .pimcore_material_icon {
+.x-ie11 .pimcore_editor_tabbar .x-tab.x-tab-active .pimcore_material_icon {
     border-radius: 15px;
     background-color: #393C3F;
     background-size: 15px 15px;
     opacity: 1;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab.x-tab-over .x-tab-inner-default {
+.pimcore_editor_tabbar .x-tab.x-tab-over .x-tab-inner-default {
     color: #fff;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab-bar-strip-default {
+.pimcore_editor_tabbar .x-tab-bar-strip-default {
     border-bottom: 0;
 }
 
-.pimcore_main_toolbar + .x-panel > .x-panel-bodyWrap > .x-tab-bar-default .x-tab-button-default {
+.pimcore_editor_tabbar .x-tab-button-default {
     height: 25px;
 }
 
