@@ -96,17 +96,7 @@ pimcore.asset.video = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region: 'center',
-            deferredRender: true,
-            enableTabScroll: true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
-        return this.tabbar;
+        return pimcore.helpers.getTabBar({items: items});
     },
 
     getEditPanel: function () {
