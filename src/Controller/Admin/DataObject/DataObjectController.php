@@ -72,6 +72,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     private array $classFieldDefinitions = [];
 
+    public function __construct(
+        protected ElementService $elementService
+    ) {
+    }
+
     /**
      * @Route("/tree-get-children-by-id", name="treegetchildrenbyid", methods={"GET"})
      *
@@ -235,73 +240,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var DataObject $child */
-        $child = $element;
-
-        $tmpObject = [
-            'id' => $child->getId(),
-            'idx' => $child->getIndex(),
-            'key' => $child->getKey(),
-            'sortBy' => $child->getChildrenSortBy(),
-            'sortOrder' => $child->getChildrenSortOrder(),
-            'text' => htmlspecialchars($child->getKey()),
-            'type' => $child->getType(),
-            'path' => $child->getRealFullPath(),
-            'basePath' => $child->getRealPath(),
-            'elementType' => 'object',
-            'locked' => $child->isLocked(),
-            'lockOwner' => $child->getLocked() ? true : false,
-        ];
-
-        $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
-        if ($child instanceof DataObject\Concrete && $child->getClass()->getShowVariants()) {
-            $allowedTypes[] = DataObject::OBJECT_TYPE_VARIANT;
-        }
-
-        $hasChildren = $child->getDao()->hasChildren($allowedTypes, null, $this->getAdminUser());
-
-        $tmpObject['allowDrop'] = false;
-
-        $tmpObject['isTarget'] = true;
-        if ($tmpObject['type'] != DataObject::OBJECT_TYPE_VARIANT) {
-            $tmpObject['allowDrop'] = true;
-        }
-
-        $tmpObject['allowChildren'] = true;
-        $tmpObject['leaf'] = !$hasChildren;
-        $tmpObject['cls'] = 'pimcore_class_icon ';
-
-        if ($child instanceof DataObject\Concrete) {
-            $tmpObject['published'] = $child->isPublished();
-            $tmpObject['className'] = $child->getClass()->getName();
-
-            if (!$child->isPublished()) {
-                $tmpObject['cls'] .= 'pimcore_unpublished ';
-            }
-
-            $tmpObject['allowVariants'] = $child->getClass()->getAllowVariants();
-        }
-
-        $this->addAdminStyle($child, ElementAdminStyleEvent::CONTEXT_TREE, $tmpObject);
-
-        $tmpObject['expanded'] = !$hasChildren;
-        $tmpObject['permissions'] = $child->getUserPermissions($this->getAdminUser());
-
-        if ($child->isLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($child->getLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        if ($tmpObject['leaf']) {
-            $tmpObject['expandable'] = false;
-            $tmpObject['leaf'] = false; //this is required to allow drag&drop
-            $tmpObject['expanded'] = true;
-            $tmpObject['loaded'] = true;
-        }
-
-        return $tmpObject;
+        return $this->elementService->getDataObjectTreeNodeConfig($element, $this->getAdminUser());
     }
 
     /**

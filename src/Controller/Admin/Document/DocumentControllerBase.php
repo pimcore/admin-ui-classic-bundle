@@ -16,8 +16,8 @@
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
@@ -36,14 +36,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 /**
  * @internal
  */
 abstract class DocumentControllerBase extends AdminAbstractController implements KernelControllerEventInterface
 {
     use ApplySchedulerDataTrait;
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use ElementEditLockHelperTrait;
     use UserNameTrait;
 
@@ -60,6 +60,11 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     const TASK_AUTOSAVE = 'autosave';
 
     const TASK_DELETE = 'delete';
+
+    public function __construct(protected ElementService $elementService)
+    {
+    }
+
 
     /**
      * @param array $data
@@ -106,6 +111,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
         throw $this->createAccessDeniedHttpException();
     }
+
 
     protected function addPropertiesToDocument(Request $request, Model\Document $document): void
     {
@@ -437,5 +443,10 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $data['userOwnerFullname'] = $userOwnerName['fullName'];
         $data['userModificationUsername'] = $userModificationName['userName'];
         $data['userModificationFullname'] = $userModificationName['fullName'];
+    }
+
+    public function getTreeNodeConfig(Model\Document $document): array
+    {
+        return $this->elementService->getDocumentTreeNodeConfig($document, $this->getAdminUser());
     }
 }

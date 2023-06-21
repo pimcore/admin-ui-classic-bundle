@@ -94,7 +94,6 @@ services:
     Pimcore\Bundle\AdminBundle\System\AdminConfig: ~
 
     #
-    # Asset Services
+    # Element Services
     #
-
-    Pimcore\Bundle\AdminBundle\Service\AssetService: ~
+    Pimcore\Bundle\AdminBundle\Service\ElementService: ~

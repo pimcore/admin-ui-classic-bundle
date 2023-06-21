@@ -18,11 +18,13 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -336,7 +338,8 @@ class ModelAssetPermissionsTest extends ModelTestCase
 
     protected function buildController(string $classname, User $user): mixed
     {
-        $AssetController = Stub::construct($classname, [], [
+        $elementService = Stub::make(ElementService::class );
+        $AssetController = Stub::construct($classname, [$elementService], [
             'getAdminUser' => function () use ($user) {
                 return $user;
             },

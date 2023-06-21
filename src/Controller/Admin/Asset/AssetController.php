@@ -44,7 +44,6 @@ use Pimcore\Model\Element\ValidationException;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
-use Pimcore\Bundle\AdminBundle\Service\AssetService;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -75,7 +74,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     protected Asset\Service $_assetService;
 
-    public function __construct(protected AssetService $assetService)
+
+    public function __construct(protected ElementService $elementService)
     {
     }
 
@@ -317,7 +317,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             $filteredTotalCount = $childrenList->getTotalCount();
 
             foreach ($children as $childAsset) {
-                $assetTreeNode = $this->getTreeNodeConfig($childAsset);
+                $assetTreeNode = $this->getTreeNodeConfig($childAsset );
                 if ($assetTreeNode['permissions']['list'] == 1) {
                     $assets[] = $assetTreeNode;
                 }
@@ -730,7 +730,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->assetService->getTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getAssetTreeNodeConfig($element, $this->getAdminUser());
     }
 
     /**
@@ -1752,7 +1752,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     'type' => $asset->getType(),
                     'filename' => $asset->getFilename(),
                     'filenameDisplay' => htmlspecialchars($filenameDisplay),
-                    'url' => $this->assetService->getThumbnailUrl($asset),
+                    'url' => $this->elementService->getThumbnailUrl($asset),
                     'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                 ];
             }

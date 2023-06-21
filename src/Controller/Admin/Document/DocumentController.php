@@ -19,7 +19,6 @@ use Exception;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
@@ -39,6 +38,7 @@ use Pimcore\Model\Site;
 use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,12 +57,17 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class DocumentController extends ElementControllerBase implements KernelControllerEventInterface
 {
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use UserNameTrait;
     use RecursionBlockingEventDispatchHelperTrait;
 
     protected Document\Service $_documentService;
 
+    public function __construct(
+        protected ElementService $elementService
+    )
+    {
+    }
     /**
      * @Route("/tree-get-root", name="pimcore_admin_document_document_treegetroot", methods={"GET"})
      *
@@ -213,7 +218,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $childrenList = $list->load();
 
             foreach ($childrenList as $childDocument) {
-                $documentTreeNode = $this->getTreeNodeConfig($childDocument);
+                $documentTreeNode = $this->elementService->getDocumentTreeNodeConfig($childDocument, $this->getAdminUser());
                 // the !isset is for printContainer case, there are no permissions sets there
                 if (!isset($documentTreeNode['permissions']['list']) || $documentTreeNode['permissions']['list'] == 1) {
                     $documents[] = $documentTreeNode;
@@ -1254,7 +1259,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $service = new Document\Service();
 
-        $config = $this->getTreeNodeConfig($document);
+        $config = $this->elementService->getDocumentTreeNodeConfig($document, $this->getAdminUser());
 
         $translations = is_null($translations) ? $service->getTranslations($document) : $translations;
 

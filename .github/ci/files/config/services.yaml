@@ -76,3 +76,8 @@ services:
     # Admin Config Services
     #
     Pimcore\Bundle\AdminBundle\System\AdminConfig: ~
+
+    #
+    # Element Services
+    #
+    Pimcore\Bundle\AdminBundle\Service\ElementService: ~
