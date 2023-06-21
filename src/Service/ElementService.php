@@ -15,7 +15,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
-use Pimcore\Bundle\AdminBundle\CustomView\Config;
+use Pimcore\Config;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -308,7 +308,7 @@ class ElementService
     {
         $container = \Pimcore::getContainer();
         /** @var Config $config */
-       // $config = $container->get(Config::class);
+        $config = $container->get(Config::class);
 
         // PREVIEWS temporary disabled, need's to be optimized some time
         /*

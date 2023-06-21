@@ -219,7 +219,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $childrenList = $list->load();
 
             foreach ($childrenList as $childDocument) {
-                $documentTreeNode = $this->elementService->getDocumentTreeNodeConfig($childDocument, $this->getAdminUser());
+                $documentTreeNode = $this->elementService->getElementTreeNodeConfig($childDocument, $this->getAdminUser());
                 // the !isset is for printContainer case, there are no permissions sets there
                 if (!isset($documentTreeNode['permissions']['list']) || $documentTreeNode['permissions']['list'] == 1) {
                     $documents[] = $documentTreeNode;
@@ -1260,7 +1260,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $service = new Document\Service();
 
-        $config = $this->elementService->getDocumentTreeNodeConfig($document, $this->getAdminUser());
+        $config = $this->elementService->getElementTreeNodeConfig($document, $this->getAdminUser());
 
         $translations = is_null($translations) ? $service->getTranslations($document) : $translations;
 
