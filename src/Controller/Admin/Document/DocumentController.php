@@ -32,6 +32,7 @@ use Pimcore\Image\Chromium;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Site;
@@ -1453,5 +1454,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getDocumentTreeNodeConfig($element, $this->getAdminUser());
     }
 }

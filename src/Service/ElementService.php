@@ -256,7 +256,7 @@ class ElementService
         $container = \Pimcore::getContainer();
 
         /** @var \Pimcore\Config $config */
-        $config = $container->get(Config::class);
+       // $config = $container->get(Config::class);
 
         $tmpDocument = [
             'id' => $childDocument->getId(),
@@ -318,13 +318,13 @@ class ElementService
         $this->addAdminStyle($childDocument, ElementAdminStyleEvent::CONTEXT_TREE, $tmpDocument);
 
         // PREVIEWS temporary disabled, need's to be optimized some time
-        if($childDocument instanceof Document\Page && isset($config['documents']['generate_preview'])) {
+      /*  if($childDocument instanceof Document\Page && isset($config['documents']['generate_preview'])) {
             $thumbnailFile = $childDocument->getPreviewImageFilesystemPath();
             // only if the thumbnail exists and isn't out of time
             if(file_exists($thumbnailFile) && filemtime($thumbnailFile) > ($childDocument->getModificationDate() - 20)) {
                 $tmpDocument['thumbnail'] = $this->urlGenerator->generate('pimcore_admin_document_page_display_preview_image', ['id' => $childDocument->getId()]);
             }
-        }
+        }*/
 
         $tmpDocument['cls'] = '';
 
