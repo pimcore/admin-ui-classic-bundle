@@ -15,7 +15,8 @@
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
-use Pimcore\Config;
+use Pimcore\Config as PimcoreConfig;
+use Pimcore\Bundle\AdminBundle\CustomView\Config ;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -161,7 +162,7 @@ class ElementService
         }
     }
 
-    public function getAssetPermissionsConfig(ElementInterface $element, array $permissions, array &$tmpNode, $user)
+    public function getAssetPermissionsConfig(ElementInterface $element, array $permissions, array &$tmpNode, UserProxy|User|null $user): void
     {
         $hasChildren = $element->getDao()->hasChildren($user);
 
@@ -190,8 +191,8 @@ class ElementService
         ElementInterface $element,
         array $permissions,
         array &$tmpNode,
-        $user
-    )
+        UserProxy|User|null $user
+    ): void
     {
         $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
         if ($element instanceof DataObject\Concrete && $element->getClass()->getShowVariants()) {
@@ -225,7 +226,7 @@ class ElementService
         $tmpNode['permissions'] = $permissions;
     }
 
-    public function getDocumentPermissionsAndChildrenConfig($element, $permissions, &$tmpNode)
+    public function getDocumentPermissionsAndChildrenConfig(ElementInterface $element, array $permissions, array &$tmpNode): void
     {
         $hasChildren = $element->getDao()->hasChildren(null, Admin::getCurrentUser());
 
@@ -269,7 +270,7 @@ class ElementService
         }
     }
 
-    public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset)
+    public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset): void
     {
 
         if ($asset instanceof Asset\Image) {
@@ -304,11 +305,11 @@ class ElementService
         }
     }
 
-    public function getDocumentSpecificSettings(Document $document, array &$tmpDocument)
+    public function getDocumentSpecificSettings(Document $document, array &$tmpDocument): void
     {
         $container = \Pimcore::getContainer();
-        /** @var Config $config */
-        $config = $container->get(Config::class);
+        /** @var PimcoreConfig $config */
+        $config = $container->get(PimcoreConfig::class);
 
         // PREVIEWS temporary disabled, need's to be optimized some time
         if ($document instanceof Document\Page && isset($config['documents']['generate_preview'])) {
@@ -316,7 +317,7 @@ class ElementService
             // only if the thumbnail exists and isn't out of time
             if (file_exists($thumbnailFile) && filemtime($thumbnailFile) > ($document->getModificationDate() - 20)) {
                 $tmpDocument['thumbnail'] =
-                    $this->generateUrl('pimcore_admin_document_page_display_preview_image',
+                    $this->urlGenerator->generate('pimcore_admin_document_page_display_preview_image',
                     ['id' => $document->getId()]
                 );
             }
@@ -342,7 +343,7 @@ class ElementService
         }
     }
 
-    public function getDataObjectSpecificSettings(array &$tmpObject)
+    public function getDataObjectSpecificSettings(array &$tmpObject): void
     {
         if ($tmpObject['leaf']) {
             $tmpObject['expandable'] = false;

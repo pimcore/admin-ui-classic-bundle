@@ -28,6 +28,7 @@ use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Document;
 use Pimcore\Model\Element;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Property;
 use Pimcore\Model\Version;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -443,6 +444,11 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $data['userOwnerFullname'] = $userOwnerName['fullName'];
         $data['userModificationUsername'] = $userModificationName['userName'];
         $data['userModificationFullname'] = $userModificationName['fullName'];
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
     }
 
 }
