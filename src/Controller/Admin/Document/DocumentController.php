@@ -170,7 +170,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $cv = [];
         if ($document->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             $db = Db::get();

@@ -15,8 +15,8 @@
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
-use Pimcore\Config as PimcoreConfig;
-use Pimcore\Bundle\AdminBundle\CustomView\Config ;
+use Pimcore\Config;
+use Pimcore\Bundle\AdminBundle\CustomView;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
@@ -42,7 +42,7 @@ class ElementService
 
     public function __construct(
         protected UrlGeneratorInterface $urlGenerator,
-        protected PimcoreConfig $config
+        protected Config $config
     ) {
     }
 
@@ -53,12 +53,12 @@ class ElementService
      *
      * @internal
      */
-    public static function getCustomViewById(string $id): ?array
+    public function getCustomViewById(string $id): ?array
     {
-        $customViews = Config::get();
-        if($customViews) {
-            foreach($customViews as $customView) {
-                if($customView['id'] == $id) {
+        $customViews = CustomView\Config::get();
+        if ($customViews) {
+            foreach ($customViews as $customView) {
+                if ($customView['id'] == $id) {
                     return $customView;
                 }
             }
@@ -87,44 +87,29 @@ class ElementService
 
         $permissions = $element->getUserPermissions($user);
 
-        //Asset
         if ($element instanceof Asset) {
             $tmpNode['text'] = htmlspecialchars($element->getFilename());
             $tmpNode['elementType'] = 'asset';
 
-            $this->getAssetPermissionsConfig($element, $permissions, $tmpNode, $user);
-        }
-        //Document
-        if ($element instanceof Document) {
+            $this->assignAssetTreeConfig($element, $permissions, $tmpNode, $user);
+        } elseif ($element instanceof Document) {
             $tmpNode['text'] = $element->getKey();
             $tmpNode['elementType'] = 'document';
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['published'] = $element->isPublished();
 
-            $this->getDocumentPermissionsAndChildrenConfig($element, $permissions, $tmpNode);
-        }
-        //DataObject
-        if ($element instanceof DataObject) {
+            $this->assignDocumentTreeConfig($element, $permissions, $tmpNode);
+        } elseif ($element instanceof DataObject) {
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['sortBy'] = $element->getChildrenSortBy();
             $tmpNode['sortOrder'] = $element->getChildrenSortOrder();
             $tmpNode['text'] = htmlspecialchars($element->getKey());
             $tmpNode['elementType'] = 'object';
 
-           $this->getDataObjectPermissionsAndChildrenConfig($element, $permissions, $tmpNode, $user);
+            $this->assignDataObjectTreeConfig($element, $permissions, $tmpNode, $user);
         }
 
         $this->addAdminStyle($element, ElementAdminStyleEvent::CONTEXT_TREE, $tmpNode);
-
-        if ($element instanceof Asset) {
-            $this->getAssetThumbnailConfig($element, $tmpNode);
-        }
-        if ($element instanceof Document) {
-            $this->getDocumentSpecificSettings($element, $tmpNode);
-        }
-        if ($element instanceof DataObject) {
-            $this->getDataObjectSpecificSettings($tmpNode);
-        }
 
         if ($element->isLocked()) {
             $tmpNode['cls'] .= 'pimcore_treenode_locked ';
@@ -132,6 +117,7 @@ class ElementService
         if ($element->getLocked()) {
             $tmpNode['cls'] .= 'pimcore_treenode_lockOwner ';
         }
+
         return $tmpNode;
     }
 
@@ -168,8 +154,8 @@ class ElementService
         return $thumbnailUrl;
     }
 
-    public function getAssetPermissionsConfig(
-        Document|Asset|DataObject\AbstractObject $element,
+    private function assignAssetTreeConfig(
+        Asset $element,
         array $permissions,
         array &$tmpNode,
         UserProxy|User|null $user
@@ -197,9 +183,12 @@ class ElementService
             $tmpNode['expandable'] = false;
             $tmpNode['expanded'] = false;
         }
+
+        $this->assignAssetThumbnailConfig($element, $tmpNode);
     }
-    public function getDataObjectPermissionsAndChildrenConfig(
-        ElementInterface $element,
+
+    public function assignDataObjectTreeConfig(
+        DataObject\AbstractObject $element,
         array $permissions,
         array &$tmpNode,
         UserProxy|User|null $user
@@ -211,13 +200,8 @@ class ElementService
         }
         $hasChildren = $element->getDao()->hasChildren($allowedTypes, null, $user);
 
-        $tmpNode['allowDrop'] = false;
-
+        $tmpNode['allowDrop'] = ($tmpNode['type'] ?? false) != DataObject::OBJECT_TYPE_VARIANT;
         $tmpNode['isTarget'] = true;
-        if ($tmpNode['type'] != DataObject::OBJECT_TYPE_VARIANT) {
-            $tmpNode['allowDrop'] = true;
-        }
-
         $tmpNode['allowChildren'] = true;
         $tmpNode['leaf'] = !$hasChildren;
         $tmpNode['cls'] = 'pimcore_class_icon ';
@@ -235,10 +219,17 @@ class ElementService
 
         $tmpNode['expanded'] = !$hasChildren;
         $tmpNode['permissions'] = $permissions;
+
+        if ($tmpNode['leaf']) {
+            $tmpNode['expandable'] = false;
+            $tmpNode['leaf'] = false; //this is required to allow drag&drop
+            $tmpNode['expanded'] = true;
+            $tmpNode['loaded'] = true;
+        }
     }
 
-    public function getDocumentPermissionsAndChildrenConfig(
-        ElementInterface $element,
+    public function assignDocumentTreeConfig(
+        Document $element,
         array $permissions,
         array &$tmpNode
     ): void
@@ -283,9 +274,11 @@ class ElementService
             $tmp = $element->getDocumentTreeNodeConfig();
             $tmpNode = array_merge($tmpNode, $tmp);
         }
+
+        $this->assignDocumentSpecificSettings($element, $tmpNode);
     }
 
-    public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset): void
+    private function assignAssetThumbnailConfig(Asset $asset, array &$tmpAsset): void
     {
         try {
             switch ($asset) {
@@ -320,7 +313,7 @@ class ElementService
         }
     }
 
-    public function getDocumentSpecificSettings(Document $document, array &$tmpDocument): void
+    private function assignDocumentSpecificSettings(Document $document, array &$tmpDocument): void
     {
         // PREVIEWS temporary disabled, need's to be optimized some time
         if ($document instanceof Document\Page && isset($this->config['documents']['generate_preview'])) {
@@ -359,16 +352,6 @@ class ElementService
 
         if (!$document->isPublished()) {
             $tmpDocument['cls'] .= 'pimcore_unpublished ';
-        }
-    }
-
-    public function getDataObjectSpecificSettings(array &$tmpObject): void
-    {
-        if ($tmpObject['leaf']) {
-            $tmpObject['expandable'] = false;
-            $tmpObject['leaf'] = false; //this is required to allow drag&drop
-            $tmpObject['expanded'] = true;
-            $tmpObject['loaded'] = true;
         }
     }
 

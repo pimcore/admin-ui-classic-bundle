@@ -286,7 +286,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             // get assets
