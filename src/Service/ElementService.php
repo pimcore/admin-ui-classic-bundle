@@ -90,10 +90,12 @@ class ElementService
 
 
         if ($element instanceof Asset) {
+            $tmpNode['cls'] = '';
             $this->assignAssetTreeConfig($element, $tmpNode, $user);
         } elseif ($element instanceof Document) {
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['published'] = $element->isPublished();
+            $tmpNode['leaf'] = true;
 
             $this->assignDocumentTreeConfig($element, $tmpNode, $user);
         } elseif ($element instanceof DataObject) {
@@ -158,6 +160,7 @@ class ElementService
         UserProxy|User|null $user
     ): void
     {
+
         $hasChildren = $element->getDao()->hasChildren($user);
 
         $permissions = $element->getUserPermissions($user);
