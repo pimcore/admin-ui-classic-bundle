@@ -40,7 +40,8 @@ class ElementService
     use AdminStyleTrait;
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator
+        protected UrlGeneratorInterface $urlGenerator,
+        protected PimcoreConfig $config
     ) {
     }
 
@@ -137,32 +138,35 @@ class ElementService
 
         $params = array_merge($defaults, $params);
 
-        if ($asset instanceof Asset\Image) {
-            return $this->urlGenerator->generate('pimcore_admin_asset_getimagethumbnail', $params);
+        switch ($asset) {
+            case $asset instanceof Asset\Image:
+                $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getimagethumbnail', $params);
+                break;
+            case $asset instanceof Asset\Folder:
+                $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getfolderthumbnail', $params);
+                break;
+            case $asset instanceof Asset\Video && \Pimcore\Video::isAvailable():
+                $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getvideothumbnail', $params);
+                break;
+            case $asset instanceof Asset\Document && \Pimcore\Document::isAvailable() && $asset->getPageCount():
+                $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getdocumentthumbnail', $params);
+                break;
+            case $asset instanceof Asset\Audio:
+                $thumbnailUrl = '/bundles/pimcoreadmin/img/flat-color-icons/speaker.svg';
+                break;
+            default:
+                $thumbnailUrl = '/bundles/pimcoreadmin/img/filetype-not-supported.svg';
         }
 
-        if ($asset instanceof Asset\Folder) {
-            return $this->urlGenerator->generate('pimcore_admin_asset_getfolderthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Video && \Pimcore\Video::isAvailable()) {
-            return $this->urlGenerator->generate('pimcore_admin_asset_getvideothumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Document && \Pimcore\Document::isAvailable() && $asset->getPageCount()) {
-            return $this->urlGenerator->generate('pimcore_admin_asset_getdocumentthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Audio) {
-            return '/bundles/pimcoreadmin/img/flat-color-icons/speaker.svg';
-        }
-
-        if ($asset instanceof Asset) {
-            return '/bundles/pimcoreadmin/img/filetype-not-supported.svg';
-        }
+        return $thumbnailUrl;
     }
 
-    public function getAssetPermissionsConfig(ElementInterface $element, array $permissions, array &$tmpNode, UserProxy|User|null $user): void
+    public function getAssetPermissionsConfig(
+        ElementInterface $element,
+        array $permissions,
+        array &$tmpNode,
+        UserProxy|User|null $user
+    ): void
     {
         $hasChildren = $element->getDao()->hasChildren($user);
 
@@ -226,7 +230,11 @@ class ElementService
         $tmpNode['permissions'] = $permissions;
     }
 
-    public function getDocumentPermissionsAndChildrenConfig(ElementInterface $element, array $permissions, array &$tmpNode): void
+    public function getDocumentPermissionsAndChildrenConfig(
+        ElementInterface $element,
+        array $permissions,
+        array &$tmpNode
+    ): void
     {
         $hasChildren = $element->getDao()->hasChildren(null, Admin::getCurrentUser());
 
@@ -272,47 +280,43 @@ class ElementService
 
     public function getAssetThumbnailConfig(Asset $asset, array &$tmpAsset): void
     {
-
-        if ($asset instanceof Asset\Image) {
-            try {
-                $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-
-                // we need the dimensions for the wysiwyg editors, so that they can resize the image immediately
-                if ($asset->getCustomSetting('imageDimensionsCalculated')) {
-                    $tmpAsset['imageWidth'] = $asset->getCustomSetting('imageWidth');
-                    $tmpAsset['imageHeight'] = $asset->getCustomSetting('imageHeight');
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of image, seems to be broken.');
-            }
-        } elseif ($asset->getType() == 'video') {
-            try {
-                if (\Pimcore\Video::isAvailable()) {
+        try {
+            switch ($asset) {
+                case $asset instanceof Asset\Image:
                     $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
+
+                    // we need the dimensions for the wysiwyg editors, so that they can resize the image immediately
+                    if ($asset->getCustomSetting('imageDimensionsCalculated')) {
+                        $tmpAsset['imageWidth'] = $asset->getCustomSetting('imageWidth');
+                        $tmpAsset['imageHeight'] = $asset->getCustomSetting('imageHeight');
+                    }
+                    break;
+
+                case $asset instanceof Asset\Video:
+                    if (\Pimcore\Video::isAvailable()) {
+                        $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
+                    }
+                    break;
+
+                case $asset instanceof Asset\Document:
+                    // add the PDF check here, otherwise the preview layer in admin is shown without content
+                    if (
+                        \Pimcore\Document::isAvailable() &&
+                        \Pimcore\Document::isFileTypeSupported($asset->getFilename())
+                    ) {
+                        $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
+                    }
+                    break;
             }
-        } elseif ($asset->getType() == 'document') {
-            try {
-                // add the PDF check here, otherwise the preview layer in admin is shown without content
-                if (\Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
-                    $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
-            }
+        } catch (\Exception $e) {
+            Logger::error('Cannot get dimensions of asset, seems to be broken. Reason: ' . $e->getMessage());
         }
     }
 
     public function getDocumentSpecificSettings(Document $document, array &$tmpDocument): void
     {
-        $container = \Pimcore::getContainer();
-        /** @var PimcoreConfig $config */
-        $config = $container->get(PimcoreConfig::class);
-
         // PREVIEWS temporary disabled, need's to be optimized some time
-        if ($document instanceof Document\Page && isset($config['documents']['generate_preview'])) {
+        if ($document instanceof Document\Page && isset($this->config['documents']['generate_preview'])) {
             $thumbnailFile = $document->getPreviewImageFilesystemPath();
             // only if the thumbnail exists and isn't out of time
             if (file_exists($thumbnailFile) && filemtime($thumbnailFile) > ($document->getModificationDate() - 20)) {
@@ -329,8 +333,16 @@ class ElementService
             $tmpDocument['url'] = $document->getFullPath();
             $site = Frontend::getSiteForDocument($document);
             if ($site instanceof Site) {
-                $tmpDocument['url'] = 'http://' . $site->getMainDomain() .
-                    preg_replace('@^' . $site->getRootPath() . '/?@', '/', $document->getRealFullPath());
+                $tmpDocument['url'] =
+                    'http://' .
+                    $site->getMainDomain() .
+                    preg_replace(
+                        '@^' .
+                        $site->getRootPath() .
+                        '/?@',
+                        '/',
+                        $document->getRealFullPath()
+                    );
             }
         }
 
