@@ -1103,6 +1103,10 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         var data = JSON.parse(request.responseText);
                         if(ev.currentTarget.status < 400 && data.success === true) {
                             success(res);
+                            if (activeUploads == filesCount) {
+                                win.close();
+                                uploadWindowCompatible.close();
+                            }
                         } else {
                             failure(res);
                             finishedErrorHandler();
@@ -1121,13 +1125,6 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     request.send(data);
 
                 });
-
-                window.setTimeout(function () {
-                    if (activeUploads == filesCount) {
-                        win.close();
-                        uploadWindowCompatible.close();
-                    }
-                }.bind(this), 1000);
             },
             afterrender:function(cmp){
                 cmp.fileInputEl.set({
