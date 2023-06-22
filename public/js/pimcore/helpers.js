@@ -1025,8 +1025,8 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
     if (description) {
         items.push({
-           xtype: 'displayfield',
-           value: description
+            xtype: 'displayfield',
+            value: description
         });
     }
 
@@ -1035,34 +1035,101 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         emptyText: t("select_a_file"),
         fieldLabel: t("file"),
         width: 470,
-        name: filename,
+        name: filename+'[]',
         buttonText: "",
         buttonConfig: {
             iconCls: 'pimcore_icon_upload'
         },
         listeners: {
             change: function (fileUploadField) {
-                if(fileUploadField.fileInputEl.dom.files[0].size > pimcore.settings["upload_max_filesize"]) {
-                    pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + fileUploadField.fileInputEl.dom.files[0].name, "error");
-                    return;
-                }
+                var win = new Ext.Window({
+                    items: [],
+                    modal: true,
+                    closable: false,
+                    bodyStyle: "padding:10px;",
+                    width: 500,
+                    autoHeight: true,
+                    autoScroll: true
+                });
+                win.show();
 
-                uploadForm.getForm().submit({
-                    url: url,
-                    params: {
-                        csrfToken: pimcore.settings['csrfToken']
-                    },
-                    waitMsg: t("please_wait"),
-                    success: function (el, res) {
-                        // content-type in response has to be text/html, otherwise (when application/json is sent)
-                        // chrome will complain in Ext.form.Action.Submit and mark the submission as failed
-                        success(res);
-                        uploadWindowCompatible.close();
-                    },
-                    failure: function (el, res) {
-                        failure(res);
-                        uploadWindowCompatible.close();
+                var finishedErrorHandler = function (e) {
+                    this.activeUploads--;
+                    win.remove(pbar);
+
+                    if(this.activeUploads < 1) {
+                        win.close();
                     }
+                }.bind(this);
+
+                var activeUploads = 0;
+                var filesCount = fileUploadField.fileInputEl.dom.files.length;
+
+                Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
+                    if (file.size > pimcore.settings["upload_max_filesize"]) {
+                        pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + file.name, "error");
+                        return;
+                    }
+
+                    var pbar = new Ext.ProgressBar({
+                        width:465,
+                        text: file.name,
+                        style: "margin-bottom: 5px"
+                    });
+
+                    win.add(pbar);
+                    win.updateLayout();
+
+                    activeUploads++;
+                    var percentComplete = activeUploads / filesCount;
+                    var progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
+                    if (percentComplete == 1) {
+                        progressText = file.name + " " + t("please_wait");
+                    }
+
+                    pbar.updateProgress(percentComplete, progressText);
+
+                    var data = new FormData();
+                    data.append(filename, file);
+                    data.append("filename", file.name);
+                    data.append("csrfToken", pimcore.settings['csrfToken']);
+
+                    var request = new XMLHttpRequest();
+                    var res = {
+                        'response': request
+                    };
+
+                    var successWrapper = function (ev) {
+                        var data = JSON.parse(request.responseText);
+                        if(ev.currentTarget.status < 400 && data.success === true) {
+                            success(res);
+                            uploadWindowCompatible.close();
+                        } else {
+                            failure(res);
+                            finishedErrorHandler();
+                        }
+                    };
+
+                    var errorWrapper = function (ev) {
+                        failure(res);
+                        finishedErrorHandler();
+                    };
+
+                    request.addEventListener("load", successWrapper, false);
+                    request.addEventListener("error", errorWrapper, false);
+                    request.addEventListener("abort", errorWrapper, false);
+                    request.open('POST', url);
+                    request.send(data);
+
+                });
+
+                window.setTimeout(function () {
+                    win.close();
+                }.bind(this), 1000);
+            },
+            afterrender:function(cmp){
+                cmp.fileInputEl.set({
+                    multiple:'multiple'
                 });
             }
         }
