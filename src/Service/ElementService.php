@@ -22,6 +22,7 @@ use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Document;
+use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Site;
 use Pimcore\Model\User;
@@ -66,7 +67,13 @@ class ElementService
         return null;
     }
 
-    public function getElementTreeNodeConfig(ElementInterface $element, UserProxy|User|null $user): array
+    /**
+     * @throws \Exception
+     */
+    public function getElementTreeNodeConfig(
+        ElementInterface|AbstractElement $element,
+        UserProxy|User|null $user
+    ): array
     {
         $tmpNode = [
             'id' => $element->getId(),
@@ -162,7 +169,7 @@ class ElementService
     }
 
     public function getAssetPermissionsConfig(
-        ElementInterface $element,
+        Document|Asset|DataObject\AbstractObject $element,
         array $permissions,
         array &$tmpNode,
         UserProxy|User|null $user

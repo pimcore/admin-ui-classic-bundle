@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
+use Pimcore\Bundle\AdminBundle\Controller\Admin\Asset\AssetController;
 use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
@@ -296,7 +297,7 @@ class ModelAssetPermissionsTest extends ModelTestCase
 
     protected function doTestTreeGetChildrenById(Asset $element, User $user, array $expectedChildren): void
     {
-        $controller = $this->buildController('\\Pimcore\\Bundle\\AdminBundle\\Controller\\Admin\\Asset\\AssetController', $user);
+        $controller = $this->buildController(AssetController::class, $user);
 
         $request = new Request([
             'node' => $element->getId(),
@@ -318,28 +319,34 @@ class ModelAssetPermissionsTest extends ModelTestCase
         $this->assertCount(
             $responseData['total'],
             $responseData['nodes'],
-            'Assert total count of response matches count of nodes array for `' . $element->getFullpath() . '` for user `' . $user->getName() . '`'
+            'Assert total count of response matches count of nodes array for `' .
+            $element->getFullpath() . '` for user `' . $user->getName() . '`'
         );
 
         $this->assertCount(
             count($expectedChildren),
             $responseData['nodes'],
-            'Assert number of expected result matches count of nodes array for `' . $element->getFullpath() . '` for user `' . $user->getName() . '` (' . print_r($responsePaths, true) . ')'
+            'Assert number of expected result matches count of nodes array for `' . $element->getFullpath() .
+            '` for user `' . $user->getName() . '` (' . print_r($responsePaths, true) . ')'
         );
 
         foreach ($expectedChildren as $path) {
             $this->assertContains(
                 $path,
                 $responsePaths,
-                'Children of `' . $element->getFullpath() . '` do to not contain `' . $path . '` for user `' . $user->getName() . '`'
+                'Children of `' . $element->getFullpath() . '` do to not contain `' . $path .
+                '` for user `' . $user->getName() . '`'
             );
         }
     }
 
     protected function buildController(string $classname, User $user): mixed
     {
-        $elementService = Stub::make(ElementService::class );
-        $AssetController = Stub::construct($classname, [$elementService], [
+        $elementService = Stub::makeEmpty(ElementService::class, [
+            'urlGenerator' => Stub::makeEmpty(UrlGeneratorInterface::class),
+        ]);
+
+        return Stub::construct($classname, [$elementService], [
             'getAdminUser' => function () use ($user) {
                 return $user;
             },
@@ -353,7 +360,5 @@ class ModelAssetPermissionsTest extends ModelTestCase
                 return '';
             },
         ]);
-
-        return $AssetController;
     }
 }
