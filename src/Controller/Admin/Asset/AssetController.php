@@ -317,7 +317,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             $filteredTotalCount = $childrenList->getTotalCount();
 
             foreach ($children as $childAsset) {
-                $assetTreeNode = $this->getTreeNodeConfig($childAsset );
+                $assetTreeNode = $this->getTreeNodeConfig($childAsset);
                 if ($assetTreeNode['permissions']['list'] == 1) {
                     $assets[] = $assetTreeNode;
                 }

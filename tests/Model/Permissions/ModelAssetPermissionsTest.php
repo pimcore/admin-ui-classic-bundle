@@ -342,7 +342,7 @@ class ModelAssetPermissionsTest extends ModelTestCase
 
     protected function buildController(string $classname, User $user): mixed
     {
-        $elementService = Stub::makeEmpty(ElementService::class, [
+        $elementService = Stub::make(ElementService::class, [
             'urlGenerator' => Stub::makeEmpty(UrlGeneratorInterface::class),
         ]);
 

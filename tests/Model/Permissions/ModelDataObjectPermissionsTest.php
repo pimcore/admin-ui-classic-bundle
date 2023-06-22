@@ -18,6 +18,8 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
+use Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject\DataObjectController;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
@@ -26,6 +28,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelDataObjectPermissionsTest extends ModelTestCase
 {
@@ -213,9 +216,13 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
      *
      * @throws \ReflectionException
      */
-    protected function doTestTreeGetChildrenById(DataObject\AbstractObject $element, User $user, ?array $expectedChildren): void
+    protected function doTestTreeGetChildrenById(
+        DataObject\AbstractObject $element,
+        User $user,
+        ?array $expectedChildren
+    ): void
     {
-        $controller = $this->buildController('\\Pimcore\\Bundle\\AdminBundle\\Controller\\Admin\\DataObject\\DataObjectController', $user);
+        $controller = $this->buildController(DataObjectController::class, $user);
 
         $request = new Request([
             'node' => $element->getId(),
@@ -521,7 +528,11 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
 
     protected function buildController(string $classname, User $user): mixed
     {
-        $dataObjectController = Stub::construct($classname, [], [
+        $elementService = Stub::make(ElementService::class, [
+            'urlGenerator' => Stub::makeEmpty(UrlGeneratorInterface::class),
+        ]);
+
+        return Stub::construct($classname, [$elementService], [
             'getAdminUser' => function () use ($user) {
                 return $user;
             },
@@ -532,7 +543,5 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
                 return new JsonResponse($data);
             },
         ]);
-
-        return $dataObjectController;
     }
 }

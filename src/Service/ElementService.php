@@ -22,8 +22,8 @@ use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Document;
-use Pimcore\Model\Element\AbstractElement;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\Site;
 use Pimcore\Model\User;
 use Pimcore\Security\User\User as UserProxy;
@@ -71,42 +71,37 @@ class ElementService
      * @throws \Exception
      */
     public function getElementTreeNodeConfig(
-        ElementInterface|AbstractElement $element,
+        ElementInterface $element,
         UserProxy|User|null $user
     ): array
     {
         $tmpNode = [
             'id' => $element->getId(),
             'key' => $element->getKey(),
+            'text' => htmlspecialchars($element->getKey()),
             'type' => $element->getType(),
             'path' => $element->getRealFullPath(),
             'basePath' => $element->getRealPath(),
             'locked' => $element->isLocked(),
-            'lockOwner' => (bool)$element->getLocked()
+            'lockOwner' => (bool)$element->getLocked(),
+            'elementType' => Service::getElementType($element)
         ];
 
-        $permissions = $element->getUserPermissions($user);
+
 
         if ($element instanceof Asset) {
-            $tmpNode['text'] = htmlspecialchars($element->getFilename());
-            $tmpNode['elementType'] = 'asset';
-
-            $this->assignAssetTreeConfig($element, $permissions, $tmpNode, $user);
+            $this->assignAssetTreeConfig($element, $tmpNode, $user);
         } elseif ($element instanceof Document) {
-            $tmpNode['text'] = $element->getKey();
-            $tmpNode['elementType'] = 'document';
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['published'] = $element->isPublished();
 
-            $this->assignDocumentTreeConfig($element, $permissions, $tmpNode);
+            $this->assignDocumentTreeConfig($element, $tmpNode, $user);
         } elseif ($element instanceof DataObject) {
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['sortBy'] = $element->getChildrenSortBy();
             $tmpNode['sortOrder'] = $element->getChildrenSortOrder();
-            $tmpNode['text'] = htmlspecialchars($element->getKey());
-            $tmpNode['elementType'] = 'object';
 
-            $this->assignDataObjectTreeConfig($element, $permissions, $tmpNode, $user);
+            $this->assignDataObjectTreeConfig($element, $tmpNode, $user);
         }
 
         $this->addAdminStyle($element, ElementAdminStyleEvent::CONTEXT_TREE, $tmpNode);
@@ -154,14 +149,18 @@ class ElementService
         return $thumbnailUrl;
     }
 
+    /**
+     * @throws \Exception
+     */
     private function assignAssetTreeConfig(
         Asset $element,
-        array $permissions,
         array &$tmpNode,
         UserProxy|User|null $user
     ): void
     {
         $hasChildren = $element->getDao()->hasChildren($user);
+
+        $permissions = $element->getUserPermissions($user);
 
         $tmpNode['permissions'] = [
             'remove' => $permissions['delete'],
@@ -187,9 +186,11 @@ class ElementService
         $this->assignAssetThumbnailConfig($element, $tmpNode);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function assignDataObjectTreeConfig(
         DataObject\AbstractObject $element,
-        array $permissions,
         array &$tmpNode,
         UserProxy|User|null $user
     ): void
@@ -218,7 +219,7 @@ class ElementService
         }
 
         $tmpNode['expanded'] = !$hasChildren;
-        $tmpNode['permissions'] = $permissions;
+        $tmpNode['permissions'] = $element->getUserPermissions($user);
 
         if ($tmpNode['leaf']) {
             $tmpNode['expandable'] = false;
@@ -228,10 +229,13 @@ class ElementService
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     public function assignDocumentTreeConfig(
         Document $element,
-        array $permissions,
-        array &$tmpNode
+        array &$tmpNode,
+        UserProxy|User|null $user
     ): void
     {
         $hasChildren = $element->getDao()->hasChildren(null, Admin::getCurrentUser());
@@ -246,6 +250,8 @@ class ElementService
             'create',
             'list',
         ];
+
+        $permissions = $element->getUserPermissions($user);
 
         foreach ($treeNodePermissionTypes as $key => $permissionType) {
             $permissionKey = is_string($key) ? $key : $permissionType;
