@@ -16,8 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Traits;
 
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Model\Element\ElementInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @internal
@@ -28,13 +29,13 @@ trait DocumentTreeConfigTrait
 {
     use AdminStyleTrait;
 
-    protected ElementService $elementService;
+    protected ElementServiceInterface $elementService;
 
     /**
-     * @required
-     * @param ElementService $elementService
+     * @param ElementServiceInterface $elementService
      */
-    public function setElementService(ElementService $elementService): void
+    #[Required]
+    public function setElementService(ElementServiceInterface $elementService): void
     {
         $this->elementService = $elementService;
     }

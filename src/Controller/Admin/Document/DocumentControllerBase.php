@@ -21,6 +21,7 @@ use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Bundle\PersonalizationBundle\Model\Document\Targeting\TargetingDocumentInterface;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -37,7 +38,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 /**
  * @internal
  */
@@ -62,7 +62,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
     const TASK_DELETE = 'delete';
 
-    public function __construct(protected ElementService $elementService)
+    public function __construct(protected ElementServiceInterface $elementService)
     {
     }
 

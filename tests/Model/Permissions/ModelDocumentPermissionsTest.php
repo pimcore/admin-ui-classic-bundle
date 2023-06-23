@@ -20,6 +20,8 @@ namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 use Codeception\Stub;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\Document\DocumentController;
 use Pimcore\Bundle\AdminBundle\Service\ElementService;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
+use Pimcore\Config;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\Page;
 use Pimcore\Model\User;
@@ -217,9 +219,8 @@ class ModelDocumentPermissionsTest extends ModelTestCase
      */
     protected function buildController(string $classname, User $user): mixed
     {
-        $elementService = Stub::make(ElementService::class, [
-            'urlGenerator' => Stub::makeEmpty(UrlGeneratorInterface::class)
-        ]);
+        $urlGenerator = Stub::makeEmpty(UrlGeneratorInterface::class);
+        $elementService = Stub::construct(ElementService::class , [$urlGenerator, new Config()]);
 
         return Stub::construct($classname, [$elementService], [
             'getAdminUser' => function () use ($user) {

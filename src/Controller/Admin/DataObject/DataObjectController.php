@@ -23,7 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
@@ -73,7 +73,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     private array $classFieldDefinitions = [];
 
     public function __construct(
-        protected ElementService $elementService
+        protected ElementServiceInterface $elementService
     ) {
     }
 

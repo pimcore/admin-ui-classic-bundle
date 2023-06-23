@@ -80,4 +80,5 @@ services:
     #
     # Element Services
     #
-    Pimcore\Bundle\AdminBundle\Service\ElementService: ~
+    Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface:
+        class: Pimcore\Bundle\AdminBundle\Service\ElementService

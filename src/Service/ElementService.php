@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Pimcore
  *
@@ -26,7 +28,6 @@ use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Site;
 use Pimcore\Model\User;
-use Pimcore\Security\User\User as UserProxy;
 use Pimcore\Tool\Admin;
 use Pimcore\Tool\Frontend;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
@@ -36,7 +37,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @internal
  */
-class ElementService
+class ElementService implements ElementServiceInterface
 {
     use AdminStyleTrait;
 
@@ -72,7 +73,7 @@ class ElementService
      */
     public function getElementTreeNodeConfig(
         ElementInterface $element,
-        UserProxy|User|null $user
+        User|null $user
     ): array
     {
         $tmpNode = [
@@ -157,7 +158,7 @@ class ElementService
     private function assignAssetTreeConfig(
         Asset $element,
         array &$tmpNode,
-        UserProxy|User|null $user
+        User|null $user
     ): void
     {
 
@@ -192,10 +193,10 @@ class ElementService
     /**
      * @throws \Exception
      */
-    public function assignDataObjectTreeConfig(
+    private function assignDataObjectTreeConfig(
         DataObject\AbstractObject $element,
         array &$tmpNode,
-        UserProxy|User|null $user
+        User|null $user
     ): void
     {
         $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
@@ -235,10 +236,10 @@ class ElementService
     /**
      * @throws \Exception
      */
-    public function assignDocumentTreeConfig(
+    private function assignDocumentTreeConfig(
         Document $element,
         array &$tmpNode,
-        UserProxy|User|null $user
+        User|null $user
     ): void
     {
         $hasChildren = $element->getDao()->hasChildren(null, Admin::getCurrentUser());
