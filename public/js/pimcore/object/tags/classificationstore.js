@@ -61,30 +61,6 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
             this.frontendLanguages.unshift("default");
         }
 
-        this.keysToWatch = [];
-
-        if (this.inherited) {
-            for (var i=0; i < this.frontendLanguages.length; i++) {
-                var currentLanguage = this.frontendLanguages[i];
-
-                var metadataForLanguage = this.metaData[currentLanguage];
-                if (metadataForLanguage) {
-                    var dataKeys = Object.keys(metadataForLanguage);
-
-                    for (var k = 0; k < dataKeys.length; k++) {
-                        var dataKey = dataKeys[k];
-                        var metadataForKey = metadataForLanguage[dataKey];
-                        if (metadataForKey.inherited) {
-                            this.keysToWatch.push({
-                                lang: currentLanguage,
-                                key: dataKey
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
         this.dropdownLayout = false;
     },
 
