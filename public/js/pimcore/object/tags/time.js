@@ -29,7 +29,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
     },
 
     getLayoutEdit: function () {
-        const options = new Ext.form.TimeField({
+        const options = {
             fieldLabel: this.fieldConfig.title,
             format: "H:i",
             emptyText: "",
@@ -40,7 +40,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
             maxValue: (this.fieldConfig.maxValue) ? this.fieldConfig.maxValue : null,
             componentCls: this.getWrapperClassNames(),
             increment: (this.fieldConfig.increment) ? this.fieldConfig.increment : 15
-        });
+        };
     
         if (this.fieldConfig.labelWidth) {
             options.labelWidth = this.fieldConfig.labelWidth;
