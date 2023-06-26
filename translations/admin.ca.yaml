@@ -1,0 +1,1088 @@
+---
+unsupported_feature: "Funci\xF3 no compatible! Si us plau, comproveu els requisits
+  del sistema!"
+screen_size_to_small: "La pantalla \xE9s massa petita per mostrar la previsualitzaci\xF3."
+too_many_children_for_recyclebin: "L'element cont\xE9 massa fills per anar a la paperera,
+  s'eliminar\xE0 permanentment"
+default: Per defecte
+metadata: Metadades
+email_address: "Correu electr\xF2nic"
+OK: D'acord
+optional: opcional
+search_replace_assignments_error: "Si us plau, seleccioneu els elements a substituir
+  i un nou element de destinaci\xF3."
+replace_assignments_in_selected_elements: Substitueix les assignacions als elements
+  seleccionats
+search_replace_assignments: Cerca i substitueix tasques
+imageadvanced: "Imatge avan\xE7ada"
+filter_active_message: "Voleu exportar nom\xE9s els valors filtrats?"
+close_others: Tanca els altres
+close_all: Tanca tot
+close_unmodified: Tanca sense modificar
+classid: ID Classe
+parentid: ID Pare
+mimetype: MIME-Type
+creationdate: "Data de creaci\xF3"
+usermodification: "Usuari de la modificaci\xF3"
+userowner: Propietari
+languages: Idiomes
+password_was_not_changed: "La contrasenya no s'ha canviat perqu\xE8 no \xE9s prou
+  segura"
+marketing: "M\xE0rqueting"
+clear_content_of_current_view: Esborra el contingut de la vista actual
+highlight_editable_elements: Ressaltar els elements editables
+continue: Continua
+you_have_unsaved_changes: Tens canvis no desats.
+shared_translations: Traduccions compartides
+textfield: Camp de text
+add_data: Afegir dades
+add_hotspot: Afegir hotspot
+add_marker_or_hotspots: "Afegiu marcador o punts d'acc\xE9s"
+custom_reports: Informes personalitzats
+start_date: Data inici
+start_date_relative: Data inici (relatiu a avui)
+end_date: Data final
+end_date_relative: Data final (relatiu a avui)
+relative_date_description: "\xE9s a dir, -1m +1d (d=dies, m=mesos, y=anys)"
+source_definition: "Definici\xF3 de la font"
+clear_thumbnails: Esborrar miniatures
+recipients: Destinataris
+object_filter: Filtra d'objectes
+crm: CRM
+notes_events: Notes i Events
+delete_folder: Suprimeix carpeta
+home: Inici
+subject: Subjecte
+poster_image: Imatge de portada
+tablet: Tauleta
+hardlink: "Enlla\xE7 for\xE7at"
+convert_to: Convertir a
+replace: Substitueix
+paste_inheritance: "Enganxa (her\xE8ncia)"
+are_you_sure: "Est\xE0s segur?"
+all_content_will_be_lost: "Es perdr\xE0 tot el contingut"
+overwrite: Sobreescriure
+click_right_to_overwrite: Feu clic dret per sobreescriure
+open_document_by_id: Document obert
+open_asset_by_id: Recurs obert
+open_object_by_id: Objecte obert
+element_not_found: Element no trobat
+do_you_really_want_to_leave_the_editmode: "De deb\xF2 vols sortir del mode d'edici\xF3
+  (NO!)"
+or_specify_an_asset_image_below: "o especifiqueu una imatge a continuaci\xF3"
+medium: Mitjana
+saved_successfully: S'ha desat correctament!
+qr_codes: Codis QR
+element: Element
+details_for_selected_event: Detalls de l'element seleccionat
+fields: Camps
+not_possible_with_paging: "Ho sentim, aix\xF2 no \xE9s possible en els elements que
+  estan paginats, intenta reestructurar les teves dades per evitar p\xE0gines en l'arbre"
+inherited: Heretat
+length: Llargada
+show_in_tree: Mostra a l'arbre
+exactmatch: "coincid\xE8ncia exacta"
+desktop: Escriptori
+drag_me: Arrossegueu-me
+serverVars: Variables del servidor
+code: Codi
+tag: Etiqueta
+tags: Etiquetes
+Click here to proceed: "Feu clic aqu\xED per continuar"
+Your browser is not supported. Please install the latest version of one of the following browsers.: "El
+  vostre navegador no \xE9s compatible. Instal\xB7leu la darrera versi\xF3 d'un dels
+  navegadors seg\xFCents."
+open_in_new_window: Obre en una finestra nova
+limit_reached: "S'ha arribat al l\xEDmit"
+casesensitive: case-sensitive
+path_aliases: "\xC0lies del cam\xED"
+pretty_url: URL bonica
+pretty_url_label: "URL bonica (substitueix el cam\xED de l'estructura d'arbre)"
+password_cannot_be_changed: La contrasenya no es pot canviar
+old_password: Contrasenya anterior
+new_password: Contrasenya nova
+retype_password: Reescriu la contrasenya
+reports: Informes
+roles: Rols
+Password: Contrasenya
+Forgot your password: Has oblidat la teva contrasenya
+Back to Login: "Tornar al Inici de sessi\xF3"
+Enter your username and pimcore will send a login link to your email address: "Introdu\xEFu
+  el vostre nom d'usuari i Pimcore us enviar\xE0 un enlla\xE7 d'inici de sessi\xF3
+  a la vostra adre\xE7a de correu electr\xF2nic"
+Please check your mailbox.: "Comproveu la vostra b\xFAstia de correu."
+Login: "Inici de sessi\xF3"
+Submit: Submit
+A temporary login link has been sent to your email address.: "S'ha enviat un enlla\xE7
+  d'inici de sessi\xF3 temporal a la vostra adre\xE7a de correu electr\xF2nic."
+user_inactive: "L'usuari no est\xE0 actiu"
+user_no_email_address: "L'usuari no t\xE9 cap adre\xE7a de correu electr\xF2nic"
+user_no_password: "L'usuari no t\xE9 contrasenya"
+user_unknown: Usuari desconegut
+lost_password_email_error: "No s'ha pogut enviar el correu electr\xF2nic de recuperaci\xF3
+  de la contrasenya"
+use_current_player_position_as_preview: "Utilitza la posici\xF3 actual del jugador
+  com a previsualitzaci\xF3"
+select_image_preview: "Seleccioneu Vista pr\xE8via de la imatge"
+preview_not_available: "Vista pr\xE8via no disponible"
+status: Estat
+video_preview_in_progress: "La previsualitzaci\xF3 d'aquest v\xEDdeo est\xE0 en curs."
+php_cli_binary_and_or_ffmpeg_binary_setting_is_missing: "El binari PHP-CLI o FFMPEG
+  no est\xE0 disponible, assegureu-vos que tots dos estiguin instal\xB7lats/executables
+  i configurats a la configuraci\xF3 del sistema."
+video_thumbnails: "Miniatures de v\xEDdeo"
+do_you_really_want_to_close_pimcore: De veritat voleu tancar Pimcore?
+drop_element_here: "Arrossegueu l'element aqu\xED"
+select_specific_area_of_image: "Seleccioneu una \xE0rea espec\xEDfica de la imatge"
+paste_recursive_updating_references: "Enganxa recursiu, actualitza refer\xE8ncies"
+add_hardlink: "Afegeix enlla\xE7 dur"
+source_path: Ruta de la font
+properties_from_source: Utilitzeu les propietats del document font
+children_from_source: Utilitzeu fills del document font
+click_right_for_more_options: "Feu clic dret per m\xE9s opcions"
+move_to_tab: Mou a la pestanya
+not_supported: No compatible
+edit_link: "Editar enlla\xE7"
+resize: Canvia la mida
+scalebyheight: "Escala per al\xE7ada"
+scalebywidth: Escala per amplada
+crop: Tallar
+cleanup: Netejar
+this_element_cannot_be_edited: Aquest element no es pot editar
+details: Detalls
+cannot_save_object_please_try_to_edit_the_object_in_detail_view: <b>No es pot desar
+  l'objecte!</b><br />Intenta editar l'objecte a la vista de detall.
+size: "Grand\xE0ria"
+select_a_file: Selecciona un fitxer
+upload_compatibility_mode: Carrega l'arxiu (mode de compatibilitat)
+the_system_is_in_maintenance_mode_please_wait: "El sistema est\xE0 en mode de manteniment,
+  espereu"
+activate: Activar
+image_is_too_small: "La imatge \xE9s massa petita, trieu-ne una de m\xE9s gran."
+name_is_not_allowed: "El nom no est\xE0 perm\xE8s"
+upload_files: Carregar fitxers
+upload_zip: Carregueu ZIP
+document_root: Arrel del document
+batch_change_selected: Batch edit selected
+download_as_zip: Descarrega ZIP
+locked: Bloquejat
+element_cannot_be_move_because_it_is_locked: "L'element no es pot moure perqu\xE8
+  est\xE0 bloquejat."
+element_cannot_be_moved: "L'element no es pot moure aqu\xED"
+element_cannot_be_moved_because_target_is_paginated: "L'element no es pot arrossegar
+  en un arbre/carpeta paginat amb indexaci\xF3 manual (ordena per \xEDndex). Canvieu
+  el m\xE8tode d'ordenaci\xF3 o utilitzeu l'opci\xF3 \"Cerca i mou\" al men\xFA contextual
+  \"Avan\xE7at\" de l'objectiu per moure els elements."
+no_collections_allowed: "No es permeten col\xB7leccions"
+filter_condition: "Condici\xF3 del filtre"
+all_types: Tots els tipus
+audio: "\xC0udio"
+video: "V\xEDdeo"
+archive: Arxiu
+unknown: Desconegut
+class: Classe
+page: "P\xE0gina"
+objectbrick: Objectbrick
+field_collection: "Col\xB7lecci\xF3 de camp"
+snippet: Fragment
+folder: Carpeta
+your_selection: "La teva selecci\xF3"
+double_click_to_add_item_to_selection: "Feu doble clic en un element de l'esquerra
+  per afegir-lo a aquesta selecci\xF3."
+label: Etiqueta
+error_auth_failed: "No s'ha pogut iniciar la sessi\xF3!<br />Si us plau, torna-ho
+  a provar."
+error_session_expired: "La sessi\xF3 ha caducat!<br />Si us plau, torneu a iniciar
+  sessi\xF3."
+site: LLoc
+descending: Descendent
+ascending: Ascendent
+sort: Ordena
+results: Resultats
+dimension: "Dimensi\xF3"
+metric: Metric
+segment: Segment
+data_explorer: Explorador de dades
+navigation: "Navegaci\xF3"
+entrances: Entrades
+exits: "\xC8xits"
+restore: Restaurar
+amount: Import
+flush_recyclebin: Buida la paperera de reciclatge
+recyclebin: Paperera de reciclatge
+deletedby: Esborrat per
+open_select_editor: "Obriu l'Editor de selecci\xF3"
+ignore: Ignorar
+email_log: Registre de correu
+email_log_resend: Reenvia el correu
+email_log_resend_window_msg: Confirmeu que voleu tornar a enviar el correu a tots
+  els destinataris.
+select_site: Seleccioneu un lloc
+main_site: Lloc principal
+filename: Nom de l'arxiu
+unsupported_filetype: Tipus de fitxer no compatible
+email_log_resend_window_success_message: El correu s'ha enviat correctament a tots
+  els destinataris.
+email_log_resend_window_error_message: Hi ha hagut un error. El correu no s'ha tornat
+  a enviar.
+error_jobs: "Els treballs seg\xFCents han fallat"
+batch_change: Batch edit all
+batch_edit_field: Batch edit all field
+published: Publicat
+all: tot
+items_per_page: "Elements per p\xE0gina"
+reload_pimcore_changes: "Heu de tornar a carregar Pimcore perqu\xE8 els canvis tinguin
+  efecte, voleu fer-ho ara?"
+info: Info
+or: o
+paste_contents: "Enganxeu aqu\xED nom\xE9s el contingut"
+paste_as_child: Enganxa com a fill
+paste_recursive_as_child: Enganxa com a fill (recursiu)
+view_original: Veure l'original
+feed: Feed
+no_items_found: No s'han trobat elements
+public_url: "Enlla\xE7 p\xFAblic"
+pageviews: "P\xE0gines vistes"
+visits: Visites
+detail: Detall
+report_settings: Opcions d'informe
+overview: "Visi\xF3 general"
+visitor_overview: "Visi\xF3 general del visitant"
+other: Altre
+google_analytics: Google Analytics
+reports_and_marketing: "M\xE0rqueting i Informes"
+save_only_scheduled_tasks: "Desa nom\xE9s les tasques programades"
+modified_assets: Recursos modificats
+modification_statistic: Canvis en els darrers 31 dies
+add_portlet: Afegeix un portlet
+modified_documents: Documents modificats
+modified_objects: Objectes modificats
+welcome: Benvingut/da
+save_and_publish: Guardar i Publicar
+delete: Esborra
+save: Guarda
+add_assets: Afegir recurs(os)
+preview: "Vista pr\xE8via"
+advanced: "Avan\xE7at"
+basic: "B\xE0sic"
+list: Llista
+view: Vista
+publish: Publicar
+rename: Canviar nom
+settings: "Configuraci\xF3"
+properties: Propietats
+versions: Versions
+add: Afegir
+date: Data
+user: Usuari
+note: Nota
+email_cc: Cc
+email_bcc: Bcc
+email_settings: "Configuraci\xF3 de correu"
+email_settings_receiver_description: 'Multiple recipients can be specified by separating
+  the email addresses with a semicolon. <br/>Example: receiver@pimcore.org; receiver2@pimcore.org<br/>For
+  ''From'' you can use additionally the syntax <i>My Name &lt;my-name@example.com&gt;</i>'
+email_logs: Correus enviats
+email_log_sent_Date: Data d'enviament
+predefined_document_type: Tipus de document predefinit
+controller: Controlador
+action: "Acci\xF3"
+actions: Accions
+template: Plantilla
+staticroute: "Ruta est\xE0tica"
+static_generator: "Generador de ruta est\xE0tica"
+static_generator_enable: "Activa la renderitzaci\xF3 est\xE0tica del costat del servidor"
+static_generator_lifetime: "Vida \xFAtil (en minuts) per a la p\xE0gina est\xE0tica
+  (opcional)"
+last_generated: "\xDAltima generaci\xF3"
+key: Clau
+id: ID
+name: Nom
+title: "T\xEDtol"
+description: "Descripci\xF3"
+unpublish: Despublicar
+target: Objectiu
+type: Tipus
+please_enter_the_new_name: "Introdu\xEFu el nou nom"
+add_page: "Afegir p\xE0gina"
+add_snippet: Afegir fragment
+add_email: Afegir correu
+add_link: "Afegir enlla\xE7"
+copy: "C\xF2pia"
+paste: Enganxa
+close_all_tabs: Tancar pestanyes
+search: Buscar
+import: Importar
+export: Exportar
+document_type: Tipus de document
+document_types: Tipus de documents
+predefined_properties: Propietats predefinides
+users: Usuaris
+profile: Perfil
+my_profile: El meu perfil
+documentation: "Documentaci\xF3"
+report_bugs: Informeu d'errors
+about: Sobre
+file: Arxiu
+extras: Extres
+help: Ajuda
+configuration: "Configuraci\xF3"
+value: Valor
+add_a_custom_property: Afegir una propietat personalitzada
+custom: Personalitzar
+general: General
+language: Idioma
+quality: Qualitat
+format: Format
+documents: Documents
+assets: Recursos
+upload: Carrega
+width: Amplada
+height: "Al\xE7ada"
+empty: Buit
+workflow: Flux de treball
+modify: 'Modificar '
+create: 'Crear '
+edit: Editar
+logout: "Tancar sessi\xF3"
+refresh: Actualitzar
+input: Input
+checkbox: Chekbox
+textarea: Textarea
+image: Imatge
+select: "Selecci\xF3"
+base: Base
+add_object: Afegeix objecte
+border: Border
+document: Document
+asset: Recurs
+object: Objecte
+remove: Eliminar
+hidden_dependencies: "Hi ha depend\xE8ncies addicionals que el vostre usuari no t\xE9
+  els permisos per veure."
+open: Obre
+days: Dies
+seemode: Mode vista
+edit_current_page: "Edita aquesta p\xE0gina"
+close: Tanca
+name_already_in_use: "El nom ja est\xE0 en \xFAs, trieu-ne un de diferent."
+name_and_key_must_be_defined: Cal definir el nom i el tipus
+mandatory_field_empty: Ompli tots els camps obligatoris
+reload: Recarregar
+schedule: Horari
+time: Temps
+version: "Versi\xF3"
+active: Actiu
+success: Fet
+translations: Traduccions
+translation_simple: Text senzill
+translation_custom: Format UCI
+firstname: Cognom
+lastname: Segon cognom
+email: "Correu electr\xF2nic"
+cant_move_node_to_target: No es pot moure el node
+error_moving_object: L'objecte no s'ha pogut moure
+translations_are_not_configured: "La traducci\xF3 no est\xE0 configurada"
+read_more_here: "Llegeix m\xE9s sobre aqu\xED"
+publish_version: "Publicar versi\xF3"
+start: "Comen\xE7a"
+session_error_text: "Sembla que hi ha un problema amb la vostra sessi\xF3. Us recomanem
+  que torneu a carregar aquesta p\xE0gina per desar-la, per\xF2 primer podeu provar
+  de desar els vostres canvis."
+session_error: "Error de sessi\xF3"
+please_wait: Si us plau, espereu...
+download: Descarregar
+inheritable: Heretable
+redirects: Redireccions
+source: Font
+link: "Enlla\xE7"
+abbr: Abr.
+stop: Atura
+dependencies: "Depend\xE8ncies"
+requires: Requereix
+required_by: Requerit per
+search_edit: Cerca, edita i exporta
+subtype: Subtipus
+initializing: Inicialitzant...
+please_select_a_type: Seleccioneu un tipus
+filter: Filtre
+field: Camp
+operator: Operador
+apply: Aplicar
+show: Veure
+public: "P\xFAblic"
+maximum_2_versions: Podeu comparar max. 2 versions
+error: Error
+element_is_locked: "L'element est\xE0 obert per una altra persona:"
+element_lock_question: Vols obrir-lo igualment?
+since: Des de
+longitude: Longitud
+latitude: Latitud
+geopoint: "Punt Geogr\xE0fic"
+cancel: "Cancel\xB7lar"
+open_search_editor: Obriu l'Editor de cerca
+parameters: "Par\xE0metres"
+anchor: "\xC0ncora"
+accesskey: "Clau d'acc\xE9s"
+relation: "Relaci\xF3"
+tabindex: Tab-Index
+not_set: no establert
+export_csv: "Exportaci\xF3 CSV"
+import_csv: "Importaci\xF3 CSV"
+show_welcome_screen: Mostra la pantalla de benvinguda a l'inici
+importFileHasHeadRow: "primera fila = t\xEDtol"
+overwrite_object_with_same_key_description: "Quan es marca la sobreescritura, en lloc
+  de crear un objecte nou per a cada fila d'importaci\xF3, se substitueixen els objectes
+  amb la mateixa clau. Els objectes existents a la vostra carpeta d'importaci\xF3
+  amb claus no contingudes al fitxer d'importaci\xF3 no es tocaran. Tingueu en compte
+  que tots els objectes que tinguin una clau coincident al fitxer d'importaci\xF3
+  es substituiran a la carpeta de destinaci\xF3. Aix\xF2 tamb\xE9 passa pels objectes
+  basats en una classe diferent o fins i tot en carpetes d'objectes! Els camps d'objectes
+  que estan configurats per ignorar en el mapeig de camps mantenen el seu valor antic."
+object_import_filename_description: seleccioneu el camp que s'utilitza per generar
+  la clau d'objecte
+save_pubish_close: Desa, publica i tanca
+save_close: Desa i tanca
+error_general: "El servidor ha llan\xE7at una excepci\xF3: no ha pogut realitzar l'acci\xF3.
+  Torneu a carregar la interf\xEDcie d'administraci\xF3 i torneu-ho a provar."
+owner_class: "Classe propiet\xE0ria"
+owner_field: Camp propietari
+nonownerobject_warning: "L'objecte actual no \xE9s el propietari d'aquestes relacions,
+  fer canvis aqu\xED pot fer que desar l'objecte sigui lent"
+element_implicit_edit_question: "Encara vols modificar-lo impl\xEDcitament amb aquesta
+  acci\xF3?"
+element_open_message: "L'element demanat ja est\xE0 obert per editar-lo."
+nonownerobjects_self_selection: "En els objectes que no s\xF3n propietaris, no \xE9s
+  possible una relaci\xF3 amb si mateix, si us plau, utilitzeu el camp original en
+  comptes del camp no propietari."
+warning: "Av\xEDs"
+csv_object_export_warning: "Tingueu en compte que l'exportaci\xF3 CSV no admet tots
+  els tipus de dades. En conseq\xFC\xE8ncia, tornar a importar un CSV exportat a pimcore
+  pot provocar la p\xE8rdua de dades. Premeu D'acord per continuar amb l'exportaci\xF3."
+navigation_exclude: "Exclou de la navegaci\xF3"
+variants: Variants
+variant: Variant
+add_variant: Afegeix una variant
+delete_message_dependencies: "Hi ha depend\xE8ncies, suprimir igualment?"
+delete_message: Segur que voleu suprimir aquest element?
+delete_message_advanced: Segur que voleu suprimir %s '%s' ?
+delete_message_batch: Segur que voleu suprimir aquests elements?
+delete_group_message: Segur que voleu suprimir aquest grup i tot el seu contingut?
+no_further_objectbricks_allowed: "No es permeten m\xE9s objectbricks"
+grid_current_language: Idioma actual
+object_columns: Columnes d'objectes
+system_columns: Columnes del sistema
+columns: Columnes
+children_grid: Graella de fills
+only_children: "nom\xE9s fills directes"
+cut: Tallar
+paste_cut_element: Element retallable enganxat
+memorize_tabs: Memoritza les pestanyes obertes
+element_history: Elements oberts recentment
+dashboards: Taulers de control
+portlet_customreport: Informe personalitzat
+clear_marker_or_hotspots: "Esborra el marcador, el punt d'acc\xE9s i les dades de
+  retall"
+hotspots_cleared: "S'han esborrat els punts d'inter\xE8s, els marcadors i les dades
+  de retall"
+deeplink: "Hiperenlla\xE7"
+click_to_open: (clic per obrir)
+add_metadata: Afegeix metadades
+pimcore_icon_edit_pdf_text: "Edita la versi\xF3 del text"
+chapter: "Cap\xEDtol"
+search_and_move: Cerca i mou
+searching: "S'est\xE0 buscant..."
+predefined_asset_metadata: Metadades de recursos predefinits
+add_predefined_metadata_definitions: Afegeix definicions predefinides
+scheduled: Programar
+naming_requirements_3chars: "El nom ha de ser alfanum\xE8ric i com a m\xEDnim 3 car\xE0cters
+  de llargada"
+there_are_more_columns: "Hi ha m\xE9s columnes de les que es mostren actualment"
+merge_csv: Importar i Combinar CSV
+translation_merger_current: Text actual
+translation_merger_csv: Text from CSV
+nothing_to_merge: There is nothing to merge
+csv_seperated_options: CSV seperated options
+csv_seperated_options_info: The list of available options can be specified as comma-seperated
+  list, as single-column values or  mixed. For the single-column way, the key will
+  also be used as the value.
+first_page: "Primera p\xE0gina"
+previous_page: "P\xE0gina anterior"
+next_page: "P\xE0gina seg\xFCent"
+last_page: "\xDAltima p\xE0gina"
+no_data_to_display: No hi ha dades per mostrar
+classificationstore_property: Propietat
+classificationstore_group: Grup
+classificationstore_relation: "Relaci\xF3"
+classificationstore_collection: "Col\xB7lecci\xF3"
+classificationstore_collection_relation: Collection relation
+classificationstore_no_groups: No groups found
+classificationstore_no_keys: No keys found
+remove_group: Elimina el grup
+classificationstore_no_collections: No collections
+reference: "Refer\xE8ncia"
+element_tag_configuration: Tag Configuration
+element_tag_all_tags: All Tags
+enter_new_name_of_the_tag: "Introdu\xEFu el nou nom de l'etiqueta"
+assigned_tags: Etiquetes assignades
+filter_tags: Filtre per a les etiquetes
+consider_child_tags: "Pensa tamb\xE9 en les etiquetes filles"
+tags_assignment: Tags Assignment
+tags_search: Cerca d'etiquetes
+batch_applied: S'ha aplicat l'arxiu de lots
+apply_tags: Aplicar etiquetes als fills
+remove_and_apply_tags: Esborra i aplica etiquetes als fills
+batch_assignment: Tag batch assignment
+batch_assignment_error: Tag batch assignment error
+no_children_found: No s'han trobat fills.
+asset_search: Cerca recursos
+document_search: Cerca documents
+object_search: Cerca objectes
+more: "M\xE9s"
+open_translation: "Traducci\xF3 oberta"
+link_existing_document: "Enlla\xE7a el document existent"
+using_inheritance: "\xDAs de l'her\xE8ncia"
+new_document: Nou document
+update_available: "Actualitzaci\xF3 disponible"
+target_document_needs_language: El document objectiu necessita un conjunt d'idiomes
+tools: Eines
+perspectives: Perspectives
+filter_active: Filtre actiu!
+reset_config: Restableix els canvis
+reset_config_tooltip: "Aix\xF2 restablir\xE0 (i desar\xE0) la configuraci\xF3 de la
+  columna de quadr\xEDcula d'aquest element al seu valor predeterminat"
+error_resetting_config: "S'ha produ\xEFt un error en restablir la configuraci\xF3"
+marketing_settings: "Configuraci\xF3 de m\xE0rqueting"
+cross_tree_moves_not_supported: Els moviments creuats de l'arbre encara no s'admeten
+add_printpage: "Afegeix Impr. P\xE0gina"
+add_printcontainer: Add PrintContainer
+web2print_preview_pdf: Generar i previsualitzar PDF
+web2print_cancel_pdf_creation: "Cancel\xB7la creaci\xF3 PDF"
+web2print_generate_pdf: Generar PDF
+web2print_download_pdf: Descarregar PDF
+web2print_last-generated: "\xDAltima generaci\xF3"
+web2print_last-generate-message: "\xDAltim missatge generat"
+web2print: Web per imprimir
+web2print_prepare_pdf_generation: "Prepara generaci\xF3 PDF"
+web2print_start_html_rendering: Iniciar render HTML
+web2print_finished_html_rendering: Acabat render HTML
+web2print_saved_html_file: Fitxer HTML desat
+web2print_pdf_conversion: "Conversi\xF3 PDF"
+web2print_saving_pdf_document: Desa el document PDF
+web2print_author: Autor
+web2print_printermarks: Printermarks
+web2print_bookmarks: "Adreces d'inter\xE8s"
+close_tab: Tanca pestanya
+web2print_only_published: "Nom\xE9s \xE9s possible amb documents publicats."
+web2print_documents_changed: "Els documents han canviat des de l'\xFAltima generaci\xF3
+  de PDF."
+about_pimcore: SOBRE LA PLATAFORMA PIMCORE
+phone: "Tel\xE8fon"
+workflow_additional_info: "Informaci\xF3 adicional"
+workflow_perform_action: "Realitza l'acci\xF3"
+workflow_notes_required: Notes (Obligatori)
+workflow_notes_optional: Notes (Opcional)
+please_enter_the_id_of_the_asset: "Introdu\xEFu l'ID o el cam\xED (p. ex., /images/logo.jpg)
+  del recurs"
+please_enter_the_id_of_the_object: "Introdu\xEFu l'ID o la ruta de l'objecte"
+please_enter_the_id_of_the_document: "Introdu\xEFu l'ID, el cam\xED o l'URL (tamb\xE9
+  incl\xF2s https://) del document"
+element_has_unsaved_changes: "L'element t\xE9 canvis no desats"
+element_unsaved_changes_message: "Tots els canvis no desats es perdran, n'est\xE0s
+  segur?"
+add_object_mbx_title: Afegir un nou objecte del tipus %s
+mode: Mode
+custom_download: "Desc\xE0rrega personalitzada"
+original_file: Arxiu original
+web_format: Format web
+print_format: "Format d'impressi\xF3"
+office_format: Format Office
+change_password: Canvia la contrasenya
+file_is_bigger_that_upload_limit: "El fitxer \xE9s m\xE9s gran que el l\xEDmit de
+  c\xE0rrega del servidor:"
+send_test_email_success: S'ha enviat el correu de prova. Voleu mantenir aquesta finestra
+  oberta per tornar a enviar un correu?
+press_crtl_and_select_to_compare: 'Compare: Press CTRL + Click Version'
+clear_filters: Esborra els filtres
+tags_configuration: Tags Configuration
+export_csv_include_headers: CSV Export with headers
+open_data_object: Open Data Object
+data_objects: Data Objects
+asset_type_change_not_allowed: '<strong>Only assets of same type are allowed here.</strong><br/>[
+  type of uploaded asset: "%s" | type of existing asset: "%s" ]'
+clear_content_of_selected_target_group: Clear content of selected Target Group
+visitors_of_this_page_will_be_automatically_associated_with_the_selected_target_groups: Visitors
+  of this page will be automatically associated with the selected Target Groups
+assign_target_group: Assign Target Group
+assign_target_groups: Assign Target Groups
+target_group: Target Group
+edit_content_for_target_group: Edit Content for Target Group
+email_reply_to: Reply To
+element_tag_filtered_tags: Filtered Tags
+web2print_addOverprint: Overprinting
+analyze_permissions: Analitzar els permisos
+unique: "\xDAnic"
+glue: Glue
+date_format: Format de data
+attribute: Atribut
+forward_attribute: Atribut endavant
+upper: Superior
+lower: Inferior
+disabled: Inhabilitat
+capitalization: "Capitalitzaci\xF3"
+restrict_to_locales: Restringeix als locals
+predefined: Predefinit
+save_as_copy: "Desa c\xF2pia"
+set_as_favourite: Estableix com a favorit
+grid_configuration: "Configuraci\xF3 de la quadr\xEDcula"
+shared_users: Usuaris compartits
+shared_roles: Rols compartits
+save_and_share: Desar i compartir
+save_copy_and_share: "Desa c\xF2pia i comparteix"
+locale: Local
+ellipses: "El\xB7lipses"
+insensitive: Insensible
+yes_value: Yes Value
+no_value: No Value
+count_empty: Count Empty
+as_array: As array
+metadata_field: Metadata field
+only_count: Only as count
+parameter: Parameter
+forward_parameter: Forward Parameter
+is_array: Array Type
+php_class: PHP Class
+additional_data: Additional Data
+flatten: Flatten
+return_last_result: Return last result
+skip_null: Skip Null
+expand_children: Ampliar fills
+collapse_children: Collapse children
+multiply: Multiplicar
+divide: Divide
+apply_to_all_objects: Apply to all
+apply_to_all_objects_msg: There are other objects which already have their own favourite
+  settings. Do you want to apply this config to those as well?
+encode: Codificar
+decode: Descodificar
+serialize: Serialitzar
+unserialize: Unserialize
+offset: Offset
+col_attribute: "Atribut de la col\xB7lecci\xF3"
+brick_attribute: Atribut del Brick
+csv_column_configuration: "Configuraci\xF3 de la columna"
+column: Columna
+resolver_strategy: "Estrat\xE8gia de resoluci\xF3"
+resolver_settings: "Configuraci\xF3 del resolutor"
+csv_settings: "Configuraci\xF3 CSV"
+skipheadrow: "Saltar fila de cap\xE7alera"
+csv_file_preview: "Vista pr\xE8via CSV"
+save_as: Guardar com
+import_export_configuration: "Configuraci\xF3 Import Export"
+brick_type: Tipus de Brick
+renderer: Renderer
+getter: Getter
+string: String
+row: Fila
+import_report: "Informe d'importaci\xF3"
+import_errors: "S'han produ\xEFt alguns errors. Comproveu l'informe d'importaci\xF3!"
+import_is_done: "Importaci\xF3 feta"
+import_file_prefix: Prefix per a fitxers nous
+create_parents: Crear pares
+fullpath: "Cam\xED complet"
+create_on_demand: Crear sota demanda
+get_by_resolver: Obteniu per atribut
+direct: Directe
+skip_empty_values: Omet els valors buits
+do_not_overwrite: No sobreescriu
+never: Mai
+if_not_empty: "Si no \xE9s buit"
+always: Sempre
+delimiter: Delimitador
+share_globally: Compartir en global
+gdpr_data_extractor: Extractor de dades GDPR
+no_configuration: "Sense configuraci\xF3"
+share_configurations: Comparteix configuracions
+enable_inheritance: "Habilita l'her\xE8ncia"
+object_settings: "Configuraci\xF3 d'objectes"
+drop_me_here: "Arrossega l'element de l'arbre fins aqu\xED"
+clear_hotspots_msg: "Aquesta imatge cont\xE9 dades addicionals, com ara marcadors
+  o punts d'acc\xE9s. Vols esborrar-los tamb\xE9?"
+restore_failed: "La restauraci\xF3 ha fallat"
+subtract: Sostreure
+batch_append_all: Batch append to all
+batch_append_selected: Batch append to selected
+batch_append_to: Afegiu dades a tots
+login_token_invalid_user_error: "Usuari no v\xE0lid."
+login_token_as_admin_non_admin_user_error: "Nom\xE9s els administradors poden iniciar
+  sessi\xF3 com a administrador."
+login_token_no_password_error: "L'usuari no t\xE9 contrasenya."
+sort_children_by: Ordena els fills per
+by_key: Clau (A a Z)
+by_index: "\xCDndex (Manual)"
+successful_object_change_children_sort_to_index: "S'ha canviat l'ordre dels fills
+  dels objectes a \xCDndex"
+successful_object_change_children_sort_to_key: S'ha canviat l'ordre dels fills dels
+  objectes a Clau
+successful_publish_document: Document publicat
+successful_publish_object: Objecte publicat
+successful_unpublish_document: Document despublicat
+successful_unpublish_object: Objecte despublicat
+error_object_change_children_sort_to_index: "No \xE9s possible ordenar fills per \xEDndex
+  a la carpeta/arbre paginat."
+error_object_change_children_sort_to_key: No es pot canviar l'ordre d'objectes secundaris
+  a Clau
+error_publish_document: El document no s'ha pogut publicar
+error_publish_object: L'objecte no s'ha pogut publicar
+error_unpublish_document: El document no s'ha pogut despublicar
+error_unpublish_object: L'objecte no s'ha pogut despublicar
+edit_as_html: Editar com HTML
+edit_as_plain_text: Editar com text
+error_empty_file_upload: "El fitxer est\xE0 buit!"
+type_column: Columna de tipus
+keep: keep
+clear_version_message: Segur que voleu suprimir totes les versions no publicades d'aquest
+  element?
+clear_all: Esborra-ho tot
+unlink_existing_document: "Desenlla\xE7a el document existent"
+grid_options: "Opcions de quadr\xEDcula"
+save_grid_options: "Desa les opcions de quadr\xEDcula"
+download_selected_as_zip: Baixeu els elements seleccionats com ZIP
+please_select_items_to_download: Seleccioneu els elements per descarregar a la llista
+key_bindings: Key Bindings
+keybinding_openClassEditor: Obrir Editor de classes
+keybinding_showMetaInfo: Veure Info Metadades
+keybinding_clearAllCaches: "Esborra totes les mem\xF2ria cau"
+keybinding_clearDataCache: "Esborra la mem\xF2ria cau de dades"
+scheduled_block_delete_all_in_past: Suprimeix totes les entrades anteriors
+scheduled_block_really_delete_past: Segur que vols suprimir totes les entrades programades?
+scheduled_block_delete_all: Suprimeix totes les entrades
+scheduled_block_really_delete_all: Segur que vols suprimir totes les entrades programades,
+  incloses les futures?
+2fa_disable: Desactiva 2FA
+renew_2fa_secret: Renova el secret de dos factors
+two_factor_authentication: "Autenticaci\xF3 de dos factors"
+2fa_alert_text: Please scan the QR-Code and add it to your Google Authenticator. <br>If
+  you don't have the Google Authenticator app installed on your mobile phone, please
+  download it from the App Store/Play Store.<br><br> You will need to reload Pimcore
+  and enter the code shown within the App afterwards!
+2fa_alert_submit: "Recarregar Pimcore i introdu\xEFu codi"
+setup_two_factor: "Autenticaci\xF3 de dos factors"
+2fa_setup_message: Two Factor Authentication is required for your account! You have
+  to set it up in your profile settings, otherwise you will not be able to sign in
+  again.
+set_focal_point: Establir punt focal
+quicksearch: "Cerca r\xE0pida"
+standard_preview: "Vista pr\xE8via est\xE0ndard"
+upload_new_version: "Carregar nova versi\xF3"
+360_viewer: "Visor 360\xB0"
+invalid_name: "Nom no v\xE0lid"
+clone: Clonar
+enter_the_name_of_the_new_item: "Introdu\xEFr nom de l'element nou"
+html_tags: Etiquetes HTML
+clear_temporary_files: Esborra els fitxers temporals
+error_pasting_item: No es pot enganxar l'element
+modificationdate: "Data de modificaci\xF3"
+blank: En blanc
+message: Missatge
+from: Des de
+to: A
+html: HTML
+text: Text
+create_folder: Afegir carpeta
+error_deleting_item: No s'ha pogut suprimir l'element
+error_renaming_item: "S'ha produ\xEFt un error al canviar el nom de l'element."
+revert: Revertir
+parent: Parent
+merge_translations: Combina traduccions
+prefix: Prefix
+load: Carregar
+saving_failed: Error al desar!
+failed_to_create_new_item: No s'ha pogut crear l'element nou, torna a provar.
+bundle: Paquet
+product: Producte
+index_field_selection_field: Index Field Selection
+indexFieldSelectionField: Index Field Selection
+indexFieldSelectionField_settings: Settings (Multi Index Field Selection Field)
+indexFieldSelectionFieldMulti: Multiple Index Field Selection
+index_field_selection_combo: Index Field Combobox
+indexFieldSelectionCombo: Index Field Combobox
+indexFieldSelectionCombo_settings: Settings (Index Field Combobox)
+specificPriceField: "Camp de preu espec\xEDfic"
+showAllFields: Mostra tots els camps
+considerTenants: Consider Tenants
+category: Categoria
+ecommerce: "Comer\xE7 electr\xF2nic"
+preSelectMode: Pre Select Mode
+remote_single: Single Select from Remote
+remote_multi: Multi Select from Remote
+local_single: Single Select from predefined List
+local_multi: Multi Select from predefined List
+indexFieldSelection: Index Field Selection
+indexFieldSelection_settings: Index Field Selection Settings
+filtergroups: Grups de filtres
+preSelect: "Selecci\xF3 pr\xE8via"
+predefined_pre_select_options: "Opcions de selecci\xF3 pr\xE8via predefinides"
+path: "Cam\xED"
+thumbnail: Miniatura
+download_thumbnail: Descarrega miniatura
+no_thumbnail_selected: No s'ha seleccionat cap miniatura
+list_thumbnail_in_download_section_on_image_detail_view: "Llista com a opci\xF3 a
+  la secci\xF3 de desc\xE0rrega a la vista de detall de la imatge"
+there_are_more_items: "Hi ha m\xE9s elements dels que es mostren"
+workflow_actions: Accions
+workflow_notes_requred_field_message: "\"%s\" \xE9s un camp obligatori."
+workflow_transition_applied_successfully: "L'acci\xF3 s'ha aplicat correctament"
+workflow_change_email_notification_subject: "Actualitzaci\xF3 del flux de treball
+  per a %s al flux de treball '%s'"
+workflow_details: Workflow Details
+workflow_graph: Workflow Graph
+workflow_current_state: Current State
+workflow_cmd_not_found: Please install the "%s" console executable on the server to
+  render the workflow graph.
+unit_width: Width Unit
+permission_missing: You need the '%s' permission to perform this action
+paste_as_language_variant: Paste as new language variant
+select_language_for_new_document: Select language for New Document
+source_document_language_missing: Set Language(Properties) in Source Document
+open_preview_in_new_window: Open preview in new window
+data: Dades
+links: "Enlla\xE7os"
+notes: Notes
+bool: Bool
+consent: Consentiment
+add_marker: Afegeix marcador
+identifier_warning: Be careful with the unique identifier because table names can
+  contain only up to 64 characters.
+unique_identifier: Unique identifier
+invalid_identifier: Invalid identifier
+identifier_already_exists: Identifier already exists
+content: Content
+send: Enviar
+you_can_only_drop_one_element_here: You can only drop one element here!
+translation: "Traducci\xF3"
+delete_error_batch: Following items cannot be deleted, do you wanna proceed with deleting
+  the remaining?
+delete_error: 'The item cannot be deleted. Reason:'
+batch_edit_field_selected: Batch edit selected field
+batch_append_selected_to: Append data to selected
+enable_batch_edit_columns: Enable Batch Edit for Columns
+delete_all: Eliminar tots
+open_linked_element: "Obriu l'element enlla\xE7at"
+mark_as_read: Marcar com llegit
+sender: Remitent
+notifications: Notificacions
+notifications_send: Enviar notificacions
+group: Grup
+attachment: Adjunt
+notification_has_been_sent: "S'ha enviat la notificaci\xF3"
+recipient: Destinatari
+this_field_is_required: "Aquest camp \xE9s obligatori"
+paste_recursive_as_language_variant: Enganxa com a nova variant d'idioma (recursiu)
+paste_no_new_language_error: "Tots els idiomes del sistema ja estan enlla\xE7ats a
+  l'element font."
+embedded_meta_data: Embedded Meta Info
+duration: Durada
+custom_metadata: Metadades personalitzades
+group_icon_class: Group Icon Class
+custom_report_permissions: "Perm\xEDs"
+visible_to_users: Visible To Users
+visible_to_roles: Visible To Roles
+open_url: Obre l'URL
+document_language_overview: Document Language Overview
+create_translation_inheritance: "Crea traducci\xF3 (her\xE8ncia)"
+create_translation: "Crea traducci\xF3"
+document_translation_parent_not_found: Parent document has no translation. Create
+  a translation for the parent first.
+paste_recursive_as_language_variant_updating_references: Paste language (recursive),
+  updating references
+redirects_expired_cleanup: Cleanup Expired Redirects
+redirects_cleanup_warning: Do you really want to cleanup expired redirects?
+redirects_cleanup_error: An error occurred while cleanup of expired redirects
+all_translations: Totes les traduccions
+only_unreferenced: only unreferenced
+split_view_settings: Split View Settings
+enable_split_view: Enable Split View
+disable_split_view: Disable Split View
+split_view_object_dirty_title: Please confirm
+split_view_object_dirty_msg: There are unsaved modifications. You will lose all changes.
+  Are you sure?
+converter_service: Converter service
+auto_convert: "Conversi\xF3 autom\xE0tica"
+web2print_enableDebugMode: "Activa el mode de depuraci\xF3"
+set_to_null: Empty (set to null)
+bundles: Bundles
+target_document_invalid: Please select a target document with valid language
+metainfo_copy_id: Copy ID to clipboard
+metainfo_copy_fullpath: Copy full path to clipboard
+metainfo_copy_deeplink: Copy deeplink to clipboard
+plain_text: Text simple
+plain_text_email_part: Email Plain Text Part
+error_message: Missatge d'error
+access_denied: "Acc\xE9s denegat!"
+access_denied_description: You don't have sufficient permissions to open the element
+  or perform the desired action.
+validation_failed: "La validaci\xF3 ha fallat!"
+export_xlsx: "Exportaci\xF3 XLSX"
+object_export_warning: Please note that the export does not support all data types.
+  Press OK to continue with the export.
+web2print_enableLenientHttpsMode: Enable lenient HTTPS mode
+web2print_enableLenientHttpsMode_txt: Enable this option if PDFreactor fails to connect
+  successfully via HTTPS
+paste_clipboard: Enganxa el porta-retalls
+paste_here: Paste your clipboard data here
+asset_metadata: Asset Metadata
+predefined_metadata: Predefined Metadata
+default_metadata: Default Metadata
+asset_export_warning: Please note that the export does not support some fields(e.g.
+  preview, size). Press OK to continue with the export.
+share_via_notifications: Share via Notifications
+cannot_save_metadata_please_try_to_edit_the_metadata_in_asset: <b>Cannot save Metadata!</b><br
+  />Please try to edit the metadata in Asset.
+email_log_forward: Forward email
+sum: Suma
+area_brick_assign_info_message: Please use drag & drop to assign a brick to the desired
+  block
+batch_remove_all: Batch remove from all
+batch_remove_selected: Batch remove from selected
+batch_remove_from: Remove data from all
+batch_remove_selected_from: Remove data from selected
+unit_tooltip: Alternative units tooltip
+available_sites: Available Sites
+fallback: Fallback
+add_site: Afegir lloc
+domain_label_width: Domain label width
+complete_required_fields: 'Please complete following required fields to publish the
+  document:'
+Uncategorized: Uncategorized
+skip_if_exists: Omet la fila si existeix
+php_class_or_service: Class or service name
+redirect_performance_warning: Using this feature has very bad effects on the performance
+  of the entire application, do you really want to continue?
+test_url: Test URL
+create_redirects: Create redirects to keep URLs working (incl. children)?
+auto_create: Auto create
+methods: "M\xE8todes"
+batch_operation: Batch Operation
+move: Mou
+property_name: Property name
+force_value: Force value
+enable_grid_locking: Enable grid locking
+export_configuration: Export Configuration As JSON
+composite_indices: Composite indices
+default_value_generator: Default value generator service / class
+no_value_set: no value set
+replace_assignments_in_all_elements: Replace assignments in all elements
+fieldlookup: Field Lookup
+show_fieldlookup: Show Field Lookup
+different_number_of_columns: Different number of columns
+brick_limit_reached: 'Limit ({bricklimit}) reached for brick: {brickname}'
+generate_type_declarations: Generate Type Declarations
+batch_change_language: Batch update language
+preview_item: Preview Item
+by_key_reverse: Key (Z to A)
+deprecated: Obsolet
+version_currently_saved_in_database: Currently saved in database (but not published)
+deprecated_feature: '<span style=''color: orange;''>Deprecated feature. Use %s instead</span>'
+edit_as_custom_text: Edit as custom text
+symfony_translation_link: 'Translation Format: https://symfony.com/doc/current/translation/message_format.html'
+no_action_available: No action available
+bricks: Bricks
+draft: Esborrany
+auto_save: Auto save
+save_draft: Save draft
+selected_grid_columns: Selected grid columns
+ungrouped: ungrouped
+reindex_warning: Changing it from alphabetical sort order to index will reindex all
+  items. Do you want to continue?
+filter_by_relation: Filter by relation
+filter_by_relation_field: Filter by relation field
+clear_relation_filter: Clear active relation filter
+apply_filter: Apply filter
+config_not_writeable: Not writable, this can have several reasons. For details please
+  have a look into the docs.
+sites: Sites
+file_exists: File already exists
+asset_upload_want_to_overwrite: Do you want to overwrite file %s?
+asset_upload_overwrite: Sobreescriure
+asset_upload_keep_both: Keep both files
+asset_upload_apply_to_all: Apply to all
+asset_upload_skip: Omet
+could_not_open_zip_file: The uploaded zip file could not be opened.
+objects_sort_method: Change data objects sort method
+link_recursion_error: The link is redirecting to itself, causing an infinite loop
+no_further_classes_allowed: No further classes allowed
+address_not_found: The entered address was not found
+possible_causes: Possible causes
+postal_code_format_error: "Postal code format, e.g. use \"5020 Salzburg, S\xF6llheimer
+  Stra\xDFe 16\" instead of \"A-5020 Salzburg, S\xF6llheimer Stra\xDFe 16\""
+delete_data_from_it: This will also delete all data from it.
+display_mode: Display Mode
+display_mode_grid: Grid view
+display_mode_combo: Tag field
+batch_confirmation: You are about to update %s dataObjects. Do you want to continue
+  ?
+field_collections: Field Collections
+display_mode_display: Display path reference
+display_mode_inline_search: Inline Search
+gdpr_dataSource_dataObjects: Data Objects
+parent_id: ID Pare
+modificationDate: "Data de modificaci\xF3"
+creationDate: "Data de creaci\xF3"
+classificationstore_tag_col_group: Grup
+none: Cap
+redirects_type_path: Path
+email_subject: Subject
+gdpr_dataSource_sentMail: Sent Emails
+email_log_subject: Subject
+gdpr_data_extractor_label_email: Email Address
+workflow_notes: Notes
+2fa_code: Code
+password: Password
+show_metainfo: Info
+email_log_from: Des de
+email_from: Des de
+log_search_from: Des de
+email_log_to: A
+email_to: To
+log_search_to: To
+structuredtable_type_text: Text
+objectsMetadata_type_text: Text
+gdpr_data_extractor_label_id: ID
+navigation_target: Target
+log_type: Type
+gdpr_dataSource_export: Export
+classificationstore_configuration: Configuration
+gdpr_dataSource_assets: Recursos
+structuredtable_type_bool: Checkbox
+objectsMetadata_type_select: "Selecci\xF3"
+objectsMetadata_type_bool: Bool
+gdpr_data_extractor_label_firstname: Cognom
+gdpr_data_extractor_label_lastname: Segon cognom
+log_source: Source
+classificationstore_error_addgroup_title: Error
+classificationstore_error_addkey_title: Error
+element_lock_message: 'The desired element is currently opened by another person:'
+log_message: Missatge
+operator_substring_settings: "Configuraci\xF3"
+delete_gridconfig_dblcheck: Do you really want to delete this item?
+email_log_cc: Cc
+email_log_bcc: Bcc
+cols: Columnes
+log_search_message: Missatge
+batch_export_confirmation: You are about to export %s dataObjects. Do you want to
+  continue ?
+header: Header
+no_header: No Header
+delete_entire_folder_question: This operation will delete the entire parent/folder.
+  You may not be able to fully undo this operation.
+allow_to_clear_relation: Allow to clear all relations of this field
+allow_asset_inline_download: Allow inline download
+email_blocklist: Email Blocklist
+password_does_not_match: New password and confirm password doesn't match
+incorrect_password: Given password is incorrect
+content_main_document: Content-Main Document
+2fa_wrong: Wrong code entered!
+language_main: Main
+system_appearance_settings: Appearance & Branding
+...

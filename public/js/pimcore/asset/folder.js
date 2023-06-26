@@ -163,17 +163,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
         }
 
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
-        return this.tabbar;
+        return pimcore.helpers.getTabBar({items: items});
     },
 
     showContextMenu: function(domEl, event, node) {

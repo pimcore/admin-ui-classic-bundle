@@ -983,3 +983,5 @@ delete_entire_folder_question: This operation will delete the entire parent/fold
 allow_to_clear_relation: Allow to clear all relations of this field
 allow_asset_inline_download: Allow inline download
 system_appearance_settings: 'Appearance & Branding'
+male: Male
+female: Female

@@ -359,8 +359,16 @@ pimcore.elementservice.getAffectedNodes = function(elementType, id) {
         });
     }
 
-    return affectedNodes;
+    const prepareAffectedNodes = new CustomEvent(pimcore.events.prepareAffectedNodes, {
+        detail: {
+            affectedNodes: affectedNodes,
+            id: id,
+            elementType: elementType
+        }
+    });
+    document.dispatchEvent(prepareAffectedNodes);
 
+    return affectedNodes;
 };
 
 
