@@ -1018,7 +1018,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
                         $language = null;
                         if ($request->request->has('language')) {
-                            $language = $request->request->getString('language');
+                            $language = (string) $request->request->get('language');
                             if (!Tool::isValidLanguage($language)) {
                                 throw new BadRequestHttpException('Invalid language: ' . $language);
                             }
