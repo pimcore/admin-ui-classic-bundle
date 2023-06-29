@@ -27,8 +27,7 @@ use Pimcore\Model\Document;
 use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Site;
-use Pimcore\Model\User;
-use Pimcore\Tool\Admin;
+use Pimcore\Security\User\UserLoader;
 use Pimcore\Tool\Frontend;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 
@@ -43,7 +42,8 @@ class ElementService implements ElementServiceInterface
 
     public function __construct(
         protected UrlGeneratorInterface $urlGenerator,
-        protected Config $config
+        protected Config $config,
+        protected UserLoader $userLoader
     ) {
     }
 
