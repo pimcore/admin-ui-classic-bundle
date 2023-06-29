@@ -19,7 +19,6 @@ namespace Pimcore\Bundle\AdminBundle\Service;
 
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element\ElementInterface;
-use Pimcore\Model\User;
 
 interface ElementServiceInterface
 {
@@ -28,7 +27,7 @@ interface ElementServiceInterface
     /**
      * @throws \Exception
      */
-    public function getElementTreeNodeConfig(ElementInterface $element, User|null $user): array;
+    public function getElementTreeNodeConfig(ElementInterface $element): array;
 
     public function getThumbnailUrl(Asset $asset, array $params = []): ?string;
 }

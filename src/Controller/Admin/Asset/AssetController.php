@@ -728,9 +728,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createAccessDeniedHttpException();
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**

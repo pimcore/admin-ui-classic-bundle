@@ -49,6 +49,6 @@ trait DocumentTreeConfigTrait
      */
     public function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getElementTreeNodeConfig($element, $this->getPimcoreUser());
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 }

@@ -71,10 +71,7 @@ class ElementService implements ElementServiceInterface
     /**
      * @throws \Exception
      */
-    public function getElementTreeNodeConfig(
-        ElementInterface $element,
-        User|null $user
-    ): array
+    public function getElementTreeNodeConfig(ElementInterface $element): array
     {
         $tmpNode = [
             'id' => $element->getId(),
@@ -88,23 +85,21 @@ class ElementService implements ElementServiceInterface
             'elementType' => Service::getElementType($element)
         ];
 
-
-
         if ($element instanceof Asset) {
             $tmpNode['cls'] = '';
-            $this->assignAssetTreeConfig($element, $tmpNode, $user);
+            $this->assignAssetTreeConfig($element, $tmpNode);
         } elseif ($element instanceof Document) {
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['published'] = $element->isPublished();
             $tmpNode['leaf'] = true;
 
-            $this->assignDocumentTreeConfig($element, $tmpNode, $user);
+            $this->assignDocumentTreeConfig($element, $tmpNode);
         } elseif ($element instanceof DataObject) {
             $tmpNode['idx'] = $element->getIndex();
             $tmpNode['sortBy'] = $element->getChildrenSortBy();
             $tmpNode['sortOrder'] = $element->getChildrenSortOrder();
 
-            $this->assignDataObjectTreeConfig($element, $tmpNode, $user);
+            $this->assignDataObjectTreeConfig($element, $tmpNode);
         }
 
         $this->addAdminStyle($element, ElementAdminStyleEvent::CONTEXT_TREE, $tmpNode);
@@ -157,13 +152,11 @@ class ElementService implements ElementServiceInterface
      */
     private function assignAssetTreeConfig(
         Asset $element,
-        array &$tmpNode,
-        User|null $user
+        array &$tmpNode
     ): void
     {
-
+        $user = $this->userLoader->getUser();
         $hasChildren = $element->getDao()->hasChildren($user);
-
         $permissions = $element->getUserPermissions($user);
 
         $tmpNode['permissions'] = [
@@ -193,16 +186,13 @@ class ElementService implements ElementServiceInterface
     /**
      * @throws \Exception
      */
-    private function assignDataObjectTreeConfig(
-        DataObject\AbstractObject $element,
-        array &$tmpNode,
-        User|null $user
-    ): void
+    private function assignDataObjectTreeConfig(DataObject\AbstractObject $element, array &$tmpNode): void
     {
         $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
         if ($element instanceof DataObject\Concrete && $element->getClass()->getShowVariants()) {
             $allowedTypes[] = DataObject::OBJECT_TYPE_VARIANT;
         }
+        $user = $this->userLoader->getUser();
         $hasChildren = $element->getDao()->hasChildren($allowedTypes, null, $user);
 
         $tmpNode['allowDrop'] = ($tmpNode['type'] ?? false) != DataObject::OBJECT_TYPE_VARIANT;
@@ -238,11 +228,11 @@ class ElementService implements ElementServiceInterface
      */
     private function assignDocumentTreeConfig(
         Document $element,
-        array &$tmpNode,
-        User|null $user
+        array &$tmpNode
     ): void
     {
-        $hasChildren = $element->getDao()->hasChildren(null, Admin::getCurrentUser());
+        $user = $this->userLoader->getUser();
+        $hasChildren = $element->getDao()->hasChildren(null, $user);
 
         $treeNodePermissionTypes = [
             'view',
