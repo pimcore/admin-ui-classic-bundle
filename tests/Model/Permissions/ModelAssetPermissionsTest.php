@@ -25,6 +25,9 @@ use Pimcore\Config;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
 use Pimcore\Model\User;
+use Pimcore\Security\User\UserLoader;
+use Pimcore\SystemSettingsConfig;
+use Pimcore\Tests\Support\Helper\Pimcore;
 use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -32,7 +35,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class ModelAssetPermissionsTest extends ModelTestCase
+class ModelAssetPermissionsTest extends AbstractPermissionTest
 {
     protected Asset\Folder $permissionfoo;
 
@@ -340,26 +343,5 @@ class ModelAssetPermissionsTest extends ModelTestCase
                 '` for user `' . $user->getName() . '`'
             );
         }
-    }
-
-    protected function buildController(string $classname, User $user): mixed
-    {
-        $urlGenerator = Stub::makeEmpty(UrlGeneratorInterface::class);
-        $elementService = Stub::construct(ElementService::class , [$urlGenerator, new Config()]);
-
-        return Stub::construct($classname, [$elementService], [
-            'getAdminUser' => function () use ($user) {
-                return $user;
-            },
-            'getPimcoreUser' => function () use ($user) {
-                return $user;
-            },
-            'adminJson' => function ($data) {
-                return new JsonResponse($data);
-            },
-            'getThumbnailUrl' => function ($asset) {
-                return '';
-            },
-        ]);
     }
 }

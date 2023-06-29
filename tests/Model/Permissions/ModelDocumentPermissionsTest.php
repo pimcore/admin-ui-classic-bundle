@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ModelDocumentPermissionsTest extends ModelTestCase
+class ModelDocumentPermissionsTest extends AbstractPermissionTest
 {
     protected Document\Folder $permissionfoo;
 
@@ -212,27 +212,6 @@ class ModelDocumentPermissionsTest extends ModelTestCase
                 $user->getName() . '`'
             );
         }
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function buildController(string $classname, User $user): mixed
-    {
-        $urlGenerator = Stub::makeEmpty(UrlGeneratorInterface::class);
-        $elementService = Stub::construct(ElementService::class , [$urlGenerator, new Config()]);
-
-        return Stub::construct($classname, [$elementService], [
-            'getAdminUser' => function () use ($user) {
-                return $user;
-            },
-            'getPimcoreUser' => function () use ($user) {
-                return $user;
-            },
-            'adminJson' => function ($data) {
-                return new JsonResponse($data);
-            },
-        ]);
     }
 
     public function testTreeGetChildrenById(): void

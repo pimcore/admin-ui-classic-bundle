@@ -448,7 +448,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
     public function getTreeNodeConfig(ElementInterface $element): array
     {
-        return $this->elementService->getElementTreeNodeConfig($element, $this->getAdminUser());
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
 }

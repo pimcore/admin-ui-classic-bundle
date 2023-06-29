@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ModelDataObjectPermissionsTest extends ModelTestCase
+class ModelDataObjectPermissionsTest extends AbstractPermissionTest
 {
     protected DataObject\Folder $permissionfoo;
 
@@ -526,23 +526,5 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
             $this->userPermissionTest6,
             null
         );
-    }
-
-    protected function buildController(string $classname, User $user): mixed
-    {
-        $urlGenerator = Stub::makeEmpty(UrlGeneratorInterface::class);
-        $elementService = Stub::construct(ElementService::class , [$urlGenerator, new Config()]);
-
-        return Stub::construct($classname, [$elementService], [
-            'getAdminUser' => function () use ($user) {
-                return $user;
-            },
-            'getPimcoreUser' => function () use ($user) {
-                return $user;
-            },
-            'adminJson' => function ($data) {
-                return new JsonResponse($data);
-            },
-        ]);
     }
 }
