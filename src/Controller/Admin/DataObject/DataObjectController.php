@@ -72,11 +72,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     private array $classFieldDefinitions = [];
 
-    public function __construct(
-        protected ElementServiceInterface $elementService
-    ) {
-    }
-
     /**
      * @Route("/tree-get-children-by-id", name="treegetchildrenbyid", methods={"GET"})
      *

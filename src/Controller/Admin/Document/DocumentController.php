@@ -64,11 +64,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     protected Document\Service $_documentService;
 
-    public function __construct(
-        protected ElementServiceInterface $elementService
-    )
-    {
-    }
     /**
      * @Route("/tree-get-root", name="pimcore_admin_document_document_treegetroot", methods={"GET"})
      *

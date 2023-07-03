@@ -74,11 +74,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     protected Asset\Service $_assetService;
 
-
-    public function __construct(protected ElementServiceInterface $elementService)
-    {
-    }
-
     /**
      * @Route("/tree-get-root", name="pimcore_admin_asset_treegetroot", methods={"GET"})
      *
