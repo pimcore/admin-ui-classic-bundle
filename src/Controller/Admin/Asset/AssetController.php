@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;

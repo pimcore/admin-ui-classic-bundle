@@ -22,7 +22,6 @@ use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
-use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
