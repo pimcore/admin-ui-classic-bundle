@@ -23,7 +23,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 /**
  * @internal
  *
- * @deprecated
+ * @deprecated Use elementService instead.
  */
 trait DocumentTreeConfigTrait
 {
