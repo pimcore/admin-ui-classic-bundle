@@ -19,11 +19,9 @@ use Exception;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
@@ -33,12 +31,14 @@ use Pimcore\Image\Chromium;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Site;
 use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +57,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class DocumentController extends ElementControllerBase implements KernelControllerEventInterface
 {
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use UserNameTrait;
     use RecursionBlockingEventDispatchHelperTrait;
 
@@ -164,7 +164,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $cv = [];
         if ($document->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             $db = Db::get();
@@ -213,7 +213,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $childrenList = $list->load();
 
             foreach ($childrenList as $childDocument) {
-                $documentTreeNode = $this->getTreeNodeConfig($childDocument);
+                $documentTreeNode = $this->elementService->getElementTreeNodeConfig($childDocument);
                 // the !isset is for printContainer case, there are no permissions sets there
                 if (!isset($documentTreeNode['permissions']['list']) || $documentTreeNode['permissions']['list'] == 1) {
                     $documents[] = $documentTreeNode;
@@ -1257,7 +1257,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $service = new Document\Service();
 
-        $config = $this->getTreeNodeConfig($document);
+        $config = $this->elementService->getElementTreeNodeConfig($document);
 
         $translations = is_null($translations) ? $service->getTranslations($document) : $translations;
 
@@ -1451,5 +1451,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 }
