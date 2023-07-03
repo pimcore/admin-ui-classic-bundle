@@ -18,6 +18,10 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
 use Codeception\Stub;
+use Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject\DataObjectController;
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
+use Pimcore\Config;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
 use Pimcore\Tests\Support\Test\ModelTestCase;
@@ -26,8 +30,9 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ModelDataObjectPermissionsTest extends ModelTestCase
+class ModelDataObjectPermissionsTest extends AbstractPermissionTest
 {
     protected DataObject\Folder $permissionfoo;
 
@@ -213,9 +218,13 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
      *
      * @throws \ReflectionException
      */
-    protected function doTestTreeGetChildrenById(DataObject\AbstractObject $element, User $user, ?array $expectedChildren): void
+    protected function doTestTreeGetChildrenById(
+        DataObject\AbstractObject $element,
+        User $user,
+        ?array $expectedChildren
+    ): void
     {
-        $controller = $this->buildController('\\Pimcore\\Bundle\\AdminBundle\\Controller\\Admin\\DataObject\\DataObjectController', $user);
+        $controller = $this->buildController(DataObjectController::class, $user);
 
         $request = new Request([
             'node' => $element->getId(),
@@ -517,22 +526,5 @@ class ModelDataObjectPermissionsTest extends ModelTestCase
             $this->userPermissionTest6,
             null
         );
-    }
-
-    protected function buildController(string $classname, User $user): mixed
-    {
-        $dataObjectController = Stub::construct($classname, [], [
-            'getAdminUser' => function () use ($user) {
-                return $user;
-            },
-            'getPimcoreUser' => function () use ($user) {
-                return $user;
-            },
-            'adminJson' => function ($data) {
-                return new JsonResponse($data);
-            },
-        ]);
-
-        return $dataObjectController;
     }
 }
