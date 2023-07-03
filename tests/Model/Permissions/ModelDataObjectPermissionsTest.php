@@ -17,20 +17,13 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
-use Codeception\Stub;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject\DataObjectController;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
-use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
-use Pimcore\Config;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\User;
-use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelDataObjectPermissionsTest extends AbstractPermissionTest
 {
@@ -222,8 +215,7 @@ class ModelDataObjectPermissionsTest extends AbstractPermissionTest
         DataObject\AbstractObject $element,
         User $user,
         ?array $expectedChildren
-    ): void
-    {
+    ): void {
         $controller = $this->buildController(DataObjectController::class, $user);
 
         $request = new Request([

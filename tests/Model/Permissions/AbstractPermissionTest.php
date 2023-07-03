@@ -24,8 +24,8 @@ use Pimcore\Model\User;
 use Pimcore\Security\User\UserLoader;
 use Pimcore\Tests\Support\Helper\Pimcore;
 use Pimcore\Tests\Support\Test\ModelTestCase;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 abstract class AbstractPermissionTest extends ModelTestCase
 {
