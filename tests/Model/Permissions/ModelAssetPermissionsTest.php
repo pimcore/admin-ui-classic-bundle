@@ -17,22 +17,12 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
-use Codeception\Stub;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\Asset\AssetController;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
-use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
-use Pimcore\Config;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
 use Pimcore\Model\User;
-use Pimcore\Security\User\UserLoader;
-use Pimcore\SystemSettingsConfig;
-use Pimcore\Tests\Support\Helper\Pimcore;
-use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ModelAssetPermissionsTest extends AbstractPermissionTest

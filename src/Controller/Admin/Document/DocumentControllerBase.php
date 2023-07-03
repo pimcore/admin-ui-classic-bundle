@@ -38,6 +38,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
+
 /**
  * @internal
  */
@@ -65,7 +66,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     public function __construct(protected ElementServiceInterface $elementService)
     {
     }
-
 
     /**
      * @param array $data
@@ -112,7 +112,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
         throw $this->createAccessDeniedHttpException();
     }
-
 
     protected function addPropertiesToDocument(Request $request, Model\Document $document): void
     {
@@ -450,5 +449,4 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     {
         return $this->elementService->getElementTreeNodeConfig($element);
     }
-
 }

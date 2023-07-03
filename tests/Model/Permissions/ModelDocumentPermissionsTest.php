@@ -17,20 +17,13 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
-use Codeception\Stub;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\Document\DocumentController;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
-use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
-use Pimcore\Config;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\Page;
 use Pimcore\Model\User;
-use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ModelDocumentPermissionsTest extends AbstractPermissionTest
 {

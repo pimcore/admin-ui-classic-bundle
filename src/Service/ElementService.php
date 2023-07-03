@@ -17,9 +17,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
-use Pimcore\Config;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\CustomView;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Config;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
@@ -29,7 +30,6 @@ use Pimcore\Model\Element\Service;
 use Pimcore\Model\Site;
 use Pimcore\Security\User\UserLoader;
 use Pimcore\Tool\Frontend;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -82,7 +82,7 @@ class ElementService implements ElementServiceInterface
             'basePath' => $element->getRealPath(),
             'locked' => $element->isLocked(),
             'lockOwner' => (bool)$element->getLocked(),
-            'elementType' => Service::getElementType($element)
+            'elementType' => Service::getElementType($element),
         ];
 
         if ($element instanceof Asset) {
@@ -127,18 +127,23 @@ class ElementService implements ElementServiceInterface
         switch ($asset) {
             case $asset instanceof Asset\Image:
                 $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getimagethumbnail', $params);
+
                 break;
             case $asset instanceof Asset\Folder:
                 $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getfolderthumbnail', $params);
+
                 break;
             case $asset instanceof Asset\Video && \Pimcore\Video::isAvailable():
                 $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getvideothumbnail', $params);
+
                 break;
             case $asset instanceof Asset\Document && \Pimcore\Document::isAvailable() && $asset->getPageCount():
                 $thumbnailUrl = $this->urlGenerator->generate('pimcore_admin_asset_getdocumentthumbnail', $params);
+
                 break;
             case $asset instanceof Asset\Audio:
                 $thumbnailUrl = '/bundles/pimcoreadmin/img/flat-color-icons/speaker.svg';
+
                 break;
             default:
                 $thumbnailUrl = '/bundles/pimcoreadmin/img/filetype-not-supported.svg';
@@ -153,8 +158,7 @@ class ElementService implements ElementServiceInterface
     private function assignAssetTreeConfig(
         Asset $element,
         array &$tmpNode
-    ): void
-    {
+    ): void {
         $user = $this->userLoader->getUser();
         $hasChildren = $element->getDao()->hasChildren($user);
         $permissions = $element->getUserPermissions($user);
@@ -229,8 +233,7 @@ class ElementService implements ElementServiceInterface
     private function assignDocumentTreeConfig(
         Document $element,
         array &$tmpNode
-    ): void
-    {
+    ): void {
         $user = $this->userLoader->getUser();
         $hasChildren = $element->getDao()->hasChildren(null, $user);
 
@@ -290,12 +293,14 @@ class ElementService implements ElementServiceInterface
                         $tmpAsset['imageWidth'] = $asset->getCustomSetting('imageWidth');
                         $tmpAsset['imageHeight'] = $asset->getCustomSetting('imageHeight');
                     }
+
                     break;
 
                 case $asset instanceof Asset\Video:
                     if (\Pimcore\Video::isAvailable()) {
                         $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
                     }
+
                     break;
 
                 case $asset instanceof Asset\Document:
@@ -306,6 +311,7 @@ class ElementService implements ElementServiceInterface
                     ) {
                         $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
                     }
+
                     break;
             }
         } catch (\Exception $e) {
@@ -322,8 +328,8 @@ class ElementService implements ElementServiceInterface
             if (file_exists($thumbnailFile) && filemtime($thumbnailFile) > ($document->getModificationDate() - 20)) {
                 $tmpDocument['thumbnail'] =
                     $this->urlGenerator->generate('pimcore_admin_document_page_display_preview_image',
-                    ['id' => $document->getId()]
-                );
+                        ['id' => $document->getId()]
+                    );
             }
         }
 
@@ -354,5 +360,4 @@ class ElementService implements ElementServiceInterface
             $tmpDocument['cls'] .= 'pimcore_unpublished ';
         }
     }
-
 }
