@@ -355,7 +355,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         $proxyUser = $this->getAdminUser(true);
 
         if ($request->query->get('error')) {
-            $params['error'] = $request->query->get('error');
+            $params['error'] = htmlspecialchars($request->query->get('error'));
         }
 
         if ($request->isMethod('post')) {
