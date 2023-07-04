@@ -872,11 +872,17 @@ pimcore.helpers.showMaintenanceDisableButton = function () {
 
 pimcore.helpers.download = function (url) {
     pimcore.settings.showCloseConfirmation = false;
-    window.setTimeout(function () {
-        pimcore.settings.showCloseConfirmation = true;
-    }, 1000);
 
-    location.href = url;
+    Ext.Ajax.request({
+        url: url,
+        success: function() {
+            pimcore.settings.showCloseConfirmation = true;
+            location.href = url;
+        },
+        failure: function() {
+            pimcore.settings.showCloseConfirmation = true;
+        },
+    });
 };
 
 pimcore.helpers.getFileExtension = function (filename) {
