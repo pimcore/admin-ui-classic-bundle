@@ -872,17 +872,25 @@ pimcore.helpers.showMaintenanceDisableButton = function () {
 
 pimcore.helpers.download = function (url) {
     pimcore.settings.showCloseConfirmation = false;
+    window.setTimeout(function () {
+        pimcore.settings.showCloseConfirmation = true;
+    }, 1000);
 
-    Ext.Ajax.request({
-        url: url,
-        success: function() {
-            pimcore.settings.showCloseConfirmation = true;
-            location.href = url;
-        },
-        failure: function() {
-            pimcore.settings.showCloseConfirmation = true;
-        },
-    });
+    let iframe = document.getElementById('download_helper_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('id', 'download_helper_iframe');
+        document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+
+    document.getElementById('download_helper_iframe').onload = function() {
+        if(iframe.src !== 'about:blank') {
+            const title = iframe.contentDocument.title;
+            pimcore.helpers.showNotification(t('error'), title, 'error');
+            iframe.src = 'about:blank';
+        }
+    }
 };
 
 pimcore.helpers.getFileExtension = function (filename) {
