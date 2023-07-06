@@ -49,6 +49,10 @@ class AdminSessionBagListener implements EventSubscriberInterface
             return;
         }
 
+        if ($event->getRequest()->attributes->get('_stateless', false)) {
+            return;
+        }
+
         $session = $event->getRequest()->getSession();
 
         //do not register bags, if session is already started
