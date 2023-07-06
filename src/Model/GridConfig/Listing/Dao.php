@@ -36,6 +36,8 @@ class Dao extends Model\Listing\Dao\AbstractDao
         $data = $this->db->fetchAllAssociative('SELECT * FROM gridconfigs' . $this->getCondition() . $this->getOrder() . $this->getOffsetLimit(), $this->model->getConditionVariables());
 
         foreach ($data as $configData) {
+            $configData['shareGlobally'] = (bool)$configData['shareGlobally'];
+            $configData['setAsFavourite'] = (bool)$configData['setAsFavourite'];
             $gridConfig = new GridConfig();
             $gridConfig->setValues($configData);
             $gridConfigs[] = $gridConfig;
