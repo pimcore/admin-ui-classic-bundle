@@ -3,7 +3,7 @@
 {% block content %}
     {% if error is defined %}
         <div class="text error">
-            {{ error|trans([],'admin')|raw }}
+            {{ error|trans([],'admin') }}
         </div>
     {% else %}
         <div class="text info">
