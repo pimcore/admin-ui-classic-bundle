@@ -885,9 +885,12 @@ pimcore.helpers.download = function (url) {
     iframe.src = url;
 
     iframe.onload = function() {
-          const title = iframe.contentDocument.title;
-          pimcore.helpers.showNotification(t('error'), title, 'error');
-          iframe.src = 'about:blank';
+        // if avoids infinity loop, which is caused by setting the src in the load function
+        if (iframe.src !== 'about:blank') {
+            const title = iframe.contentDocument.title;
+            pimcore.helpers.showNotification(t('error'), title, 'error');
+            iframe.src = 'about:blank'; //clear iframe because otherwise the error will stay in the dom
+        }
     }
 };
 
