@@ -884,12 +884,10 @@ pimcore.helpers.download = function (url) {
     }
     iframe.src = url;
 
-    document.getElementById('download_helper_iframe').onload = function() {
-        if(iframe.src !== 'about:blank') {
-            const title = iframe.contentDocument.title;
-            pimcore.helpers.showNotification(t('error'), title, 'error');
-            iframe.src = 'about:blank';
-        }
+    iframe.onload = function() {
+          const title = iframe.contentDocument.title;
+          pimcore.helpers.showNotification(t('error'), title, 'error');
+          iframe.src = 'about:blank';
     }
 };
 
