@@ -64,8 +64,8 @@ class QuantityValueController extends AdminAbstractController
         $list->setOrder($order);
         $list->setOrderKey($orderKey);
 
-        $list->setLimit((int)$request->get('limit', 25));
-        $list->setOffset((int)$request->get('start', 0));
+        $list->setLimit((int)$request->get('limit'));
+        $list->setOffset((int)$request->get('start'));
 
         $condition = '1 = 1';
         if ($request->get('filter')) {
