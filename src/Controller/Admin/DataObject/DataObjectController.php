@@ -467,7 +467,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 }
             }
 
-            $this->getDataForObject($object, $objectFromVersion);
+            try {
+                $this->getDataForObject($object, $objectFromVersion);
+            } catch(\Throwable $e) {
+                $object = $objectFromDatabase;
+                $this->getDataForObject($object, false);
+            }
+
             $objectData['data'] = $this->objectData;
             $objectData['metaData'] = $this->metaData;
             $objectData['properties'] = Element\Service::minimizePropertiesForEditmode($object->getProperties());
