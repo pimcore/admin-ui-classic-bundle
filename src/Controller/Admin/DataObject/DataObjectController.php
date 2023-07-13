@@ -1434,7 +1434,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($request->get('data')) {
-            $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            try {
+                $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            } catch(\Throwable $e) {
+                $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
+            }
         }
 
         // general settings
