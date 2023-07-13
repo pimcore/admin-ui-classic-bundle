@@ -257,7 +257,8 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
         }
 
 
-        return pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        return this.tabbar;
     },
 
     getMetaInfo: function() {
