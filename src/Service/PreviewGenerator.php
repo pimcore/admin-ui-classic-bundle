@@ -110,7 +110,7 @@ class PreviewGenerator implements PreviewGeneratorInterface
         }
 
         $sitesOptions = [
-            $this->translator->trans('main_site', [], Translation::DOMAIN_ADMIN) => '0'
+            $this->translator->trans('main_site', [], Translation::DOMAIN_ADMIN) => '0',
         ];
 
         foreach ($sites as $site) {
