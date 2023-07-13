@@ -876,7 +876,22 @@ pimcore.helpers.download = function (url) {
         pimcore.settings.showCloseConfirmation = true;
     }, 1000);
 
-    location.href = url;
+    let iframe = document.getElementById('download_helper_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('id', 'download_helper_iframe');
+        document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+
+    iframe.onload = function() {
+        // if avoids infinity loop, which is caused by setting the src in the load function
+        if (iframe.src !== 'about:blank') {
+            const title = iframe.contentDocument.title;
+            pimcore.helpers.showNotification(t('error'), title, 'error');
+            iframe.src = 'about:blank'; //clear iframe because otherwise the error will stay in the dom
+        }
+    }
 };
 
 pimcore.helpers.getFileExtension = function (filename) {

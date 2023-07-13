@@ -4,7 +4,7 @@ unsupported_feature: "\xA1Caracter\xEDstica no soportada! Por favor, revise los 
 screen_size_to_small: "Tu pantalla es muy peque\xF1a para la previsualizaci\xF3n seleccionada"
 too_many_children_for_recyclebin: Este elemento contiene muchos elementos asociados
   para ser enviado a la papelera
-default: 'Predeterminado '
+default: Predeterminado
 metadata: Metadatos
 email_address: "Direcci\xF3n de correo electr\xF3nico"
 OK: Ok
@@ -119,7 +119,7 @@ user_inactive: Usuario inactivo
 user_no_email_address: "Usuario sin direcci\xF3n de correo"
 user_no_password: "Usuario sin contrase\xF1a"
 user_unknown: Usuario desconocido
-lost_password_email_error: Could not send password recovery email
+lost_password_email_error: "No se pudo enviar el correo de recuperaci\xF3n de contrase\xF1a"
 use_current_player_position_as_preview: use_current_player_position_as_preview
 select_image_preview: Seleccione Imagen Previa
 preview_not_available: Vista previa no disponible
@@ -135,7 +135,7 @@ paste_recursive_updating_references: Pegado recursivo, actualizando referencias
 add_hardlink: Agregar un enlace directo
 source_path: Ruta de origen
 properties_from_source: Usar propiedades del documento de origen
-children_from_source: Use children from source document
+children_from_source: Usar hijos del documento origen
 click_right_for_more_options: "Click derecho para m\xE1s opciones"
 move_to_tab: "Mover a pesta\xF1a"
 not_supported: No soportado
@@ -167,21 +167,21 @@ locked: Bloqueado
 element_cannot_be_move_because_it_is_locked: "El elemento no puede ser movido porque
   est\xE1 bloqueado"
 element_cannot_be_moved: "El elemento no puede ser movido aqu\xED"
-element_cannot_be_moved_because_target_is_paginated: The element cannot be dragged
-  on a paginated tree/folder with manual indexing (Sort by index). Please change the
-  sorting method or use "Search & Move" option under the "Advanced" context menu of
-  the target to move the elements.
+element_cannot_be_moved_because_target_is_paginated: "El elemento no se puede arrastrar
+  en el \xE1rbol/carpeta paginado con indexaci\xF3n manual (Ordenar por \xEDndice).
+  Cambie el m\xE9todo de orden o use la opci\xF3n \"Buscar y mover\" en el men\xFA
+  contextual \"Avanzado\" del objetivo para mover los elementos."
 no_collections_allowed: Colecciones no permitidas
 filter_condition: "Condici\xF3n de filtro"
 all_types: Todos los tipos
 audio: Audio
-video: Video
+video: "V\xEDdeo"
 archive: Archivo
 unknown: Desconocido
 class: Clase
 page: "P\xE1gina"
 objectbrick: Objectbrick
-field_collection: Field Collection
+field_collection: "Colecci\xF3n de campos"
 snippet: Fragmento
 folder: Carpeta
 your_selection: "Su selecci\xF3n"
@@ -210,7 +210,7 @@ recyclebin: Papelera
 deletedby: Borrado por
 open_select_editor: "Editor de Selecci\xF3n libre"
 ignore: Ignorar
-email_log: Email Log
+email_log: Log del correo
 email_log_resend: Enviar Correo
 email_log_resend_window_msg: Por favor, confirme si quiere enviar el email a todos
   los destinatarios.
@@ -234,7 +234,7 @@ info: "Informaci\xF3n"
 or: "\xF3"
 paste_contents: "Pegar los contenidos solamente aqu\xED"
 paste_as_child: Pegar como hijo
-paste_recursive_as_child: Paste as child (recursive)
+paste_recursive_as_child: Pegar un hijo (recursivo)
 view_original: Ver Original
 feed: Alimentar
 no_items_found: "Art\xEDculos no encontrados"
@@ -284,12 +284,13 @@ controller: Controlador
 action: "Acci\xF3n"
 actions: Acciones
 template: Plantilla
-staticroute: Static Route
+staticroute: "Ruta est\xE1tica"
 static_generator: "Generador de p\xE1ginas est\xE1ticas"
 static_generator_enable: "Habilitar la representaci\xF3n est\xE1tica del lado del
   servidor"
-static_generator_lifetime: Lifetime (in minutes) for static page (optional)
-last_generated: Last generated
+static_generator_lifetime: "Tiempo de vida (en minutos) de la p\xE1gina est\xE1tica
+  (opcional)"
+last_generated: "\xDAltimo generado"
 key: Clave
 id: ID
 name: Nombre
@@ -309,7 +310,7 @@ close_all_tabs: "Cerrar todas las pesta\xF1as"
 search: Buscar
 import: Importar
 export: Exportar
-document_type: Document Type
+document_type: Tipo de documento
 document_types: Tipos de documento
 predefined_properties: Propiedades predefinidas
 users: Usuarios
@@ -324,7 +325,7 @@ help: Ayuda
 configuration: "Configuraci\xF3n"
 value: Valor
 add_a_custom_property: Agregar una propiedad personalizada
-custom: Custom
+custom: Personalizado
 general: General
 language: Lenguaje
 quality: Calidad
@@ -370,8 +371,8 @@ version: "Versi\xF3n"
 active: Activo
 success: "\xC9xito"
 translations: Traducciones de la Web
-translation_simple: Simple Text
-translation_custom: ICU Format
+translation_simple: Texto simple
+translation_custom: Formato ICU
 firstname: Nombre
 lastname: Apellido
 email: email
@@ -452,9 +453,9 @@ variant: Variante
 add_variant: Agregar variante
 delete_message_dependencies: "Hay dependencias, \xBFborrar de todos modos?"
 delete_message: "\xBFDesea eliminar este elemento?"
-delete_message_advanced: Do you really want to delete %s '%s' ?
+delete_message_advanced: "\xBFRealmente quieres eliminar %s '%s' ?"
 delete_message_batch: "\xBFEst\xE1 seguro que desea eliminar esos elementos?"
-delete_group_message: Do you really want to delete this group and all of its contents?
+delete_group_message: "\xBFDesea eliminar este grupo y todo su contenido?"
 no_further_objectbricks_allowed: "No se permiten m\xE1s objectbricks"
 grid_current_language: Idioma Actual
 object_columns: Columnas de Objeto
@@ -493,11 +494,11 @@ previous_page: pagina anterior
 next_page: pagina siguiente
 last_page: "\xFAltima p\xE1gina"
 no_data_to_display: No hay datos para mostrar
-classificationstore_property: Property
-classificationstore_group: Group
-classificationstore_relation: Relation
-classificationstore_collection: Collection
-classificationstore_collection_relation: Collection relation
+classificationstore_property: Propiedad
+classificationstore_group: Grupo
+classificationstore_relation: "Relaci\xF3n"
+classificationstore_collection: "Colecci\xF3n"
+classificationstore_collection_relation: "Relaci\xF3n de colecci\xF3n"
 classificationstore_no_groups: No se encontraron grupos
 classificationstore_no_keys: No se encontraron llaves
 remove_group: remove_group
@@ -592,7 +593,7 @@ visitors_of_this_page_will_be_automatically_associated_with_the_selected_target_
   seleccionados"
 assign_target_group: Asignar grupo objetivo
 assign_target_groups: Asignar grupos objetivo
-target_group: Target Group
+target_group: Grupo Objetivo
 edit_content_for_target_group: Editar el contenido para el grupo objetivo
 email_reply_to: Responder a
 element_tag_filtered_tags: Tags Filtrados
@@ -634,7 +635,7 @@ flatten: aplanar
 return_last_result: "Devolver \xFAltimo resultado"
 skip_null: "Ignorar vac\xEDos"
 expand_children: Mostrar hijos
-collapse_children: Collapse children
+collapse_children: Contraer hijos
 multiply: Multiplicar
 divide: Dividir
 apply_to_all_objects: Aplicar a todos
@@ -698,16 +699,16 @@ by_key: llave_az
 by_index: "\xEDndice (ordenado manualmente)"
 successful_object_change_children_sort_to_index: Success_object_change_children_sort_to_index
 successful_object_change_children_sort_to_key: Success_object_change_children_sort_to_key
-successful_publish_document: Document successfully published
-successful_publish_object: Object successfully published
-successful_unpublish_document: Document successfully unpublished
-successful_unpublish_object: Object successfully unpublished
+successful_publish_document: Documento publicado
+successful_publish_object: Objeto publicado
+successful_unpublish_document: Documento no publicado
+successful_unpublish_object: Objeto no publicado
 error_object_change_children_sort_to_index: error_object_change_children_sort_to_index
 error_object_change_children_sort_to_key: error_object_change_children_sort_to_key
-error_publish_document: Document could not be published
-error_publish_object: Object could not be published
-error_unpublish_document: Document could not be unpublished
-error_unpublish_object: Object could not be unpublished
+error_publish_document: El Documento no puede ser publicado
+error_publish_object: El Objeto no puede ser publicado
+error_unpublish_document: El Documento no se puede despublicar
+error_unpublish_object: El Objeto no se puede despublicar
 edit_as_html: Editar como HTML
 edit_as_plain_text: Editar como texto plano
 error_empty_file_upload: "El archivo est\xE1 vac\xEDo"
@@ -934,7 +935,7 @@ fieldlookup: campo
 show_fieldlookup: show_fieldlookup
 different_number_of_columns: "n\xFAmero_diferente_de_columnas"
 brick_limit_reached: brick_limit_reached
-generate_type_declarations: Generate Type Declarations
+generate_type_declarations: Generar declaraciones de tipos
 batch_change_language: batch_change_language
 preview_item: preview_item
 by_key_reverse: by_key_reverse
@@ -947,102 +948,100 @@ edit_as_custom_text: Editar como texto personalizado
 symfony_translation_link: "Formato de traducci\xF3n: https://symfony.com/doc/current/translation/message_format.html"
 no_action_available: "Ninguna acci\xF3n disponible"
 bricks: Bricks
-draft: Draft
+draft: Borrador
 auto_save: "Guardado autom\xE1tico"
-save_draft: Save draft
+save_draft: Guardar borrador
 selected_grid_columns: "Columnas de cuadr\xEDcula seleccionadas"
 ungrouped: desagrupado
 reindex_warning: "Cambiarlo de orden alfab\xE9tico a \xEDndice reindexar\xE1 todos
   los elementos.  \xBFQuieres continuar?"
-filter_by_relation: Filter by relation
-filter_by_relation_field: Filter by relation field
-clear_relation_filter: Clear active relation filter
-apply_filter: Apply filter
-config_not_writeable: Not writable, this can have several reasons. For details please
-  have a look into the docs.
-sites: Sites
-file_exists: File already exists
-asset_upload_want_to_overwrite: Do you want to overwrite file %s?
-asset_upload_overwrite: Overwrite
-asset_upload_keep_both: Keep both files
-asset_upload_apply_to_all: Apply to all
-asset_upload_skip: Skip
-could_not_open_zip_file: The uploaded zip file could not be opened.
-objects_sort_method: Change data objects sort method
-link_recursion_error: The link is redirecting to itself, causing an infinite loop
-no_further_classes_allowed: No further classes allowed
-address_not_found: The entered address was not found
-possible_causes: Possible causes
-postal_code_format_error: "Postal code format, e.g. use \"5020 Salzburg, S\xF6llheimer
-  Stra\xDFe 16\" instead of \"A-5020 Salzburg, S\xF6llheimer Stra\xDFe 16\""
-delete_data_from_it: This will also delete all data from it.
-display_mode: Display Mode
-display_mode_grid: Grid view
-display_mode_combo: Tag field
-batch_confirmation: You are about to update %s dataObjects. Do you want to continue
-  ?
-field_collections: Field Collections
-display_mode_display: Display path reference
-display_mode_inline_search: Inline Search
-gdpr_dataSource_dataObjects: Data Objects
-parent_id: Parent ID
-modificationDate: Modification Date
-creationDate: Creation Date
-classificationstore_tag_col_group: Group
-none: None
-redirects_type_path: Path
-email_subject: Subject
-gdpr_dataSource_sentMail: Sent Emails
-email_log_subject: Subject
-gdpr_data_extractor_label_email: Email Address
-workflow_notes: Notes
-2fa_code: Code
-password: Password
+filter_by_relation: "Filtrar por relaci\xF3n"
+filter_by_relation_field: "Filtrar por campo de relaci\xF3n"
+clear_relation_filter: "Borrar filtro de relaci\xF3n activo"
+apply_filter: Aplicar filtro
+config_not_writeable: "No se puede escribir, esto puede ser por varias razones. Para
+  m\xE1s informaci\xF3n, consulte los documentos."
+sites: Sitios
+file_exists: Archivo ya existe
+asset_upload_want_to_overwrite: Quieres sobreescribir el archivo %s?
+asset_upload_overwrite: Sobreescribir
+asset_upload_keep_both: Guarda ambos archivos
+asset_upload_apply_to_all: Aplicar a todo
+asset_upload_skip: Saltar
+could_not_open_zip_file: El archivo zip subido no se puede abrir.
+objects_sort_method: "Cambiar m\xE9todo de orden de los objetos de datos"
+link_recursion_error: "El enlace se est\xE1 redirigiendo a s\xED mismo, provocando
+  un bucle infinito"
+no_further_classes_allowed: "No se permiten m\xE1s clases"
+address_not_found: "No se encontr\xF3 la direcci\xF3n"
+possible_causes: Posibles causas
+postal_code_format_error: "Formato de c\xF3digo postal, p. use \"5020 Salzburg, S\xF6llheimer
+  Stra\xDFe 16\" en lugar de \"A-5020 Salzburg, S\xF6llheimer Stra\xDFe 16\""
+delete_data_from_it: "Esto tambi\xE9n eliminar\xE1 todos los datos del mismo."
+display_mode: "Modo de visualizaci\xF3n"
+display_mode_grid: "Vista en cuadr\xEDcula"
+display_mode_combo: Campo de etiqueta
+batch_confirmation: "Est\xE1 a punto de actualizar %s dataObjects. Quieres continuar?"
+field_collections: "Colecci\xF3n de campos"
+display_mode_display: "Referencia de la ruta de visualizaci\xF3n"
+display_mode_inline_search: "B\xFAsqueda en l\xEDnea"
+gdpr_dataSource_dataObjects: Objetos de datos
+parent_id: ID Padre
+modificationDate: "Data de modificaci\xF3n"
+creationDate: "Data de creaci\xF3n"
+classificationstore_tag_col_group: Grupo
+none: Ninguna
+redirects_type_path: Camino
+email_subject: Sujeto
+gdpr_dataSource_sentMail: Correos enviados
+email_log_subject: Sujeto
+gdpr_data_extractor_label_email: "Direcci\xF3n de correo"
+workflow_notes: Notas
+2fa_code: "C\xF3digo"
+password: "Contrase\xF1a"
 show_metainfo: Info
-email_log_from: From
-email_from: From
-log_search_from: From
-email_log_to: To
-email_to: To
-log_search_to: To
-structuredtable_type_text: Text
-objectsMetadata_type_text: Text
+email_log_from: De
+email_from: De
+log_search_from: De
+email_log_to: Para
+email_to: Para
+log_search_to: Para
+structuredtable_type_text: Texto
+objectsMetadata_type_text: Texto
 gdpr_data_extractor_label_id: ID
-navigation_target: Target
-log_type: Type
-gdpr_dataSource_export: Export
-classificationstore_configuration: Configuration
-gdpr_dataSource_assets: Assets
+navigation_target: Objetivo
+log_type: Tipo
+gdpr_dataSource_export: Exportar
+classificationstore_configuration: "Configuraci\xF3n"
+gdpr_dataSource_assets: Recursos
 structuredtable_type_bool: Checkbox
-objectsMetadata_type_select: Select
+objectsMetadata_type_select: Selector
 objectsMetadata_type_bool: Bool
-gdpr_data_extractor_label_firstname: Firstname
-gdpr_data_extractor_label_lastname: Lastname
-log_source: Source
+gdpr_data_extractor_label_firstname: Apellido
+gdpr_data_extractor_label_lastname: Segundo apellido
+log_source: Fuente
 classificationstore_error_addgroup_title: Error
 classificationstore_error_addkey_title: Error
-element_lock_message: 'The desired element is currently opened by another person:'
-log_message: Message
-operator_substring_settings: Settings
-delete_gridconfig_dblcheck: Do you really want to delete this item?
+element_lock_message: "El elemento est\xE1 abierto por otra persona:"
+log_message: Mensaje
+operator_substring_settings: Ajustes
+delete_gridconfig_dblcheck: "\xBFDeseas eliminar este elemento?"
 email_log_cc: Cc
 email_log_bcc: Bcc
-cols: Columns
-log_search_message: Message
-batch_export_confirmation: You are about to export %s dataObjects. Do you want to
-  continue ?
-header: Header
-no_header: No Header
-url-slug-invalid-chars: Provided invalid character in URL slug
-delete_entire_folder_question: This operation will delete the entire parent/folder.
-  You may not be able to fully undo this operation.
-allow_to_clear_relation: Allow to clear all relations of this field
-allow_asset_inline_download: Allow inline download
-email_blocklist: Email Blocklist
-password_does_not_match: New password and confirm password doesn't match
-incorrect_password: Given password is incorrect
-content_main_document: Content-Main Document
-2fa_wrong: Wrong code entered!
-language_main: Main
-system_appearance_settings: Appearance & Branding
+cols: Columnas
+log_search_message: Mensaje
+batch_export_confirmation: "Est\xE1 a punto de exportar %s dataObjects. Quieres continuar?"
+header: Cabecera
+no_header: Sin cabecera
+delete_entire_folder_question: "Esto eliminar\xE1 todo el padre/carpeta. Es posible
+  que no pueda deshacer esta operaci\xF3n."
+allow_to_clear_relation: Permitir borrar todas las relaciones de este campo
+allow_asset_inline_download: "Permitir descarga en l\xEDnea"
+email_blocklist: Lista de correos bloqueados
+password_does_not_match: "La nueva contrase\xF1a y la de confirmaci\xF3n no coinciden"
+incorrect_password: "La contrase\xF1a es incorrecta"
+content_main_document: Documento de Contenido principal
+2fa_wrong: "\xA1C\xF3digo incorrecto!"
+language_main: Principal
+system_appearance_settings: Apariencia y Marca
 ...

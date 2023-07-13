@@ -13,7 +13,7 @@ url_slug: URL Slug
 url_slug_datatype_info: "Geben Sie den Controller und die Aktion in folgendem Format
   ein: \n<br>AppBundle\\Controller\\ProductController: slugAction"
 controller_action: Controller & Aktion
-admin_interface: Admin Interface
+admin_interface: "Admin-Oberfl\xE4che"
 admin_interface_background: "Hintergrund zur Admin-Oberfl\xE4che"
 icon_library: Icon Bibliothek
 system_performance_stability_warning: "F\xFChren Sie diese Aktion nur durch, wenn
@@ -55,7 +55,7 @@ object_regex_info: "RegExp ohne Trennzeichen, m\xFCssen sowohl in JS als auch PH
 regex_validation: "Validierung Regul\xE4rer Ausdruck"
 test_string: Teststring
 regex: RegEx
-regex_flags: RegEx Flags
+regex_flags: RegEx-Flags
 select_presetting: "Voreinstellung ausw\xE4hlen"
 good: Gut
 best: Beste(r)
@@ -113,7 +113,7 @@ gender: Geschlecht
 use_original_tiff: Verwende Original-TIFF (nur DRUCK)
 use_original_tiff_description: 'Verwende Original-TIFF, wenn das Quellformat ein TIFF-Bild
   ist -> keine Modifikation des Bildes. '
-port: Port
+port: Hafen
 delivery_settings: Auslieferungs Einstellungen
 generate_previews: Vorschauen generieren
 invalid_class_name: "Ung\xFCltiger Klassenname"
@@ -129,7 +129,7 @@ visited_pages_before_number: n Seiten vorher angesehen
 number: Nummer
 visited_page_before: Zuvor besuchte Seite
 searchengine: Suchmaschine
-referrer: Referrer
+referrer: Referent
 referring_site: verweisende Website
 AND: UND
 OR: ODER
@@ -166,7 +166,7 @@ any: irgend
 http_method: HTTP Methode
 url_pattern: URL Muster (Reg. Ausdruck  z.B. @erfolg@i)
 beginning: Anfang
-element_css_selector: Element (CSS Selector)
+element_css_selector: Element (CSS-Selektor)
 insert_position: "Position einf\xFCgen"
 robots_txt_exists_on_filesystem: Die Datei robots.txt existiert bereits im Dokument-Root-Ordner
   des Dateisystems
@@ -176,8 +176,8 @@ add_role: "Rolle hinzuf\xFCgen"
 role_creation_error: Rolle konnte nicht angelegt werden
 workspaces: Arbeitsbereiche
 Username: Benutzername
-video_bitrate: Video Bitrate (kB/s)
-audio_bitrate: Audio Bitrate (kB/s)
+video_bitrate: Video-Bitrate (kB/s)
+audio_bitrate: Audio-Bitrate (kB/s)
 rasterize_svg: SVGs rastern
 rasterize_svg_info_text: "SVGs werden automatisch gerastert, wenn eine andere Transformation
   als Gr\xF6\xDFen\xE4nderung oder Skalierung nach Breite / H\xF6he verwendet wird."
@@ -212,7 +212,7 @@ addoverlay: "Overlay hinzuf\xFCgen"
 transformations: Transformationen
 you_can_drag_the_tabs_to_reorder_the_media_queries: "Sie k\xF6nnen die Registerkarten
   ziehen, um die Priorit\xE4t der Medienabfragen neu zu ordnen"
-frame: Frame
+frame: Rahmen
 setbackgroundcolor: Hintergrundfarbe setzen
 setbackgroundimage: Hintergrundbild setzen
 roundcorners: Ecken abrunden
@@ -252,7 +252,7 @@ visible_in_searchresult: Sichtbar im Suchergebnis
 visible_in_gridview: Sichtbar in der Gitteransicht
 fieldcollections: Feldsammlungen
 block: Block
-tooltip: Tooltip
+tooltip: QuickInfo
 decimalPrecision: Dezimalstellen
 css_style: CSS Stil
 add_setting: "Einstellung hinzuf\xFCgen"
@@ -275,7 +275,7 @@ all_users: Alle Benutzer
 admin: Administrator
 new_document_type: Neuer Dokumenttyp
 timezone: Zeitzone
-host: Host
+host: Gastgeber
 store_version_history_in_days: "Versionshistorie f\xFCr X Tage speichern"
 store_version_history_in_steps: "Versionshistorie f\xFCr X Stufen speichern"
 layout: Layout
@@ -286,7 +286,7 @@ iframe: Vorschau/ Iframe
 fieldset: Feldgruppe
 panel: Panel
 tabpanel: Reiterpanel
-tab_position: Tab Position
+tab_position: Registerkarte Position
 pattern: Muster
 variables: Variablen
 defaults: Vorgabewerte
@@ -309,7 +309,7 @@ install: Installieren
 uninstall: Deinstallieren
 some_fields_cannot_be_saved: Einige Felder konnten nicht gespeichert werden
 icon: Icon
-slider: Slider
+slider: Schieberegler
 domain: 'Domain (z.B.: example.org)'
 datetime: Datum & Uhrzeit
 default_value: Standardwert
@@ -325,7 +325,7 @@ table: Tabelle
 rows: Zeilen
 language_admin: Standardsprache Admin
 exclude_patterns: Ausschluss-Muster
-cover: Cover
+cover: Abdeckung
 contain: beinhalten
 min_value: min. Wert
 max_value: max. Wert
@@ -336,7 +336,7 @@ zoom_level: Zoomgrad
 map_type: Kartenart
 roadmap: Verkehr
 satellite: Satellit
-hybrid: Hybrid
+hybrid: Hybride
 google_api_key_simple: "Google API Schl\xFCssel (Simple-API Zugriff f\xFCr Maps, CSE,
   ...)"
 document_restrictions: Dokument Restriktionen
@@ -374,7 +374,7 @@ structuredTable: Strukturierte Tabelle
 position: Position
 objectsMetadata_allowed_class: Erlaubte Klassen
 objectsMetadata_visible_fields: Sichtbare Felder
-objectsMetadata_type_columnbool: Column Bool
+objectsMetadata_type_columnbool: "S\xE4ule Bool"
 objectsMetadata_type_multiselect: Mehrfachauswahl
 file_explorer_saved_file_error: Kann Datei nicht speichern
 reserved_field_names_error: 'Bitte verwenden Sie die folgenden reservierten Feldnamen
@@ -385,7 +385,7 @@ inherited_default_value_warning: "Der Standardwert wird verwendet, wenn entweder
 restrict_selection_to: "Auswahl einschr\xE4nken auf"
 maximum_tabs: Maximale Tab-Anzahl
 algorithm: Algorithmus
-salt: Salt
+salt: Salz
 saltlocation: Salt Pfad
 custom_layout: Benutzerdefiniertes Layout
 custom_layout_definition: Benutzerdefiniertes Layout Definition
@@ -494,7 +494,7 @@ drag_object_preview: "Objekt f\xFCr Vorschau ziehen"
 rows_fixed: Zeilen fixiert
 cols_fixed: Spalten fixiert
 force_resize: "Gr\xF6\xDFe \xE4ndern erzwingen"
-site_ids: Site IDs
+site_ids: Standort-IDs
 site_ids_tooltip: "Stellen Sie eine durch Komma getrennte Liste mit Site-IDs zur Verf\xFCgung."
 predefined_hotspot_data_templates: Vordefinierte Datenvorlagen
 hide_locale_labels_when_tabs_reached: Gebietsschemabezeichnungen nach der Anzahl der
@@ -535,7 +535,7 @@ default_positioning: Standard Position
 thumbnail_focal_point_notice: Das Bild wird automatisch basierend auf dem im Quellbild
   festgelegten Brennpunkt zugeschnitten. Wenn kein Brennpunkt vorhanden ist, wird
   die unten angegebene Standardpositionierung verwendet.
-iframe_url: IFrame URL
+iframe_url: IFrame-URL
 deactivate_maintenance: Wartung deaktivieren
 maintenance_mode: Wartungsmodus
 maintenance_not_active: Das automatische Wartungsscript scheint nicht korrekt eingerichtet
@@ -587,7 +587,7 @@ custom_report_filter_drilldown: Recherchefilter
 no_further_sources_allowed: Keine weitere Datenquelle erlaubt
 column_configuration: Spaltenkonfiguration
 show_in_google_anaytics: Zeige in Google Analytics
-style: Style
+style: Stil
 foreground_color: Vordergrundfarbe
 background_color: Hintergrundfarbe
 use_current_player_position_as_preview: Aktuelle Video-Position als Vorschau nutzen.
@@ -604,7 +604,7 @@ add_user: "Benutzer hinzuf\xFCgen"
 use_as_site: Als eigene Site benutzen
 remove_site: Site entfernen
 edit_site: Seite bearbeiten
-site_id: Site ID
+site_id: Standort-ID
 website_settings: Webseite Einstellungen
 clear_cache: "Zwischenspeicher l\xF6schen"
 extensions: Erweiterungen
@@ -641,7 +641,7 @@ all_caches: Alle Caches
 admin_translations: "Admin \xDCbersetzungen"
 lock: Sperren
 unlock: Entsperren
-lock_and_propagate_to_children: Lock and propagate to children
+lock_and_propagate_to_children: Sperren und an Kinder weitergeben
 unlock_and_propagate_to_children: Entsperren inkl. Kindelemente
 data_cache: Daten Cache
 listing_use_traits: Listung an Verwendung (Merkmale)
@@ -689,23 +689,23 @@ asset_type_changed: "Asset Typ wurde in der Zwischenzeit ge\xE4ndert. Bitte lade
 numeric_range: Numerischer Bereich
 date_range: Datumsbereich
 quantityValueRange_field: Mengenwertbereich
-allowed_targets: Allowed Targets
-disabled_fields: Disabled Fields
-predefined_metadata_definitions_error_name_exists_msg: Definition with this name already
-  exists
-quantityValueUnits: Quantity Value Units
-numeric: Number
-structuredtable_type_number: Number
-objectsMetadata_type_number: Number
+allowed_targets: Erlaubte Ziele
+disabled_fields: Deaktivierte Felder
+predefined_metadata_definitions_error_name_exists_msg: Definition mit diesem Namen
+  existiert bereits
+quantityValueUnits: Menge Wert Einheiten
+numeric: Nummer
+structuredtable_type_number: Nummer
+objectsMetadata_type_number: Nummer
 username: Benutzername
-localized_fields: Localized Fields
-field_collections: Field-Collections
-special_settings_tooltip: Special Settings
-application_logging: Application Logger
-log_search_component: Component
+localized_fields: Lokalisierte Felder
+field_collections: Feldsammlungen
+special_settings_tooltip: Besondere Einstellungen
+application_logging: Anwendungslogger
+log_search_component: Komponente
 classificationstore: Klassifizierungsspeicher
 classificationstore_mbx_enterkey_prompt: Name eingeben
-classificationstore_error_addcollection_msg: Error adding group
+classificationstore_error_addcollection_msg: "Fehler beim Hinzuf\xFCgen einer Gruppe"
 log_search_pid: PID
 log_refresh_seconds: Sekunden
 ...
