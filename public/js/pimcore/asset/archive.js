@@ -87,6 +87,7 @@ pimcore.asset.archive = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        return pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        return this.tabbar;
     }
 });

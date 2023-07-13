@@ -163,7 +163,8 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
         }
 
 
-        return pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        return this.tabbar;
     },
 
     showContextMenu: function(domEl, event, node) {
