@@ -25,13 +25,13 @@ jobs:
         runs-on: "ubuntu-20.04"
         continue-on-error: ${{ matrix.experimental }}
         env:
-            PIMCORE_TEST_DB_DSN: "mysql://root@127.0.0.1:33006/pimcore_test?serverVersion=${{ matrix.server_version }}"
+            PIMCORE_TEST_DB_DSN: "mysql://root@127.0.0.1:33006/pimcore_test"
         strategy:
             matrix:
                 include:
-                    - { php-version: 8.1, database: "mariadb:10.7", server_version: "10.7.7-MariaDB-1:10.7.7+maria~ubu2004", dependencies: lowest, pimcore_version: "", experimental: false }
-                    - { php-version: 8.2, database: "mariadb:10.7", server_version: "10.7.7-MariaDB-1:10.7.7+maria~ubu2004", dependencies: highest, pimcore_version: "", experimental: false }
-                    - { php-version: 8.2, database: "mariadb:10.7", server_version: "10.7.7-MariaDB-1:10.7.7+maria~ubu2004", dependencies: highest, pimcore_version: "11.x-dev as 11.0.0", experimental: true }
+                    - { php-version: 8.1, database: "mariadb:10.3", dependencies: lowest, pimcore_version: "", experimental: false }
+                    - { php-version: 8.2, database: "mariadb:10.7", dependencies: highest, pimcore_version: "", experimental: false }
+                    - { php-version: 8.2, database: "mariadb:10.7", dependencies: highest, pimcore_version: "11.x-dev as 11.0.0", experimental: true }
         services:
             mariadb:
                 image: "${{ matrix.database }}"
