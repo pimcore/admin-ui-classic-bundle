@@ -73,7 +73,7 @@ class ExtJSCommand extends AbstractCommand
 
         $absoluteManifest = getcwd() . '/' . $src;
 
-        $bootstrapFile = getcwd() . 'dev/pimcore/admin-ui-classic-bundle/public/extjs/js/bootstrap-ext-all.js';
+        $bootstrapFile = getcwd() . '/dev/pimcore/admin-ui-classic-bundle/public/extjs/js/bootstrap-ext-all.js';
         $bootstrap = file_get_contents($bootstrapFile);
         if (!$bootstrap) {
             throw new \Exception('bootstrap file not found');
