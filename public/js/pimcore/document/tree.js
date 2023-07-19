@@ -1065,24 +1065,24 @@ pimcore.document.tree = Class.create({
 
     pasteInfo: function (tree, record, type, enableInheritance, language) {
         pimcore.helpers.addTreeNodeLoadingIndicator("document", record.get('id'));
-
-        if (typeof language !== "string") {
-            language = false;
+        if (enableInheritance !== true) {
+            enableInheritance = false;
         }
 
-        if(enableInheritance !== true) {
-            enableInheritance = false;
+        const params = {
+            targetId: record.data.id,
+            sourceId: pimcore.cachedDocumentId,
+            type: type,
+            enableInheritance: enableInheritance
+        };
+
+        if (typeof language === "string") {
+            params.language = language;
         }
 
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_document_document_copyinfo'),
-            params: {
-                targetId: record.data.id,
-                sourceId: pimcore.cachedDocumentId,
-                type: type,
-                language: language,
-                enableInheritance: enableInheritance
-            },
+            params: params,
             success: this.paste.bind(this, tree, record)
         });
     },

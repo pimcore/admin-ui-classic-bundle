@@ -1016,12 +1016,9 @@ class DocumentController extends ElementControllerBase implements KernelControll
                     if ($request->get('type') == 'child') {
                         $enableInheritance = ($request->get('enableInheritance') == 'true') ? true : false;
 
-                        $language = null;
-                        if ($request->request->has('language')) {
-                            $language = (string) $request->request->get('language');
-                            if (!Tool::isValidLanguage($language)) {
-                                throw new BadRequestHttpException('Invalid language: ' . $language);
-                            }
+                        $language = (string) $request->request->get('language') ?: null;
+                        if ($language && !Tool::isValidLanguage($language)) {
+                            throw new BadRequestHttpException('Invalid language: ' . $language);
                         }
 
                         $resetIndex = ($request->get('resetIndex') == 'true') ? true : false;
