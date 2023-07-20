@@ -155,7 +155,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $offset = 0;
         }
 
-        $document = Document::getById($allParams['node']);
+        $document = Document::getById((int) $allParams['node']);
         if (!$document) {
             throw $this->createNotFoundException('Document was not found');
         }
