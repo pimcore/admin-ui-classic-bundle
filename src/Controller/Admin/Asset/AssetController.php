@@ -1264,7 +1264,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $stream = $thumbnail->getStream();
 
         if (!$stream) {
-            return new BinaryFileResponse(PIMCORE_PATH . '/bundles/AdminBundle/public/img/filetype-not-supported.svg');
+            return new BinaryFileResponse(PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/filetype-not-supported.svg');
         }
 
         $response = new StreamedResponse(function () use ($stream) {
@@ -1449,7 +1449,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 'Content-Type' => 'image/' . $thumb->getFileExtension(),
             ]);
         } else {
-            $response = new BinaryFileResponse(PIMCORE_PATH . '/bundles/AdminBundle/public/img/filetype-not-supported.svg');
+            $response = new BinaryFileResponse(PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/filetype-not-supported.svg');
         }
 
         $this->addThumbnailCacheHeaders($response);
