@@ -718,6 +718,9 @@ class SettingsController extends AdminAbstractController
      */
     public function getAvailableSitesAction(Request $request): JsonResponse
     {
+        // we need to check documents permission for listing purposes in sites ext model & url-slugs
+        $this->checkPermission('documents');
+
         $excludeMainSite = $request->get('excludeMainSite');
 
         $sitesList = new Model\Site\Listing();
