@@ -370,6 +370,14 @@ pimcore.settings.translation.domain = Class.create({
                             let editor = column.getEditor();
                             let value = context.record.get(column.dataIndex);
                             editor.recordReference = context.record;
+
+                            value = Ext.util.Format.htmlDecode(value);
+
+                            if (value === '<p><br /></p>' || value === '<p><br data-mce-bogus="1"></p>'){
+                                value = '';   
+                            }
+                            context.record.set(column.dataIndex, value);
+                            
                             this.setValueStatus(editor, value);
                         }
                     }
