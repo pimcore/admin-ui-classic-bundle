@@ -1054,7 +1054,7 @@
  
      addSingleAsset: function (tree, record) {
          pimcore.helpers.assetSingleUploadDialog(record.data.id, "id", function (res) {
-             var f = this.addAssetComplete.bind(this, tree, record);
+             var f = this.addAssetComplete.bind(this, tree, record, {}, {}, res);
              f();
          }.bind(this), function (res) {
              var response = Ext.decode(res.response.responseText);
@@ -1062,7 +1062,7 @@
                  pimcore.helpers.showNotification(t("error"), response.message, "error",
                      res.response.responseText);
              }
-             var f = this.addAssetComplete.bind(this, tree, record);
+             var f = this.addAssetComplete.bind(this, tree, record, {}, {}, res);
              f();
          }.bind(this));
      },
@@ -1172,10 +1172,19 @@
      },
 
      addAssetComplete: function (tree, record, config, file, response) {
- 
          record.data.leaf = false;
          record.expand();
          pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
+
+         let res = Ext.decode(response.response.responseText);
+
+         const postAddAssetTree = new CustomEvent(pimcore.events.postAddAssetTree, {
+             detail: {
+                 id: res.id,
+                 parentId: record.get("id")
+             }
+         });
+         document.dispatchEvent(postAddAssetTree);
      },
  
      editAssetKey: function (tree, record) {

@@ -59,6 +59,12 @@
   * asset id is passed as parameter
   */
  pimcore.events.postDeleteAsset = "pimcore.asset.postDelete";
+
+/**
+ * after the asset is successfully added in the tree
+ * asset id and parent id is passed as parameter
+ */
+pimcore.events.postAddAssetTree = "pimcore.assetTree.postAdd";
  
  /**
   * before document is opened
@@ -98,7 +104,7 @@
  
  /**
   * after the document is successfully created in the tree
-  * document id is passed as parameter
+  * document id and parent id  is passed as parameter
   */
  pimcore.events.postAddDocumentTree = "pimcore.documentTree.postAdd";
  
@@ -140,7 +146,7 @@
  
  /**
   * after the object is successfully created in the tree
-  * object id is passed as parameter
+  * object id and parent id is passed as parameter
   */
  pimcore.events.postAddObjectTree = "pimcore.objectTree.postAdd";
  

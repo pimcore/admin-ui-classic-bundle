@@ -803,6 +803,7 @@ pimcore.elementservice.addDocumentComplete = function (options, response) {
                 const postAddDocumentTree = new CustomEvent(pimcore.events.postAddDocumentTree, {
                     detail: {
                         id: response.id,
+                        parentId: options.parentId
                     }
                 });
 
@@ -831,6 +832,7 @@ pimcore.elementservice.addObjectComplete = function(options, response) {
                     const postAddObjectTree = new CustomEvent(pimcore.events.postAddObjectTree, {
                         detail: {
                             id: rdata.id,
+                            parentId: options.parentId
                         }
                     });
 
