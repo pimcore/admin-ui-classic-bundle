@@ -658,12 +658,6 @@ pimcore.settings.translation.domain = Class.create({
                     if (key.getKey() == key.ENTER) {
                         return false;
                     }
-                },
-                change: function (field) {
-                    value = field.getValue();
-                    if (value === '<p><br /></p>' || value == '<p><br data-mce-bogus="1"></p>'){
-                        field.setValue('');
-                    }
                 }
             },
             triggers: {
