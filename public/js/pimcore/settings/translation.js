@@ -372,10 +372,6 @@ pimcore.settings.translation.domain = Class.create({
                             editor.recordReference = context.record;
 
                             value = Ext.util.Format.htmlDecode(value);
-
-                            if (value === '<p><br /></p>' || value === '<p><br data-mce-bogus="1"></p>'){
-                                value = '';   
-                            }
                             context.record.set(column.dataIndex, value);
                             
                             this.setValueStatus(editor, value);
@@ -661,6 +657,12 @@ pimcore.settings.translation.domain = Class.create({
                 keyup: function (field, key) {
                     if (key.getKey() == key.ENTER) {
                         return false;
+                    }
+                },
+                change: function (field) {
+                    value = field.getValue();
+                    if (value === '<p><br /></p>' || value == '<p><br data-mce-bogus="1"></p>'){
+                        field.setValue('');
                     }
                 }
             },
