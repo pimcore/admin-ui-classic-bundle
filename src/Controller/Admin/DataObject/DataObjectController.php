@@ -477,8 +477,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $objectData['general']['versionDate'] = $objectFromDatabase->getModificationDate();
             $objectData['general']['versionCount'] = $objectFromDatabase->getVersionCount();
 
-            $userOwnerName = $this->getUserName($objectData['general']['userOwner']);
-            $userModificationName = ($objectData['general']['userOwner'] == $objectData['general']['userModification']) ? $userOwnerName : $this->getUserName($objectData['general']['userModification']);
+            $userOwnerName = $this->getUserName($objectData['general']['userOwner'] ?? 0);
+            $userModificationName = ($objectData['general']['userOwner'] == $objectData['general']['userModification']) ? $userOwnerName : $this->getUserName($objectData['general']['userModification'] ?? 0);
             $objectData['general']['userOwnerUsername'] = $userOwnerName['userName'];
             $objectData['general']['userOwnerFullname'] = $userOwnerName['fullName'];
             $objectData['general']['userModificationUsername'] = $userModificationName['userName'];
