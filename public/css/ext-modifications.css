@@ -183,7 +183,7 @@
 }
 
 .x-tree-view .x-grid-cell-inner-treecolumn, .pimcore_document_seo_tree .x-grid-cell-inner  {
-    padding: 3px 6px 0 0;
+    padding: 3px 6px 3px 0;
     height: 24px;
 }
 
