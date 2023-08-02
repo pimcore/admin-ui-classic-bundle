@@ -559,7 +559,7 @@ pimcore.settings.website = Class.create({
             data: value,
             type: type,
             language: '',
-            siteId: 0
+            siteId: null
         });
 
         this.rowEditing.completeEdit();
