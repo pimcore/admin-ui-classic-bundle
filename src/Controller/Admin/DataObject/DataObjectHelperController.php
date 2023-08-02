@@ -1623,7 +1623,20 @@ class DataObjectHelperController extends AdminAbstractController
                             $existingData = $brick->$valueGetter();
                             $newData = $field->removeData($existingData, $newData);
                         }
-                        $brick->$valueSetter($newData);
+
+                        $localizedFields = $brickClass->getFieldDefinition('localizedfields');
+                        $isLocalizedField = false;
+                        if ($localizedFields instanceof DataObject\ClassDefinition\Data\Localizedfields) {
+                            if ($localizedFields->getFieldDefinition($brickKey)) {
+                                $isLocalizedField = true;
+                            }
+                        }
+
+                        if ($isLocalizedField) {
+                            $brick->$valueSetter($newData, $params['language']);
+                        } else {
+                            $brick->$valueSetter($newData);
+                        }
                     } else {
                         // everything else
                         $field = $class->getFieldDefinition($name);
