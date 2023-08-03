@@ -37,7 +37,7 @@ trait UserNameTrait
     }
 
     /**
-     * @param int $userId The User ID.
+     * @param int|null $userId The User ID.
      *
      * @return array{userName: string, fullName: string}
      */
