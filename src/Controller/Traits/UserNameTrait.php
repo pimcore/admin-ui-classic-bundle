@@ -43,13 +43,13 @@ trait UserNameTrait
      */
     protected function getUserName(?int $userId = null): array
     {
-        /** @var User|null $user */
         if ($userId === null) {
             return [
                 'userName' => '',
                 'fullName' => $this->translator->trans('user_unknown', [], 'admin'),
             ];
         }
+        
         $user = User::getById($userId);
 
         if (empty($user)) {
