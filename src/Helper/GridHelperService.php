@@ -680,7 +680,7 @@ class GridHelperService
     public function prepareAssetListingForGrid(array $allParams, User $adminUser): Model\Asset\Listing
     {
         $db = \Pimcore\Db::get();
-        $folder = Model\Asset::getById($allParams['folderId']);
+        $folder = Model\Asset::getById((int) $allParams['folderId']);
 
         $start = 0;
         $limit = null;
