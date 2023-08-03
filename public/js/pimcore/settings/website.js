@@ -557,7 +557,9 @@ pimcore.settings.website = Class.create({
         let res = store.add({
             name: key,
             data: value,
-            type: type
+            type: type,
+            language: '',
+            siteId: null
         });
 
         this.rowEditing.completeEdit();
