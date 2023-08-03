@@ -258,7 +258,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         $assets = [];
         $cv = [];
-        $asset = Asset::getById($allParams['node']);
+        $asset = Asset::getById((int) $allParams['node']);
 
         $filter = $request->get('filter');
         $limit = (int)$allParams['limit'];
