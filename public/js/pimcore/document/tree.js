@@ -1494,7 +1494,7 @@ pimcore.document.tree = Class.create({
             elementType: "document",
             elementSubType: record.data.type,
             id: record.data.id,
-            default: record.data.text
+            default: record.data.key
         };
         pimcore.elementservice.editElementKey(options);
     },
