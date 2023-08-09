@@ -49,7 +49,7 @@ trait UserNameTrait
                 'fullName' => $this->translator->trans('user_unknown', [], 'admin'),
             ];
         }
-        
+
         $user = User::getById($userId);
 
         if (empty($user)) {
