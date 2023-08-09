@@ -1164,8 +1164,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         $key = $values['key'] ?? null;
-        if($key) {
-            $key = Service::getValidKey($values['key'], 'object');
+        if ($key) {
+            $key = Service::getValidKey($key, 'object');
         }
 
         if ($object->isAllowed('settings')) {
