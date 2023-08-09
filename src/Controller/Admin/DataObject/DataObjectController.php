@@ -38,6 +38,7 @@ use Pimcore\Model\DataObject\ClassDefinition\Helper\OptionsProviderResolver;
 use Pimcore\Model\DataObject\ClassDefinition\PreviewGeneratorInterface;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -1161,8 +1162,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 return ['success' => false, 'message' => "You can't rename or relocate if there's a newer not published version"];
             }
         }
-
-        $key = $values['key'] ?? null;
+        
+        $key = Service::getValidKey($values['key'], 'object') ?? null;
 
         if ($object->isAllowed('settings')) {
             if ($key) {
