@@ -1162,8 +1162,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 return ['success' => false, 'message' => "You can't rename or relocate if there's a newer not published version"];
             }
         }
-        
-        $key = Service::getValidKey($values['key'], 'object') ?? null;
+
+        $key = $values['key'] ?? null;
+        if($key) {
+            $key = Service::getValidKey($values['key'], 'object');
+        }
 
         if ($object->isAllowed('settings')) {
             if ($key) {
