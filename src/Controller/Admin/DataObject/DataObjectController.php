@@ -37,6 +37,7 @@ use Pimcore\Model\DataObject\ClassDefinition\Helper\OptionsProviderResolver;
 use Pimcore\Model\DataObject\ClassDefinition\PreviewGeneratorInterface;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -1096,6 +1097,9 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         $key = $values['key'] ?? null;
+        if ($key) {
+            $key = Service::getValidKey($key, 'object');
+        }
 
         if ($object->isAllowed('settings')) {
             if ($key) {

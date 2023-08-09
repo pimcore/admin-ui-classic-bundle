@@ -37,27 +37,31 @@ trait UserNameTrait
     }
 
     /**
-     * @param int $userId The User ID.
+     * @param int|null $userId The User ID.
      *
      * @return array{userName: string, fullName: string}
      */
-    protected function getUserName(int $userId): array
+    protected function getUserName(?int $userId = null): array
     {
-        /** @var User|null $user */
-        $user = User::getById($userId);
-
-        if (empty($user)) {
-            $data = [
+        if ($userId === null) {
+            return [
                 'userName' => '',
                 'fullName' => $this->translator->trans('user_unknown', [], 'admin'),
             ];
-        } else {
-            $data = [
-                'userName' => $user->getName(),
-                'fullName' => (empty($user->getFullName()) ? $user->getName() : $user->getFullName()),
+        }
+
+        $user = User::getById($userId);
+
+        if (empty($user)) {
+            return [
+                'userName' => '',
+                'fullName' => $this->translator->trans('user_unknown', [], 'admin'),
             ];
         }
 
-        return $data;
+        return [
+            'userName' => $user->getName(),
+            'fullName' => (empty($user->getFullName()) ? $user->getName() : $user->getFullName()),
+        ];
     }
 }
