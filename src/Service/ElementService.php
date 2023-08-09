@@ -276,6 +276,9 @@ class ElementService implements ElementServiceInterface
         } elseif (method_exists($element, 'getDocumentTreeNodeConfig')) {
             $tmp = $element->getDocumentTreeNodeConfig();
             $tmpNode = array_merge($tmpNode, $tmp);
+        } elseif (method_exists($element, 'getTreeNodeConfig')) { //for BC reasons
+            $tmp = $element->getTreeNodeConfig();
+            $tmpNode = array_merge($tmpNode, $tmp);
         }
 
         $this->assignDocumentSpecificSettings($element, $tmpNode);
