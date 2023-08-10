@@ -12,10 +12,23 @@ const standardConfigs = [
         name: "admin",
         bundleName: "pimcoreadmin",
         configName: "pimcoreAdmin",
-        copyFiles: {
-            from: "node_modules/leaflet/dist/images",
-            to: "images/[path]/[name].[ext]"
-        }
+        copyFiles: [
+            {
+                from: "node_modules/leaflet/dist/images",
+                to: "images/[path]/[name].[ext]"
+            },
+            {
+                from: 'node_modules/ace-builds',
+                to: 'ace-builds/[path][name].[ext]',
+                includeSubdirectories: false,
+            },
+            {
+                from: 'node_modules/ace-builds/src-min-noconflict',
+                to: 'ace-builds/src-min-noconflict/[path][name].[ext]',
+                includeSubdirectories: true,
+                pattern: /.*/
+            }
+        ]
     }, {
         bundleFolderName: "AdminBundle",
         name: "imageEditor",
