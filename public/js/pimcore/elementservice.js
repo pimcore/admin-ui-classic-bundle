@@ -499,6 +499,16 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
+
+                        //trigger edit object key complete event
+                        const postEditObjectKey = new CustomEvent(pimcore.events.postEditObjectKey, {
+                            detail: {
+                                object: record,
+                                key: value
+                            }
+                        });
+
+                        document.dispatchEvent(postEditObjectKey);
                     }  else {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
                             t(rdata.message));
