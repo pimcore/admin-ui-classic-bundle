@@ -276,7 +276,7 @@ trait DataObjectActionsTrait
 
                 $fieldDefinition = $this->getFieldDefinition($class, $key);
                 if ($fieldDefinition && method_exists($fieldDefinition, 'getDataFromGridEditor')) {
-                    $value = $fieldDefinition->getDataFromGridEditor((string)$value, $object, []);
+                    $value = $fieldDefinition->getDataFromGridEditor($value, $object, []);
                 }
 
                 $objectData[$key] = $value;
