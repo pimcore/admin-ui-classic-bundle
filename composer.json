@@ -10,7 +10,7 @@
     }
   },
   "require": {
-    "pimcore/pimcore": "^11.0.6",
+    "pimcore/pimcore": "^11.0.7",
     "symfony/webpack-encore-bundle": "^1.7",
     "cbschuld/browser.php": "^1.9.6"
   },
