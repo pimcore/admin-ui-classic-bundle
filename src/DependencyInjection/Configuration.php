@@ -136,7 +136,11 @@ final class Configuration implements ConfigurationInterface
 
         $this->addAdminNode($rootNode);
 
-        ConfigurationHelper::addConfigLocationWithWriteTargetNodes($rootNode, ['admin_system_settings' => '/var/config/admin_system_settings'], ['read_target']);
+        ConfigurationHelper::addConfigLocationWithWriteTargetNodes(
+            $rootNode,
+            ['admin_system_settings' => PIMCORE_CONFIGURATION_DIRECTORY . '/admin_system_settings'],
+            ['read_target']
+        );
 
         return $treeBuilder;
     }
