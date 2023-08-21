@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\Command;
 use MatthiasMullie\Minify\JS;
 use Pimcore\Console\AbstractCommand;
 use Pimcore\Logger;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,12 +28,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @internal
  */
+#[AsCommand('pimcore:extjs')]
 class ExtJSCommand extends AbstractCommand
 {
     protected function configure(): void
     {
         $this
-            ->setName('pimcore:extjs')
             ->setHidden(true)
             ->setDescription('Regenerate minified ext-js file')
             ->addArgument(
