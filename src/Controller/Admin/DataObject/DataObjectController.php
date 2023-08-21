@@ -401,7 +401,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 }
             }
 
-            $this->getDataForObject($object, $objectFromVersion);
+            try {
+                $this->getDataForObject($object, $objectFromVersion);
+            } catch(\Throwable $e) {
+                $object = $objectFromDatabase;
+                $this->getDataForObject($object, false);
+            }
+
             $objectData['data'] = $this->objectData;
             $objectData['metaData'] = $this->metaData;
             $objectData['properties'] = Element\Service::minimizePropertiesForEditmode($object->getProperties());
@@ -519,7 +525,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         throw $this->createAccessDeniedHttpException();
     }
 
-    private function injectValuesForCustomLayout(array &$layout): void
+    private function injectValuesForCustomLayout(?array &$layout): void
     {
         foreach ($layout['children'] as &$child) {
             if ($child['datatype'] === 'layout') {
@@ -1365,7 +1371,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($request->get('data')) {
-            $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            try {
+                $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            } catch(\Throwable $e) {
+                $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
+            }
         }
 
         // general settings

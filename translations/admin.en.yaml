@@ -238,6 +238,8 @@ delete: Delete
 save: Save
 add_assets: 'Add Asset(s)'
 preview: Preview
+preview_generator_locale: Language
+preview_generator_site: Site
 advanced: Advanced
 basic: Basic
 list: List
