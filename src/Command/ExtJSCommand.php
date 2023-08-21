@@ -29,13 +29,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ExtJSCommand extends AbstractCommand
 {
-    protected static $defaultName = 'pimcore:extjs';
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function configure(): void
     {
         $this
