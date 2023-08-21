@@ -482,7 +482,7 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                 var index, record;
                 for (index = 0; index < affectedNodes.length; index++) {
                     record = affectedNodes[index];
-                    pimcore.elementservice.refreshNode(record);
+                    pimcore.elementservice.refreshNode(record.parentNode);
                 }
 
                 try {
@@ -576,7 +576,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
 
                     for (index = 0; index < affectedNodes.length; index++) {
                         record = affectedNodes[index];
-                        pimcore.elementservice.refreshNode(record);
+                        pimcore.elementservice.refreshNode(record.parentNode);
                     }
 
                     if (pimcore.globalmanager.exists("asset_" + id)) {
