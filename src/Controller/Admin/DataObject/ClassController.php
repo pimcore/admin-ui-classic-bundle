@@ -805,10 +805,10 @@ class ClassController extends AdminAbstractController implements KernelControlle
             if ($request->get('task') == 'add') {
                 // check for existing fieldcollection with same name with different lower/upper cases
                 $list = new DataObject\Fieldcollection\Definition\Listing();
-                $list = $list->load();
+                $list = $list->loadNames();
 
-                foreach ($list as $item) {
-                    if (strtolower($key) === strtolower($item->getKey())) {
+                foreach ($list as $fcName) {
+                    if (strtolower($key) === strtolower($fcName)) {
                         throw new \Exception('FieldCollection with the same name already exists (lower/upper cases may be different)');
                     }
                 }
@@ -1197,10 +1197,10 @@ class ClassController extends AdminAbstractController implements KernelControlle
             if ($request->get('task') == 'add') {
                 // check for existing brick with same name with different lower/upper cases
                 $list = new DataObject\Objectbrick\Definition\Listing();
-                $list = $list->load();
+                $list = $list->loadNames();
 
-                foreach ($list as $item) {
-                    if (strtolower($key) === strtolower($item->getKey())) {
+                foreach ($list as $brickName) {
+                    if (strtolower($key) === strtolower($brickName)) {
                         throw new \Exception('Brick with the same name already exists (lower/upper cases may be different)');
                     }
                 }
@@ -1747,15 +1747,15 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
         if ($this->getAdminUser()->isAllowed('fieldcollections')) {
             $fieldCollections = new DataObject\Fieldcollection\Definition\Listing();
-            $fieldCollections = $fieldCollections->loadNames();
+            $fieldCollections = $fieldCollections->load();
 
-            foreach ($fieldCollections as $fcName) {
+            foreach ($fieldCollections as $fieldCollection) {
                 $result[] = [
                     'icon' => 'fieldcollection',
                     'checked' => true,
                     'type' => 'fieldcollection',
-                    'name' => $fcName,
-                    'displayName' => $fcName,
+                    'name' => $fieldCollection->getKey(),
+                    'displayName' => $fieldCollection->getKey(),
                 ];
             }
         }
@@ -1779,15 +1779,15 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
         if ($this->getAdminUser()->isAllowed('objectbricks')) {
             $objectBricks = new DataObject\Objectbrick\Definition\Listing();
-            $objectBricks = $objectBricks->load();
+            $objectBricks = $objectBricks->loadNames();
 
-            foreach ($objectBricks as $objectBrick) {
+            foreach ($objectBricks as $brickName) {
                 $result[] = [
                     'icon' => 'objectbricks',
                     'checked' => true,
                     'type' => 'objectbrick',
-                    'name' => $objectBrick->getKey(),
-                    'displayName' => $objectBrick->getKey(),
+                    'name' => $brickName,
+                    'displayName' => $brickName,
                 ];
             }
         }
