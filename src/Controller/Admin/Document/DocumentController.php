@@ -19,11 +19,10 @@ use Exception;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
@@ -33,6 +32,7 @@ use Pimcore\Image\Chromium;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Site;
@@ -57,7 +57,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class DocumentController extends ElementControllerBase implements KernelControllerEventInterface
 {
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use UserNameTrait;
     use RecursionBlockingEventDispatchHelperTrait;
 
@@ -155,7 +155,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $offset = 0;
         }
 
-        $document = Document::getById($allParams['node']);
+        $document = Document::getById((int) $allParams['node']);
         if (!$document) {
             throw $this->createNotFoundException('Document was not found');
         }
@@ -164,7 +164,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $cv = [];
         if ($document->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             $db = Db::get();
@@ -213,7 +213,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $childrenList = $list->load();
 
             foreach ($childrenList as $childDocument) {
-                $documentTreeNode = $this->getTreeNodeConfig($childDocument);
+                $documentTreeNode = $this->elementService->getElementTreeNodeConfig($childDocument);
                 // the !isset is for printContainer case, there are no permissions sets there
                 if (!isset($documentTreeNode['permissions']['list']) || $documentTreeNode['permissions']['list'] == 1) {
                     $documents[] = $documentTreeNode;
@@ -1016,9 +1016,9 @@ class DocumentController extends ElementControllerBase implements KernelControll
                     if ($request->get('type') == 'child') {
                         $enableInheritance = ($request->get('enableInheritance') == 'true') ? true : false;
 
-                        $language = false;
-                        if (Tool::isValidLanguage($request->get('language'))) {
-                            $language = $request->get('language');
+                        $language = (string) $request->request->get('language') ?: null;
+                        if ($language && !Tool::isValidLanguage($language)) {
+                            throw new BadRequestHttpException('Invalid language: ' . $language);
                         }
 
                         $resetIndex = ($request->get('resetIndex') == 'true') ? true : false;
@@ -1254,7 +1254,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $service = new Document\Service();
 
-        $config = $this->getTreeNodeConfig($document);
+        $config = $this->elementService->getElementTreeNodeConfig($document);
 
         $translations = is_null($translations) ? $service->getTranslations($document) : $translations;
 
@@ -1448,5 +1448,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 }

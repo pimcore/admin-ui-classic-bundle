@@ -867,7 +867,7 @@ pimcore.layout.toolbar = Class.create({
                      iconCls: "pimcore_nav_icon_maintenance",
                      itemId: 'pimcore_menu_notifications_maintenance',
                      handler: function () {
-                         window.open('https://pimcore.com/docs/pimcore/11.0/Development_Documentation/Getting_Started/Installation.html#page_5-Maintenance-Cron-Job');
+                         window.open('https://pimcore.com/docs/platform/Pimcore/Getting_Started/Installation/Webserver_Installation#5-maintenance-cron-job');
                      }
                  });
                  pimcore.notification.helper.incrementCount();

@@ -373,7 +373,8 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             }
         }
 
-        return pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        return this.tabbar;
     },
 
     getLayoutToolbar: function () {

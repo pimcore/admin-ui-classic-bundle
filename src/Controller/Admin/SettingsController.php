@@ -25,6 +25,7 @@ use Pimcore\Db;
 use Pimcore\Event\SystemEvents;
 use Pimcore\Helper\StopMessengerWorkersTrait;
 use Pimcore\Localization\LocaleServiceInterface;
+use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
@@ -43,6 +44,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -718,6 +720,15 @@ class SettingsController extends AdminAbstractController
      */
     public function getAvailableSitesAction(Request $request): JsonResponse
     {
+        try {
+            // we need to check documents permission for listing purposes in sites ext model & url-slugs
+            $this->checkPermission('documents');
+        } catch (AccessDeniedHttpException $e) {
+            Logger::log('[Startup] Sites are not loaded as "documents" permission is missing');
+            //return empty string to avoid error on startup
+            return $this->adminJson([]);
+        }
+
         $excludeMainSite = $request->get('excludeMainSite');
 
         $sitesList = new Model\Site\Listing();

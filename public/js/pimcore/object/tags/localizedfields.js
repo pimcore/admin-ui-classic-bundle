@@ -72,28 +72,6 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
             }
         }
         this.fieldConfig = fieldConfig;
-
-        this.keysToWatch = [];
-
-        if (this.inherited) {
-            for (var i = 0; i < this.frontendLanguages.length; i++) {
-                var currentLanguage = this.frontendLanguages[i];
-
-                var metadataForLanguage = this.metaData[currentLanguage];
-                var dataKeys = Object.keys(metadataForLanguage);
-
-                for (var k = 0; k < dataKeys.length; k++) {
-                    var dataKey = dataKeys[k];
-                    var metadataForKey = metadataForLanguage[dataKey];
-                    if (metadataForKey.inherited) {
-                        this.keysToWatch.push({
-                            lang: currentLanguage,
-                            key: dataKey
-                        });
-                    }
-                }
-            }
-        }
     },
 
     hideLabels: function() {

@@ -1184,7 +1184,7 @@
              elementType: "asset",
              elementSubType: record.data.type,
              id: record.data.id,
-             default: Ext.util.Format.htmlDecode(record.data.text)
+             default: Ext.util.Format.htmlDecode(record.data.key)
          };
          pimcore.elementservice.editElementKey(options);
      },

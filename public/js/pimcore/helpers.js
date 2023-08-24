@@ -876,7 +876,22 @@ pimcore.helpers.download = function (url) {
         pimcore.settings.showCloseConfirmation = true;
     }, 1000);
 
-    location.href = url;
+    let iframe = document.getElementById('download_helper_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.setAttribute('id', 'download_helper_iframe');
+        document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+
+    iframe.onload = function() {
+        // if avoids infinity loop, which is caused by setting the src in the load function
+        if (iframe.src !== 'about:blank') {
+            const title = iframe.contentDocument.title;
+            pimcore.helpers.showNotification(t('error'), title, 'error');
+            iframe.src = 'about:blank'; //clear iframe because otherwise the error will stay in the dom
+        }
+    }
 };
 
 pimcore.helpers.getFileExtension = function (filename) {
@@ -3389,3 +3404,31 @@ pimcore.helpers.getTabBar = function (attributes) {
 
     return new Ext.TabPanel(tabAttr);
 }
+
+// Sends an Ajax request, it is recommended to be used when doing simple calls or to third-party services, in contrast to Ext.Ajax.request which, by default, sends extra info (eg. custom headers) that are usually needed to be working within Pimcore interface.
+pimcore.helpers.sendRequest = function (
+    method,
+    url,
+    successCallback = function (response) {},
+    failureCallback = function (response) {},
+    alwaysCallback = function (response) {}
+) {
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+            successCallback(this);
+        } else {
+            failureCallback(this);
+        }
+        alwaysCallback(this);
+    };
+
+    request.onerror = function () {
+        failureCallback(this);
+        alwaysCallback(this);
+    }
+
+    request.open(method, url);
+    request.send();
+};

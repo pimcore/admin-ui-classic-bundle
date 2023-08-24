@@ -313,7 +313,8 @@ pimcore.document.link = Class.create(pimcore.document.document, {
             items.push(this.workflows.getLayout());
         }
 
-        return pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        return this.tabbar;
     },
 
     getLayoutForm: function () {

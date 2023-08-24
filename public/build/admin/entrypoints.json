@@ -3,10 +3,11 @@
     "admin": {
       "js": [
         "/bundles/pimcoreadmin/build/admin/runtime.js",
+        "/bundles/pimcoreadmin/build/admin/47.js",
         "/bundles/pimcoreadmin/build/admin/admin.js"
       ],
       "css": [
-        "/bundles/pimcoreadmin/build/admin/835.css"
+        "/bundles/pimcoreadmin/build/admin/admin.css"
       ]
     }
   }

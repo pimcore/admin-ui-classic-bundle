@@ -16,11 +16,12 @@
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Bundle\PersonalizationBundle\Model\Document\Targeting\TargetingDocumentInterface;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -28,6 +29,7 @@ use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Document;
 use Pimcore\Model\Element;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Property;
 use Pimcore\Model\Version;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -43,7 +45,7 @@ use Symfony\Component\Routing\Annotation\Route;
 abstract class DocumentControllerBase extends AdminAbstractController implements KernelControllerEventInterface
 {
     use ApplySchedulerDataTrait;
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use ElementEditLockHelperTrait;
     use UserNameTrait;
 
@@ -60,6 +62,10 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     const TASK_AUTOSAVE = 'autosave';
 
     const TASK_DELETE = 'delete';
+
+    public function __construct(protected ElementServiceInterface $elementService)
+    {
+    }
 
     /**
      * @param array $data
@@ -437,5 +443,10 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $data['userOwnerFullname'] = $userOwnerName['fullName'];
         $data['userModificationUsername'] = $userModificationName['userName'];
         $data['userModificationFullname'] = $userModificationName['fullName'];
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 }

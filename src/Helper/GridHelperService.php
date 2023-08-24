@@ -21,7 +21,6 @@ use League\Flysystem\FilesystemOperator;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Pimcore\Db;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\DataObject;
@@ -342,7 +341,9 @@ class GridHelperService
                         }
                     }
                 } elseif ($filter['property'] !== 'fullpath') {
-                    $conditionPartsFilters[] = $filter['property'] . ' IS NULL OR ' . $filter['property'] . " = ''";
+                    $conditionPartsFilters[] =
+                        $db->quoteIdentifier($filter['property']) . ' IS NULL OR ' .
+                        $db->quoteIdentifier($filter['property']) . " = ''";
                 }
             }
         }
@@ -552,15 +553,16 @@ class GridHelperService
                     if (strpos($orderKey, '?') !== false) {
                         $brickDescriptor = substr($orderKeyParts[0], 1);
                         $brickDescriptor = json_decode($brickDescriptor, true);
-                        $db = Db::get();
-                        $orderKey = $db->quoteIdentifier($brickDescriptor['containerKey'] . '_localized') . '.' . $db->quoteIdentifier($brickDescriptor['brickfield']);
+                        $orderKey = $list->quoteIdentifier($brickDescriptor['containerKey'] . '_localized')
+                            . '.' . $list->quoteIdentifier($brickDescriptor['brickfield']);
                         $doNotQuote = true;
                     } elseif (count($orderKeyParts) === 2) {
-                        $orderKey = $orderKeyParts[0].'.'.$orderKeyParts[1];
+                        $orderKey = $list->quoteIdentifier($orderKeyParts[0])
+                            . '.' . $list->quoteIdentifier($orderKeyParts[1]);
                         $doNotQuote = true;
                     }
                 } else {
-                    $orderKey = $list->getDao()->getTableName().'.'.$orderKey;
+                    $orderKey = $list->getDao()->getTableName() . '.' . $list->quoteIdentifier($orderKey);
                     $doNotQuote = true;
                 }
             }
@@ -678,7 +680,7 @@ class GridHelperService
     public function prepareAssetListingForGrid(array $allParams, User $adminUser): Model\Asset\Listing
     {
         $db = \Pimcore\Db::get();
-        $folder = Model\Asset::getById($allParams['folderId']);
+        $folder = Model\Asset::getById((int) $allParams['folderId']);
 
         $start = 0;
         $limit = null;

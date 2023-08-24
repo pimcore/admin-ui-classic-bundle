@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
@@ -38,6 +37,7 @@ use Pimcore\Model\DataObject\ClassDefinition\Helper\OptionsProviderResolver;
 use Pimcore\Model\DataObject\ClassDefinition\PreviewGeneratorInterface;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -101,7 +101,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $offset = (int)$request->get('start');
             $limit = (int)$request->get('limit', 100000000);
             if ($view = $request->get('view', '')) {
-                $cv = ElementService::getCustomViewById($request->get('view'));
+                $cv = $this->elementService->getCustomViewById($request->get('view'));
             }
 
             if (!is_null($filter)) {
@@ -189,7 +189,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         // custom views start
         if ($view) {
-            $cv = ElementService::getCustomViewById($view);
+            $cv = $this->elementService->getCustomViewById($view);
 
             if (!empty($cv['classes'])) {
                 $cvConditions = [];
@@ -235,73 +235,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var DataObject $child */
-        $child = $element;
-
-        $tmpObject = [
-            'id' => $child->getId(),
-            'idx' => $child->getIndex(),
-            'key' => $child->getKey(),
-            'sortBy' => $child->getChildrenSortBy(),
-            'sortOrder' => $child->getChildrenSortOrder(),
-            'text' => htmlspecialchars($child->getKey()),
-            'type' => $child->getType(),
-            'path' => $child->getRealFullPath(),
-            'basePath' => $child->getRealPath(),
-            'elementType' => 'object',
-            'locked' => $child->isLocked(),
-            'lockOwner' => $child->getLocked() ? true : false,
-        ];
-
-        $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
-        if ($child instanceof DataObject\Concrete && $child->getClass()->getShowVariants()) {
-            $allowedTypes[] = DataObject::OBJECT_TYPE_VARIANT;
-        }
-
-        $hasChildren = $child->getDao()->hasChildren($allowedTypes, null, $this->getAdminUser());
-
-        $tmpObject['allowDrop'] = false;
-
-        $tmpObject['isTarget'] = true;
-        if ($tmpObject['type'] != DataObject::OBJECT_TYPE_VARIANT) {
-            $tmpObject['allowDrop'] = true;
-        }
-
-        $tmpObject['allowChildren'] = true;
-        $tmpObject['leaf'] = !$hasChildren;
-        $tmpObject['cls'] = 'pimcore_class_icon ';
-
-        if ($child instanceof DataObject\Concrete) {
-            $tmpObject['published'] = $child->isPublished();
-            $tmpObject['className'] = $child->getClass()->getName();
-
-            if (!$child->isPublished()) {
-                $tmpObject['cls'] .= 'pimcore_unpublished ';
-            }
-
-            $tmpObject['allowVariants'] = $child->getClass()->getAllowVariants();
-        }
-
-        $this->addAdminStyle($child, ElementAdminStyleEvent::CONTEXT_TREE, $tmpObject);
-
-        $tmpObject['expanded'] = !$hasChildren;
-        $tmpObject['permissions'] = $child->getUserPermissions($this->getAdminUser());
-
-        if ($child->isLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($child->getLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        if ($tmpObject['leaf']) {
-            $tmpObject['expandable'] = false;
-            $tmpObject['leaf'] = false; //this is required to allow drag&drop
-            $tmpObject['expanded'] = true;
-            $tmpObject['loaded'] = true;
-        }
-
-        return $tmpObject;
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**
@@ -467,7 +401,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 }
             }
 
-            $this->getDataForObject($object, $objectFromVersion);
+            try {
+                $this->getDataForObject($object, $objectFromVersion);
+            } catch(\Throwable $e) {
+                $object = $objectFromDatabase;
+                $this->getDataForObject($object, false);
+            }
+
             $objectData['data'] = $this->objectData;
             $objectData['metaData'] = $this->metaData;
             $objectData['properties'] = Element\Service::minimizePropertiesForEditmode($object->getProperties());
@@ -585,7 +525,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         throw $this->createAccessDeniedHttpException();
     }
 
-    private function injectValuesForCustomLayout(array &$layout): void
+    private function injectValuesForCustomLayout(?array &$layout): void
     {
         foreach ($layout['children'] as &$child) {
             if ($child['datatype'] === 'layout') {
@@ -1163,6 +1103,9 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         $key = $values['key'] ?? null;
+        if ($key) {
+            $key = Service::getValidKey($key, 'object');
+        }
 
         if ($object->isAllowed('settings')) {
             if ($key) {
@@ -1428,7 +1371,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($request->get('data')) {
-            $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            try {
+                $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            } catch(\Throwable $e) {
+                $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
+            }
         }
 
         // general settings
@@ -1493,8 +1440,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 'treeData' => $treeData,
             ]);
         } elseif ($request->get('task') == 'session') {
-            //TODO https://github.com/pimcore/pimcore/issues/9536
-            DataObject\Service::saveElementToSession($object, $request->getSession()->getId(), '', false);
+            DataObject\Service::saveElementToSession($object, $request->getSession()->getId(), '');
 
             return $this->adminJson(['success' => true]);
         } elseif ($request->get('task') == 'scheduler') {

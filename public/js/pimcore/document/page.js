@@ -118,7 +118,8 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        return pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
+        this.tabbar = pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
+        return this.tabbar;
     },
 
     getSaveData : function (only) {
