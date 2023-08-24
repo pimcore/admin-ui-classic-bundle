@@ -38,15 +38,11 @@
         <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer" title="Edge"><img src="/bundles/pimcoreadmin/img/login/edge.svg" alt="Edge"/></a>
     </div>
 
-    <a href="#" onclick="showLogin();">{{ 'Click here to proceed'|trans([], 'admin') }}</a>
+    <a id="proceed_with_unsupported_browser" href="#" >{{ 'Click here to proceed'|trans([], 'admin') }}</a>
 </div>
 
-<script type="text/javascript">
-    function showLogin() {
-        document.getElementById('loginform').style.display = 'block';
-        document.getElementById('browserinfo').style.display = 'none';
-    }
-</script>
+<script src="/bundles/pimcoreadmin/js/pimcore/browserNotSupported.js"></script>
+
 <style type="text/css">
     #loginform {
         display: none;
