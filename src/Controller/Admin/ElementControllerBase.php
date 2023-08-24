@@ -56,10 +56,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -84,11 +80,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

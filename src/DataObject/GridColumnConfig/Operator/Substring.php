@@ -39,9 +39,6 @@ final class Substring extends AbstractOperator
         $this->ellipses = $config->ellipses ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

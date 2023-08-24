@@ -38,19 +38,9 @@ class GridConfigFavourite extends AbstractModel
 
     /**
      * enum('asset','object')
-     *
-     * @var string
      */
     protected string $type;
 
-    /**
-     * @param int $ownerId
-     * @param string $classId
-     * @param int|null $objectId
-     * @param string|null $searchType
-     *
-     * @return GridConfigFavourite|null
-     */
     public static function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, int $objectId = null, ?string $searchType = ''): ?GridConfigFavourite
     {
         try {
@@ -131,8 +121,6 @@ class GridConfigFavourite extends AbstractModel
 
     /**
      * enum('asset','object')
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -141,8 +129,6 @@ class GridConfigFavourite extends AbstractModel
 
     /**
      * enum('asset','object')
-     *
-     * @param string $type
      */
     public function setType(string $type): void
     {

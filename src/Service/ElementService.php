@@ -48,10 +48,6 @@ class ElementService implements ElementServiceInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @return array|null
-     *
      * @internal
      */
     public function getCustomViewById(string $id): ?array

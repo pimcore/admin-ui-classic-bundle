@@ -85,7 +85,6 @@ final class AdminConfig
     }
 
     /**
-     *
      * @internal
      */
     public function getAdminSystemSettingsConfig(): array
@@ -101,7 +100,6 @@ final class AdminConfig
     }
 
     /**
-     *
      * @internal
      */
     public function setAdminSystemSettingsConfig(array $config): void

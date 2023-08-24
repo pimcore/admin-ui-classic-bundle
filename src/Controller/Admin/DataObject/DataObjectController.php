@@ -74,11 +74,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/tree-get-children-by-id", name="treegetchildrenbyid", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -227,10 +222,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @param ElementInterface $element
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
@@ -240,10 +231,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/get-id-path-paging-info", name="getidpathpaginginfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getIdPathPagingInfoAction(Request $request): JsonResponse
     {
@@ -289,12 +276,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/get", name="get", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param PreviewGeneratorInterface $defaultPreviewGenerator
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -543,10 +524,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/get-select-options", name="getSelectOptions", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getSelectOptions(Request $request): JsonResponse
@@ -748,11 +725,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/get-folder", name="getfolder", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function getFolderAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -824,8 +796,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @param DataObject\ClassDefinition[] $classes
-     *
-     * @return array
      */
     protected function prepareChildClasses(array $classes): array
     {
@@ -843,11 +813,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/add", name="add", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Model\FactoryInterface $modelFactory
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request, Model\FactoryInterface $modelFactory): JsonResponse
     {
@@ -918,10 +883,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/add-folder", name="addfolder", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addFolderAction(Request $request): JsonResponse
     {
@@ -955,10 +916,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/delete", name="delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1007,10 +964,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/change-children-sort-by", name="changechildrensortby", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function changeChildrenSortByAction(Request $request): JsonResponse
@@ -1050,10 +1003,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/update", name="update", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1332,10 +1281,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/save", name="save", methods={"POST", "PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request): JsonResponse
@@ -1487,13 +1432,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @param Request $request
-     * @param DataObject\Concrete $object
-     * @param int $originalModificationDate
-     * @param array $data
-     *
-     * @return bool
-     *
      * @throws \Exception
      */
     protected function performFieldcollectionModificationCheck(Request $request, DataObject\Concrete $object, int $originalModificationDate, array $data): bool
@@ -1525,10 +1463,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/save-folder", name="savefolder", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function saveFolderAction(Request $request): JsonResponse
     {
@@ -1595,10 +1529,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/publish-version", name="publishversion", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function publishVersionAction(Request $request): JsonResponse
     {
@@ -1638,11 +1568,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/preview-version", name="previewversion", methods={"GET"})
      *
-     * @param Request $request
-     *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function previewVersionAction(Request $request): Response
     {
@@ -1678,12 +1604,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="diffversions", methods={"GET"})
-     *
-     * @param Request $request
-     * @param int $from
-     * @param int $to
-     *
-     * @return Response
      *
      * @throws \Exception
      */
@@ -1738,14 +1658,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/grid-proxy", name="gridproxy", methods={"GET", "POST", "PUT"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param GridHelperService $gridHelperService
-     * @param LocaleServiceInterface $localeService
-     * @param CsrfProtectionHandler $csrfProtection
-     *
-     * @return JsonResponse
      */
     public function gridProxyAction(
         Request $request,
@@ -1784,10 +1696,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/copy-info", name="copyinfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyInfoAction(Request $request): JsonResponse
     {
@@ -1875,10 +1783,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/copy-rewrite-ids", name="copyrewriteids", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function copyRewriteIdsAction(Request $request): JsonResponse
@@ -1917,10 +1821,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/copy", name="copy", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyAction(Request $request): JsonResponse
     {
@@ -1986,11 +1886,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/preview", name="preview", methods={"GET"})
-     *
-     * @param Request $request
-     * @param PreviewGeneratorInterface $defaultPreviewGenerator
-     *
-     * @return Response|RedirectResponse
      */
     public function previewAction(Request $request, PreviewGeneratorInterface $defaultPreviewGenerator): RedirectResponse|Response
     {

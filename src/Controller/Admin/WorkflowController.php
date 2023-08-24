@@ -57,8 +57,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      * Returns a JSON of the available workflow actions to the admin panel
      *
      * @Route("/get-workflow-form", name="pimcore_admin_workflow_getworkflowform")
-     *
-     *
      */
     public function getWorkflowFormAction(Request $request, Manager $workflowManager): JsonResponse
     {
@@ -102,8 +100,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
 
     /**
      * @Route("/submit-workflow-transition", name="pimcore_admin_workflow_submitworkflowtransition", methods={"POST"})
-     *
-     *
      */
     public function submitWorkflowTransitionAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
     {
@@ -158,8 +154,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
 
     /**
      * @Route("/submit-global-action", name="pimcore_admin_workflow_submitglobal", methods={"POST"})
-     *
-     *
      */
     public function submitGlobalAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
     {
@@ -254,11 +248,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      *
      * @Route("/show-graph", name="pimcore_admin_workflow_show_graph")
      *
-     * @param Request $request
-     * @param Manager $workflowManager
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
     public function showGraph(Request $request, Manager $workflowManager): Response
@@ -275,12 +264,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      * Get custom HTML for the workflow transition submit modal, depending whether it is configured or not.
      *
      * @Route("/modal-custom-html", name="pimcore_admin_workflow_modal_custom_html", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Registry $workflowRegistry
-     * @param Manager $manager
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -407,8 +390,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     }
 
     /**
-     * @param ControllerEvent $event
-     *
      * @throws \Exception
      */
     public function onKernelControllerEvent(ControllerEvent $event): void

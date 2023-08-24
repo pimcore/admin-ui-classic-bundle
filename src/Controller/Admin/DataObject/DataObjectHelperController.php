@@ -56,10 +56,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/load-object-data", name="loadobjectdata", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function loadObjectDataAction(Request $request): JsonResponse
     {
@@ -76,13 +72,6 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($result);
     }
 
-    /**
-     * @param int $userId
-     * @param string $classId
-     * @param string|null $searchType
-     *
-     * @return array
-     */
     public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType = null): array
     {
         $db = Db::get();
@@ -111,13 +100,6 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @param User $user
-     * @param string $classId
-     * @param string|null $searchType
-     *
-     * @return array
-     */
     public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
     {
         $configListing = [];
@@ -155,10 +137,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-export-configs", name="getexportconfigs", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getExportConfigsAction(Request $request): JsonResponse
     {
@@ -190,12 +168,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-delete-column-config", name="griddeletecolumnconfig", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function gridDeleteColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
@@ -229,12 +201,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-get-column-config", name="gridgetcolumnconfig", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function gridGetColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
@@ -635,15 +601,7 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param DataObject\ClassDefinition\Data $field
      * @param DataObject\ClassDefinition\Data[] $brickFields
-     * @param array $availableFields
-     * @param string $gridType
-     * @param int $count
-     * @param string $brickType
-     * @param DataObject\ClassDefinition $class
-     * @param int $objectId
-     * @param array|null $context
      */
     protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, array $context = null): void
     {
@@ -724,10 +682,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/prepare-helper-column-configs", name="preparehelpercolumnconfigs", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
@@ -758,10 +712,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-config-apply-to-all", name="gridconfigapplytoall", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridConfigApplyToAllAction(Request $request): JsonResponse
     {
@@ -787,10 +737,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-mark-favourite-column-config", name="gridmarkfavouritecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
@@ -875,10 +821,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-save-column-config", name="gridsavecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
@@ -970,9 +912,6 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     *
      * @throws \Exception
      */
     protected function updateGridConfigShares(?GridConfig $gridConfig, array $metadata): void
@@ -1011,10 +950,6 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     * @param int $objectId
-     *
      * @throws \Exception
      */
     protected function updateGridConfigFavourites(?GridConfig $gridConfig, array $metadata, int $objectId): void
@@ -1115,17 +1050,6 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @param DataObject\ClassDefinition\Data $field
-     * @param string $gridType
-     * @param string $position
-     * @param bool $force
-     * @param string|null $keyPrefix
-     * @param DataObject\ClassDefinition|null $class
-     * @param int|null $objectId
-     *
-     * @return array|null
-     */
     protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, string $keyPrefix = null, DataObject\ClassDefinition $class = null, int $objectId = null): ?array
     {
         $key = $keyPrefix . $field->getName();
@@ -1196,10 +1120,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/import-upload", name="importupload", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function importUploadAction(Request $request, Filesystem $filesystem): JsonResponse
     {
@@ -1246,12 +1166,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-export-jobs", name="getexportjobs", methods={"POST"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1282,12 +1196,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/do-export", name="doexport", methods={"POST"})
-     *
-     * @param Request $request
-     * @param LocaleServiceInterface $localeService
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1397,16 +1305,13 @@ class DataObjectHelperController extends AdminAbstractController
     public function encodeFunc(string $value): string
     {
         $value = str_replace('"', '""', $value);
+
         //force wrap value in quotes and return
         return '"' . $value . '"';
     }
 
     /**
      * @Route("/download-csv-file", name="downloadcsvfile", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function downloadCsvFileAction(Request $request): Response
     {
@@ -1435,11 +1340,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/download-xlsx-file", name="downloadxlsxfile", methods={"GET"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     *
-     * @return BinaryFileResponse
      */
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
@@ -1458,10 +1358,6 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * Flattens object data to an array with key=>value where
      * value is simply a string representation of the value (for objects, hrefs and assets the full path is used)
-     *
-     * @param DataObject\Concrete $object
-     *
-     * @return array
      */
     protected function csvObjectData(DataObject\Concrete $object): array
     {
@@ -1481,8 +1377,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-batch-jobs", name="getbatchjobs", methods={"POST"})
-     *
-     *
      */
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
@@ -1500,10 +1394,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/batch", name="batch", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function batchAction(Request $request): JsonResponse
     {
@@ -1713,10 +1603,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-available-visible-vields", name="getavailablevisiblefields", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAvailableVisibleFieldsAction(Request $request): JsonResponse
     {
@@ -1789,7 +1675,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @param DataObject\ClassDefinition\Data[] $fds
-     * @param bool $firstOne
      * @param DataObject\ClassDefinition\Data[] $commonFields
      */
     protected function processAvailableFieldDefinitions(array $fds, bool &$firstOne, array &$commonFields): void

@@ -35,10 +35,6 @@ class QuantityValueController extends AdminAbstractController
     /**
      * @Route("/unit-proxy", name="unitproxyget", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function unitProxyGetAction(Request $request): JsonResponse
@@ -93,10 +89,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-proxy", name="unitproxy", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -169,10 +161,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-list", name="unitlist", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function unitListAction(Request $request): JsonResponse
     {
@@ -213,11 +201,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/convert", name="convert", methods={"GET"})
-     *
-     * @param Request $request
-     * @param UnitConversionService $conversionService
-     *
-     * @return JsonResponse
      */
     public function convertAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
@@ -243,11 +226,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/convert-all", name="convertall", methods={"GET"})
-     *
-     * @param Request $request
-     * @param UnitConversionService $conversionService
-     *
-     * @return JsonResponse
      */
     public function convertAllAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {

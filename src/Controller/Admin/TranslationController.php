@@ -52,11 +52,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/import", name="pimcore_admin_translation_import", methods={"POST"})
-     *
-     * @param Request $request
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
      */
     public function importAction(Request $request, LocaleServiceInterface $localeService): JsonResponse
     {
@@ -121,10 +116,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/upload-import", name="pimcore_admin_translation_uploadimportfile", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function uploadImportFileAction(Request $request, Filesystem $filesystem): JsonResponse
     {
@@ -157,10 +148,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/export", name="pimcore_admin_translation_export", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function exportAction(Request $request): Response
     {
@@ -294,10 +281,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/add-admin-translation-keys", name="pimcore_admin_translation_addadmintranslationkeys", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAdminTranslationKeysAction(Request $request): JsonResponse
     {
@@ -339,10 +322,7 @@ class TranslationController extends AdminAbstractController
     /**
      * @Route("/translations", name="pimcore_admin_translation_translations", methods={"POST"})
      *
-     * @param Request $request
      * @param Translator $translator
-     *
-     * @return JsonResponse
      */
     public function translationsAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
@@ -679,10 +659,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/cleanup", name="pimcore_admin_translation_cleanup", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function cleanupAction(Request $request): JsonResponse
     {
@@ -705,10 +681,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/content-export-jobs", name="pimcore_admin_translation_contentexportjobs", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function contentExportJobsAction(Request $request): JsonResponse
     {
@@ -821,10 +793,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/merge-item", name="pimcore_admin_translation_mergeitem", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function mergeItemAction(Request $request): JsonResponse
     {
@@ -849,10 +817,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/get-website-translation-languages", name="pimcore_admin_translation_getwebsitetranslationlanguages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getWebsiteTranslationLanguagesAction(Request $request): JsonResponse
     {
@@ -869,10 +833,6 @@ class TranslationController extends AdminAbstractController
 
     /**
      * @Route("/get-translation-domains", name="pimcore_admin_translation_gettranslationdomains", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getTranslationDomainsAction(Request $request): JsonResponse
     {

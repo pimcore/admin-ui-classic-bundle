@@ -177,11 +177,11 @@ trait DataObjectActionsTrait
         foreach ($data as $key => $value) {
             $parts = explode('~', $key);
             if (substr($key, 0, 1) == '~') {
-                list(, $type, $field, $keyId) = $parts;
+                [, $type, $field, $keyId] = $parts;
 
                 if ($type == 'classificationstore') {
                     $groupKeyId = array_map('intval', explode('-', $keyId));
-                    list($groupId, $keyId) = $groupKeyId;
+                    [$groupId, $keyId] = $groupKeyId;
 
                     $getter = 'get' . ucfirst($field);
                     if (method_exists($object, $getter)) {
