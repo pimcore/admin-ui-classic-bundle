@@ -15,7 +15,7 @@
 pimcore.registerNS("pimcore.helpers.x");
 
 pimcore.helpers.sanitizeEmail = function (email) {
-    return email.replace(/[^a-zA-Z0-9_\-@.+]/g, '');
+    return email.replace(/[^a-zA-Z0-9_\-@.+]/g,'');
 };
 
 pimcore.helpers.sanitizeUrlSlug = function (slug) {
@@ -77,7 +77,8 @@ pimcore.helpers.openWelcomePage = function (keyCode, e) {
 
     try {
         pimcore.globalmanager.get("layout_portal_welcome").activate();
-    } catch (e) {
+    }
+    catch (e) {
         pimcore.globalmanager.add("layout_portal_welcome", new pimcore.layout.portal());
     }
 };
@@ -88,7 +89,8 @@ pimcore.helpers.openAsset = function (id, type, options) {
 
         if (!pimcore.asset[type]) {
             pimcore.globalmanager.add("asset_" + id, new pimcore.asset.unknown(id, options));
-        } else {
+        }
+        else {
             pimcore.globalmanager.add("asset_" + id, new pimcore.asset[type](id, options));
         }
 
@@ -101,7 +103,8 @@ pimcore.helpers.openAsset = function (id, type, options) {
             }
         }
 
-    } else {
+    }
+    else {
         pimcore.globalmanager.get("asset_" + id).activate();
     }
 };
@@ -135,7 +138,8 @@ pimcore.helpers.openDocument = function (id, type, options) {
                 }
             }
         }
-    } else {
+    }
+    else {
         pimcore.globalmanager.get("document_" + id).activate();
     }
 };
@@ -172,7 +176,8 @@ pimcore.helpers.openObject = function (id, type, options) {
                 element.setAddToHistory(false);
             }
         }
-    } else {
+    }
+    else {
         var tab = pimcore.globalmanager.get("object_" + id);
         tab.activate();
     }
@@ -302,7 +307,8 @@ pimcore.helpers.recordElement = function (id, type, name) {
             historyPanel.store.insert(0, thePair);
             historyPanel.resultpanel.getView().refresh();
         }
-    } catch (e) {
+    }
+    catch (e) {
         console.log(e);
     }
 
@@ -312,9 +318,11 @@ pimcore.helpers.openElement = function (idOrPath, type, subtype) {
     if (typeof subtype != "undefined" && subtype !== null) {
         if (type == "document") {
             pimcore.helpers.openDocument(idOrPath, subtype);
-        } else if (type == "asset") {
+        }
+        else if (type == "asset") {
             pimcore.helpers.openAsset(idOrPath, subtype);
-        } else if (type == "object") {
+        }
+        else if (type == "object") {
             pimcore.helpers.openObject(idOrPath, subtype);
         }
     } else {
@@ -339,9 +347,11 @@ pimcore.helpers.openElement = function (idOrPath, type, subtype) {
 pimcore.helpers.closeElement = function (id, type) {
     if (type == "document") {
         pimcore.helpers.closeDocument(id);
-    } else if (type == "asset") {
+    }
+    else if (type == "asset") {
         pimcore.helpers.closeAsset(id);
-    } else if (type == "object") {
+    }
+    else if (type == "object") {
         pimcore.helpers.closeObject(id);
     }
 };
@@ -395,7 +405,7 @@ pimcore.helpers.treeNodeLoadingIndicatorTimeouts = {};
 
 pimcore.helpers.addTreeNodeLoadingIndicator = function (type, id, disableExpander) {
 
-    if (disableExpander !== false) {
+    if(disableExpander !== false) {
         disableExpander = true;
     }
 
@@ -406,7 +416,7 @@ pimcore.helpers.addTreeNodeLoadingIndicator = function (type, id, disableExpande
             var iconEl = iconEls[index];
             if (iconEl) {
                 iconEl.addCls("pimcore_tree_node_loading_indicator");
-                if (disableExpander) {
+                if(disableExpander) {
                     iconEl.up('.x-grid-cell').addCls('pimcore_treenode_hide_plus_button');
                 }
             }
@@ -445,7 +455,8 @@ pimcore.helpers.hasTreeNodeLoadingIndicator = function (type, id) {
 pimcore.helpers.openSeemode = function () {
     if (pimcore.globalmanager.exists("pimcore_seemode")) {
         pimcore.globalmanager.get("pimcore_seemode").start();
-    } else {
+    }
+    else {
         pimcore.globalmanager.add("pimcore_seemode", new pimcore.document.seemode());
     }
 };
@@ -498,7 +509,7 @@ pimcore.helpers.showNotification = function (title, text, type, detailText, hide
         if (detailText) {
             detailText =
                 '<pre style="font-size:11px;word-wrap: break-word;">'
-                + strip_tags(detailText) +
+                    + strip_tags(detailText) +
                 "</pre>";
         }
 
@@ -593,10 +604,12 @@ pimcore.helpers.rename = function (keyCode, e) {
         if (el.document && el.document.rename) {
             el.document.rename();
 
-        } else if (el.object && el.object.rename) {
+        }
+        else if (el.object && el.object.rename) {
             el.object.rename();
 
-        } else if (el.asset && el.asset.rename) {
+        }
+        else if (el.asset && el.asset.rename) {
             el.asset.rename();
         }
     }
@@ -618,13 +631,15 @@ pimcore.helpers.togglePublish = function (publish, keyCode, e) {
             } else {
                 el.document.unpublish();
             }
-        } else if (el.object) {
+        }
+        else if (el.object) {
             if (publish) {
                 el.object.publish();
             } else {
                 el.object.unpublish();
             }
-        } else if (el.asset) {
+        }
+        else if (el.asset) {
             el.asset.save();
         }
     }
@@ -647,13 +662,15 @@ pimcore.helpers.handleCtrlS = function (keyCode, e) {
             } else {
                 el.document.save('version');
             }
-        } else if (el.object) {
+        }
+        else if (el.object) {
             if (el.object.data.general.published) {
                 el.object.publish();
             } else {
                 el.object.save('version');
             }
-        } else if (el.asset) {
+        }
+        else if (el.asset) {
             el.asset.save();
         }
     }
@@ -709,7 +726,8 @@ pimcore.helpers.handleF5 = function (keyCode, e) {
         if (activeTab.initialConfig.document) {
             activeTab.initialConfig.document.reload();
             return;
-        } else if (activeTab.initialConfig.object) {
+        }
+        else if (activeTab.initialConfig.object) {
             activeTab.initialConfig.object.reload();
             return;
         }
@@ -814,7 +832,7 @@ pimcore.helpers.hasSearchImplementation = function () {
 }
 
 pimcore.helpers.getObjectRelationInlineSearchRoute = function () {
-    if (pimcore.helpers.hasSearchImplementation()) {
+    if(pimcore.helpers.hasSearchImplementation()) {
         return pimcore.globalmanager.get('searchImplementationRegistry').getObjectRelationInlineSearchRoute();
     }
 
@@ -866,7 +884,7 @@ pimcore.helpers.download = function (url) {
     }
     iframe.src = url;
 
-    iframe.onload = function () {
+    iframe.onload = function() {
         // if avoids infinity loop, which is caused by setting the src in the load function
         if (iframe.src !== 'about:blank') {
             const title = iframe.contentDocument.title;
@@ -983,7 +1001,7 @@ pimcore.helpers.assetSingleUploadDialog = function (parent, parentType, success,
         url += "&context=" + Ext.encode(context);
     }
 
-    if (uploadAssetType) {
+    if(uploadAssetType) {
         url += "&uploadAssetType=" + uploadAssetType;
     }
 
@@ -1022,8 +1040,8 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
     if (description) {
         items.push({
-            xtype: 'displayfield',
-            value: description
+           xtype: 'displayfield',
+           value: description
         });
     }
 
@@ -1039,7 +1057,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         },
         listeners: {
             change: function (fileUploadField) {
-                if (fileUploadField.fileInputEl.dom.files[0].size > pimcore.settings["upload_max_filesize"]) {
+                if(fileUploadField.fileInputEl.dom.files[0].size > pimcore.settings["upload_max_filesize"]) {
                     pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + fileUploadField.fileInputEl.dom.files[0].name, "error");
                     return;
                 }
@@ -1185,7 +1203,7 @@ pimcore.helpers.treeNodeThumbnailPreview = function (treeView, record, item, ind
                 img.src = thumbnail;
                 img.addEventListener('load', function (ev) {
 
-                    if (triggerTime > pimcore.helpers.treeNodeThumbnailLastClose) {
+                    if(triggerTime > pimcore.helpers.treeNodeThumbnailLastClose) {
                         thumbContainer.addCls('complete');
                         container.removeCls("hidden");
                     }
@@ -1226,7 +1244,8 @@ pimcore.helpers.showUser = function (specificUser) {
         try {
             panel = pimcore.globalmanager.get("users");
             panel.activate();
-        } catch (e) {
+        }
+        catch (e) {
             panel = new pimcore.settings.user.panel();
             pimcore.globalmanager.add("users", panel);
         }
@@ -1389,7 +1408,7 @@ pimcore.helpers.uploadAssetFromFileObject = function (file, url, callbackSuccess
     // these wrappers simulate the jQuery behavior
     var successWrapper = function (ev) {
         var data = JSON.parse(request.responseText);
-        if (ev.currentTarget.status < 400 && data.success === true) {
+        if(ev.currentTarget.status < 400 && data.success === true) {
             callbackSuccess(data, request.statusText, request);
         } else {
             callbackFailure(request, request.statusText, ev);
@@ -1518,7 +1537,7 @@ pimcore.helpers.searchAndMove = function (parentId, callback, type) {
 
 pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, documentPath, content) {
 
-    if (!emailType) {
+    if(!emailType) {
         emailType = 'text';
     }
 
@@ -1539,13 +1558,13 @@ pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, document
         documentTextField
     ];
 
-    if (pimcore.helpers.hasSearchImplementation()) {
+    if(pimcore.helpers.hasSearchImplementation()) {
         const searchDocumentButton = new Ext.Button({
             name: 'searchDocument',
             fieldLabel: t('document'),
             iconCls: 'pimcore_icon_search',
-            handler: function () {
-                pimcore.helpers.itemselector(false, function (e) {
+            handler: function() {
+                pimcore.helpers.itemselector(false, function(e) {
                     documentTextField.setValue(e.fullpath);
                 }, {
                     type: ["document"],
@@ -1583,14 +1602,14 @@ pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, document
         ],
         fieldLabel: t('type'),
         listeners: {
-            select: function (t) {
-                if (t.value == 'text' || t.value == 'html') {
+            select: function(t) {
+                if(t.value == 'text' || t.value == 'html') {
                     emailContentTextField.show();
                 } else {
                     emailContentTextField.hide();
                 }
 
-                if (t.value == 'document') {
+                if(t.value == 'document') {
                     documentComponent.show();
                     paramGrid.show();
                 } else {
@@ -1651,8 +1670,8 @@ pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, document
         tbar: [
             {
                 iconCls: "pimcore_icon_table_row pimcore_icon_overlay_add",
-                handler: function () {
-                    paramsStore.add({'key': '', 'value': ''});
+                handler: function() {
+                    paramsStore.add({'key' : '', 'value': ''});
                 }
             },
             {
@@ -1701,18 +1720,16 @@ pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, document
 
 
         var params = win.getComponent("form").getForm().getFieldValues();
-        if (emailTypeDropdown.getValue() === 'document') {
+        if(emailTypeDropdown.getValue() === 'document') {
             var allRecords = paramsStore
-                .queryBy(function () {
-                    return true;
-                }) // returns a collection
+                .queryBy(function() { return true; }) // returns a collection
                 .getRange();
             var emailParamsArray = [];
             for (var i = 0; i < allRecords.length; i++) {
                 emailParamsArray.push({"key": allRecords[i].data['key'], "value": allRecords[i].data['value']});
 
             }
-            params['mailParamaters'] = JSON.stringify(emailParamsArray);
+            params['mailParamaters'] =  JSON.stringify(emailParamsArray);
         }
 
 
@@ -1743,29 +1760,30 @@ pimcore.helpers.sendTestEmail = function (from, to, subject, emailType, document
     };
 
 
-    if (emailType) {
+
+    if(emailType) {
         emailTypeDropdown.setValue(emailType);
-        if (emailType == 'document') {
+        if(emailType == 'document') {
             documentComponent.show();
             paramGrid.show();
         }
-        if (emailType == 'html' || emailType == 'text') {
+        if(emailType == 'html' || emailType == 'text') {
             emailContentTextField.show();
         }
     }
-    if (documentPath) {
+    if(documentPath) {
         documentTextField.setValue(documentPath);
     }
-    if (content) {
+    if(content) {
         emailContentTextField.setValue(content);
     }
-    if (from) {
+    if(from) {
         fromTextField.setValue(from);
     }
-    if (to) {
+    if(to) {
         toTextField.setValue(to);
     }
-    if (subject) {
+    if(subject) {
         subjectTextField.setValue(subject);
     }
 
@@ -1827,7 +1845,7 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
                 const value = el.getValue();
                 const pathRegex = new RegExp('^(/|(/[^/]+)+/?)$');
 
-                if (value && !value.match(pathRegex)) {
+                if(value && !value.match(pathRegex)) {
                     internalTypeField.setValue(null);
                     linkTypeField.setValue("direct");
                 }
@@ -1856,7 +1874,7 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
             }.bind(this),
 
             onNodeDrop: function (target, dd, e, data) {
-                if (!pimcore.helpers.dragAndDropValidateSingleItem(data)) {
+                if(!pimcore.helpers.dragAndDropValidateSingleItem(data)) {
                     return false;
                 }
 
@@ -2141,7 +2159,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
             },
 
             onNodeOver: function (target, dd, e, data) {
-                if (data.records.length === 1) {
+                if(data.records.length === 1) {
                     data = data.records[0].data;
                     if (target && target.getId() == poster.getId()) {
                         if (data.elementType == "asset" && data.type == "image") {
@@ -2158,7 +2176,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
 
             onNodeDrop: function (target, dd, e, data) {
 
-                if (!pimcore.helpers.dragAndDropValidateSingleItem(data)) {
+                if(!pimcore.helpers.dragAndDropValidateSingleItem(data)) {
                     return false;
                 }
 
@@ -2200,7 +2218,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
 
     let searchButton = undefined;
     let posterImageSearchButton = undefined;
-    if (pimcore.helpers.hasSearchImplementation()) {
+    if(pimcore.helpers.hasSearchImplementation()){
         searchButton = new Ext.Button({
             iconCls: "pimcore_icon_search",
             handler: function () {
@@ -2245,7 +2263,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
     });
 
     const updateType = function (type) {
-        if (typeof searchButton !== 'undefined') {
+        if(typeof searchButton !== 'undefined') {
             searchButton.enable();
         }
         openButton.enable();
@@ -2254,7 +2272,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
         labelEl.update(t("path"));
 
         if (type != "asset") {
-            if (typeof searchButton !== 'undefined') {
+            if(typeof searchButton !== 'undefined') {
                 searchButton.disable();
             }
             openButton.disable();
@@ -2293,7 +2311,7 @@ pimcore.helpers.editmode.openVideoEditPanel = function (data, callback) {
         poster
     ];
 
-    if (pimcore.helpers.hasSearchImplementation()) {
+    if(pimcore.helpers.hasSearchImplementation()) {
         pathContainerItems.push(searchButton);
         posterContainerItems.push(posterImageSearchButton, posterImageOpenButton);
     }
@@ -2418,9 +2436,11 @@ pimcore.helpers.markColumnConfigAsFavourite = function (objectId, classId, gridC
 
     if (type === 'object') {
         route = objectRoute;
-    } else if (type === 'asset') {
+    }
+    else if (type === 'asset') {
         route = assetRoute;
-    } else {
+    }
+    else {
         throw new Error('Unknown type given, given "' + type + '"');
     }
 
@@ -2448,7 +2468,8 @@ pimcore.helpers.markColumnConfigAsFavourite = function (objectId, classId, gridC
                         if (rdata.spezializedConfigs) {
                             pimcore.helpers.removeOtherConfigs(objectId, classId, gridConfigId, searchType);
                         }
-                    } else {
+                    }
+                    else {
                         pimcore.helpers.showNotification(t("error"), t("saving_failed"),
                             "error", t(rdata.message));
                     }
@@ -2501,9 +2522,11 @@ pimcore.helpers.saveColumnConfig = function (objectId, classId, configuration, s
 
     if (type === 'object') {
         route = objectRoute;
-    } else if (type === 'asset') {
+    }
+    else if (type === 'asset') {
         route = assetRoute;
-    } else {
+    }
+    else {
         throw new Error('Unknown type given, given "' + type + '"');
     }
 
@@ -2537,7 +2560,8 @@ pimcore.helpers.saveColumnConfig = function (objectId, classId, configuration, s
                             callback(rdata);
                         }
                         pimcore.helpers.showNotification(t("success"), t("saved_successfully"), "success");
-                    } else {
+                    }
+                    else {
                         pimcore.helpers.showNotification(t("error"), t("saving_failed"),
                             "error", t(rdata.message));
                     }
@@ -2558,7 +2582,8 @@ pimcore.helpers.saveColumnConfig = function (objectId, classId, configuration, s
 pimcore.helpers.openGenericIframeWindow = function (id, src, iconCls, title) {
     try {
         pimcore.globalmanager.get(id).activate();
-    } catch (e) {
+    }
+    catch (e) {
         pimcore.globalmanager.add(id, new pimcore.tool.genericiframewindow(id, src, iconCls, title));
     }
 };
@@ -2614,7 +2639,7 @@ pimcore.helpers.initMenuTooltips = function () {
 
 pimcore.helpers.requestNicePathDataGridDecorator = function (gridView, targets) {
 
-    if (targets && targets.count() > 0) {
+    if(targets && targets.count() > 0) {
         gridView.mask();
     }
     targets.each(function (record) {
@@ -2700,11 +2725,11 @@ pimcore.helpers.getNicePathHandlerStore = function (store, config, gridView, res
 
         if (typeof responseData[recordId] != "undefined") {
 
-            if (config.loadEditModeData) {
-                for (var i = 0; i < config.fields.length; i++) {
+            if(config.loadEditModeData) {
+                for(var i = 0; i < config.fields.length; i++) {
                     record.set(config.fields[i], responseData[recordId][config.fields[i]], {dirty: false});
                 }
-                if (responseData[recordId]['$$nicepath']) {
+                if(responseData[recordId]['$$nicepath']) {
                     record.set(config.pathProperty, responseData[recordId]['$$nicepath'], {dirty: false});
                 }
             } else {
@@ -2830,7 +2855,7 @@ pimcore.helpers.isValidPassword = function (pass) {
 
 pimcore.helpers.getDeeplink = function (type, id, subtype) {
     let target = type + "_" + id + "_" + subtype;
-    let url = Routing.generate('pimcore_admin_login_deeplink', {}, true) + '?' + target;
+    let url    = Routing.generate('pimcore_admin_login_deeplink', {}, true) + '?' + target;
 
     if (pimcore.settings['custom_admin_entrypoint_url'] !== null) {
         url = pimcore.settings['custom_admin_entrypoint_url'] + '?deeplink=' + target;
@@ -2839,84 +2864,84 @@ pimcore.helpers.getDeeplink = function (type, id, subtype) {
     return url;
 };
 
-pimcore.helpers.showElementHistory = function () {
+pimcore.helpers.showElementHistory = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("objects") || user.isAllowed("documents") || user.isAllowed("assets")) {
         pimcore.layout.toolbar.prototype.showElementHistory();
     }
 };
 
-pimcore.helpers.closeAllTabs = function () {
+pimcore.helpers.closeAllTabs = function() {
     pimcore.helpers.closeAllElements();
     // clear the opentab store, so that also non existing elements are flushed
     pimcore.helpers.clearOpenTab();
 
 };
 
-pimcore.helpers.searchAndReplaceAssignments = function () {
+pimcore.helpers.searchAndReplaceAssignments = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("objects") || user.isAllowed("documents") || user.isAllowed("assets")) {
         new pimcore.element.replace_assignments();
     }
 };
 
-pimcore.helpers.redirects = function () {
+pimcore.helpers.redirects = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("redirects")) {
         pimcore.layout.toolbar.prototype.editRedirects();
     }
 };
 
-pimcore.helpers.sharedTranslations = function () {
+pimcore.helpers.sharedTranslations = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("translations")) {
         pimcore.layout.toolbar.prototype.editTranslations();
     }
 };
 
-pimcore.helpers.recycleBin = function () {
+pimcore.helpers.recycleBin = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("recyclebin")) {
         pimcore.layout.toolbar.prototype.recyclebin();
     }
 };
 
-pimcore.helpers.notesEvents = function () {
+pimcore.helpers.notesEvents = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("notes_events")) {
         pimcore.layout.toolbar.prototype.notes();
     }
 };
 
-pimcore.helpers.tagConfiguration = function () {
+pimcore.helpers.tagConfiguration = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("tags_configuration")) {
         pimcore.layout.toolbar.prototype.showTagConfiguration();
     }
 };
 
-pimcore.helpers.users = function () {
+pimcore.helpers.users = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("users")) {
         pimcore.layout.toolbar.prototype.editUsers();
     }
 };
 
-pimcore.helpers.roles = function () {
+pimcore.helpers.roles = function() {
     var user = pimcore.globalmanager.get("user");
     if (user.isAllowed("users")) {
         pimcore.layout.toolbar.prototype.editRoles();
     }
 };
 
-pimcore.helpers.clearAllCaches = function () {
+pimcore.helpers.clearAllCaches = function() {
     var user = pimcore.globalmanager.get("user");
     if ((user.isAllowed("clear_cache") || user.isAllowed("clear_temp_files") || user.isAllowed("clear_fullpage_cache"))) {
-        pimcore.layout.toolbar.prototype.clearCache({'env[]': ['dev', 'prod']});
+        pimcore.layout.toolbar.prototype.clearCache({'env[]': ['dev','prod']});
     }
 };
 
-pimcore.helpers.clearDataCache = function () {
+pimcore.helpers.clearDataCache = function() {
     var user = pimcore.globalmanager.get("user");
     if ((user.isAllowed("clear_cache") || user.isAllowed("clear_temp_files") || user.isAllowed("clear_fullpage_cache"))) {
         pimcore.layout.toolbar.prototype.clearCache({'only_pimcore_cache': true})
@@ -2954,7 +2979,7 @@ pimcore.helpers.keyBindingMapping = {
     "clearDataCache": pimcore.helpers.clearDataCache
 };
 
-pimcore.helpers.showPermissionError = function (permission) {
+pimcore.helpers.showPermissionError = function(permission) {
     Ext.MessageBox.alert(t("error"), sprintf(t('permission_missing'), t(permission)));
 };
 
@@ -2996,13 +3021,13 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
         });
         win.show();
 
-        if (dataTransfer["files"]) {
-            if (dataTransfer["files"][0]) {
+        if(dataTransfer["files"]) {
+            if(dataTransfer["files"][0]) {
                 var file = dataTransfer["files"][0];
 
                 if (window.FileList && file.name && file.size) { // check for size (folder has size=0)
                     var pbar = new Ext.ProgressBar({
-                        width: 465,
+                        width:465,
                         text: file.name,
                         style: "margin-bottom: 5px"
                     });
@@ -3012,8 +3037,8 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 
                     var params = {};
 
-                    if (parent !== undefined) {
-                        if (parentType === 'path') {
+                    if(parent !== undefined){
+                        if(parentType === 'path') {
                             params['parentPath'] = parent;
                         } else if (parentType === 'id') {
                             params['parentId'] = parent;
@@ -3036,8 +3061,8 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
                             //progress
                             if (evt.lengthComputable) {
                                 var percentComplete = evt.loaded / evt.total;
-                                var progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
-                                if (percentComplete == 1) {
+                                var progressText = file.name + " ( " + Math.floor(percentComplete*100) + "% )";
+                                if(percentComplete == 1) {
                                     progressText = file.name + " " + t("please_wait");
                                 }
 
@@ -3069,7 +3094,7 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 };
 
 pimcore.helpers.dragAndDropValidateSingleItem = function (data) {
-    if (data.records.length > 1) {
+    if(data.records.length > 1) {
         Ext.MessageBox.alert(t('error'), t('you_can_only_drop_one_element_here'));
         return false;
     }
@@ -3080,7 +3105,8 @@ pimcore.helpers.dragAndDropValidateSingleItem = function (data) {
 pimcore.helpers.openProfile = function () {
     try {
         pimcore.globalmanager.get("profile").activate();
-    } catch (e) {
+    }
+    catch (e) {
         pimcore.globalmanager.add("profile", new pimcore.settings.profile.panel());
     }
 };
@@ -3118,7 +3144,7 @@ pimcore.helpers.treeToolTipShow = function (el, record, item) {
         if (record.data.qtipCfg.text) {
             text += record.data.qtipCfg.text;
         } else {
-            text += (t("type") + ": " + t(record.data.type));
+            text += (t("type") + ": "+ t(record.data.type));
         }
 
         var pimcore_tooltip = Ext.get('pimcore_tooltip');
@@ -3131,7 +3157,7 @@ pimcore.helpers.treeToolTipShow = function (el, record, item) {
         var offsetTreeNode = Ext.get(item).getXY();
         var parentTree = el.ownerCt.ownerCt;
 
-        if (parentTree.region == 'west') {
+        if(parentTree.region == 'west') {
             pimcore_tooltip.applyStyles({
                 top: (offsetTreeNode[1] + 8) + "px",
                 left: offsetTabPanel[0] + "px",
@@ -3139,7 +3165,7 @@ pimcore.helpers.treeToolTipShow = function (el, record, item) {
             });
         }
 
-        if (parentTree.region == 'east') {
+        if(parentTree.region == 'east') {
             pimcore_tooltip.addCls('right');
             pimcore_tooltip.applyStyles({
                 top: (offsetTreeNode[1] + 8) + "px",
@@ -3171,17 +3197,17 @@ pimcore.helpers.progressWindowOffsets = [-50];
 
 pimcore.helpers.getProgressWindowListeners = function () {
     return {
-        show: function (win) {
-            let winY = pimcore.helpers.progressWindowOffsets.reduce(function (a, b) {
+        show: function(win) {
+            let winY = pimcore.helpers.progressWindowOffsets.reduce(function(a, b) {
                 return Math.min(a, b);
             });
 
             win.alignTo(Ext.getBody(), "br-br", [-40, winY]);
-            let newOffset = winY - (win.getHeight() + 20);
+            let newOffset = winY - (win.getHeight()+20);
             pimcore.helpers.progressWindowOffsets.push(newOffset);
             win.myProgressWinOffset = newOffset;
         },
-        destroy: function (win) {
+        destroy: function(win) {
             let index = pimcore.helpers.progressWindowOffsets.indexOf(win.myProgressWinOffset);
             if (index !== -1) {
                 pimcore.helpers.progressWindowOffsets.splice(index, 1);
@@ -3269,23 +3295,23 @@ pimcore.helpers.treeDragDropValidate = function (node, oldParent, newParent) {
  * Building menu with priority
  * @param items
  */
-pimcore.helpers.buildMenu = function (items) {
+pimcore.helpers.buildMenu = function(items) {
     // priority for every menu and submenu starts at 10
     // leaving enough space for bundles etc.
     let priority = 10;
-    for (let i = 0; i < items.length; i++) {
+    for(let i = 0; i < items.length; i++) {
         // only adding priority if not set yet
-        if (items[i].priority === undefined && items[i].text !== undefined) {
+        if(items[i].priority === undefined && items[i].text !== undefined) {
             items[i].priority = priority;
             priority += 10;
         }
         // if there are no submenus left, skip to the next item
-        if (items[i].menu === undefined || null === items[i].menu) {
+        if(items[i].menu === undefined || null === items[i].menu) {
             continue;
         }
 
         // if the submenu has no items, remove the submenu itself
-        if (items[i].menu.items.length === 0) {
+        if(items[i].menu.items.length === 0){
             items.splice(i, 1);
             continue;
         }
@@ -3295,13 +3321,13 @@ pimcore.helpers.buildMenu = function (items) {
     }
 };
 
-pimcore.helpers.buildMainNavigationMarkup = function (menu) {
+pimcore.helpers.buildMainNavigationMarkup = function(menu) {
     // priority for main menu starts at 10
     // leaving enough space for bundles etc.
 
     let priority = 10;
     Object.keys(menu).forEach(key => {
-        if (menu[key].priority === undefined) {
+        if(menu[key].priority === undefined) {
             menu[key].priority = priority;
             priority += 10;
         }
@@ -3328,7 +3354,7 @@ pimcore.helpers.buildMainNavigationMarkup = function (menu) {
             html: '<div id="menuitem-' + key + '-iconEl" data-ref="iconEl" class="x-menu-item-main-icon x-menu-item-icon ' + menu[key]['iconCls'] + '"></div>',
             'data-menu-tooltip': menu[key]['label']
         };
-        if (menu[key]['style']) {
+        if(menu[key]['style']) {
             li.style = menu[key]['style'];
         }
         dh.append(ul, li);
@@ -3346,22 +3372,22 @@ pimcore.helpers.buildMainNavigationMarkup = function (menu) {
     );
 }
 
-pimcore.helpers.priorityCompare = function (a, b) {
+pimcore.helpers.priorityCompare = function(a, b) {
     let priorityA = a.priority ?? Number.MAX_VALUE;
     let priorityB = b.priority ?? Number.MAX_VALUE;
 
-    if (priorityA > priorityB) {
+    if(priorityA > priorityB) {
         return 1;
     }
 
-    if (priorityA < priorityB) {
+    if(priorityA < priorityB) {
         return -1;
     }
 
     return 0;
 }
 
-pimcore.helpers.documentTypeHasSpecificRole = function (documentType, role) {
+pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
     return pimcore.settings.document_types_configuration[documentType][role];
 }
 
@@ -3371,9 +3397,9 @@ pimcore.helpers.getTabBar = function (attributes) {
             cls: 'pimcore_editor_tabbar'
         },
         tabPosition: 'top',
-        region: 'center',
-        deferredRender: true,
-        enableTabScroll: true,
+        region:'center',
+        deferredRender:true,
+        enableTabScroll:true,
         border: false,
         activeTab: 0
     });
@@ -3385,16 +3411,13 @@ pimcore.helpers.getTabBar = function (attributes) {
 pimcore.helpers.sendRequest = function (
     method,
     url,
-    successCallback = function (response) {
-    },
-    failureCallback = function (response) {
-    },
-    alwaysCallback = function (response) {
-    }
+    successCallback = function (response) {},
+    failureCallback = function (response) {},
+    alwaysCallback = function (response) {}
 ) {
     const request = new XMLHttpRequest();
 
-    request.onload = function () {
+    request.onload = function() {
         if (this.status >= 200 && this.status < 400) {
             successCallback(this);
         } else {
