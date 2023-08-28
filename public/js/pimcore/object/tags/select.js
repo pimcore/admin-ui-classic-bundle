@@ -277,6 +277,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
                     if (this.fieldConfig.dynamicOptions) {
                         Ext.Ajax.request({
                             url: Routing.generate('pimcore_admin_dataobject_dataobject_getSelectOptions'),
+                            method: 'POST',
                             params: {
                                 objectId: this.object.id,
                                 changedData: this.object.getSaveData().data,
