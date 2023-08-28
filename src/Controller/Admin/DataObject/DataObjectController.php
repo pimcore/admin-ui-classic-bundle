@@ -551,7 +551,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = (int)$request->get('objectId');
+        $objectId = $request->request->getInt('objectId');
         $object = DataObject\Concrete::getById($objectId);
         if (!$object instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
