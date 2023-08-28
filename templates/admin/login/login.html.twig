@@ -38,15 +38,9 @@
         <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer" title="Edge"><img src="/bundles/pimcoreadmin/img/login/edge.svg" alt="Edge"/></a>
     </div>
 
-    <a href="#" onclick="showLogin();">{{ 'Click here to proceed'|trans([], 'admin') }}</a>
+    <a id="proceed_with_unsupported_browser" href="#" >{{ 'Click here to proceed'|trans([], 'admin') }}</a>
 </div>
 
-<script type="text/javascript">
-    function showLogin() {
-        document.getElementById('loginform').style.display = 'block';
-        document.getElementById('browserinfo').style.display = 'none';
-    }
-</script>
 <style type="text/css">
     #loginform {
         display: none;
@@ -63,15 +57,15 @@
     {% endif %}
 
     // hide symfony toolbar by default
-    var symfonyToolbarKey = 'symfony/profiler/toolbar/displayState';
+    const symfonyToolbarKey = 'symfony/profiler/toolbar/displayState';
     if(!window.localStorage.getItem(symfonyToolbarKey)) {
         window.localStorage.setItem(symfonyToolbarKey, 'none');
     }
 
 
     // CSRF token refresh
-    var formElement = document.getElementById('form-element');
-    var csrfRefreshInProgress = false;
+    let formElement = document.getElementById('form-element');
+    let csrfRefreshInProgress = false;
     function refreshCsrfToken() {
         csrfRefreshInProgress = true;
         formElement.style.opacity = '0.3';
@@ -99,6 +93,11 @@
         }
     }, true);
 
+    let unsupportedBrowser = document.getElementById('proceed_with_unsupported_browser');
+    unsupportedBrowser.addEventListener('click', function(e) {
+        document.getElementById('loginform').style.display = 'block';
+        document.getElementById('browserinfo').style.display = 'none';
+    });
 </script>
 
 {% for includeTemplate in includeTemplates %}
