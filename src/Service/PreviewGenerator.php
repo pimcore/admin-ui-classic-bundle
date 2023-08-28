@@ -121,7 +121,9 @@ class PreviewGenerator implements PreviewGeneratorInterface
             $domains = $site->getDomains() ?? [];
             array_unshift($domains, $site->getMainDomain());
 
-            $preSelectedSite ??= in_array(Tool::getHostname(), $domains) ? $sitesOptions[$label] : $preSelectedSite;
+            if(is_null($preSelectedSite) && in_array(Tool::getHostname(), $domains)) {
+                $preSelectedSite = $sitesOptions[$label];
+            }
         }
 
         return [
