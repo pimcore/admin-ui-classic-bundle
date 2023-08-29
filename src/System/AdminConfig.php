@@ -68,6 +68,7 @@ final class AdminConfig
             $data[self::ASSETS] = $containerConfig[self::ASSETS];
             $data['writeable'] = $repository->isWriteable();
         }
+
         return $data;
     }
 
