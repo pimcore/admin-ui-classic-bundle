@@ -228,7 +228,7 @@ pimcore.registerNS("pimcore.object.tree");
                      return;
                  }
 
-                 if (record.data.permissions.view) {
+                 if (record.data.permissions && record.data.permissions.view) {
                      pimcore.helpers.openObject(record.data.id, record.data.type);
                  }
              } catch (e) {
@@ -515,7 +515,7 @@ pimcore.registerNS("pimcore.object.tree");
 
              var isVariant = record.data.type == "variant";
 
-             if (record.data.permissions.create) {
+             if (record.data.permissions && record.data.permissions.create) {
                  if (!isVariant) {
                      if (perspectiveCfg.inTreeContextMenu("object.add")) {
                          menu.add(new Ext.menu.Item({
@@ -632,7 +632,7 @@ pimcore.registerNS("pimcore.object.tree");
                          iconCls: "pimcore_icon_unpublish",
                          handler: this.publishObject.bind(this, tree, record, 'unpublish')
                      }));
-                 } else if (!record.data.published && record.data.permissions.publish && perspectiveCfg.inTreeContextMenu("object.publish")) {
+                 } else if (!record.data.published && record.data.permissions && record.data.permissions.publish && perspectiveCfg.inTreeContextMenu("object.publish")) {
                      menu.add(new Ext.menu.Item({
                          text: t('publish'),
                          iconCls: "pimcore_icon_publish",
@@ -642,7 +642,7 @@ pimcore.registerNS("pimcore.object.tree");
              }
 
 
-             if (record.data.permissions["delete"] && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("object.delete")) {
+             if (record.data.permissions && record.data.permissions["delete"] && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("object.delete")) {
                  menu.add(new Ext.menu.Item({
                      text: t('delete'),
                      iconCls: "pimcore_icon_delete",
@@ -650,7 +650,7 @@ pimcore.registerNS("pimcore.object.tree");
                  }));
              }
 
-             if (record.data.permissions.rename && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("object.rename")) {
+             if (record.data.permissions && record.data.permissions.rename && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("object.rename")) {
                  menu.add(new Ext.menu.Item({
                      text: t('rename'),
                      iconCls: "pimcore_icon_key pimcore_icon_overlay_go",
@@ -663,7 +663,7 @@ pimcore.registerNS("pimcore.object.tree");
              var advancedMenuItems = [];
              var user = pimcore.globalmanager.get("user");
 
-             if (record.data.permissions.create &&
+             if (record.data.permissions && record.data.permissions.create &&
                  perspectiveCfg.inTreeContextMenu("object.searchAndMove") &&
                  pimcore.helpers.hasSearchImplementation()) {
                  advancedMenuItems.push({
@@ -780,7 +780,7 @@ pimcore.registerNS("pimcore.object.tree");
 
              if (user.admin || !record.data.locked) {
 
-                 if (record.data.permissions.settings && perspectiveCfg.inTreeContextMenu("object.changeChildrenSortBy")) {
+                 if (record.data.permissions && record.data.permissions.settings && perspectiveCfg.inTreeContextMenu("object.changeChildrenSortBy")) {
                      // only the admin is allowed to change the sort method.
                      // See https://github.com/pimcore/pimcore/issues/8476
 
