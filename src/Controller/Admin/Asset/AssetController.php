@@ -1243,9 +1243,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($thumbnail) {
             $thumbnailConfig = $thumbnail->getConfig();
             if ($thumbnailConfig->getFormat() === 'SOURCE' &&
-                $autoFromatConfigs = $thumbnailConfig->getAutoFormatThumbnailConfigs()) {
-                $autoFromatConfig = current($autoFromatConfigs);
-                $thumbnail = $image->getThumbnail($autoFromatConfig);
+                $autoFormatConfigs = $thumbnailConfig->getAutoFormatThumbnailConfigs()) {
+                $autoFormatConfig = current($autoFormatConfigs);
+                $thumbnail = $image->getThumbnail($autoFormatConfig);
             }
 
             $thumbnailFile = $thumbnailFile ?: $thumbnail->getLocalFile();
