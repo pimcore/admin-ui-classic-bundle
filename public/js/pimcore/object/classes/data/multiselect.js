@@ -284,6 +284,20 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
             },
             {
                 xtype: "textfield",
+                fieldLabel: t("default_value"),
+                name: "defaultValue",
+                value: datax.defaultValue
+            },
+            {
+                xtype: 'textfield',
+                width: 600,
+                fieldLabel: t("default_value_generator"),
+                labelWidth: 140,
+                name: 'defaultValueGenerator',
+                value: datax.defaultValueGenerator
+            },
+            {
+                xtype: "textfield",
                 fieldLabel: t("options_provider_class"),
                 width: 600,
                 name: "optionsProviderClass",
@@ -333,6 +347,8 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                     height: source.datax.height,
                     maxItems: source.datax.maxItems,
                     renderType: source.datax.renderType,
+                    defaultValue: source.datax.defaultValue,
+                    defaultValueGenerator: source.datax.defaultValueGenerator,
                     optionsProviderClass: source.datax.optionsProviderClass,
                     optionsProviderData: source.datax.optionsProviderData
                 });
