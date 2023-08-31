@@ -281,7 +281,35 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 triggerAction: "all",
                 editable: false,
                 forceSelection: true
-            }
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("options_provider_class"),
+                width: 600,
+                name: "optionsProviderClass",
+                value: datax.optionsProviderClass
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("options_provider_data"),
+                width: 600,
+                value: datax.optionsProviderData,
+                name: "optionsProviderData"
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("default_value"),
+                name: "defaultValue",
+                value: datax.defaultValue
+            },
+            {
+                xtype: 'textfield',
+                width: 600,
+                fieldLabel: t("default_value_generator"),
+                labelWidth: 140,
+                name: 'defaultValueGenerator',
+                value: datax.defaultValueGenerator
+            },
         ]);
 
         appendedStylingItems = appendedStylingItems.concat(
@@ -326,6 +354,8 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                     maxItems: source.datax.maxItems,
                     renderType: source.datax.renderType,
                     optionsProviderType: source.datax.optionsProviderType,
+                    defaultValue: source.datax.defaultValue,
+                    defaultValueGenerator: source.datax.defaultValueGenerator,
                     optionsProviderClass: source.datax.optionsProviderClass,
                     optionsProviderData: source.datax.optionsProviderData
                 });
