@@ -50,7 +50,7 @@ pimcore.object.classes.data.time = Class.create(pimcore.object.classes.data.data
         $super();
         this.specificPanel.removeAll();
 
-        var widthItems = this.getWidthPanelItems(this.datax);
+        const widthItems = this.getWidthPanelItems(this.datax);
         this.specificPanel.add(widthItems);
 
         var specificItems = this.getSpecificPanelItems(this.datax);
