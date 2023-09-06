@@ -33,7 +33,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
             fieldLabel: this.fieldConfig.title,
             format: "H:i",
             emptyText: "",
-            width: this.fieldConfig.width ? this.fieldConfig.width : 250,
+            width: this.fieldConfig.width ? this.fieldConfig.width : 200,
             value: this.data,
             allowBlank: (!this.fieldConfig.mandatory),
             minValue: (this.fieldConfig.minValue) ? this.fieldConfig.minValue : null,
