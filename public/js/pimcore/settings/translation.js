@@ -322,7 +322,7 @@ pimcore.settings.translation.domain = Class.create({
                     icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
                     handler: function (grid, rowIndex) {
                         let data = grid.getStore().getAt(rowIndex);
-                        pimcore.helpers.deleteConfirm(t('translation'), Ext.util.Format.htmlEncode(data.data.key), function () {
+                        this.deleteConfirm(data.data.key, function () {
                             grid.getStore().removeAt(rowIndex);
                         }.bind(this));
                     }.bind(this)
@@ -473,6 +473,19 @@ pimcore.settings.translation.domain = Class.create({
         }.bind(this), function () {
             Ext.MessageBox.alert(t("error"), t("error"));
         });
+    },
+
+    deleteConfirm: function (key, deleteCallback) {
+        let title = sprintf(t('delete_message_advanced'), 'translation', '%S');
+        title = title.replace('%S', Ext.util.Format.htmlEncode(key));
+        Ext.Msg.confirm(t('delete'), title, function (btn) {
+                if (btn == 'yes') {
+                    if (typeof deleteCallback == "function") {
+                        deleteCallback();
+                    }
+                }
+            }.bind(this)
+        );
     },
 
     refresh: function () {
