@@ -1,3 +1,6 @@
+#### v1.2.0
+ - [UI][tree][permission] When only granting Asset/Object/Document permissions without defining any Workspaces, the tree sidebar will display with the corresponding header and home icon, instead of an empty sidebar.
+
 #### v1.1.0
  - `Pimcore\Bundle\AdminBundle\Service\ElementService` is marked as internal.
  - Deprecated `DocumentTreeConfigTrait`
