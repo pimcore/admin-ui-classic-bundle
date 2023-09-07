@@ -633,7 +633,7 @@
  
                  }
              }
- 
+
              if (record.data.permissions && record.data.permissions.rename && record.data.id != 1 && !record.data.locked) {
                  if (perspectiveCfg.inTreeContextMenu("asset.rename")) {
                      menu.add(new Ext.menu.Item({
@@ -668,7 +668,8 @@
  
              //paste
              if (pimcore.cachedAssetId
-                 && (record.data.permissions.create || record.data.permissions && record.data.permissions.publish)
+                 && record.data.permissions
+                 && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.paste")) {
  
                  if (record.data.type == "folder") {
@@ -687,6 +688,7 @@
              }
  
              if (record.data.type == "folder" && pimcore.cutAsset
+                 && record.data.permissions
                  && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.pasteCut")) {
                  menu.add(new Ext.menu.Item({

@@ -361,7 +361,7 @@ pimcore.document.tree = Class.create({
             var pasteMenu = [];
             var pasteInheritanceMenu = [];
             var childSupportedDocument = (record.data.type)?pimcore.helpers.documentTypeHasSpecificRole(record.data.type, "children_supported"):false;
-            if (childSupportedDocument && record.data.permissions.create) {
+            if (childSupportedDocument && record.data.permissions && record.data.permissions.create) {
 
 
                 var addDocuments = perspectiveCfg.inTreeContextMenu("document.add");
@@ -471,7 +471,7 @@ pimcore.document.tree = Class.create({
 
 
                 //paste
-                if (pimcore.cachedDocumentId && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
+                if (pimcore.cachedDocumentId && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
                     pasteMenu.push({
                         text: t("paste_recursive_as_child"),
                         iconCls: "pimcore_icon_paste",
@@ -544,7 +544,7 @@ pimcore.document.tree = Class.create({
 
 
             //paste
-            if (childSupportedDocument && pimcore.cutDocument && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.pasteCut")) {
+            if (childSupportedDocument && pimcore.cutDocument && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.pasteCut")) {
                 pasteMenu.push({
                     text: t("paste_cut_element"),
                     iconCls: "pimcore_icon_paste",
@@ -557,7 +557,7 @@ pimcore.document.tree = Class.create({
                 });
             }
 
-            if (pimcore.cachedDocumentId && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
+            if (pimcore.cachedDocumentId && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
 
                 if (record.data.type != "folder") {
                     pasteMenu.push({
@@ -594,7 +594,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if (record.data.id != 1 && !record.data.locked && record.data.permissions.rename && perspectiveCfg.inTreeContextMenu("document.cut")) {
+            if (record.data.id != 1 && !record.data.locked && record.data.permissions && record.data.permissions.rename && perspectiveCfg.inTreeContextMenu("document.cut")) {
                 menu.add(new Ext.menu.Item({
                     text: t('cut'),
                     iconCls: "pimcore_icon_cut",
@@ -636,7 +636,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if ((record.data.type == "page" || record.data.type == "hardlink") && record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.open")) {
+            if ((record.data.type == "page" || record.data.type == "hardlink") && record.data.permissions && record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.open")) {
                 menu.add(new Ext.menu.Item({
                     text: t('open_in_new_window'),
                     iconCls: "pimcore_icon_open_window",
@@ -650,7 +650,7 @@ pimcore.document.tree = Class.create({
             var advancedMenuItems = [];
             var user = pimcore.globalmanager.get("user");
 
-            if (record.data.id != 1 && record.data.permissions.publish && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.convert")) {
+            if (record.data.id != 1 && record.data.permissions && record.data.permissions.publish && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.convert")) {
 
                 let conversionTargets = [];
                 if(addDocuments) {
@@ -705,6 +705,7 @@ pimcore.document.tree = Class.create({
             }
 
             if (childSupportedDocument &&
+                record.data.permissions &&
                 record.data.permissions.create &&
                 perspectiveCfg.inTreeContextMenu("document.searchAndMove") &&
                 pimcore.helpers.hasSearchImplementation()) {
