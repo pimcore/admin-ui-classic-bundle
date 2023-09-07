@@ -1305,7 +1305,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
             $props = $document->getObjectVars();
             foreach ($props as $name => $value) {
-                if (in_array($name, ['children', 'siblings', 'scheduledTasks'])) {
+                if (in_array($name, ['children', 'siblings', 'scheduledTasks', 'controller', 'template'])) {
                     continue;
                 }
                 $new->setValue($name, $value);
