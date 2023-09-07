@@ -156,12 +156,19 @@ pimcore.asset.metadata.tags.select = Class.create(pimcore.asset.metadata.tags.ab
     },
 
     getLayoutEdit: function () {
-        var storeData = [];
+        let storeData = [];
 
         if(this.fieldConfig.config) {
-            storeData = this.fieldConfig.config.split(",");
+            if(typeof this.fieldConfig.config === "string") {
+                storeData = this.fieldConfig.config.split(",");
+            }
+            else {
+                Object.values(this.fieldConfig.config).forEach(option => {
+                    storeData.push({'value': option.value, 'key': option.key});
+                });
+            };
         }
-
+        
         var options = {
             name: this.fieldConfig.name,
             triggerAction: "all",
