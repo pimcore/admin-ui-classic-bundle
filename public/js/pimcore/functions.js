@@ -1583,10 +1583,10 @@ sprintf = function ()
     {
         return;
     }
-    var str, tempstr = arguments[0];
+    var str = arguments[0];
     var re = /([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X)(.*)/;
     var a = b = [], numSubstitutions = 0, numMatches = 0;
-    while (a = re.exec(tempstr))
+    while (a = re.exec(str))
     {
         var leftpart = a[1], pPad = a[2], pJustify = a[3], pMinLength = a[4];
         var pPrecision = a[5], pType = a[6], rightPart = a[7];
@@ -1624,9 +1624,11 @@ sprintf = function ()
             else if (pType == 'x') subst = ('' + parseInt(param).toString(16)).toLowerCase();
             else if (pType == 'X') subst = ('' + parseInt(param).toString(16)).toUpperCase();
         }
-        str = leftpart + subst + rightPart;
-        tempstr = leftpart + rightPart;
+        arguments[numSubstitutions] = subst;
+        str = leftpart + '${'+numSubstitutions+'}' + rightPart;
     }
+    str = str.replace(/\${(\d+)}/g, (match, num) => arguments[num]);
+
     return str;
 }
 
