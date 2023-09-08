@@ -77,6 +77,7 @@ abstract class ElementControllerBase extends AdminAbstractController
             if ($root->isAllowed('list')) {
                 return $this->adminJson($this->getTreeNodeConfig($root));
             }
+
             return $this->adminJson(['success' => false, 'id' =>  $id]);
         }
 
