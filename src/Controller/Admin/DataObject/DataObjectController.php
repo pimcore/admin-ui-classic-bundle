@@ -1087,7 +1087,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     private function executeUpdateAction(DataObject $object, mixed $values): array
     {
-        $success = false;
+        $data = ['success' => false];
 
         if ($object instanceof DataObject\Concrete) {
             $object->setOmitMandatoryCheck(true);
@@ -1161,7 +1161,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     $this->updateIndexesOfObjectSiblings($object, $indexUpdate);
                 }
 
-                $success = true;
+                $data = [
+                  'success' => true,
+                  'treeData' => $this->getTreeNodeConfig($object)
+                ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);
 
@@ -1173,7 +1176,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             Logger::debug('prevented update object because of missing permissions.');
         }
 
-        return ['success' => $success];
+        return $data;
     }
 
     private function executeInsideTransaction(callable $fn): void

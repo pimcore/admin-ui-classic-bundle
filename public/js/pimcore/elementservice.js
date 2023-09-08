@@ -496,6 +496,10 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                 try {
                     var rdata = Ext.decode(response.responseText);
                     if (rdata && rdata.success) {
+                        if (rdata.treeData) {
+                            pimcore.helpers.updateTreeElementStyle('object', id, rdata.treeData);
+                        }
+
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
