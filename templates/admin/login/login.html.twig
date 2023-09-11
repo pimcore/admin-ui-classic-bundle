@@ -93,11 +93,13 @@
         }
     }, true);
 
-    let unsupportedBrowser = document.getElementById('proceed_with_unsupported_browser');
-    unsupportedBrowser.addEventListener('click', function(e) {
-        document.getElementById('loginform').style.display = 'block';
-        document.getElementById('browserinfo').style.display = 'none';
-    });
+    {% if not browserSupported %}
+        let unsupportedBrowser = document.getElementById('proceed_with_unsupported_browser');
+        unsupportedBrowser.addEventListener('click', function(e) {
+            document.getElementById('loginform').style.display = 'block';
+            document.getElementById('browserinfo').style.display = 'none';
+        });
+    {% endif %}
 </script>
 
 {% for includeTemplate in includeTemplates %}
