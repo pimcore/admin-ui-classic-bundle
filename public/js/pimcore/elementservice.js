@@ -439,7 +439,7 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
             for (index = 0; index < affectedNodes.length; index++) {
                 record = affectedNodes[index];
-                pimcore.elementservice.refreshNode(record.parentNode);
+                pimcore.elementservice.refreshNode(record);
             }
 
             if (pimcore.globalmanager.exists("document_" + id)) {
