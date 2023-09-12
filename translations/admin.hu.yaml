@@ -22,7 +22,7 @@ close_all: "\xD6sszes bez\xE1r\xE1sa"
 close_unmodified: "V\xE1ltozatlanok bez\xE1r\xE1sa"
 classid: "Oszt\xE1ly Azonos\xEDt\xF3"
 parentid: "Sz\xFCl\u0151 Azonos\xEDt\xF3"
-mimetype: MIME-Type
+mimetype: "MIME T\xEDpus"
 creationdate: "L\xE9trehoz\xE1s D\xE1tuma"
 usermodification: "Felhaszn\xE1l\xF3i m\xF3dos\xEDt\xE1sok"
 userowner: Tulajdonos
@@ -87,7 +87,7 @@ desktop: Asztal
 drag_me: "H\xFAzz"
 serverVars: "Szerver v\xE1ltoz\xF3k"
 code: "K\xF3d"
-tag: Tag
+tag: "C\xEDmke"
 tags: Tag-ek
 Click here to proceed: "Kattintson ide a folytat\xE1shoz"
 Your browser is not supported. Please install the latest version of one of the following browsers.: "Nem
@@ -117,11 +117,11 @@ Login: "Bejelentkez\xE9s"
 Submit: "Elk\xFCld\xE9s"
 A temporary login link has been sent to your email address.: "Egy ideiglenes bejelentkez\u0151
   linket k\xFCldt\xFCnk az e-mail c\xEDmedre."
-user_inactive: User is not active
-user_no_email_address: User has no email address
-user_no_password: User has no password
-user_unknown: User unknown
-lost_password_email_error: Could not send password recovery email
+user_inactive: "Inakt\xEDv felhaszn\xE1l\xF3"
+user_no_email_address: "A felhaszn\xE1l\xF3nak nincs e-mail c\xEDme"
+user_no_password: "A felhaszn\xE1l\xF3nak nincs jelszava"
+user_unknown: "Ismeretlen felhaszn\xE1l\xF3"
+lost_password_email_error: "Jelsz\xF3vissza\xE1ll\xEDt\xF3 email k\xFCld\xE9se sikertelen"
 use_current_player_position_as_preview: "Lej\xE1tsz\xF3 jelenlegi poz\xEDci\xF3j\xE1nak
   haszn\xE1lata el\u0151n\xE9zetben"
 select_image_preview: "V\xE1lassz K\xE9p-el\u0151n\xE9zetet"
@@ -148,7 +148,7 @@ edit_link: "Link szerkeszt\xE9se"
 resize: "\xC1tm\xE9retez\xE9s"
 scalebyheight: "M\xE9retez\xE9s magass\xE1g szerint"
 scalebywidth: "M\xE9retez\xE9s sz\xE9less\xE9g szerint"
-crop: Crop
+crop: "V\xE1g\xE1s"
 cleanup: "Takar\xEDt\xE1s"
 this_element_cannot_be_edited: "Ez az elem nem szerkeszthet\u0151"
 details: "R\xE9szletek"
@@ -184,8 +184,8 @@ archive: "Arch\xEDvum"
 unknown: Ismeretlen
 class: "Oszt\xE1ly"
 page: Oldal
-objectbrick: Objectbrick
-field_collection: Field Collection
+objectbrick: "\xC9p\xEDt\u0151kocka"
+field_collection: "Mez\u0151kollekci\xF3"
 snippet: "R\xE9szlet"
 folder: Mappa
 your_selection: "Kiv\xE1lasztott"
@@ -213,7 +213,7 @@ recyclebin: Kuka
 deletedby: "T\xF6r\xF6lve"
 open_select_editor: "Kiv\xE1laszt\xE1s-Szerkeszt\u0151 megnyit\xE1sa"
 ignore: "Mell\u0151z\xE9s"
-email_log: Email Log
+email_log: "Email napl\xF3"
 email_log_resend: "Email \xFAjrak\xFCld\xE9se"
 email_log_resend_window_msg: "Er\u0151s\xEDtsd meg, hogy a leveled minden \xE9rintettnek
   \xFAjra elk\xFClden\xE9d."
@@ -237,7 +237,7 @@ info: "Inf\xF3"
 or: vagy
 paste_contents: "Csak a tartalom besz\xFAr\xE1sa"
 paste_as_child: "Besz\xFAr\xE1s gyerekk\xE9nt"
-paste_recursive_as_child: Paste as child (recursive)
+paste_recursive_as_child: "Beilleszt\xE9s gyerekk\xE9nt (rekurz\xEDv)"
 view_original: "Eredeti megtekint\xE9se"
 feed: Csatorna
 no_items_found: "Nincs tal\xE1lat"
@@ -290,11 +290,11 @@ controller: Controller
 action: Action
 actions: "M\u0171veletek"
 template: Template
-staticroute: Static Route
-static_generator: Static Page Generator
-static_generator_enable: Enable server side static rendering
-static_generator_lifetime: Lifetime (in minutes) for static page (optional)
-last_generated: Last generated
+staticroute: "Statikus \xDAtvonal"
+static_generator: "Statikus oldalgener\xE1tor"
+static_generator_enable: "Szerveroldali statikus oldalgener\xE1l\xE1s enged\xE9lyez\xE9se"
+static_generator_lifetime: "Statikus oldal \xE9lettartama (percben) (opcion\xE1lis)"
+last_generated: "Utolj\xE1ra gener\xE1lva"
 key: Kulcs
 id: ID
 name: "N\xE9v"
@@ -314,7 +314,7 @@ close_all_tabs: "Minden tab bez\xE1r\xE1sa"
 search: "Keres\xE9s"
 import: "Import\xE1l\xE1s"
 export: "Export\xE1l\xE1s"
-document_type: Document Type
+document_type: "Dokumentum t\xEDpusa"
 document_types: "Dokumentum T\xEDpusok"
 predefined_properties: "Alap\xE9rtelmezett tulajdons\xE1gok"
 users: "Felhaszn\xE1l\xF3k"
@@ -322,14 +322,14 @@ profile: Profil
 my_profile: Profilom
 documentation: "Dokument\xE1ci\xF3"
 report_bugs: "Hiba bejelent\xE9se"
-about: About
+about: "K\xF6r\xFClbel\xFCl"
 file: File
 extras: "Extr\xE1k"
 help: "Seg\xEDts\xE9g"
 configuration: "Konfigur\xE1ci\xF3"
 value: "\xC9rt\xE9k"
 add_a_custom_property: "Egyedi tulajdons\xE1g hozz\xE1ad\xE1sa"
-custom: Custom
+custom: Egyedi
 general: "\xC1ltal\xE1nos"
 language: Nyelv
 quality: "Min\u0151s\xE9g"
@@ -346,11 +346,11 @@ create: "L\xE9trehoz\xE1s"
 edit: "Szerkeszt\xE9s"
 logout: "Kijelentkez\xE9s"
 refresh: "Friss\xEDt\xE9s"
-input: Input
-checkbox: Checkbox
-textarea: Textarea
+input: "Beviteli mez\u0151"
+checkbox: "Jel\xF6l\u0151n\xE9gyzet"
+textarea: "T\xF6bbsoros beviteli mez\u0151"
 image: "K\xE9p"
-select: Select
+select: "V\xE1laszt\xF3"
 base: Alap
 add_object: "Objektum hozz\xE1ad\xE1sa"
 border: Border
@@ -375,8 +375,8 @@ version: "Verzi\xF3"
 active: "Akt\xEDv"
 success: Siker
 translations: "Ford\xEDt\xE1sok"
-translation_simple: Simple Text
-translation_custom: ICU Format
+translation_simple: "Egyszer\u0171 sz\xF6veg"
+translation_custom: "ICU form\xE1tum"
 firstname: "Keresztn\xE9v"
 lastname: "Vezet\xE9kn\xE9v"
 email: E-mail
@@ -463,9 +463,9 @@ variant: "V\xE1ltozat"
 add_variant: "V\xE1ltozat hozz\xE1d\xE1sa"
 delete_message_dependencies: "Vannak f\xFCgg\u0151s\xE9gek, \xEDgy is t\xF6rl\xF6d?"
 delete_message: "T\xE9nyleg t\xF6r\xF6lni akarod?"
-delete_message_advanced: Do you really want to delete %s '%s' ?
+delete_message_advanced: "Biztos t\xF6r\xF6lni akarod %s '%s'-t?"
 delete_message_batch: "T\xE9nyleg t\xF6r\xF6lni akarod ezeket az elemeket?"
-delete_group_message: Do you really want to delete this group and all of its contents?
+delete_group_message: "Biztos t\xF6r\xF6lni akarod a csoportot \xE9s minden tartalm\xE1t?"
 no_further_objectbricks_allowed: "Tov\xE1bbi objectbrick nem enged\xE9lyezett"
 grid_current_language: Jelenlegi nyelv
 object_columns: Objektum oszlopok
@@ -481,7 +481,7 @@ dashboards: "Ir\xE1ny\xEDt\xF3pultok"
 portlet_customreport: Egyedi riport
 clear_marker_or_hotspots: "Marker, hotspot \xE9s crop adatok t\xF6rl\xE9se"
 hotspots_cleared: "Hotspot, Marker \xE9s Crop adatok t\xF6r\xF6lve"
-deeplink: Deeplink
+deeplink: "M\xE9lyhivatkoz\xE1s"
 click_to_open: "(kattints a megnyit\xE1shoz)"
 add_metadata: "Metaadatok hozz\xE1ad\xE1sa"
 pimcore_icon_edit_pdf_text: "Sz\xF6veges verzi\xF3 szerkeszt\xE9se"
@@ -506,10 +506,10 @@ previous_page: "El\u0151z\u0151 Oldal"
 next_page: "K\xF6vetkez\u0151 Oldal"
 last_page: "Utols\xF3 Oldal"
 no_data_to_display: "Nincs megjelen\xEDthet\u0151 adat"
-classificationstore_property: Property
-classificationstore_group: Group
-classificationstore_relation: Relation
-classificationstore_collection: Collection
+classificationstore_property: "Tulajdons\xE1g"
+classificationstore_group: Csoport
+classificationstore_relation: Kapcsolat
+classificationstore_collection: "Kollekci\xF3"
 classificationstore_collection_relation: Collection relation
 classificationstore_no_groups: "Nem tal\xE1lhat\xF3 csoport"
 classificationstore_no_keys: "Nem tal\xE1lhat\xF3 kulcs"
@@ -617,7 +617,7 @@ assign_target_group: "C\xE9lcsoport hozz\xE1rendel\xE9s"
 assign_target_groups: "C\xE9lcsoportok hozz\xE1rendel\xE9se"
 target_group: Target Group
 edit_content_for_target_group: "C\xE9lcsoport tartalm\xE1nak szerkeszt\xE9se"
-email_reply_to: Reply To
+email_reply_to: "V\xE1laszc\xEDm"
 element_tag_filtered_tags: "Sz\u0171rt Tagek"
 web2print_addOverprint: Overprinting
 analyze_permissions: "Jogosults\xE1gok elemz\xE9se"
@@ -651,13 +651,13 @@ only_count: "Csak darabsz\xE1m"
 parameter: "Param\xE9ter"
 forward_parameter: Forward Parameter
 is_array: "Array t\xEDpus"
-php_class: PHP Class
+php_class: "PHP Oszt\xE1ly"
 additional_data: "Tov\xE1bbi adat"
 flatten: "Lap\xEDt\xE1s"
 return_last_result: "Utols\xF3 tal\xE1lat visszaad\xE1sa"
 skip_null: "Null kihagy\xE1sa"
 expand_children: "Gyerekek kinyit\xE1sa"
-collapse_children: Collapse children
+collapse_children: "\xD6sszecsuk\xE1s"
 multiply: "Szorz\xE1s"
 divide: "Oszt\xE1s"
 apply_to_all_objects: "\xC9rv\xE9nyes\xEDtsd mindre"
@@ -722,18 +722,18 @@ by_key: Kulcs (A-Z)
 by_index: "Index (k\xE9zi)"
 successful_object_change_children_sort_to_index: "Gyerekek sorrendez\xE9se Index alapj\xE1n"
 successful_object_change_children_sort_to_key: "Gyerekek sorrendez\xE9se Kulcs alapj\xE1n"
-successful_publish_document: Document successfully published
-successful_publish_object: Object successfully published
-successful_unpublish_document: Document successfully unpublished
-successful_unpublish_object: Object successfully unpublished
+successful_publish_document: "A dokumentum k\xF6zz\xE9t\xE9tele sikeres"
+successful_publish_object: "Az objektum k\xF6zz\xE9t\xE9tele sikeres"
+successful_unpublish_document: "A dokumentum k\xF6zz\xE9t\xE9tele sikeresen visszavonva"
+successful_unpublish_object: "Az objektum k\xF6zz\xE9t\xE9tele sikeresen visszavonva"
 error_object_change_children_sort_to_index: "Gyerekek Index alap\xFA sorrendez\xE9se
   sikertelen"
 error_object_change_children_sort_to_key: "Gyerekek Kulcs alap\xFA sorrendez\xE9se
   sikertelen"
-error_publish_document: Document could not be published
-error_publish_object: Object could not be published
-error_unpublish_document: Document could not be unpublished
-error_unpublish_object: Object could not be unpublished
+error_publish_document: "A dokumentum nem tehet\u0151 k\xF6zz\xE9"
+error_publish_object: "Az objektum nem tehet\u0151 k\xF6zz\xE9"
+error_unpublish_document: "A dokumentum k\xF6zz\xE9t\xE9tele nem vonhat\xF3 vissza"
+error_unpublish_object: "Az objektum k\xF6zz\xE9t\xE9tele nem vonhat\xF3 vissza"
 edit_as_html: "Szerkeszt\xE9s HTML-k\xE9nt"
 edit_as_plain_text: "Szerkeszt\xE9s egyszer\u0171 sz\xF6vegk\xE9nt"
 error_empty_file_upload: "A file \xFCres!"
@@ -793,7 +793,7 @@ error_renaming_item: "Hiba t\xF6rt\xE9nt az elem \xE1tnevez\xE9se sor\xE1n."
 revert: "Visszavon\xE1s"
 parent: "Sz\xFCl\u0151"
 merge_translations: "Ford\xEDt\xE1sok \xF6sszevon\xE1sa"
-prefix: Prefix
+prefix: "El\u0151tag"
 load: "Bet\xF6lt\xE9s"
 saving_failed: "Ment\xE9s sikertelen!"
 failed_to_create_new_item: "\xDAj elem l\xE9trehoz\xE1sa sikertelen, pr\xF3b\xE1ld
@@ -1003,91 +1003,96 @@ reindex_warning: "V\xE1lt\xE1s index alap\xFA sorrendre \xFAjraindexel\xE9st oko
 filter_by_relation: Filter by relation
 filter_by_relation_field: Filter by relation field
 clear_relation_filter: Clear active relation filter
-apply_filter: Apply filter
-config_not_writeable: Not writable, this can have several reasons. For details please
-  have a look into the docs.
+apply_filter: "Sz\u0171r\u0151 alkalmaz\xE1sa"
+config_not_writeable: "Nem \xEDrhat\xF3, ez t\xF6bb okb\xF3l is eredhet. Ellen\u0151rizd
+  a dokument\xE1ci\xF3t."
 sites: Sites
-file_exists: File already exists
-asset_upload_want_to_overwrite: Do you want to overwrite file %s?
-asset_upload_overwrite: Overwrite
+file_exists: "A file m\xE1r l\xE9tezik"
+asset_upload_want_to_overwrite: "Fel\xFCl akarod \xEDrni ezt a filet \"%s\"?"
+asset_upload_overwrite: "Fel\xFCl\xEDr\xE1s"
 asset_upload_keep_both: Keep both files
-asset_upload_apply_to_all: Apply to all
-asset_upload_skip: Skip
-could_not_open_zip_file: The uploaded zip file could not be opened.
+asset_upload_apply_to_all: MIndegyik
+asset_upload_skip: "Kihagy\xE1s"
+could_not_open_zip_file: "A felt\xF6lt\xF6tt zip file nem nyithat\xF3 meg"
 objects_sort_method: Change data objects sort method
-link_recursion_error: The link is redirecting to itself, causing an infinite loop
+link_recursion_error: "A link \xF6nmag\xE1ra ir\xE1ny\xEDt \xE1t v\xE9gtelen ciklust
+  okozva"
 no_further_classes_allowed: No further classes allowed
-address_not_found: The entered address was not found
-possible_causes: Possible causes
+address_not_found: "A megadott c\xEDm nem tal\xE1lhat\xF3"
+possible_causes: "Lehets\xE9ges okok"
 postal_code_format_error: "Postal code format, e.g. use \"5020 Salzburg, S\xF6llheimer
   Stra\xDFe 16\" instead of \"A-5020 Salzburg, S\xF6llheimer Stra\xDFe 16\""
 delete_data_from_it: This will also delete all data from it.
-display_mode: Display Mode
-display_mode_grid: Grid view
-display_mode_combo: Tag field
+display_mode: "Megjelen\xEDt\xE9si m\xF3d"
+display_mode_grid: "R\xE1cs n\xE9zet"
+display_mode_combo: "C\xEDmke mez\u0151"
 batch_confirmation: You are about to update %s dataObjects. Do you want to continue
   ?
-field_collections: Field Collections
+field_collections: "Mez\u0151 kollekci\xF3k"
 display_mode_display: Display path reference
 display_mode_inline_search: Inline Search
-gdpr_dataSource_dataObjects: Data Objects
-parent_id: Parent ID
-modificationDate: Modification Date
-creationDate: Creation Date
-classificationstore_tag_col_group: Group
-none: None
-redirects_type_path: Path
-email_subject: Subject
-gdpr_dataSource_sentMail: Sent Emails
-email_log_subject: Subject
-gdpr_data_extractor_label_email: Email Address
-workflow_notes: Notes
-2fa_code: Code
-password: Password
+gdpr_dataSource_dataObjects: Adatobjektumok
+parent_id: "Sz\xFCl\u0151 ID"
+modificationDate: "M\xF3dos\xEDt\xE1s id\u0151pontja"
+creationDate: "L\xE9rethoz\xE1s id\u0151pontja"
+classificationstore_tag_col_group: Csoport
+none: Egyik sem
+redirects_type_path: "\xDAtvonal"
+email_subject: "T\xE1rgy"
+gdpr_dataSource_sentMail: "Elk\xFCld\xF6tt emailek"
+email_log_subject: "T\xE1rgy"
+gdpr_data_extractor_label_email: "Email c\xEDm"
+workflow_notes: Jegyzetek
+2fa_code: "K\xF3d"
+password: "Jelsz\xF3"
 show_metainfo: Info
-email_log_from: From
-email_from: From
-log_search_from: From
-email_log_to: To
-email_to: To
-log_search_to: To
-structuredtable_type_text: Text
-objectsMetadata_type_text: Text
+email_log_from: "Felad\xF3"
+email_from: "Felad\xF3"
+log_search_from: "Felad\xF3"
+email_log_to: "C\xEDmzett"
+email_to: "C\xEDmzett"
+log_search_to: "C\xEDmzett"
+structuredtable_type_text: "Sz\xF6veg"
+objectsMetadata_type_text: "Sz\xF6veg"
 gdpr_data_extractor_label_id: ID
-navigation_target: Target
-log_type: Type
+navigation_target: "C\xE9l"
+log_type: "T\xEDpus"
 gdpr_dataSource_export: Export
-classificationstore_configuration: Configuration
-gdpr_dataSource_assets: Assets
-structuredtable_type_bool: Checkbox
-objectsMetadata_type_select: Select
-objectsMetadata_type_bool: Bool
-gdpr_data_extractor_label_firstname: Firstname
-gdpr_data_extractor_label_lastname: Lastname
-log_source: Source
-classificationstore_error_addgroup_title: Error
-classificationstore_error_addkey_title: Error
-element_lock_message: 'The desired element is currently opened by another person:'
-log_message: Message
-operator_substring_settings: Settings
-delete_gridconfig_dblcheck: Do you really want to delete this item?
+classificationstore_configuration: "Konfigur\xE1ci\xF3"
+gdpr_dataSource_assets: Assetek
+structuredtable_type_bool: "Jel\xF6l\u0151n\xE9gyzet"
+objectsMetadata_type_select: "V\xE1laszt\xF3"
+objectsMetadata_type_bool: Igaz/hamis
+gdpr_data_extractor_label_firstname: "Keresztn\xE9v"
+gdpr_data_extractor_label_lastname: "Vezet\xE9kn\xE9v"
+log_source: "Forr\xE1s"
+classificationstore_error_addgroup_title: Hiba
+classificationstore_error_addkey_title: Hiba
+element_lock_message: "A kiv\xE1lasztott elem z\xE1rolva van \xE1ltala:"
+log_message: "\xDCzenet"
+operator_substring_settings: "Be\xE1ll\xEDt\xE1sok"
+delete_gridconfig_dblcheck: "Biztos t\xF6r\xF6lni akarod?"
 email_log_cc: Cc
 email_log_bcc: Bcc
-cols: Columns
-log_search_message: Message
+cols: Oszlopok
+log_search_message: "\xDCzenet"
 batch_export_confirmation: You are about to export %s dataObjects. Do you want to
   continue ?
-header: Header
-no_header: No Header
-delete_entire_folder_question: This operation will delete the entire parent/folder.
-  You may not be able to fully undo this operation.
+header: "Fejl\xE9c"
+no_header: "Nincs fejl\xE9c"
+delete_entire_folder_question: "A teljes sz\xFCl\u0151mapp\xE1t t\xF6rl\xF6d. Ez a
+  m\u0171velet nem biztos, hogy visszavonhat\xF3."
 allow_to_clear_relation: Allow to clear all relations of this field
 allow_asset_inline_download: Allow inline download
-email_blocklist: Email Blocklist
-password_does_not_match: New password and confirm password doesn't match
-incorrect_password: Given password is incorrect
+email_blocklist: Email feketelista
+password_does_not_match: "Nem egyezik a k\xE9t jelsz\xF3"
+incorrect_password: "Hib\xE1s jelsz\xF3"
 content_main_document: Content-Main Document
-2fa_wrong: Wrong code entered!
-language_main: Main
+2fa_wrong: "Hib\xE1s k\xF3d!"
+language_main: "F\u0151"
 system_appearance_settings: Appearance & Branding
+male: "F\xE9rfi"
+female: "N\u0151"
+preview_generator_locale: Nyelv
+preview_generator_site: Site
 ...
