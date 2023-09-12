@@ -445,6 +445,10 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
             if (pimcore.globalmanager.exists("document_" + id)) {
                 try {
                     if (rdata && rdata.success) {
+                        if (rdata.treeData) {
+                            pimcore.helpers.updateTreeElementStyle('document', id, rdata.treeData);
+                        }
+
                         pimcore.elementservice.reopenElement(options);
                     }  else {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
@@ -581,7 +585,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         return;
                     }
 
-                    if(rdata && rdata.success) {
+                    if (rdata && rdata.success) {
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
                     }
@@ -594,6 +598,10 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                     if (pimcore.globalmanager.exists("asset_" + id)) {
                         try {
                             if (rdata && rdata.success) {
+                                if (rdata.treeData) {
+                                    pimcore.helpers.updateTreeElementStyle('asset', id, rdata.treeData);
+                                }
+
                                 pimcore.elementservice.reopenElement(options);
                             }  else {
                                 pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
