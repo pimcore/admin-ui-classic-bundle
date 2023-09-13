@@ -541,8 +541,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
                 }
             } else {
-                $msg = 'prevented moving document, because document with same path+key already exists';
-                $msg .= ' aor the document is locked. ID: ' . $document->getId();
+                $msg = 'prevented moving document, because document with same path+key already exists' .
+                    ' or the document is locked. ID: ' . $document->getId();
                 Logger::debug($msg);
 
                 return $this->adminJson(['success' => false, 'message' => $msg]);
