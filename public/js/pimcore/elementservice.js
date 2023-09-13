@@ -442,21 +442,19 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
                 pimcore.elementservice.refreshNode(record);
             }
 
-            if (pimcore.globalmanager.exists("document_" + id)) {
-                try {
-                    if (rdata && rdata.success) {
-                        if (rdata.treeData) {
-                            pimcore.helpers.updateTreeElementStyle('document', id, rdata.treeData);
-                        }
-
-                        pimcore.elementservice.reopenElement(options);
-                    }  else {
-                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                            t(rdata.message));
+            try {
+                if (rdata && rdata.success) {
+                    if (rdata.treeData) {
+                        pimcore.helpers.updateTreeElementStyle('document', id, rdata.treeData);
                     }
-                } catch (e) {
-                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
+
+                    pimcore.elementservice.reopenElement(options);
+                }  else {
+                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
+                        t(rdata.message));
                 }
+            } catch (e) {
+                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
             }
         }.bind(this));
     }
@@ -595,22 +593,20 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         pimcore.elementservice.refreshNode(record);
                     }
 
-                    if (pimcore.globalmanager.exists("asset_" + id)) {
-                        try {
-                            if (rdata && rdata.success) {
-                                if (rdata.treeData) {
-                                    pimcore.helpers.updateTreeElementStyle('asset', id, rdata.treeData);
-                                }
-
-                                pimcore.elementservice.reopenElement(options);
-                            }  else {
-                                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                    "error", t(rdata.message));
+                    try {
+                        if (rdata && rdata.success) {
+                            if (rdata.treeData) {
+                                pimcore.helpers.updateTreeElementStyle('asset', id, rdata.treeData);
                             }
-                        } catch (e) {
+
+                            pimcore.elementservice.reopenElement(options);
+                        }  else {
                             pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                "error");
+                                "error", t(rdata.message));
                         }
+                    } catch (e) {
+                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
+                            "error");
                     }
                 }.bind(this))
             ;
