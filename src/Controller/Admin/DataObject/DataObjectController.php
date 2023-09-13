@@ -1163,7 +1163,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
                 $data = [
                   'success' => true,
-                  'treeData' => $this->getTreeNodeConfig($object)
+                  'treeData' => $this->getTreeNodeConfig($object),
                 ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);

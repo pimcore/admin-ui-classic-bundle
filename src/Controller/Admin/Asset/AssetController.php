@@ -792,7 +792,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     $asset->save();
                     $data = [
                         'success' => true,
-                        'treeData' => $this->getTreeNodeConfig($asset)
+                        'treeData' => $this->getTreeNodeConfig($asset),
                     ];
                 } catch (\Exception $e) {
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
@@ -811,7 +811,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 $asset->save();
                 $data = [
                     'success' => true,
-                    'treeData' => $this->getTreeNodeConfig($asset)
+                    'treeData' => $this->getTreeNodeConfig($asset),
                 ];
             } catch (\Exception $e) {
                 return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);

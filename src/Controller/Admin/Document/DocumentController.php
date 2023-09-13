@@ -471,7 +471,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 return $this->adminJson(
                     [
                         'success' => false,
-                        'message' => "You can't rename or relocate if there's a newer not published version"
+                        'message' => "You can't rename or relocate if there's a newer not published version",
                     ]);
             }
         }
@@ -532,7 +532,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
                     $data = [
                         'success' => true,
-                        'treeData' => $this->getTreeNodeConfig($document)
+                        'treeData' => $this->getTreeNodeConfig($document),
                     ];
                     if ($oldPath && $oldPath != $document->getRealFullPath()) {
                         $this->firePostMoveEvent($document, $oldDocument, $oldPath);
@@ -555,7 +555,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 $document->save();
                 $data = [
                     'success' => true,
-                    'treeData' => $this->getTreeNodeConfig($document)
+                    'treeData' => $this->getTreeNodeConfig($document),
                 ];
 
                 if ($oldPath && $oldPath != $document->getRealFullPath()) {
