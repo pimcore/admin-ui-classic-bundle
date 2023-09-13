@@ -964,7 +964,7 @@ class UserController extends AdminAbstractController implements KernelController
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $token = Tool\Authentication::generateToken($user->getName());
+        $token = Tool\Authentication::generateToken($user);
         $link = $this->generateCustomUrl([
             'token' => $token,
         ]);
@@ -1170,7 +1170,7 @@ class UserController extends AdminAbstractController implements KernelController
                     $user->save();
                 }
 
-                $token = Tool\Authentication::generateToken($user->getName());
+                $token = Tool\Authentication::generateToken($user);
                 $loginUrl = $this->generateCustomUrl([
                     'token' => $token,
                     'reset' => true,

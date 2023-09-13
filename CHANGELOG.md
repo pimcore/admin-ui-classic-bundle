@@ -1,3 +1,6 @@
+#### v1.2.0
+ - Bumped `pimcore/pimcore` minimum requirement to `^11.1.0`
+
 #### v1.1.0
  - `Pimcore\Bundle\AdminBundle\Service\ElementService` is marked as internal.
  - Deprecated `DocumentTreeConfigTrait`
