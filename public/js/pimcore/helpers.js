@@ -242,6 +242,14 @@ pimcore.helpers.updateTreeElementStyle = function (type, id, treeData) {
                 if (typeof treeData.qtipCfg !== "undefined") {
                     record.set("qtipCfg", treeData.qtipCfg);
                 }
+
+                if (typeof treeData.key !== "undefined") {
+                    record.set("key", treeData.key);
+                }
+
+                if (typeof treeData.text !== "undefined") {
+                    record.set("text", treeData.text);
+                }
             }
         }
     }
