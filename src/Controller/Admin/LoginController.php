@@ -224,7 +224,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
             }
 
             if (!$error) {
-                $token = Authentication::generateToken($user);
+                $token = Authentication::generateTokenByUser($user);
 
                 $loginUrl = $this->generateUrl('pimcore_admin_login_check', [
                     'token' => $token,
