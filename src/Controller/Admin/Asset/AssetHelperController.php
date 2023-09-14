@@ -303,7 +303,6 @@ class AssetHelperController extends AdminAbstractController
         if ($keyPrefix) {
             $key = $keyPrefix . $key;
         }
-
         $fieldDef = explode('~', $field['name']);
         $field['name'] = $fieldDef[0];
 
@@ -339,6 +338,15 @@ class AssetHelperController extends AdminAbstractController
         } elseif ($type === 'document' || $type === 'asset' || $type === 'object') {
             $result['layout']['fieldtype'] = 'manyToOneRelation';
             $result['layout']['subtype'] = $type;
+        }
+        if(!$predefined && $type != 'system') {
+            $eventDispatcher = \Pimcore::getKernel()->getContainer()->get('event_dispatcher');
+            $assetGetFieldGridConfig = new GenericEvent($this, [
+                'field' => $field,
+                'result' => $result
+            ]);
+
+            $eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
         }
 
         return $result;
