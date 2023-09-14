@@ -505,6 +505,7 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
+                        pimcore.elementservice.refreshNode(record.parentNode);
                     }  else {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
                             t(rdata.message));
