@@ -339,19 +339,16 @@ class AssetHelperController extends AdminAbstractController
             $result['layout']['fieldtype'] = 'manyToOneRelation';
             $result['layout']['subtype'] = $type;
         }
-        if(!$predefined && $type != 'system') {
-            $eventDispatcher = \Pimcore::getKernel()->getContainer()->get('event_dispatcher');
-            $assetGetFieldGridConfig = new GenericEvent($this, [
-                'field' => $field,
-                'result' => $result
-            ]);
+        $eventDispatcher = \Pimcore::getKernel()->getContainer()->get('event_dispatcher');
+        $assetGetFieldGridConfig = new GenericEvent($this, [
+            'field' => $field,
+            'result' => $result
+        ]);
 
-            $eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
-            if(isset($assetGetFieldGridConfig['fieldData'])) {
-                $result['layout'] = $assetGetFieldGridConfig['fieldData'];
-            }
+        $eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
+        if(isset($assetGetFieldGridConfig['fieldData'])) {
+            $result['layout'] = $assetGetFieldGridConfig['fieldData'];
         }
-
         return $result;
     }
 
