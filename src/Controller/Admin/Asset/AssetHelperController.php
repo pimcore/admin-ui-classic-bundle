@@ -347,7 +347,7 @@ class AssetHelperController extends AdminAbstractController
 
         $assetGetFieldGridConfig = new GenericEvent($this, [
             'field' => $field,
-            'result' => $result
+            'result' => $result,
         ]);
 
         $this->eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
