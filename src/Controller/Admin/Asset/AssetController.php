@@ -43,6 +43,7 @@ use Pimcore\Model\Element\ValidationException;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -738,10 +739,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      * @return JsonResponse
      *
      * @throws \Exception
+     * @throws RuntimeException
      */
     public function updateAction(Request $request): JsonResponse
     {
-        $success = false;
+        $data = ['success' => false];
         $allowUpdate = true;
 
         $updateData = array_merge($request->request->all(), $request->query->all());
@@ -757,7 +759,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 //check if parent is changed i.e. asset is moved
                 if ($asset->getParentId() != $parentAsset->getId()) {
                     if (!$parentAsset->isAllowed('create')) {
-                        throw new \Exception('Prevented moving asset - no create permission on new parent ');
+                        throw new RuntimeException('Prevented moving asset - no create permission on new parent.');
                     }
 
                     $intendedPath = $parentAsset->getRealPath();
@@ -781,29 +783,36 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             if ($allowUpdate) {
                 if ($request->get('filename') != $asset->getFilename() && !$asset->isAllowed('rename')) {
                     unset($updateData['filename']);
-                    Logger::debug('prevented renaming asset because of missing permissions ');
+                    Logger::debug('prevented renaming asset because of missing permissions.');
                 }
 
                 $asset->setValues($updateData);
 
                 try {
                     $asset->save();
-                    $success = true;
+                    $data = [
+                        'success' => true,
+                        'treeData' => $this->getTreeNodeConfig($asset),
+                    ];
                 } catch (\Exception $e) {
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
                 }
             } else {
-                $msg = 'prevented moving asset, asset with same path+key already exists at target location or the asset is locked. ID: ' . $asset->getId();
+                $msg = 'prevented moving asset, asset with same path+key already exists';
+                $msg .= ' at target location or the asset is locked. ID: ' . $asset->getId();
                 Logger::debug($msg);
 
-                return $this->adminJson(['success' => $success, 'message' => $msg]);
+                return $this->adminJson(['success' => false, 'message' => $msg]);
             }
         } elseif ($asset->isAllowed('rename') && $request->get('filename')) {
             //just rename
             try {
                 $asset->setFilename($request->get('filename'));
                 $asset->save();
-                $success = true;
+                $data = [
+                    'success' => true,
+                    'treeData' => $this->getTreeNodeConfig($asset),
+                ];
             } catch (\Exception $e) {
                 return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
             }
@@ -811,7 +820,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             Logger::debug('prevented update asset because of missing permissions ');
         }
 
-        return $this->adminJson(['success' => $success]);
+        return $this->adminJson($data);
     }
 
     /**

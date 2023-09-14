@@ -1567,11 +1567,13 @@ span.warning {
     opacity: 1;
 }
 
-.pimcore_editor_tabbar .x-tab.x-tab-active .x-tab-inner-default {
+.pimcore_editor_tabbar .x-tab.x-tab-active .x-tab-inner-default,
+.pimcore_editor_tabbar .x-tab.x-tab-over .x-tab-inner-default {
     color: #000 !important;
 }
 
-.pimcore_editor_tabbar .x-tab.x-tab-active .pimcore_material_icon {
+.pimcore_editor_tabbar .x-tab.x-tab-active .pimcore_material_icon,
+.pimcore_editor_tabbar .x-tab.x-tab-over .pimcore_material_icon {
     filter: invert(100%);
 }
 
@@ -1580,10 +1582,6 @@ span.warning {
     background-color: #393C3F;
     background-size: 15px 15px;
     opacity: 1;
-}
-
-.pimcore_editor_tabbar .x-tab.x-tab-over .x-tab-inner-default {
-    color: #fff;
 }
 
 .pimcore_editor_tabbar .x-tab-bar-strip-default {

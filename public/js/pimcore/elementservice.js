@@ -439,20 +439,22 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
             for (index = 0; index < affectedNodes.length; index++) {
                 record = affectedNodes[index];
-                pimcore.elementservice.refreshNode(record.parentNode);
+                pimcore.elementservice.refreshNode(record);
             }
 
-            if (pimcore.globalmanager.exists("document_" + id)) {
-                try {
-                    if (rdata && rdata.success) {
-                        pimcore.elementservice.reopenElement(options);
-                    }  else {
-                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                            t(rdata.message));
+            try {
+                if (rdata && rdata.success) {
+                    if (rdata.treeData) {
+                        pimcore.helpers.updateTreeElementStyle('document', id, rdata.treeData);
                     }
-                } catch (e) {
-                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
+
+                    pimcore.elementservice.reopenElement(options);
+                }  else {
+                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
+                        t(rdata.message));
                 }
+            } catch (e) {
+                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
             }
         }.bind(this));
     }
@@ -496,6 +498,10 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                 try {
                     var rdata = Ext.decode(response.responseText);
                     if (rdata && rdata.success) {
+                        if (rdata.treeData) {
+                            pimcore.helpers.updateTreeElementStyle('object', id, rdata.treeData);
+                        }
+
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
@@ -587,7 +593,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         return;
                     }
 
-                    if(rdata && rdata.success) {
+                    if (rdata && rdata.success) {
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
                     }
@@ -597,18 +603,20 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         pimcore.elementservice.refreshNode(record);
                     }
 
-                    if (pimcore.globalmanager.exists("asset_" + id)) {
-                        try {
-                            if (rdata && rdata.success) {
-                                pimcore.elementservice.reopenElement(options);
-                            }  else {
-                                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                    "error", t(rdata.message));
+                    try {
+                        if (rdata && rdata.success) {
+                            if (rdata.treeData) {
+                                pimcore.helpers.updateTreeElementStyle('asset', id, rdata.treeData);
                             }
-                        } catch (e) {
+
+                            pimcore.elementservice.reopenElement(options);
+                        }  else {
                             pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                "error");
+                                "error", t(rdata.message));
                         }
+                    } catch (e) {
+                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
+                            "error");
                     }
                 }.bind(this))
             ;

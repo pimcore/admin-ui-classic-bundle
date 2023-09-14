@@ -84,6 +84,7 @@ pimcore.document.tree = Class.create({
 
         var itemsPerPage = pimcore.settings['document_tree_paging_limit'];
 
+
         let rootNodeConfigText = t('home');
         let rootNodeConfigIconCls = "pimcore_icon_home";
         if(this.config.customViewId !== undefined && rootNodeConfig.id !== 1) {
@@ -210,7 +211,7 @@ pimcore.document.tree = Class.create({
 
     onTreeNodeClick: function (tree, record, item, index, event, eOpts ) {
         if (event.ctrlKey === false && event.shiftKey === false && event.altKey === false) {
-            if (record.data.permissions.view) {
+            if (record.data.permissions && record.data.permissions.view) {
                 pimcore.helpers.treeNodeThumbnailPreviewHide();
                 pimcore.helpers.openDocument(record.data.id, record.data.type);
             }
@@ -349,7 +350,7 @@ pimcore.document.tree = Class.create({
                 selectedIds.push(item.id);
             });
 
-            if (record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.delete")) {
+            if (record.data.permissions && record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.delete")) {
                 menu.add(new Ext.menu.Item({
                     text: t('delete'),
                     iconCls: "pimcore_icon_delete",
@@ -359,8 +360,8 @@ pimcore.document.tree = Class.create({
         } else {
             var pasteMenu = [];
             var pasteInheritanceMenu = [];
-            var childSupportedDocument = pimcore.helpers.documentTypeHasSpecificRole(record.data.type, "children_supported");
-            if (childSupportedDocument && record.data.permissions.create) {
+            var childSupportedDocument = (record.data.type)?pimcore.helpers.documentTypeHasSpecificRole(record.data.type, "children_supported"):false;
+            if (childSupportedDocument && record.data.permissions && record.data.permissions.create) {
 
 
                 var addDocuments = perspectiveCfg.inTreeContextMenu("document.add");
@@ -470,7 +471,7 @@ pimcore.document.tree = Class.create({
 
 
                 //paste
-                if (pimcore.cachedDocumentId && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
+                if (pimcore.cachedDocumentId && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
                     pasteMenu.push({
                         text: t("paste_recursive_as_child"),
                         iconCls: "pimcore_icon_paste",
@@ -543,7 +544,7 @@ pimcore.document.tree = Class.create({
 
 
             //paste
-            if (childSupportedDocument && pimcore.cutDocument && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.pasteCut")) {
+            if (childSupportedDocument && pimcore.cutDocument && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.pasteCut")) {
                 pasteMenu.push({
                     text: t("paste_cut_element"),
                     iconCls: "pimcore_icon_paste",
@@ -556,7 +557,7 @@ pimcore.document.tree = Class.create({
                 });
             }
 
-            if (pimcore.cachedDocumentId && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
+            if (pimcore.cachedDocumentId && record.data.permissions && record.data.permissions.create && perspectiveCfg.inTreeContextMenu("document.paste")) {
 
                 if (record.data.type != "folder") {
                     pasteMenu.push({
@@ -585,7 +586,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if (record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.copy")) {
+            if (record.data.permissions && record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.copy")) {
                 menu.add(new Ext.menu.Item({
                     text: t('copy'),
                     iconCls: "pimcore_icon_copy",
@@ -593,7 +594,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if (record.data.id != 1 && !record.data.locked && record.data.permissions.rename && perspectiveCfg.inTreeContextMenu("document.cut")) {
+            if (record.data.id != 1 && !record.data.locked && record.data.permissions && record.data.permissions.rename && perspectiveCfg.inTreeContextMenu("document.cut")) {
                 menu.add(new Ext.menu.Item({
                     text: t('cut'),
                     iconCls: "pimcore_icon_cut",
@@ -601,7 +602,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if (record.data.permissions.rename && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.rename")) {
+            if (record.data.permissions && record.data.permissions.rename && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.rename")) {
                 menu.add(new Ext.menu.Item({
                     text: t('rename'),
                     iconCls: "pimcore_icon_key pimcore_icon_overlay_go",
@@ -611,13 +612,13 @@ pimcore.document.tree = Class.create({
 
             //publish
             if (record.data.type != "folder" && !record.data.locked) {
-                if (record.data.published && record.data.permissions.unpublish && perspectiveCfg.inTreeContextMenu("document.unpublish")) {
+                if (record.data.published && record.data.permissions && record.data.permissions.unpublish && perspectiveCfg.inTreeContextMenu("document.unpublish")) {
                     menu.add(new Ext.menu.Item({
                         text: t('unpublish'),
                         iconCls: "pimcore_icon_unpublish",
                         handler: this.publishDocument.bind(this, tree, record, 'unpublish')
                     }));
-                } else if (!record.data.published && record.data.permissions.publish && perspectiveCfg.inTreeContextMenu("document.publish")) {
+                } else if (!record.data.published && record.data.permissions && record.data.permissions.publish && perspectiveCfg.inTreeContextMenu("document.publish")) {
                     menu.add(new Ext.menu.Item({
                         text: t('publish'),
                         iconCls: "pimcore_icon_publish",
@@ -627,7 +628,7 @@ pimcore.document.tree = Class.create({
             }
 
 
-            if (record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.delete")) {
+            if (record.data.permissions && record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.delete")) {
                 menu.add(new Ext.menu.Item({
                     text: t('delete'),
                     iconCls: "pimcore_icon_delete",
@@ -635,7 +636,7 @@ pimcore.document.tree = Class.create({
                 }));
             }
 
-            if ((record.data.type == "page" || record.data.type == "hardlink") && record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.open")) {
+            if ((record.data.type == "page" || record.data.type == "hardlink") && record.data.permissions && record.data.permissions.view && perspectiveCfg.inTreeContextMenu("document.open")) {
                 menu.add(new Ext.menu.Item({
                     text: t('open_in_new_window'),
                     iconCls: "pimcore_icon_open_window",
@@ -649,7 +650,7 @@ pimcore.document.tree = Class.create({
             var advancedMenuItems = [];
             var user = pimcore.globalmanager.get("user");
 
-            if (record.data.id != 1 && record.data.permissions.publish && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.convert")) {
+            if (record.data.id != 1 && record.data.permissions && record.data.permissions.publish && !record.data.locked && perspectiveCfg.inTreeContextMenu("document.convert")) {
 
                 let conversionTargets = [];
                 if(addDocuments) {
@@ -704,6 +705,7 @@ pimcore.document.tree = Class.create({
             }
 
             if (childSupportedDocument &&
+                record.data.permissions &&
                 record.data.permissions.create &&
                 perspectiveCfg.inTreeContextMenu("document.searchAndMove") &&
                 pimcore.helpers.hasSearchImplementation()) {
