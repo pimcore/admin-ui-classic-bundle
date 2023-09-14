@@ -54,6 +54,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class AssetHelperController extends AdminAbstractController
 {
+    public function __construct(
+        protected EventDispatcherInterface $eventDispatcher,
+    ) {
+    }
+
     public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType): array
     {
         $db = Db::get();
@@ -339,16 +344,15 @@ class AssetHelperController extends AdminAbstractController
             $result['layout']['fieldtype'] = 'manyToOneRelation';
             $result['layout']['subtype'] = $type;
         }
-        $eventDispatcher = \Pimcore::getKernel()->getContainer()->get('event_dispatcher');
+
         $assetGetFieldGridConfig = new GenericEvent($this, [
             'field' => $field,
             'result' => $result
         ]);
 
-        $eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
-        if(isset($assetGetFieldGridConfig['fieldData'])) {
-            $result['layout'] = $assetGetFieldGridConfig['fieldData'];
-        }
+        $this->eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
+        $result = $assetGetFieldGridConfig->getArgument('result');
+
         return $result;
     }
 
