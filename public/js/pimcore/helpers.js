@@ -3045,10 +3045,12 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 
                     var params = {};
 
-                    if(parentType === 'path') {
-                        params['parentPath'] = parent;
-                    } else if (parentType === 'id') {
-                        params['parentId'] = parent;
+                    if(parent !== undefined){
+                        if(parentType === 'path') {
+                            params['parentPath'] = parent;
+                        } else if (parentType === 'id') {
+                            params['parentId'] = parent;
+                        }
                     }
 
                     if (context) {
