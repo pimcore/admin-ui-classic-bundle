@@ -858,7 +858,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
-                                    console.log('reloading');
                                     this.versions.reload();
                                 } catch (e) {
                                     console.log(e);
