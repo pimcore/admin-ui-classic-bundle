@@ -181,9 +181,6 @@ class AdminEvents
     /**
      * Arguments:
      *  - field
-     *  - language
-     *  - keyPrefix
-     *  - processed
      *  - result
      *
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
