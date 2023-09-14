@@ -804,6 +804,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 method: "PUT",
                 params: saveData,
                 success: function (response) {
+                    let shouldReload = false;
                     if (task != "session") {
                         try {
                             var rdata = Ext.decode(response.responseText);
@@ -833,6 +834,8 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                                         this.data['draft'] = rdata['draft'];
                                     }
 
+                                    shouldReload = true;
+
                                     pimcore.helpers.updateTreeElementStyle('object', this.id, rdata.treeData);
                                     const postSaveObject = new CustomEvent(pimcore.events.postSaveObject, {
                                         detail: {
@@ -842,6 +845,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                                     });
 
                                     document.dispatchEvent(postSaveObject);
+
                                 } else {
                                     pimcore.helpers.showPrettyError("error", t("saving_failed"), rdata.message);
                                 }
@@ -850,10 +854,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                         }
                         // reload versions
-                        if (task != "autoSave" && this.isAllowed("versions")) {
+                        if (shouldReload && task != "autoSave" && this.isAllowed("versions")) {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
+                                    console.log('reloading');
                                     this.versions.reload();
                                 } catch (e) {
                                     console.log(e);
