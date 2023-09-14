@@ -347,6 +347,9 @@ class AssetHelperController extends AdminAbstractController
             ]);
 
             $eventDispatcher->dispatch($assetGetFieldGridConfig, AdminEvents::ASSET_GET_FIELD_GRID_CONFIG);
+            if(isset($assetGetFieldGridConfig['fieldData'])) {
+                $result['layout'] = $assetGetFieldGridConfig['fieldData'];
+            }
         }
 
         return $result;
