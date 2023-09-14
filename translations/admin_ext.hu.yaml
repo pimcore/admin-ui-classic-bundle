@@ -14,7 +14,7 @@ url_slug_datatype_info: "A Controller & Action a k\xF6vetkez\u0151 form\xE1tumba
   kell megadni:<br>\nAppBundle\\Controller\\ProductController:testAction"
 controller_action: Controller & Action
 admin_interface: "Admin interf\xE9sz"
-admin_interface_background: Admin Interface Background
+admin_interface_background: "Admin fel\xFClet h\xE1tt\xE9r"
 icon_library: "Ikon k\xF6nyvt\xE1r"
 system_performance_stability_warning: "K\xE9rj\xFCk ne haszn\xE1ld ezt a funkci\xF3t,
   kiv\xE9ve ha pontosan tudod, hogy mit csin\xE1lsz.<br /><b style='color:red'>Ez
@@ -35,7 +35,7 @@ saturation: "Szatur\xE1ci\xF3"
 hue: "Sz\xEDn\xE1rnyalat"
 addoverlay_fit: "Overlay hozz\xE1ad\xE1sa - Fit"
 environments: "K\xF6rnyezetek"
-test: Test
+test: Teszt
 colorspace: "Sz\xEDnt\xE9r"
 ratio: "Ar\xE1ny"
 decimal_size: "Tizedes m\xE9ret"
@@ -48,7 +48,7 @@ decimal_mysql_type_naming_warning: "Felh\xEDvjuk figyelm\xE9t, hogy MySQL kifeje
   pedig <code>scale</code>-nek h\xEDvj\xE1k."
 only_unsigned: "csak el\u0151jel n\xE9lk\xFCli"
 integer: "eg\xE9sz"
-static: Static
+static: Statikus
 object_regex_info: "RegExp elv\xE1laszt\xF3k n\xE9lk\xFCl, JS-ben \xE9s PHP-ban is
   m\u0171k\xF6dj\xF6n"
 regex_validation: "Regul\xE1ris Kifejez\xE9s valid\xE1ci\xF3"
@@ -79,11 +79,11 @@ defaults_to_all: "Alap\xE9rtelmezetten az \xF6sszes"
 use_different_email_delivery_settings: "M\xE1s e-mail konfigur\xE1ci\xF3 haszn\xE1lata
   a h\xEDrlev\xE9lhez"
 action_scope: "M\xE1velet hat\xF3k\xF6re"
-hit: Hit
-session: Session
+hit: "Tal\xE1lat"
+session: Munkamenet
 session_with_variables: "Session (v\xE1ltoz\xF3kkal)"
 fallback_languages: 'Fallback nyelv (CSV, pl.: de_CH,de)'
-frontend_languages: Frontend Languages
+frontend_languages: Frontend nyelvek
 add_language: "Nyelv hozz\xE1ad\xE1sa"
 default_language: "Alap\xE9rtelmezett nyelv"
 wildcards_are_supported: "A helyettes\xEDt\u0151 karakterek t\xE1mogatottak"
@@ -136,7 +136,7 @@ OR: VAGY
 AND_NOT: "\xC9S NEM"
 radius_in_km: "R\xE1diusz (km)"
 redirect: "\xC1tir\xE1ny\xEDt"
-code_snippet: Code-Snippet
+code_snippet: "K\xF3dr\xE9szlet"
 browser: "B\xF6ng\xE9sz\u0151"
 conditions: "Felt\xE9telek"
 save_order: "Sorrend ment\xE9se"
@@ -145,10 +145,10 @@ short_url: "R\xF6vid URL"
 width_and_height_must_be_an_even_number: "sz\xE9less\xE9g \xE9s magass\xE1g eg\xE9sz
   sz\xE1m kell legyen"
 this_filter_has_no_settings: this filter has no settings
-mute: Mute
-effect: Effect
+mute: "N\xE9m\xEDt\xE1s"
+effect: Effekt
 colorChannelMixer: Color Channel Mixer
-setframerate: Set Framerate
+setframerate: "Framerate be\xE1ll\xEDt\xE1s"
 source_site: "Forr\xE1s oldal"
 target_site: "C\xE9l oldal"
 source_entire_url: "Teljes URL forr\xE1sk\xE9nt"
@@ -162,10 +162,10 @@ errors_from_the_last_7_days: "AZ elm\xFAlt 7 nap hib\xE1i"
 show_close_warning: "Figyelmeztet\xE9s mutat\xE1sa bez\xE1r\xE1skor"
 matching_text: "Megfelel\u0151 sz\xF6veg"
 any: "B\xE1rmilyen"
-http_method: HTTP Method
+http_method: "HTTP met\xF3dus"
 url_pattern: URL Pattern<br />(RegExp eg. @success@i)
 beginning: Kezdet
-element_css_selector: Element (CSS Selector)
+element_css_selector: Elem (CSS selector)
 insert_position: "Beilleszt\xE9si poz\xEDci\xF3"
 robots_txt_exists_on_filesystem: "A robots.txt m\xE1r l\xE9tezik a f\xE1jl rendszer
   root mapp\xE1j\xE1ban"
@@ -204,9 +204,9 @@ radius: "R\xE1diusz"
 sigma: Szigma
 threshold: "K\xFCsz\xF6b"
 tolerance: Tolerancia
-grayscale: Grayscale
+grayscale: "Sz\xFCre\xE1rnyalatos"
 nothing_to_configure: "Nincs mit konfigur\xE1lni"
-opacity: Opacity
+opacity: "\xC1tl\xE1tsz\xF3s\xE1g"
 applymask: Apply Mask
 addoverlay: "Overlay hozz\xE1ad\xE1sa"
 transformations: "Transzform\xE1ci\xF3k"
@@ -251,10 +251,10 @@ columnlength: Oszlop hossza
 visible_in_searchresult: "L\xE1that\xF3 a keres\xE9si tal\xE1latok k\xF6z\xF6tt"
 visible_in_gridview: "L\xE1that\xF3 r\xE1csn\xE9zetben"
 fieldcollections: Field-Collections
-block: Block
+block: Blokk
 tooltip: Tooltip
 decimalPrecision: "Tizedes-pontoss\xE1g"
-css_style: CSS Style
+css_style: "CSS st\xEDlus"
 add_setting: "Be\xE1ll\xEDt\xE1s hozz\xE1ad\xE1sa"
 reverse: "Ford\xEDtott"
 geopolygon: "F\xF6ldrajzi poligon"
@@ -262,7 +262,7 @@ geopolyline: "F\xF6ldrajzi vonal"
 geobounds: "F\xF6ldrajzi hat\xE1rok"
 sure_to_install_unstable_update: "Biztos, hogy telep\xEDteni szeretn\xE9l egy potenci\xE1lisan
   nem m\u0171k\xF6d\u0151 verzi\xF3t?"
-multiselect: Multiselection
+multiselect: "T\xF6bbesv\xE1laszt\xF3"
 handler: Handler
 invisible: "L\xE1thatatlan"
 only_configured_languages: "Csak a rendszerbe\xE1ll\xEDt\xE1sokkal konfigur\xE1lt
