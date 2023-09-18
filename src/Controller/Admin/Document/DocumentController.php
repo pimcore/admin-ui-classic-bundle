@@ -19,11 +19,10 @@ use Exception;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\DocumentTreeConfigTrait;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
@@ -33,12 +32,14 @@ use Pimcore\Image\Chromium;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
+use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Site;
 use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -57,7 +58,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class DocumentController extends ElementControllerBase implements KernelControllerEventInterface
 {
-    use DocumentTreeConfigTrait;
+    use AdminStyleTrait;
     use UserNameTrait;
     use RecursionBlockingEventDispatchHelperTrait;
 
@@ -164,7 +165,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $cv = [];
         if ($document->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             $db = Db::get();
@@ -213,7 +214,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $childrenList = $list->load();
 
             foreach ($childrenList as $childDocument) {
-                $documentTreeNode = $this->getTreeNodeConfig($childDocument);
+                $documentTreeNode = $this->elementService->getElementTreeNodeConfig($childDocument);
                 // the !isset is for printContainer case, there are no permissions sets there
                 if (!isset($documentTreeNode['permissions']['list']) || $documentTreeNode['permissions']['list'] == 1) {
                     $documents[] = $documentTreeNode;
@@ -448,10 +449,11 @@ class DocumentController extends ElementControllerBase implements KernelControll
      * @return JsonResponse
      *
      * @throws Exception
+     * @throws RuntimeException
      */
     public function updateAction(Request $request): JsonResponse
     {
-        $success = false;
+        $data = ['success' => false];
         $allowUpdate = true;
 
         $document = Document::getById((int) $request->get('id'));
@@ -459,12 +461,18 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $oldPath = $document->getDao()->getCurrentFullPath();
         $oldDocument = Document::getById($document->getId(), ['force' => true]);
 
-        // this prevents the user from renaming, relocating (actions in the tree) if the newest version isn't the published one
+        // this prevents the user from renaming, relocating (actions in the tree) if the newest version isn't published
         // the reason is that otherwise the content of the newer not published version will be overwritten
         if ($document instanceof Document\PageSnippet) {
             $latestVersion = $document->getLatestVersion();
-            if ($latestVersion && $latestVersion->getData()->getModificationDate() != $document->getModificationDate()) {
-                return $this->adminJson(['success' => false, 'message' => "You can't rename or relocate if there's a newer not published version"]);
+            if ($latestVersion &&
+                $latestVersion->getData()->getModificationDate() != $document->getModificationDate()
+            ) {
+                return $this->adminJson(
+                    [
+                        'success' => false,
+                        'message' => "You can't rename or relocate if there's a newer not published version",
+                    ]);
             }
         }
 
@@ -476,7 +484,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 //check if parent is changed
                 if ($document->getParentId() != $parentDocument->getId()) {
                     if (!$parentDocument->isAllowed('create')) {
-                        throw new Exception('Prevented moving document - no create permission on new parent ');
+                        throw new RuntimeException('Prevented moving document - no create permission on new parent.');
                     }
 
                     $intendedPath = $parentDocument->getRealPath();
@@ -522,7 +530,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
                         $this->updateIndexesOfDocumentSiblings($document, $request->get('index'));
                     }
 
-                    $success = true;
+                    $data = [
+                        'success' => true,
+                        'treeData' => $this->getTreeNodeConfig($document),
+                    ];
                     if ($oldPath && $oldPath != $document->getRealFullPath()) {
                         $this->firePostMoveEvent($document, $oldDocument, $oldPath);
                     }
@@ -530,7 +541,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
                 }
             } else {
-                $msg = 'Prevented moving document, because document with same path+key already exists or the document is locked. ID: ' . $document->getId();
+                $msg = 'prevented moving document, because document with same path+key already exists' .
+                    ' or the document is locked. ID: ' . $document->getId();
                 Logger::debug($msg);
 
                 return $this->adminJson(['success' => false, 'message' => $msg]);
@@ -541,7 +553,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 $document->setKey($request->get('key'));
                 $document->setUserModification($this->getAdminUser()->getId());
                 $document->save();
-                $success = true;
+                $data = [
+                    'success' => true,
+                    'treeData' => $this->getTreeNodeConfig($document),
+                ];
 
                 if ($oldPath && $oldPath != $document->getRealFullPath()) {
                     $this->firePostMoveEvent($document, $oldDocument, $oldPath);
@@ -553,7 +568,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             Logger::debug('Prevented update document, because of missing permissions.');
         }
 
-        return $this->adminJson(['success' => $success]);
+        return $this->adminJson($data);
     }
 
     private function firePostMoveEvent(Document $document, Document $oldDocument, string $oldPath): void
@@ -1254,7 +1269,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $service = new Document\Service();
 
-        $config = $this->getTreeNodeConfig($document);
+        $config = $this->elementService->getElementTreeNodeConfig($document);
 
         $translations = is_null($translations) ? $service->getTranslations($document) : $translations;
 
@@ -1305,6 +1320,9 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
             $props = $document->getObjectVars();
             foreach ($props as $name => $value) {
+                if (in_array($name, ['children', 'siblings', 'scheduledTasks', 'controller', 'template'])) {
+                    continue;
+                }
                 $new->setValue($name, $value);
             }
 
@@ -1448,5 +1466,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
+    }
+
+    public function getTreeNodeConfig(ElementInterface $element): array
+    {
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 }

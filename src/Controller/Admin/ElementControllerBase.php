@@ -22,6 +22,7 @@ use Pimcore\Bundle\AdminBundle\Event\Model\AssetDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\DataObjectDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\DocumentDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\ElementDeleteInfoEventInterface;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Event\DataObjectEvents;
 use Pimcore\Event\DocumentEvents;
 use Pimcore\Logger;
@@ -40,6 +41,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 abstract class ElementControllerBase extends AdminAbstractController
 {
+    public function __construct(
+        protected ElementServiceInterface $elementService
+    ) {
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -71,6 +77,8 @@ abstract class ElementControllerBase extends AdminAbstractController
             if ($root->isAllowed('list')) {
                 return $this->adminJson($this->getTreeNodeConfig($root));
             }
+
+            return $this->adminJson(['success' => false, 'id' =>  $id]);
         }
 
         return $this->adminJson(['success' => false, 'message' => 'missing_permission']);

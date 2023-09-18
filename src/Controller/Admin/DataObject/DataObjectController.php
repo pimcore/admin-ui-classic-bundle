@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
@@ -102,7 +101,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $offset = (int)$request->get('start');
             $limit = (int)$request->get('limit', 100000000);
             if ($view = $request->get('view', '')) {
-                $cv = ElementService::getCustomViewById($request->get('view'));
+                $cv = $this->elementService->getCustomViewById($request->get('view'));
             }
 
             if (!is_null($filter)) {
@@ -190,7 +189,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         // custom views start
         if ($view) {
-            $cv = ElementService::getCustomViewById($view);
+            $cv = $this->elementService->getCustomViewById($view);
 
             if (!empty($cv['classes'])) {
                 $cvConditions = [];
@@ -236,73 +235,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var DataObject $child */
-        $child = $element;
-
-        $tmpObject = [
-            'id' => $child->getId(),
-            'idx' => $child->getIndex(),
-            'key' => $child->getKey(),
-            'sortBy' => $child->getChildrenSortBy(),
-            'sortOrder' => $child->getChildrenSortOrder(),
-            'text' => htmlspecialchars($child->getKey()),
-            'type' => $child->getType(),
-            'path' => $child->getRealFullPath(),
-            'basePath' => $child->getRealPath(),
-            'elementType' => 'object',
-            'locked' => $child->isLocked(),
-            'lockOwner' => $child->getLocked() ? true : false,
-        ];
-
-        $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
-        if ($child instanceof DataObject\Concrete && $child->getClass()->getShowVariants()) {
-            $allowedTypes[] = DataObject::OBJECT_TYPE_VARIANT;
-        }
-
-        $hasChildren = $child->getDao()->hasChildren($allowedTypes, null, $this->getAdminUser());
-
-        $tmpObject['allowDrop'] = false;
-
-        $tmpObject['isTarget'] = true;
-        if ($tmpObject['type'] != DataObject::OBJECT_TYPE_VARIANT) {
-            $tmpObject['allowDrop'] = true;
-        }
-
-        $tmpObject['allowChildren'] = true;
-        $tmpObject['leaf'] = !$hasChildren;
-        $tmpObject['cls'] = 'pimcore_class_icon ';
-
-        if ($child instanceof DataObject\Concrete) {
-            $tmpObject['published'] = $child->isPublished();
-            $tmpObject['className'] = $child->getClass()->getName();
-
-            if (!$child->isPublished()) {
-                $tmpObject['cls'] .= 'pimcore_unpublished ';
-            }
-
-            $tmpObject['allowVariants'] = $child->getClass()->getAllowVariants();
-        }
-
-        $this->addAdminStyle($child, ElementAdminStyleEvent::CONTEXT_TREE, $tmpObject);
-
-        $tmpObject['expanded'] = !$hasChildren;
-        $tmpObject['permissions'] = $child->getUserPermissions($this->getAdminUser());
-
-        if ($child->isLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($child->getLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        if ($tmpObject['leaf']) {
-            $tmpObject['expandable'] = false;
-            $tmpObject['leaf'] = false; //this is required to allow drag&drop
-            $tmpObject['expanded'] = true;
-            $tmpObject['loaded'] = true;
-        }
-
-        return $tmpObject;
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**
@@ -608,7 +541,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-select-options", name="getSelectOptions", methods={"GET"})
+     * @Route("/get-select-options", name="getSelectOptions", methods={"POST"})
      *
      * @param Request $request
      *
@@ -618,7 +551,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = $request->query->getInt('objectId');
+        $objectId = $request->request->getInt('objectId');
         $object = DataObject\Concrete::getById($objectId);
         if (!$object instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
@@ -1154,7 +1087,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     private function executeUpdateAction(DataObject $object, mixed $values): array
     {
-        $success = false;
+        $data = ['success' => false];
 
         if ($object instanceof DataObject\Concrete) {
             $object->setOmitMandatoryCheck(true);
@@ -1228,7 +1161,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     $this->updateIndexesOfObjectSiblings($object, $indexUpdate);
                 }
 
-                $success = true;
+                $data = [
+                  'success' => true,
+                  'treeData' => $this->getTreeNodeConfig($object),
+                ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);
 
@@ -1240,7 +1176,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             Logger::debug('prevented update object because of missing permissions.');
         }
 
-        return ['success' => $success];
+        return $data;
     }
 
     private function executeInsideTransaction(callable $fn): void

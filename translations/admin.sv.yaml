@@ -1084,4 +1084,8 @@ content_main_document: "Inneh\xE5llets huvuddokument"
 2fa_wrong: Felaktig kod inmatad!
 language_main: "Huvudspr\xE5k"
 system_appearance_settings: Utseende & profilering
+male: Male
+female: Female
+preview_generator_locale: Language
+preview_generator_site: Site
 ...

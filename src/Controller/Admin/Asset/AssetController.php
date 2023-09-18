@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -44,6 +43,7 @@ use Pimcore\Model\Element\ValidationException;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -281,7 +281,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             // get assets
@@ -723,125 +723,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createAccessDeniedHttpException();
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var Asset $asset */
-        $asset = $element;
-
-        $permissions =  $asset->getUserPermissions($this->getAdminUser());
-
-        $tmpAsset = [
-            'id' => $asset->getId(),
-            'key' => $element->getKey(),
-            'text' => htmlspecialchars($asset->getFilename()),
-            'type' => $asset->getType(),
-            'path' => $asset->getRealFullPath(),
-            'basePath' => $asset->getRealPath(),
-            'locked' => $asset->isLocked(),
-            'lockOwner' => $asset->getLocked() ? true : false,
-            'elementType' => 'asset',
-            'permissions' => [
-                'remove' => $permissions['delete'],
-                'settings' => $permissions['settings'],
-                'rename' => $permissions['rename'],
-                'publish' => $permissions['publish'],
-                'view' => $permissions['view'],
-                'list' => $permissions['list'],
-            ],
-        ];
-
-        $hasChildren = $asset->getDao()->hasChildren($this->getAdminUser());
-
-        // set type specific settings
-        if ($asset instanceof Asset\Folder) {
-            $tmpAsset['leaf'] = false;
-            $tmpAsset['expanded'] = !$hasChildren;
-            $tmpAsset['loaded'] = !$hasChildren;
-            $tmpAsset['permissions']['create'] = $permissions['create'];
-            $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-        } else {
-            $tmpAsset['leaf'] = true;
-            $tmpAsset['expandable'] = false;
-            $tmpAsset['expanded'] = false;
-        }
-
-        $this->addAdminStyle($asset, ElementAdminStyleEvent::CONTEXT_TREE, $tmpAsset);
-
-        if ($asset instanceof Asset\Image) {
-            try {
-                $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-
-                // we need the dimensions for the wysiwyg editors, so that they can resize the image immediately
-                if ($asset->getCustomSetting('imageDimensionsCalculated')) {
-                    $tmpAsset['imageWidth'] = $asset->getCustomSetting('imageWidth');
-                    $tmpAsset['imageHeight'] = $asset->getCustomSetting('imageHeight');
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of image, seems to be broken.');
-            }
-        } elseif ($asset->getType() == 'video') {
-            try {
-                if (\Pimcore\Video::isAvailable()) {
-                    $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
-            }
-        } elseif ($asset->getType() == 'document') {
-            try {
-                // add the PDF check here, otherwise the preview layer in admin is shown without content
-                if (\Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
-                    $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
-            }
-        }
-
-        $tmpAsset['cls'] = '';
-        if ($asset->isLocked()) {
-            $tmpAsset['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($asset->getLocked()) {
-            $tmpAsset['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        return $tmpAsset;
-    }
-
-    protected function getThumbnailUrl(Asset $asset, array $params = []): ?string
-    {
-        $defaults = [
-            'id' => $asset->getId(),
-            'treepreview' => true,
-            '_dc' => $asset->getModificationDate(),
-        ];
-
-        $params = array_merge($defaults, $params);
-
-        if ($asset instanceof Asset\Image) {
-            return $this->generateUrl('pimcore_admin_asset_getimagethumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Folder) {
-            return $this->generateUrl('pimcore_admin_asset_getfolderthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Video && \Pimcore\Video::isAvailable()) {
-            return $this->generateUrl('pimcore_admin_asset_getvideothumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Document && \Pimcore\Document::isAvailable() && $asset->getPageCount()) {
-            return $this->generateUrl('pimcore_admin_asset_getdocumentthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Audio) {
-            return '/bundles/pimcoreadmin/img/flat-color-icons/speaker.svg';
-        }
-
-        if ($asset instanceof Asset) {
-            return '/bundles/pimcoreadmin/img/filetype-not-supported.svg';
-        }
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**
@@ -852,10 +739,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      * @return JsonResponse
      *
      * @throws \Exception
+     * @throws RuntimeException
      */
     public function updateAction(Request $request): JsonResponse
     {
-        $success = false;
+        $data = ['success' => false];
         $allowUpdate = true;
 
         $updateData = array_merge($request->request->all(), $request->query->all());
@@ -871,7 +759,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 //check if parent is changed i.e. asset is moved
                 if ($asset->getParentId() != $parentAsset->getId()) {
                     if (!$parentAsset->isAllowed('create')) {
-                        throw new \Exception('Prevented moving asset - no create permission on new parent ');
+                        throw new RuntimeException('Prevented moving asset - no create permission on new parent.');
                     }
 
                     $intendedPath = $parentAsset->getRealPath();
@@ -895,29 +783,36 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             if ($allowUpdate) {
                 if ($request->get('filename') != $asset->getFilename() && !$asset->isAllowed('rename')) {
                     unset($updateData['filename']);
-                    Logger::debug('prevented renaming asset because of missing permissions ');
+                    Logger::debug('prevented renaming asset because of missing permissions.');
                 }
 
                 $asset->setValues($updateData);
 
                 try {
                     $asset->save();
-                    $success = true;
+                    $data = [
+                        'success' => true,
+                        'treeData' => $this->getTreeNodeConfig($asset),
+                    ];
                 } catch (\Exception $e) {
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
                 }
             } else {
-                $msg = 'prevented moving asset, asset with same path+key already exists at target location or the asset is locked. ID: ' . $asset->getId();
+                $msg = 'prevented moving asset, asset with same path+key already exists';
+                $msg .= ' at target location or the asset is locked. ID: ' . $asset->getId();
                 Logger::debug($msg);
 
-                return $this->adminJson(['success' => $success, 'message' => $msg]);
+                return $this->adminJson(['success' => false, 'message' => $msg]);
             }
         } elseif ($asset->isAllowed('rename') && $request->get('filename')) {
             //just rename
             try {
                 $asset->setFilename($request->get('filename'));
                 $asset->save();
-                $success = true;
+                $data = [
+                    'success' => true,
+                    'treeData' => $this->getTreeNodeConfig($asset),
+                ];
             } catch (\Exception $e) {
                 return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
             }
@@ -925,7 +820,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             Logger::debug('prevented update asset because of missing permissions ');
         }
 
-        return $this->adminJson(['success' => $success]);
+        return $this->adminJson($data);
     }
 
     /**
@@ -1241,6 +1136,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($thumbnail) {
+            $thumbnailConfig = $thumbnail->getConfig();
+            if ($thumbnailConfig->getFormat() === 'SOURCE' &&
+                $autoFormatConfigs = $thumbnailConfig->getAutoFormatThumbnailConfigs()) {
+                $autoFormatConfig = current($autoFormatConfigs);
+                $thumbnail = $image->getThumbnail($autoFormatConfig);
+            }
+
             $thumbnailFile = $thumbnailFile ?: $thumbnail->getLocalFile();
 
             $downloadFilename = preg_replace(
@@ -1863,7 +1765,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     'type' => $asset->getType(),
                     'filename' => $asset->getFilename(),
                     'filenameDisplay' => htmlspecialchars($filenameDisplay),
-                    'url' => $this->getThumbnailUrl($asset),
+                    'url' => $this->elementService->getThumbnailUrl($asset),
                     'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                 ];
             }

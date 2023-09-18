@@ -17,17 +17,15 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\Controller;
 
-use Codeception\Stub;
+use Pimcore\Bundle\AdminBundle\Controller\Admin\Asset\AssetController;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Property;
 use Pimcore\Model\User;
-use Pimcore\Tests\Support\Test\ModelTestCase;
 use Pimcore\Tests\Support\Util\TestHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class ModelAssetPermissionsTest extends ModelTestCase
+class ModelAssetPermissionsTest extends AbstractPermissionTest
 {
     protected Asset\Folder $permissionfoo;
 
@@ -294,7 +292,7 @@ class ModelAssetPermissionsTest extends ModelTestCase
 
     protected function doTestTreeGetChildrenById(Asset $element, User $user, array $expectedChildren): void
     {
-        $controller = $this->buildController('\\Pimcore\\Bundle\\AdminBundle\\Controller\\Admin\\Asset\\AssetController', $user);
+        $controller = $this->buildController(AssetController::class, $user);
 
         $request = new Request([
             'node' => $element->getId(),
@@ -316,41 +314,24 @@ class ModelAssetPermissionsTest extends ModelTestCase
         $this->assertCount(
             $responseData['total'],
             $responseData['nodes'],
-            'Assert total count of response matches count of nodes array for `' . $element->getFullpath() . '` for user `' . $user->getName() . '`'
+            'Assert total count of response matches count of nodes array for `' .
+            $element->getFullpath() . '` for user `' . $user->getName() . '`'
         );
 
         $this->assertCount(
             count($expectedChildren),
             $responseData['nodes'],
-            'Assert number of expected result matches count of nodes array for `' . $element->getFullpath() . '` for user `' . $user->getName() . '` (' . print_r($responsePaths, true) . ')'
+            'Assert number of expected result matches count of nodes array for `' . $element->getFullpath() .
+            '` for user `' . $user->getName() . '` (' . print_r($responsePaths, true) . ')'
         );
 
         foreach ($expectedChildren as $path) {
             $this->assertContains(
                 $path,
                 $responsePaths,
-                'Children of `' . $element->getFullpath() . '` do to not contain `' . $path . '` for user `' . $user->getName() . '`'
+                'Children of `' . $element->getFullpath() . '` do to not contain `' . $path .
+                '` for user `' . $user->getName() . '`'
             );
         }
-    }
-
-    protected function buildController(string $classname, User $user): mixed
-    {
-        $AssetController = Stub::construct($classname, [], [
-            'getAdminUser' => function () use ($user) {
-                return $user;
-            },
-            'getPimcoreUser' => function () use ($user) {
-                return $user;
-            },
-            'adminJson' => function ($data) {
-                return new JsonResponse($data);
-            },
-            'getThumbnailUrl' => function ($asset) {
-                return '';
-            },
-        ]);
-
-        return $AssetController;
     }
 }

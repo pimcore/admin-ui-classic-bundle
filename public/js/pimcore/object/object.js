@@ -373,15 +373,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             }
         }
 
-
-        this.tabbar = Ext.create('Ext.tab.Panel', {
-            tabPosition: "top",
-            region: 'center',
-            enableTabScroll: true,
-            border: false,
-            items: items
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

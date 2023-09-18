@@ -242,6 +242,14 @@ pimcore.helpers.updateTreeElementStyle = function (type, id, treeData) {
                 if (typeof treeData.qtipCfg !== "undefined") {
                     record.set("qtipCfg", treeData.qtipCfg);
                 }
+
+                if (typeof treeData.key !== "undefined") {
+                    record.set("key", treeData.key);
+                }
+
+                if (typeof treeData.text !== "undefined") {
+                    record.set("text", treeData.text);
+                }
             }
         }
     }
@@ -3037,10 +3045,12 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 
                     var params = {};
 
-                    if(parentType === 'path') {
-                        params['parentPath'] = parent;
-                    } else if (parentType === 'id') {
-                        params['parentId'] = parent;
+                    if(parent !== undefined){
+                        if(parentType === 'path') {
+                            params['parentPath'] = parent;
+                        } else if (parentType === 'id') {
+                            params['parentId'] = parent;
+                        }
                     }
 
                     if (context) {
@@ -3385,11 +3395,26 @@ pimcore.helpers.priorityCompare = function(a, b) {
     return 0;
 }
 
-
 pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
+
     return pimcore.settings.document_types_configuration[documentType][role];
 }
 
+pimcore.helpers.getTabBar = function (attributes) {
+    let tabAttr = Object.assign(attributes, {
+        tabBar: {
+            cls: 'pimcore_editor_tabbar'
+        },
+        tabPosition: 'top',
+        region:'center',
+        deferredRender:true,
+        enableTabScroll:true,
+        border: false,
+        activeTab: 0
+    });
+
+    return new Ext.TabPanel(tabAttr);
+}
 
 // Sends an Ajax request, it is recommended to be used when doing simple calls or to third-party services, in contrast to Ext.Ajax.request which, by default, sends extra info (eg. custom headers) that are usually needed to be working within Pimcore interface.
 pimcore.helpers.sendRequest = function (
