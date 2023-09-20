@@ -262,6 +262,9 @@ class MiscController extends AdminAbstractController
         }
 
         if ($request->get('deactivate')) {
+            if (Tool\Admin::isInMaintenanceMode()){
+               Tool\Admin::deactivateMaintenanceMode();
+            }
             $maintenanceModeHelper->deactivate();
         }
 
