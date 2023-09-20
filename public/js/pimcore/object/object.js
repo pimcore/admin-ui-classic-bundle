@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.object.object");
 pimcore.object.object = Class.create(pimcore.object.abstract, {
     frontendLanguages: null,
     willClose: false,
+    forceReloadAfterSave: false,
     initialize: function (id, options) {
         this.id = intval(id);
         this.options = options;
@@ -854,7 +855,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                         }
                         // reload versions
-                        if (shouldReload && task != "autoSave" && this.isAllowed("versions")) {
+                        if (forceReloadAfterSave || (shouldReload && task != "autoSave" && this.isAllowed("versions"))) {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
