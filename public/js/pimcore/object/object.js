@@ -855,7 +855,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                         }
                         // reload versions
-                        if (forceReloadAfterSave || (shouldReload && task != "autoSave" && this.isAllowed("versions"))) {
+                        if (this.forceReloadAfterSave || (shouldReload && task != "autoSave" && this.isAllowed("versions"))) {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
