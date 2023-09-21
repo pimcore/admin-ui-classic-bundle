@@ -1,5 +1,5 @@
 #### v1.2.0
- - DataObject used to automatically reloaded after save in any circumstances, now it's triggered only on successfull save. The reload can be forced by setting `forceReloadAfterSave` to `true` in a `postSaveObject` event listener.
+ - DataObject used to automatically reload version after save, but now it's triggered only on successfull save. The reload can be forced by setting `forceReloadAfterSave` to `true` in a `postSaveObject` event listener.
 
 #### v1.1.0
  - `Pimcore\Bundle\AdminBundle\Service\ElementService` is marked as internal.
