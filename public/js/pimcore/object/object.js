@@ -805,7 +805,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 method: "PUT",
                 params: saveData,
                 success: function (response) {
-                    let shouldReload = false;
+                    let shouldReloadVersions = false;
                     if (task != "session") {
                         try {
                             var rdata = Ext.decode(response.responseText);
@@ -835,7 +835,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                                         this.data['draft'] = rdata['draft'];
                                     }
 
-                                    shouldReload = true;
+                                    shouldReloadVersions = true;
 
                                     pimcore.helpers.updateTreeElementStyle('object', this.id, rdata.treeData);
                                     const postSaveObject = new CustomEvent(pimcore.events.postSaveObject, {
@@ -855,7 +855,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                         }
                         // reload versions
-                        if (this.forceReloadVersionsAfterSave || (shouldReload && task != "autoSave" && this.isAllowed("versions"))) {
+                        if (this.forceReloadVersionsAfterSave || (shouldReloadVersions && task != "autoSave" && this.isAllowed("versions"))) {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
