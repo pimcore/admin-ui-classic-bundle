@@ -586,6 +586,11 @@ class UserController extends AdminAbstractController implements KernelController
                     }
 
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
+
+                        if (Tool\Authentication::verifyPassword($user, $values['new_password'])) {
+                            throw new \Exception('The new password cannot be the same as the old one');
+                        }
+
                         $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['new_password']);
                     } else {
                         if (!$oldPasswordCheck) {
