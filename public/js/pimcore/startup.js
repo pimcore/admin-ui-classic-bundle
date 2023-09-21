@@ -821,7 +821,7 @@ Ext.onReady(function () {
                         }
                     }
                     break;
-                case "alternative_element_tree":
+                default:
                     if (!treeConfig.hidden) {
                         customPerspectiveElementTrees.push(treeConfig);
                     }
