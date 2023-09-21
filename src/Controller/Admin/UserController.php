@@ -550,6 +550,15 @@ class UserController extends AdminAbstractController implements KernelController
     {
         //TODO Can be completely validated with Symfony Validator
         $user = $this->getAdminUser();
+
+        $isResetPassword = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
+            if ($adminSession->get('password_reset')) {
+                return true;
+            }
+
+            return false;
+        });
+
         if ($user != null) {
             if ($user->getId() == $request->get('id')) {
                 $values = $this->decodeJson($request->get('data'), true);
@@ -564,16 +573,9 @@ class UserController extends AdminAbstractController implements KernelController
                 if (!empty($values['new_password'])) {
                     $oldPasswordCheck = false;
 
-                    if (empty($values['old_password'])) {
-                        // if the user want to reset the password, the old password isn't required
-                        $oldPasswordCheck = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
-                            if ($adminSession->get('password_reset')) {
-                                return true;
-                            }
-
-                            return false;
-                        });
-                    } else {
+                    if ($isResetPassword){
+                        $oldPasswordCheck = true;
+                    }elseif (!empty($values['old_password'])) {
                         $errors = $validator->validate($values['old_password'], [new UserPassword()]);
 
                         if (count($errors) === 0) {
