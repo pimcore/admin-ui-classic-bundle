@@ -11,6 +11,7 @@
   },
   "minimum-stability": "dev",
   "require": {
+    "php": "~8.1.0 || ~8.2.0",
     "pimcore/pimcore": "11.x-dev",
     "symfony/webpack-encore-bundle": "^1.7",
     "cbschuld/browser.php": "^1.9.6"
