@@ -694,7 +694,7 @@ pimcore.layout.toolbar = Class.create({
  
                          pimcore.settings['cached_environments'].forEach(function(environment) {
                              cacheSubItems.push({
-                                 text: 'Symfony ' + t('environment') + ": " + environment,
+                                 text: 'Symfony ' + t('environment') + ": " + environment  + ' (' + t('deprecated') + ')',
                                  iconCls: "pimcore_nav_icon_clear_cache",
                                  itemId: 'pimcore_menu_settings_cache_symfony_' + environment,
                                  handler: this.clearCache.bind(this, {
@@ -705,7 +705,7 @@ pimcore.layout.toolbar = Class.create({
                          }.bind(this));
  
                          cacheSubItems.push({
-                             text: 'Symfony ' + t('environment') + ": " + t('all'),
+                             text: 'Symfony ' + t('environment') + ": " + t('all')  + ' (' + t('deprecated') + ')',
                              iconCls: "pimcore_nav_icon_clear_cache",
                              itemId: 'pimcore_menu_settings_cache_symfony',
                              handler: this.clearCache.bind(this, {'only_symfony_cache': true, 'env[]': pimcore.settings['cached_environments']})
