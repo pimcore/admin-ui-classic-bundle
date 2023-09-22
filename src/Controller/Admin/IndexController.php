@@ -202,8 +202,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         ExecutorInterface $maintenanceExecutor,
         CsrfProtectionHandler $csrfProtection,
         Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
-    ): static
-    {
+    ): static {
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
@@ -340,8 +339,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         array &$settings,
         ExecutorInterface $maintenanceExecutor,
         Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
-    ): static
-    {
+    ): static {
         // check maintenance
         $maintenance_active = false;
         if ($lastExecution = $maintenanceExecutor->getLastExecution()) {
