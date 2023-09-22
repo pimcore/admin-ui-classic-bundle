@@ -1225,13 +1225,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $thumbnailConfig = null;
 
         if ($request->get('thumbnail')) {
-            $thumbnailConfig = $image->getThumbnailConfig($request->get('thumbnail'));
+            $thumbnailConfig = $image->getThumbnail($request->get('thumbnail'))->getConfig();
         }
         if (!$thumbnailConfig) {
             if ($request->get('config')) {
-                $thumbnailConfig = $image->getThumbnailConfig($this->decodeJson($request->get('config')));
+                $thumbnailConfig = $image->getThumbnail($this->decodeJson($request->get('config')))->getConfig();
             } else {
-                $thumbnailConfig = $image->getThumbnailConfig(array_merge($request->request->all(), $request->query->all()));
+                $thumbnailConfig = $image->getThumbnail(array_merge($request->request->all(), $request->query->all()))->getConfig();
             }
         } else {
             // no high-res images in admin mode (editmode)
