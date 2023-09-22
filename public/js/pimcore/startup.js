@@ -825,7 +825,6 @@ Ext.onReady(function () {
                     if (!treeConfig.hidden) {
                         customPerspectiveElementTrees.push(treeConfig);
                     }
-                    break;
             }
 
 
