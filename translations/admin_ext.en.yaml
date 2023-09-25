@@ -497,6 +497,10 @@ predefined_hotspot_data_templates: Predefined data templates
 hide_locale_labels_when_tabs_reached: Hide locale labels after number of tabs
 classificationstore_error_addkey_msg: Error adding Key
 classificationstore_dialog_keygroup_search: Key/Group Search
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Class / Service
 options_provider_class: Options Provider Class or Service Name
 options_provider_data: Options Provider Data
 show_applogger_tab: Show App Logger Tab
@@ -620,6 +624,7 @@ every: Every
 categories: Categories
 revision: Build
 objectbricks: Objectbricks
+selectoptions: Select Options
 class_definitions: Class Definitions
 custom_layout_changed: Layout was changed in the meantime. Please reload the layout and try again
 rule_violation: Rule Violation

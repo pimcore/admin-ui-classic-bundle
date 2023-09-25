@@ -1877,6 +1877,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
             'getTreeAction', 'fieldcollectionListAction', 'fieldcollectionTreeAction', 'fieldcollectionGetAction',
             'getClassDefinitionForColumnConfigAction', 'objectbrickListAction', 'objectbrickTreeAction', 'objectbrickGetAction',
             'objectbrickDeleteAction', 'objectbrickUpdateAction', 'importObjectbrickAction', 'exportObjectbrickAction', 'bulkCommitAction', 'doBulkExportAction', 'bulkExportAction', 'importFieldcollectionAction', 'exportFieldcollectionAction', // permissions for listed write operations handled separately in action methods
+            'selectOptionsGetAction', 'selectOptionsTreeAction', 'selectOptionsUpdateAction', 'getSelectOptionsUsagesAction', 'selectOptionsDeleteAction',
         ];
 
         $this->checkActionPermission($event, 'classes', $unrestrictedActions);
@@ -1943,6 +1944,24 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
 
         return $this->adminJson($result);
+    }
+
+    #[Route('/get-select-options-usages', name: 'getselectoptionsusages', methods: [Request::METHOD_GET])]
+    public function getSelectOptionsUsagesAction(Request $request): Response
+    {
+        $usages = [];
+        $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
+        $selectOptionsConfiguration = $this->getSelectOptionsConfig($id);
+        foreach ($selectOptionsConfiguration->getFieldsUsedIn() as $className => $fieldNames) {
+            foreach ($fieldNames as $fieldName) {
+                $usages[] = [
+                    'class' => $className,
+                    'field' => $fieldName,
+                ];
+            }
+        }
+
+        return $this->adminJson($usages);
     }
 
     /**
@@ -2110,5 +2129,139 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
 
         return $this->adminJson($res);
+    }
+
+    /**
+     * SELECT OPTIONS
+     */
+
+    #[Route('/select-options-get', name: 'selectoptionsget', methods: [Request::METHOD_GET])]
+    public function selectOptionsGetAction(Request $request): JsonResponse
+    {
+        $this->checkPermission('selectoptions');
+        $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
+        $selectOptionsConfiguration = $this->getSelectOptionsConfig($id);
+
+        $data = $selectOptionsConfiguration->getObjectVars();
+        $data['isWriteable'] = $selectOptionsConfiguration->isWriteable();
+        $data['enumName'] = $selectOptionsConfiguration->getEnumName(true);
+
+        return $this->adminJson($data);
+    }
+
+    #[Route('/select-options-update', name: 'selectoptionsupdate', methods: [Request::METHOD_PUT, Request::METHOD_POST])]
+    public function selectOptionsUpdateAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
+    {
+        $this->checkPermission('selectoptions');
+        try {
+            $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
+
+            if ($request->get('task') === 'add') {
+                if ((new DataObject\SelectOptions\Config\Listing())->hasConfig($id)) {
+                    throw new \Exception('Select options with the same ID already exists (lower/upper cases may be different)');
+                }
+            }
+
+            $group = $request->get(DataObject\SelectOptions\Config::PROPERTY_GROUP);
+            $useTraits = $request->get(DataObject\SelectOptions\Config::PROPERTY_USE_TRAITS, '');
+            $implementsInterfaces = $request->get(DataObject\SelectOptions\Config::PROPERTY_IMPLEMENTS_INTERFACES, '');
+            $selectOptionsData = $request->get(DataObject\SelectOptions\Config::PROPERTY_SELECT_OPTIONS, 'null');
+            $selectOptionsConfiguration = DataObject\SelectOptions\Config::createFromData(
+                [
+                    DataObject\SelectOptions\Config::PROPERTY_ID => $id,
+                    DataObject\SelectOptions\Config::PROPERTY_GROUP => $group,
+                    DataObject\SelectOptions\Config::PROPERTY_USE_TRAITS => $useTraits,
+                    DataObject\SelectOptions\Config::PROPERTY_IMPLEMENTS_INTERFACES => $implementsInterfaces,
+                    DataObject\SelectOptions\Config::PROPERTY_SELECT_OPTIONS => $this->decodeJson($selectOptionsData),
+                ]
+            );
+
+            $event = new GenericEvent($this, [
+                'selectOptionsConfiguration' => $selectOptionsConfiguration,
+            ]);
+            $eventDispatcher->dispatch($event, AdminEvents::CLASS_SELECTOPTIONS_UPDATE_CONFIGURATION);
+            /** @var DataObject\SelectOptions\Config $selectOptionsConfiguration */
+            $selectOptionsConfiguration = $event->getArgument('selectOptionsConfiguration');
+
+            $selectOptionsConfiguration->save();
+
+            return $this->adminJson(['success' => true, 'id' => $selectOptionsConfiguration->getId()]);
+        } catch (\Exception $exception) {
+            Logger::error($exception->getMessage());
+
+            return $this->adminJson(['success' => false, 'message' => $exception->getMessage()]);
+        }
+    }
+
+    #[Route('/select-options-tree', name: 'selectoptionstree', methods: [Request::METHOD_GET, Request::METHOD_POST])]
+    public function selectOptionsTreeAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
+    {
+        $this->checkPermission('selectoptions');
+        $configurations = $groups = [];
+
+        $selectOptionConfigs = new DataObject\SelectOptions\Config\Listing();
+        foreach ($selectOptionConfigs as $selectOptionConfig) {
+            $id = $selectOptionConfig->getId();
+            $configurationData = [
+                'id' => $id,
+                'text' => $id,
+                'leaf' => true,
+                'iconCls' => 'pimcore_icon_select',
+            ];
+
+            if ((int)$request->get('grouped', 0) === 0 || !$selectOptionConfig->hasGroup()) {
+                $configurations[] = $configurationData;
+                continue;
+            }
+
+            $group = $selectOptionConfig->getGroup();
+            if (!isset($groups[$group])) {
+                $groups[$group] = [
+                    'id' => 'group_' . $id,
+                    'text' => htmlspecialchars($group),
+                    'expandable' => true,
+                    'leaf' => false,
+                    'allowChildren' => true,
+                    'iconCls' => 'pimcore_icon_folder',
+                    'group' => $group,
+                    'children' => [],
+                ];
+            }
+            $groups[$group]['children'][] = $configurationData;
+        }
+
+        foreach ($groups as $group) {
+            $configurations[] = $group;
+        }
+
+        $event = new GenericEvent($this, [
+            'list' => $configurations,
+        ]);
+        $eventDispatcher->dispatch($event, AdminEvents::CLASS_SELECTOPTIONS_LIST_PRE_SEND_DATA);
+
+        return $this->adminJson($configurations);
+    }
+
+    #[Route('/select-options-delete', name: 'selectoptionsdelete', methods: [Request::METHOD_DELETE])]
+    public function selectOptionsDeleteAction(Request $request): JsonResponse
+    {
+        $this->checkPermission('selectoptions');
+
+        try {
+            $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
+            $this->getSelectOptionsConfig($id)->delete();
+            return $this->adminJson(['success' => true]);
+        } catch (\Exception $exception) {
+            return $this->adminJson(['success' => false, 'message' => $exception->getMessage()]);
+        }
+    }
+
+    protected function getSelectOptionsConfig(string $id): DataObject\SelectOptions\Config
+    {
+        $selectOptions = DataObject\SelectOptions\Config::getById($id);
+        if ($selectOptions === null) {
+            throw new NotFoundHttpException('Not Found', code: 1677133720896);
+        }
+        return $selectOptions;
     }
 }

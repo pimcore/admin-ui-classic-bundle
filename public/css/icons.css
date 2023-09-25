@@ -339,6 +339,10 @@
     background: url(/bundles/pimcoreadmin/img/flat-white-icons/bricks.svg) center center no-repeat !important;
 }
 
+.pimcore_nav_icon_selectoptions {
+    background: url(/bundles/pimcoreadmin/img/flat-white-icons/expand.svg) center center no-repeat !important;
+}
+
 .pimcore_nav_icon_quantityValue {
     background: url(/bundles/pimcoreadmin/img/flat-white-icons/calculator.svg) center center no-repeat !important;
 }

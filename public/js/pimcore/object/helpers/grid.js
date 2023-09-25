@@ -84,7 +84,7 @@ pimcore.object.helpers.grid = Class.create({
                 var key = fieldConfig.key;
                 var readerFieldConfig = {name: key};
                 // dynamic select returns data + options on cell level
-                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderClass) {
+                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CLASS && fieldConfig.layout.optionsProviderClass) {
                     if (typeof noBatchColumns != "undefined") {
                         if (fieldConfig.layout.dynamicOptions) {
                             noBatchColumns.push(key);

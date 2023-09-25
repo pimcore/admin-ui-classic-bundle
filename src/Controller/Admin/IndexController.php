@@ -273,6 +273,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'class-definition-writeable'          => isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ?
                 (bool)$_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'] : true,
             'object-custom-layout-writeable' => (new CustomLayout())->isWriteable(),
+            'select-options-writeable' => (new \Pimcore\Model\DataObject\SelectOptions\Config())->isWriteable(),
 
             // search types
             'asset_search_types' => Asset::getTypes(),
