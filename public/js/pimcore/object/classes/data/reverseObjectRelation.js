@@ -90,7 +90,6 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
 
 
         if(!this.isInCustomLayoutEditor()) {
-
             this.specificPanel.add([
                 {
                     xtype: 'textfield',
@@ -101,17 +100,16 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                 }
             ]);
 
-        this.classCombo = new Ext.form.ComboBox({
-            typeAhead: true,
-            triggerAction: 'all',
-            store: pimcore.globalmanager.get("object_types_store"),
-            valueField: 'text',
-            displayField: 'text',
-            listWidth: 'auto',
-            fieldLabel: t('owner_class'),
-            name: 'ownerClassName',
-            value: this.datax.ownerClassName,
-
+            this.classCombo = new Ext.form.ComboBox({
+                typeAhead: true,
+                triggerAction: 'all',
+                store: pimcore.globalmanager.get("object_types_store"),
+                valueField: 'text',
+                displayField: 'text',
+                listWidth: 'auto',
+                fieldLabel: t('owner_class'),
+                name: 'ownerClassName',
+                value: this.datax.ownerClassName,
                 forceSelection: true,
                 editable: true,
                 listeners: {
@@ -160,8 +158,48 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                 }
             });
 
-        this.specificPanel.add(this.classCombo);
-        this.specificPanel.add(this.fieldCombo);
+            this.specificPanel.add(this.classCombo);
+            this.specificPanel.add(this.fieldCombo);
+
+            this.fieldStore = new Ext.data.Store({
+                proxy: {
+                    type: 'ajax',
+                    url: Routing.generate('pimcore_admin_dataobject_dataobjecthelper_getavailablevisiblefields'),
+                    extraParams: {
+                        // no_brick_columns: "true",
+                        // gridtype: 'all',
+                        classes: [this.datax.ownerClassName]
+                    },
+                    reader: {
+                        type: 'json',
+                        rootProperty: "availableFields"
+                    }
+                },
+                fields: ['key', 'label'],
+                autoLoad: false,
+                forceSelection: true,
+                listeners: {
+                    load: function () {
+                        this.fieldSelect.setValue(this.datax.visibleFields);
+                    }.bind(this)
+
+                }
+            });
+            this.fieldStore.load();
+
+            this.fieldSelect = new Ext.ux.form.MultiSelect({
+                name: "visibleFields",
+                triggerAction: "all",
+                editable: false,
+                fieldLabel: t("objectsMetadata_visible_fields"),
+                store: this.fieldStore,
+                value: this.datax.visibleFields,
+                displayField: "key",
+                valueField: "key",
+                width: 400,
+                height: 300
+            });
+            this.specificPanel.add(this.fieldSelect);
 
             this.specificPanel.add(new Ext.form.DisplayField({
                 hideLabel: true,
@@ -186,7 +224,8 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                     height: source.datax.height,
                     pathFormatterClass: source.datax.pathFormatterClass,
                     ownerClassName: source.datax.ownerClassName,
-                    ownerFieldName: source.datax.ownerFieldName
+                    ownerFieldName: source.datax.ownerFieldName,
+                    visibleFields: source.datax.visibleFields
                 });
         }
     }
