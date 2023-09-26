@@ -146,14 +146,15 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                 panelConf.autoHeight = false;
             }
 
+            for (var i = 0; i < nrOfLanguages; i++) {
 
-            for (var i=0; i < nrOfLanguages; i++) {
-                this.currentLanguage = this.frontendLanguages[i];
-                this.languageElements[this.currentLanguage] = [];
-                this.groupElements[this.currentLanguage] = {};
+                let currentLanguage = this.frontendLanguages[i];
+
+                this.currentLanguage = currentLanguage;
+                this.languageElements[currentLanguage] = [];
+                this.groupElements[currentLanguage] = {};
 
                 var childItems = [];
-
 
                 for (var groupId in this.fieldConfig.activeGroupDefinitions) {
                     var groupedChildItems = [];
@@ -167,13 +168,13 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
 
                     }
                 }
-                var title = this.frontendLanguages[i];
-                if (title != "default") {
-                    var title = t(pimcore.available_languages[title]);
-                    var icon = "pimcore_icon_language_" + this.frontendLanguages[i].toLowerCase();
-                } else {
-                    var title = t(title);
-                    var icon = "pimcore_icon_white_flag";
+
+                let title = t(currentLanguage);
+                let icon = "pimcore_icon_white_flag";
+
+                if (currentLanguage !== "default") {
+                    title = t(pimcore.available_languages[currentLanguage]);
+                    icon = "pimcore_icon_language_" + currentLanguage.toLowerCase();
                 }
 
                 var item = new Ext.Panel({
@@ -187,7 +188,8 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     items: childItems
                 });
 
-                this.languagePanels[this.currentLanguage] = item;
+                this.languagePanels[currentLanguage] = item;
+                item.currentLanguage = currentLanguage.toLowerCase();
 
                 if (this.fieldConfig.labelWidth) {
                     item.labelWidth = this.fieldConfig.labelWidth;
@@ -197,14 +199,18 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     item.labelAlign = this.fieldConfig.labelAlign;
                 }
 
+                panelConf.listeners = {
+                    pimcoreGlobalLanguageChanged: function (language) {
+                        this.getLanguageTabListener(this.tabPanel, language, this.frontendLanguages);
+                    }.bind(this)
+                }
+
                 panelConf.items.push(item);
             }
-
 
             this.tabPanel = new Ext.TabPanel(panelConf);
 
             wrapperConfig.items = [this.tabPanel];
-
         }
 
         this.currentLanguage = this.frontendLanguages[0];
@@ -212,9 +218,29 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
         this.component = new Ext.Panel(wrapperConfig);
 
         this.component.updateLayout();
+
+        if (this.toolbar) {
+            this.toolbar.on(pimcore.events.globalLanguageChanged, function(language) {
+                this.tabPanel.fireEvent('pimcoreGlobalLanguageChanged', language);
+            }.bind(this));
+        }
+
         return this.component;
     },
 
+    getLanguageTabListener: function (languageTab, language, frontendLanguages) {
+        if (frontendLanguages.includes(language)) {
+            this.setActiveLanguageTab(languageTab, language)
+        }
+    },
+
+    setActiveLanguageTab: function (languageTab, language) {
+        languageTab.items.items.forEach((tabLanguage) => {
+            if (tabLanguage.currentLanguage === language) {
+                languageTab.setActiveTab(tabLanguage);
+            }
+        });
+    },
 
     getLayoutShow: function () {
 
