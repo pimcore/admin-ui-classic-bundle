@@ -300,7 +300,7 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                                         };
                                         this.store.add(storeItemData);
 
-                                        var toBeRequested = new Ext.util.Collection();
+                                        const toBeRequested = new Ext.util.Collection();
                                         toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
                                         this.requestNicePathData(toBeRequested, true);
                                     }
