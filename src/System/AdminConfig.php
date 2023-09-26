@@ -57,7 +57,19 @@ final class AdminConfig
     {
         $repository = self::getRepository();
 
-        return SystemConfig::getConfigDataByKey($repository, self::CONFIG_ID);
+        $data = SystemConfig::getConfigDataByKey($repository, self::CONFIG_ID);
+        $loadType = $repository->getReadTargets()[0] ?? null;
+
+        // If the read target is settings-store and no data is found there,
+        // load the data from the container config
+        if(!$data && $loadType === $repository::LOCATION_SETTINGS_STORE) {
+            $containerConfig = \Pimcore::getContainer()->getParameter('pimcore_admin.config');
+            $data[self::BRANDING] = $containerConfig[self::BRANDING];
+            $data[self::ASSETS] = $containerConfig[self::ASSETS];
+            $data['writeable'] = $repository->isWriteable();
+        }
+
+        return $data;
     }
 
     public function save(array $values): void

@@ -81,6 +81,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         CsrfProtectionHandler $csrfProtection,
         Config $config,
         PimcoreBundleManager $bundleManager,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
     ): Response {
         $user = $this->getAdminUser();
         $perspectiveConfig = new \Pimcore\Bundle\AdminBundle\Perspective\Config();
@@ -96,7 +97,15 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             ->addRuntimePerspective($templateParams, $user)
             ->addPluginAssets($bundleManager, $templateParams);
 
-        $this->buildPimcoreSettings($request, $templateParams, $user, $kernel, $maintenanceExecutor, $csrfProtection);
+        $this->buildPimcoreSettings(
+            $request,
+            $templateParams,
+            $user,
+            $kernel,
+            $maintenanceExecutor,
+            $csrfProtection,
+            $maintenanceModeHelper
+        );
 
         if ($user->getTwoFactorAuthentication('required') && !$user->getTwoFactorAuthentication('enabled')) {
             return $this->redirectToRoute('pimcore_admin_2fa_setup');
@@ -186,8 +195,14 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this;
     }
 
-    protected function buildPimcoreSettings(Request $request, array &$templateParams, User $user, KernelInterface $kernel, ExecutorInterface $maintenanceExecutor, CsrfProtectionHandler $csrfProtection): static
-    {
+    protected function buildPimcoreSettings(
+        Request $request,
+        array &$templateParams,
+        User $user, KernelInterface $kernel,
+        ExecutorInterface $maintenanceExecutor,
+        CsrfProtectionHandler $csrfProtection,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
+    ): static {
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
@@ -255,7 +270,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'predefined-asset-metadata-writeable' => (new \Pimcore\Model\Metadata\Predefined())->isWriteable(),
             'perspectives-writeable'              => \Pimcore\Bundle\AdminBundle\Perspective\Config::isWriteable(),
             'custom-views-writeable'              => \Pimcore\Bundle\AdminBundle\CustomView\Config::isWriteable(),
-            'class-definition-writeable'          => isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ? (bool)$_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'] : true,
+            'class-definition-writeable'          => isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ?
+                (bool)$_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'] : true,
             'object-custom-layout-writeable' => (new CustomLayout())->isWriteable(),
 
             // search types
@@ -273,7 +289,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 
         $this
             ->addSystemVarSettings($settings)
-            ->addMaintenanceSettings($settings, $maintenanceExecutor)
+            ->addMaintenanceSettings($settings, $maintenanceExecutor, $maintenanceModeHelper)
             ->addMailSettings($settings, $config, $systemSettings)
             ->addCustomViewSettings($settings)
             ->addNotificationSettings($settings, $config);
@@ -319,18 +335,22 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this;
     }
 
-    protected function addMaintenanceSettings(array &$settings, ExecutorInterface $maintenanceExecutor): static
-    {
+    protected function addMaintenanceSettings(
+        array &$settings,
+        ExecutorInterface $maintenanceExecutor,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
+    ): static {
         // check maintenance
         $maintenance_active = false;
         if ($lastExecution = $maintenanceExecutor->getLastExecution()) {
-            if ((time() - $lastExecution) < 3660) { // maintenance script should run at least every hour + a little tolerance
+            // maintenance script should run at least every hour + a little tolerance
+            if ((time() - $lastExecution) < 3660) {
                 $maintenance_active = true;
             }
         }
 
         $settings['maintenance_active'] = $maintenance_active;
-        $settings['maintenance_mode'] = Admin::isInMaintenanceMode();
+        $settings['maintenance_mode'] = $maintenanceModeHelper->isActive() || Admin::isInMaintenanceMode();
 
         return $this;
     }

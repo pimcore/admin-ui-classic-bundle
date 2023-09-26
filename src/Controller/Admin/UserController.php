@@ -550,6 +550,15 @@ class UserController extends AdminAbstractController implements KernelController
     {
         //TODO Can be completely validated with Symfony Validator
         $user = $this->getAdminUser();
+
+        $isPasswordReset = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
+            if ($adminSession->get('password_reset')) {
+                return true;
+            }
+
+            return false;
+        });
+
         if ($user != null) {
             if ($user->getId() == $request->get('id')) {
                 $values = $this->decodeJson($request->get('data'), true);
@@ -564,16 +573,10 @@ class UserController extends AdminAbstractController implements KernelController
                 if (!empty($values['new_password'])) {
                     $oldPasswordCheck = false;
 
-                    if (empty($values['old_password'])) {
+                    if ($isPasswordReset) {
                         // if the user want to reset the password, the old password isn't required
-                        $oldPasswordCheck = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
-                            if ($adminSession->get('password_reset')) {
-                                return true;
-                            }
-
-                            return false;
-                        });
-                    } else {
+                        $oldPasswordCheck = true;
+                    } elseif (!empty($values['old_password'])) {
                         $errors = $validator->validate($values['old_password'], [new UserPassword()]);
 
                         if (count($errors) === 0) {
@@ -586,6 +589,11 @@ class UserController extends AdminAbstractController implements KernelController
                     }
 
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
+
+                        if (Tool\Authentication::verifyPassword($user, $values['new_password'])) {
+                            throw new \Exception('The new password cannot be the same as the old one');
+                        }
+
                         $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['new_password']);
                     } else {
                         if (!$oldPasswordCheck) {
