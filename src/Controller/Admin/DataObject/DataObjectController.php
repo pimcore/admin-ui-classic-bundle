@@ -401,7 +401,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 }
             }
 
-            $this->getDataForObject($object, $objectFromVersion);
+            try {
+                $this->getDataForObject($object, $objectFromVersion);
+            } catch(\Throwable $e) {
+                $object = $objectFromDatabase;
+                $this->getDataForObject($object, false);
+            }
+
             $objectData['data'] = $this->objectData;
             $objectData['metaData'] = $this->metaData;
             $objectData['properties'] = Element\Service::minimizePropertiesForEditmode($object->getProperties());
@@ -519,7 +525,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         throw $this->createAccessDeniedHttpException();
     }
 
-    private function injectValuesForCustomLayout(array &$layout): void
+    private function injectValuesForCustomLayout(?array &$layout): void
     {
         foreach ($layout['children'] as &$child) {
             if ($child['datatype'] === 'layout') {
@@ -535,7 +541,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-select-options", name="getSelectOptions", methods={"GET"})
+     * @Route("/get-select-options", name="getSelectOptions", methods={"POST"})
      *
      * @param Request $request
      *
@@ -545,7 +551,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = $request->query->getInt('objectId');
+        $objectId = $request->request->getInt('objectId');
         $object = DataObject\Concrete::getById($objectId);
         if (!$object instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
@@ -1081,7 +1087,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     private function executeUpdateAction(DataObject $object, mixed $values): array
     {
-        $success = false;
+        $data = ['success' => false];
 
         if ($object instanceof DataObject\Concrete) {
             $object->setOmitMandatoryCheck(true);
@@ -1155,7 +1161,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     $this->updateIndexesOfObjectSiblings($object, $indexUpdate);
                 }
 
-                $success = true;
+                $data = [
+                  'success' => true,
+                  'treeData' => $this->getTreeNodeConfig($object),
+                ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);
 
@@ -1167,7 +1176,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             Logger::debug('prevented update object because of missing permissions.');
         }
 
-        return ['success' => $success];
+        return $data;
     }
 
     private function executeInsideTransaction(callable $fn): void
@@ -1365,7 +1374,11 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($request->get('data')) {
-            $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            try {
+                $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            } catch(\Throwable $e) {
+                $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
+            }
         }
 
         // general settings

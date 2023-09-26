@@ -99,7 +99,7 @@ retype_password: 'Retype Password'
 reports: Reports
 roles: Roles
 Password: Password
-'Forgot your password': 'Forgot your password'
+'Forgot your password': 'Forgot your password?'
 'Back to Login': 'Back to Login'
 'Enter your username and pimcore will send a login link to your email address': 'Enter your username and Pimcore will send a login link to your email address'
 'Please check your mailbox.': 'Please check your mailbox.'
@@ -238,6 +238,8 @@ delete: Delete
 save: Save
 add_assets: 'Add Asset(s)'
 preview: Preview
+preview_generator_locale: Language
+preview_generator_site: Site
 advanced: Advanced
 basic: Basic
 list: List

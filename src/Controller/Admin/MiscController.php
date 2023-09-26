@@ -253,16 +253,19 @@ class MiscController extends AdminAbstractController
      *
      * @return JsonResponse
      */
-    public function maintenanceAction(Request $request): JsonResponse
+    public function maintenanceAction(Request $request, Tool\MaintenanceModeHelperInterface $maintenanceModeHelper): JsonResponse
     {
         $this->checkPermission('maintenance_mode');
 
         if ($request->get('activate')) {
-            Tool\Admin::activateMaintenanceMode($request->getSession()->getId());
+            $maintenanceModeHelper->activate($request->getSession()->getId());
         }
 
         if ($request->get('deactivate')) {
-            Tool\Admin::deactivateMaintenanceMode();
+            if (Tool\Admin::isInMaintenanceMode()) {
+                Tool\Admin::deactivateMaintenanceMode();
+            }
+            $maintenanceModeHelper->deactivate();
         }
 
         return $this->adminJson([

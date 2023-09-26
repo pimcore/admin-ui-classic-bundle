@@ -21,7 +21,7 @@ close_others: "Alle anderen schlie\xDFen"
 close_all: "Alle schlie\xDFen"
 close_unmodified: "Unbearbeitete schlie\xDFen"
 classid: Klassen ID
-parentid: Parent ID
+parentid: Elternelement ID
 mimetype: MIME-Typ
 creationdate: Erstellungsdatum
 usermodification: Benutzer bearbeiten
@@ -108,7 +108,7 @@ retype_password: Passwort erneut eingeben
 reports: Berichte
 roles: Rollen
 Password: Kennwort
-Forgot your password: Kennwort vergessen
+Forgot your password: Kennwort vergessen?
 Back to Login: "Zur\xFCck zum Login"
 Enter your username and pimcore will send a login link to your email address: Geben
   Sie Ihren Benutzernamen ein und Pimcore sendet Ihnen einen Link zum Login per E-Mail
@@ -139,7 +139,7 @@ paste_recursive_updating_references: "Rekursiv einf\xFCgen und Referenzen aktual
 add_hardlink: "Hardlink hinzuf\xFCgen"
 source_path: Quellpfad
 properties_from_source: Verwende Eigenschaften des Quelldokuments
-children_from_source: Use children from source document
+children_from_source: Verwende Unterelemente des Quelldokuments
 click_right_for_more_options: "Rechtsklick f\xFCr mehr Optionen"
 move_to_tab: "Als Tab hinzuf\xFCgen"
 not_supported: "Nicht unterst\xFCtzt"
@@ -237,7 +237,7 @@ info: Info
 or: oder
 paste_contents: "Hier nur Inhalte einf\xFCgen"
 paste_as_child: "Einf\xFCgen als Kindelement"
-paste_recursive_as_child: Paste as child (recursive)
+paste_recursive_as_child: "Einf\xFCgen als Kindelement (rekursiv)"
 view_original: "Original \xF6ffnen"
 feed: Feed
 no_items_found: Keine Artikel gefunden
@@ -509,7 +509,7 @@ last_page: Letzte Seite
 no_data_to_display: Keine Daten zum anzeigen
 classificationstore_property: Eigenschaften
 classificationstore_group: Gruppe
-classificationstore_relation: Relation
+classificationstore_relation: "Verkn\xFCpfung"
 classificationstore_collection: Kollektion
 classificationstore_collection_relation: Sammelbeziehung
 classificationstore_no_groups: Keine Gruppen gefunden
@@ -687,7 +687,7 @@ import_report: Importiere Report
 import_errors: "Es gab Fehler. Den Import-Bericht pr\xFCfen!"
 import_is_done: Import abgeschlossen
 import_file_prefix: "Pr\xE4fix f\xFCr neue Dateien"
-create_parents: Erstelle Eltern
+create_parents: Erstelle Elternelemente
 fullpath: Voller Pfad
 create_on_demand: Bei Bedarf erstellen
 get_by_resolver: nach Attribut suchen
@@ -1000,7 +1000,7 @@ bricks: Steine
 draft: Entwurf
 auto_save: Automatisch speichern
 save_draft: Entwurf speichern
-selected_grid_columns: "Ausgew\xE4hlte Grid-Spalten"
+selected_grid_columns: "Ausgew\xE4hlte Tabellen-Spalten"
 ungrouped: nicht gruppiert
 reindex_warning: "Wenn Sie von der alphabetischen in die manuelle Sortierreihenfolge
   \xE4ndern, werden alle Elemente neu indiziert. M\xF6chten Sie fortfahren?"
@@ -1027,19 +1027,19 @@ postal_code_format_error: "Postleitzahlenformat, z.B. statt \"A-5020 Salzburg, S
   Stra\xDFe 16\" benutze \"5020 Salzburg, S\xF6llheimer Stra\xDFe 16\" verwenden"
 delete_data_from_it: This will also delete all data from it.
 display_mode: Anzeigemodus
-display_mode_grid: Grid view
+display_mode_grid: Tabellenansicht
 display_mode_combo: Tag Feld
-batch_confirmation: You are about to update %s dataObjects. Do you want to continue
-  ?
-field_collections: Field Collections
-display_mode_display: Display path reference
-display_mode_inline_search: Inline Search
-gdpr_dataSource_dataObjects: Data Objects
-parent_id: Parent ID
+batch_confirmation: "Sie sind dabei, %s Datenobjekte zu aktualisieren. M\xF6chten
+  Sie fortfahren?"
+field_collections: Feldsammlungen
+display_mode_display: Pfadreferenz anzeigen
+display_mode_inline_search: Inline-Suche
+gdpr_dataSource_dataObjects: Datenobjekte
+parent_id: Elternelement ID
 modificationDate: "\xC4nderungsdatum"
 creationDate: Erstellungsdatum
 classificationstore_tag_col_group: Gruppe
-none: None
+none: Keine
 redirects_type_path: Pfad
 email_subject: Subject
 gdpr_dataSource_sentMail: Sent Emails
@@ -1049,17 +1049,17 @@ workflow_notes: Notes
 2fa_code: Code
 password: Passwort
 show_metainfo: Info
-email_log_from: From
-email_from: From
-log_search_from: From
-email_log_to: To
-email_to: To
-log_search_to: To
+email_log_from: Von
+email_from: Von
+log_search_from: Von
+email_log_to: An
+email_to: An
+log_search_to: An
 structuredtable_type_text: Text
 objectsMetadata_type_text: Text
 gdpr_data_extractor_label_id: ID
-navigation_target: Target
-log_type: Type
+navigation_target: Ziel
+log_type: Typ
 gdpr_dataSource_export: Export
 classificationstore_configuration: Konfiguration
 gdpr_dataSource_assets: Assets
@@ -1068,30 +1068,37 @@ objectsMetadata_type_select: Select
 objectsMetadata_type_bool: Bool
 gdpr_data_extractor_label_firstname: Vorname
 gdpr_data_extractor_label_lastname: Nachname
-log_source: Source
-classificationstore_error_addgroup_title: Error
-classificationstore_error_addkey_title: Error
-element_lock_message: 'The desired element is currently opened by another person:'
-log_message: Message
-operator_substring_settings: Settings
+log_source: Quelle
+classificationstore_error_addgroup_title: Fehler
+classificationstore_error_addkey_title: Fehler
+element_lock_message: "Das gew\xFCnschte Element wird gerade von einer anderen Person
+  ge\xF6ffnet:"
+log_message: Nachricht
+operator_substring_settings: Einstellungen
 delete_gridconfig_dblcheck: "Willst du dieses Element wirklich l\xF6schen?"
 email_log_cc: Cc
 email_log_bcc: Bcc
-cols: Columns
-log_search_message: Message
-batch_export_confirmation: You are about to export %s dataObjects. Do you want to
-  continue ?
-header: Header
-no_header: No Header
-delete_entire_folder_question: This operation will delete the entire parent/folder.
-  You may not be able to fully undo this operation.
-allow_to_clear_relation: Allow to clear all relations of this field
-allow_asset_inline_download: Allow inline download
-email_blocklist: Email Blocklist
-password_does_not_match: New password and confirm password doesn't match
-incorrect_password: Given password is incorrect
+cols: Spalten
+log_search_message: Nachricht
+batch_export_confirmation: "Sie sind dabei, %s Datenobjekte zu exportieren. M\xF6chten
+  Sie fortfahren?"
+header: Kopfzeile
+no_header: Keine Kopfzeile
+delete_entire_folder_question: "Bei diesem Vorgang wird der gesamte \xFCbergeordnete
+  Ordner gel\xF6scht. M\xF6glicherweise k\xF6nnen Sie diesen Vorgang nicht vollst\xE4ndig
+  r\xFCckg\xE4ngig machen."
+allow_to_clear_relation: "Erlauben, alle Verkn\xFCpfungen dieses Feldes zu l\xF6schen"
+allow_asset_inline_download: Inline-Download zulassen
+email_blocklist: E-Mail-Blockliste
+password_does_not_match: "Neues Passwort und Best\xE4tigungspasswort stimmen nicht
+  \xFCberein"
+incorrect_password: Das angegebene Passwort ist falsch
 content_main_document: Content-Main Document
-2fa_wrong: Wrong code entered!
+2fa_wrong: Falscher Code eingegeben!
 language_main: Main
 system_appearance_settings: Appearance & Branding
+male: "M\xE4nnlich"
+female: Weiblich
+preview_generator_locale: Sprache
+preview_generator_site: Seite
 ...

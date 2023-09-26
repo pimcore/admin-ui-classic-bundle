@@ -798,7 +798,7 @@ Ext.onReady(function () {
 
                             // Do not add pimcore_icon_material class to non-material icons
                             let iconTypeClass = '';
-                            if (treeConfig.icon.match('flat-white')) {
+                            if (treeConfig.icon && treeConfig.icon.match('flat-white')) {
                                 iconTypeClass += 'pimcore_icon_material';
                             }
 

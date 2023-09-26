@@ -291,5 +291,11 @@ pimcore.events.prepareDocumentPageSettingsLayout = "pimcore.documentPageSettings
  */
 pimcore.events.globalLanguageChanged = "pimcore.globalLanguage.changed";
 
+/**
+ * fired when object key is edited
+ * object and key are passed as parameter
+ */
+pimcore.events.postEditObjectKey = "pimcore.objectKey.postEdit";
+
 
 

@@ -93,7 +93,7 @@ target_group: Zielgruppe
 target_group_multiselect: Zielgruppen Mehrfachauswahl
 select_a_target_group: "Zielgruppe ausw\xE4hlen"
 turn_off_usage_statistics: Nutzungsstatistiken ausschalten
-children: Kinder
+children: Kindelemente
 elements_to_export: Elemente zum Exportieren
 important_notice: Wichtige Anmerkung
 composite: Zusammengesetzt
@@ -641,7 +641,7 @@ all_caches: Alle Caches
 admin_translations: "Admin \xDCbersetzungen"
 lock: Sperren
 unlock: Entsperren
-lock_and_propagate_to_children: Sperren und an Kinder weitergeben
+lock_and_propagate_to_children: Sperren inkl. Kindelemente
 unlock_and_propagate_to_children: Entsperren inkl. Kindelemente
 data_cache: Daten Cache
 listing_use_traits: Listung an Verwendung (Merkmale)

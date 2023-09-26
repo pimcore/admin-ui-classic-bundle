@@ -1044,4 +1044,8 @@ content_main_document: Documento de Contenido principal
 2fa_wrong: "\xA1C\xF3digo incorrecto!"
 language_main: Principal
 system_appearance_settings: Apariencia y Marca
+male: Male
+female: Female
+preview_generator_locale: Language
+preview_generator_site: Site
 ...
