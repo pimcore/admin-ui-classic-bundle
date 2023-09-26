@@ -154,6 +154,9 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                         if (this.datax.ownerClassName != null) {
                             this.fieldCombo.store.load({params: {name: this.datax.ownerClassName}});
                         }
+                    }.bind(this),
+                    change: function() {
+                        this.fieldSelect.setValue([]);
                     }.bind(this)
                 }
             });
