@@ -750,6 +750,8 @@ class ElementController extends AdminAbstractController
         $offset = (int) $request->get('start', 0);
         $limit = (int) $request->get('limit', 25);
         $filterRequires = $request->get('filter');
+        $value = null;
+        $elements = null;
 
         if ($id && in_array($type, $allowedTypes)) {
             $element = Model\Element\Service::getElementById($type, $id);
@@ -768,14 +770,17 @@ class ElementController extends AdminAbstractController
 
                 }
 
+                $result = [
+                    'start' => $offset,
+                    'limit' => $limit,
+                    'requires' => [],  // Initialize 'requires' as an empty array
+                ];
+
                 if(count($elements) > 0){
-                    $e = Model\Element\Service::getFilterRequiresForFrontend($elements);
+                    $result = Model\Element\Service::getFilterRequiresForFrontend($elements);
+                    $result['total'] = count($result['requires']);
 
-                    $e['start'] = $offset;
-                    $e['limit'] = $limit;
-                    $e['total'] = count($e['requires']);
-
-                    return $this->adminJson($e);
+                    return $this->adminJson($result);
                 }else{
                     return $this->adminJson($elements);
                 }
@@ -811,6 +816,8 @@ class ElementController extends AdminAbstractController
         $offset = (int) $request->get('start', 0);
         $limit = (int) $request->get('limit', 25);
         $filterRequiredBy = $request->get('filter');
+        $value = null;
+        $elements = null;
 
         if ($id && in_array($type, $allowedTypes)) {
             $element = Model\Element\Service::getElementById($type, $id);
@@ -829,11 +836,14 @@ class ElementController extends AdminAbstractController
 
                 }
 
+                $result = [
+                    'start' => $offset,
+                    'limit' => $limit,
+                    'requiredBy' => [], // Initialize 'requiredBy' as an empty array
+                ];
+
                 if(count($elements) > 0){
                     $result = Model\Element\Service::getFilterRequiredByPathForFrontend($elements);
-
-                    $result['start'] = $offset;
-                    $result['limit'] = $limit;
                     $result['total'] = count($result['requiredBy']);
 
                     return $this->adminJson($result);

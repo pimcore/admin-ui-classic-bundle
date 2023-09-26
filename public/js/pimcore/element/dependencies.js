@@ -107,13 +107,13 @@ pimcore.element.dependencies = Class.create({
                 }
             },
             autoLoad: false,
+            remoteFilter: true,
             model: requiresModel
         });
 
-        var plugins = ['pimcore.gridfilters'];
         this.requiresGrid = new Ext.grid.GridPanel({
             store: this.requiresStore,
-            plugins: plugins,
+            plugins: ['pimcore.gridfilters'],
             columns: [
                 {text: "ID", sortable: true, dataIndex: 'id', hidden:true},
                 {text: t("type"), sortable: true, dataIndex: 'type', hidden: true},
@@ -216,14 +216,14 @@ pimcore.element.dependencies = Class.create({
                 }
             },
             autoLoad: false,
+            remoteFilter: true,
             model: requiredByModel
 
         });
 
-        var plugins = ['pimcore.gridfilters'];
         this.requiredByGrid = Ext.create('Ext.grid.Panel', {
             store: this.requiredByStore,
-            plugins: plugins,
+            plugins: ['pimcore.gridfilters'],
             columns: [
                 {text: "ID", sortable: true, dataIndex: 'id', hidden:true},
                 {text: t("type"), sortable: true, dataIndex: 'type', hidden: true},
