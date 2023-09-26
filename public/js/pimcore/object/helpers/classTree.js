@@ -164,7 +164,7 @@ pimcore.object.helpers.classTree = Class.create({
                         baseNode.appendChild(this.recursiveAddNode(data[keys[i]].children[j], baseNode, brickDescriptor, this.config));
                     }
                     if (data[keys[i]].nodeType == "object") {
-                        baseNode.expand();
+                        baseNode.expand(true);
                     } else {
                         // baseNode.collapse();
                     }
@@ -227,8 +227,6 @@ pimcore.object.helpers.classTree = Class.create({
         };
 
         newNode = this.appendChild(newNode);
-
-        this.expand();
 
         return newNode;
     },
