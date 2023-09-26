@@ -52,5 +52,6 @@ trait AdminStyleTrait
             $data['cls'] .= $adminStyle->getElementCssClass() . ' ';
         }
         $data['qtipCfg'] = $adminStyle->getElementQtipConfig();
+        $data['text'] = $adminStyle->getElementText();
     }
 }
