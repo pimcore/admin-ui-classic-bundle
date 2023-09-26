@@ -1694,4 +1694,8 @@ content_main_document: Content-Main Document
 2fa_wrong: Wrong code entered!
 language_main: Main
 system_appearance_settings: Appearance & Branding
+male: Male
+female: Female
+preview_generator_locale: Language
+preview_generator_site: Site
 ...

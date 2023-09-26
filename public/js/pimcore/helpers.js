@@ -242,6 +242,14 @@ pimcore.helpers.updateTreeElementStyle = function (type, id, treeData) {
                 if (typeof treeData.qtipCfg !== "undefined") {
                     record.set("qtipCfg", treeData.qtipCfg);
                 }
+
+                if (typeof treeData.key !== "undefined") {
+                    record.set("key", treeData.key);
+                }
+
+                if (typeof treeData.text !== "undefined") {
+                    record.set("text", treeData.text);
+                }
             }
         }
     }
@@ -3037,10 +3045,12 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 
                     var params = {};
 
-                    if(parentType === 'path') {
-                        params['parentPath'] = parent;
-                    } else if (parentType === 'id') {
-                        params['parentId'] = parent;
+                    if(parent !== undefined){
+                        if(parentType === 'path') {
+                            params['parentPath'] = parent;
+                        } else if (parentType === 'id') {
+                            params['parentId'] = parent;
+                        }
                     }
 
                     if (context) {
@@ -3386,6 +3396,7 @@ pimcore.helpers.priorityCompare = function(a, b) {
 }
 
 pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
+
     return pimcore.settings.document_types_configuration[documentType][role];
 }
 

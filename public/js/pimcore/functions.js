@@ -1624,8 +1624,11 @@ sprintf = function ()
             else if (pType == 'x') subst = ('' + parseInt(param).toString(16)).toLowerCase();
             else if (pType == 'X') subst = ('' + parseInt(param).toString(16)).toUpperCase();
         }
-        str = leftpart + subst + rightPart;
+        arguments[numSubstitutions] = subst;
+        str = leftpart + '${'+numSubstitutions+'}' + rightPart;
     }
+    str = str.replace(/\${(\d+)}/g, (match, num) => arguments[num]);
+
     return str;
 }
 

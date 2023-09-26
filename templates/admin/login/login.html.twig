@@ -1,7 +1,7 @@
 {% extends '@PimcoreAdmin/admin/login/layout.html.twig' %}
 
 {% block content %}
-<div id="loginform">
+<div id="loginform" {% if not browserSupported %}style="display:none;"{% endif %}>
     <form id="form-element" method="post" action="{{ path('pimcore_admin_login_check', {'perspective' : app.request.get('perspective')|striptags}) }}">
 
         {% if error is defined %}
@@ -32,20 +32,14 @@
     </div>
 
     <div class="text browserinfo">
-        <a href="https://www.google.com/chrome" target="_blank" rel="noopener noreferrer" title="Chrome"><img src="/bundles/pimcoreadmin/img/login/chrome.svg" alt="Chrome"/></a>
-        <a href="https://www.mozilla.org/firefox" target="_blank" rel="noopener noreferrer" title="Firefox"><img src="/bundles/pimcoreadmin/img/login/firefox.svg" alt="Firefox"/></a>
-        <a href="https://www.apple.com/safari" target="_blank" rel="noopener noreferrer" title="Safari"><img src="/bundles/pimcoreadmin/img/login/safari.svg" alt="Safari"/></a>
-        <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer" title="Edge"><img src="/bundles/pimcoreadmin/img/login/edge.svg" alt="Edge"/></a>
+        <a href="https://www.google.com/chrome" target="_blank" rel="noopener noreferrer" title="Chrome"><img src="/bundles/pimcoreadmin/img/login/chrome.svg" alt="Chrome"></a>
+        <a href="https://www.mozilla.org/firefox" target="_blank" rel="noopener noreferrer" title="Firefox"><img src="/bundles/pimcoreadmin/img/login/firefox.svg" alt="Firefox"></a>
+        <a href="https://www.apple.com/safari" target="_blank" rel="noopener noreferrer" title="Safari"><img src="/bundles/pimcoreadmin/img/login/safari.svg" alt="Safari"></a>
+        <a href="https://www.microsoft.com/edge" target="_blank" rel="noopener noreferrer" title="Edge"><img src="/bundles/pimcoreadmin/img/login/edge.svg" alt="Edge"></a>
     </div>
 
     <a id="proceed_with_unsupported_browser" href="#" >{{ 'Click here to proceed'|trans([], 'admin') }}</a>
 </div>
-
-<style type="text/css">
-    #loginform {
-        display: none;
-    }
-</style>
 {% endif %}
 {% endblock %}
 
@@ -93,11 +87,13 @@
         }
     }, true);
 
-    let unsupportedBrowser = document.getElementById('proceed_with_unsupported_browser');
-    unsupportedBrowser.addEventListener('click', function(e) {
-        document.getElementById('loginform').style.display = 'block';
-        document.getElementById('browserinfo').style.display = 'none';
-    });
+    {% if not browserSupported %}
+        let unsupportedBrowser = document.getElementById('proceed_with_unsupported_browser');
+        unsupportedBrowser.addEventListener('click', function(e) {
+            document.getElementById('loginform').style.display = 'block';
+            document.getElementById('browserinfo').style.display = 'none';
+        });
+    {% endif %}
 </script>
 
 {% for includeTemplate in includeTemplates %}
