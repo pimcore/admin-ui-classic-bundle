@@ -34,6 +34,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class QuantityValueController extends AdminAbstractController
 {
+    public function __construct(protected QuantityValueService $service)
+    {
+    }
     /**
      * @Route("/unit-import",name="unitimport", methods={"POST","PUT"})
      *
@@ -44,7 +47,7 @@ class QuantityValueController extends AdminAbstractController
     public function unitImportAction(Request $request): JsonResponse
     {
         $json = file_get_contents($_FILES['Filedata']['tmp_name']);
-        $success = QuantityValueService::importDefinitionFromJson($json);
+        $success = $this->service->importDefinitionFromJson($json);
         $response = $this->adminJson(['success' => $success]);
         $response->headers->set('Content-Type', 'text/html');
 
@@ -60,7 +63,7 @@ class QuantityValueController extends AdminAbstractController
      */
     public function unitExportAction(Request $request): Response
     {
-        $result = QuantityValueService::generateDefinitionJson();
+        $result = $this->service->generateDefinitionJson();
         $response = new Response($result);
         $response->headers->set('Content-Type', 'application/json');
         $response->headers->set('Content-Disposition', 'attachment;filename="quantityvalue_unit_export.json"');
