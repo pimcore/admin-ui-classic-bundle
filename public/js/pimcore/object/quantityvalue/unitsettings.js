@@ -21,14 +21,19 @@ pimcore.object.quantityValue.unitsettings = Class.create({
     initialize: function () {
         this.getTabPanel();
     },
-
-   activate: function (filter) {
+    getUploadUrl: function() {
+        return Routing.generate('pimcore_admin_dataobject_quantityvalue_unitimport');
+    },
+    getExportUrl: function() {
+        return Routing.generate('pimcore_admin_dataobject_quantityvalue_unitexport');
+    },
+    activate: function (filter) {
         if(filter){
             this.store.baseParams.filter = filter;
             this.store.load();
             this.filterField.setValue(filter);
         }
-        var tabPanel = Ext.getCmp("pimcore_panel_tabs");
+        const tabPanel = Ext.getCmp("pimcore_panel_tabs");
         tabPanel.setActiveItem("quantityValue_units");
     },
 
@@ -48,7 +53,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                 items: [this.getRowEditor()]
             });
 
-            var tabPanel = Ext.getCmp("pimcore_panel_tabs");
+            const tabPanel = Ext.getCmp("pimcore_panel_tabs");
             tabPanel.add(this.panel);
             tabPanel.setActiveItem("quantityValue_units");
 
@@ -69,7 +74,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
             type: 'string'
         }, 'abbreviation', 'longname', 'group', 'baseunit', 'factor', 'conversionOffset', 'reference', 'converter'];
 
-        var baseUnitStore = Ext.create('Ext.data.JsonStore', {
+        const baseUnitStore = Ext.create('Ext.data.JsonStore', {
             fields: fields,
             proxy: {
                 type: 'ajax',
@@ -80,12 +85,13 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                     type: 'json',
                     rootProperty: 'data'
                 }
+
             },
             // disable client pagination, default: 25
             pageSize: 0,
             listeners: {
                 load: function (store, records) {
-                    var storeData = records;
+                    const storeData = records;
                     storeData.unshift({'id': -1, 'abbreviation' : "(" + t("empty") + ")"});
                     store.loadData(storeData);
                 }
@@ -93,7 +99,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
         });
         baseUnitStore.load();
 
-        var baseUnitEditor = {
+        const baseUnitEditor = {
             xtype: 'combobox',
             triggerAction: "all",
             autoSelect: true,
@@ -106,26 +112,26 @@ pimcore.object.quantityValue.unitsettings = Class.create({
             store: baseUnitStore
         };
 
-        var typesColumns = [
+        const typesColumns = [
             {flex: 1, dataIndex: 'id', text: t("id"), filter: 'string'},
-            {flex: 1, dataIndex: 'abbreviation', text: t("abbreviation"), editor: new Ext.form.TextField(), filter: 'string'},
-            {flex: 2, dataIndex: 'longname', text: t("longname"), editor: new Ext.form.TextField(), filter: 'string'},
-            {flex: 1, dataIndex: 'group', text: t("group"), editor: new Ext.form.TextField(), filter: 'string', hidden: true},
+            {flex: 1, dataIndex: 'abbreviation', text: t("abbreviation"), editor: new Ext.form.TextField({}), filter: 'string'},
+            {flex: 2, dataIndex: 'longname', text: t("longname"), editor: new Ext.form.TextField({}), filter: 'string'},
+            {flex: 1, dataIndex: 'group', text: t("group"), editor: new Ext.form.TextField({}), filter: 'string', hidden: true},
             {flex: 1, dataIndex: 'baseunit', text: t("baseunit"), editor: baseUnitEditor, renderer: function(value){
-                if(!value) {
-                    return '('+t('empty')+')';
-                }
+                    if(!value) {
+                        return '('+t('empty')+')';
+                    }
 
-                var baseUnit = baseUnitStore.getById(value);
-                if(!baseUnit) {
-                    return '('+t('empty')+')';
-                }
-                return baseUnit.get('abbreviation');
-            }},
+                    const baseUnit = baseUnitStore.getById(value);
+                    if(!baseUnit) {
+                        return '('+t('empty')+')';
+                    }
+                    return baseUnit.get('abbreviation');
+                }},
             {flex: 1, dataIndex: 'factor', text: t("conversionFactor"), editor: new Ext.form.NumberField({decimalPrecision: 10}), filter: 'numeric'},
             {flex: 1, dataIndex: 'conversionOffset', text: t("conversionOffset"), editor: new Ext.form.NumberField({decimalPrecision: 10}), filter: 'numeric'},
-            {flex: 1, dataIndex: 'reference', text: t("reference"), editor: new Ext.form.TextField(), hidden: true, filter: 'string'},
-            {flex: 1, dataIndex: 'converter', text: t("converter_service"), editor: new Ext.form.TextField(), filter: 'string'}
+            {flex: 1, dataIndex: 'reference', text: t("reference"), editor: new Ext.form.TextField({}), hidden: true, filter: 'string'},
+            {flex: 1, dataIndex: 'converter', text: t("converter_service"), editor: new Ext.form.TextField({}), filter: 'string'}
         ];
 
         typesColumns.push({
@@ -142,7 +148,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
             }]
         });
 
-        var itemsPerPage = pimcore.helpers.grid.getDefaultPageSize(-1);
+        const itemsPerPage = pimcore.helpers.grid.getDefaultPageSize(-1);
 
         this.store = new Ext.data.Store({
             proxy: {
@@ -199,11 +205,11 @@ pimcore.object.quantityValue.unitsettings = Class.create({
             plugins: ['pimcore.gridfilters', this.rowEditing],
             columnLines: true,
             stripeRows: true,
-            columns: {
+            columns : {
                 items: typesColumns,
                 defaults: {
                     renderer: Ext.util.Format.htmlEncode
-                },
+                }
             },
             bbar: this.pagingtoolbar,
             selModel: Ext.create('Ext.selection.RowModel', {}),
@@ -228,7 +234,30 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                             this.store.reload();
                         }.bind(this),
                         iconCls: "pimcore_icon_reload"
-                    },'-',{
+                    },
+                    '-',
+                    {
+                        text: t('import'),
+                        handler: function () {
+                            pimcore.helpers.uploadDialog(this.getUploadUrl(), "Filedata", function() {
+                                this.store.reload();
+                                pimcore.layout.refresh();
+                            }.bind(this), function () {
+                                Ext.MessageBox.alert(t("error"), t("error"));
+                            });
+                        }.bind(this),
+                        iconCls: "pimcore_icon_upload"
+                    },
+                    '-',
+                    {
+                        text: t('export'),
+                        handler: function () {
+                            pimcore.helpers.download(this.getExportUrl());
+                        }.bind(this),
+                        iconCls: "pimcore_icon_download"
+                    },
+                    '-',
+                    {
                         text: this.getHint(),
                         xtype: "tbtext",
                         style: "margin: 0 10px 0 0;"
@@ -246,7 +275,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
     onAdd: function (btn, ev) {
         Ext.MessageBox.prompt(' ', t('unique_identifier'),
             function (button, value, object) {
-                var regresult = value.match(/[a-zA-Z0-9_\-]+/);
+                const regresult = value.match(/[a-zA-Z0-9_\-]+/);
                 if (button == "ok") {
                     if (value.length >= 1 && regresult == value) {
 
@@ -260,7 +289,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                                 })
                             },
                             success: function () {
-                                var u = {
+                                const u = {
                                     id: value
                                 };
                                 this.rowEditing.completeEdit();
@@ -281,11 +310,11 @@ pimcore.object.quantityValue.unitsettings = Class.create({
     },
 
     onDelete: function () {
-        var selections = this.grid.getSelectionModel().getSelected();
+        const selections = this.grid.getSelectionModel().getSelected();
         if (!selections || selections.length < 1) {
             return false;
         }
-        var rec = selections.getAt(0);
+        const rec = selections.getAt(0);
         this.grid.store.remove(rec);
     }
 });
