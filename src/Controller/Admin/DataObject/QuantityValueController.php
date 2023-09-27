@@ -231,11 +231,11 @@ class QuantityValueController extends AdminAbstractController
         foreach ($units as &$unit) {
             try {
                 if ($unit->getAbbreviation()) {
-                    $unit->setAbbreviation(\Pimcore\Model\Translation::getByKeyLocalized($unit->getAbbreviation(), Translation::DOMAIN_ADMIN,
+                    $unit->setAbbreviation(Translation::getByKeyLocalized($unit->getAbbreviation(), Translation::DOMAIN_ADMIN,
                         true, true));
                 }
                 if ($unit->getLongname()) {
-                    $unit->setLongname(\Pimcore\Model\Translation::getByKeyLocalized($unit->getLongname(), Translation::DOMAIN_ADMIN, true,
+                    $unit->setLongname(Translation::getByKeyLocalized($unit->getLongname(), Translation::DOMAIN_ADMIN, true,
                         true));
                 }
                 $result[] = $unit->getObjectVars();
