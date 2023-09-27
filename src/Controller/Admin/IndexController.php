@@ -27,6 +27,7 @@ use Pimcore\Bundle\AdminBundle\System\AdminConfig;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
+use Pimcore\Image\Chromium;
 use Pimcore\Maintenance\Executor;
 use Pimcore\Maintenance\ExecutorInterface;
 use Pimcore\Model\Asset;
@@ -34,11 +35,13 @@ use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
 use Pimcore\Model\Element\Service;
+use Pimcore\Model\Property\Predefined;
 use Pimcore\Model\User;
 use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
+use Pimcore\Video;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -211,16 +214,17 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'debug_admin_translations'       => (bool)$systemSettings['general']['debug_admin_translations'],
             'document_generatepreviews'      => (bool)$config['documents']['generate_preview'],
             'asset_disable_tree_preview'     => (bool)$adminSettings['assets']['disable_tree_preview'],
-            'chromium'                       => \Pimcore\Image\Chromium::isSupported(),
-            'videoconverter'                 => \Pimcore\Video::isAvailable(),
             'asset_hide_edit'                => (bool)$adminSettings['assets']['hide_edit_image'],
+            'asset_tree_paging_limit'        => $config['assets']['tree_paging_limit'],
+            'asset_default_upload_path'      => $config['assets']['default_upload_path'],
+            'chromium'                       => Chromium::isSupported(),
+            'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
             'timezone'                       => $config['general']['timezone'],
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
             'geocoding_url_template'         => $config['maps']['geocoding_url_template'],
             'reverse_geocoding_url_template' => $config['maps']['reverse_geocoding_url_template'],
-            'asset_tree_paging_limit'        => $config['assets']['tree_paging_limit'],
             'document_tree_paging_limit'     => $config['documents']['tree_paging_limit'],
             'object_tree_paging_limit'       => $config['objects']['tree_paging_limit'],
             'hostname'                       => htmlentities(\Pimcore\Tool::getHostname(), ENT_QUOTES, 'UTF-8'),
@@ -234,14 +238,15 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'disabledPortlets'      => $dashboardHelper->getDisabledPortlets(),
 
             // this stuff is used to decide whether the "add" button should be grayed out or not
-            'image-thumbnails-writeable'          => (new \Pimcore\Model\Asset\Image\Thumbnail\Config())->isWriteable(),
-            'video-thumbnails-writeable'          => (new \Pimcore\Model\Asset\Video\Thumbnail\Config())->isWriteable(),
+            'image-thumbnails-writeable'          => (new Asset\Image\Thumbnail\Config())->isWriteable(),
+            'video-thumbnails-writeable'          => (new Asset\Video\Thumbnail\Config())->isWriteable(),
             'document-types-writeable'            => (new DocType())->isWriteable(),
-            'predefined-properties-writeable'     => (new \Pimcore\Model\Property\Predefined())->isWriteable(),
+            'predefined-properties-writeable'     => (new Predefined())->isWriteable(),
             'predefined-asset-metadata-writeable' => (new \Pimcore\Model\Metadata\Predefined())->isWriteable(),
             'perspectives-writeable'              => \Pimcore\Bundle\AdminBundle\Perspective\Config::isWriteable(),
             'custom-views-writeable'              => \Pimcore\Bundle\AdminBundle\CustomView\Config::isWriteable(),
-            'class-definition-writeable'          => isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ? (bool)$_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'] : true,
+            'class-definition-writeable'          => !isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ||
+                $_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'],
             'object-custom-layout-writeable' => (new CustomLayout())->isWriteable(),
 
             // search types

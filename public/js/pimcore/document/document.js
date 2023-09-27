@@ -594,7 +594,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
             Ext.iterate(this.data["translations"], function (language, documentId, myself) {
                 translationsMenu.push({
                     text: pimcore.available_languages[language] + " [" + language + "]",
-                    iconCls: "pimcore_icon_language_" + language,
+                    iconCls: "pimcore_icon_language_" + language.toLowerCase(),
                     handler: function () {
                         pimcore.helpers.openElement(documentId, "document");
                     }
@@ -633,7 +633,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                             }.bind(this)
                         });
                     }.bind(this),
-                    iconCls: "pimcore_icon_language_" + language
+                    iconCls: "pimcore_icon_language_" + language.toLowerCase()
                 });
             });
         }

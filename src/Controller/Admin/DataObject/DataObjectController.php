@@ -522,13 +522,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-select-options", name="getSelectOptions", methods={"GET"})
+     * @Route("/get-select-options", name="getSelectOptions", methods={"POST"})
      *
      * @throws \Exception
      */
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = $request->query->getInt('objectId');
+        $objectId = $request->request->getInt('objectId');
         $object = DataObject\Concrete::getById($objectId);
         if (!$object instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
@@ -1036,7 +1036,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     private function executeUpdateAction(DataObject $object, mixed $values): array
     {
-        $success = false;
+        $data = ['success' => false];
 
         if ($object instanceof DataObject\Concrete) {
             $object->setOmitMandatoryCheck(true);
@@ -1110,7 +1110,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     $this->updateIndexesOfObjectSiblings($object, $indexUpdate);
                 }
 
-                $success = true;
+                $data = [
+                  'success' => true,
+                  'treeData' => $this->getTreeNodeConfig($object),
+                ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);
 
@@ -1122,7 +1125,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             Logger::debug('prevented update object because of missing permissions.');
         }
 
-        return ['success' => $success];
+        return $data;
     }
 
     private function executeInsideTransaction(callable $fn): void
