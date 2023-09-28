@@ -165,8 +165,7 @@ class WorkflowController extends AdminAbstractController implements KernelContro
         Request $request,
         Registry $workflowRegistry,
         Manager $workflowManager
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $workflowOptions = $request->get('workflow', []);
         $workflow = $workflowRegistry->get($this->element, $request->get('workflowName'));
 
