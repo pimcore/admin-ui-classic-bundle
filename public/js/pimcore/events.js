@@ -297,5 +297,8 @@ pimcore.events.globalLanguageChanged = "pimcore.globalLanguage.changed";
  */
 pimcore.events.postEditObjectKey = "pimcore.objectKey.postEdit";
 
-
-
+/**
+ * fired after basic perspective element trees were  built
+ *  array of custom perspective element trees  are passed as parameter
+ */
+pimcore.events.postBuildPerspectiveElementTree = "pimcore.elementTree.perspective.postBuild";

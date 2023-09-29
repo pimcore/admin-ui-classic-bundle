@@ -161,13 +161,26 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      *
      *
      */
-    public function submitGlobalAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
-    {
+    public function submitGlobalAction(
+        Request $request,
+        Registry $workflowRegistry,
+        Manager $workflowManager
+    ): JsonResponse {
         $workflowOptions = $request->get('workflow', []);
         $workflow = $workflowRegistry->get($this->element, $request->get('workflowName'));
 
+        $globalAction = $workflowManager->getGlobalAction(
+            $request->get('workflowName'),
+            $request->get('transition')
+        );
+        $saveSubject = !$globalAction || $globalAction->getSaveSubject();
+
         try {
-            $workflowManager->applyGlobalAction($workflow, $this->element, $request->get('transition'), $workflowOptions, true);
+            $workflowManager->applyGlobalAction(
+                $workflow,
+                $this->element, $request->get('transition'),
+                $workflowOptions, $saveSubject
+            );
 
             $data = [
                 'success' => true,
