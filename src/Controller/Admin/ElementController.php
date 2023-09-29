@@ -762,11 +762,11 @@ class ElementController extends AdminAbstractController
 
                 foreach ($filters as $filter) {
 
-                  if ($filter['type'] == 'string') {
-                    $value = ($filter['value']??'');
-                  }
+                    if ($filter['type'] == 'string') {
+                        $value = ($filter['value']??'');
+                    }
 
-                  $elements = $element->getDependencies()->getFilterRequiresByPath($offset,$limit,$value);
+                    $elements = $element->getDependencies()->getFilterRequiresByPath($offset, $limit, $value);
 
                 }
 
@@ -776,12 +776,12 @@ class ElementController extends AdminAbstractController
                     'requires' => [],  // Initialize 'requires' as an empty array
                 ];
 
-                if(count($elements) > 0){
+                if(count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiresForFrontend($elements);
                     $result['total'] = count($result['requires']);
 
                     return $this->adminJson($result);
-                }else{
+                } else {
                     return $this->adminJson($elements);
                 }
 
@@ -829,10 +829,10 @@ class ElementController extends AdminAbstractController
                 foreach ($filters as $filter) {
 
                     if ($filter['type'] == 'string') {
-                    $value = ($filter['value']??'');
+                        $value = ($filter['value']??'');
                     }
 
-                    $elements = $element->getDependencies()->getFilterRequiredByPath($offset,$limit,$value);
+                    $elements = $element->getDependencies()->getFilterRequiredByPath($offset, $limit, $value);
 
                 }
 
@@ -842,12 +842,12 @@ class ElementController extends AdminAbstractController
                     'requiredBy' => [], // Initialize 'requiredBy' as an empty array
                 ];
 
-                if(count($elements) > 0){
+                if(count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiredByPathForFrontend($elements);
                     $result['total'] = count($result['requiredBy']);
 
                     return $this->adminJson($result);
-                }else{
+                } else {
                     return $this->adminJson($elements);
                 }
 
