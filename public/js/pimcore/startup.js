@@ -737,16 +737,15 @@ Ext.onReady(function () {
             });
         }
 
-
         var perspective = pimcore.globalmanager.get("perspective");
         var elementTree = perspective.getElementTree();
-
         var locateConfigs = {
             document: [],
             asset: [],
             object: []
         };
 
+        let customPerspectiveElementTrees = [];
         for (var i = 0; i < elementTree.length; i++) {
 
             var treeConfig = elementTree[i];
@@ -822,6 +821,10 @@ Ext.onReady(function () {
                         }
                     }
                     break;
+                default:
+                    if (!treeConfig.hidden) {
+                        customPerspectiveElementTrees.push(treeConfig);
+                    }
             }
 
 
@@ -835,6 +838,13 @@ Ext.onReady(function () {
 
         }
         pimcore.globalmanager.add("tree_locate_configs", locateConfigs);
+
+        const postBuildPerspectiveElementTree = new CustomEvent(pimcore.events.postBuildPerspectiveElementTree, {
+            detail: {
+                customPerspectiveElementTrees: customPerspectiveElementTrees
+            }
+        });
+        document.dispatchEvent(postBuildPerspectiveElementTree);
 
     }
     catch (e) {
