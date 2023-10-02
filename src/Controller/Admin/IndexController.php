@@ -24,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
@@ -290,7 +291,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             })),
             // email search compatible document types
             'document_email_search_types' => $config['documents']['email_search'],
-            'select_options_provider_class' => 'Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider',
+            'select_options_provider_class' => SelectOptionsOptionsProvider::class,
         ];
 
         $this
