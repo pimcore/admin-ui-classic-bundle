@@ -615,6 +615,15 @@ pimcore.layout.toolbar = Class.create({
                      });
                  }
 
+                 if (perspectiveCfg.inToolbar('settings.objects.selectoptions') && user.isAllowed('selectoptions')) {
+                     objectMenu.menu.items.push({
+                         text: t('selectoptions'),
+                         iconCls: 'pimcore_nav_icon_selectoptions',
+                         itemId: 'pimcore_menu_settings_data_objects_selectoptions',
+                         handler: this.editSelectOptions
+                     });
+                 }
+
                  if (perspectiveCfg.inToolbar("settings.objects.quantityValue") && user.isAllowed("quantityValueUnits")) {
                      objectMenu.menu.items.push({
                          text: t("quantityValue_field"),
@@ -1203,6 +1212,14 @@ pimcore.layout.toolbar = Class.create({
              pimcore.globalmanager.add("objectbricks", new pimcore.object.objectbrick());
          }
      },
+
+    editSelectOptions: function () {
+        try {
+            pimcore.globalmanager.get('selectoptions').activate();
+        } catch (e) {
+            pimcore.globalmanager.add('selectoptions', new pimcore.object.selectoptions());
+        }
+    },
 
      clearCache: function (params) {
          Ext.Msg.confirm(t('warning'), t('system_performance_stability_warning'), function(btn){

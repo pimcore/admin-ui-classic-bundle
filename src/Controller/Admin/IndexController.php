@@ -24,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
@@ -277,6 +278,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'class-definition-writeable'          => !isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ||
                 (bool) $_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'],
             'object-custom-layout-writeable' => (new CustomLayout())->isWriteable(),
+            'select-options-writeable' => (new \Pimcore\Model\DataObject\SelectOptions\Config())->isWriteable(),
 
             // search types
             'asset_search_types' => Asset::getTypes(),
@@ -289,6 +291,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             })),
             // email search compatible document types
             'document_email_search_types' => $config['documents']['email_search'],
+            'select_options_provider_class' => SelectOptionsOptionsProvider::class,
         ];
 
         $this
