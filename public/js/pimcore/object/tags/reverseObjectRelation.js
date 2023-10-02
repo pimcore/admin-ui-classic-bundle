@@ -115,7 +115,38 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                 defaults: {
                     sortable: false
                 },
-                items: columns
+                items: [
+                    ...columns,
+                    ...[
+                        {
+                            xtype: 'actioncolumn',
+                            menuText: t('open'),
+                            width: 30,
+                            items: [
+                                {
+                                    tooltip: t('open'),
+                                    icon: "/bundles/pimcoreadmin/img/flat-color-icons/open_file.svg",
+                                    handler: function (el, rowIndex) {
+                                        var data = this.store.getAt(rowIndex);
+                                        pimcore.helpers.openObject(data.data.id, "object");
+                                    }.bind(this)
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'actioncolumn',
+                            menuText: t('remove'),
+                            width: 30,
+                            items: [
+                                {
+                                    tooltip: t('remove'),
+                                    icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
+                                    handler: this.actionColumnRemove.bind(this)
+                                }
+                            ]
+                        }
+                    ]
+                ]
             },
             componentCls: cls,
             width: this.fieldConfig.width,
