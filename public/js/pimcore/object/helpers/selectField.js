@@ -47,7 +47,7 @@ pimcore.object.helpers.selectField = {
             store: this.getSelectOptionsStore(),
             listeners: {
                 change: function (comboBox, newValue) {
-                    optionsProviderClass.setValue('\\Pimcore\\Bundle\\CoreBundle\\OptionsProvider\\SelectOptionsOptionsProvider');
+                    optionsProviderClass.setValue(pimcore.settings.select_options_provider_class);
                     optionsProviderData.setValue(newValue);
                 }
             }

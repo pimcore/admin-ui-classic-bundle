@@ -290,6 +290,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             })),
             // email search compatible document types
             'document_email_search_types' => $config['documents']['email_search'],
+            'select_options_provider_class' => 'Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider',
         ];
 
         $this
