@@ -28,13 +28,13 @@ use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Translation;
 use Pimcore\Tool\Session;
 use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -2135,7 +2135,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
     /**
      * SELECT OPTIONS
      */
-
     #[Route('/select-options-get', name: 'selectoptionsget', methods: [Request::METHOD_GET])]
     public function selectOptionsGetAction(Request $request): JsonResponse
     {
@@ -2154,6 +2153,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
     public function selectOptionsUpdateAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $this->checkPermission('selectoptions');
+
         try {
             $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
 
@@ -2212,6 +2212,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
             if ((int)$request->get('grouped', 0) === 0 || !$selectOptionConfig->hasGroup()) {
                 $configurations[] = $configurationData;
+
                 continue;
             }
 
@@ -2251,6 +2252,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         try {
             $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
             $this->getSelectOptionsConfig($id)->delete();
+
             return $this->adminJson(['success' => true]);
         } catch (\Exception $exception) {
             return $this->adminJson(['success' => false, 'message' => $exception->getMessage()]);
@@ -2263,6 +2265,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         if ($selectOptions === null) {
             throw new NotFoundHttpException('Not Found', code: 1677133720896);
         }
+
         return $selectOptions;
     }
 }
