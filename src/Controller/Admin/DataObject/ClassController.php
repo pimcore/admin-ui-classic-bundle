@@ -28,6 +28,7 @@ use Pimcore\Model\Exception\ConfigWriteException;
 use Pimcore\Model\Translation;
 use Pimcore\Tool\Session;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
