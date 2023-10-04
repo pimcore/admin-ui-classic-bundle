@@ -86,7 +86,10 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
     },
 
     getGridColumnFilter: function (field) {
-        return {type: 'string', dataIndex: field.key};
+        if (['input', 'textarea', 'html'].some((val) => field.layout.elementType.includes(val))) {
+            return {type: 'string', dataIndex: field.key};
+        }
+        return {type: field.layout.elementType, dataIndex: field.key};
     },
 
     getGridColumnConfig:function (field) {
