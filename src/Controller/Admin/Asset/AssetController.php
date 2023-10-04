@@ -33,6 +33,7 @@ use Pimcore\File;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;
+use Pimcore\Messenger\AssetUpdateTasksMessage;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation;
@@ -1487,12 +1488,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-preview-document", name="pimcore_admin_asset_getpreviewdocument", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
-    public function getPreviewDocumentAction(Request $request): StreamedResponse
+    public function getPreviewDocumentAction(
+        Request $request,
+        TranslatorInterface $translator
+    ): StreamedResponse|Response
     {
         $asset = Asset\Document::getById((int) $request->get('id'));
 
@@ -1501,6 +1501,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
+            if ($asset->getMimeType() === 'application/pdf') {
+                $pageBySanitized = $this->getPageBySanitizedStatus($asset, $translator);
+                if($pageBySanitized) {
+                    return $pageBySanitized;
+                }
+
+            }
             $stream = $this->getDocumentPreviewPdf($asset);
             if ($stream) {
                 return new StreamedResponse(function () use ($stream) {
@@ -1516,6 +1523,36 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
+    private function getPageBySanitizedStatus(Asset\Document $asset, TranslatorInterface $translator) :?Response
+    {
+        if (!Config::getSystemConfiguration('assets')['document']['process_sanitizing']) {
+            return null;
+        }
+
+        $sanitizedStatus = $asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_SANITIZED);
+        if ($sanitizedStatus === null) {
+            \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                new AssetUpdateTasksMessage($asset->getId())
+            );
+        }
+
+        if ($sanitizedStatus === null || $sanitizedStatus === Asset\SanitizedStatus::inProgress) {
+            return $this->render(
+                '@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig',
+                ['message' => $translator->trans('sanitize_pdf_in_progress', [], 'admin')]
+            );
+        }
+
+        if ($sanitizedStatus === Asset\SanitizedStatus::unsafe) {
+            return $this->render(
+                '@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig',
+                ['message' => $translator->trans('js_in_pdf', [], 'admin')]
+            );
+        }
+
+        return null;
+    }
+
     /**
      * @param Asset\Document $asset
      *
@@ -1529,7 +1566,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             $stream = $asset->getStream();
         }
 
-        if (!$stream && $asset->getPageCount() && \Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
+        if (
+            !$stream &&
+            $asset->getPageCount() &&
+            \Pimcore\Document::isAvailable() &&
+            \Pimcore\Document::isFileTypeSupported($asset->getFilename())
+        ) {
             try {
                 $document = \Pimcore\Document::getInstance();
                 $stream = $document->getPdf($asset);
