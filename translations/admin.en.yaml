@@ -988,5 +988,5 @@ allow_asset_inline_download: Allow inline download
 system_appearance_settings: 'Appearance & Branding'
 male: Male
 female: Female
-js_in_pdf: This Pdf file contains JavaScript. If you want to view it, please download it and open it in your local Pdf viewer.
-sanitize_pdf_in_progress: Pimcore is executing some technical checks on this Pdf. This may take a while.
+pdf_js_unsafe: This Pdf file contains JavaScript. If you want to view it, please download and open it in your local Pdf viewer.
+pdf_scan_in_progress: 'Preview not available: Pdf is being scanned. This may take a while.'

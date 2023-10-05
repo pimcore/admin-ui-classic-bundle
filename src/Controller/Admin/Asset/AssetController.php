@@ -985,6 +985,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
         }
 
+        if ($asset->getMimeType() === 'application/pdf') {
+            $scanResponse = $this->getResponseByScanStatus($asset);
+            if ($scanResponse) {
+                return $scanResponse;
+            }
+        }
+
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
 
         return $this->render(
@@ -1502,12 +1509,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->isAllowed('view')) {
             if ($asset->getMimeType() === 'application/pdf') {
-                $pageBySanitized = $this->getPageBySanitizedStatus($asset, $translator);
-                if($pageBySanitized) {
-                    return $pageBySanitized;
+                $scanResponse = $this->getResponseByScanStatus($asset);
+                if ($scanResponse) {
+                    return $scanResponse;
                 }
-
             }
+
             $stream = $this->getDocumentPreviewPdf($asset);
             if ($stream) {
                 return new StreamedResponse(function () use ($stream) {
@@ -1523,31 +1530,26 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    private function getPageBySanitizedStatus(Asset\Document $asset, TranslatorInterface $translator) :?Response
+    private function getResponseByScanStatus(Asset\Document $asset) :?Response
     {
-        if (!Config::getSystemConfiguration('assets')['document']['process_sanitizing']) {
+        if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
             return null;
         }
 
-        $sanitizedStatus = $asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_SANITIZED);
-        if ($sanitizedStatus === null) {
+        $scanStatus = $asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_PDF_SCAN_STATUS);
+        if ($scanStatus === null) {
+            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS->value;
             \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
                 new AssetUpdateTasksMessage($asset->getId())
             );
         }
 
-        if ($sanitizedStatus === null || $sanitizedStatus === Asset\SanitizedStatus::inProgress) {
-            return $this->render(
-                '@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig',
-                ['message' => $translator->trans('sanitize_pdf_in_progress', [], 'admin')]
-            );
+        if ($scanStatus === Asset\Enum\PdfScanStatus::IN_PROGRESS->value) {
+            return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig');
         }
 
-        if ($sanitizedStatus === Asset\SanitizedStatus::unsafe) {
-            return $this->render(
-                '@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig',
-                ['message' => $translator->trans('js_in_pdf', [], 'admin')]
-            );
+        if ($scanStatus === Asset\Enum\PdfScanStatus::UNSAFE->value) {
+            return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig');
         }
 
         return null;
