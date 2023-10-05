@@ -840,8 +840,16 @@ class UserController extends AdminAbstractController implements KernelController
             throw $this->createNotFoundException();
         }
 
-        if ($userObj->isAdmin() && !$this->getAdminUser()->isAdmin()) {
-            throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+        $adminUser = $this->getAdminUser();
+
+        if (!$adminUser->isAdmin()) {
+            if ($userObj->isAdmin()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+            }
+
+            if ($adminUser->getId() !== $userObj->getId()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify users other than themselves');
+            }
         }
 
         $userObj->setImage(null);
@@ -1031,7 +1039,7 @@ class UserController extends AdminAbstractController implements KernelController
         $unrestrictedActions = [
             'getCurrentUserAction', 'updateCurrentUserAction', 'getAvailablePermissionsAction', 'getMinimalAction',
             'getImageAction', 'uploadCurrentUserImageAction', 'disable2FaSecretAction', 'renew2FaSecretAction',
-            'getUsersForSharingAction', 'getRolesForSharingAction',
+            'getUsersForSharingAction', 'getRolesForSharingAction', 'deleteImageAction',
         ];
 
         $this->checkActionPermission($event, 'users', $unrestrictedActions);
