@@ -986,7 +986,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->getMimeType() === 'application/pdf') {
-            $scanResponse = $this->getResponseByScanStatus($asset);
+            $scanResponse = $this->getResponseByScanStatus($asset, false);
             if ($scanResponse) {
                 return $scanResponse;
             }
@@ -1530,29 +1530,27 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    private function getResponseByScanStatus(Asset\Document $asset) :?Response
+    private function getResponseByScanStatus(Asset\Document $asset, $processBackground = true) :?Response
     {
         if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
             return null;
         }
 
-        $scanStatus = $asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_PDF_SCAN_STATUS);
+        $scanStatus = Asset\Enum\PdfScanStatus::tryFrom($asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_PDF_SCAN_STATUS));
         if ($scanStatus === null) {
-            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS->value;
-            \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
-                new AssetUpdateTasksMessage($asset->getId())
-            );
+            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
+            if ($processBackground) {
+                \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                    new AssetUpdateTasksMessage($asset->getId())
+                );
+            }
         }
 
-        if ($scanStatus === Asset\Enum\PdfScanStatus::IN_PROGRESS->value) {
-            return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig');
-        }
-
-        if ($scanStatus === Asset\Enum\PdfScanStatus::UNSAFE->value) {
-            return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig');
-        }
-
-        return null;
+        return match($scanStatus) {
+            Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
+            Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
+            default => null,
+        };
     }
 
     /**

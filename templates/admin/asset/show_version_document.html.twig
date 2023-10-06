@@ -1,8 +1,4 @@
-{% if asset.getMimeType() == 'application/pdf' and asset.getScanStatus() == 'unsafe' %}
-    {% include '@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig' %}
-{% elseif asset.getMimeType() == 'application/pdf' and asset.getScanStatus() == 'inProgress' %}
-    {% include '@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig' %}
-{% elseif asset.getMimeType() == 'application/pdf' %}
+{% if asset.getMimeType() == 'application/pdf' %}
     {% set tempFile = asset.getTemporaryFile() %}
     {% set dataUri = pimcore_asset_version_preview(tempFile) %}
 
