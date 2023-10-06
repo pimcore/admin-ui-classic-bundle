@@ -1536,7 +1536,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             return null;
         }
 
-        $scanStatus = Asset\Enum\PdfScanStatus::tryFrom($asset->getCustomSetting(Asset\Document::CUSTOM_SETTING_PDF_SCAN_STATUS));
+        $scanStatus = $asset->getScanStatus();
         if ($scanStatus === null) {
             $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
             if ($processBackground) {
