@@ -1530,7 +1530,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    private function getResponseByScanStatus(Asset\Document $asset, $processBackground = true) :?Response
+    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true) :?Response
     {
         if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
             return null;
