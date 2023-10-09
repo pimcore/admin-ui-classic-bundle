@@ -33,6 +33,7 @@ use Pimcore\File;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;
+use Pimcore\Messenger\AssetUpdateTasksMessage;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation;
@@ -984,6 +985,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
         }
 
+        if ($asset->getMimeType() === 'application/pdf') {
+            $scanResponse = $this->getResponseByScanStatus($asset, false);
+            if ($scanResponse) {
+                return $scanResponse;
+            }
+        }
+
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
 
         return $this->render(
@@ -1487,12 +1495,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-preview-document", name="pimcore_admin_asset_getpreviewdocument", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
-    public function getPreviewDocumentAction(Request $request): StreamedResponse
+    public function getPreviewDocumentAction(
+        Request $request,
+        TranslatorInterface $translator
+    ): StreamedResponse|Response
     {
         $asset = Asset\Document::getById((int) $request->get('id'));
 
@@ -1501,6 +1508,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
+            if ($asset->getMimeType() === 'application/pdf') {
+                $scanResponse = $this->getResponseByScanStatus($asset);
+                if ($scanResponse) {
+                    return $scanResponse;
+                }
+            }
+
             $stream = $this->getDocumentPreviewPdf($asset);
             if ($stream) {
                 return new StreamedResponse(function () use ($stream) {
@@ -1516,6 +1530,29 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
+    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true) :?Response
+    {
+        if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
+            return null;
+        }
+
+        $scanStatus = $asset->getScanStatus();
+        if ($scanStatus === null) {
+            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
+            if ($processBackground) {
+                \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                    new AssetUpdateTasksMessage($asset->getId())
+                );
+            }
+        }
+
+        return match($scanStatus) {
+            Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
+            Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
+            default => null,
+        };
+    }
+
     /**
      * @param Asset\Document $asset
      *
@@ -1529,7 +1566,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             $stream = $asset->getStream();
         }
 
-        if (!$stream && $asset->getPageCount() && \Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
+        if (
+            !$stream &&
+            $asset->getPageCount() &&
+            \Pimcore\Document::isAvailable() &&
+            \Pimcore\Document::isFileTypeSupported($asset->getFilename())
+        ) {
             try {
                 $document = \Pimcore\Document::getInstance();
                 $stream = $document->getPdf($asset);
