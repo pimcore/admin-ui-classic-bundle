@@ -282,20 +282,6 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 editable: false,
                 forceSelection: true
             },
-            {
-                xtype: "textfield",
-                fieldLabel: t("options_provider_class"),
-                width: 600,
-                name: "optionsProviderClass",
-                value: datax.optionsProviderClass
-            },
-            {
-                xtype: "textfield",
-                fieldLabel: t("options_provider_data"),
-                width: 600,
-                value: datax.optionsProviderData,
-                name: "optionsProviderData"
-            },
             valueGrid
         ]);
 
