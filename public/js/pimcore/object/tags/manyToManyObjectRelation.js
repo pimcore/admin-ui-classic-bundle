@@ -960,11 +960,9 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
         // - https://github.com/pimcore/pimcore/pull/4337
         // - https://github.com/pimcore/pimcore/pull/4909
         // - https://github.com/pimcore/pimcore/pull/5367
-        if (nicePathRequested) {
-            window.setTimeout(function () {
-                this.component.getView().refresh();
-            }.bind(this), 500);
-        }
+        window.setTimeout(function () {
+            this.component.getView().refresh();
+        }.bind(this), 500);
     },
 
     normalizeTargetData: function (targets) {
