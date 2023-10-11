@@ -281,8 +281,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 triggerAction: "all",
                 editable: false,
                 forceSelection: true
-            },
-            valueGrid
+            }
         ]);
 
         appendedStylingItems = appendedStylingItems.concat(
