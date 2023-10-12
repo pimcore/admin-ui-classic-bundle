@@ -450,7 +450,7 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
                     pimcore.elementservice.reopenElement(options);
 
-                    //trigger edit object key complete event
+                    //trigger edit document key complete event
                     const postEditDocumentKey = new CustomEvent(pimcore.events.postEditDocumentKey, {
                         detail: {
                             document: record,
@@ -621,7 +621,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
 
                             pimcore.elementservice.reopenElement(options);
 
-                            //trigger edit object key complete event
+                            //trigger edit asset key complete event
                             const postEditAssetKey = new CustomEvent(pimcore.events.postEditAssetKey, {
                                 detail: {
                                     asset: record,
