@@ -299,13 +299,13 @@ pimcore.events.postEditObjectKey = "pimcore.objectKey.postEdit";
 
 /**
  * fired when asset key is edited
- * object and key are passed as parameter
+ * asset and key are passed as parameter
  */
 pimcore.events.postEditAssetKey = "pimcore.assetKey.postEdit";
 
 /**
  * fired when document key is edited
- * object and key are passed as parameter
+ * document and key are passed as parameter
  */
 pimcore.events.postEditDocumentKey = "pimcore.documentKey.postEdit";
 
