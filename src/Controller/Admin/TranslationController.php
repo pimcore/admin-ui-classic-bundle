@@ -28,7 +28,6 @@ use Pimcore\Tool;
 use Pimcore\Tool\Session;
 use Pimcore\Translation\Translator;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,11 +43,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TranslationController extends AdminAbstractController
 {
     protected const PLACEHOLDER_NAME = 'placeHolder';
-
-    public function __construct(
-        protected HtmlSanitizerInterface $pimcoreTranslationSanitizer
-    ) {
-    }
 
     /**
      * @Route("/import", name="pimcore_admin_translation_import", methods={"POST"})
@@ -374,7 +368,7 @@ class TranslationController extends AdminAbstractController
                 foreach ($data as $key => $value) {
                     $key = preg_replace('/^_/', '', $key, 1);
                     if (!in_array($key, ['key', 'type'])) {
-                        $t->addTranslation($key, $this->pimcoreTranslationSanitizer->sanitize($value));
+                        $t->addTranslation($key, $value);
                     }
                 }
 
