@@ -40,10 +40,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-import",name="unitimport", methods={"POST","PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function unitImportAction(Request $request): JsonResponse
     {
@@ -57,10 +53,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-export", name="unitexport", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function unitExportAction(Request $request): Response
     {
