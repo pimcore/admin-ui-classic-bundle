@@ -52,7 +52,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/object", name="pimcore_admin_dataobject_dataobject_")
+ * @Route("/object")
  *
  * @internal
  */
@@ -73,7 +73,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     private array $classFieldDefinitions = [];
 
     /**
-     * @Route("/tree-get-children-by-id", name="treegetchildrenbyid", methods={"GET"})
+     * @Route("/tree-get-children-by-id", name="pimcore_admin_dataobject_dataobject_treegetchildrenbyid", methods={"GET"})
      *
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
@@ -239,7 +239,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-id-path-paging-info", name="getidpathpaginginfo", methods={"GET"})
+     * @Route("/get-id-path-paging-info", name="pimcore_admin_dataobject_dataobject_getidpathpaginginfo", methods={"GET"})
      *
      * @param Request $request
      *
@@ -288,7 +288,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get", name="get", methods={"GET"})
+     * @Route("/get", name="pimcore_admin_dataobject_dataobject_get", methods={"GET"})
      *
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
@@ -541,7 +541,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-select-options", name="getSelectOptions", methods={"POST"})
+     * @Route("/get-select-options", name="pimcore_admin_dataobject_dataobject_getSelectOptions", methods={"POST"})
      *
      * @param Request $request
      *
@@ -747,7 +747,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-folder", name="getfolder", methods={"GET"})
+     * @Route("/get-folder", name="pimcore_admin_dataobject_dataobject_getfolder", methods={"GET"})
      *
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
@@ -842,7 +842,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/add", name="add", methods={"POST"})
+     * @Route("/add", name="pimcore_admin_dataobject_dataobject_add", methods={"POST"})
      *
      * @param Request $request
      * @param Model\FactoryInterface $modelFactory
@@ -917,7 +917,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/add-folder", name="addfolder", methods={"POST"})
+     * @Route("/add-folder", name="pimcore_admin_dataobject_dataobject_addfolder", methods={"POST"})
      *
      * @param Request $request
      *
@@ -954,7 +954,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/delete", name="delete", methods={"DELETE"})
+     * @Route("/delete", name="pimcore_admin_dataobject_dataobject_delete", methods={"DELETE"})
      *
      * @param Request $request
      *
@@ -1005,7 +1005,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/change-children-sort-by", name="changechildrensortby", methods={"PUT"})
+     * @Route("/change-children-sort-by", name="pimcore_admin_dataobject_dataobject_changechildrensortby", methods={"PUT"})
      *
      * @param Request $request
      *
@@ -1049,7 +1049,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/update", name="update", methods={"PUT"})
+     * @Route("/update", name="pimcore_admin_dataobject_dataobject_update", methods={"PUT"})
      *
      * @param Request $request
      *
@@ -1333,7 +1333,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/save", name="save", methods={"POST", "PUT"})
+     * @Route("/save", name="pimcore_admin_dataobject_dataobject_save", methods={"POST", "PUT"})
      *
      * @param Request $request
      *
@@ -1527,7 +1527,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/save-folder", name="savefolder", methods={"PUT"})
+     * @Route("/save-folder", name="pimcore_admin_dataobject_dataobject_savefolder", methods={"PUT"})
      *
      * @param Request $request
      *
@@ -1597,7 +1597,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/publish-version", name="publishversion", methods={"POST"})
+     * @Route("/publish-version", name="pimcore_admin_dataobject_dataobject_publishversion", methods={"POST"})
      *
      * @param Request $request
      *
@@ -1639,7 +1639,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/preview-version", name="previewversion", methods={"GET"})
+     * @Route("/preview-version", name="pimcore_admin_dataobject_dataobject_previewversion", methods={"GET"})
      *
      * @param Request $request
      *
@@ -1680,7 +1680,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/diff-versions/from/{from}/to/{to}", name="diffversions", methods={"GET"})
+     * @Route("/diff-versions/from/{from}/to/{to}", name="pimcore_admin_dataobject_dataobject_diffversions", methods={"GET"})
      *
      * @param Request $request
      * @param int $from
@@ -1740,7 +1740,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/grid-proxy", name="gridproxy", methods={"GET", "POST", "PUT"})
+     * @Route("/grid-proxy", name="pimcore_admin_dataobject_dataobject_gridproxy", methods={"GET", "POST", "PUT"})
      *
      * @param Request $request
      * @param EventDispatcherInterface $eventDispatcher
@@ -1786,7 +1786,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/copy-info", name="copyinfo", methods={"GET"})
+     * @Route("/copy-info", name="pimcore_admin_dataobject_dataobject_copyinfo", methods={"GET"})
      *
      * @param Request $request
      *
@@ -1876,7 +1876,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/copy-rewrite-ids", name="copyrewriteids", methods={"PUT"})
+     * @Route("/copy-rewrite-ids", name="pimcore_admin_dataobject_dataobject_copyrewriteids", methods={"PUT"})
      *
      * @param Request $request
      *
@@ -1919,7 +1919,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/copy", name="copy", methods={"POST"})
+     * @Route("/copy", name="pimcore_admin_dataobject_dataobject_copy", methods={"POST"})
      *
      * @param Request $request
      *
@@ -1988,7 +1988,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/preview", name="preview", methods={"GET"})
+     * @Route("/preview", name="pimcore_admin_dataobject_dataobject_preview", methods={"GET"})
      *
      * @param Request $request
      * @param PreviewGeneratorInterface $defaultPreviewGenerator
@@ -2143,5 +2143,17 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $this->checkPermission('objects');
 
         $this->_objectService = new DataObject\Service($this->getAdminUser());
+    }
+
+    /**
+     * @Route("/tree-get-root", name="pimcore_admin_dataobject_dataobject_treegetroot", methods={"GET"})
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function treeGetRootAction(Request $request): JsonResponse
+    {
+        return parent::treeGetRootAction($request);
     }
 }
