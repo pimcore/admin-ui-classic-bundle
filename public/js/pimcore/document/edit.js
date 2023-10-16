@@ -326,7 +326,8 @@ pimcore.document.edit = Class.create({
                     const name = editable.getName();
                     const type = editable.getType();
                     const value = editable.getValue();
-                    if (type === 'wysiwyg' && value === '<p><br /></p>') {
+                    if (type === "wysiwyg" &&
+                        (value === "<p><br></p>" || value === "<p><br data-mce-bogus=\"1\"></p>")) {
                         values[name] = {
                             data: '',
                             type: type
