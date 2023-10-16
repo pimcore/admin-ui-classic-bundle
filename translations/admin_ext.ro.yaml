@@ -1,6 +1,8 @@
+---
 invert_colors_on_login_screen: Invert Colors on Login Screen
 encrypt_data: Encrypt Data
-encrypt_data_description: Data-at-Rest/Tablespace Encryption needs to be enabled on your Database Server
+encrypt_data_description: Data-at-Rest/Tablespace Encryption needs to be enabled on
+  your Database Server
 many_to_one_relation: Many-To-One Relation
 many_to_many_relation: Many-To-Many Relation
 many_to_many_object_relation: Many-To-Many Object Relation
@@ -8,27 +10,23 @@ advanced_many_to_many_relation: Advanced Many-To-Many Relation
 advanced_many_to_many_object_relation: Advanced Many-To-Many Object Relation
 reverse_object_relation: Reverse Object Relation
 url_slug: URL Slug
-url_slug_datatype_info: >-
-    Enter the controller & action in the following
-    format:<br>App\Controller\ProductController:slugAction
+url_slug_datatype_info: Enter the controller & action in the following format:<br>App\Controller\ProductController:slugAction
 controller_action: Controller & Action
 admin_interface: Admin Interface
 admin_interface_background: Admin Interface Background
 icon_library: Icon Library
-system_performance_stability_warning: >-
-    Please do not perform this action unless you are sure what you are doing.<br
-    /><b style='color:red'>This action can have a major impact onto the stability
-    and performance of the entire system, and may causes an overload or complete
-    crash of the server!</b><br /><br />Are you sure?
+system_performance_stability_warning: Please do not perform this action unless you
+  are sure what you are doing.<br /><b style='color:red'>This action can have a major
+  impact onto the stability and performance of the entire system, and may causes an
+  overload or complete crash of the server!</b><br /><br />Are you sure?
 login_screen: Login Screen
 color_description: 'Use the HTML hex format, eg. #ffffff'
 colors: Colors
 media: Media
 custom_logo: Custom Logo
 custom_login_background_image: Custom Login Background Image
-branding_logo_description: >-
-    Used on the login and start screen. We recommend to use a SVG (JPG & PNG are
-    supported as well).
+branding_logo_description: Used on the login and start screen. We recommend to use
+  a SVG (JPG & PNG are supported as well).
 appearance_and_branding: Appearance & Branding
 brightness: Brightness
 saturation: Saturation
@@ -40,18 +38,16 @@ colorspace: Colorspace
 ratio: Ratio
 decimal_size: Decimal size
 decimal_precision: Decimal precision
-decimal_mysql_type_info: >-
-    If decimal size or precision are specified, <code>DECIMAL(decimalSize,
-    decimalPrecision)</code> MySQL type is used. Default values if missing are
-    <code>64</code> as size and <code>0</code> as precision.
-decimal_mysql_type_naming_warning: >-
-    Please note that in MySQL terms, the <code>decimalSize</code> is called
-    <code>precision</code> and the <code>decimalPrecision</code> is called
-    <code>scale</code>.
+decimal_mysql_type_info: If decimal size or precision are specified, <code>DECIMAL(decimalSize,
+  decimalPrecision)</code> MySQL type is used. Default values if missing are <code>64</code>
+  as size and <code>0</code> as precision.
+decimal_mysql_type_naming_warning: Please note that in MySQL terms, the <code>decimalSize</code>
+  is called <code>precision</code> and the <code>decimalPrecision</code> is called
+  <code>scale</code>.
 only_unsigned: only unsigned
 integer: Integer
 static: Static
-object_regex_info: 'RegExp without delimiters, has to work in both JS and PHP'
+object_regex_info: RegExp without delimiters, has to work in both JS and PHP
 regex_validation: Regular Expression Validation
 test_string: Test string
 regex: RegEx
@@ -60,19 +56,18 @@ select_presetting: Select a presetting
 good: Good
 best: Best
 1x1_pixel_placeholder: 1x1 Pixel Placeholder
-1x1_pixel_placeholder_description: >-
-    Just returns a 1x1 pixel GIF base64 encoded, in case you don't want to display
-    an image for a certain condition
+1x1_pixel_placeholder_description: Just returns a 1x1 pixel GIF base64 encoded, in
+  case you don't want to display an image for a certain condition
 average: Average
 enter_media_query: Please enter a valid CSS media query
 add_media_query: Add Media Query
 add_media_segment: Add Media Segment
-enter_media_segment: 'Please enter a valid bitrate(e.g. 400k, 1500k, 1M) for video segment'
+enter_media_segment: Please enter a valid bitrate(e.g. 400k, 1500k, 1M) for video
+  segment
 dash_media_message: This option generates a single .mpd file with media segments(bitrates)
 specific_settings: Specific Settings
-login_as_this_user_description: >-
-    The following link is a temporary link that allows you to login as this user
-    in a different browser:
+login_as_this_user_description: 'The following link is a temporary link that allows
+  you to login as this user in a different browser:'
 login_as_this_user: Login as this user in a different browser
 allowed_types_to_create: Allowed types to create
 defaults_to_all: Defaults to all
@@ -81,7 +76,7 @@ action_scope: Action Scope
 hit: Hit
 session: Session
 session_with_variables: Session (with variables)
-fallback_languages: 'Fallback Languages (CSV eg. de_CH,de)'
+fallback_languages: Fallback Languages (CSV eg. de_CH,de)
 frontend_languages: Frontend Languages
 add_language: Add Language
 default_language: Default language
@@ -110,14 +105,14 @@ redirects_import_errors: Errors
 redirects_import_error_line: Line
 gender: Gender
 use_original_tiff: Use original TIFF (only PRINT)
-use_original_tiff_description: Use original TIFF when source format is a TIFF image -> do not modify it.
+use_original_tiff_description: Use original TIFF when source format is a TIFF image
+  -> do not modify it.
 port: Port
 delivery_settings: Delivery Settings
 generate_previews: Generate previews
 invalid_class_name: Invalid Class Name
-redirect_unknown_domains_to_main_domain: >-
-    Redirect unknown domains (not used for a site and for redirects, ...) to the
-    main domain (above)
+redirect_unknown_domains_to_main_domain: Redirect unknown domains (not used for a
+  site and for redirects, ...) to the main domain (above)
 hours: Hours
 minutes: Minutes
 seconds: Seconds
@@ -165,7 +160,8 @@ url_pattern: URL Pattern<br />(RegExp eg. @success@i)
 beginning: Beginning
 element_css_selector: Element (CSS Selector)
 insert_position: Insert Position
-robots_txt_exists_on_filesystem: The robots.txt exists already in the document-root on the filesystem
+robots_txt_exists_on_filesystem: The robots.txt exists already in the document-root
+  on the filesystem
 save_error: Cannot save data
 all_roles: All Roles
 add_role: Add Role
@@ -175,22 +171,18 @@ Username: Username
 video_bitrate: Video Bitrate (kB/s)
 audio_bitrate: Audio Bitrate (kB/s)
 rasterize_svg: Rasterize SVGs
-rasterize_svg_info_text: >-
-    SVGs get automatically rasterized when a transformation other than resize or
-    scale by width/height is used.
+rasterize_svg_info_text: SVGs get automatically rasterized when a transformation other
+  than resize or scale by width/height is used.
 preserve_animation: Preserve animations for GIF
-preserve_animation_info_text: >-
-    Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth,
-    ScaleByHeight
-valid_languages_frontend_description: >-
-    These settings are used in documents to specify the content language (in
-    properties tab), for objects in localized-fields, for shared translations, ...
-    simply everywhere the editor can choose or use a language for the content.<br
-    />Fallback languages are currently used in object's localized fields and
-    shared translations.
-delete_language_note: >-
-    Note: Removing language from the list will not delete its respective data.
-    Please use console command 'pimcore:locale:delete-unused-tables' for cleanup.
+preserve_animation_info_text: 'Supported transformations are: Frame, Cover, Contain,
+  Resize, ScaleByWidth, ScaleByHeight'
+valid_languages_frontend_description: These settings are used in documents to specify
+  the content language (in properties tab), for objects in localized-fields, for shared
+  translations, ... simply everywhere the editor can choose or use a language for
+  the content.<br />Fallback languages are currently used in object's localized fields
+  and shared translations.
+delete_language_note: 'Note: Removing language from the list will not delete its respective
+  data. Please use console command ''pimcore:locale:delete-unused-tables'' for cleanup.'
 maximum_items: max. items
 collapsed: Collapsed
 url_to_custom_image_on_login_screen: URL to custom image for the login screen
@@ -207,7 +199,8 @@ opacity: Opacity
 applymask: Apply Mask
 addoverlay: Add Overlay
 transformations: Transformations
-you_can_drag_the_tabs_to_reorder_the_media_queries: You can drag the tabs to reorder the priority of the media queries
+you_can_drag_the_tabs_to_reorder_the_media_queries: You can drag the tabs to reorder
+  the priority of the media queries
 frame: Frame
 setbackgroundcolor: Set Backgroundcolor
 setbackgroundimage: Set Background Image
@@ -231,8 +224,8 @@ override_all: override all
 deactivate: Deactivate
 countrymultiselect: Countries (Multiselect)
 languagemultiselect: Languages (Multiselect)
-'yes': 'Yes'
-'no': 'No'
+"yes": "Yes"
+"no": "No"
 allow_trailing_slash_for_documents: Allow trailing Slash in URL
 localizedfields: Localized Fields
 new_folder: New Folder
@@ -242,8 +235,6 @@ visibility_of_system_properties: Visibility of system properties
 translate: translate
 translations_admin_hint: 'HINT: Please Reload UI to apply translation changes!'
 allowed_types: Allowed Types
-allowed_targets: Allowed Targets
-disabled_fields: Disabled Fields
 columnlength: Columnlength
 visible_in_searchresult: Visible in Search Result
 visible_in_gridview: Visible in Grid View
@@ -257,7 +248,8 @@ reverse: Reverse
 geopolygon: Geographic Polygon
 geopolyline: Geographic Polyline
 geobounds: Geographic Bounds
-sure_to_install_unstable_update: Are you sure that you want to install a potential not working version?
+sure_to_install_unstable_update: Are you sure that you want to install a potential
+  not working version?
 multiselect: Multiselection
 handler: Handler
 invisible: Invisible
@@ -314,7 +306,8 @@ end: End
 select_update: Select update
 stable_updates: Available stable updates
 non_stable_updates: Available non-stable updates
-latest_pimcore_version_already_installed: You have installed the latest version of pimcore.
+latest_pimcore_version_already_installed: You have installed the latest version of
+  pimcore.
 table: Table
 rows: Rows
 language_admin: Default-Language in Admin-Interface
@@ -331,7 +324,7 @@ map_type: Map type
 roadmap: Roadmap
 satellite: Satellite
 hybrid: Hybrid
-google_api_key_simple: 'Google API Key (Simple API Access for Maps, CSE, ...)'
+google_api_key_simple: Google API Key (Simple API Access for Maps, CSE, ...)
 document_restrictions: Document Restrictions
 asset_restrictions: Asset Restrictions
 object_restrictions: Object Restrictions
@@ -346,19 +339,16 @@ website: Website
 user_creation_error: Could not create user
 email_debug_addresses: Debug Email Addresses
 user_object_dependencies_description: 'This user is referenced in the following objects:'
-user_admin_description: >-
-    Admin users do not only automatically gain all permissions listed below, they
-    are also allowed to perform all actions on documents, assets and objects
-    without any restrictions.
+user_admin_description: Admin users do not only automatically gain all permissions
+  listed below, they are also allowed to perform all actions on documents, assets
+  and objects without any restrictions.
 user_apikey_description: API key required for web service access by this user
 apikey: API Key
 lazy_loading: lazy loading
-non_owner_description: >-
-    Non owner objects represent relations to an other object just in the same way
-    as objects do. The difference is, that a non-owner object field is not the
-    owner of the relation data, it is merely a view on data stored in other
-    objects. Please choose the owner and field name where the data is originally
-    stored.
+non_owner_description: Non owner objects represent relations to an other object just
+  in the same way as objects do. The difference is, that a non-owner object field
+  is not the owner of the relation data, it is merely a view on data stored in other
+  objects. Please choose the owner and field name where the data is originally stored.
 allow_variants: Allow variants
 show_variants: Show variants in tree
 allowed_class_field: Allowed class/field
@@ -371,9 +361,8 @@ objectsMetadata_type_multiselect: Multiselect
 file_explorer_saved_file_error: Cannot save file
 reserved_field_names_error: 'Please do not use the following reserved field names: '
 use_current_date: Use current date
-inherited_default_value_warning: >-
-    The default value is used if either inheritance is deactivated or if the
-    parent value is empty
+inherited_default_value_warning: The default value is used if either inheritance is
+  deactivated or if the parent value is empty
 restrict_selection_to: Restrict Selection To
 maximum_tabs: Maximum number of tabs
 algorithm: Algorithm
@@ -399,7 +388,6 @@ select_all: Select All
 deselect_all: Deselect All
 definitions_saved: Definitions saved
 predefined_metadata_definitions: Predefined Metadata Definitions
-predefined_metadata_definitions_error_name_exists_msg: Definition with this name already exists
 default_layout: Use as default layout
 hide_edit_image_tab: Hide Edit Image Tab
 are_you_sure_recursive: There child nodes which will be deleted as well! Are you sure?
@@ -429,7 +417,6 @@ inputQuantityValue_field: Input Quantity Value
 abbreviation: Abbreviation
 longname: Longname
 baseunit: Base Unit
-quantityValueUnits: Quantity Value Units
 quantityValue_units: QuantityValue Unit Definition
 valid_quantityValue_units: Valid units
 calculatedValue_calculatorclass: Calculator class
@@ -437,9 +424,8 @@ calculatedValue_calculatortype: Calculator type
 calculatedValue_calculatortype_class: Class
 calculatedValue_calculatortype_expression: Expression
 calculatedValue_calculatorexpression: Calculator expression
-calculatedValue_explanation: >-
-    See the official documentation to learn more about defining expressions or
-    classes
+calculatedValue_explanation: See the official documentation to learn more about defining
+  expressions or classes
 calculatedValue_field: Calculated Value
 conversionFactor: Conversion Factor
 conversionOffset: Conversion Offset
@@ -460,27 +446,23 @@ classificationstore_mbx_enterstore_title: New Store
 classificationstore_mbx_enterstore_prompt: Enter store name
 classificationstore_error_addstore_msg: Error creating store
 search_for_key: Search Key
-width_explanation: >-
-    The width of this component. A numeric value will be interpreted as the number
-    of pixels; a string value will be treated as a CSS value with units.
-height_explanation: >-
-    The height of this component. A numeric value will be interpreted as the
-    number of pixels; a string value will be treated as a CSS value with units.
+width_explanation: The width of this component. A numeric value will be interpreted
+  as the number of pixels; a string value will be treated as a CSS value with units.
+height_explanation: The height of this component. A numeric value will be interpreted
+  as the number of pixels; a string value will be treated as a CSS value with units.
 disable_tree_preview: Disable Tree Preview
 PHP Class Name: PHP Class Name
 editor_configuration: Editor Configuration
 allow_dirty_close: Disable unsaved content warning
-high_resolution_info_text: >-
-    eg. for Web-to-Print or everywhere where srcset is not possible/sufficient,
-    not necessary for normal web-thumbnails, they automatically get a srcset
-    attribute with 1x and 2x
+high_resolution_info_text: eg. for Web-to-Print or everywhere where srcset is not
+  possible/sufficient, not necessary for normal web-thumbnails, they automatically
+  get a srcset attribute with 1x and 2x
 advanced_settings: Advanced settings
 preserve_meta_data: Preserve meta data (don't strip)
-preserve_color: 'Preserve color (profile, space)'
-thumbnail_preserve_info_text: >-
-    'Preserve meta data' and 'preserve color' only works for transitions without
-    compositions (frame, background color, ...) and color modifications
-    (greyscale, sepia, ...)
+preserve_color: Preserve color (profile, space)
+thumbnail_preserve_info_text: '''Preserve meta data'' and ''preserve color'' only
+  works for transitions without compositions (frame, background color, ...) and color
+  modifications (greyscale, sepia, ...)'
 path_formatter_service: Formatter Service / Class
 separated: separated
 website_translation_settings: Shared Translation Settings
@@ -497,10 +479,6 @@ predefined_hotspot_data_templates: Predefined data templates
 hide_locale_labels_when_tabs_reached: Hide locale labels after number of tabs
 classificationstore_error_addkey_msg: Error adding Key
 classificationstore_dialog_keygroup_search: Key/Group Search
-options_provider_type: Options source
-options_provider_type_configure: Configure
-options_provider_type_select_options: Select Options
-options_provider_type_class: Options Provider
 options_provider_class: Options Provider Class or Service Name
 options_provider_data: Options Provider Data
 show_applogger_tab: Show App Logger Tab
@@ -523,18 +501,17 @@ used_by_class: 'Used by class:'
 uses_these_bricks: 'Uses these bricks:'
 last_login: Last Login
 multiselect_render_type: Render Type
-please_dont_forget_to_reload_pimcore: <b>Please don't forget to reload pimcore after your modification!</b>
+please_dont_forget_to_reload_pimcore: <b>Please don't forget to reload pimcore after
+  your modification!</b>
 2fa_required: Two Factor Authentication required
 2fa_reset_secret: Reset 2FA Secret
-2fa_reset_done: >-
-    The 2FA secret was reset, the user can generate a new one after login (My
-    Profile section).
+2fa_reset_done: The 2FA secret was reset, the user can generate a new one after login
+  (My Profile section).
 focal_point_support: Focal Point Support
 default_positioning: Default Positioning
-thumbnail_focal_point_notice: >-
-    The image is cropped automatically based on the focal point set on the source
-    image. If no focal point is present, the default positioning setting below is
-    used.
+thumbnail_focal_point_notice: The image is cropped automatically based on the focal
+  point set on the source image. If no focal point is present, the default positioning
+  setting below is used.
 iframe_url: IFrame URL
 deactivate_maintenance: Deactivate Maintenance
 maintenance_mode: Maintenance Mode
@@ -542,9 +519,8 @@ maintenance_not_active: It seems that the maintenance isn't set up properly
 mail_settings_incomplete: It seems that the mail settings are incomplete
 bulk_export: Bulk Export
 bulk_import: Bulk Import
-warning_bulk_import: >-
-    The Bulk Import will overwrite your class/fieldcollection/objectbrick
-    definitions without warning! Do you want to continue?
+warning_bulk_import: The Bulk Import will overwrite your class/fieldcollection/objectbrick
+  definitions without warning! Do you want to continue?
 environment: Environment
 local: Local
 example: Example
@@ -566,9 +542,8 @@ display: Display
 order: Order
 filter_type: Filter Type
 generate_page_previews: Generate Page Previews
-success_generating_previews: >-
-    Generating page previews in the background. Please reload the admin interface
-    after some time to take effect.
+success_generating_previews: Generating page previews in the background. Please reload
+  the admin interface after some time to take effect.
 error_generating_previews: Error generating page previews.
 custom_report_chart_settings: Chart Settings
 custom_report_charttype: Chart Type
@@ -592,11 +567,12 @@ foreground_color: Foreground Color
 background_color: Background Color
 use_current_player_position_as_preview: Use current player position as preview
 system_infos_and_tools: System Info & Tools
+system_requirements_check: System-Requirements Check
 server_info: Server Info
 database_administration: Database Administration
-important_use_imagick_pecl_extensions_for_best_results_gd_is_just_a_fallback_with_less_quality: >-
-    IMPORTANT: Use imagick PECL extension for best results, GDlib is just a
-    fallback with limited functionality and less quality!
+important_use_imagick_pecl_extensions_for_best_results_gd_is_just_a_fallback_with_less_quality: 'IMPORTANT:
+  Use imagick PECL extension for best results, GDlib is just a fallback with limited
+  functionality and less quality!'
 trim: Trim
 server_fileexplorer: Server File Explorer
 add_user: Add User
@@ -624,9 +600,9 @@ every: Every
 categories: Categories
 revision: Build
 objectbricks: Objectbricks
-selectoptions: Select Options
 class_definitions: Class Definitions
-custom_layout_changed: Layout was changed in the meantime. Please reload the layout and try again
+custom_layout_changed: Layout was changed in the meantime. Please reload the layout
+  and try again
 rule_violation: Rule Violation
 emails: Emails
 classification_store: Classification Store
@@ -667,7 +643,8 @@ provide_split_view: Provide Split View
 allow_multiple_assignments: Allow Multiple Assignments
 enable_admin_async_load: Enable Async Load in Admin
 enable_text_selection: Enable Text Selection
-async_loading_warning_block: 'WARNING: Async Loading is NOT possible within Localized Fields and Blocks'
+async_loading_warning_block: 'WARNING: Async Loading is NOT possible within Localized
+  Fields and Blocks'
 activate_column_configuration: Activate Column Configuration
 table_column_configuration: Column Configuration
 send_invitation_link: Send Invitation Link
@@ -680,12 +657,16 @@ json_converter_link: JSON Formatter
 max_characters: Maximum Characters
 sites: Sites
 show_hide_areablock: Show or Hide on frontend
-asset_type_changed: >-
-    Asset type was changed in the meantime. Please reload the admin interface to
-    see the latest changes.
+asset_type_changed: Asset type was changed in the meantime. Please reload the admin
+  interface to see the latest changes.
 numeric_range: Numeric Range
 date_range: Date Range
 quantityValueRange_field: Quantity Value Range
+allowed_targets: Allowed Targets
+disabled_fields: Disabled Fields
+predefined_metadata_definitions_error_name_exists_msg: Definition with this name already
+  exists
+quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
@@ -700,4 +681,4 @@ classificationstore_mbx_enterkey_prompt: Enter name
 classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Seconds
-system_requirements_check: System-Requirements Check
+...

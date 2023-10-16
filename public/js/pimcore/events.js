@@ -291,5 +291,26 @@ pimcore.events.prepareDocumentPageSettingsLayout = "pimcore.documentPageSettings
  */
 pimcore.events.globalLanguageChanged = "pimcore.globalLanguage.changed";
 
+/**
+ * fired when object key is edited
+ * object and key are passed as parameter
+ */
+pimcore.events.postEditObjectKey = "pimcore.objectKey.postEdit";
 
+/**
+ * fired when asset key is edited
+ * asset and key are passed as parameter
+ */
+pimcore.events.postEditAssetKey = "pimcore.assetKey.postEdit";
 
+/**
+ * fired when document key is edited
+ * document and key are passed as parameter
+ */
+pimcore.events.postEditDocumentKey = "pimcore.documentKey.postEdit";
+
+/**
+ * fired after basic perspective element trees were  built
+ *  array of custom perspective element trees  are passed as parameter
+ */
+pimcore.events.postBuildPerspectiveElementTree = "pimcore.elementTree.perspective.postBuild";

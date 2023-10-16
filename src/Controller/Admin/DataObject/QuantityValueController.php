@@ -18,11 +18,13 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Model\DataObject\Data\QuantityValue;
+use Pimcore\Model\DataObject\QuantityValue\Service as QuantityValueService;
 use Pimcore\Model\DataObject\QuantityValue\Unit;
 use Pimcore\Model\DataObject\QuantityValue\UnitConversionService;
 use Pimcore\Model\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -32,6 +34,44 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class QuantityValueController extends AdminAbstractController
 {
+    public function __construct(protected QuantityValueService $service)
+    {
+    }
+
+    /**
+     * @Route("/unit-import",name="unitimport", methods={"POST","PUT"})
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function unitImportAction(Request $request): JsonResponse
+    {
+        $json = file_get_contents($_FILES['Filedata']['tmp_name']);
+        $success = $this->service->importDefinitionFromJson($json);
+        $response = $this->adminJson(['success' => $success]);
+        $response->headers->set('Content-Type', 'text/html');
+
+        return $response;
+    }
+
+    /**
+     * @Route("/unit-export", name="unitexport", methods={"GET"})
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function unitExportAction(Request $request): Response
+    {
+        $result = $this->service->generateDefinitionJson();
+        $response = new Response($result);
+        $response->headers->set('Content-Type', 'application/json');
+        $response->headers->set('Content-Disposition', 'attachment;filename="quantityvalue_unit_export.json"');
+
+        return $response;
+    }
+
     /**
      * @Route("/unit-proxy", name="unitproxyget", methods={"GET"})
      *
@@ -183,11 +223,11 @@ class QuantityValueController extends AdminAbstractController
         foreach ($units as &$unit) {
             try {
                 if ($unit->getAbbreviation()) {
-                    $unit->setAbbreviation(\Pimcore\Model\Translation::getByKeyLocalized($unit->getAbbreviation(), Translation::DOMAIN_ADMIN,
+                    $unit->setAbbreviation(Translation::getByKeyLocalized($unit->getAbbreviation(), Translation::DOMAIN_ADMIN,
                         true, true));
                 }
                 if ($unit->getLongname()) {
-                    $unit->setLongname(\Pimcore\Model\Translation::getByKeyLocalized($unit->getLongname(), Translation::DOMAIN_ADMIN, true,
+                    $unit->setLongname(Translation::getByKeyLocalized($unit->getLongname(), Translation::DOMAIN_ADMIN, true,
                         true));
                 }
                 $result[] = $unit->getObjectVars();
@@ -237,7 +277,6 @@ class QuantityValueController extends AdminAbstractController
         if (!$fromUnit instanceof Unit) {
             return $this->adminJson(['success' => false]);
         }
-
         $baseUnit = $fromUnit->getBaseunit() ?? $fromUnit;
 
         $units = new Unit\Listing();

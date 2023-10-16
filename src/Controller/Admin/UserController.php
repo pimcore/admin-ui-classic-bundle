@@ -555,6 +555,11 @@ class UserController extends AdminAbstractController implements KernelController
                     }
 
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
+
+                        if (Tool\Authentication::verifyPassword($user, $values['new_password'])) {
+                            throw new \Exception('The new password cannot be the same as the old one');
+                        }
+
                         $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['new_password']);
                     } else {
                         if (!$oldPasswordCheck) {
@@ -781,8 +786,16 @@ class UserController extends AdminAbstractController implements KernelController
             throw $this->createNotFoundException();
         }
 
-        if ($userObj->isAdmin() && !$this->getAdminUser()->isAdmin()) {
-            throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+        $adminUser = $this->getAdminUser();
+
+        if (!$adminUser->isAdmin()) {
+            if ($userObj->isAdmin()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+            }
+
+            if ($adminUser->getId() !== $userObj->getId()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify users other than themselves');
+            }
         }
 
         $userObj->setImage(null);
@@ -892,7 +905,7 @@ class UserController extends AdminAbstractController implements KernelController
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $token = Tool\Authentication::generateToken($user->getName());
+        $token = Tool\Authentication::generateTokenByUser($user);
         $link = $this->generateCustomUrl([
             'token' => $token,
         ]);
@@ -947,7 +960,7 @@ class UserController extends AdminAbstractController implements KernelController
         $unrestrictedActions = [
             'getCurrentUserAction', 'updateCurrentUserAction', 'getAvailablePermissionsAction', 'getMinimalAction',
             'getImageAction', 'uploadCurrentUserImageAction', 'disable2FaSecretAction', 'renew2FaSecretAction',
-            'getUsersForSharingAction', 'getRolesForSharingAction',
+            'getUsersForSharingAction', 'getRolesForSharingAction', 'deleteImageAction',
         ];
 
         $this->checkActionPermission($event, 'users', $unrestrictedActions);
@@ -1069,7 +1082,7 @@ class UserController extends AdminAbstractController implements KernelController
                     $user->save();
                 }
 
-                $token = Tool\Authentication::generateToken($user->getName());
+                $token = Tool\Authentication::generateTokenByUser($user);
                 $loginUrl = $this->generateCustomUrl([
                     'token' => $token,
                     'reset' => true,

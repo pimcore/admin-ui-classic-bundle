@@ -615,6 +615,15 @@ pimcore.layout.toolbar = Class.create({
                      });
                  }
 
+                 if (perspectiveCfg.inToolbar('settings.objects.selectoptions') && user.isAllowed('selectoptions')) {
+                     objectMenu.menu.items.push({
+                         text: t('selectoptions'),
+                         iconCls: 'pimcore_nav_icon_selectoptions',
+                         itemId: 'pimcore_menu_settings_data_objects_selectoptions',
+                         handler: this.editSelectOptions
+                     });
+                 }
+
                  if (perspectiveCfg.inToolbar("settings.objects.quantityValue") && user.isAllowed("quantityValueUnits")) {
                      objectMenu.menu.items.push({
                          text: t("quantityValue_field"),
@@ -694,7 +703,7 @@ pimcore.layout.toolbar = Class.create({
  
                          pimcore.settings['cached_environments'].forEach(function(environment) {
                              cacheSubItems.push({
-                                 text: 'Symfony ' + t('environment') + ": " + environment,
+                                 text: 'Symfony ' + t('environment') + ": " + environment  + ' (' + t('deprecated') + ')',
                                  iconCls: "pimcore_nav_icon_clear_cache",
                                  itemId: 'pimcore_menu_settings_cache_symfony_' + environment,
                                  handler: this.clearCache.bind(this, {
@@ -705,7 +714,7 @@ pimcore.layout.toolbar = Class.create({
                          }.bind(this));
  
                          cacheSubItems.push({
-                             text: 'Symfony ' + t('environment') + ": " + t('all'),
+                             text: 'Symfony ' + t('environment') + ": " + t('all')  + ' (' + t('deprecated') + ')',
                              iconCls: "pimcore_nav_icon_clear_cache",
                              itemId: 'pimcore_menu_settings_cache_symfony',
                              handler: this.clearCache.bind(this, {'only_symfony_cache': true, 'env[]': pimcore.settings['cached_environments']})
@@ -1203,6 +1212,14 @@ pimcore.layout.toolbar = Class.create({
              pimcore.globalmanager.add("objectbricks", new pimcore.object.objectbrick());
          }
      },
+
+    editSelectOptions: function () {
+        try {
+            pimcore.globalmanager.get('selectoptions').activate();
+        } catch (e) {
+            pimcore.globalmanager.add('selectoptions', new pimcore.object.selectoptions());
+        }
+    },
 
      clearCache: function (params) {
          Ext.Msg.confirm(t('warning'), t('system_performance_stability_warning'), function(btn){

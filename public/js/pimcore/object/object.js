@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.object.object");
 pimcore.object.object = Class.create(pimcore.object.abstract, {
     frontendLanguages: null,
     willClose: false,
+    forceReloadVersionsAfterSave: false,
     initialize: function (id, options) {
         this.id = intval(id);
         this.options = options;
@@ -804,6 +805,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 method: "PUT",
                 params: saveData,
                 success: function (response) {
+                    let shouldReloadVersions = false;
                     if (task != "session") {
                         try {
                             var rdata = Ext.decode(response.responseText);
@@ -833,6 +835,8 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                                         this.data['draft'] = rdata['draft'];
                                     }
 
+                                    shouldReloadVersions = true;
+
                                     pimcore.helpers.updateTreeElementStyle('object', this.id, rdata.treeData);
                                     const postSaveObject = new CustomEvent(pimcore.events.postSaveObject, {
                                         detail: {
@@ -842,6 +846,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                                     });
 
                                     document.dispatchEvent(postSaveObject);
+
                                 } else {
                                     pimcore.helpers.showPrettyError("error", t("saving_failed"), rdata.message);
                                 }
@@ -850,7 +855,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                             pimcore.helpers.showNotification(t("error"), t("saving_failed"), "error");
                         }
                         // reload versions
-                        if (task != "autoSave" && this.isAllowed("versions")) {
+                        if (this.forceReloadVersionsAfterSave || (shouldReloadVersions && task != "autoSave" && this.isAllowed("versions"))) {
                             if (typeof this.versions.reload == "function") {
                                 try {
                                     //TODO remove this as soon as it works
