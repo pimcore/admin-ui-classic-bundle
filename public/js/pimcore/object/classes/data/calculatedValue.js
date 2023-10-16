@@ -115,7 +115,6 @@ pimcore.object.classes.data.calculatedValue = Class.create(pimcore.object.classe
                         ['html', t('html')],
                         ['number', t('number')],
                         ['date', t('date')],
-                        ['list', t('select')],
                         ['boolean', t('bool')]
                     ]
                 },
