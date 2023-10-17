@@ -379,6 +379,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
 
         var html = '<img src="' + this.data.imageInfo['previewUrl'] + '">';
         Ext.get(this.previewContainerId).setHtml(html);
+        this.marker = false;
 
         let area = this.displayPanel.getEl().down('img');
         if(area) {
