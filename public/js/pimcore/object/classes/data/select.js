@@ -129,7 +129,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
                 {
                     xtype: "button",
                     iconCls: "pimcore_icon_edit",
-                    handler: this.showoptioneditor.bind(this, valueStore)
+                    handler: this.showgrideditor.bind(this, valueStore)
 
                 }],
             style: "margin-top: 10px",
@@ -321,8 +321,8 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
         }
     },
 
-    showoptioneditor: function (valueStore) {
-        var editor = new pimcore.object.helpers.optionEditor(valueStore);
+    showgrideditor: function (valueStore) {
+        var editor = new pimcore.object.helpers.gridEditor(valueStore);
         editor.edit();
     }
 });
