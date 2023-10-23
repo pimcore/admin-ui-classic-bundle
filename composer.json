@@ -9,8 +9,6 @@
       "*": "dist"
     }
   },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
   "require": {
     "cbschuld/browser.php": "^1.9.6",
     "pimcore/pimcore": "^11.1",
