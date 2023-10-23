@@ -1095,6 +1095,10 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/more.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_more_white {
+    background: url(/bundles/pimcoreadmin/img/flat-white-icons/more.svg) center center no-repeat !important;
+}
+
 .pimcore_icon_export{
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/external.svg) center center no-repeat !important;
 }
@@ -1311,7 +1315,6 @@
 .pimcore_icon_booleanSelect {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/more.svg) center center no-repeat !important;
 }
-
 
 .pimcore_icon_gender {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/manager.svg) center center no-repeat !important;

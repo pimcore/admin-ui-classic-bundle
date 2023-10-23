@@ -2376,3 +2376,14 @@ ul.leaflet-draw-actions.leaflet-draw-actions-top.leaflet-draw-actions-bottom li:
 .pimcore_cb_middle_two_lines .x-form-cb-default {
     top: -9px
 }
+
+.pimcore_panel_toolbar_horizontal .x-toolbar-default {
+    z-index: 2;
+    background: transparent;
+    pointer-events: none;
+}
+
+.pimcore_panel_toolbar_horizontal .pimcore_main_toolbar .x-box-target *,
+.pimcore_panel_toolbar_horizontal .pimcore_main_toolbar .x-box-scroller {
+    pointer-events: all;
+}

@@ -82,7 +82,7 @@ pimcore.helpers.headbarSubmenu = (() => {
     this.getSubmenuConfig = (extConfig = {}) => {
         return {
             cls: 'x-btn-default-toolbar-medium',
-            iconCls: 'pimcore_icon_more',
+            iconCls: 'pimcore_icon_more_white',
             menu: [],
             ...extConfig
         }

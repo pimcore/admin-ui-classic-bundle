@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.document.link");
 pimcore.document.link = Class.create(pimcore.document.document, {
 
     initialize: function (id, options) {
+        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -113,18 +114,63 @@ pimcore.document.link = Class.create(pimcore.document.document, {
         this.tabPanel = Ext.getCmp("pimcore_panel_tabs");
         var tabId = "document_" + this.id;
 
-        this.tab = new Ext.Panel({
-            id: tabId,
-            title: tabTitle,
-            closable: true,
-            layout: "border",
-            items: [
-                this.getLayoutToolbar(),
-                this.getTabPanel()
-            ],
-            iconCls: this.getIconClass(),
-            document: this
+        const tabbarContainer = new Ext.Container({
+            flex: 1,
         });
+
+        const tabPanel = this.getTabPanel();
+        const toolbar = this.getLayoutToolbar();
+
+        if (this.isNewHeadbarLayoutEnabled) {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                cls: "pimcore_panel_toolbar_horizontal_border_layout",
+                title: tabTitle,
+                closable:true,
+                hideMode: "offsets",
+                layout: "border",
+                items: [
+                    {
+                        xtype: 'panel',
+                        width: "100%",
+                        region: 'north',
+                        layout: 'hbox',
+                        items: [
+                            toolbar,
+                            tabbarContainer,
+                        ]
+                    },
+
+                    tabPanel
+                ],
+                iconCls: this.getIconClass(),
+                document: this
+            });
+
+            tabPanel.items.each((item) => {
+                const title = item.getTitle();
+
+                if (title) {
+                    item.tab.setTooltip(item.getTitle());
+                    item.setTitle('');
+                }
+            });
+
+            tabbarContainer.add(tabPanel.getTabBar());
+        } else {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                title: tabTitle,
+                closable: true,
+                layout: "border",
+                items: [
+                    toolbar,
+                    tabPanel
+                ],
+                iconCls: this.getIconClass(),
+                document: this
+            });
+        }
 
         this.tab.on("beforedestroy", function () {
             Ext.Ajax.request({
@@ -226,11 +272,37 @@ pimcore.document.link = Class.create(pimcore.document.document, {
 
             buttons.push("-");
 
+            this.toolbarSubmenu = Ext.Button({
+                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+            });
+
+            if (this.isNewHeadbarLayoutEnabled) {
+                buttons.push(this.toolbarSubmenu);
+            }
+
             if (this.isAllowed("delete") && !this.data.locked) {
-                buttons.push(this.toolbarButtons.remove);
+                if (this.isNewHeadbarLayoutEnabled) {
+                    this.toolbarSubmenu.menu.push({
+                        text: t('delete'),
+                        iconCls: "pimcore_material_icon_delete pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.remove.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.remove);
+                }
             }
             if (this.isAllowed("rename") && !this.data.locked) {
-                buttons.push(this.toolbarButtons.rename);
+                if (this.isNewHeadbarLayoutEnabled) {
+                    this.toolbarSubmenu.menu.push({
+                        text: t('rename'),
+                        iconCls: "pimcore_material_icon_rename pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.rename.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.rename);
+                }
             }
 
             buttons.push({
@@ -249,7 +321,11 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 });
             }
 
-            buttons.push(this.getTranslationButtons());
+            if (this.isNewHeadbarLayoutEnabled) {
+                this.toolbarSubmenu.menu.push(this.getTranslationButtons(true));
+            } else {
+                buttons.push(this.getTranslationButtons());
+            }
 
             buttons.push("-");
             buttons.push({
@@ -313,7 +389,20 @@ pimcore.document.link = Class.create(pimcore.document.document, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        if (this.isNewHeadbarLayoutEnabled) {
+            this.tabbar = pimcore.helpers.getTabBar({
+                items: items,
+                tabBar: {
+                    layout: { pack: 'end' },
+                    defaults: {
+                        height: 46,
+                    }
+                }
+            });
+        } else {
+            this.tabbar = pimcore.helpers.getTabBar({items: items});
+        }
+
         return this.tabbar;
     },
 
