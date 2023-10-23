@@ -708,4 +708,9 @@ classificationstore_mbx_enterkey_prompt: Name eingeben
 classificationstore_error_addcollection_msg: "Fehler beim Hinzuf\xFCgen einer Gruppe"
 log_search_pid: PID
 log_refresh_seconds: Sekunden
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Options Provider
+selectoptions: Select Options
 ...
