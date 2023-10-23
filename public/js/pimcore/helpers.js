@@ -3403,7 +3403,8 @@ pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
 pimcore.helpers.getTabBar = function (attributes) {
     let tabAttr = Object.assign(attributes, {
         tabBar: {
-            cls: 'pimcore_editor_tabbar'
+            ...(() => attributes?.tabBar || {})(),
+            cls: 'pimcore_editor_tabbar',
         },
         tabPosition: 'top',
         region:'center',

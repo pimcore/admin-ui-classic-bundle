@@ -585,7 +585,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         win.show();
     },
 
-    getTranslationButtons: function () {
+    getTranslationButtons: function (asMenuItem = false) {
 
         var translationsMenu = [];
         var unlinkTranslationsMenu = [];
@@ -639,9 +639,9 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         }
 
         return {
-            tooltip: t("translation"),
+            ...(() => asMenuItem ? { text: t("translation") } : { tooltip: t("translation") })(),
             iconCls: "pimcore_material_icon_translation pimcore_material_icon",
-            scale: "medium",
+            ...(() => asMenuItem ? {} : { scale: "medium" })(),
             menu: [{
                 text: t("new_document"),
                 hidden: !pimcore.helpers.documentTypeHasSpecificRole(this.getType(), "translatable"),
