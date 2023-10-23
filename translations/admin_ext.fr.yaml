@@ -715,4 +715,9 @@ classificationstore_mbx_enterkey_prompt: Saisir un nom
 classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Secondes
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Options Provider
+selectoptions: Select Options
 ...
