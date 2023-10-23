@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.asset.text");
 pimcore.asset.text = Class.create(pimcore.asset.asset, {
 
     initialize: function(id, options) {
+        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -89,7 +90,20 @@ pimcore.asset.text = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        if (this.isNewHeadbarLayoutEnabled) {
+            this.tabbar = pimcore.helpers.getTabBar({
+                items: items,
+                tabBar: {
+                    layout: { pack: 'end' },
+                    defaults: {
+                        height: 46,
+                    }
+                }
+            });
+        } else {
+            this.tabbar = pimcore.helpers.getTabBar({items: items});
+        }
+
         return this.tabbar;
     },
 

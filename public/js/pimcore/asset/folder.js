@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.asset.folder");
 pimcore.asset.folder = Class.create(pimcore.asset.asset, {
 
     initialize: function(id, options) {
+        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -162,8 +163,20 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
+        if (this.isNewHeadbarLayoutEnabled) {
+            this.tabbar = pimcore.helpers.getTabBar({
+                items: items,
+                tabBar: {
+                    layout: { pack: 'end' },
+                    defaults: {
+                        height: 46,
+                    }
+                }
+            });
+        } else {
+            this.tabbar = pimcore.helpers.getTabBar({items: items});
+        }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 
@@ -258,21 +271,53 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
 
             buttons.push("-");
 
-            if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
-                buttons.push(this.toolbarButtons.remove);
-            }
-            if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
-                buttons.push(this.toolbarButtons.rename);
+            this.toolbarSubmenu = Ext.Button({
+                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+            });
+
+            if (this.isNewHeadbarLayoutEnabled) {
+                buttons.push(this.toolbarSubmenu);
             }
 
-            buttons.push({
-                tooltip: t("download_as_zip"),
+            if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
+                if (this.isNewHeadbarLayoutEnabled) {
+                    this.toolbarSubmenu.menu.push({
+                        text: t('delete'),
+                        iconCls: "pimcore_material_icon_delete pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.remove.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.remove);
+                }
+            }
+            if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
+                if (this.isNewHeadbarLayoutEnabled) {
+                    this.toolbarSubmenu.menu.push({
+                        text: t('rename'),
+                        iconCls: "pimcore_material_icon_rename pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.rename.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.rename);
+                }
+            }
+
+            const downloadAsZipConfig = {
+                ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: function () {
                     pimcore.elementservice.downloadAssetFolderAsZip(this.id)
                 }.bind(this)
-            });
+            }
+
+            if (this.isNewHeadbarLayoutEnabled) {
+                this.toolbarSubmenu.menu.push(downloadAsZipConfig);
+            } else {
+                buttons.push(downloadAsZipConfig);
+            }
 
             buttons.push({
                 tooltip: t('reload'),
