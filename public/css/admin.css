@@ -2387,3 +2387,8 @@ ul.leaflet-draw-actions.leaflet-draw-actions-top.leaflet-draw-actions-bottom li:
 .pimcore_panel_toolbar_horizontal .pimcore_main_toolbar .x-box-scroller {
     pointer-events: all;
 }
+
+.pimcore_panel_toolbar_horizontal .pimcore_editor_tabbar .x-tab-inner-default,
+.pimcore_panel_toolbar_horizontal_border_layout .pimcore_editor_tabbar .x-tab-inner-default {
+    display: none;
+}

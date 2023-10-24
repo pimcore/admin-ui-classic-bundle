@@ -244,6 +244,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                     buttons.push(this.toolbarButtons.remove);
                 }
             }
+
             if(this.isAllowed("rename") && !this.data.locked) {
                 if (this.isNewHeadbarLayoutEnabled) {
                     this.toolbarSubmenu.menu.push({
