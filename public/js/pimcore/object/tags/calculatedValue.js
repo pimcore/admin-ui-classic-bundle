@@ -63,6 +63,8 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
             this.component = new Ext.form.field.TextArea(input);
         } else if (this.fieldConfig.elementType === 'html') {
             this.component = new Ext.form.field.Display(input);
+        } else if (this.fieldConfig.elementType === 'date') {
+            this.component = new Ext.form.DateField(input);
         } else {
             this.component = new Ext.form.field.Text(input);
         }
@@ -104,7 +106,12 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
                 console.log(e);
             }
 
-            if (value && (this.fieldConfig === undefined || this.fieldConfig.elementType !== 'html')) {
+            if (value && this.fieldConfig.elementType === 'date') {
+                const timestamp = intval(value) * 1000;
+                const date = new Date(timestamp);
+
+                return Ext.Date.format(date, "Y-m-d");
+            } else if (value && (this.fieldConfig === undefined || this.fieldConfig.elementType !== 'html')) {
                 value = value.toString().replace(/\n/g,"<br>");
                 value = strip_tags(value, '<br>');
             }
