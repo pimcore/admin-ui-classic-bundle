@@ -115,7 +115,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
         var tabId = "document_" + this.id;
 
         const tabbarContainer = new Ext.Container({
-            flex: 1,
+            flex: 2
         });
 
         const tabPanel = this.getTabPanel();
@@ -157,6 +157,16 @@ pimcore.document.link = Class.create(pimcore.document.document, {
             });
 
             tabbarContainer.add(tabPanel.getTabBar());
+
+            tabPanel.getTabBar().on('add', () => {
+                setTimeout(() => {
+                    this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
+                }, 100);
+            });
+
+            tabbarContainer.on('resize', () => {
+                this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
+            });
         } else {
             this.tab = new Ext.Panel({
                 id: tabId,
@@ -213,6 +223,30 @@ pimcore.document.link = Class.create(pimcore.document.document, {
 
         // recalculate the layout
         pimcore.layout.refresh();
+    },
+
+    handleTabbarLayoutOnSmallDevices: function(tabPanel, tabbarContainer) {
+        const tabbarItems = tabPanel.getTabBar().items.items;
+        const firstTab = tabbarItems[0].getEl()?.dom;
+        const lastTab = tabbarItems[tabbarItems.length - 1].getEl()?.dom;
+
+        if (!firstTab || !lastTab) return;
+
+        const firstBoundingRect = firstTab.getBoundingClientRect();
+        const lastBoundingRect = lastTab.getBoundingClientRect();
+        const firstAndLastTabDistance = lastBoundingRect.x + lastBoundingRect.width - firstBoundingRect.x;
+
+        if (firstAndLastTabDistance > tabbarContainer.getWidth()) {
+            tabPanel.getTabBar().setLayout({
+                pack: 'start'
+            })
+        } else {
+            tabPanel.getTabBar().setLayout({
+                pack: 'end'
+            })
+        }
+
+        this.tab.updateLayout();
     },
 
     getLayoutToolbar: function () {
@@ -338,6 +372,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

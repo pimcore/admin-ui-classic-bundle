@@ -3404,7 +3404,7 @@ pimcore.helpers.getTabBar = function (attributes) {
     let tabAttr = Object.assign(attributes, {
         tabBar: {
             ...(() => attributes?.tabBar || {})(),
-            cls: 'pimcore_editor_tabbar',
+            cls: 'pimcore_editor_tabbar'
         },
         tabPosition: 'top',
         region:'center',

@@ -355,6 +355,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 id: "asset_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

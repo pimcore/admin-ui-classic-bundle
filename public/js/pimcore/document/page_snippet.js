@@ -28,6 +28,16 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
         this.tabPanel = Ext.getCmp("pimcore_panel_tabs");
         var tabId = "document_" + this.id;
 
+        const tabbarContainer = new Ext.Container({
+            flex: 2
+        });
+
+        const backgroundContainer = new Ext.Container({
+            cls: 'pimcore_headbar_background',
+            width: '100%',
+            height: 49,
+        });
+
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
@@ -41,7 +51,9 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 layout: "absolute",
                 items: [
                     toolbar,
-                    tabPanel
+                    tabPanel,
+                    backgroundContainer,
+                    tabbarContainer
                 ],
                 iconCls: this.getIconClass(),
                 document: this
@@ -55,6 +67,9 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                     item.setTitle('');
                 }
             });
+
+            tabbarContainer.add(tabPanel.getTabBar());
+            tabPanel.y = 46;
         } else {
             this.tab = new Ext.Panel({
                 id: tabId,
@@ -87,17 +102,12 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
         if (this.isNewHeadbarLayoutEnabled) {
             this.tab.on("boxready", function () {
-                tabPanel.setHeight(this.tab.getHeight());
+                this.calcLayoutPositions(tabPanel, backgroundContainer, tabbarContainer, toolbar);
             }.bind(this));
 
-            window.addEventListener('resize', () => {
-                tabPanel.setHeight(this.tab.getHeight());
-
-                // handle browser minimize and maximize
-                setTimeout(() => {
-                    tabPanel.setHeight(this.tab.getHeight());
-                }, 200)
-            })
+            this.tab.on('resize', function () {
+                this.calcLayoutPositions(tabPanel, backgroundContainer, tabbarContainer, toolbar);
+            }.bind(this))
         }
 
         this.tab.on("destroy", function () {
@@ -131,6 +141,38 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
         // recalculate the layout
         pimcore.layout.refresh();
+    },
+
+    calcLayoutPositions: function(tabPanel, backgroundContainer, tabbarContainer, toolbar) {
+        const headbarWidth = backgroundContainer.getWidth();
+        const toolbarWidth = Math.round(headbarWidth * (3 / 5));
+        const tabbarWidth = Math.round(headbarWidth * (2 / 5));
+
+        toolbar.setPosition(0, 0);
+        toolbar.setMaxWidth(toolbarWidth);
+        toolbar.setWidth(toolbarWidth);
+        tabbarContainer.setPosition(toolbarWidth, 0);
+        tabbarContainer.setWidth(tabbarWidth);
+
+        const tabbarItems = tabPanel.getTabBar().items.items;
+        const firstTab = tabbarItems[0].getEl().dom;
+        const lastTab = tabbarItems[tabbarItems.length - 1].getEl().dom;
+        const firstBoundingRect = firstTab.getBoundingClientRect();
+        const lastBoundingRect = lastTab.getBoundingClientRect();
+        const firstAndLastTabDistance = lastBoundingRect.x + lastBoundingRect.width - firstBoundingRect.x;
+
+        if (firstAndLastTabDistance > tabbarWidth) {
+            tabPanel.getTabBar().setLayout({
+                pack: 'start'
+            })
+        } else {
+            tabPanel.getTabBar().setLayout({
+                pack: 'end'
+            })
+        }
+
+        tabPanel.setHeight(this.tab.getHeight() - 46);
+        this.tab.updateLayout();
     },
 
     cleanUpOnDestroy: function () {
@@ -423,6 +465,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

@@ -123,7 +123,9 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
                 items: items,
                 tabConfig: {margin: 0},
                 tabBar: {
-                    layout: { pack: 'end' },
+                    layout: {
+                        pack: 'end',
+                    },
                     defaults: {
                         height: 46,
                     }
