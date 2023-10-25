@@ -369,6 +369,7 @@ class GridHelperService
         $conditionFilters = '1 = 1';
         if (count($conditionPartsFilters) > 0) {
             $conditionFilters = '(' . implode(' AND ', $conditionPartsFilters) . ')';
+            $conditionFilters = str_replace(array('--', ';'), '', $conditionFilters);
         }
         Logger::log('DataObjectController filter condition:' . $conditionFilters);
 
