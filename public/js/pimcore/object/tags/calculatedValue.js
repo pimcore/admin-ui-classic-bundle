@@ -106,12 +106,12 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
                 console.log(e);
             }
 
-            if (value && this.fieldConfig.elementType === 'date') {
+            if (value && this.fieldConfig?.elementType === 'date') {
                 const timestamp = intval(value) * 1000;
                 const date = new Date(timestamp);
 
                 return Ext.Date.format(date, "Y-m-d");
-            } else if (this.fieldConfig.elementType === 'boolean') {
+            } else if (this.fieldConfig?.elementType === 'boolean') {
                 if (value) {
                     return "true"
                 } else {
