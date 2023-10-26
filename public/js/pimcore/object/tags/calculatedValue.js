@@ -111,7 +111,14 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
                 const date = new Date(timestamp);
 
                 return Ext.Date.format(date, "Y-m-d");
-            } else if (value && (this.fieldConfig === undefined || this.fieldConfig.elementType !== 'html')) {
+            } else if (this.fieldConfig.elementType === 'boolean') {
+                if (value) {
+                    return "true"
+                } else {
+                    return "false"
+                }
+            }
+            else if (value && (this.fieldConfig === undefined || this.fieldConfig.elementType !== 'html')) {
                 value = value.toString().replace(/\n/g,"<br>");
                 value = strip_tags(value, '<br>');
             }
