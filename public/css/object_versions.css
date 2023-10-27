@@ -26,6 +26,18 @@ body {
 	width: 100%;
 }
 
+.preview tr:nth-of-type(1) {
+    position: sticky;
+    top: 0;
+    height: 24px;
+}
+.preview tr:nth-of-type(2) {
+    position: sticky;
+    top: 24px; /* :nth-of-type(1) height */
+    min-height: 24px;
+    background-color: #f6f6f6;
+}
+
 .preview td, .preview th {
 	border-bottom: 1px solid #d0d0d0;
 	border-right: 1px solid #d0d0d0;
