@@ -206,7 +206,6 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
             var defaultValueStore = defaultValueEditor.getStore();
             defaultValueStore.commitChanges();
             defaultValueStore.each(function (rec) {
-                console.log(rec.get("value"));
                 defaultValue.push({
                     value: rec.get("value")
                 });
