@@ -151,7 +151,6 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                     textAlign: "left",
                     hidden: this["marker"] !== false,
                     handler: function () {
-                        console.log(this["marker"]);
                         this.removeFocalPoint();
                     }.bind(this)
                 }, {
