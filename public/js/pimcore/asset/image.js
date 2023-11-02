@@ -429,8 +429,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                 text: t("delete"),
                 iconCls: "pimcore_icon_delete",
                 handler: function (el) {
-                    marker.remove();
-                    this.marker = false;
+                    this.removeFocalPoint();
                 }.bind(this)
             }));
 
