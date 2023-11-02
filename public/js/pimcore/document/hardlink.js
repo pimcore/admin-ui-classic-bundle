@@ -282,6 +282,15 @@ pimcore.document.hardlink = Class.create(pimcore.document.document, {
                 handler: this.unpublish.bind(this)
             });
 
+            if (this.isNewHeadbarLayoutEnabled) {
+                this.toolbarButtons.unpublish = Ext.create('Ext.menu.Item', {
+                    text: t('unpublish'),
+                    iconCls: "pimcore_material_icon_unpublish pimcore_material_icon",
+                    scale: "medium",
+                    handler: this.unpublish.bind(this)
+                })
+            }
+
             this.toolbarButtons.remove = new Ext.Button({
                 tooltip: t('delete'),
                 iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -298,18 +307,25 @@ pimcore.document.hardlink = Class.create(pimcore.document.document, {
 
             var buttons = [];
 
-            if (this.isAllowed("publish")) {
-                buttons.push(this.toolbarButtons.publish);
-            }
-            if (this.isAllowed("unpublish") && !this.data.locked) {
-                buttons.push(this.toolbarButtons.unpublish);
-            }
-
-            buttons.push("-");
-
             this.toolbarSubmenu = Ext.Button({
                 ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
             });
+
+            if (this.isAllowed("publish")) {
+                buttons.push(this.toolbarButtons.publish);
+            }
+
+            if (this.isAllowed("unpublish") && !this.data.locked) {
+                if (this.isNewHeadbarLayoutEnabled) {
+                    this.toolbarSubmenu.menu.push(
+                        this.toolbarButtons.unpublish
+                    )
+                } else {
+                    buttons.push(this.toolbarButtons.unpublish);
+                }
+            }
+
+            buttons.push("-");
 
             if (this.isNewHeadbarLayoutEnabled) {
                 buttons.push(this.toolbarSubmenu);
