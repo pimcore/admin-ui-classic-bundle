@@ -274,6 +274,10 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
             var buttons = [];
 
+            this.toolbarSubmenu = Ext.Button({
+                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+            });
+
             if (this.isAllowed("save")) {
                 buttons.push(this.toolbarButtons.save);
             }
@@ -286,10 +290,6 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             }
 
             buttons.push("-");
-
-            this.toolbarSubmenu = Ext.Button({
-                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
-            });
 
             if (this.isNewHeadbarLayoutEnabled) {
                 buttons.push(this.toolbarSubmenu);
@@ -435,13 +435,6 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                     buttons.push(shareViaNotificationsConfig);
                 }
             }
-
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t("id") + " " + this.data.id,
-                scale: "medium"
-            });
 
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('document', this.data.id, this, buttons);

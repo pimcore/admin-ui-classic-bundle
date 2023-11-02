@@ -646,13 +646,20 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 }
             }
 
+            const metaInfoMenu = this.getMetaInfoMenuItems();
+            metaInfoMenu.unshift({
+                text: t("class") + ' ' + t(this.data.general.classTitle) + ' - ' + t("copy"),
+                iconCls: "pimcore_icon_copy",
+                handler: pimcore.helpers.copyStringToClipboard.bind(this, t(this.data.general.classTitle))
+            });
+
             buttons.push({
                 xtype: "splitbutton",
                 tooltip: t("show_metainfo"),
                 iconCls: "pimcore_material_icon_info pimcore_material_icon",
                 scale: "medium",
                 handler: this.showMetaInfo.bind(this),
-                menu: this.getMetaInfoMenuItems()
+                menu: metaInfoMenu
             });
 
             if (this.data.general.showFieldLookup) {
@@ -713,20 +720,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                     buttons.push(notificationConfig);
                 }
             }
-
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t("id") + " " + this.data.general.id,
-                scale: "medium"
-            });
-
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t(this.data.general.classTitle),
-                scale: "medium"
-            });
 
             this.draftVersionNotification = new Ext.Button({
                 text: t('draft'),
