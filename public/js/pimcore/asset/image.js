@@ -146,7 +146,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                     xtype: "button",
                     id: "remove_focal_point",
                     text: t("remove_focal_point"),
-                    iconCls: "pimcore_icon_focal_point",
+                    iconCls: "pimcore_icon_focal_point_remove",
                     width: "100%",
                     textAlign: "left",
                     hidden: this["marker"] !== false,
