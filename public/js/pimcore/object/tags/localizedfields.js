@@ -289,6 +289,12 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                                 globalLanguageIndex = this.frontendLanguages.indexOf(language);
                             }
                             this.countrySelect.setValue(this.frontendLanguages[globalLanguageIndex]);
+
+                            this.availablePanels[this.currentLanguage].hide();
+                            this.component.updateLayout();
+                            this.availablePanels[language].show();
+                            this.currentLanguage = language;
+                            this.component.updateLayout();
                         }.bind(this)
                     }
                 };
