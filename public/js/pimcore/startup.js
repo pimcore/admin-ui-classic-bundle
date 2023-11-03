@@ -971,5 +971,7 @@ pimcore.helpers.unload = function () {
 };
 
 L.Icon.Default.imagePath = '../bundles/pimcoreadmin/build/admin/images/';
-pimcore.wysiwyg = {};
-pimcore.wysiwyg.editors = [];
+if (!pimcore.wysiwyg) {
+    pimcore.wysiwyg = {};
+    pimcore.wysiwyg.editors = [];
+}
