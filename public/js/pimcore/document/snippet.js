@@ -115,7 +115,7 @@ pimcore.document.snippet = Class.create(pimcore.document.page_snippet, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {

@@ -94,7 +94,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
@@ -120,26 +120,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                 document: this
             });
 
-            tabPanel.items.each((item) => {
-                const title = item.getTitle();
-
-                if (title) {
-                    item.tab.setTooltip(item.getTitle());
-                    item.setTitle('');
-                }
-            });
-
-            tabbarContainer.add(tabPanel.getTabBar());
-
-            tabPanel.getTabBar().on('add', () => {
-                setTimeout(() => {
-                    this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
-                }, 100);
-            });
-
-            tabbarContainer.on('resize', () => {
-                this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
-            });
+            pimcore.helpers.headbar.prepareTabPanel(tabPanel, tabbarContainer, this.tab);
         } else {
             this.tab = new Ext.Panel({
                 id: tabId,
@@ -198,30 +179,6 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
         pimcore.layout.refresh();
     },
 
-    handleTabbarLayoutOnSmallDevices: function(tabPanel, tabbarContainer) {
-        const tabbarItems = tabPanel.getTabBar().items.items;
-        const firstTab = tabbarItems[0].getEl()?.dom;
-        const lastTab = tabbarItems[tabbarItems.length - 1].getEl()?.dom;
-
-        if (!firstTab || !lastTab) return;
-
-        const firstBoundingRect = firstTab.getBoundingClientRect();
-        const lastBoundingRect = lastTab.getBoundingClientRect();
-        const firstAndLastTabDistance = lastBoundingRect.x + lastBoundingRect.width - firstBoundingRect.x;
-
-        if (firstAndLastTabDistance > tabbarContainer.getWidth()) {
-            tabPanel.getTabBar().setLayout({
-                pack: 'start'
-            })
-        } else {
-            tabPanel.getTabBar().setLayout({
-                pack: 'end'
-            })
-        }
-
-        this.tab.updateLayout();
-    },
-
     getLayoutToolbar : function () {
 
         if (!this.toolbar) {
@@ -259,15 +216,15 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             buttons.push("-");
 
             this.toolbarSubmenu = Ext.Button({
-                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+                ...pimcore.helpers.headbar.getSubmenuConfig()
             });
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if(this.isAllowed("delete") && !this.data.locked) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -280,7 +237,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             }
 
             if(this.isAllowed("rename") && !this.data.locked) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -317,7 +274,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                 menu: this.getMetaInfoMenuItems()
             });
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.push(this.getTranslationButtons(true));
             } else {
                 buttons.push(this.getTranslationButtons());
@@ -327,7 +284,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -361,7 +318,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {

@@ -1551,7 +1551,6 @@ span.warning {
 /* TODO here */
 .pimcore_editor_tabbar .x-tab {
     background: #393C3F;
-    border-left: 1px solid #616467;
 }
 
 .pimcore_editor_tabbar .x-tab.x-tab-active + .x-tab, .pimcore_editor_tabbar .x-tab:first-child {
@@ -2377,7 +2376,7 @@ ul.leaflet-draw-actions.leaflet-draw-actions-top.leaflet-draw-actions-bottom li:
     top: -9px
 }
 
-.pimcore_panel_toolbar_horizontal .x-toolbar-default {
+.pimcore_panel_toolbar_horizontal .pimcore_main_toolbar {
     z-index: 2;
     background: transparent;
     pointer-events: none;

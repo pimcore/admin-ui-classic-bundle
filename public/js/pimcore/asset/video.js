@@ -97,7 +97,7 @@ pimcore.asset.video = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {

@@ -133,7 +133,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
@@ -316,15 +316,15 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             buttons.push("-");
 
             this.toolbarSubmenu = Ext.Button({
-                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+                ...pimcore.helpers.headbar.getSubmenuConfig()
             });
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if(this.isAllowed("delete") && !this.data.general.locked && this.data.general.id != 1) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -338,7 +338,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
 
             if(this.isAllowed("rename") && !this.data.general.locked && this.data.general.id != 1) {
                 if(this.isAllowed("rename") && !this.data.locked) {
-                    if (this.isNewHeadbarLayoutEnabled) {
+                    if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                         this.toolbarSubmenu.menu.push({
                             text: t('rename'),
                             iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -377,7 +377,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             });
 
             const searchAndMoveConfig = {
-                ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('search_and_move') } : { tooltip: t('search_and_move') })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('search_and_move') } : { tooltip: t('search_and_move') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: pimcore.helpers.searchAndMove.bind(this, this.data.general.id,
@@ -392,7 +392,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                     }.bind(this), "object")
             }
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.push(searchAndMoveConfig);
             } else {
                 buttons.push(searchAndMoveConfig);
@@ -405,7 +405,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                 id: "object_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -441,7 +441,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {

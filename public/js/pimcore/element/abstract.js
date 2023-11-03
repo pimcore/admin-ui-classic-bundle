@@ -51,6 +51,10 @@ pimcore.element.abstract = Class.create({
       this.isNewHeadbarLayoutEnabled = true;
     },
 
+    checkIfNewHeadbarLayoutIsEnabled: function () {
+        return this.isNewHeadbarLayoutEnabled && pimcore?.settings?.new_toolbar_style
+    },
+
     // startup / opening functions
     addLoadingPanel: function () {
         var type = pimcore.helpers.getElementTypeByObject(this);

@@ -15,6 +15,8 @@
  * @private
  */
 
+pimcore.settings.new_toolbar_style = true;
+
 // debug
 if (typeof console == "undefined") {
     console = {

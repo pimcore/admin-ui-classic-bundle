@@ -118,7 +118,7 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabConfig: {margin: 0},

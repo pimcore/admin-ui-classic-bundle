@@ -163,7 +163,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {
@@ -272,15 +272,15 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             buttons.push("-");
 
             this.toolbarSubmenu = Ext.Button({
-                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+                ...pimcore.helpers.headbar.getSubmenuConfig()
             });
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -292,7 +292,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 }
             }
             if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -305,7 +305,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             }
 
             const downloadAsZipConfig = {
-                ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: function () {
@@ -313,7 +313,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 }.bind(this)
             }
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.push(downloadAsZipConfig);
             } else {
                 buttons.push(downloadAsZipConfig);
@@ -348,7 +348,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 id: "asset_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

@@ -234,6 +234,10 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                     this.toolbarButtons.save.hide();
                 }
 
+                if (this.toolbarButtons.save && this.toolbarButtons.publish) {
+                    this.toolbarButtons.publish.show();
+                }
+
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "document",
                     id: this.id,
@@ -255,6 +259,10 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
 
                 if (this.toolbarButtons.save) {
                     this.toolbarButtons.save.show();
+                }
+
+                if (this.toolbarButtons.publish && this.toolbarButtons.save) {
+                    this.toolbarButtons.publish.hide();
                 }
 
                 pimcore.elementservice.setElementPublishedState({

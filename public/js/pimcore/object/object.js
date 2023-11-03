@@ -212,7 +212,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
@@ -240,26 +240,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 iconCls: iconClass
             });
 
-            tabPanel.items.each((item) => {
-                const title = item.getTitle();
-
-                if (title) {
-                    item.tab.setTooltip(item.getTitle());
-                    item.setTitle('');
-                }
-            });
-
-            tabbarContainer.add(tabPanel.getTabBar());
-
-            tabPanel.getTabBar().on('add', () => {
-                setTimeout(() => {
-                    this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
-                }, 100);
-            });
-
-            tabbarContainer.on('resize', () => {
-                this.handleTabbarLayoutOnSmallDevices(tabPanel, tabbarContainer);
-            });
+            pimcore.helpers.headbar.prepareTabPanel(tabPanel, tabbarContainer, this.tab);
         } else {
             this.tab = new Ext.Panel({
                 id: tabId,
@@ -323,30 +304,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
         // recalculate the layout
         pimcore.layout.refresh();
-    },
-
-    handleTabbarLayoutOnSmallDevices: function(tabPanel, tabbarContainer) {
-        const tabbarItems = tabPanel.getTabBar().items.items;
-        const firstTab = tabbarItems[0].getEl()?.dom;
-        const lastTab = tabbarItems[tabbarItems.length - 1].getEl()?.dom;
-
-        if (!firstTab || !lastTab) return;
-
-        const firstBoundingRect = firstTab.getBoundingClientRect();
-        const lastBoundingRect = lastTab.getBoundingClientRect();
-        const firstAndLastTabDistance = lastBoundingRect.x + lastBoundingRect.width - firstBoundingRect.x;
-
-        if (firstAndLastTabDistance > tabbarContainer.getWidth()) {
-            tabPanel.getTabBar().setLayout({
-                pack: 'start'
-            })
-        } else {
-            tabPanel.getTabBar().setLayout({
-                pack: 'end'
-            })
-        }
-
-        this.tab.updateLayout();
     },
 
     forgetOpenTab: function () {
@@ -461,7 +418,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             }
         }
 
-        if (this.isNewHeadbarLayoutEnabled) {
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tabbar = pimcore.helpers.getTabBar({
                 items: items,
                 tabBar: {
@@ -508,6 +465,25 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 ]
             });
 
+            if (this.isAllowed("publish")) {
+                this.toolbarButtons.save.menu.add(
+                    {
+                        text: t('save_and_publish'),
+                        iconCls: "pimcore_icon_save",
+                        cls: "pimcore_save_button",
+                        scale: "medium",
+                        handler: this.publish.bind(this)
+                    }                    
+                );
+
+                this.toolbarButtons.save.menu.add(
+                    {
+                        text: t('save_pubish_close'),
+                        iconCls: "pimcore_icon_save",
+                        handler: this.publishClose.bind(this)
+                    }
+                )
+            }
 
             this.toolbarButtons.publish = new Ext.SplitButton({
                 text: t('save_and_publish'),
@@ -515,11 +491,12 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 cls: "pimcore_save_button",
                 scale: "medium",
                 handler: this.publish.bind(this),
-                menu: [{
-                    text: t('save_pubish_close'),
-                    iconCls: "pimcore_icon_save",
-                    handler: this.publishClose.bind(this)
-                },
+                menu: [
+                    {
+                        text: t('save_pubish_close'),
+                        iconCls: "pimcore_icon_save",
+                        handler: this.publishClose.bind(this)
+                    },
                     {
                         text: t('save_draft'),
                         iconCls: "pimcore_icon_save",
@@ -542,7 +519,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 handler: this.unpublish.bind(this)
             });
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarButtons.unpublish = Ext.create('Ext.menu.Item', {
                     text: t('unpublish'),
                     iconCls: "pimcore_material_icon_unpublish pimcore_material_icon",
@@ -566,7 +543,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             });
 
             this.toolbarSubmenu = Ext.Button({
-                ...pimcore.helpers.headbarSubmenu.getSubmenuConfig()
+                ...pimcore.helpers.headbar.getSubmenuConfig()
             });
 
             if (this.isAllowed("save")) {
@@ -576,7 +553,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 buttons.push(this.toolbarButtons.publish);
             }
             if (this.isAllowed("unpublish") && !this.data.general.locked) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push(
                         this.toolbarButtons.unpublish
                     )
@@ -587,12 +564,12 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
             buttons.push("-");
 
-            if (this.isNewHeadbarLayoutEnabled) {
+            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if (this.isAllowed("delete") && !this.data.general.locked) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -605,7 +582,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             }
 
             if (this.isAllowed("rename") && !this.data.general.locked) {
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -679,7 +656,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
             if (this.data.general.showFieldLookup) {
                 const showLockupConfig = {
-                    ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('fieldlookup') } : { tooltip: t('fieldlookup') })(),
+                    ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('fieldlookup') } : { tooltip: t('fieldlookup') })(),
                     iconCls: "pimcore_material_fieldlookup pimcore_material_icon",
                     scale: "medium",
                     handler: function() {
@@ -692,7 +669,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                     }.bind(this)
                 }
 
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push(showLockupConfig);
                 } else {
                     buttons.push(showLockupConfig);
@@ -701,7 +678,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
             if (this.data.hasPreview) {
                 const previewConfig = {
-                    ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('open') } : { tooltip: t('open') })(),
+                    ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('open') } : { tooltip: t('open') })(),
                     iconCls: "pimcore_material_icon_preview pimcore_material_icon",
                     scale: "medium",
                     handler: function () {
@@ -713,7 +690,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                     }.bind(this)
                 };
 
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push(previewConfig);
                 } else {
                     buttons.push("-");
@@ -723,13 +700,13 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
             if (pimcore.globalmanager.get("user").isAllowed('notifications_send')) {
                 const notificationConfig = {
-                    ...(() => this.isNewHeadbarLayoutEnabled ? { text: t('share_via_notifications') } : { tooltip: t('share_via_notifications') })(),
+                    ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('share_via_notifications') } : { tooltip: t('share_via_notifications') })(),
                     iconCls: "pimcore_icon_share",
                     scale: "medium",
                     handler: this.shareViaNotifications.bind(this)
                 };
 
-                if (this.isNewHeadbarLayoutEnabled) {
+                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.push(notificationConfig);
                 } else {
                     buttons.push(notificationConfig);
@@ -773,11 +750,21 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 id: "object_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.isNewHeadbarLayoutEnabled ? { flex: 3 } : { })(),
+                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
             });
+
+            if (this.isAllowed('publish') && this.isAllowed('save')) {
+                if (this.data.general.published) {
+                    this.toolbarButtons.save.hide();
+                    this.toolbarButtons.publish.show();
+                } else {
+                    this.toolbarButtons.publish.hide();
+                    this.toolbarButtons.save.show();
+                }
+            }
 
             if (!this.data.general.published) {
                 this.toolbarButtons.unpublish.hide();
@@ -785,6 +772,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 this.toolbarButtons.save.hide();
             }
         }
+
         this.edit.toolbar = this.toolbar;
 
         return this.toolbar;
@@ -879,6 +867,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 // toggle buttons
                 this.toolbarButtons.unpublish.show();
                 this.toolbarButtons.save.hide();
+                this.toolbarButtons.publish.show();
 
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "object",
@@ -897,6 +886,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 // toggle buttons
                 this.toolbarButtons.unpublish.hide();
                 this.toolbarButtons.save.show();
+                this.toolbarButtons.publish.hide();
 
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "object",
