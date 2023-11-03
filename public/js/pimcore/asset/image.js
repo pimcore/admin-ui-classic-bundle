@@ -134,7 +134,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                 bodyStyle: "padding: 10px;",
                 items: [{
                     xtype: "button",
-                    id: "add_focal_point",
+                    id: "add_focal_point_" + this.id,
                     text: t("set_focal_point"),
                     iconCls: "pimcore_icon_focal_point",
                     width: "100%",
@@ -144,7 +144,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                     }.bind(this)
                 },{
                     xtype: "button",
-                    id: "remove_focal_point",
+                    id: "remove_focal_point_" + this.id,
                     text: t("remove_focal_point"),
                     iconCls: "pimcore_icon_focal_point_remove",
                     width: "100%",
@@ -444,8 +444,8 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
 
         var markerDD = new Ext.dd.DD(marker);
 
-        Ext.getCmp('remove_focal_point').setVisible(true);
-        Ext.getCmp('add_focal_point').setVisible(false);
+        Ext.getCmp('remove_focal_point_' + this.id).setVisible(true);
+        Ext.getCmp('add_focal_point_' + this.id).setVisible(false);
 
         this.marker = marker;
 
@@ -454,8 +454,8 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
         if(this["marker"]) {
             this.marker.remove();
             this["marker"] = false;
-            Ext.getCmp('remove_focal_point').setVisible(false);
-            Ext.getCmp('add_focal_point').setVisible(true);
+            Ext.getCmp('remove_focal_point_' + this.id).setVisible(false);
+            Ext.getCmp('add_focal_point_' + this.id).setVisible(true);
         }
     },
     getFocalPointCoordinates: function () {
