@@ -380,7 +380,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
             });
 
             this.displayPanel.on('resize', function () {
-                this.setFocalPointCoordinates();
+                this.updateFocalPointCoordinates();
                 this.initPreviewImage();
             }.bind(this));
         }
@@ -458,7 +458,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
             Ext.getCmp('add_focal_point_' + this.id).setVisible(true);
         }
     },
-    setFocalPointCoordinates: function () {
+    updateFocalPointCoordinates: function () {
         if (this["marker"]) {
             let top = intval(this.marker.getStyle('top'));
             let left = intval(this.marker.getStyle('left'));
@@ -474,7 +474,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
         let parameters = $super(only);
 
         if (this["marker"]) {
-            this.setFocalPointCoordinates();
+            this.updateFocalPointCoordinates();
 
             parameters["image"] = Ext.encode({
                 "focalPoint": {
