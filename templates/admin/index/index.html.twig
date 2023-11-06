@@ -123,13 +123,9 @@
 
     <div id="pimcore_status"></div>
 
-    <div id="pimcore_notification" data-menu-tooltip="{{ "notifications"|trans([],'admin') }}" class="pimcore_icon_comments">
-        <img src="/bundles/pimcoreadmin/img/material-icons/outline-sms-24px.svg">
+    <div id="pimcore_notification" data-menu-tooltip="{{ user.name }} | {{ 'my_profile'|trans([],'admin') }}">
+        <img src="{{ path('pimcore_admin_user_getimage') }}">
         <span id="notification_value" style="display:none;"></span>
-    </div>
-
-    <div id="pimcore_avatar" style="display:none;">
-        <img src="{{ path('pimcore_admin_user_getimage') }}" data-menu-tooltip="{{ user.name }} | {{ 'my_profile'|trans([],'admin') }}"/>
     </div>
 
     <form id="pimcore_logout_form" method="post" action="{{ path('pimcore_admin_logout') }}">

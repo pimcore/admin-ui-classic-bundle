@@ -29,13 +29,15 @@
 #pimcore_navigation {
     position: absolute;
     left: 0px;
-    top: -5px;
+    top: 56px;
+    border-top: 1px solid #988AAA;
 }
 
 #pimcore_navigation ul {
     display:block;
     list-style: none;
     padding-left: 0px;
+    margin: 0;
 }
 
 #pimcore_navigation li {
@@ -100,8 +102,12 @@
     position: absolute;
     z-index: 10;
     left: 8px;
-    bottom: 250px;
+    bottom: 92px;
     width: 44px;
+}
+
+#pimcore_sidebar.with-notifications #pimcore_status {
+    bottom: 140px !important;
 }
 
 #pimcore_status > * {
@@ -127,32 +133,11 @@
     top: 2px;
 }
 
-#pimcore_avatar {
-    position: absolute;
-    left: 0;
-    bottom: 48px;
-    z-index: 1;
-    width: 60px;
-    height: 96px;
-    text-align: center;
-    background: #6428b4;
-    box-shadow: inset 0px -10px 10px -13px #000;
-}
-
-#pimcore_avatar img {
-    position: absolute;
-    left: 12px;
-    bottom: 50px;
-    width:36px;
-    border-radius: 18px;
-    cursor: pointer;
-}
-
 #pimcore_loading.loaded {
     position: absolute;
     z-index: 15;
     left: 8px;
-    bottom: 200px;
+    bottom: 58px;
     width:44px;
     height: 25px;
     padding:0;
@@ -162,6 +147,10 @@
 #pimcore_loading.loaded .spinner {
     width: 44px;
     margin:0;
+}
+
+#pimcore_loading.with-notifications.loaded {
+    bottom: 105px !important;
 }
 
 #pimcore_loading.loaded .spinner > div {
@@ -2305,36 +2294,48 @@ ul.leaflet-draw-actions.leaflet-draw-actions-top.leaflet-draw-actions-bottom li:
 /** notifications **/
 
 #pimcore_notification {
-    cursor: pointer;
     position: absolute;
+    left: 0;
+    top: 0;
     width: 60px;
-    height: 48px;
-    background: #279F4F;
-    bottom: 144px;
+    height: 52px;
+    text-align: center;
+    box-shadow: inset 0px -10px 10px -13px #000;
+    cursor: pointer;
     display: none;
 }
 
 #pimcore_notification > img {
     position: absolute;
-    width: 24px;
-    height: 24px;
-    top: 11px;
-    left: 18px;
+    left: 12px;
+    top: 8px;
+    width: 36px;
+    border-radius: 18px;
+    cursor: pointer;
 }
 
 #notification_value {
-    background-color: #0C0F12;
-    border-radius: 9px;
-    color: #fff;
-    font-size: 10px;
-    line-height: 1.3;
-    min-height: 12px;
+    background-color: #C0C0C0;
+    border-radius: 50px;
+    color: #524C4C;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.6;
+    min-width: 22px;
     padding: 4px 4px;
     background-clip: padding-box;
     display: block;
     position: absolute;
-    right: 12px;
-    top: 12px;
+    right: 5px;
+    top: 5px;
+}
+
+#pimcore_enterprise_subscription {
+    bottom: 48px !important;
+}
+
+#pimcore_enterprise_subscription.with-notifications {
+    bottom: 48px !important;
 }
 
 /** END notifications **/
