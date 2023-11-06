@@ -1302,7 +1302,7 @@ class DataObjectHelperController extends AdminAbstractController
 
         $allParams = array_merge($request->request->all(), $request->query->all());
 
-        $enableInheritance = $settings['enableInheritance'] ?? null;
+        $enableInheritance = $settings['enableInheritance'] ?? false;
         DataObject\Concrete::setGetInheritedValues($enableInheritance);
 
         $class = DataObject\ClassDefinition::getById($request->get('classId'));
