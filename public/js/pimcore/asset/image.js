@@ -16,7 +16,7 @@ pimcore.registerNS("pimcore.asset.image");
  * @private
  */
 pimcore.asset.image = Class.create(pimcore.asset.asset, {
-
+    focalPointCoordinates: {'x': -100,'y': -100},
     initialize: function (id, options) {
 
         this.options = options;
@@ -134,12 +134,24 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                 bodyStyle: "padding: 10px;",
                 items: [{
                     xtype: "button",
+                    id: "add_focal_point_" + this.id,
                     text: t("set_focal_point"),
                     iconCls: "pimcore_icon_focal_point",
                     width: "100%",
                     textAlign: "left",
                     handler: function () {
                         this.addFocalPoint();
+                    }.bind(this)
+                },{
+                    xtype: "button",
+                    id: "remove_focal_point_" + this.id,
+                    text: t("remove_focal_point"),
+                    iconCls: "pimcore_icon_focal_point_remove",
+                    width: "100%",
+                    textAlign: "left",
+                    hidden: this["marker"] !== false,
+                    handler: function () {
+                        this.removeFocalPoint();
                     }.bind(this)
                 }, {
                     xtype: "container",
@@ -368,6 +380,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
             });
 
             this.displayPanel.on('resize', function () {
+                this.updateFocalPointCoordinates();
                 this.initPreviewImage();
             }.bind(this));
         }
@@ -377,9 +390,8 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
 
     initPreviewImage: function () {
 
-        var html = '<img src="' + this.data.imageInfo['previewUrl'] + '">';
+        let html = '<img src="' + this.data.imageInfo['previewUrl'] + '">';
         Ext.get(this.previewContainerId).setHtml(html);
-        this.marker = false;
 
         let area = this.displayPanel.getEl().down('img');
         if(area) {
@@ -387,9 +399,18 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
             area.setStyle('max-height', (this.displayPanel.getHeight() - 40) + "px");
         }
 
-        if(this.data['customSettings']) {
-            if (this.data['customSettings']['focalPointX']) {
-                this.addFocalPoint(this.data['customSettings']['focalPointX'], this.data['customSettings']['focalPointY']);
+        let focalPointX = this.focalPointCoordinates['x'];
+        let focalPointY = this.focalPointCoordinates['y'];
+
+        //on init, the marker is undefined (on init) or set (on resize), is false when removing focal point
+        if (this.marker !== false) {
+            this.marker = false;
+            if (focalPointX > -100 && focalPointY > -100) {
+                this.addFocalPoint(focalPointX, focalPointY);
+            } else if (this.data['customSettings']) {
+                if (this.data['customSettings']['focalPointX'] && this.data['customSettings']['focalPointY']) {
+                    this.addFocalPoint(this.data['customSettings']['focalPointX'], this.data['customSettings']['focalPointY']);
+                }
             }
         }
     },
@@ -411,8 +432,7 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
                 text: t("delete"),
                 iconCls: "pimcore_icon_delete",
                 handler: function (el) {
-                    marker.remove();
-                    this.marker = false;
+                    this.removeFocalPoint();
                 }.bind(this)
             }));
 
@@ -427,30 +447,46 @@ pimcore.asset.image = Class.create(pimcore.asset.asset, {
 
         var markerDD = new Ext.dd.DD(marker);
 
+        Ext.getCmp('remove_focal_point_' + this.id).setVisible(true);
+        Ext.getCmp('add_focal_point_' + this.id).setVisible(false);
+
         this.marker = marker;
+
     },
-
-    getSaveData : function ($super, only) {
-        var parameters = $super(only);
-
+    removeFocalPoint: function () {
         if(this["marker"]) {
+            this.marker.remove();
+            this["marker"] = false;
+            Ext.getCmp('remove_focal_point_' + this.id).setVisible(false);
+            Ext.getCmp('add_focal_point_' + this.id).setVisible(true);
+            this.focalPointCoordinates = {x: -100, y: -100};
+        }
+    },
+    updateFocalPointCoordinates: function () {
+        if (this["marker"]) {
+            let top = intval(this.marker.getStyle('top'));
+            let left = intval(this.marker.getStyle('left'));
 
-            var top = intval(this.marker.getStyle('top'));
-            var left = intval(this.marker.getStyle('left'));
+            let boundingBox = this.marker.up().getSize();
 
-            var boundingBox = this.marker.up().getSize();
+            let x = round(left * 100 / boundingBox.width, 8);
+            let y = round(top * 100 / boundingBox.height, 8);
+            this.focalPointCoordinates = {x: x, y: y};
+        }
+    },
+    getSaveData: function ($super, only) {
+        let parameters = $super(only);
 
-            var x = round(left * 100 / boundingBox.width, 8);
-            var y = round(top  * 100 / boundingBox.height, 8);
+        if (this["marker"]) {
+            this.updateFocalPointCoordinates();
 
             parameters["image"] = Ext.encode({
                 "focalPoint": {
-                    "x": x,
-                    "y": y
+                    "x": this.focalPointCoordinates['x'],
+                    "y": this.focalPointCoordinates['y']
                 }
             });
         }
-
         return parameters;
     }
 });
