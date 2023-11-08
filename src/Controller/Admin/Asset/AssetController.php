@@ -617,6 +617,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $asset->setStream($stream);
         $asset->setCustomSetting('thumbnails', null);
         $asset->setUserModification($this->getAdminUser()->getId());
+        $asset->getEmbeddedMetaData(true);
 
         $newFileExt = pathinfo($newFilename, PATHINFO_EXTENSION);
         $currentFileExt = pathinfo($asset->getFilename(), PATHINFO_EXTENSION);
