@@ -276,12 +276,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                             if (oldLanguage == newLanguage) {
                                 return;
                             }
+                            this.switchLocalizedPanels(oldLanguage, newLanguage);
 
-                            this.availablePanels[oldLanguage].hide();
-                            this.component.updateLayout();
-                            this.availablePanels[newLanguage].show();
-                            this.currentLanguage = newLanguage;
-                            this.component.updateLayout();
                         }.bind(this),
                         pimcoreGlobalLanguageChanged: function (language) {
                             let globalLanguageIndex = 0;
@@ -289,6 +285,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                                 globalLanguageIndex = this.frontendLanguages.indexOf(language);
                             }
                             this.countrySelect.setValue(this.frontendLanguages[globalLanguageIndex]);
+                            this.switchLocalizedPanels(this.currentLanguage, language);
+
                         }.bind(this)
                     }
                 };
@@ -1004,6 +1002,14 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                 languageTab.setActiveTab(tabLanguage);
             }
         });
+    },
+
+    switchLocalizedPanels: function (oldLanguage, newLanguage){
+        this.availablePanels[oldLanguage].hide();
+        this.component.updateLayout();
+        this.availablePanels[newLanguage].show();
+        this.currentLanguage = newLanguage;
+        this.component.updateLayout();
     }
 });
 
