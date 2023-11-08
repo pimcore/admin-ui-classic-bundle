@@ -276,7 +276,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                             if (oldLanguage == newLanguage) {
                                 return;
                             }
-                            this.refreshLocalizedPanels(oldLanguage, newLanguage);
+                            this.switchLocalizedPanels(oldLanguage, newLanguage);
 
                         }.bind(this),
                         pimcoreGlobalLanguageChanged: function (language) {
@@ -285,7 +285,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                                 globalLanguageIndex = this.frontendLanguages.indexOf(language);
                             }
                             this.countrySelect.setValue(this.frontendLanguages[globalLanguageIndex]);
-                            this.refreshLocalizedPanels(this.currentLanguage, language);
+                            this.switchLocalizedPanels(this.currentLanguage, language);
 
                         }.bind(this)
                     }
@@ -1004,7 +1004,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
         });
     },
 
-    refreshLocalizedPanels: function (oldLanguage, newLanguage){
+    switchLocalizedPanels: function (oldLanguage, newLanguage){
         this.availablePanels[oldLanguage].hide();
         this.component.updateLayout();
         this.availablePanels[newLanguage].show();
