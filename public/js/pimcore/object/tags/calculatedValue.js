@@ -107,15 +107,16 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
             }
 
             if (value && this.fieldConfig?.elementType === 'date') {
-                const timestamp = intval(value) * 1000;
-                const date = new Date(timestamp);
-
-                return Ext.Date.format(date, "Y-m-d");
+                if (!isNaN(+value)) {
+                    const timestamp = parseInt(value) * 1000;
+                    const date = new Date(timestamp);
+                    return Ext.Date.format(date, "Y-m-d");
+                }
             } else if (this.fieldConfig?.elementType === 'boolean') {
-                if (value) {
-                    return "true"
+                if (this.fieldConfig.calculatorType !== "expression") {
+                    return value ? "true" : "false";
                 } else {
-                    return "false"
+                    return JSON.parse(value) ? "true" : "false";
                 }
             }
             else if (value && (this.fieldConfig === undefined || this.fieldConfig.elementType !== 'html')) {
