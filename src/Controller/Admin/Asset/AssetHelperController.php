@@ -26,8 +26,8 @@ use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
 use Pimcore\Bundle\AdminBundle\Tool;
 use Pimcore\Db;
+use Pimcore\File;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
-use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
@@ -722,17 +722,13 @@ class AssetHelperController extends AdminAbstractController
     /**
      * @Route("/do-export", name="pimcore_admin_asset_assethelper_doexport", methods={"POST"})
      *
-     * @param Request $request
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
+     * @throws FilesystemException
      */
-    public function doExportAction(Request $request, LocaleServiceInterface $localeService): JsonResponse
+    public function doExportAction(Request $request): JsonResponse
     {
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $ids = $request->get('ids');
-        $settings = $request->get('settings');
-        $settings = json_decode($settings, true);
+        $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $language = str_replace('default', '', $request->get('language'));
 
@@ -752,26 +748,36 @@ class AssetHelperController extends AdminAbstractController
 
         $csv = $this->getCsvData($request, $language, $list, $fields, $addTitles);
 
-        $storage = Storage::get('temp');
-        $csvFile = $this->getCsvFile($fileHandle);
+        try {
+            $storage = Storage::get('temp');
+            $csvFile = $this->getCsvFile($fileHandle);
 
-        $fileStream = $storage->readStream($csvFile);
+            $fileStream = $storage->readStream($csvFile);
 
-        $temp = tmpfile();
-        stream_copy_to_stream($fileStream, $temp, null, 0);
+            $temp = tmpfile();
+            stream_copy_to_stream($fileStream, $temp, null, 0);
 
-        $firstLine = true;
-        foreach ($csv as $line) {
-            if ($addTitles && $firstLine) {
-                $firstLine = false;
-                $line = implode($delimiter, $line) . "\r\n";
-                fwrite($temp, $line);
-            } else {
-                fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)) . "\r\n");
+            $firstLine = true;
+            foreach ($csv as $line) {
+                if ($addTitles && $firstLine) {
+                    $firstLine = false;
+                    $line = implode($delimiter, $line) . "\r\n";
+                    fwrite($temp, $line);
+                } else {
+                    fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)) . "\r\n");
+                }
             }
-        }
+            $storage->writeStream($csvFile, $temp);
+        } catch (UnableToReadFile $exception) {
+            Logger::err($exception->getMessage());
 
-        $storage->writeStream($csvFile, $temp);
+            return $this->adminJson(
+                [
+                    'success' => false,
+                    'message' => sprintf('export file not found: %s', $fileHandle)
+                ]
+            );
+        }
 
         return $this->adminJson(['success' => true]);
     }
@@ -860,7 +866,7 @@ class AssetHelperController extends AdminAbstractController
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -893,7 +899,7 @@ class AssetHelperController extends AdminAbstractController
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
