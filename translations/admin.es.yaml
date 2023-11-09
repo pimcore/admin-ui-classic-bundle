@@ -1044,37 +1044,37 @@ content_main_document: Documento de Contenido principal
 2fa_wrong: "\xA1C\xF3digo incorrecto!"
 language_main: Principal
 system_appearance_settings: Apariencia y Marca
-male: Male
-female: Female
-preview_generator_locale: Language
-preview_generator_site: Site
-failed_to_create_new_item_select_options: Failed to create new item. Name must be
-  UpperCamelCase format, at least 3 characters long and may not contain any reserved
-  words.
-pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
-  and open it in your local PDF viewer.
-pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
-  a while.'
-keybinding_save: Save
-keybinding_publish: Publish
-keybinding_unpublish: Unpublish
-keybinding_rename: Rename
-keybinding_refresh: Reload
-keybinding_openDocument: Open Document
-keybinding_openAsset: Open Asset
-keybinding_openObject: Open Object
-keybinding_openInTree: Show in Tree
-keybinding_searchDocument: Search Documents
-keybinding_searchAsset: Search Assets
-keybinding_searchObject: Search Objects
-keybinding_showElementHistory: Recently Opened Elements
-keybinding_closeAllTabs: Close all tabs
-keybinding_searchAndReplaceAssignments: Search & Replace Assignments
-keybinding_redirects: Redirects
-keybinding_sharedTranslations: Shared Translations
-keybinding_recycleBin: Recycle Bin
-keybinding_notesEvents: Notes &amp; Events
-keybinding_tagConfiguration: Tag Configuration
-keybinding_users: Users
+male: Masculino
+female: Femenino
+preview_generator_locale: Idioma
+preview_generator_site: Web
+failed_to_create_new_item_select_options: Error al crear un nuevo elemento. El nombre
+  debe estar en formato UpperCamelCase, tener al menos 3 caracteres y no puede contener
+  palabras reservadas.
+pdf_js_unsafe: "Este archivo PDF contiene JavaScript. Si quieres verlo, desc\xE1rgalo
+  y \xE1brelo en tu visor de PDF local."
+pdf_scan_in_progress: "Vista previa no disponible: Se est\xE1 escaneando el PDF. Puede
+  tardar un poco."
+keybinding_save: Guardar
+keybinding_publish: Publicar
+keybinding_unpublish: Despublicar
+keybinding_rename: Renombrar
+keybinding_refresh: Recargar
+keybinding_openDocument: Abrir documento
+keybinding_openAsset: Abrir recurso
+keybinding_openObject: Abrir objeto
+keybinding_openInTree: "Mostrar en \xE1rbol"
+keybinding_searchDocument: Buscar documentos
+keybinding_searchAsset: Buscar recursos
+keybinding_searchObject: Buscar objetos
+keybinding_showElementHistory: Elementos abiertos recientemente
+keybinding_closeAllTabs: "Cerrar todas las pesta\xF1as"
+keybinding_searchAndReplaceAssignments: Buscar y reemplazar asignaciones
+keybinding_redirects: Redirecciones
+keybinding_sharedTranslations: Traducciones compartidas
+keybinding_recycleBin: Papelera de reciclaje
+keybinding_notesEvents: Notas y Eventos
+keybinding_tagConfiguration: "Configuraci\xF3n de etiquetas"
+keybinding_users: Usuarios
 keybinding_roles: Roles
 ...
