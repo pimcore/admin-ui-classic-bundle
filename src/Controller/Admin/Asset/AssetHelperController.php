@@ -774,7 +774,7 @@ class AssetHelperController extends AdminAbstractController
             return $this->adminJson(
                 [
                     'success' => false,
-                    'message' => sprintf('export file not found: %s', $fileHandle)
+                    'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
         }

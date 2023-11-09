@@ -1291,8 +1291,7 @@ class DataObjectHelperController extends AdminAbstractController
         Request $request,
         LocaleServiceInterface $localeService,
         EventDispatcherInterface $eventDispatcher
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $ids = $request->get('ids');
         $settings = json_decode($request->get('settings'), true);
@@ -1401,7 +1400,7 @@ class DataObjectHelperController extends AdminAbstractController
             return $this->adminJson(
                 [
                     'success' => false,
-                    'message' => sprintf('export file not found: %s', $fileHandle)
+                    'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
         }
