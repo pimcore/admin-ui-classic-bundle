@@ -889,7 +889,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 }.bind(this),
                 callback: function (){
                     this.saving = false;
-                    console.log(this.isSaving());
                 }.bind(this)
             });
 
