@@ -1044,7 +1044,6 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
         var workflowTransitionHandler = function (workflow, transition, elementEditor, elementId, elementType) {
             var applyWorkflow = function (workflow, transition, elementEditor, elementId, elementType) {
-                transition.isGlobalAction = false;
                 if (transition.notes) {
                     new pimcore.workflow.transitionPanel(elementType, elementId, elementEditor, workflow.name, transition);
                 } else {
@@ -1077,7 +1076,7 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
             for (i = 0; i < workflow.allowedTransitions.length; i++) {
                 var transition = workflow.allowedTransitions[i];
-
+                transition.isGlobalAction = false;
                 items.push({
                     text: t(transition.label),
                     iconCls: transition.iconCls,
@@ -1090,7 +1089,7 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
             for (i = 0; i < workflow.globalActions.length; i++) {
                 var transition = workflow.globalActions[i];
-
+                transition.isGlobalAction = true;
                 items.push({
                     text: t(transition.label),
                     iconCls: transition.iconCls,

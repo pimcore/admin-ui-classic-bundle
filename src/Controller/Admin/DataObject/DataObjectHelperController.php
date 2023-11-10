@@ -26,9 +26,11 @@ use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
 use Pimcore\Config;
 use Pimcore\Db;
+use Pimcore\File;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
+use Pimcore\Model\DataObject\Listing;
 use Pimcore\Model\User;
 use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool;
@@ -1197,32 +1199,34 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * @Route("/do-export", name="doexport", methods={"POST"})
      *
-     * @throws \Exception
+     * @throws \Exception|FilesystemException
      */
-    public function doExportAction(Request $request, LocaleServiceInterface $localeService, EventDispatcherInterface $eventDispatcher): JsonResponse
-    {
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+    public function doExportAction(
+        Request $request,
+        LocaleServiceInterface $localeService,
+        EventDispatcherInterface $eventDispatcher
+    ): JsonResponse {
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $ids = $request->get('ids');
-        $settings = $request->get('settings');
-        $settings = json_decode($settings, true);
+        $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $header = $settings['header'] ?? 'title';
 
         $allParams = array_merge($request->request->all(), $request->query->all());
 
-        $enableInheritance = $settings['enableInheritance'] ?? null;
+        $enableInheritance = $settings['enableInheritance'] ?? false;
         DataObject\Concrete::setGetInheritedValues($enableInheritance);
 
         $class = DataObject\ClassDefinition::getById($request->get('classId'));
 
         if (!$class) {
-            throw new \Exception('No class definition found');
+            throw new \InvalidArgumentException('No class definition found');
         }
 
         $className = $class->getName();
         $listClass = '\\Pimcore\\Model\\DataObject\\' . ucfirst($className) . '\\Listing';
 
-        /** @var \Pimcore\Model\DataObject\Listing $list */
+        /** @var Listing $list */
         $list = new $listClass();
 
         $quotedIds = [];
@@ -1248,56 +1252,72 @@ class DataObjectHelperController extends AdminAbstractController
 
         $requestedLanguage = $this->extractLanguage($request);
 
-        $contextFromRequest = $request->get('context');
-        if ($contextFromRequest) {
-            $contextFromRequest = json_decode($contextFromRequest, true);
-        }
-
         $context = [
             'source' => 'pimcore-export',
         ];
 
-        if (is_array($contextFromRequest)) {
+        $contextFromRequest = $request->get('context');
+        if ($contextFromRequest) {
+            $contextFromRequest = json_decode($contextFromRequest, true);
             $context = array_merge($context, $contextFromRequest);
         }
 
-        $csv = DataObject\Service::getCsvData($requestedLanguage, $localeService, $list, $fields, $header, $addTitles, $context);
+        $csv = DataObject\Service::getCsvData(
+            $requestedLanguage,
+            $localeService,
+            $list,
+            $fields,
+            $header,
+            $addTitles,
+            $context
+        );
 
-        $storage = Storage::get('temp');
-        $csvFile = $this->getCsvFile($fileHandle);
+        try {
+            $storage = Storage::get('temp');
+            $csvFile = $this->getCsvFile($fileHandle);
 
-        $fileStream = $storage->readStream($csvFile);
+            $fileStream = $storage->readStream($csvFile);
 
-        $temp = tmpfile();
-        stream_copy_to_stream($fileStream, $temp, null, 0);
+            $temp = tmpfile();
+            stream_copy_to_stream($fileStream, $temp, null, 0);
 
-        $firstLine = true;
+            $firstLine = true;
 
-        if ($request->get('initial') && $header === 'no_header') {
-            array_shift($csv);
-            $firstLine = false;
-        }
-
-        $lineCount = count($csv);
-
-        if (!$addTitles && $lineCount > 0) {
-            fwrite($temp, "\r\n");
-        }
-
-        for ($i = 0; $i < $lineCount; $i++) {
-            $line = $csv[$i];
-            if ($addTitles && $firstLine) {
+            if ($request->get('initial') && $header === 'no_header') {
+                array_shift($csv);
                 $firstLine = false;
-                $line = implode($delimiter, $line);
-                fwrite($temp, $line);
-            } else {
-                fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)));
             }
-            if ($i < $lineCount - 1) {
+
+            $lineCount = count($csv);
+
+            if (!$addTitles && $lineCount > 0) {
                 fwrite($temp, "\r\n");
             }
+
+            for ($i = 0; $i < $lineCount; $i++) {
+                $line = $csv[$i];
+                if ($addTitles && $firstLine) {
+                    $firstLine = false;
+                    $line = implode($delimiter, $line);
+                    fwrite($temp, $line);
+                } else {
+                    fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)));
+                }
+                if ($i < $lineCount - 1) {
+                    fwrite($temp, "\r\n");
+                }
+            }
+            $storage->writeStream($csvFile, $temp);
+        } catch (UnableToReadFile $exception) {
+            Logger::err($exception->getMessage());
+
+            return $this->adminJson(
+                [
+                    'success' => false,
+                    'message' => sprintf('export file not found: %s', $fileHandle),
+                ]
+            );
         }
-        $storage->writeStream($csvFile, $temp);
 
         return $this->adminJson(['success' => true]);
     }
@@ -1316,7 +1336,7 @@ class DataObjectHelperController extends AdminAbstractController
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -1344,7 +1364,7 @@ class DataObjectHelperController extends AdminAbstractController
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
