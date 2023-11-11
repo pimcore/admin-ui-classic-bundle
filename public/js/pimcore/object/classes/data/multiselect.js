@@ -59,7 +59,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
         $super();
 
         this.specificPanel.removeAll();
-        var specificItems = this.getSpecificPanelItems(this.datax, false);
+        let specificItems = this.getSpecificPanelItems(this.datax, false);
         this.specificPanel.add(specificItems);
 
         return this.layout;
@@ -183,11 +183,11 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
 
         $super();
 
-        var options = [];
+        let options = [];
 
-        var optionsEditor = this.specificPanel.getComponent("optionseditor");
+        let optionsEditor = this.specificPanel.getComponent("optionseditor");
         if (optionsEditor) {
-            var valueStore = optionsEditor.getStore();
+            let valueStore = optionsEditor.getStore();
             valueStore.commitChanges();
             valueStore.each(function (rec) {
                 options.push({
@@ -199,11 +199,11 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
 
         this.datax.options = options;
 
-        var defaultValue = [];
+        const defaultValue = [];
 
-        var defaultValueEditor = this.specificPanel.getComponent("defaultvalueeditor");
+        let defaultValueEditor = this.specificPanel.getComponent("defaultvalueeditor");
         if (defaultValueEditor) {
-            var defaultValueStore = defaultValueEditor.getStore();
+            let defaultValueStore = defaultValueEditor.getStore();
             defaultValueStore.commitChanges();
             defaultValueStore.each(function (rec) {
                 defaultValue.push({
@@ -237,7 +237,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     showoptioneditor: function (store) {
-        var editor = new pimcore.object.helpers.gridEditor(store);
+        let editor = new pimcore.object.helpers.gridEditor(store);
         editor.edit();
     },
 
