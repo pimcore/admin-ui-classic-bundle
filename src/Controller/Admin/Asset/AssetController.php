@@ -1032,11 +1032,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createNotFoundException('Unable to get resource for asset ' . $asset->getId());
         }
 
+        $downloadFilename = Config::getDownloadFilenameByConfig($asset->getFilename(), 'assets', 'filename');
         return new StreamedResponse(function () use ($stream) {
             fpassthru($stream);
         }, 200, [
             'Content-Type' => $asset->getMimeType(),
-            'Content-Disposition' => sprintf('attachment; filename="%s"', $asset->getFilename()),
+            'Content-Disposition' => sprintf('attachment; filename="%s"', $downloadFilename),
             'Content-Length' => $asset->getFileSize(),
         ]);
     }
@@ -1161,7 +1162,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 '.' . $thumbnail->getFileExtension(),
                 $image->getFilename()
             );
-            $downloadFilename = strtolower($downloadFilename);
+            $downloadFilename = Config::getDownloadFilenameByConfig($downloadFilename, 'assets', 'lowercase');
 
             clearstatcache();
 
