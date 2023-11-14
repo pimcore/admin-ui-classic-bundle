@@ -365,6 +365,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         }
 
         this.tab.mask();
+        this.saving = true;
 
         const preSaveAsset = new CustomEvent(pimcore.events.preSaveAsset, {
             detail: {
@@ -377,6 +378,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         const isAllowed = document.dispatchEvent(preSaveAsset);
         if (!isAllowed) {
             this.tab.unmask();
+            this.saving = false;
             return false;
         }
 
@@ -385,8 +387,6 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         if (task) {
             params.task = task
         }
-
-        this.saving = true;
 
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_asset_save'),
