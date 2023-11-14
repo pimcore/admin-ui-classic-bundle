@@ -800,6 +800,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             const isAllowed = document.dispatchEvent(preSaveObject);
             if (!isAllowed) {
                 this.tab.unmask();
+                this.saving = false;
                 return false;
             }
 
