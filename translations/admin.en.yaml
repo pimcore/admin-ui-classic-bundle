@@ -970,6 +970,7 @@ email_log_subject: Subject
 gdpr_data_extractor_label_email: 'Email Address'
 workflow_notes: Notes
 2fa_code: Code
+username: Username
 password: Password
 show_metainfo: Info
 email_log_from: From
