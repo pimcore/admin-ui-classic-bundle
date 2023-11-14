@@ -386,6 +386,8 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
             params.task = task
         }
 
+        this.saving = true;
+
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_asset_save'),
             method: "PUT",
@@ -431,6 +433,9 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
             }.bind(this),
             failure: function () {
                 this.tab.unmask();
+            }.bind(this),
+            callback: function (){
+                this.saving = false;
             }.bind(this),
             params: params
         });

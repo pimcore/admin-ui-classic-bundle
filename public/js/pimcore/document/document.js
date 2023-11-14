@@ -87,6 +87,11 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
             return;
         }
 
+        if (this.isSaving()){
+            pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info", '', 300);
+            return;
+        }
+
         if(typeof task !== 'string') {
             task = '';
         }
@@ -112,9 +117,12 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                 cancelable: true
             });
 
+            this.saving = true;
+
             const isAllowed = document.dispatchEvent(preSaveDocument);
             if (!isAllowed) {
                 this.tab.unmask();
+                this.saving = false;
                 return false;
             }
 
@@ -187,6 +195,9 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                 }.bind(this),
                 failure: function () {
                     this.tab.unmask();
+                }.bind(this),
+                callback: function (){
+                    this.saving = false;
                 }.bind(this),
             });
         } else {
