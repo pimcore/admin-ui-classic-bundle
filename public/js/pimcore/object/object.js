@@ -775,7 +775,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         if (this.tab.disabled || (this.tab.isMasked() && task != 'autoSave')) {
             return;
         }
-        if (this.isSaving()){
+        if (this.saveInProgress()){
             pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info", '', 300);
             return;
         }

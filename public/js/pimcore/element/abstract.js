@@ -245,7 +245,7 @@ pimcore.element.abstract = Class.create({
         }
     },
 
-    isSaving: function(){
+    saveInProgress: function(){
         return this.saving;
     },
 
