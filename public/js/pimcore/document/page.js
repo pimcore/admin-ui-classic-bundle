@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.document.page");
 pimcore.document.page = Class.create(pimcore.document.page_snippet, {
 
     initialize: function(id, options) {
+        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -43,7 +44,6 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
     },
 
     init: function () {
-
         var user = pimcore.globalmanager.get("user");
 
         if (this.isAllowed("save") || this.isAllowed("publish")) {
@@ -118,7 +118,23 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            this.tabbar = pimcore.helpers.getTabBar({
+                items: items,
+                tabConfig: {margin: 0},
+                tabBar: {
+                    layout: {
+                        pack: 'end',
+                    },
+                    defaults: {
+                        height: 46,
+                    }
+                }
+            });
+        } else {
+            this.tabbar = pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
+        }
+
         return this.tabbar;
     },
 

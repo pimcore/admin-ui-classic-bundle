@@ -593,7 +593,7 @@ Ext.onReady(function () {
     }, 5000);
 
 
-    Ext.get("pimcore_logout").on('click', function () {
+    Ext.get("pimcore_logout")?.on('click', function () {
         document.getElementById('pimcore_logout_form').submit();
     })
 
@@ -695,8 +695,8 @@ Ext.onReady(function () {
             listeners: {
                 "afterrender": function (el) {
                     Ext.get("pimcore_navigation").show();
-                    Ext.get("pimcore_avatar").show();
-                    Ext.get("pimcore_logout").show();
+                    Ext.get("pimcore_avatar")?.show();
+                    Ext.get("pimcore_logout")?.show();
 
                     pimcore.helpers.initMenuTooltips();
 
@@ -719,7 +719,7 @@ Ext.onReady(function () {
                     el.getEl().dom.addEventListener("dragover", fn, true);
 
                     // open "My Profile" when clicking on avatar
-                    Ext.get("pimcore_avatar").on("click", function (ev) {
+                    Ext.get("pimcore_avatar")?.on("click", function (ev) {
                         pimcore.helpers.openProfile();
                     });
                 }

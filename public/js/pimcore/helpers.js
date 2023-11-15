@@ -3228,7 +3228,7 @@ pimcore.helpers.reloadUserImage = function (userId) {
     var image = Routing.generate('pimcore_admin_user_getimage', {id: userId, '_dc': Ext.Date.now()});
 
     if (pimcore.currentuser.id == userId) {
-        Ext.get("pimcore_avatar").query('img')[0].src = image;
+        Ext.get("pimcore_notification").query('img')[0].src = image;
     }
 
     if (Ext.getCmp("pimcore_user_image_" + userId)) {
@@ -3403,6 +3403,7 @@ pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
 pimcore.helpers.getTabBar = function (attributes) {
     let tabAttr = Object.assign(attributes, {
         tabBar: {
+            ...(() => attributes?.tabBar || {})(),
             cls: 'pimcore_editor_tabbar'
         },
         tabPosition: 'top',

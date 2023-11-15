@@ -38,7 +38,22 @@ pimcore.element.abstract = Class.create({
      */
     _dirtyCloseConfirmed: false,
 
+    /**
+     * Enables the new layout for the toolbar and the tabbar
+     *
+     * @private {boolean}
+     */
+    isNewHeadbarLayoutEnabled: false,
+
     addToHistory: true,
+
+    enableNewHeadbarLayout: function () {
+      this.isNewHeadbarLayoutEnabled = true;
+    },
+
+    checkIfNewHeadbarLayoutIsEnabled: function () {
+        return this.isNewHeadbarLayoutEnabled && pimcore?.settings?.new_admin_style;
+    },
 
     // startup / opening functions
     addLoadingPanel: function () {
@@ -308,7 +323,7 @@ pimcore.element.abstract = Class.create({
 
         return [
             {
-                text: t("metainfo_copy_id"),
+                text: t("id") + " " + metainfo.id + ' - ' + t("copy"),
                 iconCls: "pimcore_icon_copy",
                 handler: pimcore.helpers.copyStringToClipboard.bind(this, metainfo.id)
             },

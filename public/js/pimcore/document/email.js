@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.document.email");
 pimcore.document.email = Class.create(pimcore.document.page_snippet, {
 
     initialize: function(id, options) {
+        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -117,7 +118,20 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items});
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            this.tabbar = pimcore.helpers.getTabBar({
+                items: items,
+                tabBar: {
+                    layout: { pack: 'end' },
+                    defaults: {
+                        height: 46,
+                    }
+                }
+            });
+        } else {
+            this.tabbar = pimcore.helpers.getTabBar({items: items});
+        }
+
         return this.tabbar;
     },
 
@@ -182,16 +196,23 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
     getLayoutToolbar : function ($super) {
         $super();
 
-        this.toolbar.add(
-            new Ext.Button({
-                text: t('send_test_email'),
-                iconCls: "pimcore_material_icon_email pimcore_material_icon",
-                scale: "medium",
-                handler: function() {
-                    pimcore.helpers.sendTestEmail(this.settings.document.data['from']? this.settings.document.data['from'] : pimcore.settings.mailDefaultAddress, this.settings.document.data['to'], this.settings.document.data['subject'], 'document', this.settings.document.data['path'] + this.settings.document.data['key'], null);
-                }.bind(this)
-            })
-        );
+        const config = {
+            text: t('send_test_email'),
+            iconCls: "pimcore_material_icon_email pimcore_material_icon",
+            scale: "medium",
+            handler: function() {
+                pimcore.helpers.sendTestEmail(this.settings.document.data['from']? this.settings.document.data['from'] : pimcore.settings.mailDefaultAddress, this.settings.document.data['to'], this.settings.document.data['subject'], 'document', this.settings.document.data['path'] + this.settings.document.data['key'], null);
+            }.bind(this)
+        }
+
+        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            const submenu = this.toolbar.query('[cls*=pimcore_headbar_submenu]')[0];
+            submenu.menu.add(config);
+        } else {
+            this.toolbar.add(
+                new Ext.Button(config)
+            );
+        }
 
         return this.toolbar;
     }
