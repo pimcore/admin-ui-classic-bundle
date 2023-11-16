@@ -267,7 +267,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             }
 
             if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -279,7 +279,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 }
             }
             if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -292,7 +292,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             }
 
             const downloadAsZipConfig = {
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: function () {
@@ -300,7 +300,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 }.bind(this)
             }
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.add(downloadAsZipConfig);
             } else {
                 buttons.push(downloadAsZipConfig);
@@ -335,7 +335,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 id: "asset_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
