@@ -88,7 +88,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         }
 
         if (this.saveInProgress()){
-            pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info", '', 300);
+            pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info", '');
             return;
         }
 
