@@ -18,7 +18,6 @@ pimcore.registerNS("pimcore.document.link");
 pimcore.document.link = Class.create(pimcore.document.document, {
 
     initialize: function (id, options) {
-        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -121,7 +120,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
@@ -233,7 +232,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 ]
             });
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu = new Ext.Button({
                     ...pimcore.helpers.headbar.getSubmenuConfig()
                 });
@@ -246,7 +245,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 handler: this.unpublish.bind(this)
             });
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarButtons.unpublish = Ext.create('Ext.menu.Item', {
                     text: t('unpublish'),
                     iconCls: "pimcore_material_icon_unpublish pimcore_material_icon",
@@ -275,7 +274,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 buttons.push(this.toolbarButtons.publish);
             }
             if (this.isAllowed("unpublish") && !this.data.locked) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(
                         this.toolbarButtons.unpublish
                     )
@@ -286,12 +285,12 @@ pimcore.document.link = Class.create(pimcore.document.document, {
 
             buttons.push("-");
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if (this.isAllowed("delete") && !this.data.locked) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -303,7 +302,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 }
             }
             if (this.isAllowed("rename") && !this.data.locked) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -331,7 +330,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 });
             }
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.add(this.getTranslationButtons(true));
             } else {
                 buttons.push(this.getTranslationButtons());
@@ -341,7 +340,7 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -393,19 +392,8 @@ pimcore.document.link = Class.create(pimcore.document.document, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
-            this.tabbar = pimcore.helpers.getTabBar({
-                items: items,
-                tabBar: {
-                    layout: { pack: 'end' },
-                    defaults: {
-                        height: 46,
-                    }
-                }
-            });
-        } else {
-            this.tabbar = pimcore.helpers.getTabBar({items: items});
-        }
+
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
 
         return this.tabbar;
     },

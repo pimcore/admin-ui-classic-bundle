@@ -41,7 +41,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal",
@@ -102,7 +102,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             this.cleanUpOnDestroy();
         }.bind(this));
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab.on("boxready", function () {
                 this.calcLayoutPositions(tabPanel, backgroundContainer, tabbarContainer, toolbar);
             }.bind(this));
@@ -280,7 +280,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 handler: this.unpublish.bind(this)
             });
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarButtons.unpublish = Ext.create('Ext.menu.Item', {
                     text: t('unpublish'),
                     iconCls: "pimcore_material_icon_unpublish pimcore_material_icon",
@@ -305,7 +305,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
             var buttons = [];
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu = new Ext.Button({
                     ...pimcore.helpers.headbar.getSubmenuConfig()
                 });
@@ -320,7 +320,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             }
 
             if (this.isAllowed("unpublish") && !this.data.locked) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(
                         this.toolbarButtons.unpublish
                     )
@@ -331,12 +331,12 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
             buttons.push("-");
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 buttons.push(this.toolbarSubmenu);
             }
 
             if(this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -349,7 +349,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             }
 
             if(this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('rename'),
                         iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -386,7 +386,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 menu: this.getMetaInfoMenuItems()
             });
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.add(this.getTranslationButtons(true));
             } else {
                 buttons.push(this.getTranslationButtons());
@@ -396,7 +396,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 buttons.push("-");
                 const openInNewWindowConfig = {
                     ...(
-                        () => this.checkIfNewHeadbarLayoutIsEnabled() ?
+                        () => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ?
                             { text: t("open_in_new_window") } :
                             { tooltip: t("open_in_new_window") }
                     )(),
@@ -407,7 +407,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                     }.bind(this)
                 }
 
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(openInNewWindowConfig);
                 } else {
                     buttons.push(openInNewWindowConfig);
@@ -415,7 +415,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
 
                 const openPreviewInNewWindowConfig = {
                     ...(
-                        () => this.checkIfNewHeadbarLayoutIsEnabled() ?
+                        () => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ?
                             { text: t("open_preview_in_new_window") } :
                             { tooltip: t("open_preview_in_new_window") }
                     )(),
@@ -450,7 +450,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                     }.bind(this)
                 };
 
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(openPreviewInNewWindowConfig);
                 } else {
                     buttons.push(openPreviewInNewWindowConfig);
@@ -460,7 +460,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             if (pimcore.globalmanager.get("user").isAllowed('notifications_send')) {
                 const shareViaNotificationsConfig = {
                     ...(
-                        () => this.checkIfNewHeadbarLayoutIsEnabled() ?
+                        () => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ?
                             { text: t("share_via_notifications") } :
                             { tooltip: t("share_via_notifications") }
                     )(),
@@ -469,7 +469,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                     handler: this.shareViaNotifications.bind(this)
                 };
 
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(shareViaNotificationsConfig);
                 } else {
                     buttons.push(shareViaNotificationsConfig);
@@ -499,7 +499,7 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

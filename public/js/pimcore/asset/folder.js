@@ -18,7 +18,6 @@ pimcore.registerNS("pimcore.asset.folder");
 pimcore.asset.folder = Class.create(pimcore.asset.asset, {
 
     initialize: function(id, options) {
-        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -163,20 +162,8 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
-            this.tabbar = pimcore.helpers.getTabBar({
-                items: items,
-                tabBar: {
-                    layout: { pack: 'end' },
-                    defaults: {
-                        height: 46,
-                    }
-                }
-            });
-        } else {
-            this.tabbar = pimcore.helpers.getTabBar({items: items});
-        }
 
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 
@@ -271,7 +258,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
 
             buttons.push("-");
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu = new Ext.Button({
                     ...pimcore.helpers.headbar.getSubmenuConfig()
                 });

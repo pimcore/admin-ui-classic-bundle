@@ -20,7 +20,6 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
     type: "folder",
 
     initialize: function(id, options) {
-        this?.enableNewHeadbarLayout();
 
         this.options = options;
         this.id = intval(id);
@@ -133,7 +132,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
@@ -315,7 +314,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
 
             buttons.push("-");
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu = new Ext.Button({
                     ...pimcore.helpers.headbar.getSubmenuConfig()
                 });
@@ -324,7 +323,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             }
 
             if(this.isAllowed("delete") && !this.data.general.locked && this.data.general.id != 1) {
-                if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add({
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
@@ -338,7 +337,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
 
             if(this.isAllowed("rename") && !this.data.general.locked && this.data.general.id != 1) {
                 if(this.isAllowed("rename") && !this.data.locked) {
-                    if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+                    if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                         this.toolbarSubmenu.menu.add({
                             text: t('rename'),
                             iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -377,7 +376,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             });
 
             const searchAndMoveConfig = {
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('search_and_move') } : { tooltip: t('search_and_move') })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('search_and_move') } : { tooltip: t('search_and_move') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: pimcore.helpers.searchAndMove.bind(this, this.data.general.id,
@@ -392,7 +391,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                     }.bind(this), "object")
             }
 
-            if (this.checkIfNewHeadbarLayoutIsEnabled()) {
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                 this.toolbarSubmenu.menu.add(searchAndMoveConfig);
             } else {
                 buttons.push(searchAndMoveConfig);
@@ -405,7 +404,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                 id: "object_toolbar_" + this.id,
                 region: "north",
                 border: false,
-                ...(() => this.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -441,20 +440,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             items.push(this.workflows.getLayout());
         }
 
-        if (this.checkIfNewHeadbarLayoutIsEnabled()) {
-            this.tabbar = pimcore.helpers.getTabBar({
-                items: items,
-                tabBar: {
-                    layout: { pack: 'end' },
-                    defaults: {
-                        height: 46,
-                    }
-                }
-            });
-        } else {
-            this.tabbar = pimcore.helpers.getTabBar({items: items});
-        }
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

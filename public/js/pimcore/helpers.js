@@ -3400,12 +3400,33 @@ pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
     return pimcore.settings.document_types_configuration[documentType][role];
 }
 
+pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled = function() {
+    return pimcore?.settings?.new_admin_style;
+}
+
 pimcore.helpers.getTabBar = function (attributes) {
-    let tabAttr = Object.assign(attributes, {
-        tabBar: {
+    let tabBar;
+
+    if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+        tabBar = {
+            ...(() => attributes?.tabBar || {})(),
+            layout: {
+                pack: 'end'
+            },
+            defaults: {
+                height: 46,
+            },
+            cls: 'pimcore_editor_tabbar'
+        };
+    } else {
+        tabBar = {
             ...(() => attributes?.tabBar || {})(),
             cls: 'pimcore_editor_tabbar'
-        },
+        };
+    }
+
+    let tabAttr = Object.assign(attributes, {
+        tabBar: tabBar,
         tabPosition: 'top',
         region:'center',
         deferredRender:true,

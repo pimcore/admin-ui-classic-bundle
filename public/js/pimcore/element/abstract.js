@@ -38,21 +38,10 @@ pimcore.element.abstract = Class.create({
      */
     _dirtyCloseConfirmed: false,
 
-    /**
-     * Enables the new layout for the toolbar and the tabbar
-     *
-     * @private {boolean}
-     */
-    isNewHeadbarLayoutEnabled: false,
-
     addToHistory: true,
 
-    enableNewHeadbarLayout: function () {
-      this.isNewHeadbarLayoutEnabled = true;
-    },
-
     checkIfNewHeadbarLayoutIsEnabled: function () {
-        return this.isNewHeadbarLayoutEnabled && pimcore?.settings?.new_admin_style;
+        return pimcore?.settings?.new_admin_style;
     },
 
     // startup / opening functions
