@@ -670,7 +670,6 @@ quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
-username: Username
 localized_fields: Localized Fields
 field_collections: "F\xE4ltsamlingar"
 special_settings_tooltip: Special Settings
