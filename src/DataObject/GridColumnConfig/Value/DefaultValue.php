@@ -30,11 +30,10 @@ use Pimcore\Model\Element\ElementInterface;
  */
 final class DefaultValue extends AbstractValue
 {
-    protected LocaleServiceInterface $localeService;
+    private LocaleServiceInterface $localeService;
 
-    public function __construct(\stdClass $config, mixed $context, LocaleServiceInterface $localeService)
+    public function setLocaleService(LocaleServiceInterface $localeService): void
     {
-        parent::__construct($config, $context);
         $this->localeService = $localeService;
     }
 
