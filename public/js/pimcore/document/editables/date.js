@@ -30,11 +30,6 @@ pimcore.document.editables.date = Class.create(pimcore.document.editable, {
     render: function () {
         this.setupWrapper();
 
-        if (this.config.format) {
-            // replace any % prefixed parts from strftime format
-            this.config.format = this.config.format.replace(/%([a-zA-Z])/g, '$1');
-        }
-
         if(this.data) {
             this.config.value = this.data;
         }
