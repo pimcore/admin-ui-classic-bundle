@@ -31,7 +31,7 @@ pimcore.document.editables.date = Class.create(pimcore.document.editable, {
         this.setupWrapper();
         
         if (this.config.format && this.config.format.includes('%')) {
-            console.warn('Deprecated: Date format contains % symbols which is used for strftime, please the use parameters format according Carbon isoFormat instead.');
+            console.warn('Deprecated: Date format contains % symbols which is used for strftime, please the use parameters according Ext.Date formatting syntax instead.');
 
             // replace any % prefixed parts from strftime format
             this.config.format = this.config.format.replace(/%([a-zA-Z])/g, '$1');
