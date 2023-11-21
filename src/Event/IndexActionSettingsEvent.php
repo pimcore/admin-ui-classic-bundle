@@ -22,6 +22,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 class IndexActionSettingsEvent extends Event
 {
     private array $settings;
+
     private ?string $template = null;
 
     public function __construct(array $settings)
