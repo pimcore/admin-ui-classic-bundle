@@ -40,6 +40,10 @@ pimcore.element.abstract = Class.create({
 
     addToHistory: true,
 
+    checkIfNewHeadbarLayoutIsEnabled: function () {
+        return pimcore.settings?.new_admin_style;
+    },
+
     // startup / opening functions
     addLoadingPanel: function () {
         var type = pimcore.helpers.getElementTypeByObject(this);
@@ -308,7 +312,7 @@ pimcore.element.abstract = Class.create({
 
         return [
             {
-                text: t("metainfo_copy_id"),
+                text: t("id") + " " + metainfo.id + ' - ' + t("copy"),
                 iconCls: "pimcore_icon_copy",
                 handler: pimcore.helpers.copyStringToClipboard.bind(this, metainfo.id)
             },

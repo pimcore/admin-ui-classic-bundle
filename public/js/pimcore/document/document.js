@@ -234,6 +234,10 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                     this.toolbarButtons.save.hide();
                 }
 
+                if (this.toolbarButtons.save && this.toolbarButtons.publish) {
+                    this.toolbarButtons.publish.show();
+                }
+
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "document",
                     id: this.id,
@@ -257,6 +261,10 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                     this.toolbarButtons.save.show();
                 }
 
+                if (this.toolbarButtons.publish && this.toolbarButtons.save) {
+                    this.toolbarButtons.publish.hide();
+                }
+
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "document",
                     id: this.id,
@@ -272,7 +280,6 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
     },
 
     reload: function () {
-
         this.tab.on("close", function () {
             var currentTabIndex = this.tab.ownerCt.items.indexOf(this.tab);
             window.setTimeout(function (id, type) {
@@ -585,7 +592,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         win.show();
     },
 
-    getTranslationButtons: function () {
+    getTranslationButtons: function (asMenuItem = false) {
 
         var translationsMenu = [];
         var unlinkTranslationsMenu = [];
@@ -639,9 +646,9 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         }
 
         return {
-            tooltip: t("translation"),
+            ...(() => asMenuItem ? { text: t("translation") } : { tooltip: t("translation") })(),
             iconCls: "pimcore_material_icon_translation pimcore_material_icon",
-            scale: "medium",
+            ...(() => asMenuItem ? {} : { scale: "medium" })(),
             menu: [{
                 text: t("new_document"),
                 hidden: !pimcore.helpers.documentTypeHasSpecificRole(this.getType(), "translatable"),
