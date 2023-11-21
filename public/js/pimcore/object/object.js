@@ -418,7 +418,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             }
         }
 
-
         this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },

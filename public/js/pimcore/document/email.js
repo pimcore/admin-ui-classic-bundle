@@ -187,7 +187,14 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
             iconCls: "pimcore_material_icon_email pimcore_material_icon",
             scale: "medium",
             handler: function() {
-                pimcore.helpers.sendTestEmail(this.settings.document.data['from']? this.settings.document.data['from'] : pimcore.settings.mailDefaultAddress, this.settings.document.data['to'], this.settings.document.data['subject'], 'document', this.settings.document.data['path'] + this.settings.document.data['key'], null);
+                pimcore.helpers.sendTestEmail(
+                    this.settings.document.data['from'] ?? pimcore.settings.mailDefaultAddress,
+                    this.settings.document.data['to'],
+                    this.settings.document.data['subject'],
+                    'document', 
+                    this.settings.document.data['path'] + this.settings.document.data['key'], 
+                    null
+                );
             }.bind(this)
         }
 

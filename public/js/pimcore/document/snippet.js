@@ -114,7 +114,7 @@ pimcore.document.snippet = Class.create(pimcore.document.page_snippet, {
             items.push(this.workflows.getLayout());
         }
 
-       this.tabbar = pimcore.helpers.getTabBar({items: items});
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

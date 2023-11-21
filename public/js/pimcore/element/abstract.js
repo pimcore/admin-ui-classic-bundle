@@ -41,7 +41,7 @@ pimcore.element.abstract = Class.create({
     addToHistory: true,
 
     checkIfNewHeadbarLayoutIsEnabled: function () {
-        return pimcore?.settings?.new_admin_style;
+        return pimcore.settings?.new_admin_style;
     },
 
     // startup / opening functions

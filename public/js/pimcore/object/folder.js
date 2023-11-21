@@ -136,7 +136,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
-                title: tabTitle,
+                title: htmlspecialchars(tabTitle),
                 closable:true,
                 hideMode: "offsets",
                 layout: "border",
@@ -181,7 +181,7 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         } else {
             this.tab = new Ext.Panel({
                 id: tabId,
-                title: tabTitle,
+                title: htmlspecialchars(tabTitle),
                 closable:true,
                 layout: "border",
                 items: [

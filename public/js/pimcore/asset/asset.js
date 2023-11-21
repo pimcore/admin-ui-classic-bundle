@@ -86,7 +86,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
             this.tab = new Ext.Panel({
                 id: tabId,
                 cls: "pimcore_panel_toolbar_horizontal_border_layout",
-                title: tabTitle,
+                title: htmlspecialchars(tabTitle),
                 closable:true,
                 hideMode: "offsets",
                 layout: "border",
@@ -228,11 +228,10 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                     handler: this.remove.bind(this)
                 };
 
-                this.toolbarButtons.remove = new Ext.Button(deleteConfig);
-
                 if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(deleteConfig);
                 } else {
+                    this.toolbarButtons.remove = new Ext.Button(deleteConfig);
                     buttons.push(this.toolbarButtons.remove);
                 }
             }
@@ -245,11 +244,10 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                     handler: this.rename.bind(this)
                 };
 
-                this.toolbarButtons.rename = new Ext.Button(renameConfig);
-
                 if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(renameConfig);
                 } else {
+                    this.toolbarButtons.rename = new Ext.Button(renameConfig);
                     buttons.push(this.toolbarButtons.rename);
                 }
             }
@@ -266,11 +264,10 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                     }.bind(this)
                 };
 
-                this.toolbarButtons.upload = new Ext.Button(uploadConfig);
-
                 if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(uploadConfig);
                 } else {
+                    this.toolbarButtons.upload = new Ext.Button(uploadConfig);
                     buttons.push(this.toolbarButtons.upload);
                 }
             }

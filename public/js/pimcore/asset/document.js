@@ -93,7 +93,6 @@ pimcore.asset.document = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-
         this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
