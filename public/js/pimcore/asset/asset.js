@@ -439,6 +439,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         }
 
         this.tab.mask();
+        this.saving = true;
 
         const preSaveAsset = new CustomEvent(pimcore.events.preSaveAsset, {
             detail: {
@@ -451,6 +452,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         const isAllowed = document.dispatchEvent(preSaveAsset);
         if (!isAllowed) {
             this.tab.unmask();
+            this.saving = false;
             return false;
         }
 
@@ -505,6 +507,9 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
             }.bind(this),
             failure: function () {
                 this.tab.unmask();
+            }.bind(this),
+            callback: function (){
+                this.saving = false;
             }.bind(this),
             params: params
         });

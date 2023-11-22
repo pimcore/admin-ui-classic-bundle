@@ -1077,4 +1077,6 @@ keybinding_notesEvents: Notas y Eventos
 keybinding_tagConfiguration: "Configuraci\xF3n de etiquetas"
 keybinding_users: Usuarios
 keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: Usuario
 ...

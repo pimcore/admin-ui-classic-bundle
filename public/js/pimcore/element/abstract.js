@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.element.abstract");
 pimcore.element.abstract = Class.create({
 
     dirty: false,
+    saving: false,
 
     /**
      * if allowDirtyClose is true, a tab can be closed whether
@@ -246,6 +247,10 @@ pimcore.element.abstract = Class.create({
         } else if (typeof callback === 'function') {
             callback();
         }
+    },
+
+    saveInProgress: function(){
+        return this.saving;
     },
 
     setAddToHistory: function (addToHistory) {

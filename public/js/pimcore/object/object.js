@@ -898,7 +898,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
     },
 
     save: function (task, only, callback, successCallback) {
-
         var omitMandatoryCheck = false;
 
         // unpublish and save version is possible without checking mandatory fields
@@ -907,6 +906,10 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         }
 
         if (this.tab.disabled || (this.tab.isMasked() && task != 'autoSave')) {
+            return;
+        }
+        if (this.saveInProgress()){
+            pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info");
             return;
         }
 
@@ -930,9 +933,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             const isAllowed = document.dispatchEvent(preSaveObject);
             if (!isAllowed) {
                 this.tab.unmask();
+                this.saving = false;
                 return false;
             }
 
+            this.saving = true;
             Ext.Ajax.request({
                 url: Routing.generate('pimcore_admin_dataobject_dataobject_save', {task: task}),
                 method: "PUT",
@@ -1015,6 +1020,9 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 }.bind(this),
                 failure: function (response) {
                     this.tab.unmask();
+                }.bind(this),
+                callback: function (){
+                    this.saving = false;
                 }.bind(this)
             });
 
