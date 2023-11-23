@@ -3228,7 +3228,7 @@ pimcore.helpers.reloadUserImage = function (userId) {
     var image = Routing.generate('pimcore_admin_user_getimage', {id: userId, '_dc': Ext.Date.now()});
 
     if (pimcore.currentuser.id == userId) {
-        Ext.get("pimcore_avatar").query('img')[0].src = image;
+        Ext.get("pimcore_notification").query('img')[0].src = image;
     }
 
     if (Ext.getCmp("pimcore_user_image_" + userId)) {
@@ -3400,11 +3400,33 @@ pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
     return pimcore.settings.document_types_configuration[documentType][role];
 }
 
+pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled = function() {
+    return pimcore?.settings?.new_admin_style;
+}
+
 pimcore.helpers.getTabBar = function (attributes) {
-    let tabAttr = Object.assign(attributes, {
-        tabBar: {
+    let tabBar;
+
+    if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+        tabBar = {
+            ...(() => attributes?.tabBar || {})(),
+            layout: {
+                pack: 'end'
+            },
+            defaults: {
+                height: 46,
+            },
             cls: 'pimcore_editor_tabbar'
-        },
+        };
+    } else {
+        tabBar = {
+            ...(() => attributes?.tabBar || {})(),
+            cls: 'pimcore_editor_tabbar'
+        };
+    }
+
+    let tabAttr = Object.assign(attributes, {
+        tabBar: tabBar,
         tabPosition: 'top',
         region:'center',
         deferredRender:true,

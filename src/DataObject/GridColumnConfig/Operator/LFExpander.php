@@ -26,7 +26,7 @@ use Pimcore\Tool;
  */
 final class LFExpander extends AbstractOperator
 {
-    private \stdClass|LocaleServiceInterface $localeService;
+    private LocaleServiceInterface $localeService;
 
     /**
      * @var string[]

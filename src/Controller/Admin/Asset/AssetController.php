@@ -1095,7 +1095,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 '.' . $thumbnail->getFileExtension(),
                 $image->getFilename()
             );
-            $downloadFilename = strtolower($downloadFilename);
 
             clearstatcache();
 

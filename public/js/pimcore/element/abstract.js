@@ -18,6 +18,7 @@ pimcore.registerNS("pimcore.element.abstract");
 pimcore.element.abstract = Class.create({
 
     dirty: false,
+    saving: false,
 
     /**
      * if allowDirtyClose is true, a tab can be closed whether
@@ -39,6 +40,10 @@ pimcore.element.abstract = Class.create({
     _dirtyCloseConfirmed: false,
 
     addToHistory: true,
+
+    checkIfNewHeadbarLayoutIsEnabled: function () {
+        return pimcore.settings?.new_admin_style;
+    },
 
     // startup / opening functions
     addLoadingPanel: function () {
@@ -244,6 +249,10 @@ pimcore.element.abstract = Class.create({
         }
     },
 
+    saveInProgress: function(){
+        return this.saving;
+    },
+
     setAddToHistory: function (addToHistory) {
         this.addToHistory = addToHistory;
     },
@@ -308,7 +317,7 @@ pimcore.element.abstract = Class.create({
 
         return [
             {
-                text: t("metainfo_copy_id"),
+                text: t("id") + " " + metainfo.id + ' - ' + t("copy"),
                 iconCls: "pimcore_icon_copy",
                 handler: pimcore.helpers.copyStringToClipboard.bind(this, metainfo.id)
             },

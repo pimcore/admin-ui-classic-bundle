@@ -728,7 +728,6 @@ quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
-username: Username
 localized_fields: Localized Fields
 field_collections: Field-Collections
 special_settings_tooltip: Special Settings

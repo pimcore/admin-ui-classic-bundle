@@ -43,7 +43,6 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
     },
 
     init: function () {
-
         var user = pimcore.globalmanager.get("user");
 
         if (this.isAllowed("save") || this.isAllowed("publish")) {
@@ -118,7 +117,7 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        this.tabbar = pimcore.helpers.getTabBar({items: items, tabConfig: {margin: 0}});
+        this.tabbar = pimcore.helpers.getTabBar({items: items, tabBar: {tabConfig: {margin: 0}}});
         return this.tabbar;
     },
 

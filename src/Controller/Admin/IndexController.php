@@ -112,7 +112,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $this->eventDispatcher->dispatch($settingsEvent, AdminEvents::INDEX_ACTION_SETTINGS);
         $templateParams['settings'] = $settingsEvent->getSettings();
 
-        return $this->render('@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
+        return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
     }
 
     /**

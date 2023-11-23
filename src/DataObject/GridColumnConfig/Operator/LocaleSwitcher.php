@@ -25,9 +25,9 @@ use Pimcore\Model\Element\ElementInterface;
  */
 final class LocaleSwitcher extends AbstractOperator
 {
-    private \stdClass|LocaleServiceInterface $localeService;
+    private LocaleServiceInterface $localeService;
 
-    private ?string $locale = null;
+    private ?string $locale;
 
     public function __construct(LocaleServiceInterface $localeService, \stdClass $config, array $context = [])
     {

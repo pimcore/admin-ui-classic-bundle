@@ -26,7 +26,7 @@ use Pimcore\Event\Model\DocumentEvent;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
 use Pimcore\Http\Request\Resolver\DocumentResolver;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
-use Pimcore\Localization\LocaleService;
+use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Messenger\GeneratePagePreviewMessage;
 use Pimcore\Model\Document;
 use Pimcore\Model\Element;
@@ -359,7 +359,7 @@ class PageController extends DocumentControllerBase
         Environment $twig,
         EditableRenderer $editableRenderer,
         DocumentResolver $documentResolver,
-        LocaleService $localeService
+        LocaleServiceInterface $localeService
     ): JsonResponse {
         $blockStateStackData = json_decode($request->get('blockStateStack'), true);
         $blockStateStack->loadArray($blockStateStackData);

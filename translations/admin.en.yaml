@@ -858,7 +858,6 @@ web2print_enableDebugMode: 'Enable debug mode'
 set_to_null: 'Empty (set to null)'
 bundles: Bundles
 target_document_invalid: 'Please select a target document with valid language'
-metainfo_copy_id: 'Copy ID to clipboard'
 metainfo_copy_fullpath: 'Copy full path to clipboard'
 metainfo_copy_deeplink: 'Copy deeplink to clipboard'
 plain_text: 'Plain Text'
@@ -970,6 +969,7 @@ email_log_subject: Subject
 gdpr_data_extractor_label_email: 'Email Address'
 workflow_notes: Notes
 2fa_code: Code
+username: Username
 password: Password
 show_metainfo: Info
 email_log_from: From
