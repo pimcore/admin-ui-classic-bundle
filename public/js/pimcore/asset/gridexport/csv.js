@@ -31,6 +31,18 @@ pimcore.asset.gridexport.csv = Class.create(pimcore.element.gridexport.abstract,
                     labelWidth: 200,
                     value: ';',
                     allowBlank: false
+                }),
+                new Ext.form.ComboBox({
+                    fieldLabel: t('header'),
+                    name: 'header',
+                    store: [
+                        ['name', t('name')],
+                        ['title', t('title')],
+                        ['no_header', t('no_header')]
+                    ],
+                    labelWidth: 200,
+                    value: 'title',
+                    forceSelection: true,
                 })
             ]
         });

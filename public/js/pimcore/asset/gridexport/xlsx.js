@@ -22,6 +22,26 @@ pimcore.asset.gridexport.xlsx = Class.create(pimcore.element.gridexport.abstract
 
     getDownloadUrl: function(fileHandle) {
          return Routing.generate('pimcore_admin_asset_assethelper_downloadxlsxfile', {fileHandle: fileHandle});
+    },
+
+    getExportSettingsContainer: function () {
+        return new Ext.form.FieldSet({
+            title: t('export_xlsx'),
+            items: [
+                new Ext.form.ComboBox({
+                    fieldLabel: t('header'),
+                    name: 'header',
+                    store: [
+                        ['name', t('name')],
+                        ['title', t('title')],
+                        ['no_header', t('no_header')]
+                    ],
+                    labelWidth: 200,
+                    value: 'title',
+                    forceSelection: true,
+                })
+            ]
+        });
     }
 });
 

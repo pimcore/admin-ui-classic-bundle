@@ -731,6 +731,7 @@ class AssetHelperController extends AdminAbstractController
         $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $language = str_replace('default', '', $request->get('language'));
+        $header = $settings['header'] ?? 'title';
 
         $list = new Asset\Listing();
 
@@ -742,11 +743,11 @@ class AssetHelperController extends AdminAbstractController
         $list->setCondition('id IN (' . implode(',', $quotedIds) . ')');
         $list->setOrderKey(' FIELD(id, ' . implode(',', $quotedIds) . ')', false);
 
-        $fields = $request->get('fields');
+        $fields = json_decode($request->get('fields')[0], true);
 
         $addTitles = (bool) $request->get('initial');
 
-        $csv = $this->getCsvData($request, $language, $list, $fields, $addTitles);
+        $csv = $this->getCsvData($language, $list, $fields, $header, $addTitles);
 
         try {
             $storage = Storage::get('temp');
@@ -758,6 +759,11 @@ class AssetHelperController extends AdminAbstractController
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
+            if ($request->get('initial') && $header === 'no_header') {
+                array_shift($csv);
+                $firstLine = false;
+            }
+
             foreach ($csv as $line) {
                 if ($addTitles && $firstLine) {
                     $firstLine = false;
@@ -790,18 +796,27 @@ class AssetHelperController extends AdminAbstractController
         return '"' . $value . '"';
     }
 
-    protected function getCsvData(Request $request, string $language, Asset\Listing $list, array $fields, bool $addTitles = true): array
+    protected function getCsvData(
+        string $language,
+        Asset\Listing $list,
+        array $fields,
+        string $header,
+        bool $addTitles = true
+    ): array
     {
         //create csv
         $csv = [];
 
-        $unsupportedFields = ['preview~system', 'size~system'];
-        $fields = array_diff($fields, $unsupportedFields);
+        $unsupportedFields = [0 => 'preview~system', 1 => 'size~system'];
+        $fields = array_filter($fields, function ($field) use ($unsupportedFields) {
+            return !in_array($field['key'], $unsupportedFields);
+        });
 
-        if ($addTitles) {
+        if ($addTitles && $header != 'no_header') {
             $columns = $fields;
-            foreach ($columns as $columnIdx => $columnKey) {
-                $columns[$columnIdx] = '"' . $columnKey . '"';
+            $titleIdx = $header === 'name' ? 'key' : 'label';
+            foreach ($columns as $columnIdx => $columnKeys) {
+                $columns[$columnIdx] = '"' . $columnKeys[$titleIdx] . '"';
             }
             $csv[] = $columns;
         }
@@ -810,7 +825,7 @@ class AssetHelperController extends AdminAbstractController
             if ($fields) {
                 $dataRows = [];
                 foreach ($fields as $field) {
-                    $fieldDef = explode('~', $field);
+                    $fieldDef = explode('~', $field['key']);
                     $getter = 'get' . ucfirst($fieldDef[0]);
 
                     if (isset($fieldDef[1])) {
@@ -821,7 +836,7 @@ class AssetHelperController extends AdminAbstractController
                             $data = $asset->getMetadata($fieldDef[0], $fieldDef[1], true);
                         }
                     } else {
-                        $data = $asset->getMetadata($field, $language, true);
+                        $data = $asset->getMetadata($field['key'], $language, true);
                     }
 
                     if ($data instanceof Element\ElementInterface) {
