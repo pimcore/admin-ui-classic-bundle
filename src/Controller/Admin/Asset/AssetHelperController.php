@@ -760,7 +760,6 @@ class AssetHelperController extends AdminAbstractController
 
             $firstLine = true;
             if ($request->get('initial') && $header === 'no_header') {
-                array_shift($csv);
                 $firstLine = false;
             }
 
