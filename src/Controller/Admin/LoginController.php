@@ -32,6 +32,7 @@ use Pimcore\Http\ResponseHelper;
 use Pimcore\Logger;
 use Pimcore\Model\User;
 use Pimcore\Security\SecurityHelper;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Pimcore\Tool\Authentication;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
@@ -44,6 +45,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -194,7 +196,13 @@ class LoginController extends AdminAbstractController implements KernelControlle
     /**
      * @Route("/login/lostpassword", name="pimcore_admin_login_lostpassword")
      */
-    public function lostpasswordAction(Request $request, CsrfProtectionHandler $csrfProtection, Config $config, RateLimiterFactory $resetPasswordLimiter): Response
+    public function lostpasswordAction(
+        Request $request,
+        CsrfProtectionHandler $csrfProtection,
+        Config $config,
+        RateLimiterFactory $resetPasswordLimiter,
+        RouterInterface $router
+    ): Response
     {
         $params = $this->buildLoginPageViewParams($config);
         $error = null;
@@ -226,12 +234,20 @@ class LoginController extends AdminAbstractController implements KernelControlle
             if (!$error) {
                 $token = Authentication::generateTokenByUser($user);
 
-                $loginUrl = $this->generateUrl('pimcore_admin_login_check', [
-                    'token' => $token,
-                    'reset' => 'true',
-                ], UrlGeneratorInterface::ABSOLUTE_URL);
-
                 try {
+                    $domain = SystemSettingsConfig::get()['general']['domain'];
+                    if(empty($domain)) {
+                        throw new \Exception('No main domain set in system settings, unable to generate reset password link');
+                    }
+
+                    $context = $router->getContext();
+                    $context->setHost($domain);
+
+                    $loginUrl = $this->generateUrl('pimcore_admin_login_check', [
+                        'token' => $token,
+                        'reset' => 'true',
+                    ], UrlGeneratorInterface::ABSOLUTE_URL);
+
                     $event = new LostPasswordEvent($user, $loginUrl);
                     $this->eventDispatcher->dispatch($event, AdminEvents::LOGIN_LOSTPASSWORD);
 
