@@ -577,11 +577,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 : OptionsProviderResolver::MODE_SELECT
         );
 
+        $context = json_decode($request->get('context'), true) ?? [];
         $options = $optionsProvider->getOptions(
             [
                 'object' => $object,
                 'fieldname' => $fieldDefinition->getName(),
                 'class' => $object->getClass(),
+                'context' => $context
             ],
             $fieldDefinition
         );
