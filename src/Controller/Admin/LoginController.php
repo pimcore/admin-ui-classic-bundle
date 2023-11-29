@@ -236,7 +236,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
                 try {
                     $domain = SystemSettingsConfig::get()['general']['domain'];
-                    if(empty($domain)) {
+                    if (!$domain) {
                         throw new \Exception('No main domain set in system settings, unable to generate reset password link');
                     }
 
