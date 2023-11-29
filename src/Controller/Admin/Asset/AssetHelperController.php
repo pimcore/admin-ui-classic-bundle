@@ -801,8 +801,7 @@ class AssetHelperController extends AdminAbstractController
         array $fields,
         string $header,
         bool $addTitles = true
-    ): array
-    {
+    ): array {
         //create csv
         $csv = [];
 
