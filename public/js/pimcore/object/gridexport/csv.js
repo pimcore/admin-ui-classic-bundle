@@ -55,8 +55,8 @@ pimcore.object.gridexport.csv = Class.create(pimcore.element.gridexport.abstract
                     fieldLabel: t('header'),
                     name: 'header',
                     store: [
-                        ['name', t('name')],
-                        ['title', t('title')],
+                        ['name', t('system_key')],
+                        ['title', t('label')],
                         ['no_header', t('no_header')]
                     ],
                     labelWidth: 200,
