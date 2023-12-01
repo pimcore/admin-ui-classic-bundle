@@ -149,8 +149,7 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             startValue = me.startValue,
             value;
 
-        if(fieldInfo.layout.noteditable ||
-        JSON.stringify(this.initValue) === JSON.stringify(this.getValue())) {
+        if (fieldInfo.layout.noteditable) {
             return;
         }
 
