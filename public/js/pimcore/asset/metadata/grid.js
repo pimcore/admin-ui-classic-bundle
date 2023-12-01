@@ -246,7 +246,7 @@ pimcore.asset.metadata.grid = Class.create({
                         //enable different editors per row
                         editor.editors.each(function (e) {
                             try {
-                                if (e.config?.fieldInfo?.layout?.fieldtype === 'manyToManyRelation') {
+                                if (e.fieldInfo?.layout?.fieldtype === 'manyToManyRelation') {
                                     return;
                                 }
                                 // complete edit, so the value is stored when hopping around with TAB
