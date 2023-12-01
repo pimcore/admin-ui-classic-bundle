@@ -25,10 +25,6 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
         this.callParent();
     },
 
-    getValue: function() {
-        return Math.random();
-    },
-
     startEdit: function(el, value, /* private: false means don't focus*/
                         doFocus) {
 
@@ -121,7 +117,11 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
                     text: t("save"),
                     iconCls: 'pimcore_icon_save',
                     handler: function() {
-                        var newValue = tag.getCellEditValue();
+                        if (typeof tag.isDirty === 'function' && tag.isDirty() === false) {
+                            this.editWin.close();
+                            return;
+                        }
+                        const newValue = tag.getCellEditValue();
                         this.setValue(newValue);
                         this.completeEdit(false);
                         this.editWin.close();
@@ -149,7 +149,8 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             startValue = me.startValue,
             value;
 
-        if(fieldInfo.layout.noteditable) {
+        if(fieldInfo.layout.noteditable ||
+        JSON.stringify(this.initValue) === JSON.stringify(this.getValue())) {
             return;
         }
 
