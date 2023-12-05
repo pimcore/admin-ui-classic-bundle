@@ -37,7 +37,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
-use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -347,7 +347,7 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     /**
      * @throws \Exception
      */
-    private function getWorkflowSvg(Workflow $workflow): string
+    private function getWorkflowSvg(WorkflowInterface $workflow): string
     {
         $marking = $workflow->getMarking($this->element);
 
