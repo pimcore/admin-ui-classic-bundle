@@ -246,7 +246,7 @@ pimcore.asset.metadata.grid = Class.create({
                         //enable different editors per row
                         editor.editors.each(function (e) {
                             try {
-                                let fieldType = e.fieldInfo?.layout?.fieldtype;
+                                const fieldType = e.fieldInfo?.layout?.fieldtype;
                                 if (fieldType === 'manyToManyRelation' || fieldType === 'multiselect') {
                                     return;
                                 }
