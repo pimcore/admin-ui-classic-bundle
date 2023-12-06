@@ -202,8 +202,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         Config $config,
         RateLimiterFactory $resetPasswordLimiter,
         RouterInterface $router
-    ): Response
-    {
+    ): Response {
         $params = $this->buildLoginPageViewParams($config);
         $error = null;
 
