@@ -361,7 +361,8 @@ pimcore.treenodelocator = function()
                         pagingState.elementKey,
                         pagingState.elementType,
                         firstelementChild,
-                        lastelementChild
+                        lastelementChild,
+                        node.data.sortOrder
                     );
                 }
             }
@@ -466,7 +467,7 @@ pimcore.treenodelocator = function()
         /**
          * Returns the direction (-1/+1/0) for elements sorted by key.
          */
-        getDirectionForElementsSortedByKey: function (elementKey, elementType, firstElementChild, lastElementChild) {
+        getDirectionForElementsSortedByKey: function (elementKey, elementType, firstElementChild, lastElementChild, sortOrder) {
             if(elementType === 'asset' && lastElementChild && lastElementChild.get('type') === 'folder') {
                 return 1;
             }
@@ -475,12 +476,17 @@ pimcore.treenodelocator = function()
                 return -1;
             }
 
+            let orderMult = 1;
+            if (sortOrder === 'DESC') {
+                orderMult = -1;
+            }
+
             if (firstElementChild && elementKey.toUpperCase() < firstElementChild.get('key').toUpperCase()) {
-                return -1;
+                return -1 * orderMult;
             }
 
             if (lastElementChild && elementKey.toUpperCase() > lastElementChild.get('key').toUpperCase()) {
-                return 1;
+                return orderMult;
             }
 
             return 0;
