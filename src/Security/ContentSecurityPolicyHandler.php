@@ -77,7 +77,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
             self::FRAME_OPT => "'self' data:",
             self::CONNECT_OPT => "'self' blob:",
             self::FONT_OPT => "'self'",
-            self::WORKER_OPT => "'self' blob:"
+            self::WORKER_OPT => "'self' blob:",
         ]);
     }
 
