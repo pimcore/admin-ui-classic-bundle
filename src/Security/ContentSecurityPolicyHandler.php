@@ -46,6 +46,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     public const FRAME_OPT = 'frame-src';
 
+    public const WORKER_OPT = 'worker-src';
+
     private array $allowedUrls = [
         self::CONNECT_OPT => [
             'https://liveupdate.pimcore.org/', // AdminBundle statistics & update-check service
@@ -75,6 +77,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
             self::FRAME_OPT => "'self' data:",
             self::CONNECT_OPT => "'self' blob:",
             self::FONT_OPT => "'self'",
+            self::WORKER_OPT => "'self' blob:"
         ]);
     }
 
