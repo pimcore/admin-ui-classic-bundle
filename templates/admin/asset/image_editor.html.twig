@@ -77,7 +77,23 @@
 
 <img style="visibility: hidden" id='image' src="{{ imageUrl }}" />
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
-    window.addEventListener('load', function (e) {
+
+    /**
+    * wait for image editor to be fully available 
+    */
+    async function loadEditor(e) {
+        return new Promise(resolve => {
+            var checkInterval = setInterval(() => {
+                if (window.Layers) {
+                    clearInterval(checkInterval);
+                    loadImageToEditor(e);
+                    resolve(true);
+                }
+            }, 300);
+        });
+    }
+
+    function loadImageToEditor(e) {
         var image = document.getElementById('image');
         window.Layers.insert({
             name: "{{ asset.getFilename() }}",
@@ -109,7 +125,16 @@
 
             return false;
         });
+    }
+    
+    window.addEventListener("load", function(e) {
+        loadEditor(e).then(function() {
+            console.log("editor loaded");
+        });
     }, false);
+    
+
+
 </script>
 
 </body>
