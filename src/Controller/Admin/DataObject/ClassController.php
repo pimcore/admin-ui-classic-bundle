@@ -2076,7 +2076,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $obj = DataObject::getByPath($objPath) ?? new $className();
 
         $textLayout = new DataObject\ClassDefinition\Layout\Text();
-
+        $textLayout->setName('Preview');
         $context = [
           'data' => $request->get('renderingData'),
         ];
