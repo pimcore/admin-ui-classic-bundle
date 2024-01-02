@@ -154,12 +154,24 @@
                 {% for fkey,fieldItem  in fieldItems %}
                     {% set fieldKeys = fieldDefinitions[fieldItem.getType()].getFieldDefinitions() %}
                     {% for fieldKey in fieldKeys %}
-                        {% set value = fieldItem.get(fieldKey.getName()) %}
-                        <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                            <td>{{ fieldItem.getType() ~ " - " ~ fieldKey.getTitle()|trans([],'admin') }}</td>
-                            <td>{{ fieldKey.getName() }}</td>
-                            <td>{{ fieldKey.getVersionPreview(value) | raw }}</td>
-                        </tr>
+                        {% if fieldKey is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
+                            {% for language in validLanguages %}
+                                {% for lfd in fieldKey.getFieldDefinitions() %}
+                                    <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                        <td>{{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                        <td>{{ fieldItem.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
+                                        <td>{{ fieldItem.Localizedfields.getLocalizedValue(lfd.getName(), language) }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            {% set value = fieldItem.get(fieldKey.getName()) %}
+                            <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                <td>{{ fieldItem.getType() ~ " - " ~ fieldKey.getTitle()|trans([],'admin') }}</td>
+                                <td>{{ fieldKey.getName() }}</td>
+                                <td>{{ fieldKey.getVersionPreview(value) | raw }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             {% endif %}
