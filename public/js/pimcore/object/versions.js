@@ -228,17 +228,19 @@ pimcore.object.versions = Class.create({
             }));
         }
 
-        menu.add(new Ext.menu.Item({
-            text: t('delete'),
-            iconCls: "pimcore_icon_delete",
-            handler: this.removeVersion.bind(this, rowIndex, grid)
-        }));
+        if (this.object.isAllowed("delete")) {
+            menu.add(new Ext.menu.Item({
+                text: t('delete'),
+                iconCls: "pimcore_icon_delete",
+                handler: this.removeVersion.bind(this, rowIndex, grid)
+            }));
 
-        menu.add(new Ext.menu.Item({
-            text: t('clear_all'),
-            iconCls: "pimcore_icon_delete",
-            handler: this.removeAllVersion.bind(this, rowIndex, grid)
-        }));
+            menu.add(new Ext.menu.Item({
+                text: t('clear_all'),
+                iconCls: "pimcore_icon_delete",
+                handler: this.removeAllVersion.bind(this, rowIndex, grid)
+            }));
+        }
 
         e.stopEvent();
         menu.showAt(e.pageX, e.pageY);
