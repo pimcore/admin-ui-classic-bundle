@@ -49,7 +49,7 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
                 renderer: function (key, value, metaData, record) {
                     this.applyPermissionStyle(key, value, metaData, record);
 
-                    return t("not_supported");
+                    return record.data[key];
                 }.bind(this, field.key)};
     },
 
