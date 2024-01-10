@@ -942,7 +942,7 @@ pimcore.layout.toolbar = Class.create({
          // building the html markup for the main navigation
          pimcore.helpers.buildMainNavigationMarkup(menu);
 
-         // Additional menu items can be added via this event
+         // Full menu can be checked here
          const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
              detail: {
                  menu: menu,
