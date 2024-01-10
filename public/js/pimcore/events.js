@@ -247,6 +247,12 @@ pimcore.events.prepareAffectedNodes = "pimcore.treeNode.prepareAffectedNodes";
  pimcore.events.preMenuBuild = "pimcore.menu.preBuild";
 
 /**
+ * post building menu
+ * for having full menu
+ */
+pimcore.events.postMenuBuild = "pimcore.menu.postBuild";
+
+/**
  *  start event for the editor to create the config
  *  config and context are passed as parameters
  */

@@ -942,6 +942,15 @@ pimcore.layout.toolbar = Class.create({
          // building the html markup for the main navigation
          pimcore.helpers.buildMainNavigationMarkup(menu);
 
+         // Additional menu items can be added via this event
+         const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
+             detail: {
+                 menu: menu,
+             }
+         });
+
+         document.dispatchEvent(postMenuBuild);
+
          if(Object.keys(menu).length !== 0) {
              Object.keys(menu).filter(key => {
                  return (menu[key].items && menu[key].items.length > 0) || menu[key]['noSubmenus'];
