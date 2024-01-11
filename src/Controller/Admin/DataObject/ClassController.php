@@ -958,7 +958,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 if (!isset($groups[$item->getGroup()])) {
                     $groups[$item->getGroup()] = [
                         'id' => 'group_' . $item->getKey(),
-                        'text' => htmlspecialchars($item->getGroup() ?? ''),
+                        'text' => htmlspecialchars($item->getGroup()),
                         'expandable' => true,
                         'leaf' => false,
                         'allowChildren' => true,
@@ -1380,7 +1380,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 if (!isset($groups[$item->getGroup()])) {
                     $groups[$item->getGroup()] = [
                         'id' => 'group_' . $item->getKey(),
-                        'text' => htmlspecialchars($item->getGroup() ?? ''),
+                        'text' => htmlspecialchars($item->getGroup()),
                         'expandable' => true,
                         'leaf' => false,
                         'allowChildren' => true,

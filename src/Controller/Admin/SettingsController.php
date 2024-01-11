@@ -833,7 +833,7 @@ class SettingsController extends AdminAbstractController
                 if (empty($groups[$item->getGroup()])) {
                     $groups[$item->getGroup()] = [
                         'id' => 'group_' . $item->getName(),
-                        'text' => htmlspecialchars($item->getGroup() ?? ''),
+                        'text' => htmlspecialchars($item->getGroup()),
                         'expandable' => true,
                         'leaf' => false,
                         'allowChildren' => true,
@@ -1064,7 +1064,7 @@ class SettingsController extends AdminAbstractController
                 if (empty($groups[$item->getGroup()])) {
                     $groups[$item->getGroup()] = [
                         'id' => 'group_' . $item->getName(),
-                        'text' => htmlspecialchars($item->getGroup() ?? ''),
+                        'text' => htmlspecialchars($item->getGroup()),
                         'expandable' => true,
                         'leaf' => false,
                         'allowChildren' => true,
