@@ -942,14 +942,7 @@ pimcore.layout.toolbar = Class.create({
          // building the html markup for the main navigation
          pimcore.helpers.buildMainNavigationMarkup(menu);
 
-         // Full menu can be checked here
-         const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
-             detail: {
-                 menu: menu,
-             }
-         });
 
-         document.dispatchEvent(postMenuBuild);
 
          if(Object.keys(menu).length !== 0) {
              Object.keys(menu).filter(key => {
@@ -1038,6 +1031,15 @@ pimcore.layout.toolbar = Class.create({
                  console.error("no pimcore_menu_item");
              }
          }.bind(this));
+
+         // Full menu can be checked here
+         const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
+             detail: {
+                 menu: menu,
+             }
+         });
+
+         document.dispatchEvent(postMenuBuild);
  
          return;
      },
