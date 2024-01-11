@@ -2008,11 +2008,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/download-as-zip", name="pimcore_admin_asset_downloadaszip", methods={"GET"})
-     *
-     * @return BinaryFileResponse
      * Download all assets contained in the folder with parameter id as ZIP file.
      * The suggested filename is either [folder name].zip or assets.zip for the root folder.
+     *
+     * @Route("/download-as-zip", name="pimcore_admin_asset_downloadaszip", methods={"GET"})
      */
     public function downloadAsZipAction(Request $request): BinaryFileResponse
     {
