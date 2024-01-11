@@ -83,9 +83,19 @@ pimcore.elementservice.deleteElementsComplete = function(options, response) {
 pimcore.elementservice.deleteElementCheckDependencyComplete = function (window, res, options) {
 
     try {
-        let message = res.batchDelete ? t('delete_message_batch') : t('delete_message');
+        let message = '';
+        if (res.batchDelete) {
+            message += sprintf(t('delete_message_batch'), res.itemResults.length) + "<br /><div style='display: block; padding-top: 10px'>";
+            res.itemResults.forEach(function (item) {
+                message += "<b style='display: block; text-align: center;'>\"" + htmlspecialchars(item.path + item.key) + "\"</b>";
+            })
+            message += "</div>";
+        } else {
+            message += t('delete_message');
+        }
+
         if (res.elementKey) {
-            message += "<br /><b style='display: block; text-align: center; padding: 10px 0;'>\"" + htmlspecialchars(res.elementKey) + "\"</b>";
+            message += "<br /><b style='display: block; text-align: center; padding: 10px 0;'>\"" + htmlspecialchars(res.itemResults[0].path + res.elementKey) + "\"</b>";
         }
         if (res.hasDependencies) {
             message += "<br />" + t('delete_message_dependencies');

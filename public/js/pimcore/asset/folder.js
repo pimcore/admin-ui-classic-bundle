@@ -252,10 +252,19 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             }
 
             this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete_folder'),
+                tooltip: t('delete'),
                 iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                 scale: "medium",
-                handler: this.remove.bind(this)
+                handler: function () {
+                    var options = this.listfolder.onRawDeleteSelectedRows();
+                    if (!options) {
+                        options = {
+                            "elementType" : "asset",
+                            "id": this.id
+                        };
+                    }
+                    pimcore.elementservice.deleteElement(options);
+                }.bind(this)
             });
 
             this.toolbarButtons.rename = new Ext.Button({
