@@ -1807,7 +1807,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     'id' => $asset->getId(),
                     'type' => $asset->getType(),
                     'filename' => $asset->getFilename(),
-                    'filenameDisplay' => htmlspecialchars($filenameDisplay),
+                    'filenameDisplay' => htmlspecialchars($filenameDisplay ?? ''),
                     'url' => $this->elementService->getThumbnailUrl($asset),
                     'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                 ];
