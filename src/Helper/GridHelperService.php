@@ -336,9 +336,9 @@ class GridHelperService
                     } elseif (in_array($filterField, $systemFields)) {
                         // system field
                         if ($filterField == 'fullpath') {
-                            $conditionPartsFilters[] = 'concat(`path`, `key`) ' . $operator . ' ' . $db->quote('%' . $filter['value'] . '%');
+                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' lower(' . $db->quote('%' . $filter['value'] . '%') . ')';
                         } elseif ($filterField == 'key') {
-                            $conditionPartsFilters[] = '`key` ' . $operator . ' ' . $db->quote('%' . $filter['value'] . '%');
+                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' lower(' . $db->quote('%' . $filter['value'] . '%') . ')';
                         } elseif ($filterField == 'id' && $operator !== 'in') {
                             $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
                         } elseif ($filterField == 'id' && $operator === 'in') {
