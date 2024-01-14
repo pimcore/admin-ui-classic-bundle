@@ -103,7 +103,7 @@ class AdminExtension extends AbstractExtension
         return '<script src="' . $url . '"></script>' . "\n";
     }
 
-    public function getLoginBackgroundImage(string $fallback = ''): string
+    public function getLoginBackgroundImage(string $overwrite = ''): string
     {
         $possibleDefaultImages = [
             '/bundles/pimcoreadmin/img/login/pimconaut-ecommerce.svg',
@@ -114,8 +114,8 @@ class AdminExtension extends AbstractExtension
         ];
         $backgroundImageUrl = $possibleDefaultImages[array_rand($possibleDefaultImages)];
 
-        if (empty($fallback) === false) {
-            $backgroundImageUrl = $fallback;
+        if (empty($overwrite) === false) {
+            $backgroundImageUrl = $overwrite;
         }
 
         $customImage = AdminConfig::get()['branding']['login_screen_custom_image'];
