@@ -258,6 +258,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
             var firstButton = exportButtons.shift();
 
             this.exportButton = new Ext.SplitButton({
+                id: 'grid-export-button',
                 text: firstButton.text,
                 iconCls: firstButton.iconCls,
                 handler: firstButton.handler,
