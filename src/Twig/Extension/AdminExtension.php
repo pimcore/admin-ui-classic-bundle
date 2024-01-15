@@ -125,7 +125,7 @@ class AdminExtension extends AbstractExtension
         }
 
         if (
-            preg_match('@^https?://@', $customImage) === true
+            preg_match('@^https?://@', $customImage) === 1
             || is_file(PIMCORE_WEB_ROOT . '/var/assets' . $customImage) === true
             || is_file(PIMCORE_WEB_ROOT . $customImage) === true
         ) {
