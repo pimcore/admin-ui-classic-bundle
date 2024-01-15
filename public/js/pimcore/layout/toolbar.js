@@ -390,7 +390,7 @@ pimcore.layout.toolbar = Class.create({
 
                  var systemItems = [];
 
-                 if (perspectiveCfg.inToolbar("extras.systemtools.requirements")) {
+                 if (perspectiveCfg.inToolbar("extras.systemtools.requirements")) {removeDatapreMenuBuild
                      systemItems.push(
                          {
                              text: t("system_requirements_check"),
@@ -941,8 +941,6 @@ pimcore.layout.toolbar = Class.create({
 
          // building the html markup for the main navigation
          pimcore.helpers.buildMainNavigationMarkup(menu);
-
-
 
          if(Object.keys(menu).length !== 0) {
              Object.keys(menu).filter(key => {
