@@ -1506,7 +1506,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         foreach ($list as $item) {
             $resultItem = [
                 'id' => $item->getId(),
-                'text' => htmlspecialchars($item->getName(), ENT_QUOTES),
+                'text' => htmlspecialchars($item->getName() ?? '', ENT_QUOTES),
                 'expandable' => false,
                 'leaf' => true,
                 'expanded' => true,

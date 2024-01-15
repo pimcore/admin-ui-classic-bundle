@@ -2220,7 +2220,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
             if (!isset($groups[$group])) {
                 $groups[$group] = [
                     'id' => 'group_' . $id,
-                    'text' => htmlspecialchars($group),
+                    'text' => htmlspecialchars($group ?? ''),
                     'expandable' => true,
                     'leaf' => false,
                     'allowChildren' => true,
