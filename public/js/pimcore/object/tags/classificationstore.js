@@ -171,7 +171,7 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     title: title,
                     listeners: {
                         activate: function(frontendLanguage, tab) {
-                            if (0 !== tab.items.length) {
+                            if (tab.items.length !== 0) {
                                 return;
                             }
 
