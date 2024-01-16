@@ -258,7 +258,6 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
             var firstButton = exportButtons.shift();
 
             this.exportButton = new Ext.SplitButton({
-                id: 'grid-export-button',
                 text: firstButton.text,
                 iconCls: firstButton.iconCls,
                 handler: firstButton.handler,
@@ -314,13 +313,17 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 text: t(exportType.text),
                 iconCls: exportType.icon || "pimcore_icon_export",
                 handler: function () {
-                    pimcore.helpers.exportWarning(exportType, function (settings) {
-                        this.exportPrepare(settings, exportType);
-                    }.bind(this));
+                    this.startExport(exportType);
                 }.bind(this),
             })
         }.bind(this));
 
         return buttons;
+    },
+
+    startExport: function (exportType) {
+        pimcore.helpers.exportWarning(exportType, function (settings) {
+            this.exportPrepare(settings, exportType);
+        }.bind(this));
     }
 });
