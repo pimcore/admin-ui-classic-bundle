@@ -526,7 +526,7 @@ class EmailController extends AdminAbstractController
         return $this->adminJson(['success' => false]);
     }
 
-    protected function parseLoggingParamObject(array $params): ?array
+    protected function parseLoggingParamObject(array $params): mixed
     {
         $data = null;
         if ($params['data']['type'] === 'object') {
