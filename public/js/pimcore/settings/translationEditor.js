@@ -78,10 +78,6 @@ pimcore.settings.translation.editor = Class.create({
                 let newValue = '';
                 if (editorType == "wysiwyg") {
                    newValue = this.value;
-                   // Check and reset what the TinyMCE returns when empty
-                   if (newValue.replace(/(<([^>]+)>)/gm, "") === ""){
-                       newValue = '';
-                   }
                 } else {
                     newValue = this.component.getValue();
                 }

@@ -326,7 +326,7 @@ pimcore.document.edit = Class.create({
                     const name = editable.getName();
                     const type = editable.getType();
                     const value = editable.getValue();
-                    if (type === "wysiwyg" && value.replace(/(<([^>]+)>)/gm, "") === "") {
+                    if (type === "wysiwyg" && value === "") {
                         values[name] = {
                             data: '',
                             type: type
