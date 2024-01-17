@@ -87,7 +87,13 @@ pimcore.elementservice.deleteElementCheckDependencyComplete = function (window, 
         if (res.batchDelete) {
             message += sprintf(t('delete_message_batch'), res.itemResults.length) + "<br /><div>";
             res.itemResults.forEach(function (item) {
-                message += "<b style='display: block; text-align: center;'>\"" + htmlspecialchars(item.path + item.key) + "\"</b>";
+                if (res.itemResults.length > 0) {
+                    message += "<ul>";
+                    res.itemResults.forEach(function (item) {
+                        message += '<li>' + htmlspecialchars(item.path) + '<b>' + htmlspecialchars(item.key) + '</b></li>';
+                    })
+                    message += "</ul>";
+                }
             })
             message += "</div>";
         } else {
