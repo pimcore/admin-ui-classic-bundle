@@ -130,7 +130,7 @@ trait DataObjectActionsTrait
                 } else {
                     $o = DataObject\Service::gridObjectData($object, $allParams['fields'] ?? null, $requestedLanguage,
                         ['csvMode' => $csvMode]);
-                    if ($o['permissions']['list'] == 1) {
+                    if ($o['permissions']['list']) {
                         $objects[] = $o;
                     }
                 }
