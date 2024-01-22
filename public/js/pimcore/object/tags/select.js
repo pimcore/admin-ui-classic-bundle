@@ -78,6 +78,10 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
                 }
             }
 
+            if (value && typeof value.value !== "undefined") {
+                value = value.value;
+            }
+
             for(var i=0; i < field.layout.options.length; i++) {
                 if(field.layout.options[i]["value"] == value) {
                     return replace_html_event_attributes(strip_tags(field.layout.options[i]["key"], 'div,span,b,strong,em,i,small,sup,sub'));
