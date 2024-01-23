@@ -20,7 +20,7 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
     pathProperty: "fullpath",
 
     getGridColumnConfig: function ($super, fieldConfig) {
-        let gridColumnConfig = $super(fieldConfig);
+        const gridColumnConfig = $super(fieldConfig);
         delete gridColumnConfig.getRelationFilter;
         return gridColumnConfig;
     },
