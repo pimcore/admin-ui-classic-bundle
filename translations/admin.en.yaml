@@ -1014,3 +1014,4 @@ male: Male
 female: Female
 pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download and open it in your local PDF viewer.
 pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take a while.'
+invalid_option: 'Invalid Option field [ {field} ]: Please choose a valid option for select / multiselect field [ {field} ]. Current value: "{option}"'
