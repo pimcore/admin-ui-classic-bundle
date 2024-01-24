@@ -1807,7 +1807,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     'id' => $asset->getId(),
                     'type' => $asset->getType(),
                     'filename' => $asset->getFilename(),
-                    'filenameDisplay' => htmlspecialchars($filenameDisplay),
+                    'filenameDisplay' => htmlspecialchars($filenameDisplay ?? ''),
                     'url' => $this->elementService->getThumbnailUrl($asset),
                     'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                 ];
@@ -2015,10 +2015,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 $userIds = $this->getAdminUser()->getRoles();
                 $userIds[] = $this->getAdminUser()->getId();
                 $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+                   (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                   OR
+                   (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                )';
             }
 
             $condition = implode(' AND ', $conditionFilters);
@@ -2088,18 +2088,24 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
                 if (!empty($selectedIds)) {
                     $selectedIds = explode(',', $selectedIds);
+                    $quotedSelectedIds = [];
+                    foreach ($selectedIds as $selectedId) {
+                        if ($selectedId) {
+                            $quotedSelectedIds[] = $db->quote($selectedId);
+                        }
+                    }
                     //add a condition if id numbers are specified
-                    $conditionFilters[] = 'id IN (' . implode(',', $selectedIds) . ')';
+                    $conditionFilters[] = 'id IN (' . implode(',', $quotedSelectedIds) . ')';
                 }
                 $conditionFilters[] = "`type` != 'folder' AND `path` like " . $db->quote(Helper::escapeLike($parentPath) . '/%');
                 if (!$this->getAdminUser()->isAdmin()) {
                     $userIds = $this->getAdminUser()->getRoles();
                     $userIds[] = $this->getAdminUser()->getId();
                     $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+                       (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                       OR
+                       (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                    )';
                 }
 
                 $condition = implode(' AND ', $conditionFilters);
