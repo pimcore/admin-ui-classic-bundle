@@ -42,10 +42,6 @@ class ElementController extends AdminAbstractController
 {
     /**
      * @Route("/element/lock-element", name="pimcore_admin_element_lockelement", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function lockElementAction(Request $request): Response
     {
@@ -56,10 +52,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/unlock-element", name="pimcore_admin_element_unlockelement", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function unlockElementAction(Request $request): Response
     {
@@ -70,10 +62,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/unlock-elements", name="pimcore_admin_element_unlockelements", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function unlockElementsAction(Request $request): Response
     {
@@ -89,10 +77,6 @@ class ElementController extends AdminAbstractController
      * Returns the element data denoted by the given type and ID or path.
      *
      * @Route("/element/get-subtype", name="pimcore_admin_element_getsubtype", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getSubtypeAction(Request $request): JsonResponse
     {
@@ -152,10 +136,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/note-types", name="pimcore_admin_element_notetypes", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function noteTypes(Request $request): JsonResponse
     {
@@ -173,10 +153,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/note-list", name="pimcore_admin_element_notelist", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function noteListAction(Request $request): JsonResponse
     {
@@ -306,10 +282,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/note-add", name="pimcore_admin_element_noteadd", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function noteAddAction(Request $request): JsonResponse
     {
@@ -332,10 +304,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/find-usages", name="pimcore_admin_element_findusages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function findUsagesAction(Request $request): JsonResponse
     {
@@ -401,10 +369,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-replace-assignments-batch-jobs", name="pimcore_admin_element_getreplaceassignmentsbatchjobs", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getReplaceAssignmentsBatchJobsAction(Request $request): JsonResponse
     {
@@ -428,10 +392,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/replace-assignments", name="pimcore_admin_element_replaceassignments", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function replaceAssignmentsAction(Request $request): JsonResponse
     {
@@ -476,10 +436,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/unlock-propagate", name="pimcore_admin_element_unlockpropagate", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function unlockPropagateAction(Request $request): JsonResponse
     {
@@ -498,10 +454,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/type-path", name="pimcore_admin_element_typepath", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function typePathAction(Request $request): JsonResponse
     {
@@ -541,10 +493,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/version-update", name="pimcore_admin_element_versionupdate", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function versionUpdateAction(Request $request): JsonResponse
     {
@@ -563,10 +511,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-nice-path", name="pimcore_admin_element_getnicepath", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -622,10 +566,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-versions", name="pimcore_admin_element_getversions", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -683,10 +623,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/delete-draft", name="pimcore_admin_element_deletedraft", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteDraftAction(Request $request): JsonResponse
     {
@@ -700,10 +636,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/delete-version", name="pimcore_admin_element_deleteversion", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteVersionAction(Request $request): JsonResponse
     {
@@ -715,10 +647,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/delete-all-versions", name="pimcore_admin_element_deleteallversion", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteAllVersionAction(Request $request): JsonResponse
     {
@@ -737,10 +665,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-requires-dependencies", name="pimcore_admin_element_getrequiresdependencies", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getRequiresDependenciesAction(Request $request): JsonResponse
     {
@@ -803,10 +727,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-required-by-dependencies", name="pimcore_admin_element_getrequiredbydependencies", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getRequiredByDependenciesAction(Request $request): JsonResponse
     {
@@ -869,11 +789,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/get-predefined-properties", name="pimcore_admin_element_getpredefinedproperties", methods={"GET"})
-     *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
      */
     public function getPredefinedPropertiesAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
@@ -905,10 +820,6 @@ class ElementController extends AdminAbstractController
 
     /**
      * @Route("/element/analyze-permissions", name="pimcore_admin_element_analyzepermissions", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function analyzePermissionsAction(Request $request): Response
     {
@@ -940,11 +851,6 @@ class ElementController extends AdminAbstractController
     }
 
     /**
-     * @param DataObject\Concrete $source
-     * @param array $context
-     *
-     * @return bool|DataObject\ClassDefinition\Data|null
-     *
      * @throws \Exception
      */
     protected function getNicePathFormatterFieldDefinition(DataObject\Concrete $source, array $context): DataObject\ClassDefinition\Data|bool|null
@@ -988,13 +894,6 @@ class ElementController extends AdminAbstractController
     }
 
     /**
-     * @param DataObject\Concrete $source
-     * @param array $context
-     * @param array $result
-     * @param array $targets
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     protected function convertResultWithPathFormatter(DataObject\Concrete $source, array $context, array $result, array $targets): array

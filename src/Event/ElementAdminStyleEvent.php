@@ -46,10 +46,6 @@ class ElementAdminStyleEvent extends Event
 
     /**
      * ElementAdminStyleEvent constructor.
-     *
-     * @param ElementInterface $element
-     * @param AdminStyle $adminStyle
-     * @param int|null $context
      */
     public function __construct(ElementInterface $element, AdminStyle $adminStyle, int $context = null)
     {
@@ -80,8 +76,6 @@ class ElementAdminStyleEvent extends Event
 
     /**
      * Returns the context. e.g. CONTEXT_TREE or CONTEXT_EDITOR.
-     *
-     * @return null|int
      */
     public function getContext(): ?int
     {

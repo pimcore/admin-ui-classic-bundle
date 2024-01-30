@@ -45,8 +45,6 @@ class DataObjectController extends AdminAbstractController implements KernelCont
 
     /**
      * @Route("/search-data-objects", name="pimcore_admin_gdpr_dataobject_searchdataobjects", methods={"GET"})
-     *
-     *
      */
     public function searchDataObjectsAction(Request $request, DataObjects $service): JsonResponse
     {

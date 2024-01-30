@@ -416,8 +416,6 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/login/2fa-verify", name="pimcore_admin_2fa-verify")
-     *
-     * @param Request $request
      */
     public function twoFactorAuthenticationVerifyAction(Request $request): void
     {

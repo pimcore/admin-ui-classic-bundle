@@ -42,9 +42,6 @@ class UserPerspectiveListener implements EventSubscriberInterface, LoggerAwareIn
         $this->userResolver = $userResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

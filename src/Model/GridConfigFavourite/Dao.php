@@ -27,11 +27,6 @@ use Pimcore\Model;
 class Dao extends Model\Dao\AbstractDao
 {
     /**
-     * @param int $ownerId
-     * @param string $classId
-     * @param int|null $objectId
-     * @param string|null $searchType
-     *
      * @throws Model\Exception\NotFoundException
      */
     public function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, int $objectId = null, string $searchType = null): void
@@ -54,8 +49,6 @@ class Dao extends Model\Dao\AbstractDao
 
     /**
      * Save object to database
-     *
-     * @return GridConfigFavourite
      */
     public function save(): GridConfigFavourite
     {

@@ -45,9 +45,6 @@ final class LFExpander extends AbstractOperator
         $this->asArray = $config->asArray ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $children = $this->getChildren();

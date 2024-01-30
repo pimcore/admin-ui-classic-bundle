@@ -36,41 +36,21 @@ class PimcoreUsers implements DataProviderInterface
         $this->logsDir = $logsDir;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'pimcoreUsers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getJsClassName(): string
     {
         return 'pimcore.settings.gdpr.dataproviders.pimcoreUsers';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortPriority(): int
     {
         return 30;
     }
 
-    /**
-     * @param int $id
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     * @param int $start
-     * @param int $limit
-     * @param string|null $sort
-     *
-     * @return array
-     */
     public function searchData(int $id, string $firstname, string $lastname, string $email, int $start, int $limit, string $sort = null): array
     {
         if (empty($id) && empty($firstname) && empty($lastname) && empty($email)) {

@@ -23,9 +23,6 @@ use Pimcore\Model\Element\ElementInterface;
  */
 abstract class AbstractRenderer extends AbstractOperator
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): \Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

@@ -161,9 +161,6 @@ final class DefaultValue extends AbstractValue
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $attributeParts = explode('~', $this->attribute);

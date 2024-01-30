@@ -54,9 +54,6 @@ final class PHPCode extends AbstractOperator
         return $this->getInstance()->getLabel();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         try {

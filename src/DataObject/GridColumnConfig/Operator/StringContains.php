@@ -36,9 +36,6 @@ final class StringContains extends AbstractOperator
         $this->insensitive = $config->insensitive ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

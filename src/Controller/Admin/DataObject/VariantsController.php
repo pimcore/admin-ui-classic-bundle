@@ -37,10 +37,6 @@ class VariantsController extends AdminAbstractController
 
     /**
      * @Route("/update-key", name="updatekey", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function updateKeyAction(Request $request): JsonResponse
     {
@@ -53,14 +49,6 @@ class VariantsController extends AdminAbstractController
 
     /**
      * @Route("/get-variants", name="getvariants", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param GridHelperService $gridHelperService
-     * @param LocaleServiceInterface $localeService
-     * @param CsrfProtectionHandler $csrfProtection
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

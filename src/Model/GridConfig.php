@@ -212,8 +212,6 @@ class GridConfig extends AbstractModel
 
     /**
      * enum('asset','object')
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -222,8 +220,6 @@ class GridConfig extends AbstractModel
 
     /**
      * enum('asset','object')
-     *
-     * @param string $type
      */
     public function setType(string $type): void
     {

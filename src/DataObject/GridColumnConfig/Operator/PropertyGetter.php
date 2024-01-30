@@ -33,9 +33,6 @@ final class PropertyGetter extends AbstractOperator
         $this->propertyName = $config->propertyName ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

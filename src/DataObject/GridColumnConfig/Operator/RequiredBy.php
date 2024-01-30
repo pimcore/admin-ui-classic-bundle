@@ -38,9 +38,6 @@ final class RequiredBy extends AbstractOperator
         $this->onlyCount = $config->onlyCount ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

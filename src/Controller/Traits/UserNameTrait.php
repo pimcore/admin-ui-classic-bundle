@@ -28,8 +28,6 @@ trait UserNameTrait
 
     /**
      * @required
-     *
-     * @param TranslatorInterface $translator
      */
     public function setTranslator(TranslatorInterface $translator): void
     {
