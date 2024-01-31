@@ -335,10 +335,12 @@ class GridHelperService
                         }
                     } elseif (in_array($filterField, $systemFields)) {
                         // system field
+                        $lowerCasedFilterValue = strtolower($filter['value']); // lowercase for case insensitive search
+                        $lowerCasedFilterValue = str_replace('*', '%', $lowerCasedFilterValue); // replace wildcard
                         if ($filterField == 'fullpath') {
-                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' lower(' . $db->quote('%' . $filter['value'] . '%') . ')';
+                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
                         } elseif ($filterField == 'key') {
-                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' lower(' . $db->quote('%' . $filter['value'] . '%') . ')';
+                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
                         } elseif ($filterField == 'id' && $operator !== 'in') {
                             $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
                         } elseif ($filterField == 'id' && $operator === 'in') {
