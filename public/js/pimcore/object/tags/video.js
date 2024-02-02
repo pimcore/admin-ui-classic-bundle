@@ -233,6 +233,13 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
                     var data = Ext.decode(res.response.responseText);
                     if (data["id"] && data["type"] == "video") {
                         this.data.id = data["id"];
+                        this.data.type = "asset";
+                        this.data.data = data["fullpath"];
+
+                        this.data.poster = null;
+                        this.data.title = '';
+                        this.data.description = '';
+
                         this.dirty = true;
                     }
                     this.updateVideo();
