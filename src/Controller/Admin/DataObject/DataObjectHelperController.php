@@ -1425,6 +1425,15 @@ class DataObjectHelperController extends AdminAbstractController
                 $object = DataObject\Concrete::getById($params['job']);
 
                 if ($object) {
+                    $requestedLanguage = $params['language'];
+                    if ($requestedLanguage) {
+                        if ($requestedLanguage != 'default') {
+                            $request->setLocale($requestedLanguage);
+                        }
+                    } else {
+                        $requestedLanguage = $request->getLocale();
+                    }
+
                     $name = $params['name'];
 
                     if (!$object->isAllowed('save') || ($name === 'published' && !$object->isAllowed('publish'))) {
@@ -1449,15 +1458,6 @@ class DataObjectHelperController extends AdminAbstractController
                         $keyId = $parts[3];
 
                         if ($type == 'classificationstore') {
-                            $requestedLanguage = $params['language'];
-                            if ($requestedLanguage) {
-                                if ($requestedLanguage != 'default') {
-                                    $request->setLocale($requestedLanguage);
-                                }
-                            } else {
-                                $requestedLanguage = $request->getLocale();
-                            }
-
                             $groupKeyId = explode('-', $keyId);
                             $groupId = (int) $groupKeyId[0];
                             $keyId = (int) $groupKeyId[1];

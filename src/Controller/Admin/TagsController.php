@@ -37,6 +37,8 @@ class TagsController extends AdminAbstractController
      */
     public function addAction(Request $request): JsonResponse
     {
+        $this->checkPermission('tags_configuration');
+
         try {
             $tag = new Tag();
             $tag->setName(strip_tags($request->get('text', '')));
@@ -56,6 +58,8 @@ class TagsController extends AdminAbstractController
      */
     public function deleteAction(Request $request): JsonResponse
     {
+        $this->checkPermission('tags_configuration');
+
         $tag = Tag::getById((int) $request->get('id'));
         if ($tag) {
             $tag->delete();
@@ -73,6 +77,8 @@ class TagsController extends AdminAbstractController
      */
     public function updateAction(Request $request): JsonResponse
     {
+        $this->checkPermission('tags_configuration');
+
         $tag = Tag::getById((int) $request->get('id'));
         if ($tag) {
             $parentId = $request->get('parentId');
