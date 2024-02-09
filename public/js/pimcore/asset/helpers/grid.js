@@ -169,8 +169,9 @@ pimcore.asset.helpers.grid = Class.create({
     },
 
     getGridColumns: function() {
-        var fields = this.fields;
-        var gridColumns = [];
+        const fields = this.fields;
+        const gridFilters = this.getGridFilters();
+        let gridColumns = [];
 
         for (i = 0; i < fields.length; i++) {
             var field = fields[i];
@@ -257,6 +258,11 @@ pimcore.asset.helpers.grid = Class.create({
                 var tag = pimcore.asset.metadata.tags[fieldType];
                 var fc = tag.prototype.getGridColumnConfig(field);
                 fc.locked = this.getColumnLock(field);
+
+                if (typeof gridFilters[field.key] !== 'undefined') {
+                    fc.filter = gridFilters[field.key];
+                }
+
                 gridColumns.push(fc);
             }
         }
@@ -310,7 +316,7 @@ pimcore.asset.helpers.grid = Class.create({
                     }
 
                     var fieldType = fields[i].type;
-                    var tag = pimcore.object.tags[fieldType];
+                    var tag = pimcore.asset.metadata.tags[fieldType];
                     if (tag) {
                         var filter = tag.prototype.getGridColumnFilter(fields[i]);
                         if (filter) {
