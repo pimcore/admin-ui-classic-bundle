@@ -185,7 +185,7 @@ class GridHelperService
                     $operator = '=';
 
                     $filterField = $filter['property'];
-                    $filterOperator = $filter['operator'];
+                    $filterOperator = $filter['operator'];if (empty($value)){ continue; }
 
                     if ($filter['type'] == 'string') {
                         $operator = 'LIKE';
@@ -785,6 +785,7 @@ class GridHelperService
                 if ($operator == 'LIKE') {
                     $value = $db->quote('%' . $value . '%');
                 } elseif ($operator == 'IN') {
+                    if (empty($value)){ continue; }
                     $quoted = array_map(function ($val) use ($db) {
                         return $db->quote($val);
                     }, $value);
