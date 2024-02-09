@@ -185,7 +185,7 @@ class GridHelperService
                     $operator = '=';
 
                     $filterField = $filter['property'];
-                    $filterOperator = $filter['operator'];if (empty($value)){ continue; }
+                    $filterOperator = $filter['operator'];
 
                     if ($filter['type'] == 'string') {
                         $operator = 'LIKE';
