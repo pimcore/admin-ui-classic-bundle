@@ -1014,3 +1014,7 @@ male: Male
 female: Female
 pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download and open it in your local PDF viewer.
 pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take a while.'
+overwrite_zip_files: 'Overwrite with zip files'
+zip_upload_want_to_overwrite: 'Do you want to overwrite the files?'
+zip_upload_want_to_overwrite_yes_option: 'Yes'
+zip_upload_want_to_overwrite_no_option: 'No'
