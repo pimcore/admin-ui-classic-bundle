@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /**
@@ -170,7 +171,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         }
 
         return $this->json([
-           'csrfToken' => $csrfProtection->getCsrfToken($request->getSession()),
+            'csrfToken' => $csrfProtection->getCsrfToken($request->getSession()),
         ]);
     }
 

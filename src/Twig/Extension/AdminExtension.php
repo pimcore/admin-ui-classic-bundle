@@ -17,7 +17,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Twig\Extension;
 
+use Exception;
+use Pimcore\Bundle\AdminBundle\System\AdminConfig;
 use Pimcore\Bundle\AdminBundle\Tool;
+use Pimcore\Config;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Security\User\UserLoader;
 use Pimcore\Tool\Admin;
@@ -44,6 +47,7 @@ class AdminExtension extends AbstractExtension
             new TwigFunction('pimcore_language_flag', [Tool::class, 'getLanguageFlagFile']),
             new TwigFunction('pimcore_minimize_scripts', [$this, 'minimize']),
             new TwigFunction('pimcore_editmode_admin_language', [$this, 'getAdminLanguage']),
+            new TwigFunction('pimcore_login_background_image', [$this, 'getLoginBackgroundImage']),
         ];
     }
 
@@ -71,9 +75,10 @@ class AdminExtension extends AbstractExtension
         $scriptContents = '';
         foreach ($paths as $path) {
             $found = false;
-            foreach ([PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/js/' . $path,
-                        PIMCORE_WEB_ROOT . $path,
-                    ] as $fullPath) {
+            foreach ([
+                PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/js/' . $path,
+                PIMCORE_WEB_ROOT . $path,
+            ] as $fullPath) {
                 if (is_file($fullPath)) {
                     $scriptContents .= file_get_contents($fullPath) . "\n\n\n";
                     $found = true;
@@ -98,11 +103,59 @@ class AdminExtension extends AbstractExtension
         return '<script src="' . $url . '"></script>' . "\n";
     }
 
+    public function getLoginBackgroundImage(string $overwrite = ''): string
+    {
+        $possibleDefaultImages = [
+            '/bundles/pimcoreadmin/img/login/pimconaut-ecommerce.svg',
+            '/bundles/pimcoreadmin/img/login/pimconaut-world.svg',
+            '/bundles/pimcoreadmin/img/login/pimconaut-engineer.svg',
+            '/bundles/pimcoreadmin/img/login/pimconaut-moon.svg',
+            '/bundles/pimcoreadmin/img/login/pimconaut-rocket.svg',
+        ];
+        $backgroundImageUrl = $possibleDefaultImages[array_rand($possibleDefaultImages)];
+
+        if (empty($overwrite) === false) {
+            $backgroundImageUrl = $overwrite;
+        }
+
+        $customImage = AdminConfig::get()['branding']['login_screen_custom_image'];
+
+        if (empty($customImage) === true) {
+            return $backgroundImageUrl;
+        }
+
+        if (
+            preg_match('@^https?://@', $customImage) === 1
+            || is_file(PIMCORE_WEB_ROOT . '/var/assets' . $customImage) === true
+            || is_file(PIMCORE_WEB_ROOT . $customImage) === true
+        ) {
+            return $customImage;
+        }
+
+        $assetSource = Config::getSystemConfiguration('assets')['frontend_prefixes']['source'];
+
+        if (empty($assetSource) === false) {
+            $url = sprintf('%s/%s', $assetSource, $customImage);
+
+            try {
+                // Check if the image exists
+                getimagesize($url);
+
+                return $url;
+            } catch (Exception) {
+                return $backgroundImageUrl;
+            }
+        }
+
+        return $backgroundImageUrl;
+    }
+
     public function inlineIcon(string $icon): string
     {
         $content = file_get_contents($icon);
 
-        return sprintf('<img src="data:%s;base64,%s" title="%s" data-imgpath="%s" />',
+        return sprintf(
+            '<img src="data:%s;base64,%s" title="%s" data-imgpath="%s" />',
             mime_content_type($icon),
             base64_encode($content),
             basename($icon),
@@ -112,7 +165,8 @@ class AdminExtension extends AbstractExtension
 
     public function twemojiVariantIcon(string $icon): string
     {
-        return sprintf('<img title="%s" data-imgpath="%s" />',
+        return sprintf(
+            '<img title="%s" data-imgpath="%s" />',
             basename($icon),
             str_replace(PIMCORE_WEB_ROOT, '', $icon)
         );
