@@ -545,7 +545,7 @@ pimcore.element.helpers.gridColumnConfig = {
             editor.setObject(this.object);
         } else {
             let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
-            const tagType = layoutInfo.fieldConfig?.type ?? this.fieldObject[fieldInfo.dataIndex].type;
+            const tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
             try {
                 if (typeof pimcore.asset.metadata.tags[tagType].prototype.prepareBatchEditLayout == "function") {
                     layoutInfo = pimcore.asset.metadata.tags[tagType].prototype.prepareBatchEditLayout(layoutInfo);
