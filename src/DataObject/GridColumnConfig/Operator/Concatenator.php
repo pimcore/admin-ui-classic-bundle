@@ -36,9 +36,6 @@ final class Concatenator extends AbstractOperator
         $this->forceValue = $config->forceValue ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

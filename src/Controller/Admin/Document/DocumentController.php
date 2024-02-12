@@ -66,10 +66,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/tree-get-root", name="pimcore_admin_document_document_treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -78,11 +74,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/delete-info", name="pimcore_admin_document_document_deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -91,8 +82,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/get-data-by-id", name="pimcore_admin_document_document_getdatabyid", methods={"GET"})
-     *
-     *
      */
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -136,8 +125,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/tree-get-children-by-id", name="pimcore_admin_document_document_treegetchildrenbyid", methods={"GET"})
-     *
-     *
      */
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -245,10 +232,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/add", name="pimcore_admin_document_document_add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {
@@ -390,10 +373,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/delete", name="pimcore_admin_document_document_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteAction(Request $request): JsonResponse
     {
@@ -443,10 +422,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/update", name="pimcore_admin_document_document_update", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws Exception
      * @throws RuntimeException
@@ -614,10 +589,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/doc-types", name="pimcore_admin_document_document_doctypesget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function docTypesGetAction(Request $request): JsonResponse
     {
@@ -638,10 +609,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/doc-types", name="pimcore_admin_document_document_doctypes", methods={"PUT", "POST", "DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function docTypesAction(Request $request): JsonResponse
     {
@@ -699,11 +666,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     /**
      * @Route("/get-doc-types", name="pimcore_admin_document_document_getdoctypes", methods={"GET"})
      *
-     * @param Request $request
-     *
      * @throws BadRequestHttpException If type is invalid
-     *
-     * @return JsonResponse
      */
     public function getDocTypesAction(Request $request): JsonResponse
     {
@@ -727,10 +690,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/version-to-session", name="pimcore_admin_document_document_versiontosession", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function versionToSessionAction(Request $request): Response
     {
@@ -747,10 +706,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/publish-version", name="pimcore_admin_document_document_publishversion", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function publishVersionAction(Request $request): JsonResponse
     {
@@ -786,10 +741,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/update-site", name="pimcore_admin_document_document_updatesite", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function updateSiteAction(Request $request): JsonResponse
     {
@@ -829,10 +780,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/remove-site", name="pimcore_admin_document_document_removesite", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function removeSiteAction(Request $request): JsonResponse
     {
@@ -844,10 +791,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy-info", name="pimcore_admin_document_document_copyinfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyInfoAction(Request $request): JsonResponse
     {
@@ -943,10 +886,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy-rewrite-ids", name="pimcore_admin_document_document_copyrewriteids", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyRewriteIdsAction(Request $request): JsonResponse
     {
@@ -988,10 +927,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy", name="pimcore_admin_document_document_copy", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyAction(Request $request): JsonResponse
     {
@@ -1067,12 +1002,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="pimcore_admin_document_document_diffversions", requirements={"from": "\d+", "to": "\d+"}, methods={"GET"})
-     *
-     * @param Request $request
-     * @param int $from
-     * @param int $to
-     *
-     * @return Response
      */
     public function diffVersionsAction(Request $request, int $from, int $to): Response
     {
@@ -1140,10 +1069,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/diff-versions-image", name="pimcore_admin_document_document_diffversionsimage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      */
     public function diffVersionsImageAction(Request $request): BinaryFileResponse
     {
@@ -1160,10 +1085,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/get-id-for-path", name="pimcore_admin_document_document_getidforpath", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getIdForPathAction(Request $request): JsonResponse
     {
@@ -1179,10 +1100,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/language-tree", name="pimcore_admin_document_document_languagetree", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function languageTreeAction(Request $request): JsonResponse
     {
@@ -1200,10 +1117,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/language-tree-root", name="pimcore_admin_document_document_languagetreeroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws Exception
      */
@@ -1298,10 +1211,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/convert", name="pimcore_admin_document_document_convert", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function convertAction(Request $request): JsonResponse
     {
@@ -1342,10 +1251,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-determine-parent", name="pimcore_admin_document_document_translationdetermineparent", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationDetermineParentAction(Request $request): JsonResponse
     {
@@ -1373,10 +1278,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-add", name="pimcore_admin_document_document_translationadd", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationAddAction(Request $request): JsonResponse
     {
@@ -1406,10 +1307,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-remove", name="pimcore_admin_document_document_translationremove", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationRemoveAction(Request $request): JsonResponse
     {
@@ -1427,10 +1324,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-check-language", name="pimcore_admin_document_document_translationchecklanguage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationCheckLanguageAction(Request $request): JsonResponse
     {

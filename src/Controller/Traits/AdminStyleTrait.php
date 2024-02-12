@@ -27,10 +27,6 @@ use Pimcore\Model\Element\ElementInterface;
 trait AdminStyleTrait
 {
     /**
-     * @param ElementInterface $element
-     * @param int|null $context
-     * @param array $data
-     *
      * @throws \Exception
      */
     protected function addAdminStyle(ElementInterface $element, int $context = null, array &$data = []): void
@@ -52,6 +48,11 @@ trait AdminStyleTrait
             $data['cls'] .= $adminStyle->getElementCssClass() . ' ';
         }
         $data['qtipCfg'] = $adminStyle->getElementQtipConfig();
-        $data['text'] = $adminStyle->getElementText();
+
+        $elementText = $adminStyle->getElementText();
+        if ($elementText !== null) {
+            $data['text'] = $elementText;
+        }
+
     }
 }

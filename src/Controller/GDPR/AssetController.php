@@ -48,8 +48,6 @@ class AssetController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/search-assets", name="pimcore_admin_gdpr_asset_searchasset", methods={"GET"})
-     *
-     *
      */
     public function searchAssetAction(Request $request, Assets $service): JsonResponse
     {
@@ -70,11 +68,6 @@ class AssetController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/export", name="pimcore_admin_gdpr_asset_exportassets", methods={"GET"})
-     *
-     * @param Request $request
-     * @param Assets $service
-     *
-     * @return Response
      *
      * @throws \Exception
      */

@@ -123,14 +123,16 @@ trait DataObjectActionsTrait
             foreach ($list->getObjects() as $object) {
                 if ($csvMode) {
                     $o = DataObject\Service::getCsvDataForObject($object, $requestedLanguage, $request->get('fields'), DataObject\Service::getHelperDefinitions(), $localeService, 'title', false, $allParams['context']);
+                    // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_object is insufficient and could lead security breach
+                    if ($object->isAllowed('list')) {
+                        $objects[] = $o;
+                    }
                 } else {
                     $o = DataObject\Service::gridObjectData($object, $allParams['fields'] ?? null, $requestedLanguage,
                         ['csvMode' => $csvMode]);
-                }
-
-                // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_object is insufficient and could lead security breach
-                if ($object->isAllowed('list')) {
-                    $objects[] = $o;
+                    if ($o['permissions']['list']) {
+                        $objects[] = $o;
+                    }
                 }
             }
 
@@ -177,11 +179,11 @@ trait DataObjectActionsTrait
         foreach ($data as $key => $value) {
             $parts = explode('~', $key);
             if (substr($key, 0, 1) == '~') {
-                list(, $type, $field, $keyId) = $parts;
+                [, $type, $field, $keyId] = $parts;
 
                 if ($type == 'classificationstore') {
                     $groupKeyId = array_map('intval', explode('-', $keyId));
-                    list($groupId, $keyId) = $groupKeyId;
+                    [$groupId, $keyId] = $groupKeyId;
 
                     $getter = 'get' . ucfirst($field);
                     if (method_exists($object, $getter)) {

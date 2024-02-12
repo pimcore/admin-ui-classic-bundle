@@ -47,8 +47,6 @@ class LostPasswordEvent extends Event
 
     /**
      * Determines if lost password mail should be sent
-     *
-     * @return bool
      */
     public function getSendMail(): bool
     {
@@ -58,7 +56,6 @@ class LostPasswordEvent extends Event
     /**
      * Sets flag whether to send lost password mail or not
      *
-     * @param bool $sendMail
      *
      * @return $this
      */

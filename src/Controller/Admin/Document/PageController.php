@@ -53,11 +53,6 @@ class PageController extends DocumentControllerBase
     /**
      * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
      *
-     * @param Request $request
-     * @param StaticPageGenerator $staticPageGenerator
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getDataByIdAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
@@ -113,11 +108,6 @@ class PageController extends DocumentControllerBase
     /**
      * @Route("/save", name="save", methods={"PUT", "POST"})
      *
-     * @param Request $request
-     * @param StaticPageGenerator $staticPageGenerator
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
@@ -148,7 +138,7 @@ class PageController extends DocumentControllerBase
             }
         }
 
-        list($task, $page, $version) = $this->saveDocument($page, $request);
+        [$task, $page, $version] = $this->saveDocument($page, $request);
         $arguments = [
             'oldPage' => $oldPage,
             'task' => $task,
@@ -193,11 +183,6 @@ class PageController extends DocumentControllerBase
 
     /**
      * @Route("/generate-previews", name="generatepreviews", methods={"GET"})
-     *
-     * @param Request $request
-     * @param MessageBusInterface $messengerBusPimcoreCore
-     *
-     * @return JsonResponse
      */
     public function generatePreviewsAction(Request $request, MessageBusInterface $messengerBusPimcoreCore): JsonResponse
     {
@@ -217,10 +202,6 @@ class PageController extends DocumentControllerBase
 
     /**
      * @Route("/display-preview-image", name="display_preview_image", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      */
     public function displayPreviewImageAction(Request $request): BinaryFileResponse
     {
@@ -236,10 +217,6 @@ class PageController extends DocumentControllerBase
 
     /**
      * @Route("/check-pretty-url", name="checkprettyurl", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function checkPrettyUrlAction(Request $request): JsonResponse
     {
@@ -309,10 +286,6 @@ class PageController extends DocumentControllerBase
 
     /**
      * @Route("/clear-editable-data", name="cleareditabledata", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function clearEditableDataAction(Request $request): JsonResponse
     {
@@ -340,10 +313,6 @@ class PageController extends DocumentControllerBase
 
     /**
      * @Route("/qr-code", name="qrcode", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      *
      * @throws \Exception
      */
@@ -381,18 +350,7 @@ class PageController extends DocumentControllerBase
     /**
      * @Route("/areabrick-render-index-editmode", name="areabrick-render-index-editmode", methods={"POST"})
      *
-     * @param Request $request
-     * @param BlockStateStack $blockStateStack
-     * @param EditmodeEditableDefinitionCollector $definitionCollector
-     * @param Environment $twig
-     * @param EditableRenderer $editableRenderer
-     * @param DocumentResolver $documentResolver
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
-     *
      * @throws NotFoundHttpException|\Exception
-     *
      */
     public function areabrickRenderIndexEditmode(
         Request $request,

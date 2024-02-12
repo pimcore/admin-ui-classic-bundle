@@ -48,10 +48,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 {
     /**
      * @Route("/get-document-types", name="getdocumenttypes", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getDocumentTypesAction(Request $request): JsonResponse
     {
@@ -68,10 +64,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-asset-types", name="getassettypes", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAssetTypesAction(Request $request): JsonResponse
     {
@@ -88,10 +80,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-tree", name="gettree", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getTreeAction(Request $request): JsonResponse
     {
@@ -235,10 +223,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get", name="get", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAction(Request $request): JsonResponse
     {
@@ -256,10 +240,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-custom-layout", name="getcustomlayout", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getCustomLayoutAction(Request $request): JsonResponse
     {
@@ -298,10 +278,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/add", name="add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {
@@ -328,10 +304,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/add-custom-layout", name="addcustomlayout", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addCustomLayoutAction(Request $request): JsonResponse
     {
@@ -365,10 +337,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/delete", name="delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function deleteAction(Request $request): Response
     {
@@ -382,10 +350,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/delete-custom-layout", name="deletecustomlayout", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteCustomLayoutAction(Request $request): JsonResponse
     {
@@ -406,10 +370,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/save-custom-layout", name="savecustomlayout", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function saveCustomLayoutAction(Request $request): JsonResponse
     {
@@ -451,10 +411,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/save", name="save", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -547,10 +503,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/import-class", name="importclass", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function importClassAction(Request $request): Response
     {
@@ -574,10 +526,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/import-custom-layout-definition", name="importcustomlayoutdefinition", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function importCustomLayoutDefinitionAction(Request $request): Response
     {
@@ -630,10 +578,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-custom-layout-definitions", name="getcustomlayoutdefinitions", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getCustomLayoutDefinitionsAction(Request $request): JsonResponse
     {
@@ -658,10 +602,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-all-layouts", name="getalllayouts", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAllLayoutsAction(Request $request): JsonResponse
     {
@@ -711,10 +651,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/export-class", name="exportclass", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function exportClassAction(Request $request): Response
     {
@@ -739,10 +675,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/export-custom-layout-definition", name="exportcustomlayoutdefinition", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function exportCustomLayoutDefinitionAction(Request $request): Response
     {
@@ -774,10 +706,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/fieldcollection-get", name="fieldcollectionget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function fieldcollectionGetAction(Request $request): JsonResponse
     {
@@ -792,10 +720,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/fieldcollection-update", name="fieldcollectionupdate", methods={"PUT", "POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function fieldcollectionUpdateAction(Request $request): JsonResponse
     {
@@ -849,10 +773,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/import-fieldcollection", name="importfieldcollection", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function importFieldcollectionAction(Request $request): Response
     {
@@ -877,10 +797,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/export-fieldcollection", name="exportfieldcollection", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function exportFieldcollectionAction(Request $request): Response
     {
@@ -905,10 +821,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/fieldcollection-delete", name="fieldcollectiondelete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function fieldcollectionDeleteAction(Request $request): JsonResponse
     {
@@ -922,11 +834,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/fieldcollection-tree", name="fieldcollectiontree", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function fieldcollectionTreeAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1029,11 +936,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/fieldcollection-list", name="fieldcollectionlist", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function fieldcollectionListAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1083,10 +985,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-class-definition-for-column-config", name="getclassdefinitionforcolumnconfig", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getClassDefinitionForColumnConfigAction(Request $request): JsonResponse
     {
@@ -1165,10 +1063,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/objectbrick-get", name="objectbrickget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function objectbrickGetAction(Request $request): JsonResponse
     {
@@ -1183,11 +1077,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/objectbrick-update", name="objectbrickupdate", methods={"PUT", "POST"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function objectbrickUpdateAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1250,10 +1139,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/import-objectbrick", name="importobjectbrick", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function importObjectbrickAction(Request $request): JsonResponse
     {
@@ -1277,10 +1162,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/export-objectbrick", name="exportobjectbrick", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function exportObjectbrickAction(Request $request): Response
     {
@@ -1305,10 +1186,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/objectbrick-delete", name="objectbrickdelete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function objectbrickDeleteAction(Request $request): JsonResponse
     {
@@ -1322,11 +1199,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/objectbrick-tree", name="objectbricktree", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function objectbrickTreeAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1472,11 +1344,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/objectbrick-list", name="objectbricklist", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function objectbrickListAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1544,10 +1411,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/bulk-import", name="bulkimport", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function bulkImportAction(Request $request): JsonResponse
     {
@@ -1609,10 +1472,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/bulk-commit", name="bulkcommit", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1720,10 +1579,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/bulk-export-prepare", name="bulkexportprepare", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function bulkExportPrepareAction(Request $request): Response
     {
@@ -1738,10 +1593,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/bulk-export", name="bulkexport", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function bulkExportAction(Request $request): JsonResponse
     {
@@ -1816,10 +1667,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/do-bulk-export", name="dobulkexport", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function doBulkExportAction(Request $request): Response
     {
@@ -1886,10 +1733,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-fieldcollection-usages", name="getfieldcollectionusages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function getFieldcollectionUsagesAction(Request $request): Response
     {
@@ -1918,10 +1761,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-bricks-usages", name="getbrickusages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function getBrickUsagesAction(Request $request): Response
     {
@@ -1967,11 +1806,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/get-icons", name="geticons", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return Response
      */
     public function getIconsAction(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
@@ -2009,8 +1843,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/suggest-class-identifier", name="suggestclassidentifier")
-     *
-     * @return Response
      */
     public function suggestClassIdentifierAction(): Response
     {
@@ -2029,10 +1861,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/suggest-custom-layout-identifier", name="suggestcustomlayoutidentifier")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function suggestCustomLayoutIdentifierAction(Request $request): Response
     {
@@ -2064,10 +1892,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/text-layout-preview", name="textlayoutpreview")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function textLayoutPreviewAction(Request $request): Response
     {
@@ -2111,11 +1935,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
     /**
      * @Route("/video-supported-types", name="videosupportedTypestypes")
-     *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return Response
      */
     public function videoAllowedTypesAction(Request $request, TranslatorInterface $translator): Response
     {
@@ -2220,7 +2039,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
             if (!isset($groups[$group])) {
                 $groups[$group] = [
                     'id' => 'group_' . $id,
-                    'text' => htmlspecialchars($group),
+                    'text' => htmlspecialchars($group ?? ''),
                     'expandable' => true,
                     'leaf' => false,
                     'allowChildren' => true,

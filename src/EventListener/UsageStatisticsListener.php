@@ -44,9 +44,6 @@ class UsageStatisticsListener implements EventSubscriberInterface
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
