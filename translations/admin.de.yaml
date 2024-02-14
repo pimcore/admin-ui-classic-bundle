@@ -1132,4 +1132,6 @@ keybinding_users: Users
 keybinding_roles: Roles
 remove_focal_point: Remove Focal Point
 username: Benutzername
-...
+zip_upload_want_to_overwrite: 'Do you want to overwrite the files?'
+zip_upload_want_to_overwrite_yes_option: 'Yes'
+zip_upload_want_to_overwrite_no_option: 'No'
