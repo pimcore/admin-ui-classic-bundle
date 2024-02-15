@@ -676,6 +676,10 @@ pimcore.settings.thumbnail.items = {
         }
         var myId = Ext.id();
 
+        if (typeof data.positioning == "undefined" || data.positioning == "") {
+            data.positioning = "center";
+        }
+
         var item = new Ext.form.FormPanel({
             id: myId,
             style: "margin-top: 10px",
