@@ -82,6 +82,11 @@ pimcore.object.tags.quantityValue = Class.create(pimcore.object.tags.abstract, {
         });
 
         var updateCompatibleUnitsToolTipContent = function() {
+            if(pimcore.globalmanager.get("user").isAllowed('quantityValueUnits') !== true) {
+                compatibleUnitsButton.hide();
+                return false;
+            }
+
             if (this.inputField.value === '' || this.inputField.value === null || !this.unitField.value) {
                 compatibleUnitsButton.hide();
                 return false;
