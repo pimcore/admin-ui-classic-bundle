@@ -25,6 +25,7 @@ use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Element;
 use Pimcore\Model\User;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +36,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -1160,7 +1162,7 @@ class UserController extends AdminAbstractController implements KernelController
      *
      * @throws \Exception
      */
-    public function invitationLinkAction(Request $request, TranslatorInterface $translator): JsonResponse
+    public function invitationLinkAction(Request $request, TranslatorInterface $translator, RouterInterface $router): JsonResponse
     {
         $success = false;
         $message = '';
@@ -1187,6 +1189,15 @@ class UserController extends AdminAbstractController implements KernelController
                 }
 
                 $token = Tool\Authentication::generateTokenByUser($user);
+
+                $domain = SystemSettingsConfig::get()['general']['domain'];
+                if (!$domain) {
+                    throw new \Exception('No main domain set in system settings, unable to generate login invitation link');
+                }
+
+                $context = $router->getContext();
+                $context->setHost($domain);
+
                 $loginUrl = $this->generateCustomUrl([
                     'token' => $token,
                     'reset' => true,
