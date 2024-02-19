@@ -73,17 +73,24 @@ pimcore.asset.helpers.grid = Class.create({
                 var readerFieldConfig = {name: key};
                 // dynamic select returns data + options on cell level
 
-                if (pimcore.asset.metadata.tags[type]
-                    && typeof pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig == "function") {
+                let currentTag = pimcore.asset.metadata.tags[type];
 
-                    readerFieldConfig["convert"] = pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig.bind(this, key);
+                if (currentTag) {
+                    if (typeof currentTag.prototype.addGridOptionsFromColumnConfig == "function") {
 
-                    var readerFieldConfigOptions = {name: key + "%options", persist: false};
-                    readerFields.push(readerFieldConfigOptions);
-                }
+                        readerFieldConfig["convert"] = pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig.bind(this, key);
 
-                if (pimcore.object.tags[type] && pimcore.object.tags[type].prototype.allowBatchAppend) {
-                    batchAppendColumns.push(key);
+                        var readerFieldConfigOptions = {name: key + "%options", persist: false};
+                        readerFields.push(readerFieldConfigOptions);
+                    }
+
+                    if (currentTag.prototype.allowBatchAppend) {
+                        batchAppendColumns.push(key);
+                    }
+                    if (currentTag.prototype.allowBatchRemove) {
+                        batchRemoveColumns.push(key);
+                    }
+
                 }
 
                 readerFields.push(readerFieldConfig);
