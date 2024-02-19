@@ -241,7 +241,7 @@ pimcore.settings.user.user.settings = Class.create({
                     xtype: "button",
                     style: "margin-left: 8px",
                     iconCls: "pimcore_nav_icon_email",
-                    hidden: (this.currentUser.lastLogin > 0) || (user.id == this.currentUser.id),
+                    hidden: (user.id === this.currentUser.id),
                     handler: function () {
                         Ext.Ajax.request({
                             url: Routing.generate('pimcore_admin_user_invitationlink'),
