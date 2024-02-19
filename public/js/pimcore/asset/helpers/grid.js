@@ -44,9 +44,11 @@ pimcore.asset.helpers.grid = Class.create({
         this.baseParams['fields[]'] = fieldParam;
     },
 
-    getStore: function(noBatchColumns, batchAppendColumns) {
+    getStore: function(noBatchColumns, batchAppendColumns, batchRemoveColumns) {
 
         batchAppendColumns = batchAppendColumns || [];
+        batchRemoveColumns = batchRemoveColumns || [];
+
         // the store
         var readerFields = [];
         readerFields.push({name: "preview"});
@@ -63,6 +65,7 @@ pimcore.asset.helpers.grid = Class.create({
 
         this.noBatchColumns = [];
         this.batchAppendColumns = [];
+        this.batchRemoveColumns = [];
 
         for (var i = 0; i < this.fields.length; i++) {
             if (!in_array(this.fields[i].key, ["creationDate", "modificationDate"])) {

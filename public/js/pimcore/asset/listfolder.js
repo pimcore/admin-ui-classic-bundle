@@ -33,6 +33,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
         this.object.id = element.id;
         this.noBatchColumns = [];
         this.batchAppendColumns = [];
+        this.batchRemoveColumns = [];
     },
 
     getLayout: function () {
@@ -141,7 +142,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
             existingFilters = this.store.getFilters();
         }
 
-        this.store = gridHelper.getStore(this.noBatchColumns, this.batchAppendColumns);
+        this.store = gridHelper.getStore(this.noBatchColumns, this.batchAppendColumns, this.batchRemoveColumns);
         if (this.sortinfo) {
             this.store.sort(this.sortinfo.field, this.sortinfo.direction);
         }
