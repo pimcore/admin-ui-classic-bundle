@@ -74,7 +74,8 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
         }
 
         tag.updateContext({
-            cellEditing: true
+            cellEditing: true,
+            fieldname: fieldInfo.key
         });
 
         if (typeof tag["finishSetup"] !== "undefined") {
