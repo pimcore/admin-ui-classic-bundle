@@ -39,10 +39,6 @@ class EmailController extends AdminAbstractController
     /**
      * @Route("/email-logs", name="pimcore_admin_email_emaillogs", methods={"GET", "POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function emailLogsAction(Request $request): JsonResponse
@@ -113,11 +109,6 @@ class EmailController extends AdminAbstractController
     /**
      * @Route("/show-email-log", name="pimcore_admin_email_showemaillog", methods={"GET"})
      *
-     * @param Request $request
-     * @param Profiler|null $profiler
-     *
-     * @return JsonResponse|Response
-     *
      * @throws \Exception
      */
     public function showEmailLogAction(Request $request, ?Profiler $profiler): JsonResponse|Response
@@ -164,10 +155,6 @@ class EmailController extends AdminAbstractController
         }
     }
 
-    /**
-     * @param array $data
-     * @param array|null $fullEntry
-     */
     protected function enhanceLoggingData(array &$data, array &$fullEntry = null): void
     {
         if (!empty($data['objectClass'])) {
@@ -251,10 +238,6 @@ class EmailController extends AdminAbstractController
     /**
      * @Route("/delete-email-log", name="pimcore_admin_email_deleteemaillog", methods={"DELETE"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function deleteEmailLogAction(Request $request): JsonResponse
@@ -277,10 +260,6 @@ class EmailController extends AdminAbstractController
 
     /**
      * @Route("/resend-email", name="pimcore_admin_email_resendemail", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -373,10 +352,6 @@ class EmailController extends AdminAbstractController
     /**
      * @Route("/send-test-email", name="pimcore_admin_email_sendtestemail", methods={"POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function sendTestEmailAction(Request $request): JsonResponse
@@ -440,10 +415,6 @@ class EmailController extends AdminAbstractController
 
     /**
      * @Route("/blocklist", name="pimcore_admin_email_blocklist", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -526,7 +497,7 @@ class EmailController extends AdminAbstractController
         return $this->adminJson(['success' => false]);
     }
 
-    protected function parseLoggingParamObject(array $params): ?array
+    protected function parseLoggingParamObject(array $params): mixed
     {
         $data = null;
         if ($params['data']['type'] === 'object') {

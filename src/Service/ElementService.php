@@ -48,10 +48,6 @@ class ElementService implements ElementServiceInterface
     }
 
     /**
-     * @param string $id
-     *
-     * @return array|null
-     *
      * @internal
      */
     public function getCustomViewById(string $id): ?array
@@ -76,7 +72,7 @@ class ElementService implements ElementServiceInterface
         $tmpNode = [
             'id' => $element->getId(),
             'key' => $element->getKey(),
-            'text' => htmlspecialchars($element->getKey()),
+            'text' => htmlspecialchars($element->getKey() ?? ''),
             'type' => $element->getType(),
             'path' => $element->getRealFullPath(),
             'basePath' => $element->getRealPath(),

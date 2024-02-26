@@ -33,9 +33,6 @@ final class IsEqual extends AbstractOperator
         $this->skipNull = $config->skipNull ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

@@ -1053,4 +1053,35 @@ male: Male
 female: Female
 preview_generator_locale: Language
 preview_generator_site: Site
+failed_to_create_new_item_select_options: Failed to create new item. Name must be
+  UpperCamelCase format, at least 3 characters long and may not contain any reserved
+  words.
+pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
+  and open it in your local PDF viewer.
+pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
+  a while.'
+keybinding_save: Save
+keybinding_publish: Publish
+keybinding_unpublish: Unpublish
+keybinding_rename: Rename
+keybinding_refresh: Reload
+keybinding_openDocument: Open Document
+keybinding_openAsset: Open Asset
+keybinding_openObject: Open Object
+keybinding_openInTree: Show in Tree
+keybinding_searchDocument: Search Documents
+keybinding_searchAsset: Search Assets
+keybinding_searchObject: Search Objects
+keybinding_showElementHistory: Recently Opened Elements
+keybinding_closeAllTabs: Close all tabs
+keybinding_searchAndReplaceAssignments: Search & Replace Assignments
+keybinding_redirects: Redirects
+keybinding_sharedTranslations: Shared Translations
+keybinding_recycleBin: Recycle Bin
+keybinding_notesEvents: Notes &amp; Events
+keybinding_tagConfiguration: Tag Configuration
+keybinding_users: Users
+keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: Username
 ...

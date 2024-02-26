@@ -26,8 +26,8 @@ use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
 use Pimcore\Bundle\AdminBundle\Tool;
 use Pimcore\Db;
+use Pimcore\File;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
-use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
@@ -87,13 +87,6 @@ class AssetHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @param User $user
-     * @param string $classId
-     * @param string|null $searchType
-     *
-     * @return array
-     */
     public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
     {
         $db = Db::get();
@@ -132,10 +125,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-delete-column-config", name="pimcore_admin_asset_assethelper_griddeletecolumnconfig", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridDeleteColumnConfigAction(Request $request): JsonResponse
     {
@@ -159,10 +148,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-get-column-config", name="pimcore_admin_asset_assethelper_gridgetcolumnconfig", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridGetColumnConfigAction(Request $request): JsonResponse
     {
@@ -288,13 +273,6 @@ class AssetHelperController extends AdminAbstractController
         ];
     }
 
-    /**
-     * @param array $field
-     * @param string $language
-     * @param string|null $keyPrefix
-     *
-     * @return array|null
-     */
     protected function getFieldGridConfig(array $field, string $language = '', string $keyPrefix = null): ?array
     {
         $defaulMetadataFields = ['copyright', 'alt', 'title'];
@@ -379,10 +357,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/prepare-helper-column-configs", name="pimcore_admin_asset_assethelper_preparehelpercolumnconfigs", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
@@ -413,10 +387,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-mark-favourite-column-config", name="pimcore_admin_asset_assethelper_gridmarkfavouritecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
@@ -483,10 +453,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-save-column-config", name="pimcore_admin_asset_assethelper_gridsavecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
@@ -579,9 +545,6 @@ class AssetHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     *
      * @throws \Exception
      */
     protected function updateGridConfigShares(?GridConfig $gridConfig, array $metadata): void
@@ -620,9 +583,6 @@ class AssetHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     *
      * @throws \Exception
      */
     protected function updateGridConfigFavourites(?GridConfig $gridConfig, array $metadata): void
@@ -695,11 +655,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-export-jobs", name="pimcore_admin_asset_assethelper_getexportjobs", methods={"POST"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     *
-     * @return JsonResponse
      */
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
@@ -722,19 +677,16 @@ class AssetHelperController extends AdminAbstractController
     /**
      * @Route("/do-export", name="pimcore_admin_asset_assethelper_doexport", methods={"POST"})
      *
-     * @param Request $request
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
+     * @throws FilesystemException
      */
-    public function doExportAction(Request $request, LocaleServiceInterface $localeService): JsonResponse
+    public function doExportAction(Request $request): JsonResponse
     {
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $ids = $request->get('ids');
-        $settings = $request->get('settings');
-        $settings = json_decode($settings, true);
+        $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $language = str_replace('default', '', $request->get('language'));
+        $header = $settings['header'] ?? 'title';
 
         $list = new Asset\Listing();
 
@@ -746,32 +698,46 @@ class AssetHelperController extends AdminAbstractController
         $list->setCondition('id IN (' . implode(',', $quotedIds) . ')');
         $list->setOrderKey(' FIELD(id, ' . implode(',', $quotedIds) . ')', false);
 
-        $fields = $request->get('fields');
+        $fields = json_decode($request->get('fields')[0], true);
 
         $addTitles = (bool) $request->get('initial');
 
-        $csv = $this->getCsvData($request, $language, $list, $fields, $addTitles);
+        $csv = $this->getCsvData($language, $list, $fields, $header, $addTitles);
 
-        $storage = Storage::get('temp');
-        $csvFile = $this->getCsvFile($fileHandle);
+        try {
+            $storage = Storage::get('temp');
+            $csvFile = $this->getCsvFile($fileHandle);
 
-        $fileStream = $storage->readStream($csvFile);
+            $fileStream = $storage->readStream($csvFile);
 
-        $temp = tmpfile();
-        stream_copy_to_stream($fileStream, $temp, null, 0);
+            $temp = tmpfile();
+            stream_copy_to_stream($fileStream, $temp, null, 0);
 
-        $firstLine = true;
-        foreach ($csv as $line) {
-            if ($addTitles && $firstLine) {
+            $firstLine = true;
+            if ($request->get('initial') && $header === 'no_header') {
                 $firstLine = false;
-                $line = implode($delimiter, $line) . "\r\n";
-                fwrite($temp, $line);
-            } else {
-                fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)) . "\r\n");
             }
-        }
 
-        $storage->writeStream($csvFile, $temp);
+            foreach ($csv as $line) {
+                if ($addTitles && $firstLine) {
+                    $firstLine = false;
+                    $line = implode($delimiter, $line) . "\r\n";
+                    fwrite($temp, $line);
+                } else {
+                    fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)) . "\r\n");
+                }
+            }
+            $storage->writeStream($csvFile, $temp);
+        } catch (UnableToReadFile $exception) {
+            Logger::err($exception->getMessage());
+
+            return $this->adminJson(
+                [
+                    'success' => false,
+                    'message' => sprintf('export file not found: %s', $fileHandle),
+                ]
+            );
+        }
 
         return $this->adminJson(['success' => true]);
     }
@@ -784,18 +750,26 @@ class AssetHelperController extends AdminAbstractController
         return '"' . $value . '"';
     }
 
-    protected function getCsvData(Request $request, string $language, Asset\Listing $list, array $fields, bool $addTitles = true): array
-    {
+    protected function getCsvData(
+        string $language,
+        Asset\Listing $list,
+        array $fields,
+        string $header,
+        bool $addTitles = true
+    ): array {
         //create csv
         $csv = [];
 
-        $unsupportedFields = ['preview~system', 'size~system'];
-        $fields = array_diff($fields, $unsupportedFields);
+        $unsupportedFields = [0 => 'preview~system', 1 => 'size~system'];
+        $fields = array_filter($fields, function ($field) use ($unsupportedFields) {
+            return !in_array($field['key'], $unsupportedFields);
+        });
 
-        if ($addTitles) {
+        if ($addTitles && $header != 'no_header') {
             $columns = $fields;
-            foreach ($columns as $columnIdx => $columnKey) {
-                $columns[$columnIdx] = '"' . $columnKey . '"';
+            $titleIdx = $header === 'name' ? 'key' : 'label';
+            foreach ($columns as $columnIdx => $columnKeys) {
+                $columns[$columnIdx] = '"' . $columnKeys[$titleIdx] . '"';
             }
             $csv[] = $columns;
         }
@@ -804,7 +778,7 @@ class AssetHelperController extends AdminAbstractController
             if ($fields) {
                 $dataRows = [];
                 foreach ($fields as $field) {
-                    $fieldDef = explode('~', $field);
+                    $fieldDef = explode('~', $field['key']);
                     $getter = 'get' . ucfirst($fieldDef[0]);
 
                     if (isset($fieldDef[1])) {
@@ -815,7 +789,7 @@ class AssetHelperController extends AdminAbstractController
                             $data = $asset->getMetadata($fieldDef[0], $fieldDef[1], true);
                         }
                     } else {
-                        $data = $asset->getMetadata($field, $language, true);
+                        $data = $asset->getMetadata($field['key'], $language, true);
                     }
 
                     if ($data instanceof Element\ElementInterface) {
@@ -852,15 +826,11 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/download-csv-file", name="pimcore_admin_asset_assethelper_downloadcsvfile", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -884,16 +854,11 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/download-xlsx-file", name="pimcore_admin_asset_assethelper_downloadxlsxfile", methods={"GET"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     *
-     * @return BinaryFileResponse
      */
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -906,10 +871,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-metadata-for-column-config", name="pimcore_admin_asset_assethelper_getmetadataforcolumnconfig", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getMetadataForColumnConfigAction(Request $request): JsonResponse
     {
@@ -965,8 +926,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-batch-jobs", name="pimcore_admin_asset_assethelper_getbatchjobs", methods={"POST"})
-     *
-     *
      */
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
@@ -984,11 +943,6 @@ class AssetHelperController extends AdminAbstractController
 
     /**
      * @Route("/batch", name="pimcore_admin_asset_assethelper_batch", methods={"PUT"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function batchAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {

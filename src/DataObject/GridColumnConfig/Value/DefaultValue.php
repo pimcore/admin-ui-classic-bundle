@@ -30,11 +30,10 @@ use Pimcore\Model\Element\ElementInterface;
  */
 final class DefaultValue extends AbstractValue
 {
-    protected ?LocaleServiceInterface $localeService = null;
+    private LocaleServiceInterface $localeService;
 
-    public function __construct(\stdClass $config, mixed $context = null, LocaleServiceInterface $localeService = null)
+    public function setLocaleService(LocaleServiceInterface $localeService): void
     {
-        parent::__construct($config, $context);
         $this->localeService = $localeService;
     }
 
@@ -162,9 +161,6 @@ final class DefaultValue extends AbstractValue
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $attributeParts = explode('~', $this->attribute);

@@ -66,8 +66,8 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
     },
 
     addTab: function () {
-
         var tabTitle = this.data.filename;
+        
         if (this.id == 1) {
             tabTitle = "home";
         }
@@ -75,15 +75,53 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         this.tabPanel = Ext.getCmp("pimcore_panel_tabs");
         var tabId = "asset_" + this.id;
 
-        this.tab = new Ext.Panel({
-            id: tabId,
-            title: htmlspecialchars(tabTitle),
-            closable:true,
-            layout: "border",
-            items: [this.getLayoutToolbar(),this.getTabPanel()],
-            asset: this,
-            iconCls: this.getIconClass()
+        const tabbarContainer = new Ext.Container({
+            flex: 2
         });
+
+        const tabPanel = this.getTabPanel();
+        const toolbar = this.getLayoutToolbar();
+
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                cls: "pimcore_panel_toolbar_horizontal_border_layout",
+                title: htmlspecialchars(tabTitle),
+                closable:true,
+                hideMode: "offsets",
+                layout: "border",
+                items: [
+                    {
+                        xtype: 'panel',
+                        width: "100%",
+                        region: 'north',
+                        layout: 'hbox',
+                        items: [
+                            toolbar,
+                            tabbarContainer,
+                        ]
+                    },
+
+                    tabPanel
+                ],
+                iconCls: this.getIconClass(),
+                asset: this,
+            });
+
+            this.toolbarSubmenu.menu.addCls('pimcore_headbar_submenu_menu');
+
+            pimcore.helpers.headbar.prepareTabPanel(tabPanel, tabbarContainer, this.tab);
+        } else {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                title: htmlspecialchars(tabTitle),
+                closable:true,
+                layout: "border",
+                items: [toolbar, tabPanel],
+                asset: this,
+                iconCls: this.getIconClass()
+            });
+        }
 
         this.tab.on("activate", function () {
             this.tab.updateLayout();
@@ -174,30 +212,49 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
 
             buttons.push("-");
 
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu = new Ext.Button({
+                    ...pimcore.helpers.headbar.getSubmenuConfig()
+                });
+
+                buttons.push(this.toolbarSubmenu);
+            }
 
             if (this.isAllowed("delete") && !this.data.locked) {
-                this.toolbarButtons.remove = new Ext.Button({
-                    tooltip: t('delete'),
+                const deleteConfig = {
+                    ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('delete') } : { tooltip: t('delete') })(),
                     iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                     scale: "medium",
                     handler: this.remove.bind(this)
-                });
-                buttons.push(this.toolbarButtons.remove);
+                };
+
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add(deleteConfig);
+                } else {
+                    this.toolbarButtons.remove = new Ext.Button(deleteConfig);
+                    buttons.push(this.toolbarButtons.remove);
+                }
             }
 
             if (this.isAllowed("rename") && !this.data.locked) {
-                this.toolbarButtons.rename = new Ext.Button({
-                    tooltip: t('rename'),
+                const renameConfig = {
+                    ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('rename') } : { tooltip: t('rename') })(),
                     iconCls: "pimcore_material_icon_rename pimcore_material_icon",
                     scale: "medium",
                     handler: this.rename.bind(this)
-                });
-                buttons.push(this.toolbarButtons.rename);
+                };
+
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add(renameConfig);
+                } else {
+                    this.toolbarButtons.rename = new Ext.Button(renameConfig);
+                    buttons.push(this.toolbarButtons.rename);
+                }
             }
 
             if (this.isAllowed("publish")) {
-                this.toolbarButtons.upload = new Ext.Button({
-                    tooltip: t("upload_new_version"),
+                const uploadConfig = {
+                    ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('upload_new_version') } : { tooltip: t('upload_new_version') })(),
                     iconCls: "pimcore_material_icon_upload pimcore_material_icon",
                     scale: "medium",
                     handler: function () {
@@ -205,18 +262,30 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                             this.reload();
                         }.bind(this));
                     }.bind(this)
-                });
-                buttons.push(this.toolbarButtons.upload);
+                };
+
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add(uploadConfig);
+                } else {
+                    this.toolbarButtons.upload = new Ext.Button(uploadConfig);
+                    buttons.push(this.toolbarButtons.upload);
+                }
             }
 
-            buttons.push({
-                tooltip: t("download"),
+            const downloadConfig = {
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('download') } : { tooltip: t('download') })(),
                 iconCls: "pimcore_material_icon_download pimcore_material_icon",
                 scale: "medium",
                 handler: function () {
                     pimcore.helpers.download(Routing.generate('pimcore_admin_asset_download', {id: this.data.id}));
                 }.bind(this)
-            });
+            };
+
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu.menu.add(downloadConfig);
+            } else {
+                buttons.push(downloadConfig);
+            }
 
             buttons.push({
                 tooltip: t('reload'),
@@ -245,8 +314,8 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
 
             // only for videos and images
             if (this.isAllowed("publish") && in_array(this.data.type,["image","video"]) || this.data.mimetype == "application/pdf") {
-                buttons.push({
-                    tooltip: t("clear_thumbnails"),
+                const clearThumbnailsConfig = {
+                    ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('clear_thumbnails') } : { tooltip: t('clear_thumbnails') })(),
                     iconCls: "pimcore_material_icon_clear_thumbnails pimcore_material_icon",
                     scale: "medium",
                     handler: function () {
@@ -258,24 +327,29 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                             }
                         });
                     }.bind(this)
-                });
+                };
+
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add(clearThumbnailsConfig);
+                } else {
+                    buttons.push(clearThumbnailsConfig);
+                }
             }
 
             if (pimcore.globalmanager.get("user").isAllowed('notifications_send')) {
-                buttons.push({
-                    tooltip: t('share_via_notifications'),
+                const notificationConfig = {
+                    ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('share_via_notifications') } : { tooltip: t('share_via_notifications') })(),
                     iconCls: "pimcore_icon_share",
                     scale: "medium",
                     handler: this.shareViaNotifications.bind(this)
-                });
-            }
+                };
 
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t("id") + " " + this.data.id,
-                scale: "medium"
-            });
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add(notificationConfig);
+                } else {
+                    buttons.push(notificationConfig);
+                }
+            }
 
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('asset', this.data.id, this, buttons);
@@ -284,6 +358,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                 id: "asset_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -308,7 +383,6 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
 
         this.save(false, onCompleteCallback, "session")
     },
-
 
     getSaveData : function (only) {
         var parameters = {};
@@ -365,6 +439,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         }
 
         this.tab.mask();
+        this.saving = true;
 
         const preSaveAsset = new CustomEvent(pimcore.events.preSaveAsset, {
             detail: {
@@ -377,6 +452,7 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
         const isAllowed = document.dispatchEvent(preSaveAsset);
         if (!isAllowed) {
             this.tab.unmask();
+            this.saving = false;
             return false;
         }
 
@@ -431,6 +507,9 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
             }.bind(this),
             failure: function () {
                 this.tab.unmask();
+            }.bind(this),
+            callback: function (){
+                this.saving = false;
             }.bind(this),
             params: params
         });

@@ -323,11 +323,20 @@ pimcore.document.edit = Class.create({
         Object.values(this.getEditables()).forEach(editable => {
             try {
                 if (editable.getName() && !editable.getInherited()) {
-                    let name = editable.getName();
-                    values[name] = {
-                        data: editable.getValue(),
-                        type: editable.getType()
-                    };
+                    const name = editable.getName();
+                    const type = editable.getType();
+                    const value = editable.getValue();
+                    if (type === "wysiwyg" && value === "") {
+                        values[name] = {
+                            data: '',
+                            type: type
+                        };
+                    } else {
+                        values[name] = {
+                            data: value,
+                            type: type
+                        };
+                    }
                 }
             } catch(e2) {
 

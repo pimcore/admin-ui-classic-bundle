@@ -247,6 +247,12 @@ pimcore.events.prepareAffectedNodes = "pimcore.treeNode.prepareAffectedNodes";
  pimcore.events.preMenuBuild = "pimcore.menu.preBuild";
 
 /**
+ * post building menu
+ * for having full menu
+ */
+pimcore.events.postMenuBuild = "pimcore.menu.postBuild";
+
+/**
  *  start event for the editor to create the config
  *  config and context are passed as parameters
  */
@@ -297,5 +303,20 @@ pimcore.events.globalLanguageChanged = "pimcore.globalLanguage.changed";
  */
 pimcore.events.postEditObjectKey = "pimcore.objectKey.postEdit";
 
+/**
+ * fired when asset key is edited
+ * asset and key are passed as parameter
+ */
+pimcore.events.postEditAssetKey = "pimcore.assetKey.postEdit";
 
+/**
+ * fired when document key is edited
+ * document and key are passed as parameter
+ */
+pimcore.events.postEditDocumentKey = "pimcore.documentKey.postEdit";
 
+/**
+ * fired after basic perspective element trees were  built
+ *  array of custom perspective element trees  are passed as parameter
+ */
+pimcore.events.postBuildPerspectiveElementTree = "pimcore.elementTree.perspective.postBuild";

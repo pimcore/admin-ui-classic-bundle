@@ -212,7 +212,7 @@ addoverlay: "Overlay hozz\xE1ad\xE1sa"
 transformations: "Transzform\xE1ci\xF3k"
 you_can_drag_the_tabs_to_reorder_the_media_queries: "H\xFAz\xE1ssal \xE1tsorrendezheted
   a media query-k priorit\xE1s\xE1t"
-frame: Frame
+frame: Keret
 setbackgroundcolor: "H\xE1tt\xE9rsz\xEDn be\xE1ll\xEDt\xE1sa"
 setbackgroundimage: "H\xE1tt\xE9rk\xE9p be\xE1ll\xEDt\xE1sa"
 roundcorners: "Kerek\xEDtett sarkok"
@@ -250,7 +250,7 @@ allowed_types: "Enged\xE9lyezett t\xEDpusok"
 columnlength: Oszlop hossza
 visible_in_searchresult: "L\xE1that\xF3 a keres\xE9si tal\xE1latok k\xF6z\xF6tt"
 visible_in_gridview: "L\xE1that\xF3 r\xE1csn\xE9zetben"
-fieldcollections: Field-Collections
+fieldcollections: "Mez\u0151-Kollekci\xF3k"
 block: Blokk
 tooltip: Tooltip
 decimalPrecision: "Tizedes-pontoss\xE1g"
@@ -278,10 +278,10 @@ timezone: "Id\u0151z\xF3na"
 host: Host
 store_version_history_in_days: "Verzi\xF3 el\u0151zm\xE9nyek megtart\xE1sa X napig"
 store_version_history_in_steps: "Verzi\xF3 el\u0151zm\xE9nyek megtart\xE1sa X m\xF3dos\xEDt\xE1sig"
-layout: Layout
+layout: "Elrendez\xE9s"
 add_layout_component: "Layout Component hozz\xE1ad\xE1sa"
 add_data_component: "Adat Component hozz\xE1ad\xE1sa"
-accordion: Accordion
+accordion: Harmonika
 iframe: "El\u0151n\xE9zet / Iframe"
 fieldset: Fieldset
 panel: Panel
@@ -293,9 +293,9 @@ defaults: "Alap\xE9rtelmezett"
 wysiwyg: WYSIWYG
 objects: Objectumok
 allow_inherit: "\xD6r\xF6kl\xE9s enged\xE9lyez\xE9se"
-parent_php_class: Parent PHP Class
+parent_php_class: "Sz\xFCl\u0151 PHP Oszt\xE1ly"
 implements_interfaces: "Megval\xF3s\xEDt interface(ket)"
-use_traits: Use (traits)
+use_traits: Use (traitek)
 general_settings: "\xC1ltal\xE1nos Be\xE1ll\xEDt\xE1sok"
 layout_settings: "Layout Be\xE1ll\xEDt\xE1sok (Pimcore Admin)"
 region: "R\xE9gi\xF3"
@@ -346,7 +346,7 @@ allow_objects: "Objectumok enged\xE9lyez\xE9se"
 allowed_types_hint: "(\xFCres = \xF6sszes enged\xE9lyez\xE9se)"
 allowed_document_types: "Enged\xE9lyezett Dokumentum t\xEDpusok"
 allowed_asset_types: "Enged\xE9lyezett asset t\xEDpusok"
-allowed_video_types: Allowed Video Types
+allowed_video_types: "Enged\xE9lyezett Vide\xF3 t\xEDpusok"
 website: Webhely
 user_creation_error: "Felhaszn\xE1l\xF3 l\xE9trehoz\xE1sa sikertelen"
 email_debug_addresses: "Debug email c\xEDmek"
@@ -373,7 +373,7 @@ position: "Poz\xEDci\xF3"
 objectsMetadata_allowed_class: "Enged\xE9lyezett Oszt\xE1lyok"
 objectsMetadata_visible_fields: "L\xE1that\xF3 mez\u0151k"
 objectsMetadata_type_columnbool: Boolean oszlop
-objectsMetadata_type_multiselect: Multiselect
+objectsMetadata_type_multiselect: "T\xF6bber v\xE1laszt\xF3"
 file_explorer_saved_file_error: "File ment\xE9se sikertelen"
 reserved_field_names_error: "K\xE9rj\xFCk ne haszn\xE1ld az alabbi foglalt mez\u0151neveket: "
 use_current_date: "Aktu\xE1lis d\xE1tum"
@@ -438,7 +438,7 @@ quantityValue_units: "Mennyis\xE9g\xE9rt\xE9k egys\xE9g defin\xEDci\xF3"
 valid_quantityValue_units: "\xC9rv\xE9nyes egys\xE9gek"
 calculatedValue_calculatorclass: "Sz\xE1m\xEDt\xF3 oszt\xE1ly"
 calculatedValue_calculatortype: Calculator type
-calculatedValue_calculatortype_class: Class
+calculatedValue_calculatortype_class: "Oszt\xE1ly"
 calculatedValue_calculatortype_expression: Expression
 calculatedValue_calculatorexpression: Calculator expression
 calculatedValue_explanation: "A hivatalos dokument\xE1ci\xF3ban t\xF6bbet megtudhatsz
@@ -535,7 +535,7 @@ default_positioning: "Alap\xE9rtelmezett Poz\xEDci\xF3"
 thumbnail_focal_point_notice: "A k\xE9p automatikusan k\xF6rbev\xE1g\xF3dik a be\xE1ll\xEDtott
   f\xF3kuszpont k\xF6r\xFCl. Ha nincs f\xF3kuszpont be\xE1ll\xEDtva, akkor az al\xE1bb
   tal\xE1lhat\xF3 be\xE1ll\xEDt\xE1sok \xE9rv\xE9nyesek."
-iframe_url: IFrame URL
+iframe_url: Iframe URL
 deactivate_maintenance: "Karbantart\xE1s kikapcsol\xE1sa"
 maintenance_mode: "Karbantart\xE1s m\xF3d"
 maintenance_not_active: "\xDAgy l\xE1tszik a karbantart\xE1s nincs megfelel\u0151en
@@ -557,7 +557,7 @@ error_page: Hiba oldal
 additional_domains: "Tov\xE1bbi domainek (soronk\xE9nt egy)"
 redirect_to_main_domain: "A tov\xE1bbi domainek \xE1tir\xE1ny\xEDt\xE1sa a f\u0151
   domainre"
-debug_mode_on: DEBUG MODE
+debug_mode_on: "DEBUG M\xD3D"
 duration: "Hossz (id\u0151)"
 scope: Scope
 icon_class: Icon Class
@@ -701,7 +701,6 @@ quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
-username: Username
 localized_fields: Localized Fields
 field_collections: Field-Collections
 special_settings_tooltip: Special Settings
@@ -712,4 +711,9 @@ classificationstore_mbx_enterkey_prompt: Enter name
 classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Seconds
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Options Provider
+selectoptions: Select Options
 ...

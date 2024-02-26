@@ -37,7 +37,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
-use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -57,8 +57,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      * Returns a JSON of the available workflow actions to the admin panel
      *
      * @Route("/get-workflow-form", name="pimcore_admin_workflow_getworkflowform")
-     *
-     *
      */
     public function getWorkflowFormAction(Request $request, Manager $workflowManager): JsonResponse
     {
@@ -102,8 +100,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
 
     /**
      * @Route("/submit-workflow-transition", name="pimcore_admin_workflow_submitworkflowtransition", methods={"POST"})
-     *
-     *
      */
     public function submitWorkflowTransitionAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
     {
@@ -158,16 +154,27 @@ class WorkflowController extends AdminAbstractController implements KernelContro
 
     /**
      * @Route("/submit-global-action", name="pimcore_admin_workflow_submitglobal", methods={"POST"})
-     *
-     *
      */
-    public function submitGlobalAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
-    {
+    public function submitGlobalAction(
+        Request $request,
+        Registry $workflowRegistry,
+        Manager $workflowManager
+    ): JsonResponse {
         $workflowOptions = $request->get('workflow', []);
         $workflow = $workflowRegistry->get($this->element, $request->get('workflowName'));
 
+        $globalAction = $workflowManager->getGlobalAction(
+            $request->get('workflowName'),
+            $request->get('transition')
+        );
+        $saveSubject = !$globalAction || $globalAction->getSaveSubject();
+
         try {
-            $workflowManager->applyGlobalAction($workflow, $this->element, $request->get('transition'), $workflowOptions, true);
+            $workflowManager->applyGlobalAction(
+                $workflow,
+                $this->element, $request->get('transition'),
+                $workflowOptions, $saveSubject
+            );
 
             $data = [
                 'success' => true,
@@ -254,11 +261,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      *
      * @Route("/show-graph", name="pimcore_admin_workflow_show_graph")
      *
-     * @param Request $request
-     * @param Manager $workflowManager
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
     public function showGraph(Request $request, Manager $workflowManager): Response
@@ -275,12 +277,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
      * Get custom HTML for the workflow transition submit modal, depending whether it is configured or not.
      *
      * @Route("/modal-custom-html", name="pimcore_admin_workflow_modal_custom_html", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Registry $workflowRegistry
-     * @param Manager $manager
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -334,7 +330,7 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     /**
      * @throws \Exception
      */
-    private function getWorkflowSvg(Workflow $workflow): string
+    private function getWorkflowSvg(WorkflowInterface $workflow): string
     {
         $marking = $workflow->getMarking($this->element);
 
@@ -407,8 +403,6 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     }
 
     /**
-     * @param ControllerEvent $event
-     *
      * @throws \Exception
      */
     public function onKernelControllerEvent(ControllerEvent $event): void

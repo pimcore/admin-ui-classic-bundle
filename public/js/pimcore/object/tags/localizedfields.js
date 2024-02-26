@@ -276,12 +276,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                             if (oldLanguage == newLanguage) {
                                 return;
                             }
+                            this.switchLocalizedPanels(oldLanguage, newLanguage);
 
-                            this.availablePanels[oldLanguage].hide();
-                            this.component.updateLayout();
-                            this.availablePanels[newLanguage].show();
-                            this.currentLanguage = newLanguage;
-                            this.component.updateLayout();
                         }.bind(this),
                         pimcoreGlobalLanguageChanged: function (language) {
                             let globalLanguageIndex = 0;
@@ -289,6 +285,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                                 globalLanguageIndex = this.frontendLanguages.indexOf(language);
                             }
                             this.countrySelect.setValue(this.frontendLanguages[globalLanguageIndex]);
+                            this.switchLocalizedPanels(this.currentLanguage, language);
+
                         }.bind(this)
                     }
                 };
@@ -500,12 +498,13 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
 
     styleLanguageTab: function(item, hideLabels, language) {
         item.currentLanguage = language;
+        var languageTitle = t(pimcore.available_languages[language]);
         if (hideLabels) {
-            item.title = '<div class="pimcore_icon_language_' + language.toLowerCase() + '" title="' + pimcore.available_languages[language] + '" style="width: 20px; height:20px;"></div>';
+            item.title = '<div class="pimcore_icon_language_' + language.toLowerCase() + '" title="' + languageTitle + '" style="width: 20px; height:20px;"></div>';
             item.tbar = Ext.create('Ext.toolbar.Toolbar', {
                 style: 'margin-bottom:10px;',
                 items: [{
-                    text: t('grid_current_language') + ': ' + pimcore.available_languages[language],
+                    text: t('grid_current_language') + ': ' + languageTitle,
                     xtype: "tbtext",
                     style: 'font-size: 13px;'
                 }
@@ -513,7 +512,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
             });
         } else {
             item.iconCls = "pimcore_icon_language_" + language.toLowerCase();
-            item.title = t(pimcore.available_languages[language]);
+            item.title = languageTitle;
         }
     },
 
@@ -1004,6 +1003,14 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                 languageTab.setActiveTab(tabLanguage);
             }
         });
+    },
+
+    switchLocalizedPanels: function (oldLanguage, newLanguage){
+        this.availablePanels[oldLanguage].hide();
+        this.component.updateLayout();
+        this.availablePanels[newLanguage].show();
+        this.currentLanguage = newLanguage;
+        this.component.updateLayout();
     }
 });
 

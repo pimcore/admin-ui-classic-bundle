@@ -140,7 +140,7 @@ paste_recursive_updating_references: "Beilleszt\xE9s rekurz\xEDvan, hivatkoz\xE1
 add_hardlink: "Hardlink hozz\xE1ad\xE1sa"
 source_path: "Forr\xE1s \xFAtvonal"
 properties_from_source: "Tulajdons\xE1gok haszn\xE1lata a forr\xE1s Dokumentumb\xF3l"
-children_from_source: Use children from source document
+children_from_source: "Gyerekek haszn\xE1lata a forr\xE1s dokumentumb\xF3l"
 click_right_for_more_options: "Jobb kattint\xE1s a tov\xE1bbi lehet\u0151s\xE9gek\xE9rt"
 move_to_tab: "Mozgat\xE1sra Tabra"
 not_supported: "Nem t\xE1mogatott"
@@ -615,7 +615,7 @@ visitors_of_this_page_will_be_automatically_associated_with_the_selected_target_
   oldal l\xE1togat\xF3i automatikusan beker\xFClnek a kiv\xE1lasztott C\xE9lcsoportba"
 assign_target_group: "C\xE9lcsoport hozz\xE1rendel\xE9s"
 assign_target_groups: "C\xE9lcsoportok hozz\xE1rendel\xE9se"
-target_group: Target Group
+target_group: "C\xE9lcsoport"
 edit_content_for_target_group: "C\xE9lcsoport tartalm\xE1nak szerkeszt\xE9se"
 email_reply_to: "V\xE1laszc\xEDm"
 element_tag_filtered_tags: "Sz\u0171rt Tagek"
@@ -981,7 +981,7 @@ show_fieldlookup: "Mez\u0151 keres\xE9s mutat\xE1sa"
 different_number_of_columns: "K\xFCl\xF6nb\xF6z\u0151 sz\xE1m\xFA oszlopok"
 brick_limit_reached: "Limit ({bricklimit}) el\xE9rve a k\xF6vetkez\u0151 elemhez:
   {brickname}"
-generate_type_declarations: Generate Type Declarations
+generate_type_declarations: "T\xEDpus deklar\xE1ci\xF3k gener\xE1l\xE1sa"
 batch_change_language: "Nyelv k\xF6tegelt friss\xEDt\xE9se"
 preview_item: "T\xE9tel el\u0151n\xE9zete"
 by_key_reverse: Kulcs (Z-A)
@@ -1010,7 +1010,7 @@ sites: Sites
 file_exists: "A file m\xE1r l\xE9tezik"
 asset_upload_want_to_overwrite: "Fel\xFCl akarod \xEDrni ezt a filet \"%s\"?"
 asset_upload_overwrite: "Fel\xFCl\xEDr\xE1s"
-asset_upload_keep_both: Keep both files
+asset_upload_keep_both: "MIndk\xE9t file megtart\xE1sa"
 asset_upload_apply_to_all: MIndegyik
 asset_upload_skip: "Kihagy\xE1s"
 could_not_open_zip_file: "A felt\xF6lt\xF6tt zip file nem nyithat\xF3 meg"
@@ -1076,8 +1076,7 @@ email_log_cc: Cc
 email_log_bcc: Bcc
 cols: Oszlopok
 log_search_message: "\xDCzenet"
-batch_export_confirmation: You are about to export %s dataObjects. Do you want to
-  continue ?
+batch_export_confirmation: "%s adatobjektumok fogsz export\xE1lni. Folytassuk?"
 header: "Fejl\xE9c"
 no_header: "Nincs fejl\xE9c"
 delete_entire_folder_question: "A teljes sz\xFCl\u0151mapp\xE1t t\xF6rl\xF6d. Ez a
@@ -1090,9 +1089,40 @@ incorrect_password: "Hib\xE1s jelsz\xF3"
 content_main_document: Content-Main Document
 2fa_wrong: "Hib\xE1s k\xF3d!"
 language_main: "F\u0151"
-system_appearance_settings: Appearance & Branding
+system_appearance_settings: "Megjelen\xEDt\xE9s & Branding"
 male: "F\xE9rfi"
 female: "N\u0151"
 preview_generator_locale: Nyelv
 preview_generator_site: Site
+failed_to_create_new_item_select_options: Failed to create new item. Name must be
+  UpperCamelCase format, at least 3 characters long and may not contain any reserved
+  words.
+pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
+  and open it in your local PDF viewer.
+pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
+  a while.'
+keybinding_save: Save
+keybinding_publish: Publish
+keybinding_unpublish: Unpublish
+keybinding_rename: Rename
+keybinding_refresh: Reload
+keybinding_openDocument: Open Document
+keybinding_openAsset: Open Asset
+keybinding_openObject: Open Object
+keybinding_openInTree: Show in Tree
+keybinding_searchDocument: Search Documents
+keybinding_searchAsset: Search Assets
+keybinding_searchObject: Search Objects
+keybinding_showElementHistory: Recently Opened Elements
+keybinding_closeAllTabs: Close all tabs
+keybinding_searchAndReplaceAssignments: Search & Replace Assignments
+keybinding_redirects: Redirects
+keybinding_sharedTranslations: Shared Translations
+keybinding_recycleBin: Recycle Bin
+keybinding_notesEvents: Notes &amp; Events
+keybinding_tagConfiguration: Tag Configuration
+keybinding_users: Users
+keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: "Felhaszn\xE1l\xF3n\xE9v"
 ...

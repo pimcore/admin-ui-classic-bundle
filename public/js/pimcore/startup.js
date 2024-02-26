@@ -593,7 +593,7 @@ Ext.onReady(function () {
     }, 5000);
 
 
-    Ext.get("pimcore_logout").on('click', function () {
+    Ext.get("pimcore_logout")?.on('click', function () {
         document.getElementById('pimcore_logout_form').submit();
     })
 
@@ -695,8 +695,8 @@ Ext.onReady(function () {
             listeners: {
                 "afterrender": function (el) {
                     Ext.get("pimcore_navigation").show();
-                    Ext.get("pimcore_avatar").show();
-                    Ext.get("pimcore_logout").show();
+                    Ext.get("pimcore_avatar")?.show();
+                    Ext.get("pimcore_logout")?.show();
 
                     pimcore.helpers.initMenuTooltips();
 
@@ -719,7 +719,7 @@ Ext.onReady(function () {
                     el.getEl().dom.addEventListener("dragover", fn, true);
 
                     // open "My Profile" when clicking on avatar
-                    Ext.get("pimcore_avatar").on("click", function (ev) {
+                    Ext.get("pimcore_avatar")?.on("click", function (ev) {
                         pimcore.helpers.openProfile();
                     });
                 }
@@ -737,16 +737,15 @@ Ext.onReady(function () {
             });
         }
 
-
         var perspective = pimcore.globalmanager.get("perspective");
         var elementTree = perspective.getElementTree();
-
         var locateConfigs = {
             document: [],
             asset: [],
             object: []
         };
 
+        let customPerspectiveElementTrees = [];
         for (var i = 0; i < elementTree.length; i++) {
 
             var treeConfig = elementTree[i];
@@ -822,6 +821,10 @@ Ext.onReady(function () {
                         }
                     }
                     break;
+                default:
+                    if (!treeConfig.hidden) {
+                        customPerspectiveElementTrees.push(treeConfig);
+                    }
             }
 
 
@@ -835,6 +838,13 @@ Ext.onReady(function () {
 
         }
         pimcore.globalmanager.add("tree_locate_configs", locateConfigs);
+
+        const postBuildPerspectiveElementTree = new CustomEvent(pimcore.events.postBuildPerspectiveElementTree, {
+            detail: {
+                customPerspectiveElementTrees: customPerspectiveElementTrees
+            }
+        });
+        document.dispatchEvent(postBuildPerspectiveElementTree);
 
     }
     catch (e) {
@@ -961,5 +971,7 @@ pimcore.helpers.unload = function () {
 };
 
 L.Icon.Default.imagePath = '../bundles/pimcoreadmin/build/admin/images/';
-pimcore.wysiwyg = {};
-pimcore.wysiwyg.editors = [];
+if (!pimcore.wysiwyg) {
+    pimcore.wysiwyg = {};
+    pimcore.wysiwyg.editors = [];
+}

@@ -615,6 +615,15 @@ pimcore.layout.toolbar = Class.create({
                      });
                  }
 
+                 if (perspectiveCfg.inToolbar('settings.objects.selectoptions') && user.isAllowed('selectoptions')) {
+                     objectMenu.menu.items.push({
+                         text: t('selectoptions'),
+                         iconCls: 'pimcore_nav_icon_selectoptions',
+                         itemId: 'pimcore_menu_settings_data_objects_selectoptions',
+                         handler: this.editSelectOptions
+                     });
+                 }
+
                  if (perspectiveCfg.inToolbar("settings.objects.quantityValue") && user.isAllowed("quantityValueUnits")) {
                      objectMenu.menu.items.push({
                          text: t("quantityValue_field"),
@@ -819,6 +828,25 @@ pimcore.layout.toolbar = Class.create({
             };
          }
 
+         // profile
+         let profileItems = [
+            {
+                text: t("my_profile"),
+                iconCls: 'pimcore_icon_profile',
+                handler: () => {
+                    pimcore.helpers.openProfile();
+                }
+            },
+
+            {
+                text: t('logout'),
+                iconCls: 'pimcore_material_icon_logout',
+                handler: () => {
+                    document.getElementById('pimcore_logout_form').submit();
+                }
+            }
+         ]
+
          // notifications
          if (user.isAllowed("notifications")) {
              var notificationItems = [{
@@ -870,6 +898,7 @@ pimcore.layout.toolbar = Class.create({
                          window.open('https://pimcore.com/docs/platform/Pimcore/Getting_Started/Installation/Webserver_Installation#5-maintenance-cron-job');
                      }
                  });
+
                  pimcore.notification.helper.incrementCount();
              }
  
@@ -883,17 +912,23 @@ pimcore.layout.toolbar = Class.create({
                          window.open('https://pimcore.com/docs/pimcore/current/Development_Documentation/Development_Tools_and_Details/Email_Framework');
                      }
                  });
+
                  pimcore.notification.helper.incrementCount();
              }
 
-
-             menu.notification = {
-                 items: notificationItems,
-                 shadow: false,
-                 cls: "pimcore_navigation_flyout",
-                 exclude: true,
-             };
+             profileItems = [
+                ...notificationItems,
+                '-',
+                ...profileItems,
+             ]
          }
+
+         menu.notification = {
+            items: profileItems,
+            shadow: false,
+            cls: "pimcore_navigation_flyout",
+            exclude: true,
+        };
 
          // Additional menu items can be added via this event
          const preMenuBuild = new CustomEvent(pimcore.events.preMenuBuild, {
@@ -994,6 +1029,15 @@ pimcore.layout.toolbar = Class.create({
                  console.error("no pimcore_menu_item");
              }
          }.bind(this));
+
+         // Full menu can be checked here
+         const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
+             detail: {
+                 menu: menu,
+             }
+         });
+
+         document.dispatchEvent(postMenuBuild);
  
          return;
      },
@@ -1203,6 +1247,14 @@ pimcore.layout.toolbar = Class.create({
              pimcore.globalmanager.add("objectbricks", new pimcore.object.objectbrick());
          }
      },
+
+    editSelectOptions: function () {
+        try {
+            pimcore.globalmanager.get('selectoptions').activate();
+        } catch (e) {
+            pimcore.globalmanager.add('selectoptions', new pimcore.object.selectoptions());
+        }
+    },
 
      clearCache: function (params) {
          Ext.Msg.confirm(t('warning'), t('system_performance_stability_warning'), function(btn){

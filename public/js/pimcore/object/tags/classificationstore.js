@@ -156,6 +156,7 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
 
                 var childItems = [];
 
+
                 for (var groupId in this.fieldConfig.activeGroupDefinitions) {
                     var groupedChildItems = [];
 
@@ -185,8 +186,32 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     hideMode: "offsets",
                     iconCls: icon,
                     title: title,
-                    items: childItems
-                });
+                    listeners: {
+                        activate: function(frontendLanguage, tab) {
+                            if (tab.items.length !== 0) {
+                                return;
+                            }
+
+                            this.currentLanguage = frontendLanguage;
+
+                            const childItems = [];
+                            for (const groupId in this.fieldConfig.activeGroupDefinitions) {
+                                const groupedChildItems = [];
+
+                                if (this.fieldConfig.activeGroupDefinitions.hasOwnProperty(groupId)) {
+                                    const group = this.fieldConfig.activeGroupDefinitions[groupId];
+
+                                    const fieldset = this.createGroupFieldset(this.currentLanguage, group, groupedChildItems);
+
+                                    childItems.push(fieldset);
+                                }
+                            }
+
+                            tab.add(childItems);
+                            this.component.updateLayout();
+                        }.bind(this, this.frontendLanguages[i])
+                    }
+                })
 
                 this.languagePanels[currentLanguage] = item;
                 item.currentLanguage = currentLanguage.toLowerCase();
@@ -213,11 +238,8 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
             wrapperConfig.items = [this.tabPanel];
         }
 
-        this.currentLanguage = this.frontendLanguages[0];
 
         this.component = new Ext.Panel(wrapperConfig);
-
-        this.component.updateLayout();
 
         if (this.toolbar) {
             this.toolbar.on(pimcore.events.globalLanguageChanged, function(language) {

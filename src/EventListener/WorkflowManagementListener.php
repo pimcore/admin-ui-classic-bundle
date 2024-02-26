@@ -43,9 +43,6 @@ class WorkflowManagementListener implements EventSubscriberInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -58,7 +55,6 @@ class WorkflowManagementListener implements EventSubscriberInterface
     /**
      * Fired before information is sent back to the admin UI about an element
      *
-     * @param GenericEvent $e
      *
      * @throws \Exception
      */

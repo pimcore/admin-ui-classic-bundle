@@ -23,6 +23,8 @@ class IndexActionSettingsEvent extends Event
 {
     private array $settings;
 
+    private ?string $template = null;
+
     public function __construct(array $settings)
     {
         $this->settings = $settings;
@@ -41,5 +43,15 @@ class IndexActionSettingsEvent extends Event
     public function addSetting(string $key, mixed $value): void
     {
         $this->settings[$key] = $value;
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?string $template): void
+    {
+        $this->template = $template;
     }
 }

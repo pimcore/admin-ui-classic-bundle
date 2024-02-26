@@ -26,9 +26,11 @@ use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
 use Pimcore\Config;
 use Pimcore\Db;
+use Pimcore\File;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
+use Pimcore\Model\DataObject\Listing;
 use Pimcore\Model\User;
 use Pimcore\Security\SecurityHelper;
 use Pimcore\Tool;
@@ -56,10 +58,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/load-object-data", name="loadobjectdata", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function loadObjectDataAction(Request $request): JsonResponse
     {
@@ -76,13 +74,6 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($result);
     }
 
-    /**
-     * @param int $userId
-     * @param string $classId
-     * @param string|null $searchType
-     *
-     * @return array
-     */
     public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType = null): array
     {
         $db = Db::get();
@@ -111,13 +102,6 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @param User $user
-     * @param string $classId
-     * @param string|null $searchType
-     *
-     * @return array
-     */
     public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
     {
         $configListing = [];
@@ -155,10 +139,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-export-configs", name="getexportconfigs", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getExportConfigsAction(Request $request): JsonResponse
     {
@@ -190,12 +170,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-delete-column-config", name="griddeletecolumnconfig", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function gridDeleteColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
@@ -229,12 +203,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-get-column-config", name="gridgetcolumnconfig", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function gridGetColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
@@ -635,15 +603,7 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param DataObject\ClassDefinition\Data $field
      * @param DataObject\ClassDefinition\Data[] $brickFields
-     * @param array $availableFields
-     * @param string $gridType
-     * @param int $count
-     * @param string $brickType
-     * @param DataObject\ClassDefinition $class
-     * @param int $objectId
-     * @param array|null $context
      */
     protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, array $context = null): void
     {
@@ -724,10 +684,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/prepare-helper-column-configs", name="preparehelpercolumnconfigs", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
@@ -758,10 +714,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-config-apply-to-all", name="gridconfigapplytoall", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridConfigApplyToAllAction(Request $request): JsonResponse
     {
@@ -787,10 +739,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-mark-favourite-column-config", name="gridmarkfavouritecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
@@ -875,10 +823,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/grid-save-column-config", name="gridsavecolumnconfig", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
@@ -970,9 +914,6 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     *
      * @throws \Exception
      */
     protected function updateGridConfigShares(?GridConfig $gridConfig, array $metadata): void
@@ -1011,10 +952,6 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @param GridConfig|null $gridConfig
-     * @param array $metadata
-     * @param int $objectId
-     *
      * @throws \Exception
      */
     protected function updateGridConfigFavourites(?GridConfig $gridConfig, array $metadata, int $objectId): void
@@ -1115,17 +1052,6 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @param DataObject\ClassDefinition\Data $field
-     * @param string $gridType
-     * @param string $position
-     * @param bool $force
-     * @param string|null $keyPrefix
-     * @param DataObject\ClassDefinition|null $class
-     * @param int|null $objectId
-     *
-     * @return array|null
-     */
     protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, string $keyPrefix = null, DataObject\ClassDefinition $class = null, int $objectId = null): ?array
     {
         $key = $keyPrefix . $field->getName();
@@ -1196,10 +1122,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/import-upload", name="importupload", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function importUploadAction(Request $request, Filesystem $filesystem): JsonResponse
     {
@@ -1246,12 +1168,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-export-jobs", name="getexportjobs", methods={"POST"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1283,38 +1199,34 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * @Route("/do-export", name="doexport", methods={"POST"})
      *
-     * @param Request $request
-     * @param LocaleServiceInterface $localeService
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
-     *
-     * @throws \Exception
+     * @throws \Exception|FilesystemException
      */
-    public function doExportAction(Request $request, LocaleServiceInterface $localeService, EventDispatcherInterface $eventDispatcher): JsonResponse
-    {
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+    public function doExportAction(
+        Request $request,
+        LocaleServiceInterface $localeService,
+        EventDispatcherInterface $eventDispatcher
+    ): JsonResponse {
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $ids = $request->get('ids');
-        $settings = $request->get('settings');
-        $settings = json_decode($settings, true);
+        $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $header = $settings['header'] ?? 'title';
 
         $allParams = array_merge($request->request->all(), $request->query->all());
 
-        $enableInheritance = $settings['enableInheritance'] ?? null;
+        $enableInheritance = $settings['enableInheritance'] ?? false;
         DataObject\Concrete::setGetInheritedValues($enableInheritance);
 
         $class = DataObject\ClassDefinition::getById($request->get('classId'));
 
         if (!$class) {
-            throw new \Exception('No class definition found');
+            throw new \InvalidArgumentException('No class definition found');
         }
 
         $className = $class->getName();
         $listClass = '\\Pimcore\\Model\\DataObject\\' . ucfirst($className) . '\\Listing';
 
-        /** @var \Pimcore\Model\DataObject\Listing $list */
+        /** @var Listing $list */
         $list = new $listClass();
 
         $quotedIds = [];
@@ -1340,56 +1252,72 @@ class DataObjectHelperController extends AdminAbstractController
 
         $requestedLanguage = $this->extractLanguage($request);
 
-        $contextFromRequest = $request->get('context');
-        if ($contextFromRequest) {
-            $contextFromRequest = json_decode($contextFromRequest, true);
-        }
-
         $context = [
             'source' => 'pimcore-export',
         ];
 
-        if (is_array($contextFromRequest)) {
+        $contextFromRequest = $request->get('context');
+        if ($contextFromRequest) {
+            $contextFromRequest = json_decode($contextFromRequest, true);
             $context = array_merge($context, $contextFromRequest);
         }
 
-        $csv = DataObject\Service::getCsvData($requestedLanguage, $localeService, $list, $fields, $header, $addTitles, $context);
+        $csv = DataObject\Service::getCsvData(
+            $requestedLanguage,
+            $localeService,
+            $list,
+            $fields,
+            $header,
+            $addTitles,
+            $context
+        );
 
-        $storage = Storage::get('temp');
-        $csvFile = $this->getCsvFile($fileHandle);
+        try {
+            $storage = Storage::get('temp');
+            $csvFile = $this->getCsvFile($fileHandle);
 
-        $fileStream = $storage->readStream($csvFile);
+            $fileStream = $storage->readStream($csvFile);
 
-        $temp = tmpfile();
-        stream_copy_to_stream($fileStream, $temp, null, 0);
+            $temp = tmpfile();
+            stream_copy_to_stream($fileStream, $temp, null, 0);
 
-        $firstLine = true;
+            $firstLine = true;
 
-        if ($request->get('initial') && $header === 'no_header') {
-            array_shift($csv);
-            $firstLine = false;
-        }
-
-        $lineCount = count($csv);
-
-        if (!$addTitles && $lineCount > 0) {
-            fwrite($temp, "\r\n");
-        }
-
-        for ($i = 0; $i < $lineCount; $i++) {
-            $line = $csv[$i];
-            if ($addTitles && $firstLine) {
+            if ($request->get('initial') && $header === 'no_header') {
+                array_shift($csv);
                 $firstLine = false;
-                $line = implode($delimiter, $line);
-                fwrite($temp, $line);
-            } else {
-                fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)));
             }
-            if ($i < $lineCount - 1) {
+
+            $lineCount = count($csv);
+
+            if (!$addTitles && $lineCount > 0) {
                 fwrite($temp, "\r\n");
             }
+
+            for ($i = 0; $i < $lineCount; $i++) {
+                $line = $csv[$i];
+                if ($addTitles && $firstLine) {
+                    $firstLine = false;
+                    $line = implode($delimiter, $line);
+                    fwrite($temp, $line);
+                } else {
+                    fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)));
+                }
+                if ($i < $lineCount - 1) {
+                    fwrite($temp, "\r\n");
+                }
+            }
+            $storage->writeStream($csvFile, $temp);
+        } catch (UnableToReadFile $exception) {
+            Logger::err($exception->getMessage());
+
+            return $this->adminJson(
+                [
+                    'success' => false,
+                    'message' => sprintf('export file not found: %s', $fileHandle),
+                ]
+            );
         }
-        $storage->writeStream($csvFile, $temp);
 
         return $this->adminJson(['success' => true]);
     }
@@ -1404,15 +1332,11 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/download-csv-file", name="downloadcsvfile", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -1436,16 +1360,11 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/download-xlsx-file", name="downloadxlsxfile", methods={"GET"})
-     *
-     * @param Request $request
-     * @param GridHelperService $gridHelperService
-     *
-     * @return BinaryFileResponse
      */
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
-        $fileHandle = \Pimcore\File::getValidFilename($request->get('fileHandle'));
+        $fileHandle = File::getValidFilename($request->get('fileHandle'));
         $csvFile = $this->getCsvFile($fileHandle);
 
         try {
@@ -1459,10 +1378,6 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * Flattens object data to an array with key=>value where
      * value is simply a string representation of the value (for objects, hrefs and assets the full path is used)
-     *
-     * @param DataObject\Concrete $object
-     *
-     * @return array
      */
     protected function csvObjectData(DataObject\Concrete $object): array
     {
@@ -1482,8 +1397,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-batch-jobs", name="getbatchjobs", methods={"POST"})
-     *
-     *
      */
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
@@ -1501,10 +1414,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/batch", name="batch", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function batchAction(Request $request): JsonResponse
     {
@@ -1516,6 +1425,15 @@ class DataObjectHelperController extends AdminAbstractController
                 $object = DataObject\Concrete::getById($params['job']);
 
                 if ($object) {
+                    $requestedLanguage = $params['language'];
+                    if ($requestedLanguage) {
+                        if ($requestedLanguage != 'default') {
+                            $request->setLocale($requestedLanguage);
+                        }
+                    } else {
+                        $requestedLanguage = $request->getLocale();
+                    }
+
                     $name = $params['name'];
 
                     if (!$object->isAllowed('save') || ($name === 'published' && !$object->isAllowed('publish'))) {
@@ -1540,15 +1458,6 @@ class DataObjectHelperController extends AdminAbstractController
                         $keyId = $parts[3];
 
                         if ($type == 'classificationstore') {
-                            $requestedLanguage = $params['language'];
-                            if ($requestedLanguage) {
-                                if ($requestedLanguage != 'default') {
-                                    $request->setLocale($requestedLanguage);
-                                }
-                            } else {
-                                $requestedLanguage = $request->getLocale();
-                            }
-
                             $groupKeyId = explode('-', $keyId);
                             $groupId = (int) $groupKeyId[0];
                             $keyId = (int) $groupKeyId[1];
@@ -1714,10 +1623,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @Route("/get-available-visible-vields", name="getavailablevisiblefields", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAvailableVisibleFieldsAction(Request $request): JsonResponse
     {
@@ -1790,7 +1695,6 @@ class DataObjectHelperController extends AdminAbstractController
 
     /**
      * @param DataObject\ClassDefinition\Data[] $fds
-     * @param bool $firstOne
      * @param DataObject\ClassDefinition\Data[] $commonFields
      */
     protected function processAvailableFieldDefinitions(array $fds, bool &$firstOne, array &$commonFields): void

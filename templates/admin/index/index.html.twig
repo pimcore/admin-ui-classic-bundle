@@ -123,22 +123,30 @@
 
     <div id="pimcore_status"></div>
 
-    <div id="pimcore_notification" data-menu-tooltip="{{ "notifications"|trans([],'admin') }}" class="pimcore_icon_comments">
-        <img src="/bundles/pimcoreadmin/img/material-icons/outline-sms-24px.svg">
-        <span id="notification_value" style="display:none;"></span>
-    </div>
+    {% block notification %}
+        <div id="pimcore_notification" data-menu-tooltip="{{ "notifications"|trans([],'admin') }}" class="pimcore_icon_comments">
+            <img src="/bundles/pimcoreadmin/img/material-icons/outline-sms-24px.svg">
+            <span id="notification_value" style="display:none;"></span>
+        </div>
+    {% endblock %}
 
-    <div id="pimcore_avatar" style="display:none;">
-        <img src="{{ path('pimcore_admin_user_getimage') }}" data-menu-tooltip="{{ user.name }} | {{ 'my_profile'|trans([],'admin') }}"/>
-    </div>
 
-    <form id="pimcore_logout_form" method="post" action="{{ path('pimcore_admin_logout') }}">
-        <input type="hidden" name="csrfToken" value="{{ pimcore_csrf.getCsrfToken(app.request.session) }}">
+    {% block avatar %}
+        <div id="pimcore_avatar" style="display:none;">
+            <img src="{{ path('pimcore_admin_user_getimage') }}" data-menu-tooltip="{{ user.name }} | {{ 'my_profile'|trans([],'admin') }}"/>
+        </div>
+    {% endblock %}
 
-        <a id="pimcore_logout" data-menu-tooltip="{{ "logout"|trans([],'admin') }}" href="#" style="display: none">
-            <img src="/bundles/pimcoreadmin/img/material-icons/outline-logout-24px.svg">
-        </a>
-    </form>
+    {% block logout %}
+        <form id="pimcore_logout_form" method="post" action="{{ path('pimcore_admin_logout') }}">
+            <input type="hidden" name="csrfToken" value="{{ pimcore_csrf.getCsrfToken(app.request.session) }}">
+
+            <a id="pimcore_logout" data-menu-tooltip="{{ "logout"|trans([],'admin') }}" href="#" style="display: none">
+                <img src="/bundles/pimcoreadmin/img/material-icons/outline-logout-24px.svg">
+            </a>
+        </form>
+    {% endblock %}
+
     <div id="pimcore_signet" data-menu-tooltip="Pimcore Platform ({{ settings.version }}|{{ settings.build }})" style="text-indent: -10000px">
         BE RESPECTFUL AND HONOR OUR WORK FOR FREE & OPEN SOURCE SOFTWARE BY NOT REMOVING OUR LOGO.
         WE OFFER YOU THE POSSIBILITY TO ADDITIONALLY ADD YOUR OWN LOGO IN PIMCORE'S SYSTEM SETTINGS. THANK YOU!
@@ -150,26 +158,29 @@
 
 {# define stylesheets #}
 
-{% set styles = [
+{% block stylesheets %}
+
+    {% set styles = [
         path('pimcore_admin_misc_admincss'),
         "/bundles/pimcoreadmin/css/icons.css",
         "/bundles/pimcoreadmin/extjs/css/PimcoreApp-all_1.css",
         "/bundles/pimcoreadmin/extjs/css/PimcoreApp-all_2.css",
         "/bundles/pimcoreadmin/css/admin.css"
-    ]
-%}
+    ] %}
 
-<!-- stylesheets -->
-<style type="text/css">
-    {#
-     # use @import here, because if IE9 CSS file limitations (31 files)
-     # see also: http://blogs.telerik.com/blogs/posts/10-05-03/internet-explorer-css-limits.aspx
-     # @import bypasses this problem in an elegant way
-    #}
-    {% for style in styles %}
-        @import url("{{ style }}?_dc={{ settings.build }}");
-    {% endfor %}
-</style>
+    <!-- stylesheets -->
+    <style type="text/css">
+        {#
+         # use @import here, because if IE9 CSS file limitations (31 files)
+         # see also: http://blogs.telerik.com/blogs/posts/10-05-03/internet-explorer-css-limits.aspx
+         # @import bypasses this problem in an elegant way
+        #}
+        {% for style in styles %}
+            @import url("{{ style }}?_dc={{ settings.build }}");
+        {% endfor %}
+    </style>
+
+{% endblock %}
 
 {# define scripts #}
 
@@ -297,6 +308,8 @@
     "pimcore/object/helpers/optionEditor.js",
     "pimcore/object/helpers/imageGalleryDropZone.js",
     "pimcore/object/helpers/imageGalleryPanel.js",
+    "pimcore/object/helpers/selectField.js",
+    "pimcore/object/helpers/reservedWords.js",
     "pimcore/element/tag/configuration.js",
     "pimcore/element/tag/assignment.js",
     "pimcore/element/tag/tree.js",
@@ -492,6 +505,8 @@
     "pimcore/object/importcolumn/value/DefaultValue.js",
     "pimcore/object/objectbrick.js",
     "pimcore/object/objectbricks/field.js",
+    "pimcore/object/selectoptions.js",
+    "pimcore/object/selectoptionsitems/definition.js",
     "pimcore/object/tags/abstract.js",
     "pimcore/object/tags/abstractRelations.js",
     "pimcore/object/tags/block.js",

@@ -697,7 +697,6 @@ quantityValueUnits: Menge Wert Einheiten
 numeric: Nummer
 structuredtable_type_number: Nummer
 objectsMetadata_type_number: Nummer
-username: Benutzername
 localized_fields: Lokalisierte Felder
 field_collections: Feldsammlungen
 special_settings_tooltip: Besondere Einstellungen
@@ -708,4 +707,9 @@ classificationstore_mbx_enterkey_prompt: Name eingeben
 classificationstore_error_addcollection_msg: "Fehler beim Hinzuf\xFCgen einer Gruppe"
 log_search_pid: PID
 log_refresh_seconds: Sekunden
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Options Provider
+selectoptions: Select Options
 ...

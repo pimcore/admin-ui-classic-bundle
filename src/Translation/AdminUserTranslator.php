@@ -45,9 +45,6 @@ class AdminUserTranslator implements TranslatorInterface, LocaleAwareInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
     {
         $domain = $domain ?? 'admin';
@@ -56,9 +53,6 @@ class AdminUserTranslator implements TranslatorInterface, LocaleAwareInterface
         return $this->translator->trans($id, $parameters, $domain, $locale);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setLocale(string $locale): void
     {
         if ($this->translator instanceof LocaleAwareInterface) {
@@ -66,9 +60,6 @@ class AdminUserTranslator implements TranslatorInterface, LocaleAwareInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLocale(): string
     {
         if ($this->translator instanceof LocaleAwareInterface) {
