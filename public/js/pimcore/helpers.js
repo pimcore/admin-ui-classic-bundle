@@ -1053,7 +1053,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 });
                 win.show();
 
-                var finishedErrorHandler = function (e) {
+                let finishedErrorHandler = function (e) {
                     this.activeUploads--;
                     win.remove(pbar);
 
