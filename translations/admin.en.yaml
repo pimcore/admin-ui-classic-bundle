@@ -139,7 +139,7 @@ this_element_cannot_be_edited: 'This element cannot be edited'
 details: Details
 cannot_save_object_please_try_to_edit_the_object_in_detail_view: '<b>Cannot save object!</b><br />Please try to edit the object in the detail view.'
 size: Size
-select_a_file: 'Select a file'
+select_a_file: 'Select files'
 upload_compatibility_mode: 'Upload File (Compatibility Mode)'
 the_system_is_in_maintenance_mode_please_wait: 'The system is in maintenance mode, please wait'
 activate: Activate
