@@ -1081,7 +1081,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     win.updateLayout();
 
                     activeUploads++;
-                    let percentComplete = activeUploads / filesCount;
+                    const percentComplete = activeUploads / filesCount;
                     let progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
                     if (percentComplete == 1) {
                         progressText = file.name + " " + t("please_wait");
