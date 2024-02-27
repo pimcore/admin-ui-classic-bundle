@@ -1100,7 +1100,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     };
 
                     let successWrapper = function (ev) {
-                        var data = JSON.parse(request.responseText);
+                        const data = JSON.parse(request.responseText);
                         if(ev.currentTarget.status < 400 && data.success === true) {
                             success(res);
                             if (activeUploads == filesCount) {
