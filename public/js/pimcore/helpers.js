@@ -1042,7 +1042,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         },
         listeners: {
             change: function (fileUploadField) {
-                let win = new Ext.Window({
+                const win = new Ext.Window({
                     items: [],
                     modal: true,
                     closable: false,
