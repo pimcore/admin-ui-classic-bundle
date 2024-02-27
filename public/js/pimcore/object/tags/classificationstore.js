@@ -154,22 +154,6 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                 this.languageElements[currentLanguage] = [];
                 this.groupElements[currentLanguage] = {};
 
-                var childItems = [];
-
-
-                for (var groupId in this.fieldConfig.activeGroupDefinitions) {
-                    var groupedChildItems = [];
-
-                    if (this.fieldConfig.activeGroupDefinitions.hasOwnProperty(groupId)) {
-                        var group = this.fieldConfig.activeGroupDefinitions[groupId];
-
-                        var fieldset = this.createGroupFieldset(this.currentLanguage, group, groupedChildItems);
-
-                        childItems.push(fieldset);
-
-                    }
-                }
-
                 let title = t(currentLanguage);
                 let icon = "pimcore_icon_white_flag";
 
@@ -214,7 +198,6 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                 })
 
                 this.languagePanels[currentLanguage] = item;
-                item.currentLanguage = currentLanguage.toLowerCase();
 
                 if (this.fieldConfig.labelWidth) {
                     item.labelWidth = this.fieldConfig.labelWidth;
