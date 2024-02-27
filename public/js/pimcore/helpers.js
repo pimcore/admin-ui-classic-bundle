@@ -1032,7 +1032,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
     items.push({
         xtype: 'fileuploadfield',
-        emptyText: t("select_a_file"),
+        emptyText: t("select_files"),
         fieldLabel: t("file"),
         width: 470,
         name: filename+'[]',
