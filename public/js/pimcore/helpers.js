@@ -1071,7 +1071,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         return;
                     }
 
-                    var pbar = new Ext.ProgressBar({
+                    let pbar = new Ext.ProgressBar({
                         width:465,
                         text: file.name,
                         style: "margin-bottom: 5px"
