@@ -125,7 +125,7 @@ pimcore.settings.thumbnail.item = Class.create({
                     value: this.data.format,
                     triggerAction: 'all',
                     editable: false,
-                    store: [["SOURCE", "Auto (Web-optimized - recommended)"], ["ORIGINAL", "ORIGINAL"], ["PNG", "PNG"], ["GIF", "GIF"], ["JPEG", "JPEG"], ["PJPEG", "JPEG (progressive)"], ["TIFF", "TIFF"],
+                    store: [["SOURCE", "Auto (Web-optimized - recommended)"], ["ORIGINAL", "ORIGINAL"], ["PNG", "PNG"], ["GIF", "GIF"], ["JPEG", "JPEG"], ["PJPEG", "JPEG (progressive)"], ["AVIF", "AVIF"], ["TIFF", "TIFF"],
                         ["PRINT", "Print (PNG,JPG,SVG,TIFF)"]],
                     width: 450
                 }, {
