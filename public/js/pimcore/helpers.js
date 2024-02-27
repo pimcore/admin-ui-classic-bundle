@@ -1063,7 +1063,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 }.bind(this);
 
                 let activeUploads = 0;
-                let filesCount = fileUploadField.fileInputEl.dom.files.length;
+                const filesCount = fileUploadField.fileInputEl.dom.files.length;
 
                 Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
                     if (file.size > pimcore.settings["upload_max_filesize"]) {
