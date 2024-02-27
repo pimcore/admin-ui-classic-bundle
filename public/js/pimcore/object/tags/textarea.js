@@ -30,11 +30,11 @@ pimcore.object.tags.textarea = Class.create(pimcore.object.tags.abstract, {
             return null;
         }
 
-        const editorConfig = this.initEditorConfig(field);
-
         // TEXTAREA
         if (field.type == 'textarea') {
-           return new Ext.form.TextArea(editorConfig);
+            const editorConfig = this.initEditorConfig(field);
+
+            return new Ext.form.TextArea(editorConfig);
         }
     },
 
