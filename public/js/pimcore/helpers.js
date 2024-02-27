@@ -1042,7 +1042,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         },
         listeners: {
             change: function (fileUploadField) {
-                var win = new Ext.Window({
+                let win = new Ext.Window({
                     items: [],
                     modal: true,
                     closable: false,
@@ -1062,8 +1062,8 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     }
                 }.bind(this);
 
-                var activeUploads = 0;
-                var filesCount = fileUploadField.fileInputEl.dom.files.length;
+                let activeUploads = 0;
+                let filesCount = fileUploadField.fileInputEl.dom.files.length;
 
                 Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
                     if (file.size > pimcore.settings["upload_max_filesize"]) {
@@ -1081,25 +1081,25 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     win.updateLayout();
 
                     activeUploads++;
-                    var percentComplete = activeUploads / filesCount;
-                    var progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
+                    let percentComplete = activeUploads / filesCount;
+                    let progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
                     if (percentComplete == 1) {
                         progressText = file.name + " " + t("please_wait");
                     }
 
                     pbar.updateProgress(percentComplete, progressText);
 
-                    var data = new FormData();
+                    let data = new FormData();
                     data.append(filename, file);
                     data.append("filename", file.name);
                     data.append("csrfToken", pimcore.settings['csrfToken']);
 
-                    var request = new XMLHttpRequest();
-                    var res = {
+                    let request = new XMLHttpRequest();
+                    let res = {
                         'response': request
                     };
 
-                    var successWrapper = function (ev) {
+                    let successWrapper = function (ev) {
                         var data = JSON.parse(request.responseText);
                         if(ev.currentTarget.status < 400 && data.success === true) {
                             success(res);
@@ -1113,7 +1113,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         }
                     };
 
-                    var errorWrapper = function (ev) {
+                    let errorWrapper = function (ev) {
                         failure(res);
                         finishedErrorHandler();
                     };
