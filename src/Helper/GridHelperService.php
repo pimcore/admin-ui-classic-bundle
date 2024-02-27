@@ -776,6 +776,9 @@ class GridHelperService
                 if ($operator == 'LIKE') {
                     $value = $db->quote('%' . $value . '%');
                 } elseif ($operator == 'IN') {
+                    if (empty($value)) {
+                        continue;
+                    }
                     $quoted = array_map(function ($val) use ($db) {
                         return $db->quote($val);
                     }, $value);

@@ -99,7 +99,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnConfig:function (field) {
-        if (field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CLASS
+        if (field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE
             && field.layout.optionsProviderClass) {
             return this.getGridColumnConfigDynamic(field);
         } else {

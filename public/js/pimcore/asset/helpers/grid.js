@@ -44,9 +44,11 @@ pimcore.asset.helpers.grid = Class.create({
         this.baseParams['fields[]'] = fieldParam;
     },
 
-    getStore: function(noBatchColumns, batchAppendColumns) {
+    getStore: function(noBatchColumns, batchAppendColumns, batchRemoveColumns) {
 
         batchAppendColumns = batchAppendColumns || [];
+        batchRemoveColumns = batchRemoveColumns || [];
+
         // the store
         var readerFields = [];
         readerFields.push({name: "preview"});
@@ -63,6 +65,7 @@ pimcore.asset.helpers.grid = Class.create({
 
         this.noBatchColumns = [];
         this.batchAppendColumns = [];
+        this.batchRemoveColumns = [];
 
         for (var i = 0; i < this.fields.length; i++) {
             if (!in_array(this.fields[i].key, ["creationDate", "modificationDate"])) {
@@ -73,17 +76,24 @@ pimcore.asset.helpers.grid = Class.create({
                 var readerFieldConfig = {name: key};
                 // dynamic select returns data + options on cell level
 
-                if (pimcore.asset.metadata.tags[type]
-                    && typeof pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig == "function") {
+                let currentTag = pimcore.asset.metadata.tags[type];
 
-                    readerFieldConfig["convert"] = pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig.bind(this, key);
+                if (currentTag) {
+                    if (typeof currentTag.prototype.addGridOptionsFromColumnConfig == "function") {
 
-                    var readerFieldConfigOptions = {name: key + "%options", persist: false};
-                    readerFields.push(readerFieldConfigOptions);
-                }
+                        readerFieldConfig["convert"] = pimcore.asset.metadata.tags[type].prototype.addGridOptionsFromColumnConfig.bind(this, key);
 
-                if (pimcore.object.tags[type] && pimcore.object.tags[type].prototype.allowBatchAppend) {
-                    batchAppendColumns.push(key);
+                        var readerFieldConfigOptions = {name: key + "%options", persist: false};
+                        readerFields.push(readerFieldConfigOptions);
+                    }
+
+                    if (currentTag.prototype.allowBatchAppend) {
+                        batchAppendColumns.push(key);
+                    }
+                    if (currentTag.prototype.allowBatchRemove) {
+                        batchRemoveColumns.push(key);
+                    }
+
                 }
 
                 readerFields.push(readerFieldConfig);
@@ -169,8 +179,9 @@ pimcore.asset.helpers.grid = Class.create({
     },
 
     getGridColumns: function() {
-        var fields = this.fields;
-        var gridColumns = [];
+        const fields = this.fields;
+        const gridFilters = this.getGridFilters();
+        let gridColumns = [];
 
         for (i = 0; i < fields.length; i++) {
             var field = fields[i];
@@ -257,6 +268,11 @@ pimcore.asset.helpers.grid = Class.create({
                 var tag = pimcore.asset.metadata.tags[fieldType];
                 var fc = tag.prototype.getGridColumnConfig(field);
                 fc.locked = this.getColumnLock(field);
+
+                if (typeof gridFilters[field.key] !== 'undefined') {
+                    fc.filter = gridFilters[field.key];
+                }
+
                 gridColumns.push(fc);
             }
         }
@@ -310,7 +326,7 @@ pimcore.asset.helpers.grid = Class.create({
                     }
 
                     var fieldType = fields[i].type;
-                    var tag = pimcore.object.tags[fieldType];
+                    var tag = pimcore.asset.metadata.tags[fieldType];
                     if (tag) {
                         var filter = tag.prototype.getGridColumnFilter(fields[i]);
                         if (filter) {
