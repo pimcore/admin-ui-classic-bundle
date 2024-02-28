@@ -175,7 +175,11 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 }
             }
 
-            $groupName = Translation::getByKeyLocalized($groupName, Translation::DOMAIN_ADMIN, true, true);
+            $groupNameTranslation = Translation::getByKeyLocalized($groupName, Translation::DOMAIN_ADMIN, true, true);
+
+            if (!empty($groupNameTranslation)) {
+                $groupName = $groupNameTranslation;
+            }
 
             if (!isset($groups[$groupName])) {
                 $groups[$groupName] = [
