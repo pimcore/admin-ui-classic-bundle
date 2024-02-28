@@ -300,15 +300,36 @@
                             {% set v2 = fieldKey1.getVersionPreview(keyData2) %}
                         {% endif %}
 
-                        <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                        <td>{{ fieldItem1.getType() ~ " - " ~ fieldKey1.getTitle()|trans([],'admin') }}</td>
-                        <td>{{ fieldKey1.name }}</td>
-                            {% if isImportPreview is not defined or isNew is not defined %}
-                                <td>{{ v1 | raw }}</td>
-                            {% endif %}
-                            {% set fieldIsEqual = fieldKey1 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not fieldKey1.isEqual(keyData1, keyData2) ? 'modified' : '' %}
-                            <td class="{{ fieldIsEqual }}">{{ v2 | raw }}</td>
-                        </tr>
+                        {% if keyData2 is not empty and fieldKey1 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
+                            {# localized loop #}
+                            {% for language in validLanguages %}
+                                {% for lfd in fieldKey1.getFieldDefinitions() %}
+                                    {% set v1l = fieldItem1.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
+                                    {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
+                                        {% set v2l = keyData2.getLocalizedValue(lfd.getName(), language) %}
+                                    {% else %}
+                                        {% set v2l = '' %}
+                                    {% endif %}
+                                    {% set fieldIsEqual = v1l != v2l ? 'modified' : '' %}
+                                    <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                        <td>{{ fieldItem1.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                        <td>{{ fieldItem1.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
+                                        <td>{{ v1l }}</td>
+                                        <td class="{{ fieldIsEqual }}">{{ v2l }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% endfor %}
+                        {% else %}
+                            <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                <td>{{ fieldItem1.getType() ~ " - " ~ fieldKey1.getTitle()|trans([],'admin') }}</td>
+                                <td>{{ fieldKey1.name }}</td>
+                                {% if isImportPreview is not defined or isNew is not defined %}
+                                    <td>{{ v1 | raw }}</td>
+                                {% endif %}
+                                {% set fieldIsEqual = fieldKey1 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not fieldKey1.isEqual(keyData1, keyData2) ? 'modified' : '' %}
+                                <td class="{{ fieldIsEqual }}">{{ v2 | raw }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             {% endif %}
@@ -334,15 +355,36 @@
                                 {% set v1 = fieldKey2.getVersionPreview(keyData1) %}
                             {% endif %}
 
-                            <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                                <td>{{ fieldItem2.getType() ~ " - " ~ fieldKey2.getTitle()|trans([],'admin') }}</td>
-                                <td>{{ fieldKey2.name }}</td>
-                                {% if isImportPreview is not defined or isNew is not defined %}
-                                    <td>{{ v1 | raw }}</td>
-                                {% endif %}
-                                {% set fieldIsEqual = fieldKey2 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not fieldKey2.isEqual(v1, keyData2) ? 'modified' : '' %}
-                                <td class="{{ fieldIsEqual }}">{{ v2 | raw }}</td>
-                            </tr>
+                            {% if keyData2 is not empty and fieldKey2 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
+                                {# localized loop #}
+                                {% for language in validLanguages %}
+                                    {% for lfd in fieldKey2.getFieldDefinitions() %}
+                                        {% set v1l = fieldItem2.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
+                                        {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
+                                            {% set v2l = keyData2.getLocalizedValue(lfd.getName(), language) %}
+                                        {% else %}
+                                            {% set v2l = '' %}
+                                        {% endif %}
+                                        {% set fieldIsEqual = v1l != v2l ? 'modified' : '' %}
+                                        <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                            <td>{{ fieldItem2.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                            <td>{{ fieldItem2.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
+                                            <td>{{ v1l }}</td>
+                                            <td class="{{ fieldIsEqual }}">{{ v2l }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                <tr {% if loop.index is odd %}class="odd"{% endif %}>
+                                    <td>{{ fieldItem2.getType() ~ " - " ~ fieldKey2.getTitle()|trans([],'admin') }}</td>
+                                    <td>{{ fieldKey2.name }}</td>
+                                    {% if isImportPreview is not defined or isNew is not defined %}
+                                        <td>{{ v1 | raw }}</td>
+                                    {% endif %}
+                                    {% set fieldIsEqual = fieldKey2 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not fieldKey2.isEqual(keyData1, keyData2) ? 'modified' : '' %}
+                                    <td class="{{ fieldIsEqual }}">{{ v2 | raw }}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
