@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -34,6 +33,7 @@ use Pimcore\File;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;
+use Pimcore\Messenger\AssetUpdateTasksMessage;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation;
@@ -44,6 +44,7 @@ use Pimcore\Model\Element\ValidationException;
 use Pimcore\Model\Metadata;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -76,10 +77,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/tree-get-root", name="pimcore_admin_asset_treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -88,11 +85,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/delete-info", name="pimcore_admin_asset_deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -250,8 +242,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/tree-get-children-by-id", name="pimcore_admin_asset_treegetchildrenbyid", methods={"GET"})
-     *
-     *
      */
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -259,7 +249,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         $assets = [];
         $cv = [];
-        $asset = Asset::getById($allParams['node']);
+        $asset = Asset::getById((int) $allParams['node']);
 
         $filter = $request->get('filter');
         $limit = (int)$allParams['limit'];
@@ -281,7 +271,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($asset->hasChildren()) {
             if ($allParams['view']) {
-                $cv = ElementService::getCustomViewById($allParams['view']);
+                $cv = $this->elementService->getCustomViewById($allParams['view']);
             }
 
             // get assets
@@ -343,11 +333,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/add-asset", name="pimcore_admin_asset_addasset", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function addAssetAction(Request $request, Config $config): JsonResponse
     {
@@ -377,11 +362,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/add-asset-compatibility", name="pimcore_admin_asset_addassetcompatibility", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Config $config
-     *
-     * @return JsonResponse
      */
     public function addAssetCompatibilityAction(Request $request, Config $config): JsonResponse
     {
@@ -410,10 +390,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * @Route("/exists", name="pimcore_admin_asset_exists", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function existsAction(Request $request): JsonResponse
@@ -426,9 +402,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @param Request $request
-     * @param Config $config
-     *
      * @return array{success: bool, asset: ?Asset}
      *
      * @throws \Exception
@@ -590,11 +563,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * @Route("/replace-asset", name="pimcore_admin_asset_replaceasset", methods={"POST", "PUT"})
      *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function replaceAssetAction(Request $request, TranslatorInterface $translator): JsonResponse
@@ -615,6 +583,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $stream = fopen($_FILES['Filedata']['tmp_name'], 'r+');
         $asset->setStream($stream);
         $asset->setCustomSetting('thumbnails', null);
+        if (method_exists($asset, 'getEmbeddedMetaData')) {
+            $asset->getEmbeddedMetaData(true);
+        }
         $asset->setUserModification($this->getAdminUser()->getId());
 
         $newFileExt = pathinfo($newFilename, PATHINFO_EXTENSION);
@@ -646,10 +617,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/add-folder", name="pimcore_admin_asset_addfolder", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addFolderAction(Request $request): JsonResponse
     {
@@ -676,10 +643,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/delete", name="pimcore_admin_asset_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteAction(Request $request): JsonResponse
     {
@@ -723,139 +686,23 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createAccessDeniedHttpException();
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var Asset $asset */
-        $asset = $element;
-
-        $permissions =  $asset->getUserPermissions($this->getAdminUser());
-
-        $tmpAsset = [
-            'id' => $asset->getId(),
-            'key' => $element->getKey(),
-            'text' => htmlspecialchars($asset->getFilename()),
-            'type' => $asset->getType(),
-            'path' => $asset->getRealFullPath(),
-            'basePath' => $asset->getRealPath(),
-            'locked' => $asset->isLocked(),
-            'lockOwner' => $asset->getLocked() ? true : false,
-            'elementType' => 'asset',
-            'permissions' => [
-                'remove' => $permissions['delete'],
-                'settings' => $permissions['settings'],
-                'rename' => $permissions['rename'],
-                'publish' => $permissions['publish'],
-                'view' => $permissions['view'],
-                'list' => $permissions['list'],
-            ],
-        ];
-
-        $hasChildren = $asset->getDao()->hasChildren($this->getAdminUser());
-
-        // set type specific settings
-        if ($asset instanceof Asset\Folder) {
-            $tmpAsset['leaf'] = false;
-            $tmpAsset['expanded'] = !$hasChildren;
-            $tmpAsset['loaded'] = !$hasChildren;
-            $tmpAsset['permissions']['create'] = $permissions['create'];
-            $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-        } else {
-            $tmpAsset['leaf'] = true;
-            $tmpAsset['expandable'] = false;
-            $tmpAsset['expanded'] = false;
-        }
-
-        $this->addAdminStyle($asset, ElementAdminStyleEvent::CONTEXT_TREE, $tmpAsset);
-
-        if ($asset instanceof Asset\Image) {
-            try {
-                $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-
-                // we need the dimensions for the wysiwyg editors, so that they can resize the image immediately
-                if ($asset->getCustomSetting('imageDimensionsCalculated')) {
-                    $tmpAsset['imageWidth'] = $asset->getCustomSetting('imageWidth');
-                    $tmpAsset['imageHeight'] = $asset->getCustomSetting('imageHeight');
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of image, seems to be broken.');
-            }
-        } elseif ($asset->getType() == 'video') {
-            try {
-                if (\Pimcore\Video::isAvailable()) {
-                    $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
-            }
-        } elseif ($asset->getType() == 'document') {
-            try {
-                // add the PDF check here, otherwise the preview layer in admin is shown without content
-                if (\Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
-                    $tmpAsset['thumbnail'] = $this->getThumbnailUrl($asset, ['origin' => 'treeNode']);
-                }
-            } catch (\Exception $e) {
-                Logger::debug('Cannot get dimensions of video, seems to be broken.');
-            }
-        }
-
-        $tmpAsset['cls'] = '';
-        if ($asset->isLocked()) {
-            $tmpAsset['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($asset->getLocked()) {
-            $tmpAsset['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        return $tmpAsset;
-    }
-
-    protected function getThumbnailUrl(Asset $asset, array $params = []): ?string
-    {
-        $defaults = [
-            'id' => $asset->getId(),
-            'treepreview' => true,
-            '_dc' => $asset->getModificationDate(),
-        ];
-
-        $params = array_merge($defaults, $params);
-
-        if ($asset instanceof Asset\Image) {
-            return $this->generateUrl('pimcore_admin_asset_getimagethumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Folder) {
-            return $this->generateUrl('pimcore_admin_asset_getfolderthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Video && \Pimcore\Video::isAvailable()) {
-            return $this->generateUrl('pimcore_admin_asset_getvideothumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Document && \Pimcore\Document::isAvailable() && $asset->getPageCount()) {
-            return $this->generateUrl('pimcore_admin_asset_getdocumentthumbnail', $params);
-        }
-
-        if ($asset instanceof Asset\Audio) {
-            return '/bundles/pimcoreadmin/img/flat-color-icons/speaker.svg';
-        }
-
-        if ($asset instanceof Asset) {
-            return '/bundles/pimcoreadmin/img/filetype-not-supported.svg';
-        }
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**
      * @Route("/update", name="pimcore_admin_asset_update", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
+     * @throws RuntimeException
      */
     public function updateAction(Request $request): JsonResponse
     {
-        $success = false;
+        $data = ['success' => false];
         $allowUpdate = true;
 
         $updateData = array_merge($request->request->all(), $request->query->all());
@@ -871,7 +718,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 //check if parent is changed i.e. asset is moved
                 if ($asset->getParentId() != $parentAsset->getId()) {
                     if (!$parentAsset->isAllowed('create')) {
-                        throw new \Exception('Prevented moving asset - no create permission on new parent ');
+                        throw new RuntimeException('Prevented moving asset - no create permission on new parent.');
                     }
 
                     $intendedPath = $parentAsset->getRealPath();
@@ -895,29 +742,36 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             if ($allowUpdate) {
                 if ($request->get('filename') != $asset->getFilename() && !$asset->isAllowed('rename')) {
                     unset($updateData['filename']);
-                    Logger::debug('prevented renaming asset because of missing permissions ');
+                    Logger::debug('prevented renaming asset because of missing permissions.');
                 }
 
                 $asset->setValues($updateData);
 
                 try {
                     $asset->save();
-                    $success = true;
+                    $data = [
+                        'success' => true,
+                        'treeData' => $this->getTreeNodeConfig($asset),
+                    ];
                 } catch (\Exception $e) {
                     return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
                 }
             } else {
-                $msg = 'prevented moving asset, asset with same path+key already exists at target location or the asset is locked. ID: ' . $asset->getId();
+                $msg = 'prevented moving asset, asset with same path+key already exists';
+                $msg .= ' at target location or the asset is locked. ID: ' . $asset->getId();
                 Logger::debug($msg);
 
-                return $this->adminJson(['success' => $success, 'message' => $msg]);
+                return $this->adminJson(['success' => false, 'message' => $msg]);
             }
         } elseif ($asset->isAllowed('rename') && $request->get('filename')) {
             //just rename
             try {
                 $asset->setFilename($request->get('filename'));
                 $asset->save();
-                $success = true;
+                $data = [
+                    'success' => true,
+                    'treeData' => $this->getTreeNodeConfig($asset),
+                ];
             } catch (\Exception $e) {
                 return $this->adminJson(['success' => false, 'message' => $e->getMessage()]);
             }
@@ -925,16 +779,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             Logger::debug('prevented update asset because of missing permissions ');
         }
 
-        return $this->adminJson(['success' => $success]);
+        return $this->adminJson($data);
     }
 
     /**
      * @Route("/save", name="pimcore_admin_asset_save", methods={"PUT","POST"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1037,10 +886,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/publish-version", name="pimcore_admin_asset_publishversion", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function publishVersionAction(Request $request): JsonResponse
     {
@@ -1071,10 +916,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/show-version", name="pimcore_admin_asset_showversion", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function showVersionAction(Request $request): Response
     {
@@ -1087,6 +928,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if (!$asset->isAllowed('versions')) {
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
+        }
+
+        if ($asset->getMimeType() === 'application/pdf') {
+            $scanResponse = $this->getResponseByScanStatus($asset, false);
+            if ($scanResponse) {
+                return $scanResponse;
+            }
         }
 
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
@@ -1103,10 +951,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/download", name="pimcore_admin_asset_download", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function downloadAction(Request $request): StreamedResponse
     {
@@ -1137,10 +981,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/download-image-thumbnail", name="pimcore_admin_asset_downloadimagethumbnail", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      */
     public function downloadImageThumbnailAction(Request $request): BinaryFileResponse
     {
@@ -1241,6 +1081,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($thumbnail) {
+            $thumbnailConfig = $thumbnail->getConfig();
+            if ($thumbnailConfig->getFormat() === 'SOURCE' &&
+                $autoFormatConfigs = $thumbnailConfig->getAutoFormatThumbnailConfigs()) {
+                $autoFormatConfig = current($autoFormatConfigs);
+                $thumbnail = $image->getThumbnail($autoFormatConfig);
+            }
+
             $thumbnailFile = $thumbnailFile ?: $thumbnail->getLocalFile();
 
             $downloadFilename = preg_replace(
@@ -1248,7 +1095,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 '.' . $thumbnail->getFileExtension(),
                 $image->getFilename()
             );
-            $downloadFilename = strtolower($downloadFilename);
 
             clearstatcache();
 
@@ -1266,10 +1112,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-asset", name="pimcore_admin_asset_getasset", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function getAssetAction(Request $request): StreamedResponse
     {
@@ -1302,10 +1144,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-image-thumbnail", name="pimcore_admin_asset_getimagethumbnail", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse|JsonResponse|BinaryFileResponse
      */
     public function getImageThumbnailAction(Request $request): BinaryFileResponse|JsonResponse|StreamedResponse
     {
@@ -1323,13 +1161,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $thumbnailConfig = null;
 
         if ($request->get('thumbnail')) {
-            $thumbnailConfig = $image->getThumbnailConfig($request->get('thumbnail'));
+            $thumbnailConfig = $image->getThumbnail($request->get('thumbnail'))->getConfig();
         }
         if (!$thumbnailConfig) {
             if ($request->get('config')) {
-                $thumbnailConfig = $image->getThumbnailConfig($this->decodeJson($request->get('config')));
+                $thumbnailConfig = $image->getThumbnail($this->decodeJson($request->get('config')))->getConfig();
             } else {
-                $thumbnailConfig = $image->getThumbnailConfig(array_merge($request->request->all(), $request->query->all()));
+                $thumbnailConfig = $image->getThumbnail(array_merge($request->request->all(), $request->query->all()))->getConfig();
             }
         } else {
             // no high-res images in admin mode (editmode)
@@ -1378,7 +1216,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $stream = $thumbnail->getStream();
 
         if (!$stream) {
-            return new BinaryFileResponse(PIMCORE_PATH . '/bundles/AdminBundle/public/img/filetype-not-supported.svg');
+            return new BinaryFileResponse(PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/filetype-not-supported.svg');
         }
 
         $response = new StreamedResponse(function () use ($stream) {
@@ -1395,10 +1233,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-folder-thumbnail", name="pimcore_admin_asset_getfolderthumbnail", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function getFolderThumbnailAction(Request $request): StreamedResponse
     {
@@ -1433,10 +1267,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-video-thumbnail", name="pimcore_admin_asset_getvideothumbnail", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function getVideoThumbnailAction(Request $request): StreamedResponse
     {
@@ -1512,10 +1342,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-document-thumbnail", name="pimcore_admin_asset_getdocumentthumbnail", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse|BinaryFileResponse
      */
     public function getDocumentThumbnailAction(Request $request): BinaryFileResponse|StreamedResponse
     {
@@ -1563,7 +1389,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 'Content-Type' => 'image/' . $thumb->getFileExtension(),
             ]);
         } else {
-            $response = new BinaryFileResponse(PIMCORE_PATH . '/bundles/AdminBundle/public/img/filetype-not-supported.svg');
+            $response = new BinaryFileResponse(PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/filetype-not-supported.svg');
         }
 
         $this->addThumbnailCacheHeaders($response);
@@ -1585,13 +1411,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-preview-document", name="pimcore_admin_asset_getpreviewdocument", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
-    public function getPreviewDocumentAction(Request $request): StreamedResponse
-    {
+    public function getPreviewDocumentAction(
+        Request $request,
+        TranslatorInterface $translator
+    ): StreamedResponse|Response {
         $asset = Asset\Document::getById((int) $request->get('id'));
 
         if (!$asset) {
@@ -1599,6 +1423,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
+            if ($asset->getMimeType() === 'application/pdf') {
+                $scanResponse = $this->getResponseByScanStatus($asset);
+                if ($scanResponse) {
+                    return $scanResponse;
+                }
+            }
+
             $stream = $this->getDocumentPreviewPdf($asset);
             if ($stream) {
                 return new StreamedResponse(function () use ($stream) {
@@ -1614,9 +1445,30 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
+    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true): ?Response
+    {
+        if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
+            return null;
+        }
+
+        $scanStatus = $asset->getScanStatus();
+        if ($scanStatus === null) {
+            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
+            if ($processBackground) {
+                \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                    new AssetUpdateTasksMessage($asset->getId())
+                );
+            }
+        }
+
+        return match($scanStatus) {
+            Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
+            Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
+            default => null,
+        };
+    }
+
     /**
-     * @param Asset\Document $asset
-     *
      * @return resource|null
      */
     protected function getDocumentPreviewPdf(Asset\Document $asset)
@@ -1627,7 +1479,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             $stream = $asset->getStream();
         }
 
-        if (!$stream && $asset->getPageCount() && \Pimcore\Document::isAvailable() && \Pimcore\Document::isFileTypeSupported($asset->getFilename())) {
+        if (
+            !$stream &&
+            $asset->getPageCount() &&
+            \Pimcore\Document::isAvailable() &&
+            \Pimcore\Document::isFileTypeSupported($asset->getFilename())
+        ) {
             try {
                 $document = \Pimcore\Document::getInstance();
                 $stream = $document->getPdf($asset);
@@ -1641,10 +1498,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-preview-video", name="pimcore_admin_asset_getpreviewvideo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function getPreviewVideoAction(Request $request): Response
     {
@@ -1695,10 +1548,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/serve-video-preview", name="pimcore_admin_asset_servevideopreview", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function serveVideoPreviewAction(Request $request): StreamedResponse
     {
@@ -1741,10 +1590,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/image-editor", name="pimcore_admin_asset_imageeditor", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function imageEditorAction(Request $request): Response
     {
@@ -1762,10 +1607,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/image-editor-save", name="pimcore_admin_asset_imageeditorsave", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function imageEditorSaveAction(Request $request): JsonResponse
     {
@@ -1791,8 +1632,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-folder-content-preview", name="pimcore_admin_asset_getfoldercontentpreview", methods={"GET"})
-     *
-     *
      */
     public function getFolderContentPreviewAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -1862,8 +1701,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     'id' => $asset->getId(),
                     'type' => $asset->getType(),
                     'filename' => $asset->getFilename(),
-                    'filenameDisplay' => htmlspecialchars($filenameDisplay),
-                    'url' => $this->getThumbnailUrl($asset),
+                    'filenameDisplay' => htmlspecialchars($filenameDisplay ?? ''),
+                    'url' => $this->elementService->getThumbnailUrl($asset),
                     'idPath' => $data['idPath'] = Element\Service::getIdPath($asset),
                 ];
             }
@@ -1885,10 +1724,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/copy-info", name="pimcore_admin_asset_copyinfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyInfoAction(Request $request): JsonResponse
     {
@@ -1964,10 +1799,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/copy", name="pimcore_admin_asset_copy", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyAction(Request $request): JsonResponse
     {
@@ -2030,10 +1861,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/download-as-zip-jobs", name="pimcore_admin_asset_downloadaszipjobs", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function downloadAsZipJobsAction(Request $request): JsonResponse
     {
@@ -2070,10 +1897,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 $userIds = $this->getAdminUser()->getRoles();
                 $userIds[] = $this->getAdminUser()->getId();
                 $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+                   (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                   OR
+                   (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                )';
             }
 
             $condition = implode(' AND ', $conditionFilters);
@@ -2107,10 +1934,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/download-as-zip-add-files", name="pimcore_admin_asset_downloadaszipaddfiles", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function downloadAsZipAddFilesAction(Request $request): JsonResponse
     {
@@ -2143,18 +1966,24 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
                 if (!empty($selectedIds)) {
                     $selectedIds = explode(',', $selectedIds);
+                    $quotedSelectedIds = [];
+                    foreach ($selectedIds as $selectedId) {
+                        if ($selectedId) {
+                            $quotedSelectedIds[] = $db->quote($selectedId);
+                        }
+                    }
                     //add a condition if id numbers are specified
-                    $conditionFilters[] = 'id IN (' . implode(',', $selectedIds) . ')';
+                    $conditionFilters[] = 'id IN (' . implode(',', $quotedSelectedIds) . ')';
                 }
                 $conditionFilters[] = "`type` != 'folder' AND `path` like " . $db->quote(Helper::escapeLike($parentPath) . '/%');
                 if (!$this->getAdminUser()->isAdmin()) {
                     $userIds = $this->getAdminUser()->getRoles();
                     $userIds[] = $this->getAdminUser()->getId();
                     $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+                       (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                       OR
+                       (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
+                    )';
                 }
 
                 $condition = implode(' AND ', $conditionFilters);
@@ -2185,13 +2014,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/download-as-zip", name="pimcore_admin_asset_downloadaszip", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      * Download all assets contained in the folder with parameter id as ZIP file.
      * The suggested filename is either [folder name].zip or assets.zip for the root folder.
+     *
+     * @Route("/download-as-zip", name="pimcore_admin_asset_downloadaszip", methods={"GET"})
      */
     public function downloadAsZipAction(Request $request): BinaryFileResponse
     {
@@ -2215,11 +2041,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/import-zip", name="pimcore_admin_asset_importzip", methods={"POST"})
-     *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return Response
      */
     public function importZipAction(Request $request, TranslatorInterface $translator): Response
     {
@@ -2286,10 +2107,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/import-zip-files", name="pimcore_admin_asset_importzipfiles", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function importZipFilesAction(Request $request, Filesystem $filesystem): JsonResponse
     {
@@ -2359,10 +2176,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/clear-thumbnail", name="pimcore_admin_asset_clearthumbnail", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function clearThumbnailAction(Request $request): JsonResponse
     {
@@ -2386,13 +2199,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/grid-proxy", name="pimcore_admin_asset_gridproxy", methods={"GET", "POST", "PUT"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param GridHelperService $gridHelperService
-     * @param CsrfProtectionHandler $csrfProtection
-     *
-     * @return JsonResponse
      */
     public function gridProxyAction(Request $request, EventDispatcherInterface $eventDispatcher, GridHelperService $gridHelperService, CsrfProtectionHandler $csrfProtection): JsonResponse
     {
@@ -2566,10 +2372,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     /**
      * @Route("/get-text", name="pimcore_admin_asset_gettext", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getTextAction(Request $request): JsonResponse
     {

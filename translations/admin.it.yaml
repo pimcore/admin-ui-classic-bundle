@@ -1061,7 +1061,6 @@ batch_export_confirmation: You are about to export %s dataObjects. Do you want t
   continue ?
 header: Header
 no_header: No Header
-url-slug-invalid-chars: Provided invalid character in URL slug
 delete_entire_folder_question: This operation will delete the entire parent/folder.
   You may not be able to fully undo this operation.
 allow_to_clear_relation: Allow to clear all relations of this field
@@ -1073,4 +1072,39 @@ content_main_document: Content-Main Document
 2fa_wrong: Wrong code entered!
 language_main: Main
 system_appearance_settings: Appearance & Branding
+male: Male
+female: Female
+preview_generator_locale: Language
+preview_generator_site: Site
+failed_to_create_new_item_select_options: Failed to create new item. Name must be
+  UpperCamelCase format, at least 3 characters long and may not contain any reserved
+  words.
+pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
+  and open it in your local PDF viewer.
+pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
+  a while.'
+keybinding_save: Save
+keybinding_publish: Publish
+keybinding_unpublish: Unpublish
+keybinding_rename: Rename
+keybinding_refresh: Reload
+keybinding_openDocument: Open Document
+keybinding_openAsset: Open Asset
+keybinding_openObject: Open Object
+keybinding_openInTree: Show in Tree
+keybinding_searchDocument: Search Documents
+keybinding_searchAsset: Search Assets
+keybinding_searchObject: Search Objects
+keybinding_showElementHistory: Recently Opened Elements
+keybinding_closeAllTabs: Close all tabs
+keybinding_searchAndReplaceAssignments: Search & Replace Assignments
+keybinding_redirects: Redirects
+keybinding_sharedTranslations: Shared Translations
+keybinding_recycleBin: Recycle Bin
+keybinding_notesEvents: Notes &amp; Events
+keybinding_tagConfiguration: Tag Configuration
+keybinding_users: Users
+keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: Nome Utente
 ...

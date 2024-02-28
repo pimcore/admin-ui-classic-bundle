@@ -162,17 +162,7 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 
@@ -267,21 +257,53 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
 
             buttons.push("-");
 
-            if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
-                buttons.push(this.toolbarButtons.remove);
-            }
-            if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
-                buttons.push(this.toolbarButtons.rename);
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu = new Ext.Button({
+                    ...pimcore.helpers.headbar.getSubmenuConfig()
+                });
+
+                buttons.push(this.toolbarSubmenu);
             }
 
-            buttons.push({
-                tooltip: t("download_as_zip"),
+            if (this.isAllowed("delete") && !this.data.locked && this.data.id != 1) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add({
+                        text: t('delete'),
+                        iconCls: "pimcore_material_icon_delete pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.remove.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.remove);
+                }
+            }
+            if (this.isAllowed("rename") && !this.data.locked && this.data.id != 1) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add({
+                        text: t('rename'),
+                        iconCls: "pimcore_material_icon_rename pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.rename.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.rename);
+                }
+            }
+
+            const downloadAsZipConfig = {
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { text: t('download_as_zip') } : { tooltip: t('download_as_zip') })(),
                 iconCls: "pimcore_material_icon_download_zip pimcore_material_icon",
                 scale: "medium",
                 handler: function () {
                     pimcore.elementservice.downloadAssetFolderAsZip(this.id)
                 }.bind(this)
-            });
+            }
+
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu.menu.add(downloadAsZipConfig);
+            } else {
+                buttons.push(downloadAsZipConfig);
+            }
 
             buttons.push({
                 tooltip: t('reload'),
@@ -307,18 +329,12 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 handler: this.showMetaInfo.bind(this),
                 menu: this.getMetaInfoMenuItems()
             });
-
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t("id") + " " + this.data.id,
-                scale: "medium"
-            });
-
+            
             this.toolbar = new Ext.Toolbar({
                 id: "asset_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'

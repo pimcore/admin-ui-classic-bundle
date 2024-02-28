@@ -61,30 +61,6 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
             this.frontendLanguages.unshift("default");
         }
 
-        this.keysToWatch = [];
-
-        if (this.inherited) {
-            for (var i=0; i < this.frontendLanguages.length; i++) {
-                var currentLanguage = this.frontendLanguages[i];
-
-                var metadataForLanguage = this.metaData[currentLanguage];
-                if (metadataForLanguage) {
-                    var dataKeys = Object.keys(metadataForLanguage);
-
-                    for (var k = 0; k < dataKeys.length; k++) {
-                        var dataKey = dataKeys[k];
-                        var metadataForKey = metadataForLanguage[dataKey];
-                        if (metadataForKey.inherited) {
-                            this.keysToWatch.push({
-                                lang: currentLanguage,
-                                key: dataKey
-                            });
-                        }
-                    }
-                }
-            }
-        }
-
         this.dropdownLayout = false;
     },
 
@@ -176,21 +152,6 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                 this.languageElements[this.currentLanguage] = [];
                 this.groupElements[this.currentLanguage] = {};
 
-                var childItems = [];
-
-
-                for (var groupId in this.fieldConfig.activeGroupDefinitions) {
-                    var groupedChildItems = [];
-
-                    if (this.fieldConfig.activeGroupDefinitions.hasOwnProperty(groupId)) {
-                        var group = this.fieldConfig.activeGroupDefinitions[groupId];
-
-                        var fieldset = this.createGroupFieldset(this.currentLanguage, group, groupedChildItems);
-
-                        childItems.push(fieldset);
-
-                    }
-                }
                 var title = this.frontendLanguages[i];
                 if (title != "default") {
                     var title = t(pimcore.available_languages[title]);
@@ -208,9 +169,32 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     hideMode: "offsets",
                     iconCls: icon,
                     title: title,
-                    items: childItems
-                });
+                    listeners: {
+                        activate: function(frontendLanguage, tab) {
+                            if (tab.items.length !== 0) {
+                                return;
+                            }
 
+                            this.currentLanguage = frontendLanguage;
+
+                            const childItems = [];
+                            for (const groupId in this.fieldConfig.activeGroupDefinitions) {
+                                const groupedChildItems = [];
+
+                                if (this.fieldConfig.activeGroupDefinitions.hasOwnProperty(groupId)) {
+                                    const group = this.fieldConfig.activeGroupDefinitions[groupId];
+
+                                    const fieldset = this.createGroupFieldset(this.currentLanguage, group, groupedChildItems);
+
+                                    childItems.push(fieldset);
+                                }
+                            }
+
+                            tab.add(childItems);
+                            this.component.updateLayout();
+                        }.bind(this, this.frontendLanguages[i])
+                    }
+                })
                 this.languagePanels[this.currentLanguage] = item;
 
                 if (this.fieldConfig.labelWidth) {
@@ -231,11 +215,9 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
 
         }
 
-        this.currentLanguage = this.frontendLanguages[0];
 
         this.component = new Ext.Panel(wrapperConfig);
 
-        this.component.updateLayout();
         return this.component;
     },
 
@@ -667,7 +649,7 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
                     var groupId = fieldConfig.csGroupId;
                     var keyId = fieldConfig.csKeyId;
 
-                    if (this.metaData[currentLanguage][groupId][keyId]) {
+                    if (this.metaData[currentLanguage][groupId] && this.metaData[currentLanguage][groupId][keyId]) {
                         if (this.metaData[currentLanguage][groupId][keyId].inherited) {
                             if(languageElement.isDirty()) {
                                 this.metaData[currentLanguage][groupId][keyId].inherited = false;

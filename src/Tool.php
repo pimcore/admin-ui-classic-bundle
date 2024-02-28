@@ -19,11 +19,6 @@ namespace Pimcore\Bundle\AdminBundle;
 final class Tool
 {
     /**
-     * @param string $language
-     * @param bool $absolutePath
-     *
-     * @return string
-     *
      * @internal
      */
     public static function getLanguageFlagFile(string $language, bool $absolutePath = true): string

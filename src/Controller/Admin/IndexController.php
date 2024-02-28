@@ -24,9 +24,11 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
+use Pimcore\Image\Chromium;
 use Pimcore\Maintenance\Executor;
 use Pimcore\Maintenance\ExecutorInterface;
 use Pimcore\Model\Asset;
@@ -34,11 +36,13 @@ use Pimcore\Model\DataObject\ClassDefinition\CustomLayout;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
 use Pimcore\Model\Element\Service;
+use Pimcore\Model\Property\Predefined;
 use Pimcore\Model\User;
 use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
+use Pimcore\Video;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,14 +68,6 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     /**
      * @Route("/", name="pimcore_admin_index", methods={"GET"})
      *
-     * @param Request $request
-     * @param KernelInterface $kernel
-     * @param Executor $maintenanceExecutor
-     * @param CsrfProtectionHandler $csrfProtection
-     * @param Config $config
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
     public function indexAction(
@@ -81,6 +77,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         CsrfProtectionHandler $csrfProtection,
         Config $config,
         PimcoreBundleManager $bundleManager,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
     ): Response {
         $user = $this->getAdminUser();
         $perspectiveConfig = new \Pimcore\Bundle\AdminBundle\Perspective\Config();
@@ -96,7 +93,15 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             ->addRuntimePerspective($templateParams, $user)
             ->addPluginAssets($bundleManager, $templateParams);
 
-        $this->buildPimcoreSettings($request, $templateParams, $user, $kernel, $maintenanceExecutor, $csrfProtection);
+        $this->buildPimcoreSettings(
+            $request,
+            $templateParams,
+            $user,
+            $kernel,
+            $maintenanceExecutor,
+            $csrfProtection,
+            $maintenanceModeHelper
+        );
 
         if ($user->getTwoFactorAuthentication('required') && !$user->getTwoFactorAuthentication('enabled')) {
             return $this->redirectToRoute('pimcore_admin_2fa_setup');
@@ -107,22 +112,20 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $this->eventDispatcher->dispatch($settingsEvent, AdminEvents::INDEX_ACTION_SETTINGS);
         $templateParams['settings'] = $settingsEvent->getSettings();
 
-        return $this->render('@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
+        return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
     }
 
     /**
      * @Route("/index/statistics", name="pimcore_admin_index_statistics", methods={"GET"})
      *
-     * @param Request $request
-     * @param Connection $db
-     * @param KernelInterface $kernel
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function statisticsAction(Request $request, Connection $db, KernelInterface $kernel): JsonResponse
     {
+        if (!$request->isXmlHttpRequest()) {
+            throw $this->createAccessDeniedHttpException();
+        }
+
         // DB
         try {
             $tables = $db->fetchAllAssociative('SELECT TABLE_NAME as name,TABLE_ROWS as `rows` from information_schema.TABLES
@@ -182,8 +185,14 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this;
     }
 
-    protected function buildPimcoreSettings(Request $request, array &$templateParams, User $user, KernelInterface $kernel, ExecutorInterface $maintenanceExecutor, CsrfProtectionHandler $csrfProtection): static
-    {
+    protected function buildPimcoreSettings(
+        Request $request,
+        array &$templateParams,
+        User $user, KernelInterface $kernel,
+        ExecutorInterface $maintenanceExecutor,
+        CsrfProtectionHandler $csrfProtection,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
+    ): static {
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
@@ -221,16 +230,17 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'debug_admin_translations'       => (bool)$systemSettings['general']['debug_admin_translations'],
             'document_generatepreviews'      => (bool)$config['documents']['generate_preview'],
             'asset_disable_tree_preview'     => (bool)$adminSettings['assets']['disable_tree_preview'],
-            'chromium'                       => \Pimcore\Image\Chromium::isSupported(),
-            'videoconverter'                 => \Pimcore\Video::isAvailable(),
             'asset_hide_edit'                => (bool)$adminSettings['assets']['hide_edit_image'],
+            'asset_tree_paging_limit'        => $config['assets']['tree_paging_limit'],
+            'asset_default_upload_path'      => $config['assets']['default_upload_path'],
+            'chromium'                       => Chromium::isSupported(),
+            'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
             'timezone'                       => $config['general']['timezone'],
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
             'geocoding_url_template'         => $config['maps']['geocoding_url_template'],
             'reverse_geocoding_url_template' => $config['maps']['reverse_geocoding_url_template'],
-            'asset_tree_paging_limit'        => $config['assets']['tree_paging_limit'],
             'document_tree_paging_limit'     => $config['documents']['tree_paging_limit'],
             'object_tree_paging_limit'       => $config['objects']['tree_paging_limit'],
             'hostname'                       => htmlentities(\Pimcore\Tool::getHostname(), ENT_QUOTES, 'UTF-8'),
@@ -244,15 +254,17 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'disabledPortlets'      => $dashboardHelper->getDisabledPortlets(),
 
             // this stuff is used to decide whether the "add" button should be grayed out or not
-            'image-thumbnails-writeable'          => (new \Pimcore\Model\Asset\Image\Thumbnail\Config())->isWriteable(),
-            'video-thumbnails-writeable'          => (new \Pimcore\Model\Asset\Video\Thumbnail\Config())->isWriteable(),
+            'image-thumbnails-writeable'          => (new Asset\Image\Thumbnail\Config())->isWriteable(),
+            'video-thumbnails-writeable'          => (new Asset\Video\Thumbnail\Config())->isWriteable(),
             'document-types-writeable'            => (new DocType())->isWriteable(),
-            'predefined-properties-writeable'     => (new \Pimcore\Model\Property\Predefined())->isWriteable(),
+            'predefined-properties-writeable'     => (new Predefined())->isWriteable(),
             'predefined-asset-metadata-writeable' => (new \Pimcore\Model\Metadata\Predefined())->isWriteable(),
             'perspectives-writeable'              => \Pimcore\Bundle\AdminBundle\Perspective\Config::isWriteable(),
             'custom-views-writeable'              => \Pimcore\Bundle\AdminBundle\CustomView\Config::isWriteable(),
-            'class-definition-writeable'          => isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ? (bool)$_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'] : true,
+            'class-definition-writeable'          => !isset($_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE']) ||
+                (bool) $_SERVER['PIMCORE_CLASS_DEFINITION_WRITABLE'],
             'object-custom-layout-writeable' => (new CustomLayout())->isWriteable(),
+            'select-options-writeable' => (new \Pimcore\Model\DataObject\SelectOptions\Config())->isWriteable(),
 
             // search types
             'asset_search_types' => Asset::getTypes(),
@@ -265,11 +277,12 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             })),
             // email search compatible document types
             'document_email_search_types' => $config['documents']['email_search'],
+            'select_options_provider_class' => SelectOptionsOptionsProvider::class,
         ];
 
         $this
             ->addSystemVarSettings($settings)
-            ->addMaintenanceSettings($settings, $maintenanceExecutor)
+            ->addMaintenanceSettings($settings, $maintenanceExecutor, $maintenanceModeHelper)
             ->addMailSettings($settings, $config, $systemSettings)
             ->addCustomViewSettings($settings)
             ->addNotificationSettings($settings, $config);
@@ -315,18 +328,22 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this;
     }
 
-    protected function addMaintenanceSettings(array &$settings, ExecutorInterface $maintenanceExecutor): static
-    {
+    protected function addMaintenanceSettings(
+        array &$settings,
+        ExecutorInterface $maintenanceExecutor,
+        Tool\MaintenanceModeHelperInterface $maintenanceModeHelper
+    ): static {
         // check maintenance
         $maintenance_active = false;
         if ($lastExecution = $maintenanceExecutor->getLastExecution()) {
-            if ((time() - $lastExecution) < 3660) { // maintenance script should run at least every hour + a little tolerance
+            // maintenance script should run at least every hour + a little tolerance
+            if ((time() - $lastExecution) < 3660) {
                 $maintenance_active = true;
             }
         }
 
         $settings['maintenance_active'] = $maintenance_active;
-        $settings['maintenance_mode'] = Admin::isInMaintenanceMode();
+        $settings['maintenance_mode'] = $maintenanceModeHelper->isActive() || Admin::isInMaintenanceMode();
 
         return $this;
     }

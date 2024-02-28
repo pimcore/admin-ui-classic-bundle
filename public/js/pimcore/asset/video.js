@@ -96,16 +96,7 @@ pimcore.asset.video = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region: 'center',
-            deferredRender: true,
-            enableTabScroll: true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 
@@ -119,7 +110,7 @@ pimcore.asset.video = Class.create(pimcore.asset.asset, {
                 bodyCls: "pimcore_overflow_scrolling",
                 html: ''
             });
-            this.previewPanel.on("resize", function (el, width, height, rWidth, rHeight) {
+            this.previewPanel.on("boxready", function () {
                 this.initPreviewVideo();
             }.bind(this));
 

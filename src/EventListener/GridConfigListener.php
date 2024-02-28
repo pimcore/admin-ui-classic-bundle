@@ -30,9 +30,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class GridConfigListener implements EventSubscriberInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

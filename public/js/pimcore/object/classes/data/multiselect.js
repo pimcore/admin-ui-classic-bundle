@@ -259,7 +259,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
 
         this.selectionModel = valueGrid.getSelectionModel();
 
-        return stylingItems.concat([
+        let appendedStylingItems = stylingItems.concat([
             {
                 xtype: "numberfield",
                 fieldLabel: t("maximum_items"),
@@ -281,23 +281,15 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 triggerAction: "all",
                 editable: false,
                 forceSelection: true
-            },
-            {
-                xtype: "textfield",
-                fieldLabel: t("options_provider_class"),
-                width: 600,
-                name: "optionsProviderClass",
-                value: datax.optionsProviderClass
-            },
-            {
-                xtype: "textfield",
-                fieldLabel: t("options_provider_data"),
-                width: 600,
-                value: datax.optionsProviderData,
-                name: "optionsProviderData"
-            },
-            valueGrid
+            }
         ]);
+
+        appendedStylingItems = appendedStylingItems.concat(
+            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, valueGrid)
+        );
+        appendedStylingItems.push(valueGrid);
+
+        return appendedStylingItems;
     },
 
     applyData: function ($super) {
@@ -333,6 +325,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                     height: source.datax.height,
                     maxItems: source.datax.maxItems,
                     renderType: source.datax.renderType,
+                    optionsProviderType: source.datax.optionsProviderType,
                     optionsProviderClass: source.datax.optionsProviderClass,
                     optionsProviderData: source.datax.optionsProviderData
                 });

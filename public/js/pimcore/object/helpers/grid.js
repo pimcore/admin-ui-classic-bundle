@@ -84,7 +84,7 @@ pimcore.object.helpers.grid = Class.create({
                 var key = fieldConfig.key;
                 var readerFieldConfig = {name: key};
                 // dynamic select returns data + options on cell level
-                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderClass) {
+                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE && fieldConfig.layout.optionsProviderClass) {
                     if (typeof noBatchColumns != "undefined") {
                         if (fieldConfig.layout.dynamicOptions) {
                             noBatchColumns.push(key);
@@ -454,7 +454,7 @@ pimcore.object.helpers.grid = Class.create({
         var fields = this.fields;
         for (var i = 0; i < fields.length; i++) {
 
-            if(fields[i].key != "id" && fields[i].key != "published"
+            if(fields[i].key != "id" && fields[i].key != "published" && fields[i].key != "key"
                 && fields[i].key != "filename" && fields[i].key != "classname"
                 && fields[i].key != "creationDate" && fields[i].key != "modificationDate") {
 
@@ -501,7 +501,7 @@ pimcore.object.helpers.grid = Class.create({
             }
 
             if(fields[i].key != "id" && fields[i].key != "published" && fields[i].key != "fullpath"
-                && fields[i].key != "filename" && fields[i].key != "classname"
+                && fields[i].key != "filename" && fields[i].key != "classname" && fields[i].key != "key"
                 && fields[i].key != "creationDate" && fields[i].key != "modificationDate") {
 
                 var fieldType = fields[i].type;

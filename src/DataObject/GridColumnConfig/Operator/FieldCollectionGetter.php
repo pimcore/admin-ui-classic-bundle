@@ -40,9 +40,6 @@ final class FieldCollectionGetter extends AbstractOperator
         $this->colAttr = $config->colAttr ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

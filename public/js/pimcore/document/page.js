@@ -43,7 +43,6 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
     },
 
     init: function () {
-
         var user = pimcore.globalmanager.get("user");
 
         if (this.isAllowed("save") || this.isAllowed("publish")) {
@@ -118,19 +117,7 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.tagAssignment.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            tabConfig: {
-                margin: 0
-            },
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items, tabBar: {tabConfig: {margin: 0}}});
         return this.tabbar;
     },
 

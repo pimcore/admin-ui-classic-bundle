@@ -181,9 +181,6 @@ class AdminEvents
     /**
      * Arguments:
      *  - field
-     *  - language
-     *  - keyPrefix
-     *  - processed
      *  - result
      *
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
@@ -410,6 +407,28 @@ class AdminEvents
      * @var string
      */
     const CLASS_OBJECTBRICK_UPDATE_DEFINITION = 'pimcore.admin.class.objectbrick.updateDefinition';
+
+    /**
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\ClassController
+     * Arguments:
+     *  - list | array | the list of select options
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const CLASS_SELECTOPTIONS_LIST_PRE_SEND_DATA = 'pimcore.admin.class.selectoptionsList.preSendData';
+
+    /**
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\ClassController
+     * Arguments:
+     *  - selectOptionsConfiguration | \Pimcore\Model\DataObject\SelectOptions\Config
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const CLASS_SELECTOPTIONS_UPDATE_CONFIGURATION = 'pimcore.admin.class.selectoptions.updateDefinition';
 
     /**
      * Fired before an element is opened

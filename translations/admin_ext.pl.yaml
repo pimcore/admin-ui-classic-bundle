@@ -686,7 +686,6 @@ quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
-username: Username
 localized_fields: Localized Fields
 field_collections: Field-Collections
 special_settings_tooltip: Special Settings
@@ -697,4 +696,9 @@ classificationstore_mbx_enterkey_prompt: Enter name
 classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Seconds
+options_provider_type: Options source
+options_provider_type_configure: Configure
+options_provider_type_select_options: Select Options
+options_provider_type_class: Options Provider
+selectoptions: Select Options
 ...

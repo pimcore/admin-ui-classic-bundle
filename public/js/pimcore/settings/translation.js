@@ -322,7 +322,7 @@ pimcore.settings.translation.domain = Class.create({
                     icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
                     handler: function (grid, rowIndex) {
                         let data = grid.getStore().getAt(rowIndex);
-                        pimcore.helpers.deleteConfirm(t('translation'), Ext.util.Format.htmlEncode(data.data.key), function () {
+                        pimcore.helpers.deleteConfirm(t('translation').toLowerCase(), Ext.util.Format.htmlEncode(data.data.key), function () {
                             grid.getStore().removeAt(rowIndex);
                         }.bind(this));
                     }.bind(this)
@@ -370,6 +370,7 @@ pimcore.settings.translation.domain = Class.create({
                             let editor = column.getEditor();
                             let value = context.record.get(column.dataIndex);
                             editor.recordReference = context.record;
+                            
                             this.setValueStatus(editor, value);
                         }
                     }

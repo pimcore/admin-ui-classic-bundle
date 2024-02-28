@@ -42,11 +42,6 @@ class MiscController extends AdminAbstractController
 {
     /**
      * @Route("/get-available-controller-references", name="pimcore_admin_misc_getavailablecontroller_references", methods={"GET"})
-     *
-     * @param Request $request
-     * @param ControllerDataProvider $provider
-     *
-     * @return JsonResponse
      */
     public function getAvailableControllerReferencesAction(Request $request, ControllerDataProvider $provider): JsonResponse
     {
@@ -67,10 +62,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/get-available-templates", name="pimcore_admin_misc_getavailabletemplates", methods={"GET"})
-     *
-     * @param ControllerDataProvider $provider
-     *
-     * @return JsonResponse
      */
     public function getAvailableTemplatesAction(ControllerDataProvider $provider): JsonResponse
     {
@@ -91,8 +82,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/json-translations-system", name="pimcore_admin_misc_jsontranslationssystem", methods={"GET"})
-     *
-     *
      */
     public function jsonTranslationsSystemAction(Request $request, TranslatorInterface $translator): Response
     {
@@ -135,10 +124,6 @@ class MiscController extends AdminAbstractController
     /**
      * @Route("/script-proxy", name="pimcore_admin_misc_scriptproxy", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @internal
      */
     public function scriptProxyAction(Request $request): Response
@@ -174,11 +159,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/admin-css", name="pimcore_admin_misc_admincss", methods={"GET"})
-     *
-     * @param Request $request
-     * @param Config $config
-     *
-     * @return Response
      */
     public function adminCssAction(Request $request, Config $config): Response
     {
@@ -202,10 +182,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/ping", name="pimcore_admin_misc_ping", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function pingAction(Request $request): JsonResponse
     {
@@ -218,10 +194,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/available-languages", name="pimcore_admin_misc_availablelanguages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function availableLanguagesAction(Request $request): Response
     {
@@ -234,10 +206,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/get-valid-filename", name="pimcore_admin_misc_getvalidfilename", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getValidFilenameAction(Request $request): JsonResponse
     {
@@ -248,21 +216,20 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/maintenance", name="pimcore_admin_misc_maintenance", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
-    public function maintenanceAction(Request $request): JsonResponse
+    public function maintenanceAction(Request $request, Tool\MaintenanceModeHelperInterface $maintenanceModeHelper): JsonResponse
     {
         $this->checkPermission('maintenance_mode');
 
         if ($request->get('activate')) {
-            Tool\Admin::activateMaintenanceMode($request->getSession()->getId());
+            $maintenanceModeHelper->activate($request->getSession()->getId());
         }
 
         if ($request->get('deactivate')) {
-            Tool\Admin::deactivateMaintenanceMode();
+            if (Tool\Admin::isInMaintenanceMode()) {
+                Tool\Admin::deactivateMaintenanceMode();
+            }
+            $maintenanceModeHelper->deactivate();
         }
 
         return $this->adminJson([
@@ -272,10 +239,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/country-list", name="pimcore_admin_misc_countrylist", methods={"GET"})
-     *
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
      */
     public function countryListAction(LocaleServiceInterface $localeService): JsonResponse
     {
@@ -297,10 +260,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/language-list", name="pimcore_admin_misc_languagelist", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function languageListAction(Request $request): JsonResponse
     {
@@ -319,10 +278,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/get-language-flag", name="pimcore_admin_misc_getlanguageflag", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
      */
     public function getLanguageFlagAction(Request $request): BinaryFileResponse
     {
@@ -335,11 +290,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/icon-list", name="pimcore_admin_misc_iconlist", methods={"GET"})
-     *
-     * @param Request $request
-     * @param Profiler|null $profiler
-     *
-     * @return Response
      */
     public function iconListAction(Request $request, ?Profiler $profiler): Response
     {
@@ -379,10 +329,6 @@ class MiscController extends AdminAbstractController
 
     /**
      * @Route("/test", name="pimcore_admin_misc_test")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function testAction(Request $request): Response
     {

@@ -99,7 +99,7 @@ retype_password: 'Retype Password'
 reports: Reports
 roles: Roles
 Password: Password
-'Forgot your password': 'Forgot your password'
+'Forgot your password': 'Forgot your password?'
 'Back to Login': 'Back to Login'
 'Enter your username and pimcore will send a login link to your email address': 'Enter your username and Pimcore will send a login link to your email address'
 'Please check your mailbox.': 'Please check your mailbox.'
@@ -140,6 +140,7 @@ details: Details
 cannot_save_object_please_try_to_edit_the_object_in_detail_view: '<b>Cannot save object!</b><br />Please try to edit the object in the detail view.'
 size: Size
 select_a_file: 'Select a file'
+select_files: 'Select files'
 upload_compatibility_mode: 'Upload File (Compatibility Mode)'
 the_system_is_in_maintenance_mode_please_wait: 'The system is in maintenance mode, please wait'
 activate: Activate
@@ -238,6 +239,8 @@ delete: Delete
 save: Save
 add_assets: 'Add Asset(s)'
 preview: Preview
+preview_generator_locale: Language
+preview_generator_site: Site
 advanced: Advanced
 basic: Basic
 list: List
@@ -682,8 +685,30 @@ save_grid_options: 'Save Grid Options'
 download_selected_as_zip: 'Download selected items as ZIP'
 please_select_items_to_download: 'Please select items to download in the list'
 key_bindings: 'Key Bindings'
+keybinding_save: 'Save'
+keybinding_publish: 'Publish'
+keybinding_unpublish: 'Unpublish'
+keybinding_rename: 'Rename'
+keybinding_refresh: 'Reload'
+keybinding_openDocument: 'Open Document'
+keybinding_openAsset: 'Open Asset'
+keybinding_openObject: 'Open Object'
 keybinding_openClassEditor: 'Open Class Editor'
+keybinding_openInTree: 'Show in Tree'
 keybinding_showMetaInfo: 'Show Meta Info'
+keybinding_searchDocument: 'Search Documents'
+keybinding_searchAsset: 'Search Assets'
+keybinding_searchObject: 'Search Objects'
+keybinding_showElementHistory: 'Recently Opened Elements'
+keybinding_closeAllTabs:  'Close all tabs'
+keybinding_searchAndReplaceAssignments: 'Search & Replace Assignments'
+keybinding_redirects: 'Redirects'
+keybinding_sharedTranslations: 'Shared Translations'
+keybinding_recycleBin: 'Recycle Bin'
+keybinding_notesEvents: 'Notes &amp; Events'
+keybinding_tagConfiguration: 'Tag Configuration'
+keybinding_users: 'Users'
+keybinding_roles: 'Roles'
 keybinding_clearAllCaches: 'Clear all Caches'
 keybinding_clearDataCache: 'Clear Data Cache'
 scheduled_block_delete_all_in_past: 'Delete all past entries'
@@ -699,6 +724,7 @@ setup_two_factor: 'Setup Two Factor Authentication'
 2fa_setup_message: 'Two Factor Authentication is required for your account! You have to set it up in your profile settings, otherwise you will not be able to sign in again.'
 2fa_wrong: 'Wrong code entered!'
 set_focal_point: 'Set Focal Point'
+remove_focal_point: 'Remove Focal Point'
 quicksearch: 'Quick Search'
 standard_preview: 'Standard Preview'
 upload_new_version: 'Upload new version'
@@ -726,6 +752,7 @@ prefix: Prefix
 load: Load
 saving_failed: 'Saving failed!'
 failed_to_create_new_item: 'Failed to create new item, please try again.'
+failed_to_create_new_item_select_options: 'Failed to create new item. Name must be UpperCamelCase format, at least 3 characters long and may not contain any reserved words.'
 bundle: Bundle
 product: Product
 index_field_selection_field: 'Index Field Selection'
@@ -832,7 +859,6 @@ web2print_enableDebugMode: 'Enable debug mode'
 set_to_null: 'Empty (set to null)'
 bundles: Bundles
 target_document_invalid: 'Please select a target document with valid language'
-metainfo_copy_id: 'Copy ID to clipboard'
 metainfo_copy_fullpath: 'Copy full path to clipboard'
 metainfo_copy_deeplink: 'Copy deeplink to clipboard'
 plain_text: 'Plain Text'
@@ -944,6 +970,7 @@ email_log_subject: Subject
 gdpr_data_extractor_label_email: 'Email Address'
 workflow_notes: Notes
 2fa_code: Code
+username: Username
 password: Password
 show_metainfo: Info
 email_log_from: From
@@ -978,8 +1005,13 @@ cols: Columns
 log_search_message: Message
 batch_export_confirmation: You are about to export %s dataObjects. Do you want to continue ?
 header: Header
+system_key: System Key
 no_header: No Header
 delete_entire_folder_question: This operation will delete the entire parent/folder. You may not be able to fully undo this operation.
 allow_to_clear_relation: Allow to clear all relations of this field
 allow_asset_inline_download: Allow inline download
 system_appearance_settings: 'Appearance & Branding'
+male: Male
+female: Female
+pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download and open it in your local PDF viewer.
+pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take a while.'

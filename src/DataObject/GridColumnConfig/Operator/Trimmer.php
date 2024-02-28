@@ -39,9 +39,6 @@ final class Trimmer extends AbstractOperator
         $this->trim = $config->trim ?? 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

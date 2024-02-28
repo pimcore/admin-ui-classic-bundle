@@ -19,36 +19,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
 
     pathProperty: "fullpath",
 
-    initialize: function (data, fieldConfig) {
-        this.data = [];
-        this.fieldConfig = fieldConfig;
-        if (data) {
-            this.data = data;
-        }
-
-        var fields = [
-            "id",
-            "path",
-            "maintype",
-            "classname",
-            "published"
-        ];
-
-        this.store = new Ext.data.JsonStore({
-            data: this.data,
-            listeners: {
-                add: function () {
-                    this.dataChanged = true;
-                }.bind(this),
-                remove: function () {
-                    this.dataChanged = true;
-                }.bind(this),
-                clear: function () {
-                    this.dataChanged = true;
-                }.bind(this)
-            },
-            fields: fields
-        });
+    getGridColumnConfig: function ($super, fieldConfig) {
+        const gridColumnConfig = $super(fieldConfig);
+        delete gridColumnConfig.getRelationFilter;
+        return gridColumnConfig;
     },
 
     removeObject: function (index) {
@@ -136,6 +110,7 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
 
         var className = record.data.text;
 
+        let columns = this.getVisibleColumns();
 
         this.component = new Ext.grid.GridPanel({
             store: this.store,
@@ -147,36 +122,36 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                     sortable: false
                 },
                 items: [
-                    {text: 'ID', dataIndex: 'id', flex: 50},
-                    {text: t("reference"), dataIndex: 'fullpath', flex: 200, renderer: this.fullPathRenderCheck.bind(this)},
-                    {text: t("class"), dataIndex: 'classname', flex: 100},
-                    {
-                        xtype: 'actioncolumn',
-                        menuText: t('open'),
-                        width: 30,
-                        items: [
-                            {
-                                tooltip: t('open'),
-                                icon: "/bundles/pimcoreadmin/img/flat-color-icons/open_file.svg",
-                                handler: function (el, rowIndex) {
-                                    var data = this.store.getAt(rowIndex);
-                                    pimcore.helpers.openObject(data.data.id, "object");
-                                }.bind(this)
-                            }
-                        ]
-                    },
-                    {
-                        xtype: 'actioncolumn',
-                        menuText: t('remove'),
-                        width: 30,
-                        items: [
-                            {
-                                tooltip: t('remove'),
-                                icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
-                                handler: this.actionColumnRemove.bind(this)
-                            }
-                        ]
-                    }
+                    ...columns,
+                    ...[
+                        {
+                            xtype: 'actioncolumn',
+                            menuText: t('open'),
+                            width: 30,
+                            items: [
+                                {
+                                    tooltip: t('open'),
+                                    icon: "/bundles/pimcoreadmin/img/flat-color-icons/open_file.svg",
+                                    handler: function (el, rowIndex) {
+                                        var data = this.store.getAt(rowIndex);
+                                        pimcore.helpers.openObject(data.data.id, "object");
+                                    }.bind(this)
+                                }
+                            ]
+                        },
+                        {
+                            xtype: 'actioncolumn',
+                            menuText: t('remove'),
+                            width: 30,
+                            items: [
+                                {
+                                    tooltip: t('remove'),
+                                    icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
+                                    handler: this.actionColumnRemove.bind(this)
+                                }
+                            ]
+                        }
+                    ]
                 ]
             },
             componentCls: cls,
@@ -355,11 +330,16 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                         Ext.MessageBox.confirm(t("element_is_locked"), t("element_lock_message") + lockDetails,
                                 function (lock, buttonValue) {
                                     if (buttonValue == "yes") {
-                                        this.store.add({
+                                        let storeItemData = {
                                             id: item.id,
                                             path: item.fullpath,
                                             type: item.classname
-                                        });
+                                        };
+                                        this.store.add(storeItemData);
+
+                                        const toBeRequested = new Ext.util.Collection();
+                                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                                        this.requestNicePathData(toBeRequested, true);
                                     }
                                 }.bind(this, arguments));
 
@@ -369,14 +349,18 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                             method: 'PUT',
                             params: {id: item.id, type: 'object'}
                         });
-                        var toBeRequested = new Ext.util.Collection();
-                        toBeRequested.add(this.store.add({
+
+                        let storeItemData = {
                             id: item.id,
                             path: item.fullpath,
                             type: item.classname,
                             published: item.published
-                        }));
-                        this.requestNicePathData(toBeRequested);
+                        };
+                        this.store.add(storeItemData);
+
+                        const toBeRequested = new Ext.util.Collection();
+                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        this.requestNicePathData(toBeRequested, true);
                     }
 
                 }.bind(this, item)
@@ -386,17 +370,22 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             var lockDetails = "<br /><br />" + t("element_implicit_edit_question");
 
             Ext.MessageBox.confirm(' ', t("element_open_message") + lockDetails,
-                    function (item, buttonValue) {
-                        if (buttonValue == "yes") {
-                            this.store.add({
-                                id: item.id,
-                                path: item.fullpath,
-                                type: item.classname,
-                                published: item.published
-                            });
+                function (item, buttonValue) {
+                    if (buttonValue == "yes") {
+                        let storeItemData = {
+                            id: item.id,
+                            path: item.fullpath,
+                            type: item.classname,
+                            published: item.published
+                        };
+                        this.store.add(storeItemData);
 
-                        }
-                    }.bind(this, item));
+                        const toBeRequested = new Ext.util.Collection();
+                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        this.requestNicePathData(toBeRequested, true);
+                    }
+                }.bind(this, item)
+            );
         }
     },
 

@@ -25,6 +25,7 @@ use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Element;
 use Pimcore\Model\User;
+use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -35,6 +36,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -46,10 +48,6 @@ class UserController extends AdminAbstractController implements KernelController
 {
     /**
      * @Route("/user/tree-get-children-by-id", name="pimcore_admin_user_treegetchildrenbyid", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetChildrenByIdAction(Request $request): JsonResponse
     {
@@ -110,10 +108,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/add", name="pimcore_admin_user_add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {
@@ -201,12 +195,6 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @param User\AbstractUser $node
-     * @param array $currentList
-     * @param bool $roleMode
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     protected function populateChildNodes(User\AbstractUser $node, array &$currentList, bool $roleMode): array
@@ -237,10 +225,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/delete", name="pimcore_admin_user_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -384,10 +368,6 @@ class UserController extends AdminAbstractController implements KernelController
     /**
      * @Route("/user/get", name="pimcore_admin_user_get", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getAction(Request $request): JsonResponse
@@ -493,10 +473,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-minimal", name="pimcore_admin_user_getminimal", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getMinimalAction(Request $request): JsonResponse
     {
@@ -518,10 +494,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/upload-current-user-image", name="pimcore_admin_user_uploadcurrentuserimage", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function uploadCurrentUserImageAction(Request $request): JsonResponse
     {
@@ -541,15 +513,20 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/update-current-user", name="pimcore_admin_user_updatecurrentuser", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function updateCurrentUserAction(Request $request, ValidatorInterface $validator): JsonResponse
     {
         //TODO Can be completely validated with Symfony Validator
         $user = $this->getAdminUser();
+
+        $isPasswordReset = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
+            if ($adminSession->get('password_reset')) {
+                return true;
+            }
+
+            return false;
+        });
+
         if ($user != null) {
             if ($user->getId() == $request->get('id')) {
                 $values = $this->decodeJson($request->get('data'), true);
@@ -564,16 +541,10 @@ class UserController extends AdminAbstractController implements KernelController
                 if (!empty($values['new_password'])) {
                     $oldPasswordCheck = false;
 
-                    if (empty($values['old_password'])) {
+                    if ($isPasswordReset) {
                         // if the user want to reset the password, the old password isn't required
-                        $oldPasswordCheck = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
-                            if ($adminSession->get('password_reset')) {
-                                return true;
-                            }
-
-                            return false;
-                        });
-                    } else {
+                        $oldPasswordCheck = true;
+                    } elseif (!empty($values['old_password'])) {
                         $errors = $validator->validate($values['old_password'], [new UserPassword()]);
 
                         if (count($errors) === 0) {
@@ -586,6 +557,11 @@ class UserController extends AdminAbstractController implements KernelController
                     }
 
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
+
+                        if (Tool\Authentication::verifyPassword($user, $values['new_password'])) {
+                            throw new \Exception('The new password cannot be the same as the old one');
+                        }
+
                         $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['new_password']);
                     } else {
                         if (!$oldPasswordCheck) {
@@ -625,10 +601,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-current-user", name="pimcore_admin_user_getcurrentuser", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function getCurrentUserAction(Request $request): Response
     {
@@ -667,10 +639,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/role-tree-get-children-by-id", name="pimcore_admin_user_roletreegetchildrenbyid", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function roleTreeGetChildrenByIdAction(Request $request): JsonResponse
     {
@@ -722,10 +690,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/role-get", name="pimcore_admin_user_roleget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function roleGetAction(Request $request): JsonResponse
     {
@@ -777,11 +741,7 @@ class UserController extends AdminAbstractController implements KernelController
     /**
      * @Route("/user/upload-image", name="pimcore_admin_user_uploadimage", methods={"POST"})
      *
-     * @param Request $request
-     *
      * @throws \Exception
-     *
-     * @return JsonResponse
      */
     public function uploadImageAction(Request $request): JsonResponse
     {
@@ -818,11 +778,7 @@ class UserController extends AdminAbstractController implements KernelController
     /**
      * @Route("/user/delete-image", name="pimcore_admin_user_deleteimage", methods={"DELETE"})
      *
-     * @param Request $request
-     *
      * @throws \Exception
-     *
-     * @return JsonResponse
      */
     public function deleteImageAction(Request $request): JsonResponse
     {
@@ -832,8 +788,16 @@ class UserController extends AdminAbstractController implements KernelController
             throw $this->createNotFoundException();
         }
 
-        if ($userObj->isAdmin() && !$this->getAdminUser()->isAdmin()) {
-            throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+        $adminUser = $this->getAdminUser();
+
+        if (!$adminUser->isAdmin()) {
+            if ($userObj->isAdmin()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify admin users');
+            }
+
+            if ($adminUser->getId() !== $userObj->getId()) {
+                throw $this->createAccessDeniedHttpException('Only admin users are allowed to modify users other than themselves');
+            }
         }
 
         $userObj->setImage(null);
@@ -843,10 +807,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/disable-2fa", name="pimcore_admin_user_disable2fasecret", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function disable2FaSecretAction(Request $request): JsonResponse
     {
@@ -867,10 +827,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/reset-2fa-secret", name="pimcore_admin_user_reset2fasecret", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function reset2FaSecretAction(Request $request): JsonResponse
     {
@@ -889,10 +845,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/reset-my-2fa-secret", name="pimcore_admin_user_reset_my_2fa_secret", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function resetMy2FaSecretAction(Request $request): JsonResponse
     {
@@ -909,10 +861,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-image", name="pimcore_admin_user_getimage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function getImageAction(Request $request): StreamedResponse
     {
@@ -931,11 +879,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-token-login-link", name="pimcore_admin_user_gettokenloginlink", methods={"GET"})
-     *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -964,7 +907,7 @@ class UserController extends AdminAbstractController implements KernelController
             ], Response::HTTP_FORBIDDEN);
         }
 
-        $token = Tool\Authentication::generateToken($user->getName());
+        $token = Tool\Authentication::generateTokenByUser($user);
         $link = $this->generateCustomUrl([
             'token' => $token,
         ]);
@@ -977,10 +920,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/search", name="pimcore_admin_user_search", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function searchAction(Request $request): JsonResponse
     {
@@ -1023,17 +962,13 @@ class UserController extends AdminAbstractController implements KernelController
         $unrestrictedActions = [
             'getCurrentUserAction', 'updateCurrentUserAction', 'getAvailablePermissionsAction', 'getMinimalAction',
             'getImageAction', 'uploadCurrentUserImageAction', 'disable2FaSecretAction', 'renew2FaSecretAction',
-            'getUsersForSharingAction', 'getRolesForSharingAction',
+            'getUsersForSharingAction', 'getRolesForSharingAction', 'deleteImageAction',
         ];
 
         $this->checkActionPermission($event, 'users', $unrestrictedActions);
     }
 
     /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @Route("/user/get-users-for-sharing", name="pimcore_admin_user_getusersforsharing", methods={"GET"})
      */
     public function getUsersForSharingAction(Request $request): JsonResponse
@@ -1044,10 +979,6 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @Route("/user/get-roles-for-sharing", name="pimcore_admin_user_getrolesforsharing", methods={"GET"}))
      */
     public function getRolesForSharingAction(Request $request): JsonResponse
@@ -1059,10 +990,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-users", name="pimcore_admin_user_getusers", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getUsersAction(Request $request): JsonResponse
     {
@@ -1096,10 +1023,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-roles", name="pimcore_admin_user_getroles", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getRolesAction(Request $request): JsonResponse
     {
@@ -1124,10 +1047,6 @@ class UserController extends AdminAbstractController implements KernelController
 
     /**
      * @Route("/user/get-default-key-bindings", name="pimcore_admin_user_getdefaultkeybindings", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
@@ -1137,14 +1056,9 @@ class UserController extends AdminAbstractController implements KernelController
     /**
      * @Route("/user/invitationlink", name="pimcore_admin_user_invitationlink", methods={"POST"})
      *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
-    public function invitationLinkAction(Request $request, TranslatorInterface $translator): JsonResponse
+    public function invitationLinkAction(Request $request, TranslatorInterface $translator, RouterInterface $router): JsonResponse
     {
         $success = false;
         $message = '';
@@ -1170,7 +1084,16 @@ class UserController extends AdminAbstractController implements KernelController
                     $user->save();
                 }
 
-                $token = Tool\Authentication::generateToken($user->getName());
+                $token = Tool\Authentication::generateTokenByUser($user);
+
+                $domain = SystemSettingsConfig::get()['general']['domain'];
+                if (!$domain) {
+                    throw new \Exception('No main domain set in system settings, unable to generate login invitation link');
+                }
+
+                $context = $router->getContext();
+                $context->setHost($domain);
+
                 $loginUrl = $this->generateCustomUrl([
                     'token' => $token,
                     'reset' => true,

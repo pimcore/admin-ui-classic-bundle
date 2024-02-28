@@ -26,7 +26,7 @@ use Pimcore\Tool;
  */
 final class LFExpander extends AbstractOperator
 {
-    private \stdClass|LocaleServiceInterface $localeService;
+    private LocaleServiceInterface $localeService;
 
     /**
      * @var string[]
@@ -45,9 +45,6 @@ final class LFExpander extends AbstractOperator
         $this->asArray = $config->asArray ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $children = $this->getChildren();

@@ -41,13 +41,6 @@ class RenderletController extends AdminAbstractController
      * Handles editmode preview for renderlets
      *
      * @Route("/document_tag/renderlet", name="pimcore_admin_document_renderlet_renderlet")
-     *
-     * @param Request $request
-     * @param ActionRenderer $actionRenderer
-     * @param EditableHandler $editableHandler
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return Response
      */
     public function renderletAction(
         Request $request,

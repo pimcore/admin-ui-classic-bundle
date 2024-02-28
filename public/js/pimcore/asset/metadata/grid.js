@@ -246,6 +246,10 @@ pimcore.asset.metadata.grid = Class.create({
                         //enable different editors per row
                         editor.editors.each(function (e) {
                             try {
+                                const fieldType = e.fieldInfo?.layout?.fieldtype;
+                                if (fieldType === 'manyToManyRelation' || fieldType === 'multiselect') {
+                                    return;
+                                }
                                 // complete edit, so the value is stored when hopping around with TAB
                                 e.completeEdit();
                                 Ext.destroy(e);

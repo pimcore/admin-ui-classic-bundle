@@ -33,9 +33,6 @@ final class ElementCounter extends AbstractOperator
         $this->countEmpty = $config->countEmpty ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

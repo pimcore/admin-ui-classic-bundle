@@ -86,18 +86,56 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
         this.tabPanel = Ext.getCmp("pimcore_panel_tabs");
         var tabId = "document_" + this.id;
 
-        this.tab = new Ext.Panel({
-            id: tabId,
-            title: tabTitle,
-            closable:true,
-            layout: "border",
-            items: [
-                this.getLayoutToolbar(),
-                this.getTabPanel()
-            ],
-            iconCls: this.getIconClass(),
-            document: this
+        const tabbarContainer = new Ext.Container({
+            flex: 2
         });
+
+        const tabPanel = this.getTabPanel();
+        const toolbar = this.getLayoutToolbar();
+
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                cls: "pimcore_panel_toolbar_horizontal_border_layout",
+                title: htmlspecialchars(tabTitle),
+                closable:true,
+                hideMode: "offsets",
+                layout: "border",
+                items: [
+                    {
+                        xtype: 'panel',
+                        width: "100%",
+                        region: 'north',
+                        layout: 'hbox',
+                        items: [
+                            toolbar,
+                            tabbarContainer,
+                        ]
+                    },
+
+                    tabPanel
+                ],
+                iconCls: this.getIconClass(),
+                document: this
+            });
+
+            this.toolbarSubmenu.menu.addCls('pimcore_headbar_submenu_menu');
+
+            pimcore.helpers.headbar.prepareTabPanel(tabPanel, tabbarContainer, this.tab);
+        } else {
+            this.tab = new Ext.Panel({
+                id: tabId,
+                title: htmlspecialchars(tabTitle),
+                closable:true,
+                layout: "border",
+                items: [
+                    toolbar,
+                    tabPanel
+                ],
+                iconCls: this.getIconClass(),
+                document: this
+            });
+        }
 
         this.tab.on("beforedestroy", function () {
             Ext.Ajax.request({
@@ -158,14 +196,14 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
 
             this.toolbarButtons.remove = new Ext.Button({
                 tooltip: t('delete_folder'),
-                iconCls: "pimcore_icon_delete",
+                iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                 scale: "medium",
                 handler: this.remove.bind(this)
             });
 
             this.toolbarButtons.rename = new Ext.Button({
                 tooltip: t('rename'),
-                iconCls: "pimcore_icon_key pimcore_icon_overlay_go",
+                iconCls: "pimcore_material_icon_rename pimcore_material_icon",
                 scale: "medium",
                 handler: this.rename.bind(this)
             });
@@ -178,11 +216,38 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
 
             buttons.push("-");
 
-            if(this.isAllowed("delete") && !this.data.locked) {
-                buttons.push(this.toolbarButtons.remove);
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu = new Ext.Button({
+                    ...pimcore.helpers.headbar.getSubmenuConfig()
+                });
+
+                buttons.push(this.toolbarSubmenu);
             }
+
+            if(this.isAllowed("delete") && !this.data.locked) {
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add({
+                        text: t('delete'),
+                        iconCls: "pimcore_material_icon_delete pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.remove.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.remove);
+                }
+            }
+
             if(this.isAllowed("rename") && !this.data.locked) {
-                buttons.push(this.toolbarButtons.rename);
+                if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                    this.toolbarSubmenu.menu.add({
+                        text: t('rename'),
+                        iconCls: "pimcore_material_icon_rename pimcore_material_icon",
+                        scale: "medium",
+                        handler: this.rename.bind(this)
+                    });
+                } else {
+                    buttons.push(this.toolbarButtons.rename);
+                }
             }
 
             buttons.push({
@@ -210,19 +275,17 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                 menu: this.getMetaInfoMenuItems()
             });
 
-            buttons.push(this.getTranslationButtons());
-
-            buttons.push("-");
-            buttons.push({
-                xtype: 'tbtext',
-                text: t("id") + " " + this.data.id,
-                scale: "medium"
-            });
+            if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                this.toolbarSubmenu.menu.add(this.getTranslationButtons(true));
+            } else {
+                buttons.push(this.getTranslationButtons());
+            }
 
             this.toolbar = new Ext.Toolbar({
                 id: "document_toolbar_" + this.id,
                 region: "north",
                 border: false,
+                ...(() => pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled() ? { flex: 3 } : { })(),
                 cls: "pimcore_main_toolbar",
                 items: buttons,
                 overflowHandler: 'scroller'
@@ -256,17 +319,7 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             items.push(this.workflows.getLayout());
         }
 
-
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

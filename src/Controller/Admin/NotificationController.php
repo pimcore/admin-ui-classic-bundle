@@ -37,11 +37,6 @@ class NotificationController extends AdminAbstractController
 {
     /**
      * @Route("/recipients", name="pimcore_admin_notification_recipients", methods={"GET"})
-     *
-     * @param UserService $service
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
      */
     public function recipientsAction(UserService $service, TranslatorInterface $translator): JsonResponse
     {
@@ -64,11 +59,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/send", name="pimcore_admin_notification_send", methods={"POST"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function sendAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -94,11 +84,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/find", name="pimcore_admin_notification_find")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function findAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -126,11 +111,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/find-all", name="pimcore_admin_notification_findall")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function findAllAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -165,11 +145,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/find-last-unread", name="pimcore_admin_notification_findlastunread")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function findLastUnreadAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -196,11 +171,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/mark-as-read", name="pimcore_admin_notification_markasread", methods={"PUT"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function markAsReadAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -214,11 +184,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/delete", name="pimcore_admin_notification_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function deleteAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -232,11 +197,6 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/delete-all", name="pimcore_admin_notification_deleteall", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function deleteAllAction(Request $request, NotificationService $service): JsonResponse
     {

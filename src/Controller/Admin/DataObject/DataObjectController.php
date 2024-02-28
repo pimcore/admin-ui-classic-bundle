@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
@@ -38,6 +37,7 @@ use Pimcore\Model\DataObject\ClassDefinition\Helper\OptionsProviderResolver;
 use Pimcore\Model\DataObject\ClassDefinition\PreviewGeneratorInterface;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -74,11 +74,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/tree-get-children-by-id", name="treegetchildrenbyid", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -101,7 +96,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $offset = (int)$request->get('start');
             $limit = (int)$request->get('limit', 100000000);
             if ($view = $request->get('view', '')) {
-                $cv = ElementService::getCustomViewById($request->get('view'));
+                $cv = $this->elementService->getCustomViewById($request->get('view'));
             }
 
             if (!is_null($filter)) {
@@ -189,7 +184,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         // custom views start
         if ($view) {
-            $cv = ElementService::getCustomViewById($view);
+            $cv = $this->elementService->getCustomViewById($view);
 
             if (!empty($cv['classes'])) {
                 $cvConditions = [];
@@ -227,89 +222,15 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @param ElementInterface $element
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     protected function getTreeNodeConfig(ElementInterface $element): array
     {
-        /** @var DataObject $child */
-        $child = $element;
-
-        $tmpObject = [
-            'id' => $child->getId(),
-            'idx' => $child->getIndex(),
-            'key' => $child->getKey(),
-            'sortBy' => $child->getChildrenSortBy(),
-            'sortOrder' => $child->getChildrenSortOrder(),
-            'text' => htmlspecialchars($child->getKey()),
-            'type' => $child->getType(),
-            'path' => $child->getRealFullPath(),
-            'basePath' => $child->getRealPath(),
-            'elementType' => 'object',
-            'locked' => $child->isLocked(),
-            'lockOwner' => $child->getLocked() ? true : false,
-        ];
-
-        $allowedTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
-        if ($child instanceof DataObject\Concrete && $child->getClass()->getShowVariants()) {
-            $allowedTypes[] = DataObject::OBJECT_TYPE_VARIANT;
-        }
-
-        $hasChildren = $child->getDao()->hasChildren($allowedTypes, null, $this->getAdminUser());
-
-        $tmpObject['allowDrop'] = false;
-
-        $tmpObject['isTarget'] = true;
-        if ($tmpObject['type'] != DataObject::OBJECT_TYPE_VARIANT) {
-            $tmpObject['allowDrop'] = true;
-        }
-
-        $tmpObject['allowChildren'] = true;
-        $tmpObject['leaf'] = !$hasChildren;
-        $tmpObject['cls'] = 'pimcore_class_icon ';
-
-        if ($child instanceof DataObject\Concrete) {
-            $tmpObject['published'] = $child->isPublished();
-            $tmpObject['className'] = $child->getClass()->getName();
-
-            if (!$child->isPublished()) {
-                $tmpObject['cls'] .= 'pimcore_unpublished ';
-            }
-
-            $tmpObject['allowVariants'] = $child->getClass()->getAllowVariants();
-        }
-
-        $this->addAdminStyle($child, ElementAdminStyleEvent::CONTEXT_TREE, $tmpObject);
-
-        $tmpObject['expanded'] = !$hasChildren;
-        $tmpObject['permissions'] = $child->getUserPermissions($this->getAdminUser());
-
-        if ($child->isLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_locked ';
-        }
-        if ($child->getLocked()) {
-            $tmpObject['cls'] .= 'pimcore_treenode_lockOwner ';
-        }
-
-        if ($tmpObject['leaf']) {
-            $tmpObject['expandable'] = false;
-            $tmpObject['leaf'] = false; //this is required to allow drag&drop
-            $tmpObject['expanded'] = true;
-            $tmpObject['loaded'] = true;
-        }
-
-        return $tmpObject;
+        return $this->elementService->getElementTreeNodeConfig($element);
     }
 
     /**
      * @Route("/get-id-path-paging-info", name="getidpathpaginginfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getIdPathPagingInfoAction(Request $request): JsonResponse
     {
@@ -355,12 +276,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/get", name="get", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param PreviewGeneratorInterface $defaultPreviewGenerator
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -467,7 +382,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 }
             }
 
-            $this->getDataForObject($object, $objectFromVersion);
+            try {
+                $this->getDataForObject($object, $objectFromVersion);
+            } catch(\Throwable $e) {
+                $object = $objectFromDatabase;
+                $this->getDataForObject($object, false);
+            }
+
             $objectData['data'] = $this->objectData;
             $objectData['metaData'] = $this->metaData;
             $objectData['properties'] = Element\Service::minimizePropertiesForEditmode($object->getProperties());
@@ -585,7 +506,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         throw $this->createAccessDeniedHttpException();
     }
 
-    private function injectValuesForCustomLayout(array &$layout): void
+    private function injectValuesForCustomLayout(?array &$layout): void
     {
         foreach ($layout['children'] as &$child) {
             if ($child['datatype'] === 'layout') {
@@ -601,17 +522,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @Route("/get-select-options", name="getSelectOptions", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
+     * @Route("/get-select-options", name="getSelectOptions", methods={"POST"})
      *
      * @throws \Exception
      */
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = $request->query->getInt('objectId');
+        $objectId = $request->request->getInt('objectId');
         $object = DataObject\Concrete::getById($objectId);
         if (!$object instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
@@ -808,11 +725,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/get-folder", name="getfolder", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function getFolderAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -884,8 +796,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @param DataObject\ClassDefinition[] $classes
-     *
-     * @return array
      */
     protected function prepareChildClasses(array $classes): array
     {
@@ -903,11 +813,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/add", name="add", methods={"POST"})
-     *
-     * @param Request $request
-     * @param Model\FactoryInterface $modelFactory
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request, Model\FactoryInterface $modelFactory): JsonResponse
     {
@@ -978,10 +883,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/add-folder", name="addfolder", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addFolderAction(Request $request): JsonResponse
     {
@@ -1015,10 +916,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/delete", name="delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1067,10 +964,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/change-children-sort-by", name="changechildrensortby", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function changeChildrenSortByAction(Request $request): JsonResponse
@@ -1111,10 +1004,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/update", name="update", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function updateAction(Request $request): JsonResponse
@@ -1147,7 +1036,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     private function executeUpdateAction(DataObject $object, mixed $values): array
     {
-        $success = false;
+        $data = ['success' => false];
 
         if ($object instanceof DataObject\Concrete) {
             $object->setOmitMandatoryCheck(true);
@@ -1163,6 +1052,9 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         $key = $values['key'] ?? null;
+        if ($key) {
+            $key = Service::getValidKey($key, 'object');
+        }
 
         if ($object->isAllowed('settings')) {
             if ($key) {
@@ -1218,7 +1110,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     $this->updateIndexesOfObjectSiblings($object, $indexUpdate);
                 }
 
-                $success = true;
+                $data = [
+                  'success' => true,
+                  'treeData' => $this->getTreeNodeConfig($object),
+                ];
             } catch (\Exception $e) {
                 Logger::error((string) $e);
 
@@ -1230,7 +1125,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             Logger::debug('prevented update object because of missing permissions.');
         }
 
-        return ['success' => $success];
+        return $data;
     }
 
     private function executeInsideTransaction(callable $fn): void
@@ -1389,10 +1284,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/save", name="save", methods={"POST", "PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request): JsonResponse
@@ -1428,21 +1319,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($request->get('data')) {
-            $this->applyChanges($object, $this->decodeJson($request->get('data')));
-        }
-
-        // general settings
-        // @TODO: IS THIS STILL NECESSARY?
-        if ($request->get('general')) {
-            $general = $this->decodeJson($request->get('general'));
-
-            // do not allow all values to be set, will cause problems (eg. icon)
-            if (is_array($general) && count($general) > 0) {
-                foreach ($general as $key => $value) {
-                    if (!in_array($key, ['id', 'classId', 'className', 'type', 'icon', 'userOwner', 'userModification', 'modificationDate'])) {
-                        $object->setValue($key, $value);
-                    }
-                }
+            try {
+                $this->applyChanges($object, $this->decodeJson($request->get('data')));
+            } catch(\Throwable $e) {
+                $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
             }
         }
 
@@ -1493,8 +1373,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 'treeData' => $treeData,
             ]);
         } elseif ($request->get('task') == 'session') {
-            //TODO https://github.com/pimcore/pimcore/issues/9536
-            DataObject\Service::saveElementToSession($object, $request->getSession()->getId(), '', false);
+            DataObject\Service::saveElementToSession($object, $request->getSession()->getId(), '');
 
             return $this->adminJson(['success' => true]);
         } elseif ($request->get('task') == 'scheduler') {
@@ -1541,13 +1420,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     }
 
     /**
-     * @param Request $request
-     * @param DataObject\Concrete $object
-     * @param int $originalModificationDate
-     * @param array $data
-     *
-     * @return bool
-     *
      * @throws \Exception
      */
     protected function performFieldcollectionModificationCheck(Request $request, DataObject\Concrete $object, int $originalModificationDate, array $data): bool
@@ -1579,10 +1451,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/save-folder", name="savefolder", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function saveFolderAction(Request $request): JsonResponse
     {
@@ -1649,10 +1517,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/publish-version", name="publishversion", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function publishVersionAction(Request $request): JsonResponse
     {
@@ -1692,11 +1556,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/preview-version", name="previewversion", methods={"GET"})
      *
-     * @param Request $request
-     *
      * @throws \Exception
-     *
-     * @return Response
      */
     public function previewVersionAction(Request $request): Response
     {
@@ -1732,12 +1592,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="diffversions", methods={"GET"})
-     *
-     * @param Request $request
-     * @param int $from
-     * @param int $to
-     *
-     * @return Response
      *
      * @throws \Exception
      */
@@ -1792,14 +1646,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/grid-proxy", name="gridproxy", methods={"GET", "POST", "PUT"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param GridHelperService $gridHelperService
-     * @param LocaleServiceInterface $localeService
-     * @param CsrfProtectionHandler $csrfProtection
-     *
-     * @return JsonResponse
      */
     public function gridProxyAction(
         Request $request,
@@ -1838,10 +1684,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/copy-info", name="copyinfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyInfoAction(Request $request): JsonResponse
     {
@@ -1929,10 +1771,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     /**
      * @Route("/copy-rewrite-ids", name="copyrewriteids", methods={"PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function copyRewriteIdsAction(Request $request): JsonResponse
@@ -1971,10 +1809,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/copy", name="copy", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyAction(Request $request): JsonResponse
     {
@@ -2040,11 +1874,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
     /**
      * @Route("/preview", name="preview", methods={"GET"})
-     *
-     * @param Request $request
-     * @param PreviewGeneratorInterface $defaultPreviewGenerator
-     *
-     * @return Response|RedirectResponse
      */
     public function previewAction(Request $request, PreviewGeneratorInterface $defaultPreviewGenerator): RedirectResponse|Response
     {

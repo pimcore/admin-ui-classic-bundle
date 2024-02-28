@@ -40,17 +40,11 @@ class Assets extends Elements implements DataProviderInterface
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'assets';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getJsClassName(): string
     {
         return 'pimcore.settings.gdpr.dataproviders.assets';
@@ -58,10 +52,6 @@ class Assets extends Elements implements DataProviderInterface
 
     /**
      * Exports data of given asset as json
-     *
-     * @param Asset $asset
-     *
-     * @return Response
      */
     public function doExportData(Asset $asset): Response
     {
@@ -101,16 +91,6 @@ class Assets extends Elements implements DataProviderInterface
     }
 
     /**
-     * @param int $id
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     * @param int $start
-     * @param int $limit
-     * @param string|null $sort
-     *
-     * @return array
-     *
      * @throws Exception
      */
     public function searchData(int $id, string $firstname, string $lastname, string $email, int $start, int $limit, string $sort = null): array
@@ -190,9 +170,6 @@ class Assets extends Elements implements DataProviderInterface
         return ['data' => $elements, 'success' => true, 'total' => $query->rowCount()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortPriority(): int
     {
         return 20;

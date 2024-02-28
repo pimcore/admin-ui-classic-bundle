@@ -20,7 +20,7 @@ use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Workflow\Manager;
 use Pimcore\Workflow\Transition;
-use Symfony\Component\Workflow\Workflow;
+use Symfony\Component\Workflow\WorkflowInterface;
 
 class ActionsButtonService
 {
@@ -31,7 +31,7 @@ class ActionsButtonService
         $this->workflowManager = $workflowManager;
     }
 
-    public function getAllowedTransitions(Workflow $workflow, ElementInterface $element): array
+    public function getAllowedTransitions(WorkflowInterface $workflow, ElementInterface $element): array
     {
         $allowedTransitions = [];
 
@@ -56,7 +56,7 @@ class ActionsButtonService
         return $allowedTransitions;
     }
 
-    public function getGlobalActions(Workflow $workflow, ElementInterface $element): array
+    public function getGlobalActions(WorkflowInterface $workflow, ElementInterface $element): array
     {
         $globalActions = [];
         foreach ($this->workflowManager->getGlobalActions($workflow->getName()) as $globalAction) {

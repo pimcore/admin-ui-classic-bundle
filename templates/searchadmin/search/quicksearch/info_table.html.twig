@@ -49,7 +49,8 @@
             {% endif %}
         {% endif %}
 
-        {% set owner = pimcore_user(element.getUserOwner()) %}
+        {% set userOwnerId = element.getUserOwner() %}
+        {% set owner = userOwnerId is not null ? pimcore_user(userOwnerId) : null %}
         {% if owner is instanceof('\\Pimcore\\Model\\User') %}
             <tr>
                 <th>{{ 'owner'|trans([],'admin') }}</th>
@@ -57,7 +58,8 @@
             </tr>
         {% endif %}
 
-        {% set editor = pimcore_user(element.getUserModification()) %}
+        {% set userModificationId = element.getUserModification() %}
+        {% set editor = userModificationId is not null ? pimcore_user(userModificationId) : null %}
         {% if editor is instanceof('\\Pimcore\\Model\\User') %}
             <tr>
                 <th>{{ 'usermodification'|trans([],'admin') }}</th>
