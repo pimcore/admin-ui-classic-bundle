@@ -266,8 +266,8 @@
             {% endfor %}
         {% elseif definition is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Fieldcollections') %}
             {% set fields1,fields2 = object1.get(fieldName),object2.get(fieldName) %}
-            {% set fieldDefinitions11,fieldItems1 = null,null %}
-            {% set fieldDefinitions12,fieldItems2 = null,null %}
+            {% set fieldDefinitions1,fieldItems1 = null,null %}
+            {% set fieldDefinitions2,fieldItems2 = null,null %}
             {% set skipFieldItems2 = [] %}
 
             {% if fields1 %}
