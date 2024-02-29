@@ -125,23 +125,6 @@ pimcore.settings.system = Class.create({
                         defaultType: 'textfield',
                         defaults: {width: 300},
                         items: [{
-                            xtype: 'combo',
-                            fieldLabel: t('language_admin'),
-                            typeAhead: true,
-                            value: this.getValue("general.language"),
-                            queryMode: 'local',
-                            mode: 'local',
-                            listWidth: 100,
-                            width: 500,
-                            //editable: true,     // If typeAhead is enabled the combo must be editable: true -- please change one of those settings.
-                            store: pimcore.globalmanager.get("pimcorelanguages"),
-                            displayField: 'display',
-                            valueField: 'language',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            name: 'general.language',
-                            cls: "pimcore_extra_label_bottom"
-                        }, {
                             xtype: "container",
                             html: '<strong>' + t('frontend_languages') + '</strong>'
                         }, {
