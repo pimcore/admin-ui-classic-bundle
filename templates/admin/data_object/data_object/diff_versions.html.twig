@@ -303,17 +303,17 @@
                         {% if keyData2 is not empty and fieldKey1 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
                             {# localized loop #}
                             {% for language in validLanguages %}
-                                {% for langFieldDefinition in fieldKey1.getFieldDefinitions() %}
-                                    {% set localizedValue1 = fieldItem1.Localizedfields.getLocalizedValue(langFieldDefinition.getName(), language) %}
-                                    {% if keyData2.getLocalizedValue(langFieldDefinition.getName(), language) is not empty %}
-                                        {% set localizedValue2 = keyData2.getLocalizedValue(langFieldDefinition.getName(), language) %}
+                                {% for lfd in fieldKey1.getFieldDefinitions() %}
+                                    {% set localizedValue1 = fieldItem1.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
+                                    {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
+                                        {% set localizedValue2 = keyData2.getLocalizedValue(lfd.getName(), language) %}
                                     {% else %}
                                         {% set localizedValue2 = '' %}
                                     {% endif %}
-                                    {% set fieldIsEqual = langFieldDefinition.isEqual(localizedValue1,localizedValue2) ? '' : 'modified' %}
+                                    {% set fieldIsEqual = lfd is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not lfd.isEqual(localizedValue1, localizedValue2) ? 'modified' : '' %}
                                     <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                                        <td>{{ fieldItem1.type }} - {{ langFieldDefinition.getTitle()|trans([],'admin') }} ({{ language }})</td>
-                                        <td>{{ fieldItem1.fieldName }} - {{ langFieldDefinition.getName() }}/{{ language }}</td>
+                                        <td>{{ fieldItem1.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                        <td>{{ fieldItem1.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
                                         <td>{{ localizedValue1 }}</td>
                                         <td class="{{ fieldIsEqual }}">{{ localizedValue2 }}</td>
                                     </tr>
@@ -358,17 +358,17 @@
                             {% if keyData2 is not empty and fieldKey2 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
                                 {# localized loop #}
                                 {% for language in validLanguages %}
-                                    {% for localizedFieldDefinition in fieldKey2.getFieldDefinitions() %}
-                                        {% set localizedValue1 = fieldItem2.Localizedfields.getLocalizedValue(localizedFieldDefinition.getName(), language) %}
-                                        {% if keyData2.getLocalizedValue(localizedFieldDefinition.getName(), language) is not empty %}
-                                            {% set localizedValue2 = keyData2.getLocalizedValue(localizedFieldDefinition.getName(), language) %}
+                                    {% for lfd in fieldKey2.getFieldDefinitions() %}
+                                        {% set localizedValue1 = fieldItem2.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
+                                        {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
+                                            {% set localizedValue2 = keyData2.getLocalizedValue(lfd.getName(), language) %}
                                         {% else %}
                                             {% set localizedValue2 = '' %}
                                         {% endif %}
-                                        {% set fieldIsEqual = localizedFieldDefinition.isEqual(localizedValue1,localizedValue2) ? '' : 'modified' %}
+                                        {% set fieldIsEqual = lfd is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not lfd.isEqual(localizedValue1, localizedValue2) ? 'modified' : '' %}
                                         <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                                            <td>{{ fieldItem2.type }} - {{ localizedFieldDefinition.getTitle()|trans([],'admin') }} ({{ language }})</td>
-                                            <td>{{ fieldItem2.fieldName }} - {{ localizedFieldDefinition.getName() }}/{{ language }}</td>
+                                            <td>{{ fieldItem2.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                            <td>{{ fieldItem2.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
                                             <td>{{ localizedValue1 }}</td>
                                             <td class="{{ fieldIsEqual }}">{{ localizedValue2 }}</td>
                                         </tr>
