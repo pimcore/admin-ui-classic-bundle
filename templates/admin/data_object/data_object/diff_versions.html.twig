@@ -303,19 +303,19 @@
                         {% if keyData2 is not empty and fieldKey1 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
                             {# localized loop #}
                             {% for language in validLanguages %}
-                                {% for lfd in fieldKey1.getFieldDefinitions() %}
-                                    {% set v1l = fieldItem1.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
-                                    {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
-                                        {% set v2l = keyData2.getLocalizedValue(lfd.getName(), language) %}
+                                {% for langFieldDefinition in fieldKey1.getFieldDefinitions() %}
+                                    {% set firstVersionLocalizedValue = fieldItem1.Localizedfields.getLocalizedValue(langFieldDefinition.getName(), language) %}
+                                    {% if keyData2.getLocalizedValue(langFieldDefinition.getName(), language) is not empty %}
+                                        {% set secondVersionLocalizedValue = keyData2.getLocalizedValue(langFieldDefinition.getName(), language) %}
                                     {% else %}
-                                        {% set v2l = '' %}
+                                        {% set secondVersionLocalizedValue = '' %}
                                     {% endif %}
-                                    {% set fieldIsEqual = v1l != v2l ? 'modified' : '' %}
+                                    {% set fieldIsEqual = langFieldDefinition.isEqual(firstVersionLocalizedValue,secondVersionLocalizedValue) ? '' : 'modified' %}
                                     <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                                        <td>{{ fieldItem1.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
-                                        <td>{{ fieldItem1.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
-                                        <td>{{ v1l }}</td>
-                                        <td class="{{ fieldIsEqual }}">{{ v2l }}</td>
+                                        <td>{{ fieldItem1.type }} - {{ langFieldDefinition.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                        <td>{{ fieldItem1.fieldName }} - {{ langFieldDefinition.getName() }}/{{ language }}</td>
+                                        <td>{{ firstVersionLocalizedValue }}</td>
+                                        <td class="{{ fieldIsEqual }}">{{ secondVersionLocalizedValue }}</td>
                                     </tr>
                                 {% endfor %}
                             {% endfor %}
@@ -358,19 +358,19 @@
                             {% if keyData2 is not empty and fieldKey2 is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
                                 {# localized loop #}
                                 {% for language in validLanguages %}
-                                    {% for lfd in fieldKey2.getFieldDefinitions() %}
-                                        {% set v1l = fieldItem2.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
-                                        {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
-                                            {% set v2l = keyData2.getLocalizedValue(lfd.getName(), language) %}
+                                    {% for localizedFieldDefinition in fieldKey2.getFieldDefinitions() %}
+                                        {% set firstVersionLocalizedValue = fieldItem2.Localizedfields.getLocalizedValue(localizedFieldDefinition.getName(), language) %}
+                                        {% if keyData2.getLocalizedValue(localizedFieldDefinition.getName(), language) is not empty %}
+                                            {% set secondVersionLocalizedValue = keyData2.getLocalizedValue(localizedFieldDefinition.getName(), language) %}
                                         {% else %}
-                                            {% set v2l = '' %}
+                                            {% set secondVersionLocalizedValue = '' %}
                                         {% endif %}
-                                        {% set fieldIsEqual = v1l != v2l ? 'modified' : '' %}
+                                        {% set fieldIsEqual = localizedFieldDefinition.isEqual(firstVersionLocalizedValue,secondVersionLocalizedValue) ? '' : 'modified' %}
                                         <tr {% if loop.index is odd %}class="odd"{% endif %}>
-                                            <td>{{ fieldItem2.type }} - {{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
-                                            <td>{{ fieldItem2.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
-                                            <td>{{ v1l }}</td>
-                                            <td class="{{ fieldIsEqual }}">{{ v2l }}</td>
+                                            <td>{{ fieldItem2.type }} - {{ localizedFieldDefinition.getTitle()|trans([],'admin') }} ({{ language }})</td>
+                                            <td>{{ fieldItem2.fieldName }} - {{ localizedFieldDefinition.getName() }}/{{ language }}</td>
+                                            <td>{{ firstVersionLocalizedValue }}</td>
+                                            <td class="{{ fieldIsEqual }}">{{ secondVersionLocalizedValue }}</td>
                                         </tr>
                                     {% endfor %}
                                 {% endfor %}
