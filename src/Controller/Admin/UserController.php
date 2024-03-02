@@ -1210,7 +1210,7 @@ class UserController extends AdminAbstractController implements KernelController
                     $mail->send();
 
                     $success = true;
-                    $message = sprintf($translator->trans('invitation_link_sent', [], 'admin'), $user->getEmail());
+                    $message = sprintf($translator->trans('invitation_link_sent', [], 'admin_ext'), $user->getEmail());
                 } catch (\Exception $e) {
                     $message .= 'could not send email';
                 }
