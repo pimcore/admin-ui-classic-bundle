@@ -628,6 +628,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
     },
 
     dataIsNotInherited: function (fromObjectbrick) {
+        console.log('123');
         // also check the referenced localized fields
         if (this.referencedFields.length > 0) {
             for (var r = 0; r < this.referencedFields.length; r++) {
@@ -643,17 +644,19 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
         for (var i = 0; i < this.frontendLanguages.length; i++) {
             var currentLanguage = this.frontendLanguages[i];
 
-            for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
-                if (this.metaData[currentLanguage]) {
-                    var languageElement = this.languageElements[currentLanguage][s];
-                    var key = languageElement.name;
-                    if (this.metaData[currentLanguage][key]) {
-                        if (this.metaData[currentLanguage][key].inherited) {
-                            if (languageElement.isDirty()) {
-                                this.metaData[currentLanguage][key].inherited = false;
-                                languageElement.unmarkInherited();
-                            } else {
-                                foundUnmodifiedInheritedField = true;
+            if (typeof this.languageElements[currentLanguage] !== "undefined") {
+                for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
+                    if (this.metaData[currentLanguage]) {
+                        var languageElement = this.languageElements[currentLanguage][s];
+                        var key = languageElement.name;
+                        if (this.metaData[currentLanguage][key]) {
+                            if (this.metaData[currentLanguage][key].inherited) {
+                                if (languageElement.isDirty()) {
+                                    this.metaData[currentLanguage][key].inherited = false;
+                                    languageElement.unmarkInherited();
+                                } else {
+                                    foundUnmodifiedInheritedField = true;
+                                }
                             }
                         }
                     }
