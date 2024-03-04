@@ -628,7 +628,6 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
     },
 
     dataIsNotInherited: function (fromObjectbrick) {
-        console.log('123');
         // also check the referenced localized fields
         if (this.referencedFields.length > 0) {
             for (var r = 0; r < this.referencedFields.length; r++) {
