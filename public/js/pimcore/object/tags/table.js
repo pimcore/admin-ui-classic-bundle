@@ -165,7 +165,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
         
         if (!this.fieldConfig.noteditable)
         {
-            var tbar = [];
+            tbar = [];
 
             if (!this.fieldConfig.colsFixed || columns.length < this.fieldConfig.cols) {
                 tbar.push({
