@@ -1,4 +1,4 @@
-#### v1.3.0
+#### v1.4.0
 - [DataObject] Password data type algorithms other than `password_hash` are deprecated since Pimcore `11.2` and will be removed in Pimcore `12`. A visual warning is displayed in the backend, it can be hidden by replacing the value of translation key `(deprecated)`
 
 #### v1.2.0
