@@ -110,7 +110,7 @@ pimcore.object.classes.data.password = Class.create(pimcore.object.classes.data.
             const saltCombo = new Ext.form.field.ComboBox({
                 xtype: "combo",
                 width: 300,
-                fieldLabel: t("saltlocation"),
+                fieldLabel: t("saltlocation") + t("(deprecated)"),
                 hidden: this.datax.algorithm == "password_hash",
                 itemId: "saltlocation",
                 name: "saltlocation",
@@ -133,7 +133,7 @@ pimcore.object.classes.data.password = Class.create(pimcore.object.classes.data.
 
             const salt = new Ext.form.field.Text({
                 xtype: 'textfield',
-                fieldLabel: t("salt"),
+                fieldLabel: t("salt") + t("(deprecated)"),
                 hidden: this.datax.algorithm == "password_hash",
                 width: 300,
                 itemId: "salt",
