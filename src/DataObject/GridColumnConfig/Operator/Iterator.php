@@ -24,9 +24,6 @@ use Pimcore\Model\Element\ElementInterface;
  */
 final class Iterator extends AbstractOperator
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

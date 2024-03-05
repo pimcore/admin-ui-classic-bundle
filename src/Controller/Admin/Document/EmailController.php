@@ -32,10 +32,6 @@ class EmailController extends DocumentControllerBase
     /**
      * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getDataByIdAction(Request $request): JsonResponse
@@ -77,10 +73,6 @@ class EmailController extends DocumentControllerBase
     /**
      * @Route("/save", name="save", methods={"PUT", "POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request): JsonResponse
@@ -90,7 +82,7 @@ class EmailController extends DocumentControllerBase
             throw $this->createNotFoundException('Email not found');
         }
 
-        list($task, $page, $version) = $this->saveDocument($page, $request);
+        [$task, $page, $version] = $this->saveDocument($page, $request);
         $this->saveToSession($page, $request->getSession());
 
         if ($task === self::TASK_PUBLISH || $task === self::TASK_UNPUBLISH) {

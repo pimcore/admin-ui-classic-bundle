@@ -27,10 +27,6 @@ use Pimcore\Model\Element\ElementInterface;
 trait AdminStyleTrait
 {
     /**
-     * @param ElementInterface $element
-     * @param int|null $context
-     * @param array $data
-     *
      * @throws \Exception
      */
     protected function addAdminStyle(ElementInterface $element, int $context = null, array &$data = []): void

@@ -34,10 +34,6 @@ class TagsController extends AdminAbstractController
 {
     /**
      * @Route("/add", name="pimcore_admin_tags_add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {
@@ -58,10 +54,6 @@ class TagsController extends AdminAbstractController
     /**
      * @Route("/delete", name="pimcore_admin_tags_delete", methods={"DELETE"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function deleteAction(Request $request): JsonResponse
@@ -80,10 +72,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/update", name="pimcore_admin_tags_update", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -111,10 +99,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/tree-get-children-by-id", name="pimcore_admin_tags_treegetchildrenbyid", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetChildrenByIdAction(Request $request): JsonResponse
     {
@@ -199,10 +183,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/load-tags-for-element", name="pimcore_admin_tags_loadtagsforelement", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function loadTagsForElementAction(Request $request): JsonResponse
     {
@@ -223,10 +203,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/add-tag-to-element", name="pimcore_admin_tags_addtagtoelement", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addTagToElementAction(Request $request): JsonResponse
     {
@@ -246,10 +222,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/remove-tag-from-element", name="pimcore_admin_tags_removetagfromelement", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function removeTagFromElementAction(Request $request): JsonResponse
     {
@@ -269,11 +241,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/get-batch-assignment-jobs", name="pimcore_admin_tags_getbatchassignmentjobs", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function getBatchAssignmentJobsAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -408,10 +375,6 @@ class TagsController extends AdminAbstractController
 
     /**
      * @Route("/do-batch-assignment", name="pimcore_admin_tags_dobatchassignment", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function doBatchAssignmentAction(Request $request): JsonResponse
     {

@@ -37,9 +37,6 @@ final class ObjectFieldGetter extends AbstractOperator
         $this->forwardAttribute = $config->forwardAttribute ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

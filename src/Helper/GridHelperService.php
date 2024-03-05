@@ -404,11 +404,6 @@ class GridHelperService
 
     /**
      * Adds all the query stuff that is needed for displaying, filtering and exporting the feature grid data.
-     *
-     * @param DataObject\Listing\Concrete $list
-     * @param array $featureJoins
-     * @param ClassDefinition $class
-     * @param array $featureAndSlugFilters
      */
     public function addGridFeatureJoins(DataObject\Listing\Concrete $list, array $featureJoins, ClassDefinition $class, array $featureAndSlugFilters): void
     {
@@ -460,10 +455,6 @@ class GridHelperService
 
     /**
      * Adds all the query stuff that is needed for displaying, filtering and exporting the slug grid data.
-     *
-     * @param DataObject\Listing\Concrete $list
-     * @param array $slugJoins
-     * @param array $featureAndSlugFilters
      */
     public function addSlugJoins(DataObject\Listing\Concrete $list, array $slugJoins, array $featureAndSlugFilters): void
     {

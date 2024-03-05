@@ -68,14 +68,6 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     /**
      * @Route("/", name="pimcore_admin_index", methods={"GET"})
      *
-     * @param Request $request
-     * @param KernelInterface $kernel
-     * @param Executor $maintenanceExecutor
-     * @param CsrfProtectionHandler $csrfProtection
-     * @param Config $config
-     *
-     * @return Response
-     *
      * @throws \Exception
      */
     public function indexAction(
@@ -125,12 +117,6 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 
     /**
      * @Route("/index/statistics", name="pimcore_admin_index_statistics", methods={"GET"})
-     *
-     * @param Request $request
-     * @param Connection $db
-     * @param KernelInterface $kernel
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

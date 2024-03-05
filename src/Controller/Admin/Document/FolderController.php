@@ -31,10 +31,6 @@ class FolderController extends DocumentControllerBase
     /**
      * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getDataByIdAction(Request $request): JsonResponse
@@ -59,10 +55,6 @@ class FolderController extends DocumentControllerBase
 
     /**
      * @Route("/save", name="save", methods={"PUT", "POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

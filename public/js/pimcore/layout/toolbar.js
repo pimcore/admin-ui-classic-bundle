@@ -1029,6 +1029,15 @@ pimcore.layout.toolbar = Class.create({
                  console.error("no pimcore_menu_item");
              }
          }.bind(this));
+
+         // Full menu can be checked here
+         const postMenuBuild = new CustomEvent(pimcore.events.postMenuBuild, {
+             detail: {
+                 menu: menu,
+             }
+         });
+
+         document.dispatchEvent(postMenuBuild);
  
          return;
      },

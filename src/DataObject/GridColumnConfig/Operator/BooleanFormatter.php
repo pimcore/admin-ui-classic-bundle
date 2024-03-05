@@ -36,9 +36,6 @@ final class BooleanFormatter extends AbstractOperator
         $this->noValue = $config->noValue ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

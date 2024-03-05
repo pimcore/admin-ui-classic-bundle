@@ -42,7 +42,6 @@ final class Service
 
     /**
      * @param \stdClass[] $jsonConfigs
-     * @param array $context
      *
      * @return ConfigElementInterface[]
      */

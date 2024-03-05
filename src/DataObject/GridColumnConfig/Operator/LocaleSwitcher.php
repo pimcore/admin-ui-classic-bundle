@@ -37,9 +37,6 @@ final class LocaleSwitcher extends AbstractOperator
         $this->locale = $config->locale ?? null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();
