@@ -184,7 +184,7 @@ class DataObject extends Element
                         $type = $keyParts[1];
 
                         if ($type === 'classificationstore') {
-                            if (!empty($inheritedData = Service::getInheritedData($object, $key, $requestedLanguage))) {
+                            if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
                                 $data[$dataKey] = $inheritedData['value'];
                                 $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
                             }
@@ -333,4 +333,22 @@ class DataObject extends Element
 
         return null;
     }
+
+    protected static function getInheritedData(Concrete $object, string $key, string $requestedLanguage): array
+    {
+        if (!$parent = Service::hasInheritableParentObject($object)) {
+            return [];
+        }
+
+        if ($inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage)) {
+            return [
+                'parent' => $parent,
+                'value' => $inheritedValue,
+            ];
+        }
+
+        return self::getInheritedData($parent, $key, $requestedLanguage);
+    }
+
+
 }
