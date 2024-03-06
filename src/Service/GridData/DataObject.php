@@ -184,7 +184,7 @@ class DataObject extends Element
                         $type = $keyParts[1];
 
                         if ($type === 'classificationstore') {
-                            if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
+                            if (!empty($inheritedData = Service::getInheritedData($object, $key, $requestedLanguage))) {
                                 $data[$dataKey] = $inheritedData['value'];
                                 $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
                             }
@@ -197,7 +197,7 @@ class DataObject extends Element
                             $permissionTypes = ['View', 'Edit'];
                             foreach ($permissionTypes as $permissionType) {
                                 //TODO, this needs refactoring! Ideally, call it only once!
-                                $languagesAllowed = self::getLanguagePermissions($object, $user, 'l' . $permissionType);
+                                $languagesAllowed = Service::getLanguagePermissions($object, $user, 'l' . $permissionType);
 
                                 if ($languagesAllowed) {
                                     $languagesAllowed = array_keys($languagesAllowed);
