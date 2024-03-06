@@ -123,7 +123,7 @@ trait DataObjectActionsTrait
             $objects = [];
             foreach ($list->getObjects() as $object) {
                 if ($csvMode) {
-                    $o = DataObject\Service::getCsvDataForObject($object, $requestedLanguage, $request->get('fields'), DataObject\Service::getHelperDefinitions(), $localeService, 'title', false, $allParams['context']);
+                    $o = DataObject::getCsvDataForObject($object, $requestedLanguage, $request->get('fields'), GridData\DataObject::getHelperDefinitions(), $localeService, 'title', false, $allParams['context']);
                     // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_object is insufficient and could lead security breach
                     if ($object->isAllowed('list')) {
                         $objects[] = $o;
