@@ -24,8 +24,9 @@ use Pimcore\Model\DataObject\Service;
 use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
+use Pimcore\Model;
 use Pimcore\Model\DataObject\ClassDefinition;
-
+use Pimcore\Model\DataObject\Objectbrick;
 class DataObject extends Element
 {
 
@@ -95,7 +96,7 @@ class DataObject extends Element
 
                     $brickKey = $keyParts[1];
 
-                    $key = self::getFieldForBrickType($object->getclass(), $brickType);
+                    $key = Service::getFieldForBrickType($object->getclass(), $brickType);
 
                     $brickClass = Objectbrick\Definition::getByKey($brickType);
                     $context['outerFieldname'] = $key;
