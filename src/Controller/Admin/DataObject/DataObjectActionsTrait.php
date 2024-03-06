@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
@@ -92,7 +93,7 @@ trait DataObjectActionsTrait
 
                 return [
                     'success' => true,
-                    'data' => DataObject\Service::gridObjectData($object, $allParams['fields'], $requestedLanguage),
+                    'data' => GridData\DataObject::getData($object, $allParams['fields'], $requestedLanguage),
                 ];
             } catch (\Exception $e) {
                 return [
@@ -128,7 +129,7 @@ trait DataObjectActionsTrait
                         $objects[] = $o;
                     }
                 } else {
-                    $o = DataObject\Service::gridObjectData($object, $allParams['fields'] ?? null, $requestedLanguage,
+                    $o = GridData\DataObject::getData($object, $allParams['fields'] ?? null, $requestedLanguage,
                         ['csvMode' => $csvMode]);
                     if ($o['permissions']['list']) {
                         $objects[] = $o;
