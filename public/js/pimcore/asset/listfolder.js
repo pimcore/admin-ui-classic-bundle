@@ -460,7 +460,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
     },
 
     onRawDeleteSelectedRows: function () {
-        var ids = [];
+        let ids = [];
         var selectedRows = this.grid.getSelectionModel().getSelection();
         for (var i = 0; i < selectedRows.length; i++) {
             ids.push(selectedRows[i].data.id);
