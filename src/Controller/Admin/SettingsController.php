@@ -1283,7 +1283,7 @@ class SettingsController extends AdminAbstractController
         $algorithms = hash_algos();
         foreach ($algorithms as $algorithm) {
             $options[] = [
-                'key' => $algorithm,
+                'key' => $algorithm. $this->translator->trans('(deprecated)', [], 'admin'),
                 'value' => $algorithm,
             ];
         }
