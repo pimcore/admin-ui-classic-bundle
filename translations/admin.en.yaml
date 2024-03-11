@@ -919,7 +919,6 @@ batch_change_language: 'Batch update language'
 preview_item: 'Preview Item'
 by_key_reverse: 'Key (Z to A)'
 deprecated: Deprecated
-(deprecated): ' (deprecated)'
 version_currently_saved_in_database: 'Currently saved in database (but not published)'
 deprecated_feature: "<span style='color: orange;'>Deprecated feature. Use %s instead</span>"
 edit_as_custom_text: 'Edit as custom text'
