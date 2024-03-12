@@ -15,7 +15,13 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
+use function base64_encode;
+use function basename;
+use function date;
 use Exception;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
@@ -27,6 +33,7 @@ use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
+use Pimcore\Document\Renderer\DocumentRenderer;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
 use Pimcore\Image\Chromium;
 use Pimcore\Logger;
@@ -40,6 +47,7 @@ use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
 use RuntimeException;
+use function sprintf;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -51,14 +59,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Pimcore\Document\Renderer\DocumentRenderer;
-use function base64_encode;
-use function basename;
-use function date;
-use function file_exists;
-use function file_get_contents;
-use function file_put_contents;
-use function sprintf;
 use function uniqid;
 use function unlink;
 
