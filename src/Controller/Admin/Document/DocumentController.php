@@ -35,7 +35,7 @@ use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
 use Pimcore\Document\Renderer\DocumentRenderer;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
-use Pimcore\Image\Chromium;
+use Pimcore\Image\HtmlToImage;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
@@ -1017,7 +1017,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     public function diffVersionsAction(Request $request, int $from, int $to, DocumentRenderer $documentRenderer, RouterInterface $router): Response
     {
         // return with error if prerequisites do not match
-        if (!Chromium::isSupported() || !class_exists('Imagick')) {
+        if (!HtmlToImage::isSupported() || !class_exists('Imagick')) {
             return $this->render('@PimcoreAdmin/admin/document/document/diff_versions_unsupported.html.twig');
         }
 
@@ -1056,8 +1056,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         try {
-            Chromium::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($fromHtmlFile)]), $fromImageFile);
-            Chromium::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($toHtmlFile)]), $toImageFile);
+            HtmlToImage::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($fromHtmlFile)]), $fromImageFile);
+            HtmlToImage::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($toHtmlFile)]), $toImageFile);
         } finally {
             unlink($fromHtmlFile);
             unlink($toHtmlFile);
