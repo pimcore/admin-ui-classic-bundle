@@ -369,11 +369,21 @@ pimcore.element.tag.tree = Class.create({
     getCheckedTagIds: function () {
         var store = this.tree.getStore();
         var checkedTagIds = [];
-        store.each(function (node) {
+
+        function checkNode(node) {
             if (node.data.checked) {
                 checkedTagIds.push(node.id);
             }
-        });
+            if (node.childNodes.length > 0) {
+                node.eachChild(function(childNode) {
+                    checkNode(childNode);
+                });
+            }
+        }
+
+        if (store.data.items.length > 0) {
+            checkNode(store.data.items[0]);
+        }
 
         return checkedTagIds;
     },
