@@ -1110,7 +1110,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $tempFileTemplate = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $comparisonId . '-%s.%s';
         $fromImageFile = sprintf($tempFileTemplate, 'from', 'png');
         $toImageFile = sprintf($tempFileTemplate, 'to', 'png');
-        $diffImageFile = sprintf($tempFileTemplate, 'diff', 'png');
         $fromHtmlFile = sprintf($tempFileTemplate, 'from', 'html');
         $toHtmlFile = sprintf($tempFileTemplate, 'to', 'html');
 
@@ -1142,11 +1141,11 @@ class DocumentController extends ElementControllerBase implements KernelControll
             $result = $image1->compareImages($image2, Imagick::METRIC_MEANSQUAREERROR);
             $result[0]->setImageFormat('png');
 
-            $result[0]->writeImage($diffImageFile);
+            $viewParams['image'] = base64_encode($result[0]->getImageBlob());
+
             $result[0]->clear();
             $result[0]->destroy();
 
-            $viewParams['image'] = base64_encode($result[0]->getImageBlob());
         } else {
             $viewParams['image1'] = base64_encode(file_get_contents($fromImageFile));
             $viewParams['image2'] = base64_encode(file_get_contents($toImageFile));
@@ -1158,7 +1157,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $image2->clear();
         $image2->destroy();
 
-        unlink($diffImageFile);
         unlink($fromImageFile);
         unlink($toImageFile);
 
