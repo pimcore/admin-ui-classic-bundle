@@ -1174,6 +1174,14 @@ class DataObjectHelperController extends AdminAbstractController
         $requestedLanguage = $this->extractLanguage($request);
         $allParams = array_merge($request->request->all(), $request->query->all());
 
+        //prepare fields
+        $fieldnames = [];
+        $fields = json_decode($allParams['fields'][0], true);
+        foreach($fields as $field) {
+            $fieldnames[] = $field['key'];
+        }
+        $allParams['fields'] = $fieldnames;
+
         $list = $gridHelperService->prepareListingForGrid($allParams, $requestedLanguage, $this->getAdminUser());
 
         $beforeListPrepareEvent = new GenericEvent($this, [
