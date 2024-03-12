@@ -1106,7 +1106,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
             throw $this->createNotFoundException('Version with id [' . $from . "] doesn't exist");
         }
 
-        $comparisonId = date('Y-m-d') . '-' . uniqid(true);
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
         $tempFileTemplate = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $comparisonId . '-%s.%s';
         $fromImageFile = sprintf($tempFileTemplate, 'from', 'png');
         $toImageFile = sprintf($tempFileTemplate, 'to', 'png');
