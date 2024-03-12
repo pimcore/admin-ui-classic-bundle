@@ -1032,7 +1032,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $docTo = $versionTo?->loadData();
 
         if (!$docTo) {
-            throw $this->createNotFoundException('Version with id [' . $from . "] doesn't exist");
+            throw $this->createNotFoundException('Version with id [' . $to . "] doesn't exist");
         }
 
         $comparisonId = uniqid(date('Y-m-d') . '-', true);
