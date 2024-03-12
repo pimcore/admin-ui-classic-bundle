@@ -15,3 +15,8 @@ _pimcore_gdpr:
 pimcore_admin_page_display_preview_image:
     path: /admin/page/display-preview-image
     defaults: { _controller: Pimcore\Bundle\AdminBundle\Controller\Admin\Document\PageController::displayPreviewImageAction }
+
+# we need to have this outside of /admin scope, to be reachable publicly
+pimcore_admin_document_document_diff_versions_html:
+    path: /__admin/document/diff-versions-html
+    defaults: { _controller: Pimcore\Bundle\AdminBundle\Controller\Admin\Document\DocumentController::diffVersionsHtmlAction }

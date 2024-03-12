@@ -38,13 +38,13 @@
 </head>
 <body>
     {% if image is defined %}
-        <img src="{{ path('pimcore_admin_document_document_diffversionsimage', {id:  image}) }}" />
+        <img src="data:image/png;base64,{{ image }}" />
     {% else %}
         <div id="left">
-            <img src="{{ path('pimcore_admin_document_document_diffversionsimage', {id:  image1}) }}" />
+            <img src="data:image/png;base64,{{ image1 }}" />
         </div>
         <div id="right">
-            <img src="{{ path('pimcore_admin_document_document_diffversionsimage', {id:  image2}) }}">
+            <img src="data:image/png;base64,{{ image2 }}" />
         </div>
     {% endif %}
 </body>

@@ -15,7 +15,13 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
+use function base64_encode;
+use function basename;
+use function date;
 use Exception;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
@@ -27,6 +33,7 @@ use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
+use Pimcore\Document\Renderer\DocumentRenderer;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
 use Pimcore\Image\Chromium;
 use Pimcore\Logger;
@@ -40,6 +47,7 @@ use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
 use RuntimeException;
+use function sprintf;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,7 +57,10 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function uniqid;
+use function unlink;
 
 /**
  * @Route("/document")
@@ -1003,7 +1014,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="pimcore_admin_document_document_diffversions", requirements={"from": "\d+", "to": "\d+"}, methods={"GET"})
      */
-    public function diffVersionsAction(Request $request, int $from, int $to): Response
+    public function diffVersionsAction(Request $request, int $from, int $to, DocumentRenderer $documentRenderer, RouterInterface $router): Response
     {
         // return with error if prerequisites do not match
         if (!Chromium::isSupported() || !class_exists('Imagick')) {
@@ -1017,45 +1028,56 @@ class DocumentController extends ElementControllerBase implements KernelControll
             throw $this->createNotFoundException('Version with id [' . $from . "] doesn't exist");
         }
 
+        $versionTo = Version::getById($to);
+        $docTo = $versionTo?->loadData();
+
+        if (!$docTo) {
+            throw $this->createNotFoundException('Version with id [' . $from . "] doesn't exist");
+        }
+
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
+        $tempFileTemplate = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $comparisonId . '-%s.%s';
+        $fromImageFile = sprintf($tempFileTemplate, 'from', 'png');
+        $toImageFile = sprintf($tempFileTemplate, 'to', 'png');
+        $fromHtmlFile = sprintf($tempFileTemplate, 'from', 'html');
+        $toHtmlFile = sprintf($tempFileTemplate, 'to', 'html');
+
+        $viewParams = [];
+
+        $docContentFrom = $documentRenderer->render($docFrom);
+        $docContentTo = $documentRenderer->render($docTo);
+
+        file_put_contents($fromHtmlFile, $docContentFrom);
+        file_put_contents($toHtmlFile, $docContentTo);
+
         $prefix = Config::getSystemConfiguration('documents')['preview_url_prefix'];
         if (empty($prefix)) {
             $prefix = $request->getSchemeAndHttpHost();
         }
 
-        $prefix .= $docFrom->getRealFullPath() . '?pimcore_version=';
+        try {
+            Chromium::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($fromHtmlFile)]), $fromImageFile);
+            Chromium::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($toHtmlFile)]), $toImageFile);
+        } finally {
+            unlink($fromHtmlFile);
+            unlink($toHtmlFile);
+        }
 
-        $fromUrl = $prefix . $from;
-        $toUrl = $prefix . $to;
-
-        $toFileId = uniqid();
-        $fromFileId = uniqid();
-        $diffFileId = uniqid();
-        $fromFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $fromFileId . '.png';
-        $toFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $toFileId . '.png';
-        $diffFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $diffFileId . '.png';
-
-        $viewParams = [];
-
-        $session = $request->getSession();
-
-        Chromium::convert($fromUrl, $fromFile, $session->getName(), $session->getId());
-        Chromium::convert($toUrl, $toFile, $session->getName(), $session->getId());
-
-        $image1 = new Imagick($fromFile);
-        $image2 = new Imagick($toFile);
+        $image1 = new Imagick($fromImageFile);
+        $image2 = new Imagick($toImageFile);
 
         if ($image1->getImageWidth() == $image2->getImageWidth() && $image1->getImageHeight() == $image2->getImageHeight()) {
             $result = $image1->compareImages($image2, Imagick::METRIC_MEANSQUAREERROR);
             $result[0]->setImageFormat('png');
 
-            $result[0]->writeImage($diffFile);
+            $viewParams['image'] = base64_encode($result[0]->getImageBlob());
+
             $result[0]->clear();
             $result[0]->destroy();
 
-            $viewParams['image'] = $diffFileId;
         } else {
-            $viewParams['image1'] = $fromFileId;
-            $viewParams['image2'] = $toFileId;
+            $viewParams['image1'] = base64_encode(file_get_contents($fromImageFile));
+            $viewParams['image2'] = base64_encode(file_get_contents($toImageFile));
         }
 
         // cleanup
@@ -1064,18 +1086,17 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $image2->clear();
         $image2->destroy();
 
+        unlink($fromImageFile);
+        unlink($toImageFile);
+
         return $this->render('@PimcoreAdmin/admin/document/document/diff_versions.html.twig', $viewParams);
     }
 
-    /**
-     * @Route("/diff-versions-image", name="pimcore_admin_document_document_diffversionsimage", methods={"GET"})
-     */
-    public function diffVersionsImageAction(Request $request): BinaryFileResponse
+    public function diffVersionsHtmlAction(Request $request): BinaryFileResponse
     {
-        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $request->get('id') . '.png';
+        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($request->get('id'));
         if (file_exists($file)) {
             $response = new BinaryFileResponse($file);
-            $response->headers->set('Content-Type', 'image/png');
 
             return $response;
         }
@@ -1356,7 +1377,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         // check permissions
-        $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
+        $this->checkActionPermission($event, 'documents', ['docTypesGetAction', 'diffVersionsHtmlAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
     }
