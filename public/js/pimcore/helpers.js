@@ -3290,14 +3290,31 @@ pimcore.helpers.treeDragDropValidate = function (node, oldParent, newParent) {
         if (disabledLayoutTypes.includes(newParent.data.editor.type)) {
             return false;
         }
+
+        return this.isComponentAsChildAllowed(newParent, node);
     }
 
-    if (newParent.data.root) {
+    if (newParent.data.root && node.data.type !== 'layout') {
         return false;
     }
 
     return true;
 };
+
+pimcore.helpers.isComponentAsChildAllowed = function (parentNode, childNode) {
+    const parentType = parentNode.data.editor.type;
+    const childType = childNode.data.editor.type;
+    const allowedChildren = pimcore.object.helpers.layout.getRawAllowedTypes();
+
+    if (allowedChildren[parentType] &&
+        allowedChildren[parentType].includes(childType) ||
+        (allowedChildren[parentType].includes('data') && child.data.type === 'data')
+    ) {
+        return true
+    }
+
+    return false;
+}
 
 /**
  * Building menu with priority
