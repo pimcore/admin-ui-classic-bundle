@@ -247,7 +247,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 xtype: "combo",
                 displayField:'name',
                 valueField: "value",
-                hidden: !this.element.data.general.allowInhreitance,
+                hidden: !this.element.data.general.allowInheritance,
                 store: selectObjectOptions,
                 editable: false,
                 width : 300,
