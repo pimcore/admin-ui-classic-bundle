@@ -851,6 +851,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
     },
 
     publish: function (only, callback) {
+
+        if(!this.isAllowed('publish')) {
+            return
+        }
+
         return this.save("publish", only, callback, function (rdata) {
             if (rdata && rdata.success) {
                 //set the object as published only if in the response error doesn't exist
@@ -870,6 +875,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
     },
 
     unpublish: function (only, callback) {
+
+        if(!this.isAllowed('unpublish')) {
+            return
+        }
+
         this.save("unpublish", only, callback, function (rdata) {
             if (rdata && rdata.success) {
                 this.data.general.published = false;
@@ -898,6 +908,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
     },
 
     save: function (task, only, callback, successCallback) {
+
+        if(!this.isAllowed("save")) {
+            return
+        }
+
         var omitMandatoryCheck = false;
 
         // unpublish and save version is possible without checking mandatory fields
