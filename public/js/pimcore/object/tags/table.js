@@ -161,7 +161,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
 
         this.cellEditing = Ext.create('Ext.grid.plugin.CellEditing', {});
 
-        var tbar = null;
+        let tbar = null;
         
         if (!this.fieldConfig.noteditable)
         {
