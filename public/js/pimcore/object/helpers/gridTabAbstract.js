@@ -234,7 +234,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
             var selectObjectOptions = Ext.create('Ext.data.Store', {
                 fields: ['name', 'value'],
                 data: [
-                    [t("empty"), "all_objects"],
+                    [t("all_types"), "all_objects"],
                     [t("only_object"), "only_objects"],
                     [t("only_variant"), "only_variant_objects"],
                 ]
