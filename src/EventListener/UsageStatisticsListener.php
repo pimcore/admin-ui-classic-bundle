@@ -74,7 +74,7 @@ class UsageStatisticsListener implements EventSubscriberInterface
 
         $params = $this->getParams($request);
         $user = $this->userResolver->getUser();
-        $this->logger->info($request->attributes->get('_controller'), [
+        $this->logger->info($request->attributes->get('_controller') ?? '', [
             $user ? $user->getId() : '0',
             $request->attributes->get('_route'),
             $request->attributes->get('_route_params'),
