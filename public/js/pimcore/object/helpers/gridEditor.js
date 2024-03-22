@@ -21,7 +21,7 @@ pimcore.registerNS("pimcore.object.helpers.optionEditor");
 /**
  * @private
  */
-pimcore.object.helpers.optionEditor = Class.create({
+pimcore.object.helpers.gridEditor = Class.create({
 
     initialize: function (store) {
         this.store = store;
