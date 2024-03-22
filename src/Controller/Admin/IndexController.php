@@ -28,7 +28,7 @@ use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
 use Pimcore\Extension\Bundle\PimcoreBundleManager;
-use Pimcore\Image\Chromium;
+use Pimcore\Image\HtmlToImage;
 use Pimcore\Maintenance\Executor;
 use Pimcore\Maintenance\ExecutorInterface;
 use Pimcore\Model\Asset;
@@ -233,7 +233,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'asset_hide_edit'                => (bool)$adminSettings['assets']['hide_edit_image'],
             'asset_tree_paging_limit'        => $config['assets']['tree_paging_limit'],
             'asset_default_upload_path'      => $config['assets']['default_upload_path'],
-            'chromium'                       => Chromium::isSupported(),
+            'chromium'                       => HtmlToImage::isSupported(),
             'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
