@@ -179,6 +179,18 @@ pimcore.object.quantityValue.unitsettings = Class.create({
             remoteFilter: true,
             autoSync: true,
             listeners: {
+                "load": function () {
+                    try {
+                        baseUnitStore.reload({
+                            page: this.store.currentPage,
+                            start: 1,
+                            limit: 9999
+                        });
+                        Ext.apply(baseUnitStore, {pageSize: this.pagingtoolbar.pageSize});
+                    }
+                    catch (e) {
+                    }
+                }.bind(this),
                 update: function() {
                     pimcore.helpers.quantityValue.getClassDefinitionStore().reload();
                     baseUnitStore.reload();
