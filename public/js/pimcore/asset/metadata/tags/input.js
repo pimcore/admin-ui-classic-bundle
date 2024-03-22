@@ -30,15 +30,7 @@ pimcore.asset.metadata.tags.input = Class.create(pimcore.asset.metadata.tags.abs
     },
 
     getGridColumnEditor: function(field) {
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
+        const editorConfig = this.initEditorConfig(field);
 
         return new Ext.form.TextField(editorConfig);
     },

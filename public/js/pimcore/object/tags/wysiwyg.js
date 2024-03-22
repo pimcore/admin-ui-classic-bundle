@@ -33,21 +33,11 @@ pimcore.object.tags.wysiwyg = Class.create(pimcore.object.tags.abstract, {
      * @extjs since HTMLEditor seems not working properly in grid, this feature is deactivated for now
      */
     /*getGridColumnEditor: function(field) {
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
-
-        if(field.layout.noteditable) {
+        if (field.layout.noteditable) {
             return null;
         }
         // WYSIWYG
-        if (field.type == "wysiwyg") {
+        if (field.type == 'wysiwyg') {
             return Ext.create('Ext.form.HtmlEditor', {
                 width: 500,
                 height: 300
@@ -268,4 +258,3 @@ pimcore.object.tags.wysiwyg = Class.create(pimcore.object.tags.abstract, {
         return this.getValue();
     }
 });
-

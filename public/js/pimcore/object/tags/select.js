@@ -108,36 +108,28 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
     },
 
     getCellEditor: function (field, record) {
-        var key = field.key;
-        if(field.layout.noteditable) {
+        if (field.layout.noteditable) {
             return null;
         }
 
-        var value = record.data[key];
-        var options = record.data[key +  "%options"];
+        const key = field.key;
+        const value = record.data[key];
+        let options = record.data[key +  '%options'];
         options = this.prepareStoreDataAndFilterLabels(options);
 
-        var store = new Ext.data.Store({
+        const store = new Ext.data.Store({
             autoDestroy: true,
             fields: ['key', 'value'],
             data: options
         });
 
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
-            triggerAction: "all",
+            triggerAction: 'all',
             editable: false,
-            mode: "local",
+            mode: 'local',
             valueField: 'value',
             displayField: 'key',
             value: value,
@@ -152,37 +144,29 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnEditor: function(field) {
-        if(field.layout.noteditable) {
+        if (field.layout.noteditable) {
             return null;
         }
 
-        var storeData = this.prepareStoreDataAndFilterLabels(field.layout.options);
+        const storeData = this.prepareStoreDataAndFilterLabels(field.layout.options);
         
-        if(!field.layout.mandatory) {
-            storeData.unshift({'value': '', 'key': "(" + t("empty") + ")"});
+        if (!field.layout.mandatory) {
+            storeData.unshift({'value': '', 'key': '(' + t('empty') + ')'});
         }
-        
-        var store = new Ext.data.Store({
+
+        const store = new Ext.data.Store({
             autoDestroy: true,
             fields: ['key', 'value'],
             data: storeData
         });
 
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
-            triggerAction: "all",
+            triggerAction: 'all',
             editable: false,
-            mode: "local",
+            mode: 'local',
             valueField: 'value',
             displayField: 'key',
             displayTpl: Ext.create('Ext.XTemplate',

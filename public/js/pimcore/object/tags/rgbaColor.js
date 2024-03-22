@@ -57,17 +57,12 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnEditor: function (field) {
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                editorConfig.width = field.config.width;
-            }
-        }
-
         if (field.layout.noteditable) {
             return null;
         }
+
+        const editorConfig = this.initEditorConfig(field);
+
         return new Ext.form.TextField(editorConfig);
     },
 

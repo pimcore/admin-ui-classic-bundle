@@ -429,7 +429,7 @@ pimcore.object.helpers.grid = Class.create({
     getColumnWidth: function(field, defaultValue) {
         if (field.width) {
             return field.width;
-        } else if(field.layout && field.layout.width) {
+        } else if (field.layout && field.layout.width && field.layout.width !== '100%' && intval(field.layout.width) > 10) {
             return field.layout.width;
         } else {
             return defaultValue;
