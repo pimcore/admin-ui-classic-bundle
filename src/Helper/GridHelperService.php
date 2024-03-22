@@ -591,18 +591,6 @@ class GridHelperService
             $conditionFilters[] = '(`path` = ' . $quotedPath . ' OR `path` like ' . $quotedWildcardPath . ')';
         }
 
-        if (isset($requestParams['all_objects']) && $requestParams['all_objects'] === 'true') {
-            $conditionFilters[] = "(`type` = 'object' OR `type` = 'variant')";
-        } else {
-            if (isset($requestParams['only_variant_objects']) && $requestParams['only_variant_objects'] === 'true') {
-                $conditionFilters[] = "`type` = 'variant'";
-            } elseif(isset($requestParams['only_objects']) && $requestParams['only_objects'] === 'true') {
-                $conditionFilters[] = "`type` = 'object'";
-            } else {
-                $conditionFilters[] = "(`type` = 'object' OR `type` = 'variant')";
-            }
-        }
-
         if (!$adminUser->isAdmin()) {
             $userIds = $adminUser->getRoles();
             $userIds[] = $adminUser->getId();
