@@ -317,7 +317,6 @@ non_stable_updates: Available non-stable updates
 latest_pimcore_version_already_installed: You have installed the latest version of pimcore.
 table: Table
 rows: Rows
-language_admin: Default-Language in Admin-Interface
 exclude_patterns: Exclude Patterns
 cover: Cover
 contain: Contain

@@ -1,3 +1,6 @@
+#### v1.5.0
+ - [System Settings] Removed "Default-Language in Admin-Interface" setting.
+
 #### v1.4.0
 - [DataObject] Password data type algorithms other than `password_hash` are deprecated since `pimcore/pimcore:^11.2` and will be removed in `pimcore/pimcore:^12`.
 
