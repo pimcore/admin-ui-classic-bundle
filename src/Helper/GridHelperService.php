@@ -670,16 +670,19 @@ class GridHelperService
             }
         }
 
-        if ($class->getShowVariants()) {
-            if (isset($requestParams['listing']) && $requestParams['listing'] == "only_objects") {
-                $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT]); 
-            } elseif(isset($requestParams['listing']) && $requestParams['listing'] == "only_variant_objects") {
-                $list->setObjectTypes([DataObject::OBJECT_TYPE_VARIANT]); 
-            } else {
+        if ($class->getAllowVariants()) {
+            if ($class->getShowVariants()) {
                 $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_VARIANT]);
             }
+            if (isset($requestParams['filter_by_object_type'])){
+                if ($requestParams['filter_by_object_type'] === "only_objects") {
+                    $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT]);
+                } elseif($requestParams['filter_by_object_type'] === "only_variant_objects") {
+                    $list->setObjectTypes([DataObject::OBJECT_TYPE_VARIANT]);
+                }
+            }
         }
-
+        
         $this->addGridFeatureJoins($list, $featureJoins, $class, $featureAndSlugFilters);
         $this->addSlugJoins($list, $slugJoins, $featureAndSlugFilters);
 

@@ -259,7 +259,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                         this.grid.filters.clearFilters();
                         this.grid.getStore().clearFilter();
 
-                        this.store.getProxy().setExtraParam("listing", selected);
+                        this.store.getProxy().setExtraParam("filter_by_object_type", selected);
 
                         this.pagingtoolbar.moveFirst();
 
