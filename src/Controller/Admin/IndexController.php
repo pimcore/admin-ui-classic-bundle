@@ -224,6 +224,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 $systemSettings['general']['valid_languages'],
                 true
             ),
+            'requiredLanguages' => $systemSettings['general']['required_languages'],
 
             // flags
             'showCloseConfirmation'          => true,
