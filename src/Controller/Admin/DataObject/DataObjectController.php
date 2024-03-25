@@ -15,6 +15,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
+use Carbon\Carbon;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
@@ -1310,8 +1311,18 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             if ($request->get('task') !== 'autoSave' && $request->get('task') !== 'unpublish') {
                 $fields = array_keys($object->getClass()->getFieldDefinitions());
                 foreach ($fields as $field) {
-                    $getter  ='get' . ucfirst($field);
-                    if ($object->$getter() !== $objectFromDatabase->$getter()) {
+                    $getter = 'get' . ucfirst($field);
+                    $objectValue = $object->$getter();
+                    $objectFromDatabaseValue = $objectFromDatabase->$getter();
+                    if ($objectValue !== $objectFromDatabaseValue) {
+                        // For Carbon objects, we need to compare the values - not the objects.
+                        if (
+                            $objectValue instanceof Carbon
+                            && $objectFromDatabaseValue instanceof Carbon
+                            && $objectValue->equalTo($objectFromDatabaseValue)
+                        ) {
+                            continue;
+                        }
                         $object->markFieldDirty($field);
                     }
                 }
