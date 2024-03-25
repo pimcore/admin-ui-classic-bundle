@@ -106,7 +106,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
         if (this.component.getValue()) {
             let value = this.component.getValue();
             if (value && typeof value.getTime == "function") {
-                return value.getTime();
+                return value.getTime() - 60000 * value.getTimezoneOffset();
             } else {
                 return value;
             }
