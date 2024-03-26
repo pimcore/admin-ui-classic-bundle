@@ -23,20 +23,24 @@ pimcore.object.helpers.layout = {
      * specify which children a layout can have
      * @param source
     */
-    getAllowedTypes : function (source) {
-        var allowedTypes = {
-            accordion: ["panel","region","tabpanel","text","iframe"],
-            fieldset: ["data","text","iframe"],
-            fieldcontainer: ["data","text","iframe"],
-            panel: ["data","region","tabpanel","button","accordion","fieldset", "fieldcontainer","panel","text","html", "iframe"],
-            region: ["panel","accordion","tabpanel","text","localizedfields","iframe"],
-            tabpanel: ["panel", "region", "accordion","text","localizedfields","iframe", "tabpabel"],
+    getRawAllowedTypes : function () {
+        return {
+            accordion: ["panel", "region", "tabpanel", "text", "iframe"],
+            fieldset: ["data", "text", "iframe"],
+            fieldcontainer: ["data", "text", "iframe"],
+            panel: ["data", "region", "tabpanel", "button", "accordion", "fieldset", "fieldcontainer", "panel", "text", "html", "iframe"],
+            region: ["panel", "accordion", "tabpanel", "text", "localizedfields", "iframe"],
+            tabpanel: ["panel", "region", "accordion", "text", "localizedfields", "iframe", "tabpabel"],
             button: [],
             text: [],
-            root: ["panel","region","tabpanel","accordion","text","iframe", "button","fieldcontainer", "fieldset"],
-            localizedfields: ["panel","tabpanel","accordion","fieldset", "fieldcontainer", "text","region","button","iframe"],
-            block: ["panel","tabpanel","accordion","fieldset", "fieldcontainer", "text","region","button","iframe"]
+            root: ["panel", "region", "tabpanel", "accordion", "text", "iframe", "button", "fieldcontainer", "fieldset"],
+            localizedfields: ["panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"],
+            block: ["panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"]
         };
+    },
+
+    getAllowedTypes : function (source) {
+        const allowedTypes = this.getRawAllowedTypes();
 
         const prepareClassLayoutContextMenu = new CustomEvent(pimcore.events.prepareClassLayoutContextMenu, {
             detail: {
