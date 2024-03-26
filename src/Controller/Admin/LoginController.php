@@ -114,7 +114,10 @@ class LoginController extends AdminAbstractController implements KernelControlle
             return new RedirectResponse($redirectUrl);
         }
 
-        $csrfProtection->regenerateCsrfToken($request->getSession());
+        // check csrf token before generating a new one with force=true
+        if (!$csrfProtection->getCsrfToken($request->getSession())) {
+            $csrfProtection->regenerateCsrfToken($request->getSession());
+        }
 
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
