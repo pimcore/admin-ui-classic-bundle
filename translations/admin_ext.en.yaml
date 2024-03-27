@@ -213,6 +213,7 @@ setbackgroundcolor: Set Backgroundcolor
 setbackgroundimage: Set Background Image
 roundcorners: Round Corners
 rotate: Rotate
+mirror: Mirror
 color: Color
 angle: Angle
 label_width: Label Width
@@ -325,6 +326,7 @@ min_value: min. Value
 max_value: max. Value
 increment: Increment Step
 vertical: Vertical
+horizontal: Horizontal
 country: Country
 zoom_level: Zoom level
 map_type: Map type

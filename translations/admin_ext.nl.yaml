@@ -204,6 +204,7 @@ setbackgroundcolor: Achtergrondkleur instellen
 setbackgroundimage: Achtergrondafbeelding instellen
 roundcorners: Afgeronde hoeken
 rotate: Draaien
+mirror: Spiegelen
 color: Kleur
 angle: Hoek
 label_width: Labelbreedte
@@ -317,6 +318,7 @@ min_value: minimale waarde
 max_value: maximale waarde
 increment: Ophoogstap
 vertical: Verticaal
+horizontal: Horizontaal
 country: Land
 zoom_level: Zoom niveau
 map_type: Kaarttype
