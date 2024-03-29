@@ -84,6 +84,12 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                 reader: {
                     type: 'json',
                     rootProperty: 'data'
+                },
+                // Remove pagination parameters
+                extraParams: {
+                    limit: null,
+                    page: null,
+                    start: null
                 }
 
             },
