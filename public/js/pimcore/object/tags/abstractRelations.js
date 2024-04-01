@@ -41,6 +41,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             {
                 xtype: "button",
                 iconCls: "pimcore_icon_filter",
+                tooltip: t("filter"),
                 cls: "relations_grid_filter_btn",
                 handler: this.showFilterInput.bind(this)
             }

@@ -215,25 +215,29 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         var items = [this.component, {
             xtype: "button",
             iconCls: "pimcore_icon_open",
+            tooltip: t("open"),
             style: "margin-left: 5px",
             handler: this.openElement.bind(this)
         }];
+
+        if (this.fieldConfig.assetInlineDownloadAllowed) {
+            items.push({
+                xtype: "button",
+                iconCls: "pimcore_icon_download",
+                tooltip: t("download"),
+                cls: "pimcore_inline_download",
+                style: "margin-left: 5px",
+                handler: this.downloadAsset.bind(this)
+            });
+        }
 
         if (this.fieldConfig.allowToClearRelation) {
             items.push({
                 xtype: "button",
                 iconCls: "pimcore_icon_delete",
+                tooltip: t("empty"),
                 style: "margin-left: 5px",
                 handler: this.empty.bind(this)
-            });
-        }
-
-        if(pimcore.helpers.hasSearchImplementation()) {
-            items.push({
-                xtype: "button",
-                iconCls: "pimcore_icon_search",
-                style: "margin-left: 5px",
-                handler: this.openSearchEditor.bind(this)
             });
         }
 
@@ -242,19 +246,20 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             items.push({
                 xtype: "button",
                 iconCls: "pimcore_icon_upload",
+                tooltip: t("upload"),
                 cls: "pimcore_inline_upload",
                 style: "margin-left: 5px",
                 handler: this.uploadDialog.bind(this)
             });
         }
 
-        if (this.fieldConfig.assetInlineDownloadAllowed) {
+        if(pimcore.helpers.hasSearchImplementation()) {
             items.push({
                 xtype: "button",
-                iconCls: "pimcore_icon_download",
-                cls: "pimcore_inline_download",
+                iconCls: "pimcore_icon_search",
+                tooltip: t("search"),
                 style: "margin-left: 5px",
-                handler: this.downloadAsset.bind(this)
+                handler: this.openSearchEditor.bind(this)
             });
         }
 
