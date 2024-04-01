@@ -1309,21 +1309,16 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             // Mark fields that have changed as dirty
             if ($request->get('task') !== 'autoSave' && $request->get('task') !== 'unpublish') {
-                $fields = array_keys($object->getClass()->getFieldDefinitions());
-                foreach ($fields as $field) {
-                    $getter = 'get' . ucfirst($field);
-                    $objectValue = $object->$getter();
-                    $objectFromDatabaseValue = $objectFromDatabase->$getter();
-                    if ($objectValue !== $objectFromDatabaseValue) {
-                        // For Carbon objects, we need to compare the values - not the objects.
-                        if (
-                            $objectValue instanceof Carbon
-                            && $objectFromDatabaseValue instanceof Carbon
-                            && $objectValue->equalTo($objectFromDatabaseValue)
-                        ) {
-                            continue;
-                        }
-                        $object->markFieldDirty($field);
+                foreach ($object->getClass()->getFieldDefinitions() as $fieldName => $fieldDefinition) {
+                    $getter = 'get' . ucfirst($fieldName);
+                    $oldValue = $objectFromDatabase->$getter();
+                    $newValue = $object->$getter();
+                    $isEqual = $fieldDefinition instanceof DataObject\ClassDefinition\Data\EqualComparisonInterface
+                        ? $fieldDefinition->isEqual($oldValue, $newValue)
+                        : $oldValue === $newValue;
+
+                    if (!$isEqual) {
+                        $object->markFieldDirty($fieldName);
                     }
                 }
             }
