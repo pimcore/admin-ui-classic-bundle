@@ -483,7 +483,7 @@ pimcore.element.properties = Class.create({
         var data = record.data;
         var type = data.type;
 
-        if (type == "bool") {
+        if (type == "bool" && data.inherited == false) {
             record.set("data", !record.data.data);
         }
     },
