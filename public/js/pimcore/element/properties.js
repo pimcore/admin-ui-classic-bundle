@@ -461,7 +461,7 @@ pimcore.element.properties = Class.create({
             else if (data.inherited == false) {
                 return '<div class="pimcore_property_droptarget">&nbsp;</div>';
             }
-        } else if (type == "bool" && data.inherited == false) {
+        } else if (type == "bool") {
             if (value) {
                 return '<div style="text-align: left"><div role="button" class="x-grid-checkcolumn x-grid-checkcolumn-checked" style=""></div></div>';
             } else {
