@@ -685,9 +685,4 @@ options_provider_type_configure: Configure
 options_provider_type_select_options: Select Options
 options_provider_type_class: Options Provider
 selectoptions: Select Options
-rgbaColor: RGBA Color
-booleanSelect: Boolean Select
-quantityValue: Quantity Value
-inputQuantityValue: Input Quantity Value
-calculatedValue: Calculated Value
 ...
