@@ -459,9 +459,10 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
 
         let params = this.getSaveData(only);
         if (task && params) {
-            params.task = task
+            params.task = task;
         } else {
-            return
+            this.tab.unmask();
+            return;
         }
 
         Ext.Ajax.request({
