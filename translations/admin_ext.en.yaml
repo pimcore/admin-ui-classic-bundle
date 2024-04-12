@@ -701,3 +701,8 @@ log_search_pid: PID
 log_refresh_seconds: Seconds
 system_requirements_check: System-Requirements Check
 required_language: 'Mandatory language'
+rgbaColor: RGBA Color
+booleanSelect: Boolean Select
+quantityValue: Quantity Value
+inputQuantityValue: Input Quantity Value
+calculatedValue: Calculated Value
