@@ -206,6 +206,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             $adminEntrypointUrl = null;
         }
 
+        $requiredLangauges = $systemSettings['general']['required_languages'];
+
         $settings = [
             'instanceId'          => $this->getInstanceId(),
             'version'             => Version::getVersion(),
@@ -224,7 +226,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 $systemSettings['general']['valid_languages'],
                 true
             ),
-            'requiredLanguages' => $systemSettings['general']['required_languages'],
+            'requiredLanguages' => empty($requiredLangauges) === true ? $systemSettings['general']['valid_languages'] : $requiredLangauges,
 
             // flags
             'showCloseConfirmation'          => true,
