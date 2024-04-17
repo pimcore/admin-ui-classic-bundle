@@ -1453,7 +1453,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         $scanStatus = $asset->getScanStatus();
         if ($scanStatus === null) {
-            $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
             if ($processBackground) {
                 \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
                     new AssetUpdateTasksMessage($asset->getId())
@@ -1464,7 +1463,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return match($scanStatus) {
             Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
             Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
-            default => null,
+            Asset\Enum\PdfScanStatus::SAFE => null,
+            default => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
         };
     }
 
