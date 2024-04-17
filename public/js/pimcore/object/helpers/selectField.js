@@ -49,7 +49,7 @@ pimcore.object.helpers.selectField = {
                 change: function (comboBox, newValue) {
                     if (newValue !== null){
                         optionsProviderClass.setValue(pimcore.settings.select_options_provider_class);
-                        optionsProviderData.setValue(newValue);\
+                        optionsProviderData.setValue(newValue);
                     }
                 }
             }
