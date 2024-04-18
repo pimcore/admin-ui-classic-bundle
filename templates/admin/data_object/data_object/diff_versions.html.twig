@@ -304,7 +304,7 @@
                             {# localized loop #}
                             {% for language in validLanguages %}
                                 {% for lfd in fieldKey1.getFieldDefinitions() %}
-                                    {% set localizedValue1 = fieldItem1.Localizedfields.getLocalizedValue(lfd.getName(), language) %}
+                                    {% set localizedValue1 = fieldItem1.Localizedfields.getLocalizedValue(lfd.getName(), language) ?? '' %}
                                     {% if keyData2.getLocalizedValue(lfd.getName(), language) is not empty %}
                                         {% set localizedValue2 = keyData2.getLocalizedValue(lfd.getName(), language) %}
                                     {% else %}
