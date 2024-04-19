@@ -892,9 +892,10 @@ class ClassificationstoreController extends AdminAbstractController implements K
         return $this->adminJson(['success' => false]);
     }
 
-     *  #[Route("/add-collections", name:"addcollections", methods:["POST"])]
+    /*
      * @throws \Exception
      */
+    #[Route("/add-collections", name:"addcollections", methods:["POST"])]
     public function addCollectionsAction(Request $request): JsonResponse
     {
         $this->checkPermission('objects');
