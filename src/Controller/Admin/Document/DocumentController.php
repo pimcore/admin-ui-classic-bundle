@@ -978,7 +978,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         return $this->adminJson(['success' => $success]);
     }
 
-    #[Route("/diff-versions/from/{from}/to/{to}", name:"pimcore_admin_document_document_diffversions", requirements:["from": "\d+", "to": "\d+"], methods={"GET"})]
+    #[Route("/diff-versions/from/{from}/to/{to}", name:"pimcore_admin_document_document_diffversions", requirements:["from" => "\d+", "to" => "\d+"], methods=["GET"])]
     public function diffVersionsAction(Request $request, int $from, int $to, DocumentRenderer $documentRenderer, RouterInterface $router): Response
     {
         // return with error if prerequisites do not match
