@@ -27,17 +27,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/variants", name="pimcore_admin_dataobject_variants_")
- *
  * @internal
  */
+#[Route("/variants", name:"pimcore_admin_dataobject_variants_")]
 class VariantsController extends AdminAbstractController
 {
     use DataObjectActionsTrait;
 
-    /**
-     * @Route("/update-key", name="updatekey", methods={"PUT"})
-     */
+    #[Route("/update-key", name:"updatekey", methods:["PUT"])]
     public function updateKeyAction(Request $request): JsonResponse
     {
         $id = $request->request->getInt('id');
@@ -48,10 +45,9 @@ class VariantsController extends AdminAbstractController
     }
 
     /**
-     * @Route("/get-variants", name="getvariants", methods={"GET", "POST"})
-     *
      * @throws \Exception
      */
+    #[Route("/get-variants", name:"getvariants", methods:["GET", "POST"])]
     public function getVariantsAction(
         Request $request,
         EventDispatcherInterface $eventDispatcher,

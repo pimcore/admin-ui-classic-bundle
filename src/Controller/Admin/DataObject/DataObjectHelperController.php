@@ -48,17 +48,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/object-helper", name="pimcore_admin_dataobject_dataobjecthelper_")
- *
  * @internal
  */
+#[Route("/object-helper", name:"pimcore_admin_dataobject_dataobjecthelper_")]
 class DataObjectHelperController extends AdminAbstractController
 {
     const SYSTEM_COLUMNS = ['id', 'fullpath', 'key', 'published', 'creationDate', 'modificationDate', 'filename', 'classname'];
 
-    /**
-     * @Route("/load-object-data", name="loadobjectdata", methods={"GET"})
-     */
+    #[Route("/load-object-data", name:"loadobjectdata", methods:["GET"])]
     public function loadObjectDataAction(Request $request): JsonResponse
     {
         $object = DataObject::getById((int) $request->get('id'));
@@ -137,9 +134,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @Route("/get-export-configs", name="getexportconfigs", methods={"GET"})
-     */
+    #[Route("/get-export-configs", name:"getexportconfigs", methods:["GET"])]
     public function getExportConfigsAction(Request $request): JsonResponse
     {
         $classId = $request->get('classId');
@@ -168,9 +163,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'data' => $result]);
     }
 
-    /**
-     * @Route("/grid-delete-column-config", name="griddeletecolumnconfig", methods={"DELETE"})
-     */
+    #[Route("/grid-delete-column-config", name:"griddeletecolumnconfig", methods:["DELETE"])]
     public function gridDeleteColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
         $gridConfigId = (int)$request->get('gridConfigId');
@@ -201,9 +194,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($newGridConfig);
     }
 
-    /**
-     * @Route("/grid-get-column-config", name="gridgetcolumnconfig", methods={"GET"})
-     */
+    #[Route("/grid-get-column-config", name:"gridgetcolumnconfig", methods:["GET"])]
     public function gridGetColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
         $result = $this->doGetGridColumnConfig($request, $config);
@@ -682,9 +673,7 @@ class DataObjectHelperController extends AdminAbstractController
         return null;
     }
 
-    /**
-     * @Route("/prepare-helper-column-configs", name="preparehelpercolumnconfigs", methods={"POST"})
-     */
+    #[Route("/prepare-helper-column-configs", name:"preparehelpercolumnconfigs", methods:["POST"])]
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
         $helperColumns = [];
@@ -712,9 +701,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'columns' => $newData]);
     }
 
-    /**
-     * @Route("/grid-config-apply-to-all", name="gridconfigapplytoall", methods={"POST"})
-     */
+    #[Route("/grid-config-apply-to-all", name:"gridconfigapplytoall", methods:["POST"])]
     public function gridConfigApplyToAllAction(Request $request): JsonResponse
     {
         $objectId = $request->request->getInt('objectId');
@@ -737,9 +724,7 @@ class DataObjectHelperController extends AdminAbstractController
         throw $this->createAccessDeniedHttpException();
     }
 
-    /**
-     * @Route("/grid-mark-favourite-column-config", name="gridmarkfavouritecolumnconfig", methods={"POST"})
-     */
+    #[Route("/grid-mark-favourite-column-config", name:"gridmarkfavouritecolumnconfig", methods:["POST"])]
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
         $objectId = (int)$request->get('objectId');
@@ -821,9 +806,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $result;
     }
 
-    /**
-     * @Route("/grid-save-column-config", name="gridsavecolumnconfig", methods={"POST"})
-     */
+    #[Route("/grid-save-column-config", name:"gridsavecolumnconfig", methods:["POST"])]
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
         $objectId = $request->request->getInt('id');
@@ -1120,9 +1103,7 @@ class DataObjectHelperController extends AdminAbstractController
      * IMPORTER
      */
 
-    /**
-     * @Route("/import-upload", name="importupload", methods={"POST"})
-     */
+    #[Route("/import-upload", name:"importupload", methods:["POST"])]
     public function importUploadAction(Request $request, Filesystem $filesystem): JsonResponse
     {
         $data = file_get_contents($_FILES['Filedata']['tmp_name']);
@@ -1166,9 +1147,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $fileHandle . '.csv';
     }
 
-    /**
-     * @Route("/get-export-jobs", name="getexportjobs", methods={"POST"})
-     */
+    #[Route("/get-export-jobs", name:"getexportjobs", methods:["POST"])]
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $requestedLanguage = $this->extractLanguage($request);
@@ -1205,10 +1184,9 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @Route("/do-export", name="doexport", methods={"POST"})
-     *
      * @throws \Exception|FilesystemException
      */
+    #[Route("/do-export", name:"doexport", methods:["POST"])]
     public function doExportAction(
         Request $request,
         LocaleServiceInterface $localeService,
@@ -1338,9 +1316,7 @@ class DataObjectHelperController extends AdminAbstractController
         return '"' . $value . '"';
     }
 
-    /**
-     * @Route("/download-csv-file", name="downloadcsvfile", methods={"GET"})
-     */
+    #[Route("/download-csv-file", name:"downloadcsvfile", methods:["GET"])]
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
@@ -1366,9 +1342,7 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/download-xlsx-file", name="downloadxlsxfile", methods={"GET"})
-     */
+    #[Route("/download-xlsx-file", name:"downloadxlsxfile", methods:["GET"])]
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
@@ -1403,9 +1377,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $o;
     }
 
-    /**
-     * @Route("/get-batch-jobs", name="getbatchjobs", methods={"POST"})
-     */
+    #[Route("/get-batch-jobs", name:"getbatchjobs", methods:["POST"])]
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
         if ($request->get('language')) {
@@ -1420,9 +1392,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'jobs' => $jobs]);
     }
 
-    /**
-     * @Route("/batch", name="batch", methods={"PUT"})
-     */
+    #[Route("/batch", name:"batch", methods:["PUT"])]
     public function batchAction(Request $request): JsonResponse
     {
         $success = true;
@@ -1629,9 +1599,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => $success]);
     }
 
-    /**
-     * @Route("/get-available-visible-vields", name="getavailablevisiblefields", methods={"GET"})
-     */
+    #[Route("/get-available-visible-vields", name:"getavailablevisiblefields", methods:["GET"])]
     public function getAvailableVisibleFieldsAction(Request $request): JsonResponse
     {
         $class = null;

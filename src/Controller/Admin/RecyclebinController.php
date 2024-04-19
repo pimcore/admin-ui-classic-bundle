@@ -30,9 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class RecyclebinController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/recyclebin/list", name="pimcore_admin_recyclebin_list", methods={"POST"})
-     */
+    #[Route("/recyclebin/list", name:"pimcore_admin_recyclebin_list", methods:["POST"])]
     public function listAction(Request $request): JsonResponse
     {
         if ($request->get('xaction') == 'destroy') {
@@ -138,9 +136,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         }
     }
 
-    /**
-     * @Route("/recyclebin/restore", name="pimcore_admin_recyclebin_restore", methods={"POST"})
-     */
+    #[Route("/recyclebin/restore", name:"pimcore_admin_recyclebin_restore", methods:["POST"])]
     public function restoreAction(Request $request): JsonResponse
     {
         $item = Recyclebin\Item::getById((int) $request->get('id'));
@@ -152,9 +148,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/flush", name="pimcore_admin_recyclebin_flush", methods={"DELETE"})
-     */
+    #[Route("/recyclebin/flush", name:"pimcore_admin_recyclebin_flush", methods:["DELETE"])]
     public function flushAction(): JsonResponse
     {
         $bin = new Element\Recyclebin();
@@ -163,9 +157,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/add", name="pimcore_admin_recyclebin_add", methods={"POST"})
-     */
+    #[Route("/recyclebin/add", name:"pimcore_admin_recyclebin_add", methods:["POST"])]
     public function addAction(Request $request): JsonResponse
     {
         try {

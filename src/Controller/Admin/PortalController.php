@@ -28,10 +28,9 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/portal")
- *
  * @internal
  */
+#[Route("/portal")]
 class PortalController extends AdminAbstractController implements KernelControllerEventInterface
 {
     protected ?Dashboard $dashboardHelper = null;
@@ -46,9 +45,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         $this->dashboardHelper->saveDashboard($request->get('key'), $config);
     }
 
-    /**
-     * @Route("/dashboard-list", name="pimcore_admin_portal_dashboardlist", methods={"GET"})
-     */
+    #[Route("/dashboard-list", name:"pimcore_admin_portal_dashboardlist", methods:["GET"])]
     public function dashboardListAction(Request $request): JsonResponse
     {
         $dashboards = $this->dashboardHelper->getAllDashboards();
@@ -63,9 +60,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson($data);
     }
 
-    /**
-     * @Route("/create-dashboard", name="pimcore_admin_portal_createdashboard", methods={"POST"})
-     */
+    #[Route("/create-dashboard", name:"pimcore_admin_portal_createdashboard", methods:["POST"])]
     public function createDashboardAction(Request $request): JsonResponse
     {
         $dashboards = $this->dashboardHelper->getAllDashboards();
@@ -82,9 +77,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         }
     }
 
-    /**
-     * @Route("/delete-dashboard", name="pimcore_admin_portal_deletedashboard", methods={"DELETE"})
-     */
+    #[Route("/delete-dashboard", name:"pimcore_admin_portal_deletedashboard", methods:["DELETE"])]
     public function deleteDashboardAction(Request $request): JsonResponse
     {
         $key = $request->get('key');
@@ -93,17 +86,13 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/get-configuration", name="pimcore_admin_portal_getconfiguration", methods={"GET"})
-     */
+    #[Route("/get-configuration", name:"pimcore_admin_portal_getconfiguration", methods:["GET"])]
     public function getConfigurationAction(Request $request): JsonResponse
     {
         return $this->adminJson($this->getCurrentConfiguration($request));
     }
 
-    /**
-     * @Route("/remove-widget", name="pimcore_admin_portal_removewidget", methods={"DELETE"})
-     */
+    #[Route("/remove-widget", name:"pimcore_admin_portal_removewidget", methods:["DELETE"])]
     public function removeWidgetAction(Request $request): JsonResponse
     {
         $config = $this->getCurrentConfiguration($request);
@@ -125,9 +114,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/add-widget", name="pimcore_admin_portal_addwidget", methods={"POST"})
-     */
+    #[Route("/add-widget", name:"pimcore_admin_portal_addwidget", methods:["POST"])]
     public function addWidgetAction(Request $request): JsonResponse
     {
         $config = $this->getCurrentConfiguration($request);
@@ -147,9 +134,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson(['success' => true, 'id' => $nextId]);
     }
 
-    /**
-     * @Route("/reorder-widget", name="pimcore_admin_portal_reorderwidget", methods={"PUT"})
-     */
+    #[Route("/reorder-widget", name:"pimcore_admin_portal_reorderwidget", methods:["PUT"])]
     public function reorderWidgetAction(Request $request): JsonResponse
     {
         $config = $this->getCurrentConfiguration($request);
@@ -176,9 +161,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/update-portlet-config", name="pimcore_admin_portal_updateportletconfig", methods={"PUT"})
-     */
+    #[Route("/update-portlet-config", name:"pimcore_admin_portal_updateportletconfig", methods:["PUT"])]
     public function updatePortletConfigAction(Request $request): JsonResponse
     {
         $key = $request->get('key');
@@ -200,9 +183,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/portlet-modified-documents", name="pimcore_admin_portal_portletmodifieddocuments", methods={"GET"})
-     */
+    #[Route("/portlet-modified-documents", name:"pimcore_admin_portal_portletmodifieddocuments", methods:["GET"])]
     public function portletModifiedDocumentsAction(Request $request): JsonResponse
     {
         $list = Document::getList([
@@ -229,9 +210,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson($response);
     }
 
-    /**
-     * @Route("/portlet-modified-assets", name="pimcore_admin_portal_portletmodifiedassets", methods={"GET"})
-     */
+    #[Route("/portlet-modified-assets", name:"pimcore_admin_portal_portletmodifiedassets", methods:["GET"])]
     public function portletModifiedAssetsAction(Request $request): JsonResponse
     {
         $list = Asset::getList([
@@ -261,9 +240,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson($response);
     }
 
-    /**
-     * @Route("/portlet-modified-objects", name="pimcore_admin_portal_portletmodifiedobjects", methods={"GET"})
-     */
+    #[Route("/portlet-modified-objects", name:"pimcore_admin_portal_portletmodifiedobjects", methods:["GET"])]
     public function portletModifiedObjectsAction(Request $request): JsonResponse
     {
         $list = DataObject::getList([
@@ -290,9 +267,7 @@ class PortalController extends AdminAbstractController implements KernelControll
         return $this->adminJson($response);
     }
 
-    /**
-     * @Route("/portlet-modification-statistics", name="pimcore_admin_portal_portletmodificationstatistics", methods={"GET"})
-     */
+    #[Route("/portlet-modification-statistics", name:"pimcore_admin_portal_portletmodificationstatistics", methods:["GET"])]
     public function portletModificationStatisticsAction(Request $request): JsonResponse
     {
         $db = \Pimcore\Db::get();

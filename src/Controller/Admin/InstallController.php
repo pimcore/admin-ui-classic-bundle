@@ -25,15 +25,12 @@ use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/install")
- *
  * @internal
  */
+#[Route("/install")]
 class InstallController extends AdminAbstractController
 {
-    /**
-     * @Route("/check", name="pimcore_admin_install_check", methods={"GET", "POST"})
-     */
+    #[Route("/check", name:"pimcore_admin_install_check", methods:["GET", "POST"])]
     public function checkAction(Request $request, Connection $db, ?Profiler $profiler): Response
     {
         if ($profiler) {

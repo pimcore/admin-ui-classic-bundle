@@ -23,17 +23,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/hardlink", name="pimcore_admin_document_hardlink_")
- *
  * @internal
  */
+#[Route("/hardlink", name:"pimcore_admin_document_hardlink_")]
 class HardlinkController extends DocumentControllerBase
 {
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route("/get-data-by-id", name:"getdatabyid", methods:["GET"])]
     public function getDataByIdAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int)$request->get('id'));
@@ -70,10 +68,9 @@ class HardlinkController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route("/save", name:"save", methods:["POST", "PUT"])]
     public function saveAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int) $request->get('id'));

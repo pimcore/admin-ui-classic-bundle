@@ -205,9 +205,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $data['unlinkTranslations'] = $unlinkTranslations;
     }
 
-    /**
-     * @Route("/save-to-session", name="savetosession", methods={"POST"})
-     */
+    #[Route("/save-to-session", name:"savetosession", methods:["POST"])]
     public function saveToSessionAction(Request $request): JsonResponse
     {
         if ($documentId = (int) $request->get('id')) {
@@ -258,9 +256,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         return $sessionDocument;
     }
 
-    /**
-     * @Route("/remove-from-session", name="removefromsession", methods={"DELETE"})
-     */
+    #[Route("/remove-from-session", name:"removefromsession", methods:["DELETE"])]
     public function removeFromSessionAction(Request $request): JsonResponse
     {
         Model\Document\Service::removeElementFromSession('document', $request->get('id'), $request->getSession()->getId());
@@ -307,10 +303,9 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     /**
      * This is used for pages and snippets to change the main document (which is not saved with the normal save button)
      *
-     * @Route("/change-main-document", name="changemaindocument", methods={"PUT"})
-     *
      * @throws \Exception
      */
+    #[Route("/change-main-document", name:"changemaindocument", methods:["PUT"])]
     public function changeMainDocumentAction(Request $request): JsonResponse
     {
         $doc = Model\Document\PageSnippet::getById((int) $request->get('id'));
