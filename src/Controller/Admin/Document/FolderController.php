@@ -22,17 +22,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/folder", name="pimcore_admin_document_folder_")
- *
  * @internal
  */
+#[Route("/folder", name:"pimcore_admin_document_folder_")]
 class FolderController extends DocumentControllerBase
 {
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route("/get-data-by-id", name:"getdatabyid", methods:["GET"])]
     public function getDataByIdAction(Request $request): JsonResponse
     {
         $folder = Document\Folder::getById((int)$request->get('id'));
@@ -54,10 +52,9 @@ class FolderController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"PUT", "POST"})
-     *
      * @throws \Exception
      */
+    #[Route("/save", name:"save", methods:["PUT", "POST"])]
     public function saveAction(Request $request): JsonResponse
     {
         $folder = Document\Folder::getById((int) $request->get('id'));

@@ -29,12 +29,11 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class AssetController
  *
- * @Route("/asset")
- *
  * @package GDPRDataExtractorBundle\Controller
  *
  * @internal
  */
+#[Route("/asset")]
 class AssetController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -46,9 +45,7 @@ class AssetController extends AdminAbstractController implements KernelControlle
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-assets", name="pimcore_admin_gdpr_asset_searchasset", methods={"GET"})
-     */
+    #[Route("/search-assets", name:"pimcore_admin_gdpr_asset_searchasset", methods:["GET"])]
     public function searchAssetAction(Request $request, Assets $service): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -67,10 +64,9 @@ class AssetController extends AdminAbstractController implements KernelControlle
     }
 
     /**
-     * @Route("/export", name="pimcore_admin_gdpr_asset_exportassets", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route("/export", name:"pimcore_admin_gdpr_asset_exportassets", methods:["GET"])]
     public function exportAssetsAction(Request $request, Assets $service): Response
     {
         $asset = Asset::getById((int) $request->get('id'));

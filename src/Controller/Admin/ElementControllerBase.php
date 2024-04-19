@@ -54,9 +54,7 @@ abstract class ElementControllerBase extends AdminAbstractController
         return [];
     }
 
-    /**
-     * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     */
+    #[Route("/tree-get-root", name:"treegetroot", methods:["GET"])]
     public function treeGetRootAction(Request $request): JsonResponse
     {
         $type = $request->get('elementType');
@@ -81,10 +79,9 @@ abstract class ElementControllerBase extends AdminAbstractController
     }
 
     /**
-     * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route("/delete-info", name:"deleteinfo", methods:["GET"])]
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $hasDependency = false;

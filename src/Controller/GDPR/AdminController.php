@@ -30,9 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AdminController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/get-data-providers", name="pimcore_admin_gdpr_admin_getdataproviders", methods={"GET"})
-     */
+    #[Route("/get-data-providers", name:"pimcore_admin_gdpr_admin_getdataproviders", methods:["GET"])]
     public function getDataProvidersAction(Manager $manager): JsonResponse
     {
         $response = [];

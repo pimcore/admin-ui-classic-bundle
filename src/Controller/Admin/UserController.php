@@ -46,9 +46,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/user/tree-get-children-by-id", name="pimcore_admin_user_treegetchildrenbyid", methods={"GET"})
-     */
+    #[Route("/user/tree-get-children-by-id", name:"pimcore_admin_user_treegetchildrenbyid", methods:["GET"])]
     public function treeGetChildrenByIdAction(Request $request): JsonResponse
     {
         $list = new User\Listing();
@@ -106,9 +104,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $tmpUser;
     }
 
-    /**
-     * @Route("/user/add", name="pimcore_admin_user_add", methods={"POST"})
-     */
+    #[Route("/user/add", name:"pimcore_admin_user_add", methods:["POST"])]
     public function addAction(Request $request): JsonResponse
     {
         try {
@@ -224,10 +220,9 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @Route("/user/delete", name="pimcore_admin_user_delete", methods={"DELETE"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/delete", name:"pimcore_admin_user_delete", methods:["DELETE"])]
     public function deleteAction(Request $request): JsonResponse
     {
         $user = User\AbstractUser::getById((int)$request->get('id'));
@@ -257,10 +252,9 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @Route("/user/update", name="pimcore_admin_user_update", methods={"PUT"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/update", name:"pimcore_admin_user_update", methods:["PUT"])]
     public function updateAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         /** @var User|User\Role|null $user */
@@ -366,10 +360,9 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @Route("/user/get", name="pimcore_admin_user_get", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/get", name:"pimcore_admin_user_get", methods:["GET"])]
     public function getAction(Request $request): JsonResponse
     {
         $userId = (int)$request->get('id');
@@ -471,9 +464,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/get-minimal", name="pimcore_admin_user_getminimal", methods={"GET"})
-     */
+    #[Route("/user/get-minimal", name:"pimcore_admin_user_getminimal", methods:["GET"])]
     public function getMinimalAction(Request $request): JsonResponse
     {
         $user = User::getById((int)$request->get('id'));
@@ -492,9 +483,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->adminJson($minimalUserData);
     }
 
-    /**
-     * @Route("/user/upload-current-user-image", name="pimcore_admin_user_uploadcurrentuserimage", methods={"POST"})
-     */
+    #[Route("/user/upload-current-user-image", name:"pimcore_admin_user_uploadcurrentuserimage", methods:["POST"])]
     public function uploadCurrentUserImageAction(Request $request): JsonResponse
     {
         $user = $this->getAdminUser();
@@ -511,9 +500,7 @@ class UserController extends AdminAbstractController implements KernelController
         }
     }
 
-    /**
-     * @Route("/user/update-current-user", name="pimcore_admin_user_updatecurrentuser", methods={"PUT"})
-     */
+    #[Route("/user/update-current-user", name:"pimcore_admin_user_updatecurrentuser", methods:["PUT"])]
     public function updateCurrentUserAction(Request $request, ValidatorInterface $validator): JsonResponse
     {
         //TODO Can be completely validated with Symfony Validator
@@ -599,9 +586,7 @@ class UserController extends AdminAbstractController implements KernelController
         }
     }
 
-    /**
-     * @Route("/user/get-current-user", name="pimcore_admin_user_getcurrentuser", methods={"GET"})
-     */
+    #[Route("/user/get-current-user", name:"pimcore_admin_user_getcurrentuser", methods:["GET"])]
     public function getCurrentUserAction(Request $request): Response
     {
         $user = $this->getAdminUser();
@@ -637,9 +622,7 @@ class UserController extends AdminAbstractController implements KernelController
 
     // ROLES
 
-    /**
-     * @Route("/user/role-tree-get-children-by-id", name="pimcore_admin_user_roletreegetchildrenbyid", methods={"GET"})
-     */
+    #[Route("/user/role-tree-get-children-by-id", name:"pimcore_admin_user_roletreegetchildrenbyid", methods:["GET"])]
     public function roleTreeGetChildrenByIdAction(Request $request): JsonResponse
     {
         $list = new User\Role\Listing();
@@ -688,9 +671,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $tmpUser;
     }
 
-    /**
-     * @Route("/user/role-get", name="pimcore_admin_user_roleget", methods={"GET"})
-     */
+    #[Route("/user/role-get", name:"pimcore_admin_user_roleget", methods:["GET"])]
     public function roleGetAction(Request $request): JsonResponse
     {
         $role = User\Role::getById((int)$request->get('id'));
@@ -739,10 +720,9 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @Route("/user/upload-image", name="pimcore_admin_user_uploadimage", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/upload-image", name:"pimcore_admin_user_uploadimage", methods:["POST"])]
     public function uploadImageAction(Request $request): JsonResponse
     {
         $userObj = User::getById($this->getUserId($request));
@@ -776,10 +756,9 @@ class UserController extends AdminAbstractController implements KernelController
     }
 
     /**
-     * @Route("/user/delete-image", name="pimcore_admin_user_deleteimage", methods={"DELETE"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/delete-image", name:"pimcore_admin_user_deleteimage", methods:["DELETE"])]
     public function deleteImageAction(Request $request): JsonResponse
     {
         $userObj = User::getById($this->getUserId($request));
@@ -805,9 +784,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/user/disable-2fa", name="pimcore_admin_user_disable2fasecret", methods={"DELETE"})
-     */
+    #[Route("/user/disable-2fa", name:"pimcore_admin_user_disable2fasecret", methods:["DELETE"])]
     public function disable2FaSecretAction(Request $request): JsonResponse
     {
         $user = $this->getAdminUser();
@@ -825,9 +802,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/reset-2fa-secret", name="pimcore_admin_user_reset2fasecret", methods={"PUT"})
-     */
+    #[Route("/user/reset-2fa-secret", name:"pimcore_admin_user_reset2fasecret", methods:["PUT"])]
     public function reset2FaSecretAction(Request $request): JsonResponse
     {
         $user = User::getById((int)$request->get('id'));
@@ -843,9 +818,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/reset-my-2fa-secret", name="pimcore_admin_user_reset_my_2fa_secret", methods={"PUT"})
-     */
+    #[Route("/user/reset-my-2fa-secret", name:"pimcore_admin_user_reset_my_2fa_secret", methods:["PUT"])]
     public function resetMy2FaSecretAction(Request $request): JsonResponse
     {
         $user = $this->getAdminUser();
@@ -859,9 +832,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/get-image", name="pimcore_admin_user_getimage", methods={"GET"})
-     */
+    #[Route("/user/get-image", name:"pimcore_admin_user_getimage", methods:["GET"])]
     public function getImageAction(Request $request): StreamedResponse
     {
         $userObj = User::getById($this->getUserId($request));
@@ -877,9 +848,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/get-token-login-link", name="pimcore_admin_user_gettokenloginlink", methods={"GET"})
-     *
+     *  #[Route("/user/get-token-login-link", name:"pimcore_admin_user_gettokenloginlink", methods:["GET"])]
      * @throws \Exception
      */
     public function getTokenLoginLinkAction(Request $request, TranslatorInterface $translator): JsonResponse
@@ -918,9 +887,7 @@ class UserController extends AdminAbstractController implements KernelController
         ]);
     }
 
-    /**
-     * @Route("/user/search", name="pimcore_admin_user_search", methods={"GET"})
-     */
+    #[Route("/user/search", name:"pimcore_admin_user_search", methods:["GET"])]
     public function searchAction(Request $request): JsonResponse
     {
         $q = '%' . $request->get('query') . '%';
@@ -968,9 +935,7 @@ class UserController extends AdminAbstractController implements KernelController
         $this->checkActionPermission($event, 'users', $unrestrictedActions);
     }
 
-    /**
-     * @Route("/user/get-users-for-sharing", name="pimcore_admin_user_getusersforsharing", methods={"GET"})
-     */
+    #[Route("/user/get-users-for-sharing", name:"pimcore_admin_user_getusersforsharing", methods:["GET"])]
     public function getUsersForSharingAction(Request $request): JsonResponse
     {
         $this->checkPermission('share_configurations');
@@ -978,9 +943,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->getUsersAction($request);
     }
 
-    /**
-     * @Route("/user/get-roles-for-sharing", name="pimcore_admin_user_getrolesforsharing", methods={"GET"}))
-     */
+    #[Route("/user/get-roles-for-sharing", name:"pimcore_admin_user_getrolesforsharing", methods:["GET"]))]
     public function getRolesForSharingAction(Request $request): JsonResponse
     {
         $this->checkPermission('share_configurations');
@@ -988,9 +951,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->getRolesAction($request);
     }
 
-    /**
-     * @Route("/user/get-users", name="pimcore_admin_user_getusers", methods={"GET"})
-     */
+    #[Route("/user/get-users", name:"pimcore_admin_user_getusers", methods:["GET"])]
     public function getUsersAction(Request $request): JsonResponse
     {
         $users = [];
@@ -1021,9 +982,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->adminJson(['success' => true, 'total' => count($users), 'data' => $users]);
     }
 
-    /**
-     * @Route("/user/get-roles", name="pimcore_admin_user_getroles", methods={"GET"})
-     */
+    #[Route("/user/get-roles", name:"pimcore_admin_user_getroles", methods:["GET"])]
     public function getRolesAction(Request $request): JsonResponse
     {
         $roles = [];
@@ -1045,19 +1004,16 @@ class UserController extends AdminAbstractController implements KernelController
         return $this->adminJson(['success' => true, 'total' => count($roles), 'data' => $roles]);
     }
 
-    /**
-     * @Route("/user/get-default-key-bindings", name="pimcore_admin_user_getdefaultkeybindings", methods={"GET"})
-     */
+    #[Route("/user/get-default-key-bindings", name:"pimcore_admin_user_getdefaultkeybindings", methods:["GET"])]
     public function getDefaultKeyBindingsAction(Request $request): JsonResponse
     {
         return $this->adminJson(['success' => true, 'data' => UserHelper::getDefaultKeyBindings()]);
     }
 
     /**
-     * @Route("/user/invitationlink", name="pimcore_admin_user_invitationlink", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route("/user/invitationlink", name:"pimcore_admin_user_invitationlink", methods:["POST"])]
     public function invitationLinkAction(Request $request, TranslatorInterface $translator, RouterInterface $router): JsonResponse
     {
         $success = false;

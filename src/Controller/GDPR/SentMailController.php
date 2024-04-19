@@ -27,10 +27,9 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class SentMailController
  *
- * @Route("/sent-mail")
- *
  * @internal
  */
+#[Route("/sent-mail")]
 class SentMailController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -42,9 +41,7 @@ class SentMailController extends AdminAbstractController implements KernelContro
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/export", name="pimcore_admin_gdpr_sentmail_exportdataobject", methods={"GET"})
-     */
+    #[Route("/export", name:"pimcore_admin_gdpr_sentmail_exportdataobject", methods:["GET"])]
     public function exportDataObjectAction(Request $request): JsonResponse
     {
         $this->checkPermission('emails');
