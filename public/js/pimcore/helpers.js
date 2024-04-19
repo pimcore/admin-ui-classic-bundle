@@ -1017,6 +1017,7 @@ pimcore.helpers.assetSingleUploadDialog = function (parent, parentType, success,
 };
 
 pimcore.helpers.uploadDialog = function (url, filename, success, failure, description) {
+    let pbar;
 
     if (typeof success != "function") {
         success = function () {
@@ -1094,8 +1095,8 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         return;
                     }
 
-                    let pbar = new Ext.ProgressBar({
-                        width:465,
+                    pbar = new Ext.ProgressBar({
+                        width: 465,
                         text: file.name,
                         style: "margin-bottom: 5px"
                     });
