@@ -1078,10 +1078,10 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 win.show();
 
                 let finishedErrorHandler = function (e) {
-                    this.activeUploads--;
+                    activeUploads--;
                     win.remove(pbar);
 
-                    if(this.activeUploads < 1) {
+                    if (activeUploads < 1) {
                         win.close();
                     }
                 }.bind(this);
@@ -1124,8 +1124,11 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     };
 
                     let successWrapper = function (ev) {
-                        const data = JSON.parse(request.responseText);
-                        if(ev.currentTarget.status < 400 && data.success === true) {
+                        let data = {success: false};
+                        try {
+                            data = JSON.parse(request.responseText);
+                        } catch (e) {}
+                        if (ev.currentTarget.status < 400 && data.success === true) {
                             success(res);
                             if (activeUploads == filesCount) {
                                 win.close();
