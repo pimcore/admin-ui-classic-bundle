@@ -1160,8 +1160,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         }
     });
 
-
-    var uploadForm = new Ext.form.FormPanel({
+    const uploadForm = new Ext.form.FormPanel({
         fileUpload: true,
         width: 500,
         bodyStyle: 'padding: 10px;',
