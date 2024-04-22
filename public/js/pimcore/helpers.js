@@ -1036,7 +1036,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         filename = "Filedata";
     }
 
-    var uploadWindowCompatible = new Ext.Window({
+    const uploadWindowCompatible = new Ext.Window({
         autoHeight: true,
         title: t('upload'),
         closeAction: 'close',
@@ -1044,7 +1044,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         modal: true
     });
 
-    var items = [];
+    const items = [];
 
     if (description) {
         items.push({
@@ -1079,7 +1079,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 });
                 win.show();
 
-                let finishedErrorHandler = function (pbar) {
+                const finishedErrorHandler = function (pbar) {
                     activeUploads--;
                     win.remove(pbar);
 
@@ -1112,17 +1112,17 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
                     pbar.updateProgress(percentComplete, progressText);
 
-                    let data = new FormData();
+                    const data = new FormData();
                     data.append(filename, file);
                     data.append("filename", file.name);
                     data.append("csrfToken", pimcore.settings['csrfToken']);
 
-                    let request = new XMLHttpRequest();
-                    let res = {
+                    const request = new XMLHttpRequest();
+                    const res = {
                         'response': request
                     };
 
-                    let successWrapper = function (ev) {
+                    const successWrapper = function (ev) {
                         let data = {success: false};
                         try {
                             data = JSON.parse(request.responseText);
@@ -1139,7 +1139,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         }
                     };
 
-                    let errorWrapper = function (ev) {
+                    const errorWrapper = function (ev) {
                         failure(res);
                         finishedErrorHandler(pbar);
                     };
@@ -1152,7 +1152,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
                 });
             },
-            afterrender:function(cmp){
+            afterrender: function(cmp){
                 cmp.fileInputEl.set({
                     multiple:'multiple'
                 });
