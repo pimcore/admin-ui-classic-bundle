@@ -1017,7 +1017,6 @@ pimcore.helpers.assetSingleUploadDialog = function (parent, parentType, success,
 };
 
 pimcore.helpers.uploadDialog = function (url, filename, success, failure, description) {
-    let pbar;
 
     if (typeof success != "function") {
         success = function () {
@@ -1066,6 +1065,9 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         },
         listeners: {
             change: function (fileUploadField) {
+                let activeUploads = 0;
+                const filesCount = fileUploadField.fileInputEl.dom.files.length;
+
                 const win = new Ext.Window({
                     items: [],
                     modal: true,
@@ -1077,7 +1079,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 });
                 win.show();
 
-                let finishedErrorHandler = function (e) {
+                let finishedErrorHandler = function (pbar) {
                     activeUploads--;
                     win.remove(pbar);
 
@@ -1086,16 +1088,13 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     }
                 }.bind(this);
 
-                let activeUploads = 0;
-                const filesCount = fileUploadField.fileInputEl.dom.files.length;
-
                 Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
                     if (file.size > pimcore.settings["upload_max_filesize"]) {
                         pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + file.name, "error");
                         return;
                     }
 
-                    pbar = new Ext.ProgressBar({
+                    const pbar = new Ext.ProgressBar({
                         width: 465,
                         text: file.name,
                         style: "margin-bottom: 5px"
@@ -1136,13 +1135,13 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                             }
                         } else {
                             failure(res);
-                            finishedErrorHandler();
+                            finishedErrorHandler(pbar);
                         }
                     };
 
                     let errorWrapper = function (ev) {
                         failure(res);
-                        finishedErrorHandler();
+                        finishedErrorHandler(pbar);
                     };
 
                     request.addEventListener("load", successWrapper, false);
