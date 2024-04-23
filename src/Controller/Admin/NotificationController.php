@@ -64,7 +64,7 @@ class NotificationController extends AdminAbstractController
     {
         $this->checkPermission('notifications_send');
 
-        $recipientId = (int) $request->request->getInt('recipientId');
+        $recipientId = $request->request->getInt('recipientId');
         $fromUser = (int) $this->getAdminUser()->getId();
         $title = $request->request->get('title', '');
         $message = $request->request->get('message', '');
