@@ -283,7 +283,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
     },
 
     getCreateControl: function () {
-
         var allowedClasses;
         var i;
 
@@ -324,12 +323,14 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 items.push({
                     cls: "pimcore_block_button_plus",
                     iconCls: "pimcore_icon_plus",
+                    tooltip: t("add"),
                     handler: collectionMenu[0].handler
                 });
             } else if (collectionMenu.length > 1) {
                 items.push({
                     cls: "pimcore_block_button_plus",
                     iconCls: "pimcore_icon_plus",
+                    tooltip: t("add"),
                     menu: collectionMenu
                 });
             } else {
@@ -340,10 +341,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             }
         }
 
-
         return items[0];
-    }
-    ,
+    },
 
     getVisibleColumns: function () {
         var visibleFields = this.visibleFields || [];
@@ -658,6 +657,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_delete",
+                    tooltip: t("empty"),
                     handler: function () {
                         pimcore.helpers.deleteConfirm(t('all'), t('relations'), function () {
                             this.empty();
@@ -666,15 +666,16 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 });
             }
 
+            toolbarItems = toolbarItems.concat(this.getCreateControl());
+
             if(pimcore.helpers.hasSearchImplementation()) {
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_search",
+                    tooltip: t("search"),
                     handler: this.openSearchEditor.bind(this)
                 });
             }
-
-            toolbarItems = toolbarItems.concat(this.getCreateControl());
         }
 
         return toolbarItems;

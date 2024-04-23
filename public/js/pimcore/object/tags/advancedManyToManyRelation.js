@@ -600,6 +600,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_delete",
+                    tooltip: t("empty"),
                     handler: function () {
                         pimcore.helpers.deleteConfirm(t('all'), t('relations'), function () {
                             this.empty();
@@ -611,8 +612,9 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             if (this.fieldConfig.assetsAllowed && this.fieldConfig.noteditable == false) {
                 toolbarItems.push({
                     xtype: "button",
-                    cls: "pimcore_inline_upload",
                     iconCls: "pimcore_icon_upload",
+                    tooltip: t("upload"),
+                    cls: "pimcore_inline_upload",
                     handler: this.uploadDialog.bind(this)
                 });
             }
@@ -622,6 +624,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                     {
                         xtype: "button",
                         iconCls: "pimcore_icon_search",
+                        tooltip: t("search"),
                         handler: this.openSearchEditor.bind(this)
                     }
                     //,
