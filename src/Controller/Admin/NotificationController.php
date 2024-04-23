@@ -110,7 +110,7 @@ class NotificationController extends AdminAbstractController
     }
 
     /**
-     * @Route("/find-all", name="pimcore_admin_notification_findall")
+     * @Route("/find-all", name="pimcore_admin_notification_findall", methods={"POST"})
      */
     public function findAllAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -124,8 +124,8 @@ class NotificationController extends AdminAbstractController
         }
 
         $options = [
-            'offset' => $request->get('start', 0),
-            'limit' => $request->get('limit', 40),
+            'offset' => $request->request->getInt('start'),
+            'limit' => $request->request->getInt('limit', 40),
         ];
 
         $result = $service->findAll($filter, $options);
