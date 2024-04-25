@@ -10,14 +10,13 @@ Please follow the [instructions](https://docs.github.com/en/code-security/securi
 
 
 ## Resolving Process
-Every submitted security issue is handled with top priority by following these steps: 
+Every submitted security issue is handled with top priority by following these steps:
 
 1. Confirm the vulnerability
 2. Determine the severity
 3. Contact reporter
 4. Work on a patch
 5. Get a CVE identification number (may be done by the reporter or a security service provider)
-6. Patch reviewing 
+6. Patch reviewing
 7. Tagging a new release for supported versions
 8. Publish security announcement
-
