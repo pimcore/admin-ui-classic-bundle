@@ -702,6 +702,22 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 }
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.general.id,
+                    scale: "medium"
+                });
+
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t(this.data.general.classTitle),
+                    scale: "medium"
+                });
+            }
+
             this.draftVersionNotification = new Ext.Button({
                 text: t('draft'),
                 cls: "pimcore_draft_button",
