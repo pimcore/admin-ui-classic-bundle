@@ -196,6 +196,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
+        $requiredLanguages = $systemSettings['general']['valid_languages'];
         $dashboardHelper = new Dashboard($user);
         $customAdminEntrypoint = $this->getParameter('pimcore_admin.custom_admin_route_name');
 
@@ -206,7 +207,9 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             $adminEntrypointUrl = null;
         }
 
-        $requiredLanguages = $systemSettings['general']['required_languages'];
+        if (array_key_exists('required_languages', $systemSettings['general'])) {
+            $requiredLanguages = $systemSettings['general']['required_languages'];
+        }
 
         $settings = [
             'instanceId'          => $this->getInstanceId(),
@@ -226,7 +229,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 $systemSettings['general']['valid_languages'],
                 true
             ),
-            'requiredLanguages' => $requiredLanguages ?: $systemSettings['general']['valid_languages'],
+            'requiredLanguages' => $requiredLanguages,
 
             // flags
             'showCloseConfirmation'          => true,
