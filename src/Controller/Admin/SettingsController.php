@@ -369,6 +369,12 @@ class SettingsController extends AdminAbstractController
         $this->checkPermission('system_settings');
         $config = $config->getSystemSettingsConfig();
 
+        // If required languages is empty it's the same as if all langauges are required. Therefore, we
+        // need to overwrite the value with the valid languages value to have all languages required
+        if (empty($config['general']['required_languages']) === true) {
+            $config['general']['required_languages'] = $config['general']['valid_languages'];
+        }
+
         $valueArray = [
             'general' => $config['general'],
             'documents' => $config['documents'],
@@ -1283,7 +1289,7 @@ class SettingsController extends AdminAbstractController
         $algorithms = hash_algos();
         foreach ($algorithms as $algorithm) {
             $options[] = [
-                'key' => $algorithm,
+                'key' => $algorithm . ' (' . $this->translator->trans('deprecated', [], 'admin') . ')',
                 'value' => $algorithm,
             ];
         }

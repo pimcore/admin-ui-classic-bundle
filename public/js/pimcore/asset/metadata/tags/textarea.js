@@ -37,19 +37,10 @@ pimcore.asset.metadata.tags.textarea = Class.create(pimcore.asset.metadata.tags.
     },
 
     getGridColumnEditor: function(field) {
-        var editorConfig = {};
+        if (field.type == 'textarea') {
+            const editorConfig = this.initEditorConfig(field);
 
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
-
-        // TEXTAREA
-        if (field.type == "textarea") {
-           return new Ext.form.TextArea(editorConfig);
+            return new Ext.form.TextArea(editorConfig);
         }
     },
 

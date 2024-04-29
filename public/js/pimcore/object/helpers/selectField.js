@@ -47,8 +47,10 @@ pimcore.object.helpers.selectField = {
             store: this.getSelectOptionsStore(),
             listeners: {
                 change: function (comboBox, newValue) {
-                    optionsProviderClass.setValue(pimcore.settings.select_options_provider_class);
-                    optionsProviderData.setValue(newValue);
+                    if (newValue !== null){
+                        optionsProviderClass.setValue(pimcore.settings.select_options_provider_class);
+                        optionsProviderData.setValue(newValue);
+                    }
                 }
             }
         });
