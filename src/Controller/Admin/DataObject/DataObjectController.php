@@ -15,7 +15,6 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Carbon\Carbon;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
