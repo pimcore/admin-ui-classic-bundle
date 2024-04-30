@@ -161,7 +161,7 @@ pimcore.object.tags.inputQuantityValue = Class.create(pimcore.object.tags.abstra
     },
 
     getCellEditValue: function () {
-        var value = this.getValue();
+        let value = this.getValue();
         value["unitAbbr"] = this.unitField.getRawValue();
         return value;
       },
