@@ -135,6 +135,7 @@ pimcore.object.tags.inputQuantityValue = Class.create(pimcore.object.tags.abstra
         }.bind(this, field.key);
 
         return {
+            getEditor: this.getWindowCellEditor.bind(this, field),
             text: t(field.label),
             sortable:true,
             dataIndex:field.key,
@@ -158,6 +159,12 @@ pimcore.object.tags.inputQuantityValue = Class.create(pimcore.object.tags.abstra
             value: this.inputField.getValue()
         };
     },
+
+    getCellEditValue: function () {
+        var value = this.getValue();
+        value["unitAbbr"] = this.unitField.getRawValue();
+        return value;
+      },
 
     getName: function () {
         return this.fieldConfig.name;
