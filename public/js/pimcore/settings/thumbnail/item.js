@@ -855,6 +855,38 @@ pimcore.settings.thumbnail.items = {
         return item;
     },
 
+    itemMirror: function (panel, data, getName) {
+        const niceName = t("mirror");
+        if (typeof getName != "undefined" && getName) {
+            return niceName;
+        }
+
+        if (typeof data == "undefined") {
+            data = {};
+        }
+        const myId = Ext.id();
+
+        return new Ext.form.FormPanel({
+            id: myId,
+            style: "margin-top: 10px",
+            border: true,
+            bodyStyle: "padding: 10px;",
+            tbar: this.getTopBar(niceName, myId, panel),
+            items: [{
+                xtype: 'combo',
+                name: "mode",
+                fieldLabel: t("mode"),
+                width: 210,
+                store: [["horizontal", t("horizontal")], ["vertical", t("vertical")]],
+                value: data.mode
+            }, {
+                xtype: "hidden",
+                name: "type",
+                value: "mirror"
+            }]
+        });
+    },
+
     itemSetBackgroundColor: function (panel, data, getName) {
 
         var niceName = t("setbackgroundcolor");
