@@ -1,4 +1,4 @@
-name: "Static Analysis"
+name: "Codeception Tests"
 
 on:
     schedule:
@@ -7,9 +7,6 @@ on:
         branches:
             - "[0-9]+.[0-9]+"
             - "[0-9]+.x"
-        paths-ignore:
-            - 'doc/**'
-            - 'public/**'
     push:
         branches:
             - "[0-9]+.[0-9]+"
@@ -17,5 +14,8 @@ on:
             - "*_actions"
 
 jobs:
-    static-analysis:
-        uses: pimcore/workflows-collection-public/.github/workflows/reusable-static-analysis-public.yaml@main
+    codeception-tests:
+        uses: pimcore/workflows-collection-public/.github/workflows/reusable-codeception-tests-public.yaml@main
+        with:
+            APP_ENV: test
+            PIMCORE_TEST: 1
