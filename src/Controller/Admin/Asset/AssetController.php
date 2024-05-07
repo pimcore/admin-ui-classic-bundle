@@ -1461,7 +1461,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             }
         }
 
-        return match($scanStatus) {
+        return match ($scanStatus) {
             Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
             Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
             default => null,

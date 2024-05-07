@@ -1074,7 +1074,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
             $result[0]->clear();
             $result[0]->destroy();
-
         } else {
             $viewParams['image1'] = base64_encode(file_get_contents($fromImageFile));
             $viewParams['image2'] = base64_encode(file_get_contents($toImageFile));

@@ -688,13 +688,11 @@ class ElementController extends AdminAbstractController
                 $filters = $this->decodeJson($filterRequires);
 
                 foreach ($filters as $filter) {
-
                     if ($filter['type'] == 'string') {
                         $value = ($filter['value']??'');
                     }
 
                     $elements = $element->getDependencies()->getFilterRequiresByPath($offset, $limit, $value);
-
                 }
 
                 $result = [
@@ -703,7 +701,7 @@ class ElementController extends AdminAbstractController
                     'requires' => [],  // Initialize 'requires' as an empty array
                 ];
 
-                if(count($elements) > 0) {
+                if (count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiresForFrontend($elements);
                     $result['total'] = count($result['requires']);
 
@@ -711,7 +709,6 @@ class ElementController extends AdminAbstractController
                 } else {
                     return $this->adminJson($elements);
                 }
-
             }
 
             if ($element instanceof Model\Element\ElementInterface) {
@@ -750,13 +747,11 @@ class ElementController extends AdminAbstractController
                 $filters = $this->decodeJson($filterRequiredBy);
 
                 foreach ($filters as $filter) {
-
                     if ($filter['type'] == 'string') {
                         $value = ($filter['value']??'');
                     }
 
                     $elements = $element->getDependencies()->getFilterRequiredByPath($offset, $limit, $value);
-
                 }
 
                 $result = [
@@ -765,7 +760,7 @@ class ElementController extends AdminAbstractController
                     'requiredBy' => [], // Initialize 'requiredBy' as an empty array
                 ];
 
-                if(count($elements) > 0) {
+                if (count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiredByPathForFrontend($elements);
                     $result['total'] = count($result['requiredBy']);
 
@@ -773,7 +768,6 @@ class ElementController extends AdminAbstractController
                 } else {
                     return $this->adminJson($elements);
                 }
-
             }
 
             if ($element instanceof Model\Element\ElementInterface) {

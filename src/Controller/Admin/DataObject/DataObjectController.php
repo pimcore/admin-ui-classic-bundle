@@ -384,7 +384,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             try {
                 $this->getDataForObject($object, $objectFromVersion);
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $object = $objectFromDatabase;
                 $this->getDataForObject($object, false);
             }
@@ -1326,7 +1326,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         if ($request->get('data')) {
             try {
                 $this->applyChanges($object, $this->decodeJson($request->get('data')));
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
             }
         }
