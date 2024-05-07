@@ -23,3 +23,4 @@ jobs:
             PHP_CS_FIXER_GITHUB_TOKEN: ${{ secrets.PHP_CS_FIXER_GITHUB_TOKEN }}
         with:
             head_ref: ${{ github.ref }}
+            config_file: .php-cs-fixer.dist.php

@@ -21,7 +21,7 @@ env:
 
 jobs:
     codeception-tests:
-    uses: pimcore/workflows-collection-public/.github/workflows/reusable-codeception-tests-public.yaml@main
+    uses: pimcore/workflows-collection-public/.github/workflows/reusable-codeception-tests.yaml@main
     with:
         APP_ENV: test
         PIMCORE_TEST: 1
