@@ -53,6 +53,5 @@ trait AdminStyleTrait
         if ($elementText !== null) {
             $data['text'] = $elementText;
         }
-
     }
 }

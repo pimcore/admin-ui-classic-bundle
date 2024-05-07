@@ -129,7 +129,7 @@ class MiscController extends AdminAbstractController
     public function scriptProxyAction(Request $request): Response
     {
         $storageFile = $request->get('storageFile');
-        if(!$storageFile) {
+        if (!$storageFile) {
             throw new \InvalidArgumentException('The parameter storageFile is required');
         }
 
