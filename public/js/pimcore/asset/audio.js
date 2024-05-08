@@ -63,7 +63,7 @@ pimcore.asset.audio = Class.create(pimcore.asset.asset, {
 
         items.push(this.getEditPanel());
 
-        if (this.isAllowed("publish")) {
+        if (this.isAllowed("view") || this.isAllowed("publish")) {
             items.push(this.metadata.getLayout());
         }
         if (this.isAllowed("properties")) {
