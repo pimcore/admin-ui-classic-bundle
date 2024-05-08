@@ -50,11 +50,11 @@ pimcore.asset.metadata.grid = Class.create({
                     });
                 }
             }
-            // if (this.asset.isAllowed('publish')){
-            //     this.editorLayout();
-            // }else{
-            this.viewerLayout();
-            // }
+            if (this.asset.isAllowed('publish')){
+                this.editorLayout();
+            }else{
+                this.viewerLayout();
+            }
         }
         return this.grid;
     },
@@ -62,13 +62,13 @@ pimcore.asset.metadata.grid = Class.create({
 
         this.dataProvider.setStore(this.asset.data.metadata);
 
-        let storeData = this.dataProvider.getDataAsArray();
+        const storeData = this.dataProvider.getDataAsArray();
 
-        var store = new Ext.data.Store({
+        const store = new Ext.data.Store({
             data: storeData
         });
 
-        let nameConfig = {
+        const nameConfig = {
             text: t("name"),
             dataIndex: 'name',
             renderer: Ext.util.Format.htmlEncode,
@@ -77,15 +77,13 @@ pimcore.asset.metadata.grid = Class.create({
             editable: false
         };
 
-
-        let languageConfig = {
+        const languageConfig = {
             text: t('language'),
             sortable: true,
             dataIndex: "language",
             width: 80,
             editable: false
         };
-
 
         this.grid = Ext.create('Ext.grid.Panel', {
             title: this.config.title ? this.config.title : t("custom_metadata"),
@@ -129,7 +127,7 @@ pimcore.asset.metadata.grid = Class.create({
                                 tooltip: t('open'),
                                 icon: "/bundles/pimcoreadmin/img/flat-color-icons/open_file.svg",
                                 handler: function (grid, rowIndex) {
-                                    let rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     if (typeof pimcore.asset.metadata.tags[rec.get('type')] !== "undefined") {
                                         pimcore.asset.metadata.tags[rec.get('type')].prototype.handleGridOpenAction(grid, rowIndex);
                                     }
@@ -152,14 +150,14 @@ pimcore.asset.metadata.grid = Class.create({
 
         this.dataProvider.setStore(this.asset.data.metadata);
 
-        let updateListener = function (eventType, name, language, newValue, type, config, originator) {
+        const updateListener = function (eventType, name, language, newValue, type, config, originator) {
             if (originator == this.grid.getId()) {
                 // nothing to do
                 return;
             }
-            let store = this.grid.getStore();
+            const store = this.grid.getStore();
             language = language || "";
-            var existingIndex = store.findBy(function (record, id) {
+            const existingIndex = store.findBy(function (record, id) {
                 if (record.data.name == name && record.data.language == language) {
                     return true;
                 }
@@ -171,12 +169,12 @@ pimcore.asset.metadata.grid = Class.create({
                 if (eventType == "remove") {
                     store.removeAt(existingIndex);
                 } else {
-                    let item = store.getAt(existingIndex);
+                    const item = store.getAt(existingIndex);
                     item.set("data", newValue);
                 }
 
             } else {
-                let item = {
+                const item = {
                     name: name,
                     language: language,
                     data: newValue,
@@ -188,7 +186,7 @@ pimcore.asset.metadata.grid = Class.create({
         }.bind(this);
 
 
-        var customKey = new Ext.form.TextField({
+        const customKey = new Ext.form.TextField({
             name: 'key',
             emptyText: t('name'),
             enableKeyEvents: true,
@@ -201,15 +199,15 @@ pimcore.asset.metadata.grid = Class.create({
             }
         });
 
-        var supportedTypes = pimcore.helpers.getAssetMetadataDataTypes("custom");
-        var typeStore = [];
+        const supportedTypes = pimcore.helpers.getAssetMetadataDataTypes("custom");
+        const typeStore = [];
 
         for (let i = 0; i < supportedTypes.length; i++) {
-            let type = supportedTypes[i];
+            const type = supportedTypes[i];
             typeStore.push([type, t(type)]);
         }
 
-        var customType = new Ext.form.ComboBox({
+        const customType = new Ext.form.ComboBox({
             name: "type",
             valueField: "id",
             displayField: 'name',
@@ -222,15 +220,15 @@ pimcore.asset.metadata.grid = Class.create({
             emptyText: t('type')
         });
 
-        var languagestore = [["", t("none")]];
-        var websiteLanguages = pimcore.settings.websiteLanguages;
-        var selectContent = "";
+        const languagestore = [["", t("none")]];
+        const websiteLanguages = pimcore.settings.websiteLanguages;
+        let selectContent = "";
         for (let i = 0; i < websiteLanguages.length; i++) {
             selectContent = pimcore.available_languages[websiteLanguages[i]] + " [" + websiteLanguages[i] + "]";
             languagestore.push([websiteLanguages[i], selectContent]);
         }
 
-        var customLanguage = new Ext.form.ComboBox({
+        const customLanguage = new Ext.form.ComboBox({
             name: "language",
             store: languagestore,
             editable: false,
@@ -240,7 +238,7 @@ pimcore.asset.metadata.grid = Class.create({
             emptyText: t('language')
         });
 
-        var modelName = 'pimcore.model.assetmetadata';
+        const modelName = 'pimcore.model.assetmetadata';
         if (!Ext.ClassManager.get(modelName)) {
             Ext.define(modelName, {
                     extend: 'Ext.data.Model',
@@ -253,7 +251,7 @@ pimcore.asset.metadata.grid = Class.create({
                         }, "type", {
                             name: "data",
                             convert: function (v, r) {
-                                let dataType = r.data.type;
+                                const dataType = r.data.type;
                                 if (typeof pimcore.asset.metadata.tags[dataType] !== "undefined") {
                                     if (typeof pimcore.asset.metadata.tags[dataType].prototype.convertPredefinedGridData === "function") {
                                         v = pimcore.asset.metadata.tags[dataType].prototype.convertPredefinedGridData(v, r);
@@ -283,20 +281,20 @@ pimcore.asset.metadata.grid = Class.create({
         }
 
 
-        let storeData = this.dataProvider.getDataAsArray();
+        const storeData = this.dataProvider.getDataAsArray();
 
-        var store = new Ext.data.Store({
+        const store = new Ext.data.Store({
             model: modelName,
             data: storeData,
             listeners: {
                 update: function (store, record, operation, modifiedFieldNames, details, eOpts) {
                     let newData = record.data.data;
 
-                    let oldKey = record.data.lastName + "~" + record.data.lastLanguage;
-                    let newKey = record.data.name + "~" + record.data.language;
+                    const oldKey = record.data.lastName + "~" + record.data.lastLanguage;
+                    const newKey = record.data.name + "~" + record.data.language;
 
                     if (oldKey != newKey) {
-                        let oldRecord = {
+                        const oldRecord = {
                             name: record.data.lastName,
                             language: record.data.lastLanguage
                         };
@@ -320,15 +318,13 @@ pimcore.asset.metadata.grid = Class.create({
                 }.bind(this),
                 remove: function (store, records, index, isMove, eOpts) {
                     for (let i = 0; i < records.length; i++) {
-                        let record = records[i];
-                        let key = this.dataProvider.buildKeyFromItem(record.data);
+                        const record = records[i];
                         this.dataProvider.remove(record.data, this.grid.getId());
                     }
                 }.bind(this),
                 add: function (updateListener, store, records, index, eOpts) {
                     for (let i = 0; i < records.length; i++) {
-                        let record = records[i];
-                        let key = this.dataProvider.buildKeyFromItem(record.data);
+                        const record = records[i];
                         // this.dataProvider.registerChangeListener(key, this.grid.getId(), updateListener);
                         this.dataProvider.update(record.data, record.data.data, this.grid.getId());
                     }
@@ -362,7 +358,7 @@ pimcore.asset.metadata.grid = Class.create({
             }
         });
 
-        let tbarItems = [
+        const tbarItems = [
             {
                 xtype: "tbtext",
                 text: t('add') + " &nbsp;&nbsp;"
@@ -416,7 +412,7 @@ pimcore.asset.metadata.grid = Class.create({
             );
         }
 
-        let nameConfig = {
+        const nameConfig = {
             text: t("name"),
             dataIndex: 'name',
             renderer: Ext.util.Format.htmlEncode,
@@ -432,7 +428,7 @@ pimcore.asset.metadata.grid = Class.create({
             };
         }
 
-        let languageConfig = {
+        const languageConfig = {
             text: t('language'),
             sortable: true,
             dataIndex: "language",
@@ -498,7 +494,7 @@ pimcore.asset.metadata.grid = Class.create({
                                 tooltip: t('open'),
                                 icon: "/bundles/pimcoreadmin/img/flat-color-icons/open_file.svg",
                                 handler: function (grid, rowIndex) {
-                                    let rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     if (typeof pimcore.asset.metadata.tags[rec.get('type')] !== "undefined") {
                                         pimcore.asset.metadata.tags[rec.get('type')].prototype.handleGridOpenAction(grid, rowIndex);
                                     }
@@ -586,7 +582,7 @@ pimcore.asset.metadata.grid = Class.create({
         }
 
         // check for duplicate name
-        var duplicateIndex = store.findBy(function (record, id) {
+        const duplicateIndex = store.findBy(function (record, id) {
             if (record.data.name.toLowerCase() == key.toLowerCase()) {
                 if (String(record.data.language).toLowerCase() == language.toLowerCase()) {
                     return true;
