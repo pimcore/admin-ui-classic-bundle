@@ -68,9 +68,9 @@ abstract class ElementControllerBase extends AdminAbstractController
         }
 
         if (in_array($type, $allowedTypes)) {
-            /** @var Document|Asset|AbstractObject $root */
+            /** @var Document|Asset|AbstractObject|null $root */
             $root = Service::getElementById($type, $id);
-            if ($root->isAllowed('list')) {
+            if ($root?->isAllowed('list')) {
                 return $this->adminJson($this->getTreeNodeConfig($root));
             }
 
