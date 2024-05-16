@@ -483,31 +483,53 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                 }.bind(this, data)
             }));
 
-            menu.add(new Ext.menu.Item({
-                text: t('delete'),
-                iconCls: "pimcore_icon_delete",
-                handler: function (data) {
-                    var ids = [];
-                    var selectedRows = grid.getSelectionModel().getSelection();
-                    for (var i = 0; i < selectedRows.length; i++) {
-                        ids.push(selectedRows[i].data.id);
-                    }
-                    ids = ids.join(',');
+            const ids = [];
+            const paths = [];
+            for (let i = 0; i < selectedRows.length; i++) {
+                if (selectedRows[i].data.permissions.delete) {
+                    paths.push(selectedRows[i].data.fullpath);
+                    ids.push(selectedRows[i].data.id);
+                }
+            }
+            if (ids.length > 0) {
+                menu.add(new Ext.menu.Item({
+                    text: t('delete'),
+                    iconCls: "pimcore_icon_delete",
+                    handler: function (data) {
+                        const idsString = ids.join(',');
+                        const pathsString = paths.join(',<br>- ');
 
-                    var options = {
-                        "elementType": "object",
-                        "id": ids,
-                        "success": function () {
-                            this.getStore().reload();
-                            var tree = pimcore.globalmanager.get("layout_object_tree").tree;
-                            tree.getStore().load({
-                                node: tree.getRootNode()
+                        var options = {
+                            "elementType": "object",
+                            "id": idsString,
+                            "success": function () {
+                                this.getStore().reload();
+                                var tree = pimcore.globalmanager.get("layout_object_tree").tree;
+                                tree.getStore().load({
+                                    node: tree.getRootNode()
+                                });
+                            }.bind(this)
+                        };
+
+                        if (selectedRows.length === ids.length) {
+                            pimcore.elementservice.deleteElement(options);
+                        } else if (ids.length > 0) {
+                            Ext.MessageBox.show({
+                                title: t('delete'),
+                                msg: t('not_all_selected_can_be_deleted') + ':<br><b>- ' + pathsString + '</b>',
+                                buttons: Ext.Msg.OKCANCEL,
+                                icon: Ext.MessageBox.INFO,
+                                fn: function (options, button) {
+                                    if (button === "ok") {
+                                        pimcore.elementservice.deleteElement(options);
+                                    }
+                                }.bind(this, options)
                             });
-                        }.bind(this)
-                    };
-                    pimcore.elementservice.deleteElement(options);
-                }.bind(grid, data)
-            }));
+                        }
+
+                    }.bind(grid, data)
+                }));
+            }
         }
 
         const prepareOnRowContextmenu = new CustomEvent(pimcore.events.prepareOnRowContextmenu, {
