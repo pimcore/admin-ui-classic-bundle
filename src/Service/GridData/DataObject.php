@@ -238,10 +238,19 @@ class DataObject extends Element
      *
      * @return \stdClass value and objectid where the value comes from
      */
-    private static function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null, ClassDefinition\Data $fieldDefinition = null, array $context = [], array $brickDescriptor = null): \stdClass
+    private static function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null, ClassDefinition\Data $fieldDefinition = null, array $context = [], array $brickDescriptor = null, string $requestedLanguage = null): \stdClass
     {
         $getter = 'get' . ucfirst($key);
-        $value = $object->$getter();
+        $value = null;
+
+        try{
+            $value = $object->$getter($requestedLanguage ?? AdminTool::getCurrentUser()?->getLanguage());
+        } catch (\Throwable) {
+        }
+
+        if (empty($value)){
+            $value = $object->$getter();
+        }
         if (!empty($value) && !empty($brickType)) {
             $getBrickType = 'get' . ucfirst($brickType);
             $value = $value->$getBrickType();
