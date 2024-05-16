@@ -134,7 +134,7 @@ class DataObject extends Element
                         if (in_array($key, Concrete::SYSTEM_COLUMN_NAMES)) {
                             $data[$dataKey] = $object->$getter();
                         } else {
-                            $valueObject = self::getValueForObject($object, $key, $brickType, $brickKey, $def, $context, $brickDescriptor);
+                            $valueObject = self::getValueForObject($object, $key, $brickType, $brickKey, $def, $context, $brickDescriptor, $requestedLanguage);
                             $data['inheritedFields'][$dataKey] = ['inherited' => $valueObject->objectid != $object->getId(), 'objectid' => $valueObject->objectid];
 
                             if ($csvMode || method_exists($def, 'getDataForGrid')) {
