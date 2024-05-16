@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 
 namespace Pimcore\Bundle\AdminBundle\Service\GridData;
+
 use Pimcore\Model;
 use Pimcore\Model\Asset\MetaData\ClassDefinition\Data\Data;
 use Pimcore\Model\Element\Service;
@@ -89,7 +90,6 @@ class Asset extends Element
         return $data;
     }
 
-
     /**
      *
      *
@@ -121,5 +121,4 @@ class Asset extends Element
 
         return $thumbnailUrl;
     }
-
 }

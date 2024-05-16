@@ -17,19 +17,19 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Service\GridData;
 
 use Pimcore\Localization\LocaleServiceInterface;
+use Pimcore\Model;
 use Pimcore\Model\DataObject\AbstractObject;
+use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Model\DataObject\Classificationstore;
 use Pimcore\Model\DataObject\Concrete;
+use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\DataObject\Service;
 use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Pimcore\Model;
-use Pimcore\Model\DataObject\ClassDefinition;
-use Pimcore\Model\DataObject\Objectbrick;
+
 class DataObject extends Element
 {
-
     /**
      * Language only user for classification store !!!
      *
@@ -233,7 +233,6 @@ class DataObject extends Element
         return [];
     }
 
-
     /**
      * gets value for given object and getter, including inherited values
      *
@@ -349,6 +348,4 @@ class DataObject extends Element
 
         return self::getInheritedData($parent, $key, $requestedLanguage);
     }
-
-
 }

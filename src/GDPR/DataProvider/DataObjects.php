@@ -20,7 +20,6 @@ namespace Pimcore\Bundle\AdminBundle\GDPR\DataProvider;
 use Pimcore\Bundle\AdminBundle\Helper\QueryParams;
 use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Model\Asset;
-use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\DataObject\Data\ElementMetadata;

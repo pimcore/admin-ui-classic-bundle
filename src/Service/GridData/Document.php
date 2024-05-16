@@ -15,6 +15,7 @@ declare(strict_types=1);
  */
 
 namespace Pimcore\Bundle\AdminBundle\Service\GridData;
+
 use Pimcore\Model;
 
 class Document extends Element
@@ -39,6 +40,4 @@ class Document extends Element
 
         return $data;
     }
-
-
 }
