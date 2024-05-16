@@ -243,12 +243,12 @@ class DataObject extends Element
         $getter = 'get' . ucfirst($key);
         $value = null;
 
-        try{
+        try {
             $value = $object->$getter($requestedLanguage ?? AdminTool::getCurrentUser()?->getLanguage());
         } catch (\Throwable) {
         }
 
-        if (empty($value)){
+        if (empty($value)) {
             $value = $object->$getter();
         }
         if (!empty($value) && !empty($brickType)) {
