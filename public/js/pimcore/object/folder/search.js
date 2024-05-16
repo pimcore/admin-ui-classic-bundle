@@ -497,7 +497,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                     iconCls: "pimcore_icon_delete",
                     handler: function (data) {
                         const idsString = ids.join(',');
-                        const pathsString = paths.join(',<br>- ');
+                        const pathsString = paths.join('</li><li>');
 
                         var options = {
                             "elementType": "object",
@@ -516,7 +516,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                         } else if (ids.length > 0) {
                             Ext.MessageBox.show({
                                 title: t('delete'),
-                                msg: t('not_all_selected_can_be_deleted') + ':<br><b>- ' + pathsString + '</b>',
+                                msg: t('not_all_selected_can_be_deleted') + ':<br><ul><li>' + pathsString + '</li></ul>',
                                 buttons: Ext.Msg.OKCANCEL,
                                 icon: Ext.MessageBox.INFO,
                                 fn: function (options, button) {
