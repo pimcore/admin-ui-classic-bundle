@@ -3308,7 +3308,7 @@ pimcore.helpers.isComponentAsChildAllowed = function (parentNode, childNode) {
 
     if (allowedChildren[parentType] &&
         allowedChildren[parentType].includes(childType) ||
-        (allowedChildren[parentType].includes('data') && child.data.type === 'data')
+        (allowedChildren[parentType].includes('data') && childNode.data.type === 'data')
     ) {
         return true
     }
