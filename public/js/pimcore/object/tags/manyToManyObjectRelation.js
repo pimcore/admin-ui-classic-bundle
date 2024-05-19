@@ -733,7 +733,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {
                     afterrender: function (gridview) {
-                        this.requestNicePathData(this.store.data);
+                        this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
             }
