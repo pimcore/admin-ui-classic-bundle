@@ -209,6 +209,20 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                 value: t('non_owner_description'),
                 cls: "pimcore_extra_label_bottom"
             }));
+
+            if(this.context == 'class') {
+                this.specificPanel.add({
+                    xtype: "checkbox",
+                    boxLabel: t("enable_admin_async_load"),
+                    name: "optimizedAdminLoading",
+                    value: this.datax.optimizedAdminLoading
+                });
+                this.specificPanel.add({
+                    xtype: "displayfield",
+                    hideLabel: true,
+                    value: t('async_loading_warning_block'),
+                    cls: "pimcore_extra_label_bottom"
+                });}
         }
 
         return this.layout;
@@ -228,7 +242,8 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
                     pathFormatterClass: source.datax.pathFormatterClass,
                     ownerClassName: source.datax.ownerClassName,
                     ownerFieldName: source.datax.ownerFieldName,
-                    visibleFields: source.datax.visibleFields
+                    visibleFields: source.datax.visibleFields,
+                    optimizedAdminLoading: source.datax.optimizedAdminLoading,
                 });
         }
     }
