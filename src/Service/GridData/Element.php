@@ -25,7 +25,6 @@ use Pimcore\Model\Element\Service;
  */
 abstract class Element
 {
-
     public static function gridElementData(ElementInterface $element): array
     {
         $data = [
