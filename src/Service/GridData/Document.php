@@ -18,13 +18,12 @@ namespace Pimcore\Bundle\AdminBundle\Service\GridData;
 
 use Pimcore\Model;
 
+/**
+ *
+ * @internal
+ */
 class Document extends Element
 {
-    /**
-     *
-     *
-     * @internal
-     */
     public static function getData(Model\Document $document): array
     {
         $data = self::gridElementData($document);

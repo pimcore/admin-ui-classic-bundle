@@ -28,14 +28,14 @@ use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
+/**
+ *
+ * @internal
+ */
 class DataObject extends Element
 {
     /**
      * Language only user for classification store !!!
-     *
-     *
-     *
-     * @internal
      */
     public static function getData(AbstractObject $object, array $fields = null, string $requestedLanguage = null, array $params = []): array
     {

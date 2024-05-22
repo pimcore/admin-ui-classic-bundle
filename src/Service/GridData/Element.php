@@ -19,14 +19,13 @@ namespace Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 
+/**
+ *
+ * @internal
+ */
 abstract class Element
 {
-    /**
-     * /**
-     * @internal
-     *
-     *
-     */
+
     public static function gridElementData(ElementInterface $element): array
     {
         $data = [

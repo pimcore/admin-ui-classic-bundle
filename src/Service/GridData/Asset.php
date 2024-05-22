@@ -21,13 +21,12 @@ use Pimcore\Model\Asset\MetaData\ClassDefinition\Data\Data;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Exception\UnsupportedException;
 
+/**
+ *
+ * @internal
+ */
 class Asset extends Element
 {
-    /**
-     *
-     *
-     * @internal
-     */
     public static function getData(Model\Asset $asset, array $fields = null, string $requestedLanguage = null, array $params = []): array
     {
         $data = self::gridElementData($asset);
@@ -90,11 +89,6 @@ class Asset extends Element
         return $data;
     }
 
-    /**
-     *
-     *
-     * @internal
-     */
     public static function getPreviewThumbnail(Model\Asset $asset, array $params = [], bool $onlyMethod = false): ?string
     {
         $thumbnailMethod = '';
