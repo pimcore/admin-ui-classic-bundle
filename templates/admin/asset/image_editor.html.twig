@@ -3,6 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
     <base href="/bundles/pimcoreadmin/js/lib/minipaint/" />
     {{ encore_entry_script_tags('imageEditor', null, 'pimcoreAdminImageEditor') }}
 </head>
@@ -169,19 +174,18 @@
         });
     }
 
-    function removeHref(className = 'main_menu') {
+    function removeHref() {
         const allLinkElements = document.getElementsByTagName('nav')[0].querySelectorAll("a");
         for (let a of allLinkElements) {
             if (a.getAttribute('href') === 'javascript:void(0)') {
+                a.classList.add('cursor-pointer');
                 a.removeAttribute('href');
             }
         }
     }
     
     window.addEventListener("load", function(e) {
-        loadEditor(e).then(function() {
-            console.log("editor loaded");
-        });
+        loadEditor(e);
     }, false);
 
 
