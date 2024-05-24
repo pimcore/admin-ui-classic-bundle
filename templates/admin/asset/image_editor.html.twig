@@ -155,6 +155,11 @@
         const spanElement = document.createElement('span');
 
         aElement.setAttribute('id', 'save_button');
+        aElement.setAttribute('role', 'menu_item');
+        aElement.setAttribute('tabindex', '-1');
+        aElement.setAttribute('aria-haspopup', 'false');
+        aElement.classList.add('cursor-pointer');
+        aElement.setAttribute('aria-expanded', 'false');
         spanElement.setAttribute('class', 'name trn');
         spanElement.innerText = parent.t('save');
 
