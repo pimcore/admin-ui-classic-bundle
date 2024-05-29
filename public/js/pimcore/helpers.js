@@ -1036,7 +1036,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         filename = "Filedata";
     }
 
-    var uploadWindowCompatible = new Ext.Window({
+    const uploadWindowCompatible = new Ext.Window({
         autoHeight: true,
         title: t('upload'),
         closeAction: 'close',
@@ -1044,7 +1044,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         modal: true
     });
 
-    var items = [];
+    const items = [];
 
     if (description) {
         items.push({
@@ -1065,6 +1065,9 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         },
         listeners: {
             change: function (fileUploadField) {
+                let activeUploads = 0;
+                const filesCount = fileUploadField.fileInputEl.dom.files.length;
+
                 const win = new Ext.Window({
                     items: [],
                     modal: true,
@@ -1076,17 +1079,14 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                 });
                 win.show();
 
-                let finishedErrorHandler = function (e) {
-                    this.activeUploads--;
+                const finishedErrorHandler = function (pbar) {
+                    activeUploads--;
                     win.remove(pbar);
 
-                    if(this.activeUploads < 1) {
+                    if (activeUploads < 1) {
                         win.close();
                     }
                 }.bind(this);
-
-                let activeUploads = 0;
-                const filesCount = fileUploadField.fileInputEl.dom.files.length;
 
                 Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
                     if (file.size > pimcore.settings["upload_max_filesize"]) {
@@ -1094,8 +1094,8 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         return;
                     }
 
-                    let pbar = new Ext.ProgressBar({
-                        width:465,
+                    const pbar = new Ext.ProgressBar({
+                        width: 465,
                         text: file.name,
                         style: "margin-bottom: 5px"
                     });
@@ -1112,19 +1112,22 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
                     pbar.updateProgress(percentComplete, progressText);
 
-                    let data = new FormData();
+                    const data = new FormData();
                     data.append(filename, file);
                     data.append("filename", file.name);
                     data.append("csrfToken", pimcore.settings['csrfToken']);
 
-                    let request = new XMLHttpRequest();
-                    let res = {
+                    const request = new XMLHttpRequest();
+                    const res = {
                         'response': request
                     };
 
-                    let successWrapper = function (ev) {
-                        const data = JSON.parse(request.responseText);
-                        if(ev.currentTarget.status < 400 && data.success === true) {
+                    const successWrapper = function (ev) {
+                        let data = {success: false};
+                        try {
+                            data = JSON.parse(request.responseText);
+                        } catch (e) {}
+                        if (ev.currentTarget.status < 400 && data.success === true) {
                             success(res);
                             if (activeUploads == filesCount) {
                                 win.close();
@@ -1132,13 +1135,13 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                             }
                         } else {
                             failure(res);
-                            finishedErrorHandler();
+                            finishedErrorHandler(pbar);
                         }
                     };
 
-                    let errorWrapper = function (ev) {
+                    const errorWrapper = function (ev) {
                         failure(res);
-                        finishedErrorHandler();
+                        finishedErrorHandler(pbar);
                     };
 
                     request.addEventListener("load", successWrapper, false);
@@ -1149,7 +1152,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
 
                 });
             },
-            afterrender:function(cmp){
+            afterrender: function(cmp){
                 cmp.fileInputEl.set({
                     multiple:'multiple'
                 });
@@ -1157,8 +1160,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         }
     });
 
-
-    var uploadForm = new Ext.form.FormPanel({
+    const uploadForm = new Ext.form.FormPanel({
         fileUpload: true,
         width: 500,
         bodyStyle: 'padding: 10px;',
@@ -3294,7 +3296,7 @@ pimcore.helpers.reloadUserImage = function (userId) {
     var image = Routing.generate('pimcore_admin_user_getimage', {id: userId, '_dc': Ext.Date.now()});
 
     if (pimcore.currentuser.id == userId) {
-        Ext.get("pimcore_notification").query('img')[0].src = image;
+        Ext.get("pimcore_avatar").query('img')[0].src = image;
     }
 
     if (Ext.getCmp("pimcore_user_image_" + userId)) {

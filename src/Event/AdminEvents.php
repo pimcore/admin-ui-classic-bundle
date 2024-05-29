@@ -323,6 +323,20 @@ class AdminEvents
     const DOCUMENT_TREE_GET_CHILDREN_BY_ID_PRE_SEND_DATA = 'pimcore.admin.document.treeGetChildrenById.preSendData';
 
     /**
+     * Fired before the edit lock is handled.
+     *
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\DataObjectController
+     * Arguments:
+     *  - data | array | editLock behaviour, this can be modified
+     *  - object | AbstractObject | the current object
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const OBJECT_GET_IS_LOCKED = 'pimcore.admin.dataobject.get.isLocked';
+
+    /**
      * Fired before the request params are parsed.
      *
      * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\DataObjectController

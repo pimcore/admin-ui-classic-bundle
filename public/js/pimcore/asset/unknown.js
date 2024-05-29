@@ -61,7 +61,7 @@ pimcore.asset.unknown = Class.create(pimcore.asset.asset, {
         var items = [];
         var user = pimcore.globalmanager.get("user");
 
-        if (this.isAllowed("publish")) {
+        if (this.isAllowed("view") || this.isAllowed("publish")) {
             items.push(this.metadata.getLayout());
         }
         if (this.isAllowed("properties")) {

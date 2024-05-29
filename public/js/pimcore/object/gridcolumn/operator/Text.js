@@ -39,7 +39,7 @@ pimcore.object.gridcolumn.operator.text = Class.create(pimcore.object.gridcolumn
         } else {
 
             //For building up operator list
-            var configAttributes = { type: this.type, class: this.class};
+            var configAttributes = { type: this.type, class: this.class, label: this.defaultText};
 
             var node = {
                 draggable: true,
@@ -63,7 +63,7 @@ pimcore.object.gridcolumn.operator.text = Class.create(pimcore.object.gridcolumn
             leaf: true,
             isOperator: true,
             configAttributes: {
-                label: null,
+                label: this.defaultText,
                 type: this.type,
                 class: this.class
             }

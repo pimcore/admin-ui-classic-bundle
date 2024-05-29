@@ -15,6 +15,7 @@ permissions:
 jobs:
     poeditor:
         runs-on: ubuntu-latest
+        if: ${{ github.repository == 'pimcore/admin-ui-classic-bundle' }}
         steps:
             -   name: Trigger workflow in pimcore/poeditor-export-action
                 env:

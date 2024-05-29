@@ -64,6 +64,15 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     use DataObjectActionsTrait;
     use UserNameTrait;
 
+    /** On active edit lock answer with editlock response */
+    const TASK_RESPONSE = 'response';
+
+    /** On active edit lock overwrite with new user */
+    const TASK_OVERWRITE = 'overwrite';
+
+    /** On active edit lock keep existing entry */
+    const TASK_KEEP = 'keep';
+
     protected DataObject\Service $_objectService;
 
     private array $objectData = [];
@@ -295,10 +304,25 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         // check for lock
         if ($object->isAllowed('save') || $object->isAllowed('publish') || $object->isAllowed('unpublish') || $object->isAllowed('delete')) {
             if (Element\Editlock::isLocked($objectId, 'object', $request->getSession()->getId())) {
-                return $this->getEditLockResponse($objectId, 'object');
-            }
+                //Hook for modifying editlock handling - e.g. no editLockResponse but keep old lock
+                $lockData = [
+                    'task' => self::TASK_RESPONSE,
+                ];
+                $event = new GenericEvent($this, [
+                    'data' => $lockData,
+                    'object' => $object,
+                ]);
+                $eventDispatcher->dispatch($event, AdminEvents::OBJECT_GET_IS_LOCKED);
+                $lockData = $event->getArgument('data');
 
-            Element\Editlock::lock($request->get('id'), 'object', $request->getSession()->getId());
+                if ($lockData['task'] === self::TASK_RESPONSE) {
+                    return $this->getEditLockResponse($objectId, 'object');
+                } elseif ($lockData['task'] === self::TASK_OVERWRITE) {
+                    Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
+                }
+            } else {
+                Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
+            }
         }
 
         // we need to know if the latest version is published or not (a version), because of lazy loaded fields in $this->getDataForObject()
@@ -1308,11 +1332,16 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             // Mark fields that have changed as dirty
             if ($request->get('task') !== 'autoSave' && $request->get('task') !== 'unpublish') {
-                $fields = array_keys($object->getClass()->getFieldDefinitions());
-                foreach ($fields as $field) {
-                    $getter  ='get' . ucfirst($field);
-                    if ($object->$getter() !== $objectFromDatabase->$getter()) {
-                        $object->markFieldDirty($field);
+                foreach ($object->getClass()->getFieldDefinitions() as $fieldName => $fieldDefinition) {
+                    $getter = 'get' . ucfirst($fieldName);
+                    $oldValue = $objectFromDatabase->$getter();
+                    $newValue = $object->$getter();
+                    $isEqual = $fieldDefinition instanceof DataObject\ClassDefinition\Data\EqualComparisonInterface
+                        ? $fieldDefinition->isEqual($oldValue, $newValue)
+                        : $oldValue === $newValue;
+
+                    if (!$isEqual) {
+                        $object->markFieldDirty($fieldName);
                     }
                 }
             }

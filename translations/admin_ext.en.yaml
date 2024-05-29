@@ -213,6 +213,7 @@ setbackgroundcolor: Set Backgroundcolor
 setbackgroundimage: Set Background Image
 roundcorners: Round Corners
 rotate: Rotate
+mirror: Mirror
 color: Color
 angle: Angle
 label_width: Label Width
@@ -324,6 +325,7 @@ min_value: min. Value
 max_value: max. Value
 increment: Increment Step
 vertical: Vertical
+horizontal: Horizontal
 country: Country
 zoom_level: Zoom level
 map_type: Map type
@@ -699,3 +701,9 @@ classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Seconds
 system_requirements_check: System-Requirements Check
+required_language: 'Mandatory language'
+rgbaColor: RGBA Color
+booleanSelect: Boolean Select
+quantityValue: Quantity Value
+inputQuantityValue: Input Quantity Value
+calculatedValue: Calculated Value
