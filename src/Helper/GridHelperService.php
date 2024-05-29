@@ -28,10 +28,10 @@ use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\User;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
@@ -40,8 +40,7 @@ class GridHelperService
 {
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
 
     }
 
@@ -642,7 +641,7 @@ class GridHelperService
                 if ($condition !== null) {
                     $conditionFilters[] = $condition;
                 }
-                #$conditionFilters[] = 'oo_id IN (SELECT id FROM search_backend_data WHERE maintype = "object" AND MATCH (`data`,`properties`) AGAINST (' . $list->quote($query) . ' IN BOOLEAN MODE))';
+                //$conditionFilters[] = 'oo_id IN (SELECT id FROM search_backend_data WHERE maintype = "object" AND MATCH (`data`,`properties`) AGAINST (' . $list->quote($query) . ' IN BOOLEAN MODE))';
             }
         }
 

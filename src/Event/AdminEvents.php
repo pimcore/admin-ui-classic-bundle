@@ -151,7 +151,6 @@ class AdminEvents
      */
     const OBJECT_LIST_AFTER_LIST_LOAD = 'pimcore.admin.object.list.afterListLoad';
 
-
     /**
      * Allows to implement an additional condition for the object list when the search field within the grid is used.
      *
