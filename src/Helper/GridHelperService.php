@@ -635,13 +635,15 @@ class GridHelperService
                     'condition' => null,
                     'list' => $list,
                 ]);
-                $this->eventDispatcher->dispatch($handleFullTextQueryEvent, AdminEvents::OBJECT_LIST_HANDLE_FULLTEXT_QUERY);
+                $this->eventDispatcher->dispatch(
+                    $handleFullTextQueryEvent,
+                    AdminEvents::OBJECT_LIST_HANDLE_FULLTEXT_QUERY
+                );
 
                 $condition = $handleFullTextQueryEvent->getArgument('condition');
                 if ($condition !== null) {
                     $conditionFilters[] = $condition;
                 }
-                //$conditionFilters[] = 'oo_id IN (SELECT id FROM search_backend_data WHERE maintype = "object" AND MATCH (`data`,`properties`) AGAINST (' . $list->quote($query) . ' IN BOOLEAN MODE))';
             }
         }
 
