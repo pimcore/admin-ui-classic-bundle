@@ -174,36 +174,6 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 this.pagingtoolbar.moveFirst();
             }.bind(this);
 
-            this.searchField = new Ext.form.TextField(
-                {
-                    name: "query",
-                    width: 200,
-                    hideLabel: true,
-                    enableKeyEvents: true,
-                    value: this.searchFilter,
-                    triggers: {
-                        search: {
-                            weight: 1,
-                            cls: 'x-form-search-trigger',
-                            scope: 'this',
-                            handler: function(field, trigger, e) {
-                                this.searchQuery(field);
-                            }.bind(this)
-                        }
-                    },
-                    listeners: {
-                        "change": function() {
-                            this.saveColumnConfigButton.show();
-                        }.bind(this),
-                        "keydown" : function (field, key) {
-                            if (key.getKey() == key.ENTER) {
-                                this.searchQuery(field);
-                            }
-                        }.bind(this)
-                    }
-                }
-            );
-
             this.languageInfo = new Ext.Toolbar.TextItem();
 
             this.toolbarFilterInfo = new Ext.Button({
@@ -229,7 +199,6 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 }.bind(this)
             });
 
-            this.store.getProxy().setExtraParam("query", this.searchFilter);
 
             var selectObjectOptions = Ext.create('Ext.data.Store', {
                 fields: ['name', 'value'],
@@ -329,18 +298,56 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
 
         this.buildColumnConfigMenu();
 
+        let items = [
+            this.languageInfo, "-",
+            this.toolbarFilterInfo,
+            this.clearFilterButton, "->",
+            this.selectObjectType, "-",
+            this.checkboxOnlyDirectChildren, "-",
+            this.exportButton, "-",
+            this.columnConfigButton,
+            this.saveColumnConfigButton
+        ];
+
+        if(pimcore.helpers.hasSearchImplementation()) {
+            this.searchField = new Ext.form.TextField(
+                {
+                    name: "query",
+                    width: 200,
+                    hideLabel: true,
+                    enableKeyEvents: true,
+                    value: this.searchFilter,
+                    triggers: {
+                        search: {
+                            weight: 1,
+                            cls: 'x-form-search-trigger',
+                            scope: 'this',
+                            handler: function (field, trigger, e) {
+                                this.searchQuery(field);
+                            }.bind(this)
+                        }
+                    },
+                    listeners: {
+                        "change": function () {
+                            this.saveColumnConfigButton.show();
+                        }.bind(this),
+                        "keydown": function (field, key) {
+                            if (key.getKey() == key.ENTER) {
+                                this.searchQuery(field);
+                            }
+                        }.bind(this)
+                    }
+                }
+            );
+
+            this.store.getProxy().setExtraParam("query", this.searchFilter);
+
+            items.unshift(this.searchField, "-");
+        }
+
         var toolbar = new Ext.Toolbar({
             scrollable: "x",
-            items: [this.searchField, "-",
-                this.languageInfo, "-",
-                this.toolbarFilterInfo,
-                this.clearFilterButton, "->",
-                this.selectObjectType, "-",
-                this.checkboxOnlyDirectChildren, "-",
-                this.exportButton, "-",
-                this.columnConfigButton,
-                this.saveColumnConfigButton
-            ]
+            items: items
         });
 
         return toolbar;
