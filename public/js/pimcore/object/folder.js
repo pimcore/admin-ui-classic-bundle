@@ -397,6 +397,15 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                 buttons.push(searchAndMoveConfig);
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.general.id,
+                    scale: "medium"
+                });
+            }
+
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('object', this.id, this, buttons);
 

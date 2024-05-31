@@ -336,14 +336,19 @@ pimcore.document.settings_abstract = Class.create({
     },
 
     getStaticGeneratorFields: function (collapsed) {
+        let lastGenerated = '';
 
         if(collapsed !== true) {
             collapsed = false;
         }
 
-        var date = new Date(this.document.data.staticLastGenerated * 1000);
-        date = Ext.Date.format(date, "Y-m-d H:i");
-
+        if (this.document.data.staticLastGenerated) {
+            const date = new Date(this.document.data.staticLastGenerated * 1000);
+            lastGenerated = Ext.Date.format(date, "Y-m-d H:i");
+        }else{
+            lastGenerated = t('never');
+        }
+        
         return {
             xtype:'fieldset',
             title: t('static_generator'),
@@ -371,7 +376,7 @@ pimcore.document.settings_abstract = Class.create({
                     width: 400,
                 }, {
                     xtype: "displayfield",
-                    value: t("last_generated") + ": " + date,
+                    value: t("last_generated") + ": " + lastGenerated,
                     hidden: !this.document.data.staticGeneratorEnabled
                 }
             ]

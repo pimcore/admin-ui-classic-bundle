@@ -26,7 +26,7 @@ pimcore.document.editables.numeric = Class.create(pimcore.document.editable, {
 
         this.config.value = data;
         this.config.name = id + "_editable";
-        this.config.decimalPrecision = 20;
+        this.config.decimalPrecision = config.decimalPrecision ?? 20;
         this.config.mouseWheelEnabled = false;
 
         if(this.config["required"]) {

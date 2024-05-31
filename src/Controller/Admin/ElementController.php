@@ -652,10 +652,13 @@ class ElementController extends AdminAbstractController
     {
         $elementId = $request->request->getInt('id');
         $elementModificationdate = $request->request->get('date');
+        $elementType = $request->request->get('type');
 
         $versions = new Model\Version\Listing();
-        $versions->setCondition('cid = ' . $versions->quote($elementId) . ' AND date <> ' . $versions->quote($elementModificationdate));
-
+        $versions->setCondition('cid = ' . $versions->quote($elementId) .
+            ' AND date <> ' . $versions->quote($elementModificationdate) .
+            ' AND ctype = ' . $versions->quote($elementType)
+        );
         foreach ($versions->load() as $vkey => $version) {
             $version->delete();
         }
