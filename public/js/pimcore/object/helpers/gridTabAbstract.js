@@ -309,7 +309,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
             this.saveColumnConfigButton
         ];
 
-        if(pimcore.helpers.hasSearchImplementation()) {
+        if (pimcore.helpers.hasSearchImplementation()) {
             this.searchField = new Ext.form.TextField(
                 {
                     name: "query",
