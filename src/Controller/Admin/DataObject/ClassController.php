@@ -1900,6 +1900,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $obj = DataObject::getByPath($objPath) ?? new $className();
 
         $textLayout = new DataObject\ClassDefinition\Layout\Text();
+        $textLayout->setName('textLayoutPreview' . $className);
 
         $context = [
           'data' => $request->get('renderingData'),
@@ -1907,6 +1908,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
         if ($renderingClass = $request->get('renderingClass')) {
             $textLayout->setRenderingClass($renderingClass);
+            $textLayout->setRenderingData($request->get('renderingData', ''));
         }
 
         if ($staticHtml = $request->get('html')) {
