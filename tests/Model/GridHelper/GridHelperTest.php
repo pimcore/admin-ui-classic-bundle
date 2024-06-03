@@ -21,6 +21,7 @@ use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Db;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Tests\Support\Test\ModelTestCase;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class GridHelperTest extends ModelTestCase
 {
@@ -65,7 +66,7 @@ class GridHelperTest extends ModelTestCase
 
         $queryBuilder = Db::get()->createQueryBuilder();
 
-        $gridHelperService = new GridHelperService();
+        $gridHelperService = new GridHelperService(new EventDispatcher());
         $gridHelperService->addGridFeatureJoins($list, $featureJoins, $class, $featureAndSlugFilters);
 
         $dao = $list->getDao();
