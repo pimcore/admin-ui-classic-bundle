@@ -1793,3 +1793,7 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
 
     return string
 }
+
+function getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}

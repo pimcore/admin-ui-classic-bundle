@@ -1219,6 +1219,7 @@ class DataObjectHelperController extends AdminAbstractController
         $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $header = $settings['header'] ?? 'title';
+        Tool\UserTimezone::setUserTimezone($request->request->get('userTimezone'));
 
         $allParams = array_merge($request->request->all(), $request->query->all());
 

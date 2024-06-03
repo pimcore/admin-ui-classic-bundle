@@ -155,7 +155,10 @@ pimcore.asset.versions = Class.create({
         var data = grid.getStore().getAt(rowIndex).data;
 
         var versionId = data.id;
-        var url = Routing.generate('pimcore_admin_asset_showversion', {id: versionId});
+        var url = Routing.generate('pimcore_admin_asset_showversion', {
+            id: versionId,
+            userTimezone: getUserTimezone()
+        });
         Ext.get(this.frameId).dom.src = url;
     },
 

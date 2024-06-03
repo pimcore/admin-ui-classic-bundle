@@ -937,6 +937,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             }
         }
 
+        Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
 
         return $this->render(
