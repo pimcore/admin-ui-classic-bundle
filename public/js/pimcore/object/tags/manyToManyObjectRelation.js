@@ -429,7 +429,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     focus: function() {
                         this.store.getProxy().setExtraParam('data', '');
                     }.bind(this)
-                }
+                },
+                plugins: 'dragdroptag'
             });
         } else {
             let columns = this.getVisibleColumns();
