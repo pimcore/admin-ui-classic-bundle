@@ -41,7 +41,10 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
         var user = pimcore.globalmanager.get("user");
 
         this.properties = new pimcore.element.properties(this, "asset");
-        this.dependencies = new pimcore.element.dependencies(this, "asset");
+
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "asset");
+        }
 
         if (user.isAllowed("notes_events")) {
             this.notes = new pimcore.element.notes(this, "asset");
@@ -147,7 +150,9 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.properties.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
 
         if (user.isAllowed("notes_events")) {

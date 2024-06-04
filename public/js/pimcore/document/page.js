@@ -64,7 +64,10 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             this.versions = new pimcore.document.versions(this);
         }
 
-        this.dependencies = new pimcore.element.dependencies(this, "document");
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "document");
+        }
+
         this.preview = new pimcore.document.pages.preview(this);
         if(pimcore.globalmanager.get('customReportsPanelImplementationFactory').hasImplementation()) {
             this.reports = pimcore.globalmanager.get('customReportsPanelImplementationFactory').getNewReportInstance("document_page");
@@ -96,7 +99,9 @@ pimcore.document.page = Class.create(pimcore.document.page_snippet, {
             items.push(this.scheduler.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if(this.reports) {
             var reportLayout = this.reports.getLayout();
