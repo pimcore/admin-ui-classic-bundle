@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToWriteFile;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
@@ -1280,15 +1281,11 @@ class DataObjectHelperController extends AdminAbstractController
             $context
         );
 
+        // We don't use flysystem here because we need to append to the file
+        $stream = null;
         try {
-            $storage = Storage::get('temp');
+            $newData = [];
             $csvFile = $this->getCsvFile($fileHandle);
-
-            $fileStream = $storage->readStream($csvFile);
-
-            $temp = tmpfile();
-            stream_copy_to_stream($fileStream, $temp, null, 0);
-
             $firstLine = true;
 
             if ($request->get('initial') && $header === 'no_header') {
@@ -1299,7 +1296,8 @@ class DataObjectHelperController extends AdminAbstractController
             $lineCount = count($csv);
 
             if (!$addTitles && $lineCount > 0) {
-                fwrite($temp, "\r\n");
+                // Ensure a line break when appending new batch
+                $newData[] = null;
             }
 
             for ($i = 0; $i < $lineCount; $i++) {
@@ -1307,24 +1305,44 @@ class DataObjectHelperController extends AdminAbstractController
                 if ($addTitles && $firstLine) {
                     $firstLine = false;
                     $line = implode($delimiter, $line);
-                    fwrite($temp, $line);
+                    $newData[] = $line;
+
                 } else {
-                    fwrite($temp, implode($delimiter, array_map([$this, 'encodeFunc'], $line)));
-                }
-                if ($i < $lineCount - 1) {
-                    fwrite($temp, "\r\n");
+                    $newData[] = implode($delimiter, array_map([$this, 'encodeFunc'], $line));
                 }
             }
-            $storage->writeStream($csvFile, $temp);
+            $csvFilePath = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . $csvFile;
+            $stream = fopen($csvFilePath, 'a');
+            if ($stream === false) {
+                throw new UnableToReadFile('Could not open file');
+            }
+
+            $bytesWritten = fwrite($stream, implode("\r\n", $newData));
+            if ($bytesWritten === false) {
+                throw new UnableToWriteFile('Could not write to file');
+            }
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
 
             return $this->adminJson(
                 [
                     'success' => false,
-                    'message' => sprintf('export file not found: %s', $fileHandle),
+                    'message' => sprintf('Unable to read file: %s', $fileHandle),
                 ]
             );
+        } catch (UnableToWriteFile $exception) {
+            Logger::err($exception->getMessage());
+
+            return $this->adminJson(
+                [
+                    'success' => false,
+                    'message' => sprintf('Unable to write to file: %s', $fileHandle),
+                ]
+            );
+        } finally {
+            if (is_resource($stream)) {
+                fclose($stream);
+            }
         }
 
         return $this->adminJson(['success' => true]);
