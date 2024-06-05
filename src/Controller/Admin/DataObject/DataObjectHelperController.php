@@ -1283,6 +1283,7 @@ class DataObjectHelperController extends AdminAbstractController
 
         // We don't use flysystem here because we need to append to the file
         $stream = null;
+
         try {
             $newData = [];
             $csvFile = $this->getCsvFile($fileHandle);
