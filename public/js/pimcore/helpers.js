@@ -3543,8 +3543,9 @@ pimcore.helpers.localizedDateTime = function (value, options){
             timeStyle: "medium"
         }
     }
-    const dateFormatter = new Intl.DateTimeFormat(user.datetimeLocale, options);
+
     if (user.datetimeLocale) {
+        const dateFormatter = new Intl.DateTimeFormat(user.datetimeLocale, options);
         return dateFormatter.format(value);
     }else{
         let format = '';
