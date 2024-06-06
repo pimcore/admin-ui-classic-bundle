@@ -3534,3 +3534,53 @@ pimcore.helpers.sendRequest = function (
     request.open(method, url);
     request.send();
 };
+
+pimcore.helpers.localizedDateTime = function (value, options){
+    const user = pimcore.globalmanager.get("user");
+    if (typeof options === 'undefined') {
+        options = {
+            dateStyle: "short",
+            timeStyle: "medium"
+        }
+    }
+    const dateFormatter = new Intl.DateTimeFormat(user.datetimeLocale, options);
+    if (user.datetimeLocale) {
+        return dateFormatter.format(value);
+    }else{
+        let format = '';
+        let separator = ' ';
+        if (options.dateStyle === 'short') {
+            format+= 'Y-m-d';
+        }
+        if (options.timeStyle === 'short') {
+            format+= separator + 'H:i';
+        }else if (options.timeStyle === 'medium') {
+            format+= separator + 'H:i:s';
+        }
+        if (format === ''){
+            format = 'Y-m-d H:i:s';
+        }
+        return Ext.Date.format(value, format);
+    }
+}
+
+const getDateFormatPattern = (locale) => {
+    const getPatternForPart = (part) => {
+        switch (part.type) {
+            case 'day':
+                return 'd'.repeat(part.value.length);
+            case 'month':
+                return 'm'.repeat(part.value.length);
+            case 'year':
+                return 'y'.repeat(part.value.length);
+            case 'literal':
+                return part.value;
+            default:
+                console.log('Unsupported date part', part);
+                return '';
+        }
+    };
+    return new Intl.DateTimeFormat(locale).formatToParts(new Date('2021-01-01'))
+        .map(getPatternForPart)
+        .join('');
+};

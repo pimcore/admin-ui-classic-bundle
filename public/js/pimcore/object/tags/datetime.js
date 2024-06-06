@@ -135,7 +135,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                 dateString += " 00:00";
             }
 
-            value = Ext.Date.parseDate(dateString, "Y-m-d H:i");
+            value = pimcore.helpers.localizedDateTime(dateString, {dateStyle: "short", timeStyle: "short"});
             if (value && typeof value.getTime == "function") {
                 return value.getTime();
             }

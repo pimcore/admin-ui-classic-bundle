@@ -92,14 +92,14 @@ pimcore.asset.versions = Class.create({
                         return "";
                     }.bind(this), editable: false},
                     {text: t("date"), width:150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function(d) {
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        return pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
                     }},
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
                     {text: t("user"), sortable: true, dataIndex: 'name', filter: 'list'},
                     {text: t("scheduled"), width:130, sortable: true, dataIndex: 'scheduled', renderer: function(d) {
                         if (d != null){
                         	var date = new Date(d * 1000);
-                            return Ext.Date.format(date, "Y-m-d H:i:s");
+                            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
                     	}
                     }, editable: false},
                     {text: t("note"), sortable: true, dataIndex: 'note', editor: new Ext.form.TextField(), filter: 'string', renderer: Ext.util.Format.htmlEncode}

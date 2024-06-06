@@ -301,6 +301,43 @@ pimcore.settings.user.user.settings = Class.create({
             }
         });
 
+        const validLocales = [
+            ['', '(system)']
+        ];
+        const allLocales = this.data.validLocales ?? [];
+        // Rely on supportedLocalesOf to exclude any non-supported locales
+        Intl.DateTimeFormat.supportedLocalesOf(Object.keys(allLocales), {localeMatcher: "best fit"}).forEach(function (locale) {
+           validLocales.push([locale, allLocales[locale]])
+        });
+
+        const localesStore = new Ext.data.ArrayStore({
+            fields: ['code', 'text'],
+            data : validLocales
+        });
+
+        generalItems.push({
+            xtype: 'combo',
+            fieldLabel: t('datetime_locale'),
+            typeAhead: true,
+            value: this.currentUser.datetimeLocale ?? '',
+            mode: 'local',
+            listWidth: 400,
+            store: localesStore,
+            displayField: 'text',
+            valueField: 'code',
+            forceSelection: true,
+            triggerAction: 'all',
+            name: 'datetimeLocale',
+            listeners: {
+                change: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this),
+                select: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this)
+            }
+        });
+
         var rolesStore = Ext.create('Ext.data.ArrayStore', {
             fields: ["id", "name"],
             data: this.data.roles

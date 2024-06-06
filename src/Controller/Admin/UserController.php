@@ -464,6 +464,7 @@ class UserController extends AdminAbstractController implements KernelController
             'availablePermissions' => $availableUserPermissionsData,
             'availablePerspectives' => $availablePerspectives,
             'validLanguages' => Tool::getValidLanguages(),
+            'validLocales' => Tool::getSupportedJSLocales(),
             'objectDependencies' => [
                 'hasHidden' => $hasHidden,
                 'dependencies' => $userObjectData,

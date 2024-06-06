@@ -336,13 +336,13 @@ pimcore.object.helpers.grid = Class.create({
             } else if(field.key == "creationDate") {
                 gridColumns.push({text: t("creationdate") + " (System)", width: this.getColumnWidth(field, 160), sortable: true,
                     dataIndex: "creationDate", filter: 'date', editable: false, locked: this.getColumnLock(field), renderer: function(d) {
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
                     }/*, hidden: !propertyVisibility.creationDate*/});
             } else if(field.key == "modificationDate") {
                 gridColumns.push({text: t("modificationdate") + " (System)", width: this.getColumnWidth(field, 160), sortable: true,
                     dataIndex: "modificationDate", filter: 'date', editable: false, locked: this.getColumnLock(field), renderer: function(d) {
 
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
                     }/*, hidden: !propertyVisibility.modificationDate*/});
             } else {
                 if (fields[i].isOperator) {

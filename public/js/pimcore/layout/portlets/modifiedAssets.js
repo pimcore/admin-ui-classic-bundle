@@ -52,7 +52,7 @@ pimcore.layout.portlets.modifiedAssets = Class.create(pimcore.layout.portlets.ab
                 {text: t('path'), sortable: false, dataIndex: 'path', flex: 1},
                 {text: t('date'), width: 150, sortable: false, renderer: function (d) {
                     var date = new Date(d * 1000);
-                    return Ext.Date.format(date,"Y-m-d H:i:s");
+                    return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
                 }, dataIndex: 'date'}
             ],
             stripeRows: true,

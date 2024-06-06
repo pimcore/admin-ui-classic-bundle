@@ -344,7 +344,7 @@ pimcore.document.settings_abstract = Class.create({
 
         if (this.document.data.staticLastGenerated) {
             const date = new Date(this.document.data.staticLastGenerated * 1000);
-            lastGenerated = Ext.Date.format(date, "Y-m-d H:i");
+            lastGenerated = pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "short"});
         }else{
             lastGenerated = t('never');
         }
