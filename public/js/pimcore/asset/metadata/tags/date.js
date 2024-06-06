@@ -53,7 +53,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: 'c'};
     },
 
     getLayoutEdit:function () {
