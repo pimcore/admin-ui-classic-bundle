@@ -60,7 +60,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: field.layout.columnType === "date" ? 'm/d/Y' : "c"};
     },
 
     getLayoutEdit:function () {
@@ -105,6 +105,9 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
     getValue:function () {
         if (this.component.getValue()) {
             let value = this.component.getValue();
+            if(value && this.fieldConfig.columnType === "date") {
+                return Ext.Date.format(value, "Y-m-d");
+            }
             if (value && typeof value.getTime == "function") {
                 return value.getTime();
             } else {
