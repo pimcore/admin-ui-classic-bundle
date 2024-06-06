@@ -125,7 +125,7 @@ pimcore.document.versions = Class.create({
                     },
                     {
                         text: t("date"), width: 150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function (d) {
-                            pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
+                            return pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
                         }, editable: false
                     },
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
