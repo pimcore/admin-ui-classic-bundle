@@ -401,7 +401,7 @@ pimcore.settings.website = Class.create({
             }
         } else if (type == "date") {
             property = Ext.create('Ext.form.field.Date', {
-                format: "Y-m-d"
+                format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
             });
         } else if (type == "checkbox" || type == "bool") {
             property =  {

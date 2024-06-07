@@ -106,7 +106,7 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
                     const minDate = new Date(intval(value['start_date'] || 0) * 1000);
                     const maxDate = new Date(intval(value['end_date'] || 0) * 1000);
 
-                    return `${Ext.Date.format(minDate, 'Y-m-d')}, ${Ext.Date.format(maxDate, 'Y-m-d')}`;
+                    return `${pimcore.helpers.localizedDateTime(minDate, {dateStyle: "short"}), pimcore.helpers.localizedDateTime(maxDate, {dateStyle: "short"})}`;
                 }
 
                 return '';

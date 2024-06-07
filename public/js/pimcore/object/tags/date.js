@@ -53,7 +53,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
                     var timestamp = intval(value) * 1000;
                     var date = new Date(timestamp);
 
-                    return Ext.Date.format(date, "Y-m-d");
+                    return pimcore.helpers.localizedDateTime(date, {dateStyle: "short"});
                 }
                 return "";
             }.bind(this, field.key)};
@@ -70,7 +70,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
             name:this.fieldConfig.name,
             componentCls: this.getWrapperClassNames(),
             width:130,
-            format: "Y-m-d"
+            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
         };
 
         if (this.fieldConfig.labelWidth) {

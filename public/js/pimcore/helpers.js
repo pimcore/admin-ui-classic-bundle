@@ -3565,23 +3565,28 @@ pimcore.helpers.localizedDateTime = function (value, options){
     }
 }
 
-const getDateFormatPattern = (locale) => {
-    const getPatternForPart = (part) => {
-        switch (part.type) {
-            case 'day':
-                return 'd'.repeat(part.value.length);
-            case 'month':
-                return 'm'.repeat(part.value.length);
-            case 'year':
-                return 'y'.repeat(part.value.length);
-            case 'literal':
-                return part.value;
-            default:
-                console.log('Unsupported date part', part);
-                return '';
-        }
-    };
-    return new Intl.DateTimeFormat(locale).formatToParts(new Date('2021-01-01'))
-        .map(getPatternForPart)
-        .join('');
+pimcore.helpers.intlDateFormatFromLocale = function (fallback){
+    const user = pimcore.globalmanager.get("user");
+    if (user.datetimeLocale) {
+        const getPatternForPart = (part) => {
+            switch (part.type) {
+                case 'day':
+                    return 'd';
+                case 'month':
+                    return 'm';
+                case 'year':
+                    return 'y';
+                case 'literal':
+                    return part.value;
+                default:
+                    console.log('Unsupported date part', part);
+                    return '';
+            }
+        };
+        return new Intl.DateTimeFormat(user.datetimeLocale).formatToParts(new Date('2021-01-01'))
+            .map(getPatternForPart)
+            .join('');
+    } else {
+        return fallback;
+    }
 };

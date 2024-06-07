@@ -53,21 +53,21 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                         if (value) {
                             var timestamp = intval(value) * 1000;
                             var date = new Date(timestamp);
-                            return Ext.Date.format(date, "Y-m-d H:i");
+                            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "short"});
                         }
                         return "";
                     }.bind(this, field.key)};
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")};
     },
 
     getLayoutEdit:function () {
 
         var date = {
             width:130,
-            format: "Y-m-d"
+            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
         };
 
         var time = {
@@ -124,7 +124,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.datefield.getValue()) {
             var value = this.datefield.getValue();
-            var dateString = Ext.Date.format(value, "Y-m-d");
+            var dateString = Epimcore.helpers.localizedDateTime(value, {dateStyle: "short"});
 
             if (this.timefield.getValue()) {
                 var timeValue = this.timefield.getValue();
