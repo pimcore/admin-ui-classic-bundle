@@ -208,8 +208,8 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             flex: 2
         });
 
-        const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
+        const tabPanel = this.getTabPanel();
 
         if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
