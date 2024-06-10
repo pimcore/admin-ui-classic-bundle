@@ -306,7 +306,7 @@ pimcore.settings.user.user.settings = Class.create({
         ];
         const allLocales = this.data.validLocales ?? [];
         // Rely on supportedLocalesOf to exclude any non-supported locales
-        Intl.DateTimeFormat.supportedLocalesOf(Object.keys(allLocales), {localeMatcher: "best fit"}).forEach(function (locale) {
+        Intl.DateTimeFormat.supportedLocalesOf(Object.keys(allLocales), {localeMatcher: "lookup"}).forEach(function (locale) {
            validLocales.push([locale, allLocales[locale]])
         });
 

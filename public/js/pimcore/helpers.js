@@ -3565,17 +3565,35 @@ pimcore.helpers.localizedDateTime = function (value, options){
     }
 }
 
+// Returns the format based on the localized date by DateTimeFormat
+// It checks wheter it is leading zero or 4 digits years by guessing it by checking the output of a dummy date
 pimcore.helpers.intlDateFormatFromLocale = function (fallback){
     const user = pimcore.globalmanager.get("user");
     if (user.datetimeLocale) {
+        const dateFormatter = new Intl.DateTimeFormat(user.datetimeLocale, {dateStyle: "short"});
+        const localizedDate = dateFormatter.format(new Date('2021-06-03'));
+        let dayFormat= 'j'; //no leading zero
+        let monthFormat = 'n'; //no leading zero
+        let yearFormat = 'y'; // 2 digits year
+
+        if (localizedDate.includes('2021')){
+            yearFormat = 'Y';
+        }
+        if (localizedDate.includes('03')){
+            dayFormat = 'd';
+        }
+        if (localizedDate.includes('06')){
+            monthFormat = 'm';
+        }
+
         const getPatternForPart = (part) => {
             switch (part.type) {
                 case 'day':
-                    return 'd';
+                    return dayFormat;
                 case 'month':
-                    return 'm';
+                    return monthFormat;
                 case 'year':
-                    return 'y';
+                    return yearFormat;
                 case 'literal':
                     return part.value;
                 default:
@@ -3583,7 +3601,7 @@ pimcore.helpers.intlDateFormatFromLocale = function (fallback){
                     return '';
             }
         };
-        return new Intl.DateTimeFormat(user.datetimeLocale).formatToParts(new Date('2021-01-01'))
+        return dateFormatter.formatToParts()
             .map(getPatternForPart)
             .join('');
     } else {
