@@ -28,7 +28,8 @@ pimcore.object.classes.data.data = Class.create({
         "object", "objectvar", "objectvars", "omitmandatorycheck", "parent", "parentclass", "parentid", "path",
         "permissions", "permissionsforuser", "properties", "property", "published", "realfullpath", "realpath",
         "relationdata", "resource", "scheduledtasks", "siblings", "type", "types", "usermodification", "userowner",
-        "userpermissions", "value", "valueforfieldname", "valuefromparent", "values", "versioncount", "versions",
+        "userpermissions", "validtablecolumns", "value", "valueforfieldname", "valuefromparent", "values",
+        "versioncount", "versions",
     ],
 
     /**
