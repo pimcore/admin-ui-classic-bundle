@@ -3565,7 +3565,7 @@ pimcore.helpers.localizedDateTime = function (value, options){
     }
 }
 
-// Returns the format based on the localized date by DateTimeFormat
+// Returns the date format based on the localized date by DateTimeFormat
 // It checks wheter it is leading zero or 4 digits years by guessing it by checking the output of a dummy date
 pimcore.helpers.intlDateFormatFromLocale = function (fallback){
     const user = pimcore.globalmanager.get("user");
@@ -3601,6 +3601,61 @@ pimcore.helpers.intlDateFormatFromLocale = function (fallback){
                     return '';
             }
         };
+        return dateFormatter.formatToParts()
+            .map(getPatternForPart)
+            .join('');
+    } else {
+        return fallback;
+    }
+};
+
+// Returns the time format based on the localized date by DateTimeFormat
+// It checks wheter it is 0-12 AM/PM, 0-23. Minutes and seconds are internationally with a leading zero as 00-59.
+pimcore.helpers.intlTimeFormatFromLocale = function (fallback){
+    const user = pimcore.globalmanager.get("user");
+    const dummyDate = new Date('2020-01-01 09:30:59');
+    if (user.datetimeLocale) {
+        const dateFormatter = new Intl.DateTimeFormat(user.datetimeLocale, {timeStyle: "short"});
+        const localizedDateTime = dateFormatter.format(dummyDate);
+
+        let dayPeriodFormat = '';
+        if (localizedDateTime.includes('am') || localizedDateTime.includes('a.m.')){ //lowecased eg. am/pm
+            dayPeriodFormat = 'a';
+        }else if (localizedDateTime.includes('AM') || localizedDateTime.includes('A.M.')){
+            dayPeriodFormat = 'A';
+        }
+
+        let hourFormat= '';
+        if (localizedDateTime.includes('09')){
+            hourFormat = 'H';
+            if (dayPeriodFormat){
+                hourFormat = 'h';
+            }
+        }else if (localizedDateTime.includes('9')){
+            hourFormat = 'G';
+            if (dayPeriodFormat){
+                hourFormat = 'g';
+            }
+        }
+
+        const getPatternForPart = (part) => {
+            switch (part.type) {
+                case 'hour':
+                    return hourFormat;
+                case 'minute':
+                    return 'i';
+                case 'second':
+                    return 's';
+                case 'dayPeriod':
+                    return dayPeriodFormat;
+                case 'literal':
+                    return part.value;
+                default:
+                    console.log('Unsupported date part', part);
+                    return '';
+            }
+        };
+
         return dateFormatter.formatToParts()
             .map(getPatternForPart)
             .join('');
