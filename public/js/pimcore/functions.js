@@ -1797,3 +1797,14 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
 function getUserTimezone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
+function dateToUTC(date) {
+
+    let utcDate = new Date(date.toLocaleString('en-US', {
+        timeZone: 'UTC'
+    }));
+
+    let diff = date.getTime() - utcDate.getTime();
+
+    return new Date(date.getTime() - diff);
+
+}

@@ -887,6 +887,7 @@ pimcore.helpers.download = function (url) {
     let iframe = document.getElementById('download_helper_iframe');
     if (!iframe) {
         iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
         iframe.setAttribute('id', 'download_helper_iframe');
         document.body.appendChild(iframe);
     }

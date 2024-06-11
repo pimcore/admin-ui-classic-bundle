@@ -208,8 +208,8 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             flex: 2
         });
 
-        const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
+        const tabPanel = this.getTabPanel();
 
         if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
@@ -700,6 +700,22 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 } else {
                     buttons.push(notificationConfig);
                 }
+            }
+
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.general.id,
+                    scale: "medium"
+                });
+
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t(this.data.general.classTitle),
+                    scale: "medium"
+                });
             }
 
             this.draftVersionNotification = new Ext.Button({

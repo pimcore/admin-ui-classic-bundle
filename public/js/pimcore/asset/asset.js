@@ -351,6 +351,15 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
                 }
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('asset', this.data.id, this, buttons);
 
