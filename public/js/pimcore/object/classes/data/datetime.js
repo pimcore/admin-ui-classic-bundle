@@ -121,7 +121,10 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
             cls:"object_field"
         });
 
-        var columnTypeData = [["bigint(20)", "BIGINT"], ["datetime", "DATETIME"]];
+        var columnTypeData = [["datetime", "DATETIME"],["bigint(20)", "BIGINT"]];
+
+        // do not check for newly created fields but for existing ones without a respectTimezone value
+        let isRespectTimezone = (datax.respectTimezone !== false && Boolean(datax.name)) || datax.columnType === "bigint(20)";
 
         var columnTypeField = new Ext.form.ComboBox({
             name: "columnType",
@@ -130,7 +133,8 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
             forceSelection: true,
             editable: false,
             fieldLabel: t("column_type"),
-            value: datax.columnType != "bigint(20)" && datax.columnType != "datetime" ? 'bigint(20)' : datax.columnType ,
+            value: datax.columnType != "bigint(20)" && datax.columnType != "datetime" ? 'datetime' : datax.columnType ,
+            readOnly: !isRespectTimezone,
             store: new Ext.data.ArrayStore({
                 fields: [
                     'id',
@@ -143,7 +147,7 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
             displayField: 'label'
         });
 
-
+console.log({isRespectTimezone: isRespectTimezone, datax: datax});
         specificItems = specificItems.concat(
             [
                 defaultComponent,
@@ -164,6 +168,16 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
                     disabled: this.isInCustomLayoutEditor(),
                     listeners:{
                         change:this.toggleDefaultDate.bind(this, defaultValue, datefield, timefield)
+                    }
+                },
+                {
+                    xtype:"checkbox",
+                    fieldLabel:t("respect_timezone"),
+                    name:"respectTimezone",
+                    checked:isRespectTimezone,
+                    disabled: this.isInCustomLayoutEditor(),
+                    listeners:{
+                        change:this.toggleColumnType.bind(this, columnTypeField)
                     }
                 }, {
                 xtype: "displayfield",
@@ -211,6 +225,14 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
 
     },
 
+    toggleColumnType: function (columnTypeField, checkbox, checked) {
+        if (!checked) {
+            columnTypeField.setValue("datetime");
+        }
+
+        columnTypeField.setReadOnly(!checked);
+    },
+
     applyData: function ($super) {
         $super();
         this.datax.queryColumnType = this.datax.columnType;
@@ -225,6 +247,7 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
                 {
                     defaultValue: source.datax.defaultValue,
                     useCurrentDate: source.datax.useCurrentDate,
+                    respectTimezone: source.datax.respectTimezone,
                     defaultValueGenerator: source.datax.defaultValueGenerator,
                     columnType: source.datax.columnType
                 });
