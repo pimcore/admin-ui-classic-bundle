@@ -50,8 +50,13 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
                 }
 
                 if (value) {
-                    var timestamp = intval(value) * 1000;
-                    var date = new Date(timestamp);
+                    let date;
+                    if (typeof value === "string" && value.match(/-/)) {
+                        date = new Date(value);
+                    } else {
+                        let timestamp = intval(value) * 1000;
+                        date = new Date(timestamp);
+                    }
 
                     return Ext.Date.format(date, "Y-m-d");
                 }
@@ -118,6 +123,9 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
     },
 
     getCellEditValue: function () {
+        if (this.fieldConfig.columnType === "date") {
+            return this.getValue();
+        }
         return this.getValue() / 1000;
     },
 
