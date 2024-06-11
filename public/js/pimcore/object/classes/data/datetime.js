@@ -147,7 +147,7 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
             displayField: 'label'
         });
 
-console.log({isRespectTimezone: isRespectTimezone, datax: datax});
+
         specificItems = specificItems.concat(
             [
                 defaultComponent,
