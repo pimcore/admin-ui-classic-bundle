@@ -1797,10 +1797,11 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
 function getUserTimezone() {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 }
-function dateToUTC(date) {
+
+function dateToServerTimezone(date) {
 
     let utcDate = new Date(date.toLocaleString('en-US', {
-        timeZone: 'UTC'
+        timeZone: pimcore.settings.timezone ?? 'UTC'
     }));
 
     let diff = date.getTime() - utcDate.getTime();
