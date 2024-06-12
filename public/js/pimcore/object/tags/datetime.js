@@ -59,7 +59,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                                 date = new Date(timestamp);
 
                                 if (!this.isRespectTimezone()) {
-                                    date = dateToUTC(date);
+                                    date = dateToServerTimezone(date);
                                 }
                             }
 
@@ -90,8 +90,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
             var tmpDate = new Date(intval(this.data) * 1000);
 
             if (!this.isRespectTimezone()) {
-                debugger;
-                tmpDate = dateToUTC(tmpDate);
+                tmpDate = dateToServerTimezone(tmpDate);
             }
 
             date.value = tmpDate;

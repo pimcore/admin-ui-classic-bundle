@@ -56,6 +56,10 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
                     } else {
                         let timestamp = intval(value) * 1000;
                         date = new Date(timestamp);
+
+                        if (!this.isRespectTimezone()) {
+                            date = dateToServerTimezone(date);
+                        }
                     }
 
                     return Ext.Date.format(date, "Y-m-d");
@@ -92,6 +96,11 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
 
         if (this.data) {
             var tmpDate = new Date(intval(this.data) * 1000);
+
+            if (!this.isRespectTimezone()) {
+                tmpDate = dateToServerTimezone(tmpDate);
+            }
+
             date.value = tmpDate;
         }
 
@@ -157,6 +166,10 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
         }
 
         return false;
+    },
+
+    isRespectTimezone: function() {
+        return this.fieldConfig.columnType !== "date";
     }
 
 });
