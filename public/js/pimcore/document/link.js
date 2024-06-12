@@ -336,6 +336,15 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 buttons.push(this.getTranslationButtons());
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             this.toolbar = new Ext.Toolbar({
                 id: "document_toolbar_" + this.id,
                 region: "north",

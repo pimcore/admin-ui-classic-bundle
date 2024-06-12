@@ -302,19 +302,19 @@ pimcore.layout.toolbar = Class.create({
                      handler: this.editTranslations.bind(this, 'messages'),
                      priority: 10
                  }];
-             }
 
-             extrasItems.push({
-                 text: t("translations"),
-                 iconCls: "pimcore_nav_icon_translations",
-                 itemId: 'pimcore_menu_extras_translations',
-                 hideOnClick: false,
-                 menu: {
-                     cls: "pimcore_navigation_flyout",
-                     shadow: false,
-                     items: translationItems
-                 }
-             });
+                 extrasItems.push({
+                     text: t("translations"),
+                     iconCls: "pimcore_nav_icon_translations",
+                     itemId: 'pimcore_menu_extras_translations',
+                     hideOnClick: false,
+                     menu: {
+                         cls: "pimcore_navigation_flyout",
+                         shadow: false,
+                         items: translationItems
+                     }
+                 });
+             }
  
              if (user.isAllowed("recyclebin") && perspectiveCfg.inToolbar("extras.recyclebin")) {
                  extrasItems.push({

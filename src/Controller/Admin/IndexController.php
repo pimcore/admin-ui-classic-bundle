@@ -196,6 +196,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
+        $requiredLanguages = $systemSettings['general']['valid_languages'];
         $dashboardHelper = new Dashboard($user);
         $customAdminEntrypoint = $this->getParameter('pimcore_admin.custom_admin_route_name');
 
@@ -204,6 +205,10 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         } catch (Exception) {
             // if the custom admin entrypoint is not defined, return null in the settings
             $adminEntrypointUrl = null;
+        }
+
+        if (array_key_exists('required_languages', $systemSettings['general'])) {
+            $requiredLanguages = $systemSettings['general']['required_languages'];
         }
 
         $settings = [
@@ -224,6 +229,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 $systemSettings['general']['valid_languages'],
                 true
             ),
+            'requiredLanguages' => $requiredLanguages,
 
             // flags
             'showCloseConfirmation'          => true,
@@ -313,7 +319,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         // upload limit
         $max_upload = filesize2bytes(ini_get('upload_max_filesize') . 'B');
         $max_post = filesize2bytes(ini_get('post_max_size') . 'B');
-        $upload_mb = min($max_upload, $max_post);
+        $upload_mb = min($max_upload, $max_post) ?: $max_upload;
 
         $settings['upload_max_filesize'] = (int) $upload_mb;
 

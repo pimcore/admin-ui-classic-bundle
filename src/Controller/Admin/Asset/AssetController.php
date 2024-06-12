@@ -576,7 +576,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($newType != $asset->getType()) {
             return $this->adminJson([
                 'success' => false,
-                'message' => sprintf($translator->trans('asset_type_change_not_allowed', [], 'admin'), $asset->getType(), $newType),
+                'message' => sprintf($translator->trans('asset_type_change_not_allowed', [], 'admin'), $newType, $asset->getType()),
             ]);
         }
 
