@@ -302,14 +302,14 @@ class MiscController extends AdminAbstractController
 
         $type = $request->get('type');
 
-        $icons = match($type){
+        $icons = match($type) {
             'color' => rscandir($iconDir . '/flat-color-icons/'),
             'white' => rscandir($iconDir . '/flat-white-icons/'),
             'twemoji' => rscandir($iconDir . '/twemoji/'),
             'flags' => $this->getFlags(),
         };
 
-        $source = match($type){
+        $source = match($type) {
             'color' => 'based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
             'white' => 'based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
             'twemoji' => 'based on the <a href="https://github.com/twitter/twemoji/blob/master/LICENSE" target="_blank">Twemoji icons</a>',
@@ -327,7 +327,7 @@ class MiscController extends AdminAbstractController
             'iconsCss' => $iconsCss,
             'type' => $type,
             'extraInfo' => $extraInfo,
-            'source' => $source
+            'source' => $source,
         ]);
     }
 
@@ -349,6 +349,7 @@ class MiscController extends AdminAbstractController
 
         return $languageOptions;
     }
+
     /**
      * @Route("/test", name="pimcore_admin_misc_test")
      */
