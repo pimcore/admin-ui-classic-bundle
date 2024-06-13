@@ -217,8 +217,6 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             columnLines: true,
             bodyCls: "pimcore_editable_grid",
             autoHeight: true,
-            width: this.fieldConfig.width,
-            height: this.fieldConfig.height,
             selModel: Ext.create('Ext.selection.CellModel'),
             hideHeaders: !this.fieldConfig.columnConfigActivated,
             plugins: [
