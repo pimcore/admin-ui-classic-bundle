@@ -302,7 +302,6 @@ class MiscController extends AdminAbstractController
         $iconDir = $publicDir . '/img';
         $extraInfo = null;
 
-
         $icons = match($type) {
             'color' => rscandir($iconDir . '/flat-color-icons/'),
             'white' => rscandir($iconDir . '/flat-white-icons/'),
