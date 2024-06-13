@@ -1793,3 +1793,15 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
 
     return string
 }
+
+function dateToServerTimezone(date) {
+
+    let utcDate = new Date(date.toLocaleString('en-US', {
+        timeZone: pimcore.settings.timezone ?? 'UTC'
+    }));
+
+    let diff = date.getTime() - utcDate.getTime();
+
+    return new Date(date.getTime() - diff);
+
+}
