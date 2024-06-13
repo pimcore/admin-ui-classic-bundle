@@ -299,7 +299,7 @@ pimcore.settings.translation.domain = Class.create({
 
         var dateRenderer = function (d) {
             var date = new Date(d * 1000);
-            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
         };
 
         typesColumns.push({

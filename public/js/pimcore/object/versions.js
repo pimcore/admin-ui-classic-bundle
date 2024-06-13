@@ -104,7 +104,8 @@ pimcore.object.versions = Class.create({
                     },
                     {
                         text: t("date"), width: 150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function (d) {
-                            return pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "medium"});
+                            console.log(pimcore.globalmanager.get('localeDateTime'));
+                            return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }
                     },
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
@@ -117,7 +118,7 @@ pimcore.object.versions = Class.create({
                         renderer: function (d) {
                             if (d != null) {
                                 var date = new Date(d * 1000);
-                                return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                             }
                         },
                         editable: false

@@ -299,7 +299,7 @@ pimcore.object.helpers.gridConfigDialog = Class.create(pimcore.element.helpers.g
                             if (key == "modificationDate" || key == "creationDate") {
                                 var timestamp = intval(value) * 1000;
                                 var date = new Date(timestamp);
-                                return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "short"});
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
                             } else if (key == "published") {
                                 return Ext.String.format('<div style="text-align: left"><div role="button" class="x-grid-checkcolumn{0}" style=""></div></div>', value ? '-checked' : '');

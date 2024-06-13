@@ -124,7 +124,7 @@ pimcore.element.note_details = Class.create({
                 xtype: "textfield",
                 fieldLabel: t('date'),
                 readOnly: true,
-                value: pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"})
+                value: Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat())
             }
         );
 

@@ -103,7 +103,7 @@ pimcore.document.editables.scheduledblock = Class.create(pimcore.document.editab
             var timestamp = new Date(element.date * 1000);
 
             jumpMenuEntries.push({
-                text: pimcore.helpers.localizedDateTime(timestamp, {dateStyle: "short",timeStyle: "short"}),
+                text: Ext.Date.format(timestamp, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat()),
                 iconCls: 'pimcore_icon_time',
                 handler: function(element, timestamp) {
                     this.dateField.setValue(timestamp);

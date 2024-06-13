@@ -230,7 +230,7 @@ pimcore.settings.metadata.predefined = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     }
                     return "";
                 }
@@ -240,7 +240,7 @@ pimcore.settings.metadata.predefined = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     }
                     return "";
                 }

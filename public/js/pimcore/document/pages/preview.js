@@ -125,7 +125,7 @@ Ext.define('pimcore.document.pages.preview', {
                 cls: 'pimcore_document_preview_timeslider',
                 tipText: function(thumb){
                     const date = new Date(thumb.value * 1000);
-                    return pimcore.helpers.localizedDateTime(date, {timeStyle: "short"});
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
                 },
                 listeners: {
                     change: function(field, newValue, oldValue) {

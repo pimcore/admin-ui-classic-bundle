@@ -112,7 +112,7 @@ pimcore.settings.email.log = Class.create({
                 sortable: false,
                 renderer: function (d) {
                     const date = new Date(intval(d) * 1000);
-                    return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }
             },
             {

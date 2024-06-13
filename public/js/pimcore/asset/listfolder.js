@@ -374,7 +374,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
                     gridColumns.push({text: t(field.label), width: this.getColumnWidth(field, 150), sortable: true, dataIndex: field.key, editable: false, filter: 'date',
                        renderer: function(d) {
                             var date = new Date(d * 1000);
-                            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }
                     });
                 } else if (key == "filename") {
@@ -396,7 +396,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
                     renderer: function(d) {
                         if (d) {
                             var date = new Date(d * 1000);
-                            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short"});
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateFormat());
                         }
 
                     }

@@ -68,7 +68,7 @@ pimcore.settings.gdpr.dataproviders.sentMail = Class.create({
                 sortable: false,
                 renderer: function (d) {
                     var date = new Date(intval(d) * 1000);
-                    return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "medium"});
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }
             },
             {

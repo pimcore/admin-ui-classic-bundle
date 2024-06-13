@@ -98,7 +98,7 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
             }
 
             date.value = tmpDate;
-            time.value = pimcore.helpers.localizedDateTime(tmpDate, {timeStyle: "short"});
+            time.value = Ext.Date.format(tmpDate, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
         }
 
         var datefield = new Ext.form.DateField(date);
@@ -181,10 +181,10 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
     setDefaultValue:function (defaultValue, datefield, timefield) {
 
         if (datefield.getValue() && typeof datefield.getValue() === 'object') {
-            var dateString = pimcore.helpers.localizedDateTime(datefield.getValue(), {dateStyle: "short"});
+            var dateString = Ext.Date.format(datefield.getValue(), pimcore.globalmanager.get('localeDateTime').getDateFormat());
 
             if (timefield.getValue()) {
-                dateString += " " + pimcore.helpers.localizedDateTime(timefield.getValue(), {timeStyle: "short"});
+                dateString += " " + Ext.Date.format(timefield.getValue(), pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
             } else {
                 dateString += " 00:00";
             }

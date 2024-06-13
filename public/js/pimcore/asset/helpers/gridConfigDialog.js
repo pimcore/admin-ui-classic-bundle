@@ -365,7 +365,7 @@ pimcore.asset.helpers.gridConfigDialog = Class.create(pimcore.element.helpers.gr
                             } else if ((key == "modificationDate" || key == "creationDate") && value) {
                                 var timestamp = intval(value) * 1000;
                                 var date = new Date(timestamp);
-                                return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "short"});
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
                             } else {
                                 var fieldType = record.data.dataType;

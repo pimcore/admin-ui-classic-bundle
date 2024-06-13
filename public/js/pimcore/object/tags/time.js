@@ -65,7 +65,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
 
     getValue: function () {
         const date = this.component.getValue();
-        return pimcore.helpers.localizedDateTime(date, {timeStyle: "short"});
+        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
     },
 
     getName: function () {

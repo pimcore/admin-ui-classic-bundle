@@ -110,7 +110,7 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
                 if (!isNaN(+value)) {
                     const timestamp = parseInt(value) * 1000;
                     const date = new Date(timestamp);
-                    return pimcore.helpers.localizedDateTime(date, {dateStyle: "short"});
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateFormat());
                 }
             } else if (this.fieldConfig?.elementType === 'boolean') {
                 if (this.fieldConfig.calculatorType !== "expression") {

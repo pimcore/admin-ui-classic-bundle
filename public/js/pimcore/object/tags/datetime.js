@@ -53,7 +53,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                         if (value) {
                             var timestamp = intval(value) * 1000;
                             var date = new Date(timestamp);
-                            return pimcore.helpers.localizedDateTime(date, {dateStyle: "short", timeStyle: "short"});
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
                         }
                         return "";
                     }.bind(this, field.key)};
@@ -124,7 +124,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.datefield.getValue()) {
             var value = this.datefield.getValue();
-            var dateString = Epimcore.helpers.localizedDateTime(value, {dateStyle: "short"});
+            var dateString = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getDateFormat());
 
             if (this.timefield.getValue()) {
                 var timeValue = this.timefield.getValue();
@@ -135,7 +135,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                 dateString += " 00:00";
             }
 
-            value = pimcore.helpers.localizedDateTime(dateString, {dateStyle: "short", timeStyle: "short"});
+            value = Ext.Date.format(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
             if (value && typeof value.getTime == "function") {
                 return value.getTime();
             }

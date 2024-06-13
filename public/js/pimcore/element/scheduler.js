@@ -43,7 +43,7 @@ pimcore.element.scheduler = Class.create({
                     td = [
                         rawTask.id,
                         d,
-                        pimcore.helpers.localizedDateTime(d, {timeStyle: "short"}),
+                        Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat()),
                         rawTask.action
                     ];
 
@@ -63,7 +63,7 @@ pimcore.element.scheduler = Class.create({
                     convert: function (v, rec) {
                         var ret = v;
                         if (v instanceof Date) {
-                            ret = pimcore.helpers.localizedDateTime(v, {dateStyle: "short"});
+                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getDateFormat());
                         }
                         return ret;
                     }
@@ -73,7 +73,7 @@ pimcore.element.scheduler = Class.create({
                     convert: function (v, rec) {
                         var ret = v;
                         if (v instanceof Date) {
-                            ret = pimcore.helpers.localizedDateTime(v, {timeStyle: "short"});
+                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
                         }
                         return ret;
                     }
@@ -112,7 +112,7 @@ pimcore.element.scheduler = Class.create({
                     fields: ['id', {name: 'date', convert: function (v, rec) {
                             var d = new Date(intval(v) * 1000);
 
-                            var ret = pimcore.helpers.localizedDateTime(d, {dateStyle: "short", timeStyle: "short"});
+                            var ret = Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
                             if (rec.data.note) {
                                 ret += " - " + rec.data.note;
