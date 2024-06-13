@@ -21,7 +21,7 @@ final class Tool
     /**
      * @internal
      */
-    public static function getLanguageFlagFile(string $language, bool $absolutePath = true, $includeUnknown = true): string
+    public static function getLanguageFlagFile(string $language, bool $absolutePath = true, bool $includeUnknown = true): string
     {
         $basePath = '/bundles/pimcoreadmin/img/flags';
         $iconFsBasePath = PIMCORE_WEB_ROOT . $basePath;

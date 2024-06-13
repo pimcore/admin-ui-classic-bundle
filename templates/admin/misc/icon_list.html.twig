@@ -17,7 +17,6 @@
             display:inline-block;
             padding-top: 20px;
         }
-
         .icon {
             text-align: center;
             width:100px;
@@ -29,16 +28,21 @@
             padding-top: 5px;
             box-sizing: border-box;
         }
-        .icon img:hover{
+
+        .icon img:hover, div.lazy-load:hover {
             cursor: copy;
         }
 
-        .icon.black {
+        #white .icon {
             background-color: #0C0F12;
         }
 
-        .icon.black .label {
+        #white .icon .label {
             color: #fff;
+        }
+
+        #flags .icon{
+            height: 100px;
         }
 
         .info {
@@ -69,228 +73,136 @@
             display: none;
             background-color: #eee;
         }
-
-        /*-------------------------------------*/
-
-        .accordion_item {
-            margin: 5px auto;
-        }
-        .accordion_item .accordion_title {
-            position: relative;
-            display: block;
-            padding: 13px 60px 15px 13px;
-            margin-bottom: 2px;
-            color: #202020;
-            font-size: 28px;
-            text-decoration: none;
-            background-color: #eaeaea;
-            border-radius: 3px;
-            -webkit-transition: background-color 0.2s;
-            transition: background-color 0.2s;
-            cursor: pointer;
-        }
-        .accordion_item .accordion_title:hover {
-            background-color: #e5e4e4;
-            transition: all 0.5s ease-out;
-        }
-        .accordion_item .accordion-active {
-            background-color: #e5e4e4;
-        }
-        .accordion_item .accordion_title .accordion_arrow {
-            position: absolute;
-            top: 13px; right: 10px;
+        .lazy-load{
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 50px;
+            width: 50px;
             display: inline-block;
-            vertical-align: middle;
-            width: 30px;
-            height: 30px;
-            text-align: center;
-            color: #fff;
-            line-height: 30px;
-            font-size: 20px;
-            font-weight: 700;
-            margin-right: 5px;
-            background-color: #c9c9c9;
-            border-radius: 50%;
-            -webkit-transition: all 0.2s ease-out;
-            transition: all 0.2s ease-out;
         }
-        .accordion_item .accordion_rotate {
-            transform: rotate(225deg);
-        }
-        .accordion_item .accordion_content {
-            padding: 30px;
-            margin-bottom: 2px;
-            font-size: 14px;
-            display: none;
-            background-color: #f3f3f3;
-        }
-        .accordion_item .accordion_arrow-item {
-            font-weight: 700;
-        }
-        /*-------------------------------------*/
 
     </style>
 </head>
 <body>
 
-
-<div class="accordion">
-    <div class="accordion_item">
-        <div class="accordion_title">
-            <div class="accordion_arrow"><span class="accordion_arrow-item ">+</span></div>
-            <span class="accordion_title-text">Color Icons</span>
-        </div>
-        <div class="accordion_content">
-            <small>based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a></small>
-            <div id="color_icons" class="icons">
-                <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon to copy path to clipboard.</div>
-                {% for icon in colorIcons %}
-                    {% set iconPath = icon|replace({(webRoot): ''}) %}
-                    <div class="icon">
-                        {{ icon | pimcore_inline_icon | raw }}
-                        <div class="label">
-                            {{ iconPath in iconsCss  ? '*' : '' }}
-                            {{ iconPath|basename }}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="accordion_item">
-        <div class="accordion_title">
-            <div class="accordion_arrow"><span class="accordion_arrow-item ">+</span></div>
-            <span class="accordion_title-text">White Icons</span>
-        </div>
-        <div class="accordion_content">
-            <small>based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a></small>
-            <div id="white_icons" class="icons">
-                {% for icon in whiteIcons %}
-                    {% set iconPath = icon|replace({(webRoot): ''}) %}
-                    <div class="icon black">
-                        {{ icon | pimcore_lazy_icon | raw }}
-                        <div class="label">
-                            {{ iconPath in iconsCss  ? '*' : '' }}
-                            {{ iconPath|basename }}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="accordion_item">
-        <div class="accordion_title">
-            <div class="accordion_arrow"><span class="accordion_arrow-item ">+</span></div>
-            <span class="accordion_title-text">Twemoji</span>
-        </div>
-        <div class="accordion_content">
-            <small>Source: <a href="https://github.com/twitter/twemoji" target="_blank">(Twemoji)</a></small>
-            <div id="twemoji" class="icons">
-                <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon to copy path to clipboard.</div>
-                <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon with green border to display all its related variants. Click on the letter to display flags with the clicked initial</div>
-                {% for icon in twemoji %}
-                    {% set iconPath = icon|replace({(webRoot): ''}) %}
-
-{#                    Any icon with basename that has a dash will be considered as a variant to avoid recurisvely searching for "parent" icon.#}
-{#                    It happens that all icon that have variants have at least a prefix of 4-5 characters.#}
-
-                    {% if '-' in iconPath and iconPath|basename|split('-')[0]|length > 3 %}
-                        <div class="icon variant">
-                            {{ icon | pimcore_twemoji_variant_icon | raw }}
-                            <div class="label">{{ iconPath|basename }}</div>
-                        </div>
-                    {% else %}
-                        <div class="icon">
-                            {{ icon | pimcore_lazy_icon | raw }}
-                            <div class="label">{{ iconPath|basename }}</div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="accordion_item">
-        <div class="accordion_title">
-            <div class="accordion_arrow"><span class="accordion_arrow-item ">+</span></div>
-            <span class="accordion_title-text">Flags</span>
-        </div>
-        <div class="accordion_content">
-
-            <small>based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a></small>
-            <div id="flags" class="icons">
-                {% for langOpt in languageOptions %}
-                    <div class="icon">
-                        {{ langOpt['display'] }} <br>
-                        {{ langOpt['flag'] | pimcore_lazy_icon | raw }}
-                        <div class="label">
-                            {% set iconPath = langOpt['flag']|replace({(webRoot): ''}) %}
-                            {{ iconPath|basename }}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
+<div class="info">
+    {% if source is defined %}
+        <small>{{ source|raw }}</small>
+    {% endif %}
 </div>
 
+<div id="{{ type }}" class="icons">
+    <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon to copy path to clipboard.</div>
+
+    {% if extraInfo is defined %}
+        <div style="margin-bottom: 20px; text-align: left">{{ extraInfo }}</div>
+    {% endif %}
+
+    {% for icon in icons %}
+        {% set iconPath = icon|replace({(webRoot): ''}) %}
+        {% if ('-' in iconPath and iconPath|basename|split('-')[0]|length > 3) and (type =='twemoji') %}
+            <div class="icon variant">
+                {{ icon | pimcore_twemoji_variant_icon | raw }}
+                <div class="label">{{ iconPath|basename }}</div>
+            </div>
+        {% else %}
+            <div class="icon">
+
+                {% if type == 'flags' %}
+                    {% set country = iconPath|basename|replace({'.svg': ''}) %}
+                    <div class="country_name" data-isocode="{{ country }}"></div>
+                {% endif %}
+
+                {% if loop.index < 200 %}
+                    {{ icon | pimcore_inline_icon | raw }}
+                {% else %}
+                    {{ icon | pimcore_lazy_icon | raw }}
+                {% endif %}
+
+                <div class="label">
+                    {{ iconPath in iconsCss  ? '*' : '' }}
+                    {{ iconPath|basename }}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
 
 <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/common.js"></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/functions.js"></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/helpers.js"></script>
 
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
     $( document ).ready(function() {
 
-        // Init accordion
-        $(".accordion_title").on("click", function(e) {
-
-            e.preventDefault();
-            let $this = $(this);
-
-            if (!$this.hasClass("accordion-active")) {
-                $(".accordion_content").slideUp(400);
-                $(".accordion_title").removeClass("accordion-active");
-                $('.accordion_arrow').removeClass('accordion_rotate');
-            }
-
-            $this.toggleClass("accordion-active");
-            $this.next().slideToggle();
-            $('.accordion_arrow',this).toggleClass('accordion_rotate');
-        });
-
-        // Open the first one by default
-        $('.accordion_title').first().click();
-
         // Add click event to copy icon path on all icons
-        $('img').each(function () {
-            $(this).click(function () {
-                pimcore.helpers.copyStringToClipboard($(this).data('imgpath') ?? $(this).data('lazyimgpath'));
+        $('img, div.lazy-load').each(function () {
+            $(this).on('click', function () {
+                copyStringToClipboard($(this).data('imgpath') ?? $(this).data('lazyimgpath'));
             });
         });
+
+        $('div.lazy-load').each(function (index) {
+            $(this).delay(1000 * (index/100)).css('background-image', 'url(' + $(this).data('lazyimgpath') + ')');
+        });
+
+
         // Twimoji only: clicking on icon with green border displays all its variants
         $('.icon:not(.variant)').each(function () {
-            $(this).click(function () {
-                let variants = $(this).prevUntil('div.icon:not(.variant)');
-                variants.each(function () {
-                    if (!$(this).is(':visible')) {
-                        let img = $(this).children('img');
-                        img.attr('src', img.data('imgpath'));
-                        $(this).show();
-                    }
+            let variants = $(this).prevUntil('div.icon:not(.variant)');
+            if (variants.length > 0) {
+                $(this).on('click', function () {
+                    variants.each(function () {
+                        if (!$(this).is(':visible')) {
+                            let img = $(this).children('img');
+                            img.attr('src', img.data('imgpath'));
+                            $(this).show();
+                        }
+                    });
                 });
-            });
+            }
         });
 
-        // Lazy Load the hidden ones
-        $('img.lazy-load').each(function (index) {
-            $(this).delay(500 * (index/100)).attr('src', $(this).data('lazyimgpath'));
-        });
+        // Country name from coutnry code
+        const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
+        $('.country_name').each(function(){
+            try {
+                let country = regionNames.of($(this).data('isocode').toUpperCase());
+                $(this).text(country);
+            } catch{
+                // quick workaround for the ones that breaks it, eg. Scotland and Wels
+                $(this).text($(this).data('isocode'));
+            }
+        })
 
     });
+
+    const copyStringToClipboard = function (str) {
+        let selection = document.getSelection(),
+            prevSelection = (selection.rangeCount > 0) ? selection.getRangeAt(0) : false,
+            el;
+
+        // create element and insert string
+        el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+
+        // insert element, select all text and copy
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // restore previous selection
+        if (prevSelection) {
+            selection.removeAllRanges();
+            selection.addRange(prevSelection);
+        }
+    };
+
 </script>
 
 </body>

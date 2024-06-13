@@ -167,7 +167,7 @@ class AdminExtension extends AbstractExtension
     public function lazyIcon(string $icon): string
     {
         return sprintf(
-            '<img class="lazy-load" title="%s" data-lazyimgpath="%s" />',
+            '<div class="lazy-load" title="%s" data-lazyimgpath="%s" /></div>',
             basename($icon),
             str_replace(PIMCORE_WEB_ROOT, '', $icon)
         );
