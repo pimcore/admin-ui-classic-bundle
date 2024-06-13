@@ -43,24 +43,24 @@ pimcore.localeDateTime = {
             this.shortDate = this.convertDateFormatFromIntl(locale);
             this.shortTime = this.convertTimeFroamtFromIntl(locale, 'short');
             this.mediumTime = this.convertTimeFroamtFromIntl(locale, 'medium');
-
-            if (Ext.util && Ext.util.Format) {
-                Ext.apply(Ext.util.Format, {
-                    dateFormat: this.getShortDateFormat()
-                })
-            }
-            Ext.override(Ext.form.field.Date, {
-                format: this.getShortDateFormat(),
-            });
-
-            Ext.override(Ext.grid.column.Date, {
-                format: this.getShortDateFormat(),
-            });
-
-            Ext.override(Ext.form.field.Time, {
-                format: this.getShortTimeFormat(),
-            });
         }
+
+        if (Ext.util && Ext.util.Format) {
+            Ext.apply(Ext.util.Format, {
+                dateFormat: this.getShortDateFormat()
+            })
+        }
+        Ext.override(Ext.form.field.Date, {
+            format: this.getShortDateFormat(),
+        });
+
+        Ext.override(Ext.grid.column.Date, {
+            format: this.getShortDateFormat(),
+        });
+
+        Ext.override(Ext.form.field.Time, {
+            format: this.getShortTimeFormat(),
+        });
     },
 
     // Returns the EXT JS date format equivalent based on the localized date by Intl.DateTimeFormat
