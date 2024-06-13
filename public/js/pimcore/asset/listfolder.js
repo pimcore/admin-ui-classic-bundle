@@ -396,7 +396,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
                     renderer: function(d) {
                         if (d) {
                             var date = new Date(d * 1000);
-                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                         }
 
                     }

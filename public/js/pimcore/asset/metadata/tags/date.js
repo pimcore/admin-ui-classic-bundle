@@ -45,7 +45,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
                     var timestamp = intval(value) * 1000;
                     var date = new Date(timestamp);
 
-                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
                 return "";
             }.bind(this, field.key)
@@ -111,7 +111,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
             if(!(value instanceof Date)) {
                 value = new Date(value * 1000);
             }
-            return Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+            return Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
         }
 
         return Ext.util.Format.htmlEncode(value);

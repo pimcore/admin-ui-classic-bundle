@@ -181,7 +181,7 @@ pimcore.object.classes.data.datetime = Class.create(pimcore.object.classes.data.
     setDefaultValue:function (defaultValue, datefield, timefield) {
 
         if (datefield.getValue() && typeof datefield.getValue() === 'object') {
-            var dateString = Ext.Date.format(datefield.getValue(), pimcore.globalmanager.get('localeDateTime').getDateFormat());
+            var dateString = Ext.Date.format(datefield.getValue(), pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
 
             if (timefield.getValue()) {
                 dateString += " " + Ext.Date.format(timefield.getValue(), pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());

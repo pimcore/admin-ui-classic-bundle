@@ -63,7 +63,7 @@ pimcore.element.scheduler = Class.create({
                     convert: function (v, rec) {
                         var ret = v;
                         if (v instanceof Date) {
-                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                         }
                         return ret;
                     }

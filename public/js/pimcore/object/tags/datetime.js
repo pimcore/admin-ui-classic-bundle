@@ -60,7 +60,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: pimcore.globalmanager.get('localeDateTime').getDateFormat()};
+        return {type:'date', dataIndex:field.key, dateFormat: pimcore.globalmanager.get('localeDateTime').getShortDateFormat()};
     },
 
     getLayoutEdit:function () {
@@ -123,7 +123,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.datefield.getValue()) {
             var value = this.datefield.getValue();
-            var dateString = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+            var dateString = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
 
             if (this.timefield.getValue()) {
                 var timeValue = this.timefield.getValue();

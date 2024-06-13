@@ -53,7 +53,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
                     var timestamp = intval(value) * 1000;
                     var date = new Date(timestamp);
 
-                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateFormat());
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
                 return "";
             }.bind(this, field.key)};
