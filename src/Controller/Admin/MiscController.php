@@ -308,11 +308,14 @@ class MiscController extends AdminAbstractController
         $languageOptions = [];
         foreach ($locales as $short => $translation) {
             if (!empty($short)) {
-                $languageOptions[] = [
-                    'language' => $short,
-                    'display' => $translation . " ($short)",
-                    'flag' => AdminTool::getLanguageFlagFile($short, true),
-                ];
+                $flag = AdminTool::getLanguageFlagFile($short, true, false);
+                if ($flag) {
+                    $languageOptions[] = [
+                        'language' => $short,
+                        'display' => $translation . " ($short)",
+                        'flag' => $flag,
+                    ];
+                }
             }
         }
 
