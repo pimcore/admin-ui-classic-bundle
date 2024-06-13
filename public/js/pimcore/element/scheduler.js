@@ -141,12 +141,9 @@ pimcore.element.scheduler = Class.create({
             });
 
             var propertiesColumns = [
-                {text: t("date"), width: 120, sortable: true, dataIndex: 'date', editor: new Ext.form.DateField({
-                        format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
-                    })
+                {text: t("date"), width: 120, sortable: true, dataIndex: 'date', editor: new Ext.form.DateField()
                 },
                 {text: t("time"), width: 100, sortable: true, dataIndex: 'time', editor: new Ext.form.TimeField({
-                        format: "H:i",
                         listeners: {
                             focus : function(component) {
                                 component.setValue(Ext.util.Format.htmlDecode(component.value));

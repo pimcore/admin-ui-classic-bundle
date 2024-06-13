@@ -60,14 +60,13 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")};
+        return {type:'date', dataIndex:field.key, dateFormat: pimcore.globalmanager.get('localeDateTime').getDateFormat()};
     },
 
     getLayoutEdit:function () {
 
         var date = {
             width:130,
-            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
         };
 
         var time = {

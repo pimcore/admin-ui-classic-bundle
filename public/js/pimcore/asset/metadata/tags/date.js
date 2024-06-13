@@ -63,7 +63,6 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
             name:this.fieldConfig.name,
             componentCls:"object_field",
             width:130,
-            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
         };
 
         if (this.fieldConfig.labelWidth) {
@@ -96,9 +95,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
     },
 
     getGridCellEditor: function (gridtype, record) {
-        return Ext.create('Ext.form.field.Date', {
-            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
-        });
+        return Ext.create('Ext.form.field.Date');
     },
 
     convertPredefinedGridData: function(v, r) {

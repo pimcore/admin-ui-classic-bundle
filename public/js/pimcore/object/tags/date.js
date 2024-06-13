@@ -70,7 +70,6 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
             name:this.fieldConfig.name,
             componentCls: this.getWrapperClassNames(),
             width:130,
-            format: pimcore.helpers.intlDateFormatFromLocale("Y-m-d")
         };
 
         if (this.fieldConfig.labelWidth) {
