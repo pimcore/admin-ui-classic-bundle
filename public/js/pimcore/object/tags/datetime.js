@@ -51,8 +51,18 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                         }
 
                         if (value) {
-                            var timestamp = intval(value) * 1000;
-                            var date = new Date(timestamp);
+                            let date;
+                            if (typeof value === "string" && value.match(/-/)) {
+                                date = new Date(value);
+                            } else {
+                                let timestamp = intval(value) * 1000;
+                                date = new Date(timestamp);
+
+                                if (!this.isRespectTimezone()) {
+                                    date = dateToServerTimezone(date);
+                                }
+                            }
+
                             return Ext.Date.format(date, "Y-m-d H:i");
                         }
                         return "";
@@ -60,7 +70,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: 'c'};
     },
 
     getLayoutEdit:function () {
@@ -78,6 +88,11 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.data) {
             var tmpDate = new Date(intval(this.data) * 1000);
+
+            if (!this.isRespectTimezone()) {
+                tmpDate = dateToServerTimezone(tmpDate);
+            }
+
             date.value = tmpDate;
             time.value = tmpDate;
         }
@@ -136,6 +151,11 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
             }
 
             value = Ext.Date.parseDate(dateString, "Y-m-d H:i");
+
+            if (value && this.fieldConfig.columnType === "datetime" && !this.isRespectTimezone()) {
+                return dateString;
+            }
+
             if (value && typeof value.getTime == "function") {
                 return value.getTime();
             }
@@ -176,7 +196,13 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getCellEditValue: function () {
+        if (this.fieldConfig.columnType === "datetime" && !this.isRespectTimezone()) {
+            return this.getValue();
+        }
         return this.getValue() / 1000;
-    }
+    },
 
+    isRespectTimezone: function() {
+       return this.fieldConfig.respectTimezone !== false;
+    }
 });
