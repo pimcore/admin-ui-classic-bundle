@@ -296,11 +296,12 @@ class MiscController extends AdminAbstractController
         if ($profiler) {
             $profiler->disable();
         }
+
+        $type = $request->get('type');
         $publicDir = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin';
         $iconDir = $publicDir . '/img';
         $extraInfo = null;
 
-        $type = $request->get('type');
 
         $icons = match($type) {
             'color' => rscandir($iconDir . '/flat-color-icons/'),

@@ -813,7 +813,6 @@ pimcore.layout.toolbar = Class.create({
                      itemId: 'pimcore_menu_settings_icon_library',
                      text: t('icon_library'),
                      handler: function() {
-
                          const iconLibraryTab = Ext.create('Ext.tab.Panel', {
                              region: 'center',
                              deferredRender: true,
