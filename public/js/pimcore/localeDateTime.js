@@ -21,27 +21,28 @@ pimcore.localeDateTime = {
     systemShortTime: 'H:i',
     systemMediumTime: 'H:i:s',
 
-    getShortDateFormat: function(){
+    getShortDateFormat: function () {
         return this.shortDate;
     },
-    getShortTimeFormat: function(){
+    getShortTimeFormat: function () {
         return this.shortTime;
     },
-    getMediumTimeFormat: function(){
+    getMediumTimeFormat: function () {
         return this.mediumTime;
     },
-    getShortDateTimeFormat: function() {
+    getShortDateTimeFormat: function () {
         return this.shortDate + ' ' + this.shortTime;
     },
-    getDateTimeFormat: function() {
+    getDateTimeFormat: function () {
         return this.shortDate + ' ' + this.mediumTime;
     },
 
-    setDefaultDateTime: function(locale){
-        if (locale){
-            this.shortDate = this.intlDateFormatFromLocale(locale);
-            this.shortTime = this.intlTimeFormatFromLocale(locale, 'short');
-            this.mediumTime = this.intlTimeFormatFromLocale(locale, 'medium');
+    // Set the default date and time format based on the given locale and override forms/fields globally
+    setDefaultDateTime: function (locale) {
+        if (locale) {
+            this.shortDate = this.convertDateFormatFromIntl(locale);
+            this.shortTime = this.convertTimeFroamtFromIntl(locale, 'short');
+            this.mediumTime = this.convertTimeFroamtFromIntl(locale, 'medium');
 
             if (Ext.util && Ext.util.Format) {
                 Ext.apply(Ext.util.Format, {
@@ -61,51 +62,23 @@ pimcore.localeDateTime = {
             });
         }
     },
-    convertByLocale: function (value, locale, options){
-        if (typeof options === 'undefined') {
-            options = {
-                dateStyle: "short",
-                timeStyle: "medium"
-            }
-        }
 
-        if (locale) {
-            const dateFormatter = new Intl.DateTimeFormat(locale, options);
-            return dateFormatter.format(value);
-        }else{
-            let format = '';
-            let separator = ' ';
-            if (options.dateStyle === 'short') {
-                format+= this.systemShortDate;
-            }
-            if (options.timeStyle === 'short') {
-                format+= separator + this.systemShortTime;
-            }else if (options.timeStyle === 'medium') {
-                format+= separator + this.systemMediumTime;
-            }
-            if (format === ''){
-                format = this.systemShortDate + this.systemMediumTime;
-            }
-            return Ext.Date.format(value, format);
-        }
-    },
-
-    // Returns the date format based on the localized date by DateTimeFormat
+    // Returns the EXT JS date format equivalent based on the localized date by Intl.DateTimeFormat
     // It checks wheter it is leading zero or 4 digits years by guessing it by checking the output of a dummy date
-    intlDateFormatFromLocale: function (locale){
+    convertDateFormatFromIntl: function (locale) {
         const dateFormatter = new Intl.DateTimeFormat(locale, {dateStyle: "short"});
         const localizedDate = dateFormatter.format(new Date('2021-06-03'));
-        let dayFormat= 'j'; //no leading zero
+        let dayFormat = 'j'; //no leading zero
         let monthFormat = 'n'; //no leading zero
         let yearFormat = 'y'; // 2 digits year
 
-        if (localizedDate.includes('2021')){
+        if (localizedDate.includes('2021')) {
             yearFormat = 'Y';
         }
-        if (localizedDate.includes('03')){
+        if (localizedDate.includes('03')) {
             dayFormat = 'd';
         }
-        if (localizedDate.includes('06')){
+        if (localizedDate.includes('06')) {
             monthFormat = 'm';
         }
 
@@ -129,29 +102,29 @@ pimcore.localeDateTime = {
             .join('');
     },
 
-    // Returns the time format based on the localized date by DateTimeFormat
+    // Returns the EXT JS time format equivalent based on the localized date by Intl.DateTimeFormat
     // It checks wheter it is 0-12 AM/PM, 0-23. Minutes and seconds are internationally with a leading zero as 00-59.
-    intlTimeFormatFromLocale: function (locale, timeStyle){
+    convertTimeFroamtFromIntl: function (locale, timeStyle) {
         const dummyDate = new Date('2020-01-01 09:30:59');
         const dateFormatter = new Intl.DateTimeFormat(locale, {timeStyle: timeStyle});
         const localizedDateTime = dateFormatter.format(dummyDate);
 
         let dayPeriodFormat = '';
-        if (localizedDateTime.includes('am') || localizedDateTime.includes('a.m.')){ //lowecased eg. am/pm
+        if (localizedDateTime.includes('am') || localizedDateTime.includes('a.m.')) { //lowecased eg. am/pm
             dayPeriodFormat = 'a';
-        }else if (localizedDateTime.includes('AM') || localizedDateTime.includes('A.M.')){
+        } else if (localizedDateTime.includes('AM') || localizedDateTime.includes('A.M.')) {
             dayPeriodFormat = 'A';
         }
 
-        let hourFormat= '';
-        if (localizedDateTime.includes('09')){
+        let hourFormat = '';
+        if (localizedDateTime.includes('09')) {
             hourFormat = 'H';
-            if (dayPeriodFormat){
+            if (dayPeriodFormat) {
                 hourFormat = 'h';
             }
-        }else if (localizedDateTime.includes('9')){
+        } else if (localizedDateTime.includes('9')) {
             hourFormat = 'G';
-            if (dayPeriodFormat){
+            if (dayPeriodFormat) {
                 hourFormat = 'g';
             }
         }
