@@ -217,6 +217,8 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             columnLines: true,
             bodyCls: "pimcore_editable_grid",
             autoHeight: true,
+            width: this.fieldConfig.width,
+            height: this.fieldConfig.height,
             selModel: Ext.create('Ext.selection.CellModel'),
             hideHeaders: !this.fieldConfig.columnConfigActivated,
             plugins: [
@@ -225,7 +227,16 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             tbar: tbar,
             viewConfig: {
                 markDirty: false,
-                forceFit: true
+                forceFit: true,
+                listeners: {
+                    refresh: function (dataview) {
+                        Ext.suspendLayouts();
+                        Ext.each(dataview.panel.columns, function (column) {
+                            column.autoSize();
+                        });
+                        Ext.resumeLayouts(true);
+                    }
+                }
             }
         });
         this.component.add(this.grid);
