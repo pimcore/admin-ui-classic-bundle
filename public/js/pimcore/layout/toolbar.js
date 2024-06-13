@@ -808,7 +808,6 @@ pimcore.layout.toolbar = Class.create({
              }
  
              if (user.admin) {
-
                  settingsItems.push({
                      iconCls: "pimcore_nav_icon_icons",
                      itemId: 'pimcore_menu_settings_icon_library',
