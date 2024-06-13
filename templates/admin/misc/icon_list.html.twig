@@ -111,7 +111,7 @@
                     <div class="country_name" data-isocode="{{ country }}"></div>
                 {% endif %}
 
-                {% if loop.index < 200 %}
+                {% if loop.index < 300 %}
                     {{ icon | pimcore_inline_icon | raw }}
                 {% else %}
                     {{ icon | pimcore_lazy_icon | raw }}
@@ -142,7 +142,7 @@
         });
 
         $('div.lazy-load').each(function (index) {
-            $(this).delay(1000 * (index/100)).css('background-image', 'url(' + $(this).data('lazyimgpath') + ')');
+            $(this).delay(300 * (index/100)).css('background-image', 'url(' + $(this).data('lazyimgpath') + ')');
         });
 
 
