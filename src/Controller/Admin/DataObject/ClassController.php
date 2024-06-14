@@ -1822,7 +1822,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         };
 
         $style = '';
-        if ($type === 'white'){
+        if ($type === 'white') {
             $style = 'background-color:#000';
         }
         foreach ($icons as &$icon) {
@@ -1839,7 +1839,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $startIndex = 0;
         $result = [];
 
-        if (str_starts_with($type,'twemoji')){
+        if (str_starts_with($type, 'twemoji')) {
             foreach ($icons as $index => $twemojiIcon) {
                 $iconBase = basename($twemojiIcon);
 
@@ -1857,17 +1857,17 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $icons = array_values($icons);
             $limit = count($icons);
 
-            if ($type === 'twemoji-1'){
+            if ($type === 'twemoji-1') {
                 $limit = floor($limit / 3);
             }
-            if ($type === 'twemoji-2'){
+            if ($type === 'twemoji-2') {
                 $startIndex = floor($limit / 3);
                 $limit = floor($limit / 3 * 2);
             }
-            if ($type === 'twemoji-3'){
+            if ($type === 'twemoji-3') {
                 $startIndex = floor($limit / 3 * 2);
             }
-        }else{
+        } else {
             $limit = count($icons);
         }
 
@@ -1878,7 +1878,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 'text' => sprintf('<img style="%s" src="data:%s;base64,%s"/>', $style, mime_content_type(PIMCORE_WEB_ROOT . $icon), base64_encode($content)),
                 'value' => $icon,
             ];
-        };
+        }
 
         return $this->adminJson($result);
     }
