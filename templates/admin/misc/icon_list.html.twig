@@ -134,12 +134,9 @@
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
     $( document ).ready(function() {
 
-        // Add click event to copy icon path on all icons
-        $('img, div.lazy-load').each(function () {
-            $(this).on('click', function () {
-                copyStringToClipboard($(this).data('imgpath') ?? $(this).data('lazyimgpath'));
-            });
-        });
+        // Add click event to copy icon path to clipboard
+        $('body').on('click', 'img, div.lazy-load', function () { copyStringToClipboard($(this).data('imgpath') ?? $(this).data('lazyimgpath')); });
+
 
         $('div.lazy-load').each(function (index) {
             $(this).delay(300 * (index/100)).css('background-image', 'url(' + $(this).data('lazyimgpath') + ')');
