@@ -1812,6 +1812,10 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $classId = $request->get('classId');
         $type = $request->get('type');
 
+        if (!$type){
+            return $this->adminJson([]);
+        }
+
         $iconDir = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img';
 
         $icons = match($type) {

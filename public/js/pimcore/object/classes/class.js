@@ -22,7 +22,7 @@ pimcore.object.classes.klass = Class.create({
     context: "class",
     uploadRoute: 'pimcore_admin_dataobject_class_importclass',
     exportRoute: 'pimcore_admin_dataobject_class_exportclass',
-
+    iconCss: ' left center no-repeat; text-indent: 20px',
     initialize: function (data, parentPanel, reopen, editorPrefix) {
         this.parentPanel = parentPanel;
         this.data = data;
@@ -752,8 +752,8 @@ pimcore.object.classes.klass = Class.create({
             value: this.data.icon,
             listeners: {
                 "afterrender": function (el) {
-                    el.inputEl.applyStyles("background:url(" + el.getValue() + ") left center no-repeat; text-indent: 19px;");
-                }
+                    el.inputEl.applyStyles("background:url(" + el.getValue() + ")" + this.iconCss);
+                }.bind(this)
             }
         });
 
@@ -916,15 +916,16 @@ pimcore.object.classes.klass = Class.create({
                         {
                             xtype: "combobox",
                             store: iconStore,
-                            width: 100,
+                            width: 105,
                             valueField: 'value',
                             displayField: 'text',
+                            emptyText: t('select_type_first'),
                             listeners: {
                                 select: function (ele, rec, idx) {
                                     const icon = Ext.getCmp("iconfield-" + this.getId());
                                     const newValue = rec.data.value;
                                     icon.setValue(newValue);
-                                    icon.inputEl.applyStyles("background:url(" + newValue + ") left center no-repeat; text-indent: 19px;");
+                                    icon.inputEl.applyStyles("background:url(" + newValue + ")" + this.iconCss);
                                     return newValue;
                                 }.bind(this)
                             }
@@ -934,7 +935,7 @@ pimcore.object.classes.klass = Class.create({
                             xtype: "button",
                             tooltip: t("refresh"),
                             handler: function(iconField) {
-                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ") right center no-repeat;");
+                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ")" + this.iconCss);
                             }.bind(this, iconField)
                         },
                         {

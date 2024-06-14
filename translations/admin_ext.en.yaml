@@ -18,6 +18,9 @@ icon_library: Icon Library
 color_icons: Color Icons
 white_icons: White Icons
 twemoji: Twemoji
+twemoji_variants: Twemoji variants
+select_type_first: Please select a type first
+icon_tools: Icon Tools
 flags: Flags
 system_performance_stability_warning: >-
     Please do not perform this action unless you are sure what you are doing.<br
