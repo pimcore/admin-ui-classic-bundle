@@ -1821,7 +1821,9 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $icons = match($type) {
             'color' => rscandir($iconDir . '/flat-color-icons/'),
             'white' => rscandir($iconDir . '/flat-white-icons/'),
-            'twemoji-1', 'twemoji-2', 'twemoji-3', 'twemoji_variants' => rscandir($iconDir . '/twemoji/'),
+            'twemoji-1', 'twemoji-2', 'twemoji-3',
+            'twemoji_variants-1', 'twemoji_variants-2', 'twemoji_variants-3'
+            => rscandir($iconDir . '/twemoji/'),
             default => []
         };
 
@@ -1847,12 +1849,12 @@ class ClassController extends AdminAbstractController implements KernelControlle
             foreach ($icons as $index => $twemojiIcon) {
                 $iconBase = basename($twemojiIcon);
 
-                // All the variants (like skin color) have 3 hyphens in their base name
+                // All the variants (like skin color) have a hyphen in their base name
                 // Here we remove/unset wheter if the selected icon type is the variant list
-                $countHyphen = substr_count($iconBase, '-');
+                $explodeByHyphen = explode('-', $iconBase);
                 if (
-                    ($type != 'twemoji_variants' && $countHyphen > 3) ||
-                    ($type == 'twemoji_variants' && $countHyphen < 3)
+                    (!str_starts_with($type, 'twemoji_variants') && isset($explodeByHyphen[1])) ||
+                    (str_starts_with($type, 'twemoji_variants')  && !isset($explodeByHyphen[1]))
                 ) {
                     unset($icons[$index]);
                 }
@@ -1861,14 +1863,14 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $icons = array_values($icons);
             $limit = count($icons);
 
-            if ($type === 'twemoji-1') {
+            if (str_ends_with($type,'-1')) {
                 $limit = floor($limit / 3);
             }
-            if ($type === 'twemoji-2') {
+            if (str_ends_with($type,'-2')) {
                 $startIndex = floor($limit / 3);
                 $limit = floor($limit / 3 * 2);
             }
-            if ($type === 'twemoji-3') {
+            if (str_ends_with($type,'-3')) {
                 $startIndex = floor($limit / 3 * 2);
             }
         } else {

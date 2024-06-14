@@ -98,6 +98,10 @@
 
     {% for icon in icons %}
         {% set iconPath = icon|replace({(webRoot): ''}) %}
+        {#
+            Any icon with basename that has a dash will be considered as a variant to avoid recurisvely searching for "parent" icon.
+            It happens that all icon that have variants have at least a prefix of 4-5 characters.
+        #}
         {% if ('-' in iconPath and iconPath|basename|split('-')[0]|length > 3) and (type =='twemoji') %}
             <div class="icon variant">
                 {{ icon | pimcore_twemoji_variant_icon | raw }}

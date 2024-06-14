@@ -709,13 +709,15 @@ pimcore.object.classes.klass = Class.create({
                 { "text": t('twemoji') + ' (1/3)', "value": 'twemoji-1' },
                 { "text": t('twemoji') + ' (2/3)', "value": 'twemoji-2' },
                 { "text": t('twemoji') + ' (3/3)', "value": 'twemoji-3' },
-                { "text": t('twemoji_variants'), "value": 'twemoji_variants' },
+                { "text": t('twemoji_variants') + ' (1/3)', "value": 'twemoji_variants-1' },
+                { "text": t('twemoji_variants') + ' (2/3)', "value": 'twemoji_variants-2' },
+                { "text": t('twemoji_variants') + ' (3/3)', "value": 'twemoji_variants-3' },
             ]
         });
 
         const iconTypeBox = Ext.create('Ext.form.ComboBox', {
             store: iconTypes,
-            width: 150,
+            width: 180,
             displayField: 'text',
             valueField: 'value',
             emptyText: t('type'),
@@ -738,7 +740,7 @@ pimcore.object.classes.klass = Class.create({
                     type: 'json'
                 },
                 extraParams: {
-                    classId: this.getId(),
+                    classId: this.getId()
                 }
             },
             fields: ["text", "value"]
@@ -916,7 +918,7 @@ pimcore.object.classes.klass = Class.create({
                         {
                             xtype: "combobox",
                             store: iconStore,
-                            width: 105,
+                            width: 75,
                             valueField: 'value',
                             displayField: 'text',
                             emptyText: t('select_type_first'),

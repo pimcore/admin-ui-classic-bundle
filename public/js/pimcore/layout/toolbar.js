@@ -1372,6 +1372,7 @@ pimcore.layout.toolbar = Class.create({
         }
         catch (e) {
             pimcore.globalmanager.add("iconlibrary", new pimcore.iconlibrary.panel());
+            pimcore.globalmanager.get("iconlibrary").activate();
         }
     }
  });
