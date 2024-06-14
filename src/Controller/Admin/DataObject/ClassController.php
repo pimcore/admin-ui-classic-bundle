@@ -1812,7 +1812,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $classId = $request->get('classId');
         $type = $request->get('type');
 
-        if (!$type){
+        if (!$type) {
             return $this->adminJson([]);
         }
 
