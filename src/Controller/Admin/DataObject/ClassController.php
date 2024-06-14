@@ -1863,14 +1863,14 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $icons = array_values($icons);
             $limit = count($icons);
 
-            if (str_ends_with($type,'-1')) {
+            if (str_ends_with($type, '-1')) {
                 $limit = floor($limit / 3);
             }
-            if (str_ends_with($type,'-2')) {
+            if (str_ends_with($type, '-2')) {
                 $startIndex = floor($limit / 3);
                 $limit = floor($limit / 3 * 2);
             }
-            if (str_ends_with($type,'-3')) {
+            if (str_ends_with($type, '-3')) {
                 $startIndex = floor($limit / 3 * 2);
             }
         } else {
