@@ -240,8 +240,8 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
     },
 
     setActiveLanguageTab: function (languageTab, language) {
-        languageTab.items.items.forEach((tabLanguage) => {
-            if (tabLanguage.currentLanguage === language) {
+        languageTab.items.items.forEach((tabLanguage, index) => {
+            if (this.frontendLanguages[index] === language) {
                 languageTab.setActiveTab(tabLanguage);
             }
         });
