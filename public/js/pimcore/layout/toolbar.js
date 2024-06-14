@@ -812,54 +812,7 @@ pimcore.layout.toolbar = Class.create({
                      iconCls: "pimcore_nav_icon_icons",
                      itemId: 'pimcore_menu_settings_icon_library',
                      text: t('icon_library'),
-                     handler: function() {
-                         const iconLibraryTab = Ext.create('Ext.tab.Panel', {
-                             region: 'center',
-                             deferredRender: true,
-                             id: "pimcore_icon_library_tabs",
-                             enableTabScroll: true,
-                             hideMode: "offsets",
-                             cls: "tab_panel",
-                             height: "100%",
-                             items: [
-                                 {
-                                     title: t('color_icons'),
-                                     html: '<iframe src="' + Routing.generate('pimcore_admin_misc_iconlist', {type: 'color'}) + '" frameborder="0" style="width:100%; height:100%" ></iframe>',
-                                     collapsible: true
-                                 },
-                                 {
-                                     title: t('white_icons'),
-                                     html: '<iframe src="' + Routing.generate('pimcore_admin_misc_iconlist', {type: 'white'}) + '" frameborder="0" style="width:100%; height:100%" ></iframe>',
-                                     collapsible: true
-                                 },
-                                 {
-                                     title: t('twemoji'),
-                                     html: '<iframe src="' + Routing.generate('pimcore_admin_misc_iconlist', {type: 'twemoji'}) + '" frameborder="0" style="width:100%; height:100%" ></iframe>',
-                                     collapsible: true
-                                 },
-                                 {
-                                     title: t('flags'),
-                                     html: '<iframe src="' + Routing.generate('pimcore_admin_misc_iconlist', {type: 'flags'}) + '" frameborder="0" style="width:100%; height:100%" ></iframe>',
-                                     collapsible: true
-                                 }
-                             ]
-                         });
-
-                         this.panel = new Ext.Panel({
-                             id: "pimcore_icon_library_panel",
-                             title: t("icon_library"),
-                             iconCls: "pimcore_icon_icons",
-                             border: false,
-                             layout: 'border',
-                             closable: true,
-                             items: [
-                                 iconLibraryTab
-                             ],
-                         });
-
-                         const tabPanel = Ext.getCmp("pimcore_panel_tabs");
-                         tabPanel.add(this.panel);
-                     }
+                     handler: this.showIconLibrary.bind(this)
                  });
              }
  
@@ -1411,6 +1364,15 @@ pimcore.layout.toolbar = Class.create({
          }
  
          pimcore.globalmanager.add("new_notifications", new pimcore.notification.modal());
-     }
+     },
+
+    showIconLibrary: function () {
+        try {
+            pimcore.globalmanager.get("iconlibrary").activate();
+        }
+        catch (e) {
+            pimcore.globalmanager.add("iconlibrary", new pimcore.iconlibrary.panel());
+        }
+    }
  });
  
