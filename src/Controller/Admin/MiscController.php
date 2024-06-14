@@ -307,6 +307,7 @@ class MiscController extends AdminAbstractController
             'white' => rscandir($iconDir . '/flat-white-icons/'),
             'twemoji' => rscandir($iconDir . '/twemoji/'),
             'flags' => $this->getFlags(),
+            default => []
         };
 
         $source = match($type) {

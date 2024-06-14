@@ -701,7 +701,36 @@ pimcore.object.classes.klass = Class.create({
             return "Pimcore\\Model\\DataObject\\" + ucfirst(name);
         };
 
-        var iconStore = new Ext.data.ArrayStore({
+        const iconTypes = Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [
+                { "text": t('color_icons'), "value": 'color' },
+                { "text": t('white_icons'), "value": 'white' },
+                { "text": t('twemoji') + ' (1/3)', "value": 'twemoji-1' },
+                { "text": t('twemoji') + ' (2/3)', "value": 'twemoji-2' },
+                { "text": t('twemoji') + ' (3/3)', "value": 'twemoji-3' },
+                { "text": t('twemoji_variants'), "value": 'twemoji_variants' },
+            ]
+        });
+
+        const iconTypeBox = Ext.create('Ext.form.ComboBox', {
+            store: iconTypes,
+            width: 150,
+            displayField: 'text',
+            valueField: 'value',
+            emptyText: t('type'),
+            listeners: {
+                change: function (elem) {
+                    iconStore.proxy.extraParams = {
+                       'type' : elem.value,
+                        classId: this.getId(),
+                    };
+                    iconStore.load();
+                }.bind(this)
+            }
+        });
+
+        const iconStore = new Ext.data.ArrayStore({
             proxy: {
                 url: Routing.generate('pimcore_admin_dataobject_class_geticons'),
                 type: 'ajax',
@@ -709,7 +738,7 @@ pimcore.object.classes.klass = Class.create({
                     type: 'json'
                 },
                 extraParams: {
-                    classId: this.getId()
+                    classId: this.getId(),
                 }
             },
             fields: ["text", "value"]
@@ -723,7 +752,7 @@ pimcore.object.classes.klass = Class.create({
             value: this.data.icon,
             listeners: {
                 "afterrender": function (el) {
-                    el.inputEl.applyStyles("background:url(" + el.getValue() + ") right center no-repeat;");
+                    el.inputEl.applyStyles("background:url(" + el.getValue() + ") left center no-repeat; text-indent: 19px;");
                 }
             }
         });
@@ -872,19 +901,30 @@ pimcore.object.classes.klass = Class.create({
                         labelWidth: 200
                     },
                     items: [
-                        iconField,
+                        iconField
+                    ]
+                },
+                {
+                    xtype: "fieldcontainer",
+                    layout: "hbox",
+                    fieldLabel: t("icon_tools"),
+                    defaults: {
+                        labelWidth: 200
+                    },
+                    items: [
+                        iconTypeBox,
                         {
                             xtype: "combobox",
                             store: iconStore,
-                            width: 50,
+                            width: 100,
                             valueField: 'value',
                             displayField: 'text',
                             listeners: {
                                 select: function (ele, rec, idx) {
-                                    var icon = ele.container.down("#iconfield-" + this.getId());
-                                    var newValue = rec.data.value;
-                                    icon.component.setValue(newValue);
-                                    icon.component.inputEl.applyStyles("background:url(" + newValue + ") right center no-repeat;");
+                                    const icon = Ext.getCmp("iconfield-" + this.getId());
+                                    const newValue = rec.data.value;
+                                    icon.setValue(newValue);
+                                    icon.inputEl.applyStyles("background:url(" + newValue + ") left center no-repeat; text-indent: 19px;");
                                     return newValue;
                                 }.bind(this)
                             }
