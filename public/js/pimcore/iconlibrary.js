@@ -62,7 +62,7 @@ pimcore.iconlibrary.panel = Class.create({
             });
 
             this.panel = new Ext.Panel({
-                id: "pimcore_icon_library_panel",
+                id: "pimcore_iconlibrary_panel",
                 title: t("icon_library"),
                 iconCls: "pimcore_icon_icons",
                 border: false,
