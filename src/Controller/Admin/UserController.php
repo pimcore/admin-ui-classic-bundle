@@ -630,6 +630,8 @@ class UserController extends AdminAbstractController implements KernelController
             return $adminSession->get('password_reset');
         });
 
+        $userData['validLocales'] = Tool::getSupportedJSLocales();
+
         $response = new Response('pimcore.currentuser = ' . $this->encodeJson($userData));
         $response->headers->set('Content-Type', 'text/javascript');
 
