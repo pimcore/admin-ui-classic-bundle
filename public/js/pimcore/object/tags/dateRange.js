@@ -28,8 +28,8 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
     },
 
     getLayoutEdit: function () {
-        const startDateConfig = { format: 'Y-m-d' };
-        const endDateConfig = { format: 'Y-m-d' };
+        const startDateConfig = {};
+        const endDateConfig = {};
 
         if (this.data && 'start_date' in this.data) {
             startDateConfig.value = new Date(intval(this.data['start_date']) * 1000);
