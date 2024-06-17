@@ -29,7 +29,7 @@
             box-sizing: border-box;
         }
 
-        .icon img:hover, div.lazy-load:hover {
+        .icon img:hover {
             cursor: copy;
         }
 
@@ -71,13 +71,6 @@
             display: none;
             background-color: #eee;
         }
-        .lazy-load{
-            background-size: contain;
-            background-repeat: no-repeat;
-            height: 50px;
-            width: 50px;
-            display: inline-block;
-        }
 
     </style>
 </head>
@@ -115,7 +108,7 @@
                     <div class="country_name" data-isocode="{{ country }}"></div>
                 {% endif %}
 
-                {% if loop.index < 300 %}
+                {% if loop.index < 100 %}
                     {{ icon | pimcore_inline_icon | raw }}
                 {% else %}
                     {{ icon | pimcore_lazy_icon | raw }}
@@ -139,13 +132,7 @@
     $( document ).ready(function() {
 
         // Add click event to copy icon path to clipboard
-        $('body').on('click', 'img, div.lazy-load', function () { copyStringToClipboard($(this).data('imgpath') ?? $(this).data('lazyimgpath')); });
-
-
-        $('div.lazy-load').each(function (index) {
-            $(this).delay(300 * (index/100)).css('background-image', 'url(' + $(this).data('lazyimgpath') + ')');
-        });
-
+        $('body').on('click', 'img', function () { copyStringToClipboard($(this).data('imgpath')); });
 
         // Twimoji only: clicking on icon with green border displays all its variants
         $('.icon:not(.variant)').each(function () {

@@ -722,7 +722,7 @@ pimcore.object.classes.klass = Class.create({
             valueField: 'value',
             emptyText: t('type'),
             listeners: {
-                change: function (elem) {
+                select: function (elem) {
                     iconStore.proxy.extraParams = {
                        'type' : elem.value,
                         classId: this.getId(),
