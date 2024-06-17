@@ -1546,7 +1546,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
                     $layoutDefinition = null;
                     if ($layoutList) {
-                        $layoutDefinition = $layoutList[0];
+                        $layoutDefinition = array_values($layoutList)[0];
                     }
 
                     if (!$layoutDefinition) {
