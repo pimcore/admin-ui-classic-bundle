@@ -476,6 +476,15 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 }
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('document', this.data.id, this, buttons);
 

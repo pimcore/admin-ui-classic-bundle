@@ -2,6 +2,213 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.34.0](https://github.com/ajaxorg/ace/compare/v1.33.3...v1.34.0) (2024-05-22)
+
+
+### Features
+
+* allow users to add arialabel to text input ([#5560](https://github.com/ajaxorg/ace/issues/5560)) ([8d7dfb6](https://github.com/ajaxorg/ace/commit/8d7dfb69392960aba61def982f4bea8f3a5caa70))
+
+### [1.33.3](https://github.com/ajaxorg/ace/compare/v1.33.2...v1.33.3) (2024-05-21)
+
+
+### Bug Fixes
+
+* contrast completion meta contrast cloud editor themes ([#5558](https://github.com/ajaxorg/ace/issues/5558)) ([b8877f0](https://github.com/ajaxorg/ace/commit/b8877f0f725b3973961cb639127402c9f56609de))
+
+### [1.33.2](https://github.com/ajaxorg/ace/compare/v1.33.1...v1.33.2) (2024-05-13)
+
+
+### Bug Fixes
+
+* Add soft wrap for ghost text ([#5540](https://github.com/ajaxorg/ace/issues/5540)) ([6a26b27](https://github.com/ajaxorg/ace/commit/6a26b277d0050b38cd766e00f93be4b9f3170f68))
+* generator function's determination; wrong parameter highlighting ([#5538](https://github.com/ajaxorg/ace/issues/5538)) ([ceca6f7](https://github.com/ajaxorg/ace/commit/ceca6f7b38f6b3347988f17579ae6a2e758137dd))
+* incorrect spans style ([#5539](https://github.com/ajaxorg/ace/issues/5539)) ([65a7f38](https://github.com/ajaxorg/ace/commit/65a7f38713cffb729dab530711351c0a17c5801f))
+* not determined folding widgets for html tags ([#5548](https://github.com/ajaxorg/ace/issues/5548)) ([7a51992](https://github.com/ajaxorg/ace/commit/7a5199292f55dfa1a8ea8830ea1a9d98be097161))
+* wrong token type ([#5535](https://github.com/ajaxorg/ace/issues/5535)) ([4041489](https://github.com/ajaxorg/ace/commit/4041489bb38ffe609d5f9b43b4a7637e47fc4739))
+
+### [1.33.1](https://github.com/ajaxorg/ace/compare/v1.33.0...v1.33.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* account for `this.popup` being potentially undefined in completion mousewheel listener ([#5537](https://github.com/ajaxorg/ace/issues/5537)) ([6c3a9a6](https://github.com/ajaxorg/ace/commit/6c3a9a66a7a0ab0dd493ad2c281c9dd343d5301f))
+
+## [1.33.0](https://github.com/ajaxorg/ace/compare/v1.32.9...v1.33.0) (2024-04-12)
+
+
+### Features
+
+* Make translation system key based and add annotation type to gutter icon aria labels ([#5524](https://github.com/ajaxorg/ace/issues/5524)) ([bb8256d](https://github.com/ajaxorg/ace/commit/bb8256d5a5b5e989e3fb1bb80f326b8564fbbc20))
+
+
+### Bug Fixes
+
+* Contrast is too low for searched items ([#5523](https://github.com/ajaxorg/ace/issues/5523)) ([507ae2f](https://github.com/ajaxorg/ace/commit/507ae2f872a2b2f1a14fdffbf6530f4046df44c0))
+
+### [1.32.9](https://github.com/ajaxorg/ace/compare/v1.32.8...v1.32.9) (2024-03-29)
+
+
+### Bug Fixes
+
+* apply class to autocomplete popup for no suggestions state ([#5522](https://github.com/ajaxorg/ace/issues/5522)) ([a66f861](https://github.com/ajaxorg/ace/commit/a66f8619953eecd85833d97715e479d3b211c4cd))
+
+### [1.32.8](https://github.com/ajaxorg/ace/compare/v1.32.7...v1.32.8) (2024-03-22)
+
+
+### Bug Fixes
+
+* allow completers to trigger on newline characters ([#5519](https://github.com/ajaxorg/ace/issues/5519)) ([6e870fd](https://github.com/ajaxorg/ace/commit/6e870fd08e06be47f9da971743d13b25c41f99c2))
+* don't detach completion popup while typing when prefix is empty ([#5517](https://github.com/ajaxorg/ace/issues/5517)) ([7937e53](https://github.com/ajaxorg/ace/commit/7937e53babb9b327902e9dab4b18c04a907883be))
+* scroll cursor line to top editor for long inline preview ([#5514](https://github.com/ajaxorg/ace/issues/5514)) ([529473b](https://github.com/ajaxorg/ace/commit/529473b6959d5f7a70ada1d20feb0c87b432f766))
+* SwiftHighlightRules exports ([#5516](https://github.com/ajaxorg/ace/issues/5516)) ([f493ab0](https://github.com/ajaxorg/ace/commit/f493ab03bb50fe089c927b7a50a4a327c8dcec4c))
+
+### [1.32.7](https://github.com/ajaxorg/ace/compare/v1.32.6...v1.32.7) (2024-03-01)
+
+
+### Bug Fixes
+
+* swap blue/red in cloudeditor themes to reduces usage of red ([#5492](https://github.com/ajaxorg/ace/issues/5492)) ([0e8f549](https://github.com/ajaxorg/ace/commit/0e8f549a16481f8bb7573ac9edaae377cb9e3972))
+
+### [1.32.6](https://github.com/ajaxorg/ace/compare/v1.32.5...v1.32.6) (2024-02-07)
+
+### [1.32.5](https://github.com/ajaxorg/ace/compare/v1.32.4...v1.32.5) (2024-01-30)
+
+### [1.32.4](https://github.com/ajaxorg/ace/compare/v1.32.3...v1.32.4) (2024-01-29)
+
+
+### Bug Fixes
+
+* Improve contrast of completion popup in CloudEditor theme ([#5473](https://github.com/ajaxorg/ace/issues/5473)) ([273c7f1](https://github.com/ajaxorg/ace/commit/273c7f159ded7dc9403266c6501e16a35e4101c6))
+* update JSX mode to reflect React JSX ([#5451](https://github.com/ajaxorg/ace/issues/5451)) ([66789a7](https://github.com/ajaxorg/ace/commit/66789a79ce1b7791c65886d8aecddd7efc0415e8))
+
+### [1.32.3](https://github.com/ajaxorg/ace/compare/v1.32.2...v1.32.3) (2023-12-29)
+
+
+### Bug Fixes
+
+* improve prefixing for inline preview ([#5439](https://github.com/ajaxorg/ace/issues/5439)) ([51006bb](https://github.com/ajaxorg/ace/commit/51006bba9c60b97251ddb04ed74f68ba4e7f6b54))
+* update ghost text if on same line popup ([12f4664](https://github.com/ajaxorg/ace/commit/12f466460d7187cfe37593dab1fbe275403fedd3))
+* updated red color in cloud-editor dark theme ([#5432](https://github.com/ajaxorg/ace/issues/5432)) ([142b607](https://github.com/ajaxorg/ace/commit/142b607578f5d071a5026691ff6662c11e9f186b))
+
+### [1.32.2](https://github.com/ajaxorg/ace/compare/v1.32.1...v1.32.2) (2023-12-14)
+
+
+### Bug Fixes
+
+* **themes:** changed the solarized theme primary color from `[#93](https://github.com/ajaxorg/ace/issues/93)A1A1` to `[#839496](https://github.com/ajaxorg/ace/issues/839496)`. ([#5422](https://github.com/ajaxorg/ace/issues/5422)) ([114a5c1](https://github.com/ajaxorg/ace/commit/114a5c163fd875b4fab332dadfadeeae41e4097a)), closes [#93A1A1](https://github.com/ajaxorg/ace/issues/93A1A1)
+
+### [1.32.1](https://github.com/ajaxorg/ace/compare/v1.32.0...v1.32.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* don't show loading state when empty completer array is provided ([7a8a929](https://github.com/ajaxorg/ace/commit/7a8a92933b3fde75907612d106643d28efa2d776))
+* prevent browser scroll while scrolling over the tooltip ([#5414](https://github.com/ajaxorg/ace/issues/5414)) ([c6475c0](https://github.com/ajaxorg/ace/commit/c6475c00bcfa49dde37ef9de06ebba82ba5ba15d))
+* switch aria-selected to aria-current for webkit ([#5416](https://github.com/ajaxorg/ace/issues/5416)) ([bf1a4ea](https://github.com/ajaxorg/ace/commit/bf1a4ea607ed09b5a299390dd2daa5c1d0019e00)), closes [#5403](https://github.com/ajaxorg/ace/issues/5403)
+* yaml worker errors at undefined row/column ([06cc12a](https://github.com/ajaxorg/ace/commit/06cc12aad98176d931a1c1cf9a701f4ac0c33de5))
+
+## [1.32.0](https://github.com/ajaxorg/ace/compare/v1.31.2...v1.32.0) (2023-11-30)
+
+
+### Features
+
+* adding CloudEditor theme ([#5404](https://github.com/ajaxorg/ace/issues/5404)) ([b0ee067](https://github.com/ajaxorg/ace/commit/b0ee067fadaf9593ed2207f363a402eb9ab8d57a))
+
+
+### Bug Fixes
+
+* autocomplete tests ([#5407](https://github.com/ajaxorg/ace/issues/5407)) ([cf6999d](https://github.com/ajaxorg/ace/commit/cf6999d9cb4103df16dc38a8cbfd40ab2a999e6d))
+* set completion popup role to 'menu' for safari ([6845905](https://github.com/ajaxorg/ace/commit/684590546746fa2ef090c10c140e01e43974d8f4))
+* stop rendering the completion popup disconnected from the editor for long ghost text ([#5401](https://github.com/ajaxorg/ace/issues/5401)) ([94d68a7](https://github.com/ajaxorg/ace/commit/94d68a73042c61a786d253fd0838e62cc5770a31))
+* try to scroll inline preview into view ([#5400](https://github.com/ajaxorg/ace/issues/5400)) ([95af560](https://github.com/ajaxorg/ace/commit/95af5608b655259d12cdbc4ca28cf450f9e649c7))
+
+### [1.31.2](https://github.com/ajaxorg/ace/compare/v1.31.1...v1.31.2) (2023-11-15)
+
+
+### Bug Fixes
+
+* inline preview with loading state ([05db94f](https://github.com/ajaxorg/ace/commit/05db94f53774f64318de757347f7217043744fe6))
+
+### [1.31.1](https://github.com/ajaxorg/ace/compare/v1.31.0...v1.31.1) (2023-10-30)
+
+
+### Bug Fixes
+
+* improve yaml folding ([5c80e3c](https://github.com/ajaxorg/ace/commit/5c80e3cdd716b4ad26ee6958c9137278530b7816))
+
+## [1.31.0](https://github.com/ajaxorg/ace/compare/v1.30.0...v1.31.0) (2023-10-23)
+
+
+### Features
+
+* add nasal language ([#5342](https://github.com/ajaxorg/ace/issues/5342)) ([4fff99e](https://github.com/ajaxorg/ace/commit/4fff99e320539a1472ce0512cd1fd3e5fc7f2ca6))
+
+
+### Bug Fixes
+
+* doc tooltip not filtering properly ([e5034c7](https://github.com/ajaxorg/ace/commit/e5034c7b58fb47fe57b28dbb001e72a567ef9abe))
+
+## [1.30.0](https://github.com/ajaxorg/ace/compare/v1.29.0...v1.30.0) (2023-10-13)
+
+
+### Features
+
+* Add support for time units in PRQL ([#5324](https://github.com/ajaxorg/ace/issues/5324)) ([8b9175b](https://github.com/ajaxorg/ace/commit/8b9175bc780fade64bed1570fa1cd34d022b337b))
+
+## [1.29.0](https://github.com/ajaxorg/ace/compare/v1.28.0...v1.29.0) (2023-10-09)
+
+
+### Features
+
+* allow setting completion.ignoreCaption ([5618046](https://github.com/ajaxorg/ace/commit/56180467e12c300850da89cc13c1c8648fb5e342))
+
+## [1.28.0](https://github.com/ajaxorg/ace/compare/v1.27.0...v1.28.0) (2023-09-22)
+
+
+### Features
+
+* Keep focus on same item in completion popup when slow completer delivers results. ([#5322](https://github.com/ajaxorg/ace/issues/5322)) ([0983134](https://github.com/ajaxorg/ace/commit/09831343ccd450326cffb4b0f26ce3a8b830c7fb))
+
+## [1.27.0](https://github.com/ajaxorg/ace/compare/v1.26.0...v1.27.0) (2023-09-19)
+
+
+### Features
+
+* Allow not showing inline preview for completers when `inlineEnabled` is set to `true`. ([#5315](https://github.com/ajaxorg/ace/issues/5315)) ([f3e3330](https://github.com/ajaxorg/ace/commit/f3e333041fc1a687b3ce35a44f1bf00bcc15a236))
+
+## [1.26.0](https://github.com/ajaxorg/ace/compare/v1.25.1...v1.26.0) (2023-09-15)
+
+
+### Features
+
+* Allow to set setSelectOnHover for Autocomplete ([#5317](https://github.com/ajaxorg/ace/issues/5317)) ([dccbcc2](https://github.com/ajaxorg/ace/commit/dccbcc20288a48403f10aa29b6b9b6181dc8a66f))
+
+
+### Bug Fixes
+
+* Improve PRQL syntax highlightning ([#5313](https://github.com/ajaxorg/ace/issues/5313)) ([7d677f1](https://github.com/ajaxorg/ace/commit/7d677f1019ea5c81f3d9ae36ed1e71ac7a08fb30))
+
+### [1.25.1](https://github.com/ajaxorg/ace/compare/v1.25.0...v1.25.1) (2023-09-14)
+
+## [1.25.0](https://github.com/ajaxorg/ace/compare/v1.24.2...v1.25.0) (2023-09-14)
+
+
+### Features
+
+* Add syntax highlighting for PRQL ([#5307](https://github.com/ajaxorg/ace/issues/5307)) ([24862cd](https://github.com/ajaxorg/ace/commit/24862cdc83694bbe541c6f8be6fbaaff80d44bf7))
+
+### [1.24.2](https://github.com/ajaxorg/ace/compare/v1.24.1...v1.24.2) (2023-09-08)
+
+
+### Bug Fixes
+
+* Added project details in index.html file ([#5300](https://github.com/ajaxorg/ace/issues/5300)) ([6e83505](https://github.com/ajaxorg/ace/commit/6e835059dd13e95178b15ce9b06a2f2444c2e731))
+* autocompletion threshold doesn't apply to trigger characters ([84bbc88](https://github.com/ajaxorg/ace/commit/84bbc888e1c0304c0160bb19fc46cf5539d079cf))
+* Update php_highlight_rules.js ([#5288](https://github.com/ajaxorg/ace/issues/5288)) ([caedd0c](https://github.com/ajaxorg/ace/commit/caedd0cf22d5a7644ceb418562ebcab801011c88))
+
+### [1.24.1](https://github.com/ajaxorg/ace/compare/v1.24.0...v1.24.1) (2023-08-15)
+
 ## [1.24.0](https://github.com/ajaxorg/ace/compare/v1.23.4...v1.24.0) (2023-08-09)
 
 

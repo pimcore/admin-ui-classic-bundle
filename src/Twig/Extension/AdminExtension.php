@@ -55,6 +55,7 @@ class AdminExtension extends AbstractExtension
     {
         return [
             new TwigFilter('pimcore_inline_icon', [$this, 'inlineIcon']),
+            new TwigFilter('pimcore_lazy_icon', [$this, 'lazyIcon']),
             new TwigFilter('pimcore_twemoji_variant_icon', [$this, 'twemojiVariantIcon']),
         ];
     }
@@ -158,6 +159,16 @@ class AdminExtension extends AbstractExtension
             '<img src="data:%s;base64,%s" title="%s" data-imgpath="%s" />',
             mime_content_type($icon),
             base64_encode($content),
+            basename($icon),
+            str_replace(PIMCORE_WEB_ROOT, '', $icon)
+        );
+    }
+
+    public function lazyIcon(string $icon): string
+    {
+        return sprintf(
+            '<img src="%s" loading="lazy" class="lazy-load" title="%s" data-imgpath="%s" />',
+            str_replace(PIMCORE_WEB_ROOT, '', $icon),
             basename($icon),
             str_replace(PIMCORE_WEB_ROOT, '', $icon)
         );

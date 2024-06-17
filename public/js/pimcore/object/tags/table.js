@@ -434,6 +434,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
                                 line = line.split("\t");
                                 result.push(line);
                             }
+                            this.dirty = true;
                         }
                     }
 

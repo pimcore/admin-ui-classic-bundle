@@ -125,7 +125,7 @@ pimcore.settings.thumbnail.item = Class.create({
                     value: this.data.format,
                     triggerAction: 'all',
                     editable: false,
-                    store: [["SOURCE", "Auto (Web-optimized - recommended)"], ["ORIGINAL", "ORIGINAL"], ["PNG", "PNG"], ["GIF", "GIF"], ["JPEG", "JPEG"], ["PJPEG", "JPEG (progressive)"], ["TIFF", "TIFF"],
+                    store: [["SOURCE", "Auto (Web-optimized - recommended)"], ["ORIGINAL", "ORIGINAL"], ["PNG", "PNG"], ["GIF", "GIF"], ["JPEG", "JPEG"], ["PJPEG", "JPEG (progressive)"], ["WEBP", "WebP"], ["AVIF", "AVIF"], ["TIFF", "TIFF"],
                         ["PRINT", "Print (PNG,JPG,SVG,TIFF)"]],
                     width: 450
                 }, {
@@ -853,6 +853,38 @@ pimcore.settings.thumbnail.items = {
         });
 
         return item;
+    },
+
+    itemMirror: function (panel, data, getName) {
+        const niceName = t("mirror");
+        if (typeof getName != "undefined" && getName) {
+            return niceName;
+        }
+
+        if (typeof data == "undefined") {
+            data = {};
+        }
+        const myId = Ext.id();
+
+        return new Ext.form.FormPanel({
+            id: myId,
+            style: "margin-top: 10px",
+            border: true,
+            bodyStyle: "padding: 10px;",
+            tbar: this.getTopBar(niceName, myId, panel),
+            items: [{
+                xtype: 'combo',
+                name: "mode",
+                fieldLabel: t("mode"),
+                width: 210,
+                store: [["horizontal", t("horizontal")], ["vertical", t("vertical")]],
+                value: data.mode
+            }, {
+                xtype: "hidden",
+                name: "type",
+                value: "mirror"
+            }]
+        });
     },
 
     itemSetBackgroundColor: function (panel, data, getName) {
