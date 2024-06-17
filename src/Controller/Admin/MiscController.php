@@ -302,7 +302,7 @@ class MiscController extends AdminAbstractController
         $iconDir = $publicDir . '/img';
         $extraInfo = null;
 
-        $icons = match($type) {
+        $icons = match ($type) {
             'color' => rscandir($iconDir . '/flat-color-icons/'),
             'white' => rscandir($iconDir . '/flat-white-icons/'),
             'twemoji' => rscandir($iconDir . '/twemoji/'),
@@ -310,14 +310,17 @@ class MiscController extends AdminAbstractController
             default => []
         };
 
-        $source = match($type) {
-            'color' => 'based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
-            'white' => 'based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
-            'twemoji' => 'based on the <a href="https://github.com/twitter/twemoji/blob/master/LICENSE" target="_blank">Twemoji icons</a>',
+        $source = match ($type) {
+            'color', 'white' =>
+                'based on the ' .
+                '<a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
+            'twemoji' =>
+                'based on the ' .
+                '<a href="https://github.com/twitter/twemoji/blob/master/LICENSE" target="_blank">Twemoji icons</a>',
             default => ''
         };
 
-        if ($type ==='twemoji') {
+        if ($type === 'twemoji') {
             $extraInfo = 'ℹ Click on icon with green border to display all its related variants. Click on the letter to display flags with the clicked initial';
         }
 

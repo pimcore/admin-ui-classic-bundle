@@ -23,7 +23,7 @@ pimcore.iconlibrary.panel = Class.create({
     },
 
     activate: function () {
-        var tabPanel = Ext.getCmp("pimcore_panel_tabs");
+        const tabPanel = Ext.getCmp("pimcore_panel_tabs");
         tabPanel.setActiveItem("pimcore_iconlibrary_panel");
     },
 
@@ -74,7 +74,7 @@ pimcore.iconlibrary.panel = Class.create({
 
             this.panel.on("destroy", function () {
                 pimcore.globalmanager.remove("iconlibrary");
-            }.bind(this));
+            });
 
             pimcore.layout.refresh();
         }

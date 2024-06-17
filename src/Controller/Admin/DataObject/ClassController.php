@@ -1881,7 +1881,12 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $icon = $icons[$i];
             $content = file_get_contents(PIMCORE_WEB_ROOT . $icon);
             $result[] = [
-                'text' => sprintf('<img style="%s" src="data:%s;base64,%s"/>', $style, mime_content_type(PIMCORE_WEB_ROOT . $icon), base64_encode($content)),
+                'text' => sprintf(
+                    '<img style="%s" src="data:%s;base64,%s"/>',
+                    $style,
+                    mime_content_type(PIMCORE_WEB_ROOT . $icon),
+                    base64_encode($content)
+                ),
                 'value' => $icon,
             ];
         }
