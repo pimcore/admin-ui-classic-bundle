@@ -201,7 +201,11 @@ pimcore.object.versions = Class.create({
 
             var selections = grid.getSelectionModel().getSelection();
 
-            var url = Routing.generate('pimcore_admin_dataobject_dataobject_diffversions', {from: selections[0].data.id, to: selections[1].data.id});
+            var url = Routing.generate('pimcore_admin_dataobject_dataobject_diffversions', {
+                from: selections[0].data.id,
+                to: selections[1].data.id,
+                userTimezone: getUserTimezone()
+            });
             Ext.get(this.iframeId).dom.src = url;
         }
     },
@@ -211,8 +215,10 @@ pimcore.object.versions = Class.create({
         var store = grid.getStore();
         var data = store.getAt(rowIndex).data;
         var versionId = data.id;
-
-        var url = Routing.generate('pimcore_admin_dataobject_dataobject_previewversion', {id: versionId});
+        var url = Routing.generate('pimcore_admin_dataobject_dataobject_previewversion', {
+            id: versionId,
+            userTimezone: getUserTimezone()
+        });
         Ext.get(this.iframeId).dom.src = url;
     },
 

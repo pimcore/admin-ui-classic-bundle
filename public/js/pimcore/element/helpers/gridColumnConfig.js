@@ -857,6 +857,7 @@ pimcore.element.helpers.gridColumnConfig = {
         this.exportParameters.initial = initial ? 1 : 0;
         this.exportParameters.language = this.gridLanguage;
         this.exportParameters.context = Ext.encode(this.context);
+        this.exportParameters.userTimezone = getUserTimezone();
 
         Ext.Ajax.request({
             url: this.exportProcessUrl,

@@ -1794,6 +1794,10 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
     return string
 }
 
+function getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
 function dateToServerTimezone(date) {
 
     let utcDate = new Date(date.toLocaleString('en-US', {

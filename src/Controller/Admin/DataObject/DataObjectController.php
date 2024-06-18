@@ -1596,6 +1596,9 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $object = $version?->loadData();
 
         if ($object) {
+
+            Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
             if (method_exists($object, 'getLocalizedFields')) {
                 /** @var DataObject\Localizedfield $localizedFields */
                 $localizedFields = $object->getLocalizedFields();
@@ -1650,6 +1653,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         if (!$object2) {
             throw $this->createNotFoundException('Version with id [' . $id2 . "] doesn't exist");
         }
+
+        Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
 
         if (method_exists($object2, 'getLocalizedFields')) {
             /** @var DataObject\Localizedfield $localizedFields2 */
