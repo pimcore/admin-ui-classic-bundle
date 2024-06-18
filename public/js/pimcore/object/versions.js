@@ -104,7 +104,6 @@ pimcore.object.versions = Class.create({
                     },
                     {
                         text: t("date"), width: 150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function (d) {
-                            console.log(pimcore.globalmanager.get('localeDateTime'));
                             return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }
                     },

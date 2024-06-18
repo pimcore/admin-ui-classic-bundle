@@ -55,7 +55,6 @@ pimcore.settings.profile.panel = Class.create({
     getEditPanel: function () {
         this.forceReloadOnSave = false;
         this.currentUser = pimcore.currentuser;
-        console.log(pimcore.currentuser);
 
         var passwordCheck = function (el) {
             if (pimcore.helpers.isValidPassword(el.getValue())) {
