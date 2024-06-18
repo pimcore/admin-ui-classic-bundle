@@ -24,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Model\GridConfig;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Db;
 use Pimcore\File;
@@ -66,7 +67,7 @@ class DataObjectHelperController extends AdminAbstractController
         if ($object) {
             $result['success'] = true;
             $fields = $request->get('fields');
-            $result['fields'] = DataObject\Service::gridObjectData($object, $fields);
+            $result['fields'] = GridData\DataObject::getData($object, $fields);
         } else {
             $result['success'] = false;
         }
