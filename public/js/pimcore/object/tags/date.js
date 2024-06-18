@@ -62,7 +62,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
                         }
                     }
 
-                    return Ext.Date.format(date, "Y-m-d");
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
                 return "";
             }.bind(this, field.key)};
@@ -79,7 +79,6 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
             name:this.fieldConfig.name,
             componentCls: this.getWrapperClassNames(),
             width:130,
-            format: "Y-m-d"
         };
 
         if (this.fieldConfig.labelWidth) {

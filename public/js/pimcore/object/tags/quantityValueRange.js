@@ -78,14 +78,14 @@ pimcore.object.tags.quantityValueRange = Class.create(pimcore.object.tags.abstra
 
         if (this.data) {
             if (!isNaN(this.data.minimum)) {
-                this.minimum.setRawValue(this.data.minimum);
+                this.minimum.setRawValue(this.minimum.valueToRaw(this.data.minimum));
                 this.minimum.resetOriginalValue();
             } else {
                 this.data.minimum = null;
             }
 
             if (!isNaN(this.data.maximum)) {
-                this.maximum.setRawValue(this.data.maximum);
+                this.maximum.setRawValue(this.maximum.valueToRaw(this.data.maximum));
                 this.maximum.resetOriginalValue();
             } else {
                 this.data.maximum = null;

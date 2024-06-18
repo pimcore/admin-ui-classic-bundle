@@ -22,6 +22,7 @@ creationdate: 'Creation Date'
 usermodification: 'User Modification'
 userowner: Owner
 languages: Languages
+datetime_locale: Date Time Locale
 password_was_not_changed: "Password wasn't changed because it isn't secure enough"
 password_does_not_match: "New password and confirm password doesn't match"
 incorrect_password: "Given password is incorrect"

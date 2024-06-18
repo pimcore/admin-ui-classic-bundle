@@ -22,7 +22,7 @@ pimcore.object.classes.klass = Class.create({
     context: "class",
     uploadRoute: 'pimcore_admin_dataobject_class_importclass',
     exportRoute: 'pimcore_admin_dataobject_class_exportclass',
-
+    iconCss: ' left center no-repeat; text-indent: 20px',
     initialize: function (data, parentPanel, reopen, editorPrefix) {
         this.parentPanel = parentPanel;
         this.data = data;
@@ -701,7 +701,38 @@ pimcore.object.classes.klass = Class.create({
             return "Pimcore\\Model\\DataObject\\" + ucfirst(name);
         };
 
-        var iconStore = new Ext.data.ArrayStore({
+        const iconTypes = Ext.create('Ext.data.Store', {
+            fields: ['text', 'value'],
+            data: [
+                { "text": t('color_icons'), "value": 'color' },
+                { "text": t('white_icons'), "value": 'white' },
+                { "text": t('twemoji') + ' (1/3)', "value": 'twemoji-1' },
+                { "text": t('twemoji') + ' (2/3)', "value": 'twemoji-2' },
+                { "text": t('twemoji') + ' (3/3)', "value": 'twemoji-3' },
+                { "text": t('twemoji_variants') + ' (1/3)', "value": 'twemoji_variants-1' },
+                { "text": t('twemoji_variants') + ' (2/3)', "value": 'twemoji_variants-2' },
+                { "text": t('twemoji_variants') + ' (3/3)', "value": 'twemoji_variants-3' },
+            ]
+        });
+
+        const iconTypeBox = Ext.create('Ext.form.ComboBox', {
+            store: iconTypes,
+            width: 180,
+            displayField: 'text',
+            valueField: 'value',
+            emptyText: t('type'),
+            listeners: {
+                select: function (elem) {
+                    iconStore.proxy.extraParams = {
+                       'type' : elem.value,
+                        classId: this.getId(),
+                    };
+                    iconStore.load();
+                }.bind(this)
+            }
+        });
+
+        const iconStore = new Ext.data.ArrayStore({
             proxy: {
                 url: Routing.generate('pimcore_admin_dataobject_class_geticons'),
                 type: 'ajax',
@@ -723,8 +754,8 @@ pimcore.object.classes.klass = Class.create({
             value: this.data.icon,
             listeners: {
                 "afterrender": function (el) {
-                    el.inputEl.applyStyles("background:url(" + el.getValue() + ") right center no-repeat;");
-                }
+                    el.inputEl.applyStyles("background:url(" + el.getValue() + ")" + this.iconCss);
+                }.bind(this)
             }
         });
 
@@ -872,19 +903,31 @@ pimcore.object.classes.klass = Class.create({
                         labelWidth: 200
                     },
                     items: [
-                        iconField,
+                        iconField
+                    ]
+                },
+                {
+                    xtype: "fieldcontainer",
+                    layout: "hbox",
+                    fieldLabel: t("icon_tools"),
+                    defaults: {
+                        labelWidth: 200
+                    },
+                    items: [
+                        iconTypeBox,
                         {
                             xtype: "combobox",
                             store: iconStore,
-                            width: 50,
+                            width: 75,
                             valueField: 'value',
                             displayField: 'text',
+                            emptyText: t('select_type_first'),
                             listeners: {
                                 select: function (ele, rec, idx) {
-                                    var icon = ele.container.down("#iconfield-" + this.getId());
-                                    var newValue = rec.data.value;
-                                    icon.component.setValue(newValue);
-                                    icon.component.inputEl.applyStyles("background:url(" + newValue + ") right center no-repeat;");
+                                    const icon = Ext.getCmp("iconfield-" + this.getId());
+                                    const newValue = rec.data.value;
+                                    icon.setValue(newValue);
+                                    icon.inputEl.applyStyles("background:url(" + newValue + ")" + this.iconCss);
                                     return newValue;
                                 }.bind(this)
                             }
@@ -894,7 +937,7 @@ pimcore.object.classes.klass = Class.create({
                             xtype: "button",
                             tooltip: t("refresh"),
                             handler: function(iconField) {
-                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ") right center no-repeat;");
+                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ")" + this.iconCss);
                             }.bind(this, iconField)
                         },
                         {
@@ -902,7 +945,7 @@ pimcore.object.classes.klass = Class.create({
                             iconCls: "pimcore_icon_icons",
                             text: t('icon_library'),
                             handler: function () {
-                                pimcore.helpers.openGenericIframeWindow("icon-library", Routing.generate('pimcore_admin_misc_iconlist'), "pimcore_icon_icons", t("icon_library"));
+                                pimcore.globalmanager.get("layout_toolbar").showIconLibrary();
                             }
                         }
                     ]
