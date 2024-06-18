@@ -464,6 +464,7 @@ class UserController extends AdminAbstractController implements KernelController
             'availablePermissions' => $availableUserPermissionsData,
             'availablePerspectives' => $availablePerspectives,
             'validLanguages' => Tool::getValidLanguages(),
+            'validLocales' => Tool::getSupportedJSLocales(),
             'objectDependencies' => [
                 'hasHidden' => $hasHidden,
                 'dependencies' => $userObjectData,
@@ -628,6 +629,8 @@ class UserController extends AdminAbstractController implements KernelController
         $userData['isPasswordReset'] = Tool\Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
             return $adminSession->get('password_reset');
         });
+
+        $userData['validLocales'] = Tool::getSupportedJSLocales();
 
         $response = new Response('pimcore.currentuser = ' . $this->encodeJson($userData));
         $response->headers->set('Content-Type', 'text/javascript');

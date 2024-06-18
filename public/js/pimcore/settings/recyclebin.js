@@ -111,7 +111,7 @@ pimcore.settings.recyclebin = Class.create({
                 text: t("date"), flex: 140, sortable: true, dataIndex: 'date',
                 renderer: function (d) {
                     var date = new Date(d * 1000);
-                    return Ext.Date.format(date, "Y-m-d H:i:s");
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 },
                 filter: 'date'
 

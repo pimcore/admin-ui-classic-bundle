@@ -301,8 +301,13 @@ Ext.onReady(function () {
         }
     });
 
-    var user = new pimcore.user(pimcore.currentuser);
+    let user = new pimcore.user(pimcore.currentuser);
     pimcore.globalmanager.add("user", user);
+
+    // set the default date time format according to user locale settings
+    let localeDateTime = pimcore.localeDateTime;
+    pimcore.globalmanager.add("localeDateTime", localeDateTime);
+    localeDateTime.setDefaultDateTime(user.datetimeLocale);
 
     // document types
     Ext.define('pimcore.model.doctypes', {

@@ -237,7 +237,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 var value = filterData[i].getValue();
 
                 if (value instanceof Date) {
-                    value = Ext.Date.format(value, "Y-m-d");
+                    value = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
 
                 if (value && typeof value == "object") {

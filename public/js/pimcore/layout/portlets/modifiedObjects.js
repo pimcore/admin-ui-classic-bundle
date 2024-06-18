@@ -53,7 +53,7 @@ pimcore.layout.portlets.modifiedObjects = Class.create(pimcore.layout.portlets.a
                 {text: t('path'), sortable: false, dataIndex: 'path', flex: 1},
                 {text: t('date'), width: 150, sortable: false, renderer: function (d) {
                     var date = new Date(d * 1000);
-                    return Ext.Date.format(date,"Y-m-d H:i:s");
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }, dataIndex: 'date'}
 
             ],
