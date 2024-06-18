@@ -1546,7 +1546,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
                     $layoutDefinition = null;
                     if ($layoutList) {
-                        $layoutDefinition = $layoutList[0];
+                        $layoutDefinition = array_values($layoutList)[0];
                     }
 
                     if (!$layoutDefinition) {
@@ -1810,14 +1810,27 @@ class ClassController extends AdminAbstractController implements KernelControlle
     public function getIconsAction(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         $classId = $request->get('classId');
+        $type = $request->get('type');
+
+        if (!$type) {
+            return $this->adminJson([]);
+        }
 
         $iconDir = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img';
-        $classIcons = rscandir($iconDir . '/object-icons/');
-        $colorIcons = rscandir($iconDir . '/flat-color-icons/');
-        $twemoji = rscandir($iconDir . '/twemoji/');
 
-        $icons = array_merge($classIcons, $colorIcons, $twemoji);
+        $icons = match($type) {
+            'color' => rscandir($iconDir . '/flat-color-icons/'),
+            'white' => rscandir($iconDir . '/flat-white-icons/'),
+            'twemoji-1', 'twemoji-2', 'twemoji-3',
+            'twemoji_variants-1', 'twemoji_variants-2', 'twemoji_variants-3'
+            => rscandir($iconDir . '/twemoji/'),
+            default => []
+        };
 
+        $style = '';
+        if ($type === 'white') {
+            $style = 'background-color:#000';
+        }
         foreach ($icons as &$icon) {
             $icon = str_replace(PIMCORE_WEB_ROOT, '', $icon);
         }
@@ -1829,11 +1842,51 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $eventDispatcher->dispatch($event, AdminEvents::CLASS_OBJECT_ICONS_PRE_SEND_DATA);
         $icons = $event->getArgument('icons');
 
+        $startIndex = 0;
         $result = [];
-        foreach ($icons as $icon) {
+
+        if (str_starts_with($type, 'twemoji')) {
+            foreach ($icons as $index => $twemojiIcon) {
+                $iconBase = basename($twemojiIcon);
+
+                // All the variants (like skin color) have a hyphen in their base name
+                // Here we remove/unset wheter if the selected icon type is the variant list
+                $explodeByHyphen = explode('-', $iconBase);
+                if (
+                    (!str_starts_with($type, 'twemoji_variants') && isset($explodeByHyphen[1])) ||
+                    (str_starts_with($type, 'twemoji_variants')  && !isset($explodeByHyphen[1]))
+                ) {
+                    unset($icons[$index]);
+                }
+            }
+
+            $icons = array_values($icons);
+            $limit = count($icons);
+
+            if (str_ends_with($type, '-1')) {
+                $limit = floor($limit / 3);
+            }
+            if (str_ends_with($type, '-2')) {
+                $startIndex = floor($limit / 3);
+                $limit = floor($limit / 3 * 2);
+            }
+            if (str_ends_with($type, '-3')) {
+                $startIndex = floor($limit / 3 * 2);
+            }
+        } else {
+            $limit = count($icons);
+        }
+
+        for ($i = $startIndex; $i < $limit; $i++) {
+            $icon = $icons[$i];
             $content = file_get_contents(PIMCORE_WEB_ROOT . $icon);
             $result[] = [
-                'text' => sprintf('<img src="data:%s;base64,%s"/>', mime_content_type(PIMCORE_WEB_ROOT . $icon), base64_encode($content)),
+                'text' => sprintf(
+                    '<img style="%s" src="data:%s;base64,%s"/>',
+                    $style,
+                    mime_content_type(PIMCORE_WEB_ROOT . $icon),
+                    base64_encode($content)
+                ),
                 'value' => $icon,
             ];
         }
@@ -1900,6 +1953,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $obj = DataObject::getByPath($objPath) ?? new $className();
 
         $textLayout = new DataObject\ClassDefinition\Layout\Text();
+        $textLayout->setName('textLayoutPreview' . $className);
 
         $context = [
           'data' => $request->get('renderingData'),
@@ -1907,6 +1961,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
         if ($renderingClass = $request->get('renderingClass')) {
             $textLayout->setRenderingClass($renderingClass);
+            $textLayout->setRenderingData($request->get('renderingData', ''));
         }
 
         if ($staticHtml = $request->get('html')) {

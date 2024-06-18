@@ -270,7 +270,7 @@ pimcore.object.versions = Class.create({
                     Ext.Ajax.request({
                         url: Routing.generate('pimcore_admin_element_deleteallversion'),
                         method: 'DELETE',
-                        params: {id: elememntId, date: modificationDate}
+                        params: {id: elememntId, date: modificationDate, type: 'object'}
                     });
 
                     //get sub collection of versions for removel. Keep current version

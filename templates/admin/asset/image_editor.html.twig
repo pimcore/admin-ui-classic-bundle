@@ -3,28 +3,43 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .cursor-pointer {
+            cursor: pointer;
+        }
+    </style>
     <base href="/bundles/pimcoreadmin/js/lib/minipaint/" />
     {{ encore_entry_script_tags('imageEditor', null, 'pimcoreAdminImageEditor') }}
 </head>
 <body>
 <div class="wrapper">
+    <nav aria-label="Main Menu" class="main_menu" id="main_menu"></nav>
 
     <div class="submenu">
         <div class="block attributes" id="action_attributes"></div>
         <div class="clear"></div>
+        <button class="undo_button" id="undo_button" type="button">
+            <span class="sr_only">Undo</span>
+        </button>
     </div>
 
     <div class="sidebar_left" id="tools_container"></div>
 
-    <div class="main_wrapper" id="main_wrapper">
-        <div class="canvas_wrapper" id="canvas_wrapper">
-            <div id="mouse"></div>
-            <div class="transparent-grid" id="canvas_minipaint_background"></div>
-            <canvas id="canvas_minipaint">
-                <div class="trn error">
-                    Your browser does not support canvas or JavaScript is not enabled.
-                </div>
-            </canvas>
+    <div class="middle_area" id="middle_area">
+
+        <canvas class="ruler_left" id="ruler_left"></canvas>
+        <canvas class="ruler_top" id="ruler_top"></canvas>
+
+        <div class="main_wrapper" id="main_wrapper">
+            <div class="canvas_wrapper" id="canvas_wrapper">
+                <div id="mouse"></div>
+                <div class="transparent-grid" id="canvas_minipaint_background"></div>
+                <canvas id="canvas_minipaint">
+                    <div class="trn error">
+                        Your browser does not support canvas or JavaScript is not enabled.
+                    </div>
+                </canvas>
+            </div>
         </div>
     </div>
 
@@ -62,11 +77,15 @@
     </div>
 </div>
 <div class="mobile_menu">
-    <button class="right_mobile_menu" id="mobile_menu_button" type="button"></button>
+    <button class="left_mobile_menu" id="left_mobile_menu_button" type="button">
+        <span class="sr_only">Toggle Menu</span>
+    </button>
+    <button class="right_mobile_menu" id="mobile_menu_button" type="button">
+        <span class="sr_only">Toggle Menu</span>
+    </button>
 </div>
-<div class="ddsmoothmenu" id="main_menu"></div>
 <div class="hidden" id="tmp"></div>
-<div id="popup"></div>
+<div id="popups"></div>
 
 {% set imageFileExtension = pimcore_file_extension(asset.getFilename()) %}
 {% set imageUrl = path('pimcore_admin_asset_getasset', {id: asset.getId()}) %}
@@ -87,6 +106,7 @@
             var checkInterval = setInterval(() => {
                 if (window.Layers) {
                     clearInterval(checkInterval);
+                    manipulateMenuBar();
                     loadImageToEditor(e);
                     resolve(true);
                 }
@@ -127,13 +147,51 @@
             return false;
         });
     }
+
+    function manipulateMenuBar() {
+        const menuBar = document.getElementsByClassName('menu_bar')[0];
+        const liElement = document.createElement('li');
+        const aElement = document.createElement('a');
+        const spanElement = document.createElement('span');
+
+        aElement.setAttribute('id', 'save_button');
+        aElement.setAttribute('role', 'menu_item');
+        aElement.setAttribute('tabindex', '-1');
+        aElement.setAttribute('aria-haspopup', 'false');
+        aElement.classList.add('cursor-pointer');
+        aElement.setAttribute('aria-expanded', 'false');
+        spanElement.setAttribute('class', 'name trn');
+        spanElement.innerText = parent.t('save');
+
+        aElement.appendChild(spanElement);
+        liElement.appendChild(aElement);
+        menuBar.prepend(liElement);
+
+        document.getElementById('main_menu_0_0').addEventListener('click', () => {
+            document.getElementById('main_menu_1_10').remove();
+            document.getElementById('main_menu_1_11').remove();
+        })
+
+        removeHref();
+
+        document.getElementsByTagName('nav')[0].addEventListener('click', (e) => {
+            removeHref();
+        });
+    }
+
+    function removeHref() {
+        const allLinkElements = document.getElementsByTagName('nav')[0].querySelectorAll("a");
+        for (let a of allLinkElements) {
+            if (a.getAttribute('href') === 'javascript:void(0)') {
+                a.classList.add('cursor-pointer');
+                a.removeAttribute('href');
+            }
+        }
+    }
     
     window.addEventListener("load", function(e) {
-        loadEditor(e).then(function() {
-            console.log("editor loaded");
-        });
+        loadEditor(e);
     }, false);
-    
 
 
 </script>

@@ -329,7 +329,16 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 handler: this.showMetaInfo.bind(this),
                 menu: this.getMetaInfoMenuItems()
             });
-            
+
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             this.toolbar = new Ext.Toolbar({
                 id: "asset_toolbar_" + this.id,
                 region: "north",

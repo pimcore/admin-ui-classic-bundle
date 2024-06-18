@@ -1,6 +1,9 @@
 #### v1.5.0
 - [Assets] Metadata can be now displayed as a read-only tab when the user is granted `view` permissions to the asset.
 - [Composer] Added `phpoffice/phpspreadsheet` requirement (which got moved out from `pimcore/pimcore`) and extended support to `v2`.
+- [Date & date/time fields] Date & date/time fields are now configured with `date` and `datetime` column type by default.
+- [Date/time fields] Date/time fields now support the usage without timezone support.
+- [Icons] Overhauled Icon library and icon dropdown selector in class definition editor.
 - [System Settings] Removed "Default-Language in Admin-Interface" setting.
 
 #### v1.4.0
