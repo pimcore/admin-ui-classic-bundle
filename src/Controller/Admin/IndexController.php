@@ -250,6 +250,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'document_tree_paging_limit'     => $config['documents']['tree_paging_limit'],
             'object_tree_paging_limit'       => $config['objects']['tree_paging_limit'],
             'hostname'                       => htmlentities(\Pimcore\Tool::getHostname(), ENT_QUOTES, 'UTF-8'),
+            'dependency'                     => $config['dependency']['enabled'],
 
             'document_auto_save_interval' => $config['documents']['auto_save_interval'],
             'object_auto_save_interval'   => $config['objects']['auto_save_interval'],
