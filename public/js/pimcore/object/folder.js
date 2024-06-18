@@ -56,7 +56,10 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             this.notes = new pimcore.element.notes(this, "object");
         }
 
-        this.dependencies = new pimcore.element.dependencies(this, "object");
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "object");
+        }
+
         this.tagAssignment = new pimcore.element.tag.assignment(this, "object");
         this.workflows = new pimcore.element.workflows(this, "object");
     },
@@ -435,7 +438,9 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         if (this.isAllowed("properties")) {
             items.push(this.properties.getLayout());
         }
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if (user.isAllowed("notes_events")) {
             items.push(this.notes.getLayout());

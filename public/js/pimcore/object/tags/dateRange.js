@@ -28,8 +28,8 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
     },
 
     getLayoutEdit: function () {
-        const startDateConfig = { format: 'Y-m-d' };
-        const endDateConfig = { format: 'Y-m-d' };
+        const startDateConfig = {};
+        const endDateConfig = {};
 
         if (this.data && 'start_date' in this.data) {
             startDateConfig.value = new Date(intval(this.data['start_date']) * 1000);
@@ -106,7 +106,7 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
                     const minDate = new Date(intval(value['start_date'] || 0) * 1000);
                     const maxDate = new Date(intval(value['end_date'] || 0) * 1000);
 
-                    return `${Ext.Date.format(minDate, 'Y-m-d')}, ${Ext.Date.format(maxDate, 'Y-m-d')}`;
+                    return `${Ext.Date.format(minDate, pimcore.globalmanager.get('localeDateTime').getShortDateFormat()), Ext.Date.format(maxDate, pimcore.globalmanager.get('localeDateTime').getShortDateFormat())}`;
                 }
 
                 return '';

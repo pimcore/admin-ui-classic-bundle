@@ -62,8 +62,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                                     date = dateToServerTimezone(date);
                                 }
                             }
-
-                            return Ext.Date.format(date, "Y-m-d H:i");
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
                         }
                         return "";
                     }.bind(this, field.key)};
@@ -77,7 +76,6 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         var date = {
             width:130,
-            format: "Y-m-d"
         };
 
         var time = {
@@ -139,7 +137,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.datefield.getValue()) {
             var value = this.datefield.getValue();
-            var dateString = Ext.Date.format(value, "Y-m-d");
+            var dateString = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
 
             if (this.timefield.getValue()) {
                 var timeValue = this.timefield.getValue();
@@ -150,7 +148,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                 dateString += " 00:00";
             }
 
-            value = Ext.Date.parseDate(dateString, "Y-m-d H:i");
+            value = Ext.Date.parseDate(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
             if (value && this.fieldConfig.columnType === "datetime" && !this.isRespectTimezone()) {
                 return dateString;

@@ -18,8 +18,8 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\GDPR\DataProvider;
 
 use Pimcore\Bundle\AdminBundle\Helper\QueryParams;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Model\Asset;
-use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\DataObject\Data\ElementMetadata;
@@ -150,7 +150,7 @@ class DataObjects extends Elements implements DataProviderInterface
             foreach ($query->fetchAllAssociative() as $hit) {
                 $element = Element\Service::getElementById($hit['type'], $hit['id']);
                 if ($element instanceof Concrete) {
-                    $data = DataObject\Service::gridObjectData($element);
+                    $data = GridData\DataObject::getData($element);
                     $data['__gdprIsDeletable'] = $this->config['classes'][$element->getClassName()]['allowDelete'] ?? false;
                     $elements[] = $data;
                 }

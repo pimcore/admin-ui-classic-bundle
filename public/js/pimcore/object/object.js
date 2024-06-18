@@ -48,7 +48,11 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         this.properties = new pimcore.element.properties(this, "object");
         this.versions = new pimcore.object.versions(this);
         this.scheduler = new pimcore.element.scheduler(this, "object");
-        this.dependencies = new pimcore.element.dependencies(this, "object");
+
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "object");
+        }
+
         this.workflows = new pimcore.element.workflows(this, "object");
 
         if (user.isAllowed("notes_events")) {
@@ -360,7 +364,9 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
         }
 
         try {
-            items.push(this.dependencies.getLayout());
+            if (typeof this.dependencies !== "undefined") {
+                items.push(this.dependencies.getLayout());
+            }
         } catch (e) {
 
         }
