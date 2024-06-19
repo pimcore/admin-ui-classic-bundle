@@ -364,11 +364,20 @@
                  } else if (item.isDirectory) {
                      // Get folder contents
                      var dirReader = item.createReader();
-                     dirReader.readEntries(function (entries) {
-                         for (var i = 0; i < entries.length; i++) {
-                             traverseFileTree(entries[i], path + item.name + "/");
-                         }
-                     });
+                     var entries = [];
+                     var readEntries = function() {
+                         dirReader.readEntries(function(results) {
+                             if (results.length) {
+                                 entries = entries.concat(Array.from(results));
+                                 readEntries();
+                             } else {
+                                 for (var i = 0; i < entries.length; i++) {
+                                     traverseFileTree(entries[i], path + item.name + "/");
+                                 }
+                             }
+                         });
+                     };
+                     readEntries();
                  }
              }.bind(this);
  
