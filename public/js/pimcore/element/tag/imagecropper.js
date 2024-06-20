@@ -16,57 +16,91 @@ pimcore.registerNS("pimcore.element.tag.imagecropper");
  * @private
  */
 pimcore.element.tag.imagecropper = Class.create({
-
     initialize: function (imageId, data, saveCallback, config) {
+        this.editWindow = null;
         this.imageId = imageId;
         this.data = data;
-        this.saveCallback = saveCallback;
         this.modal = true;
+        this.saveCallback = saveCallback;
+
+        this.assetData = null;
+        this.assetWidth = null;
+        this.assetHeight = null;
+        this.thumbnailData = null;
+        this.thumbnailWidth = null;
+        this.thumbnailHeight = null;
+        this.promiseImage = null;
+        this.promiseThumbnail = null;
+        this.hasThumbnail = false;
 
         this.ratioX = null;
         this.ratioY = null;
         this.preserveRatio = false;
+
+        // Has thumbnail, load asset and thumbnail data
+        if (this.imageId && this.data.thumbnail) {
+            this.promiseImage = this.loadAsset(this.imageId);
+            this.promiseThumbnail = this.loadThumbnailData(this.data.thumbnail);
+            this.hasThumbnail = true;
+        }
+
+        // Set ratio from config
         if(typeof config == "object") {
             if(config["ratioX"] && config["ratioY"]) {
                 this.ratioX = config["ratioX"];
                 this.ratioY = config["ratioY"];
                 this.preserveRatio = true;
+                this.hasThumbnail = false;
             }
         }
     },
 
-    open: function (modal) {
-        var validImage = (typeof this.imageId != "undefined" && this.imageId !== null),
-            imageUrl = Routing.generate('pimcore_admin_asset_getimagethumbnail', {id: this.imageId, width: 500, height: 400, contain: true}),
-            button = {};
-
+    open: function (modal){
+        // Set modal
         if(typeof modal != "undefined") {
             this.modal = modal;
         }
 
-        if( validImage )
-        {
+        if(this.hasThumbnail) {
+            // Wait for thumbnail and asset data to be loaded
+            Promise.all([this.promiseImage, this.promiseThumbnail]).then(this.createCropperWindow.bind(this));
+        } else {
+            this.createCropperWindow();
+        }
+    },
+
+    createCropperWindow: function(){
+        let button = {};
+        const validImage = (typeof this.imageId != "undefined" && this.imageId !== null),
+          imageUrl = Routing.generate('pimcore_admin_asset_getimagethumbnail', {id: this.imageId, width: 800, height: 600, contain: true});
+
+        // Has thumbnail, set ratio (after thumbnail and asset data is loaded)
+        if (this.hasThumbnail) {
+            if ((this.thumbnailWidth && this.thumbnailHeight)) {
+                this.ratioX = this.thumbnailWidth / this.thumbnailHeight;
+                this.ratioY = 1;
+                this.preserveRatio = true;
+            } else {
+                this.ratioX = this.assetWidth;
+                this.ratioY = this.assetHeight;
+                this.preserveRatio = false;
+            }
+        }
+
+        if (validImage) {
             button = {
                 xtype: "button",
                 iconCls: "pimcore_icon_apply",
                 text: t("save"),
                 handler: function () {
-
-                    var originalWidth = this.editWindow.body.getWidth();
-                    var originalHeight = this.editWindow.body.getHeight();
-
-                    var dimensions = Ext.get("selector").getStyle(["top","left","width","height"]);
-
-                    var newWidth = intval(dimensions.width);
-                    var newHeight = intval(dimensions.height);
-                    var top = intval(dimensions.top);
-                    var left = intval(dimensions.left);
-
+                    const originalWidth = this.editWindow.body.getWidth();
+                    const originalHeight = this.editWindow.body.getHeight();
+                    const sel = Ext.get("selector");
                     this.data = {
-                        cropWidth: newWidth * 100 / originalWidth,
-                        cropHeight: newHeight * 100 / originalHeight,
-                        cropTop: top * 100 / originalHeight,
-                        cropLeft: left * 100 / originalWidth,
+                        cropWidth: sel.getWidth() * 100 / originalWidth,
+                        cropHeight: sel.getHeight() * 100 / originalHeight,
+                        cropTop: sel.getTop(true) * 100 / originalHeight,
+                        cropLeft: sel.getLeft(true) * 100 / originalWidth,
                         cropPercent: true
                     };
 
@@ -78,71 +112,18 @@ pimcore.element.tag.imagecropper = Class.create({
                 }.bind(this)
             }
         }
+
         this.editWindow = new Ext.Window({
-            width: 500,
-            height: 400,
+            width: 800,
+            height: 600,
             modal: this.modal,
             resizable: false,
             bodyStyle: "background: url('/bundles/pimcoreadmin/img/tree-preview-transparent-background.png');",
             bbar: ["->", button],
-            html: validImage ? '<img id="selectorImage" src="' + imageUrl + '" />' : '<span style="padding:10px;">' + t("no_data_to_display") + '</span>'
+            html: validImage ? '<img id="selectorImage" src="' + imageUrl + '" />' : '<span style="padding:10px;">' + t("no_data_to_display") + '</span>',
         });
 
-        var checkSize = function () {
-            // this function checks if the selected area fits into the image
-            var sel = Ext.get("selector");
-            var dimensions;
-
-            var windowId = this.editWindow.getId();
-            var originalWidth = Ext.getCmp(windowId).getEl().getWidth(true);
-            var originalHeight = Ext.getCmp(windowId).getEl().getHeight(true);
-
-            var skip = false;
-
-            while(!skip) {
-                skip = true;
-                dimensions = sel.getStyle(["top","left","width","height"]);
-
-                if(intval(dimensions.top) < 0) {
-                    sel.setStyle("top", "0");
-                    skip = false;
-                }
-                if(intval(dimensions.left) < 0) {
-                    sel.setStyle("left", "0");
-                    skip = false;
-                }
-                if((intval(dimensions.left) + intval(dimensions.width)) > originalWidth) {
-                    if(intval(dimensions.left) < originalWidth || intval(dimensions.left) > originalWidth) {
-                        sel.setStyle("left", (originalWidth-intval(dimensions.width)) + "px");
-                    }
-                    if(intval(dimensions.width) > originalWidth) {
-                        sel.setStyle("width", (originalWidth) + "px");
-                    }
-                    skip = false;
-                }
-                if((intval(dimensions.top) + intval(dimensions.height)) > originalHeight) {
-                    if(intval(dimensions.top) < originalHeight || intval(dimensions.top) > originalHeight) {
-                        sel.setStyle("top", (originalHeight-intval(dimensions.height)) + "px");
-                    }
-                    if(intval(dimensions.height) > originalHeight) {
-                        sel.setStyle("height", (originalHeight) + "px");
-                    }
-                    skip = false;
-                }
-            }
-
-
-            // check the ratio if given
-            if(this.ratioX && this.ratioY) {
-                dimensions = sel.getStyle(["width","height"]);
-
-                var height = intval(dimensions.width) * (this.ratioY / this.ratioX);
-                sel.setStyle("height", (height) + "px");
-            }
-        };
-
-        if( validImage ) {
-
+        if(validImage) {
             this.editWindow.add({
                 xtype: 'component',
                 id: "selector",
@@ -150,74 +131,199 @@ pimcore.element.tag.imagecropper = Class.create({
                     target: "selector",
                     pinned: true,
                     width: 100,
-                    height: 100 / (this.ratioX / this.ratioY) || 100,
+                    height: (100 / (this.ratioX * this.ratioY)) || 100,
                     preserveRatio: this.preserveRatio,
                     dynamic: true,
                     handles: 'all',
-                    listeners: {
-                        resize: checkSize.bind(this)
-                    }
                 },
                 style: "cursor:move; position: absolute; top: 10px; left: 10px;z-index:9000;",
                 draggable: true,
                 listeners: {
-                    afterrender: function (el) {
-
-                    }
+                    resize: this.checkSize.bind(this),
+                    move: this.checkSize.bind(this),
                 }
             });
 
+            this.editWindow.on("afterrender", this.setWindowSizes.bind(this));
+            this.editWindow.show();
         }
+    },
 
-        this.editWindowInitCount = 0;
+    checkSize: function()  {
+        const sel = Ext.get("selector");
+        const image = Ext.get("selectorImage");
 
-        this.editWindow.on("afterrender", function ( ){
-            this.editWindowInterval = window.setInterval(function () {
-                var el = Ext.get("selectorImage");
+        if(image && image.getWidth() > 30) {
+            const imageFactor = this.assetWidth / image.getWidth();
 
-                if(el) {
-
-                    var imageWidth = el.getWidth();
-                    var imageHeight = el.getHeight();
-
-                    if(el.getWidth() > 30) {
-                        clearInterval(this.editWindowInterval);
-                        this.editWindowInitCount = 0;
-
-                        var winBodyInnerSize = this.editWindow.body.getSize();
-                        var winOuterSize = this.editWindow.getSize();
-                        var paddingWidth = winOuterSize["width"] - winBodyInnerSize["width"];
-                        var paddingHeight = winOuterSize["height"] - winBodyInnerSize["height"];
-
-                        this.editWindow.setSize(imageWidth + paddingWidth, imageHeight + paddingHeight);
-
-                        //Ext.get("selectorImage").remove();
-
-                        if(this.data && this.data["cropPercent"]) {
-                            Ext.get("selector").applyStyles({
-                                width: (imageWidth * (this.data.cropWidth / 100)) + "px",
-                                height: (imageHeight * (this.data.cropHeight / 100)) + "px",
-                                top: (imageHeight * (this.data.cropTop / 100)) + "px",
-                                left: (imageWidth * (this.data.cropLeft / 100)) + "px"
-                            });
-                        }
-
-                        return;
-
-                    } else if (this.editWindowInitCount > 60) {
-                        // if more than 30 secs cancel and close the window
-                        this.editWindow.close();
+            for (let i = 0; i < 2; i++) {
+                // Has thumbnail
+                if (this.hasThumbnail) {
+                    if (this.thumbnailHeight && this.thumbnailHeight > this.assetHeight) {
+                        // Is asset smaller than thumbnail, set size to asset size
+                        sel.setStyle("height", image.getHeight() + "px");
+                    } else if (this.thumbnailWidth && this.thumbnailWidth > this.assetWidth){
+                        // Is asset smaller than thumbnail, set size to asset size
+                        sel.setStyle("width", image.getWidth() + "px");
                     }
 
-                    this.editWindowInitCount++;
+                    // Fix min thumbnail size width
+                    if (this.thumbnailWidth && (sel.getWidth() < (this.thumbnailWidth / imageFactor))) {
+                        sel.setStyle("width", (this.thumbnailWidth / imageFactor) + "px");
+                    }
+
+                    // Fix min thumbnail size height
+                    if (this.thumbnailHeight && (sel.getHeight() < (this.thumbnailHeight / imageFactor))) {
+                        sel.setStyle("height", (this.thumbnailHeight / imageFactor) + "px");
+                    }
+
+                    // Max width and fix height for dimension
+                    if (sel.getWidth() >= image.getWidth()) {
+                        sel.setStyle("width", image.getWidth() + "px");
+
+                        if(this.thumbnailHeight && this.thumbnailWidth) {
+                            sel.setStyle("height", (image.getWidth() / this.ratioX * this.ratioY) + "px");
+                        }
+                    }
+
+                    // Max height & fix width for dimension
+                    if (sel.getHeight() >= image.getHeight()) {
+                        sel.setStyle("height", image.getHeight() + "px");
+
+                        if(this.thumbnailHeight && this.thumbnailWidth) {
+                            sel.setStyle("width", (image.getHeight() / this.ratioY * this.ratioX) + "px");
+                        }
+                    }
                 } else {
-                    clearInterval(this.editWindowInterval);
+                    // check the ratio if given
+                    if (this.ratioX && this.ratioY) {
+                        if (sel.getHeight() > image.getHeight()) {
+                            sel.setStyle("height", (sel.getWidth() * (this.ratioY / this.ratioX)) + "px");
+                        } else if (sel.getWidth() > image.getWidth()) {
+                            sel.setStyle("width", (sel.getHeight() * (this.ratioX / this.ratioY)) + "px");
+                        }
+                    }
+
+                    // Max width
+                    if (sel.getWidth() > image.getWidth()) {
+                        sel.setStyle("width", image.getWidth() + "px");
+                    }
+
+                    // Max height
+                    if (sel.getHeight() > image.getHeight()) {
+                        sel.setStyle("height", image.getHeight() + "px");
+                    }
                 }
-            }.bind(this), 500);
 
-        }.bind(this));
+                // Limit top
+                if (sel.getTop(true) < 0) {
+                    sel.setStyle("top", "0");
+                }
 
-        this.editWindow.show();
-    }
+                // Limit left
+                if (sel.getLeft(true) < 0) {
+                    sel.setStyle("left", "0");
+                }
 
+                // Limit Bottom
+                if (image.getHeight() && (sel.getTop(true) + sel.getHeight()) > image.getHeight()) {
+                    sel.setStyle("top", (image.getHeight() - sel.getHeight() + "px"));
+                }
+
+                // Limit Right
+                if ((sel.getLeft(true) + sel.getWidth()) > image.getWidth()) {
+                    sel.setStyle("left", (image.getWidth() - sel.getWidth()) + "px");
+                }
+            }
+        }
+    },
+
+    // Set window size
+    setWindowSizes: function() {
+        this.editWindowInitCount = 0;
+        const editWindowInterval = window.setInterval(() => {
+            const image = Ext.get("selectorImage");
+            if(this.editWindow.body && image && (image.getWidth() > 30)) {
+                clearInterval(editWindowInterval);
+
+                // Set window size
+                const winBodyInnerSize = this.editWindow.body.getSize();
+                const winOuterSize = this.editWindow.getSize();
+                const paddingWidth = winOuterSize["width"] - winBodyInnerSize["width"];
+                const paddingHeight = winOuterSize["height"] - winBodyInnerSize["height"];
+                this.editWindow.setSize(image.getWidth() + paddingWidth, image.getHeight() + paddingHeight);
+
+                if(this.data && this.data["cropPercent"]) {
+                    // Set selector size and position from saved data
+                    const sel = Ext.get("selector").applyStyles({
+                        width: (image.getWidth() * (this.data.cropWidth / 100)) + "px",
+                        height: (image.getHeight() * (this.data.cropHeight / 100)) + "px",
+                        top: (image.getHeight() * (this.data.cropTop / 100)) + "px",
+                        left: (image.getWidth() * (this.data.cropLeft / 100)) + "px"
+                    });
+
+                    // Is thumbnail changed or old data, fix proportions
+                    if (this.hasThumbnail
+                      && this.thumbnailWidth && this.thumbnailHeight
+                      && (sel.getWidth()/ sel.getHeight()) !== (this.ratioX / this.ratioY))
+                    {
+                        sel.setStyle("height", (sel.getWidth() / this.ratioX * this.ratioY) + "px");
+                    }
+                }
+
+                this.checkSize();
+                return;
+            }else if (this.editWindowInitCount > 60) {
+                // If more than 30 secs cancel and close the window
+                clearInterval(editWindowInterval);
+                this.editWindow.close();
+            }
+
+            this.editWindowInitCount++;
+        }, 500);
+    },
+
+    // Load original asset data
+    loadAsset: function(imageId) {
+        return Ext.Ajax.request({
+            url: Routing.generate('pimcore_admin_asset_getdatabyid'),
+            params: {
+                id: imageId
+            },
+            success: function (response) {
+                this.assetData = Ext.decode(response.responseText);
+                if (this.assetData.imageInfo && this.assetData.imageInfo.dimensions) {
+                    this.assetWidth = this.assetData.imageInfo.dimensions.width;
+                    this.assetHeight = this.assetData.imageInfo.dimensions.height;
+                }
+            }.bind(this)
+        });
+    },
+
+    // Load thumbnail data
+    loadThumbnailData: function(thumbnailName) {
+        return Ext.Ajax.request({
+            url: Routing.generate('pimcore_admin_settings_thumbnailget'),
+            params: {
+                name: thumbnailName
+            },
+            success: function (response) {
+                this.thumbnailData = Ext.decode(response.responseText);
+                if (this.thumbnailData.items) {
+                    Ext.each(this.thumbnailData.items, (item) => {
+                        const allowedMethods = ['scaleByHeight', 'scaleByWidth', 'frame', 'resize', 'contain', 'crop', 'cover'];
+                        if (allowedMethods.includes(item.method) && item.arguments.width
+                          && (!this.thumbnailWidth || this.thumbnailWidth > item.arguments.width)) {
+                            this.thumbnailWidth = item.arguments.width;
+                        }
+
+                        if (allowedMethods.includes(item.method) && item.arguments.height
+                          && (!this.thumbnailHeight || this.thumbnailHeight > item.arguments.height)) {
+                            this.thumbnailHeight = item.arguments.height;
+                        }
+                    }, this);
+                }
+            }.bind(this)
+        });
+    },
 });
