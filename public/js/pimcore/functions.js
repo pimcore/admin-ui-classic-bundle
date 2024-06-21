@@ -1801,7 +1801,7 @@ function getUserTimezone() {
 function dateToServerTimezone(date) {
 
     let utcDate = new Date(date.toLocaleString('en-US', {
-        timeZone: pimcore.settings.timezone ?? 'UTC'
+        timeZone: pimcore.settings.timezone ? pimcore.settings.timezone : 'UTC'
     }));
 
     let diff = date.getTime() - utcDate.getTime();

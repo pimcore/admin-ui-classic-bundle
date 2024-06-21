@@ -69,7 +69,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'c'};
+        return {type:'date', dataIndex:field.key, dateFormat: field.layout.respectTimezone !== false ? "c" : "Y-m-d"};
     },
 
     getLayoutEdit:function () {
