@@ -1029,7 +1029,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 foreach ($classDefs as $classDef) {
                     if ($classDef['classname'] == $class->getName()) {
                         $fieldName = $classDef['fieldname'];
-                        if ($filteredFieldDefinition && !$filteredFieldDefinition[$fieldName]) {
+                        if (isset($filteredFieldDefinition[$fieldName]) && !$filteredFieldDefinition[$fieldName]) {
                             continue;
                         }
 
