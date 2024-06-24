@@ -326,6 +326,10 @@ class MiscController extends AdminAbstractController
 
         $iconsCss = file_get_contents($publicDir . '/css/icons.css');
 
+        if ($type === null) {
+            return $this->render('@PimcoreAdmin/admin/misc/icon_library_reload.html.twig');
+        }
+
         return $this->render('@PimcoreAdmin/admin/misc/icon_list.html.twig', [
             'icons' => $icons,
             'iconsCss' => $iconsCss,

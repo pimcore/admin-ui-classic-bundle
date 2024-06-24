@@ -1809,28 +1809,35 @@ class ClassController extends AdminAbstractController implements KernelControlle
      */
     public function getIconsAction(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
-        $classId = $request->get('classId');
-        $type = $request->get('type');
-
-        if (!$type) {
-            return $this->adminJson([]);
-        }
+        $classId = $request->query->get('classId');
+        $type = $request->query->has('type') ? $request->query->getString('type') : null;
 
         $iconDir = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img';
 
-        $icons = match($type) {
-            'color' => rscandir($iconDir . '/flat-color-icons/'),
-            'white' => rscandir($iconDir . '/flat-white-icons/'),
-            'twemoji-1', 'twemoji-2', 'twemoji-3',
-            'twemoji_variants-1', 'twemoji_variants-2', 'twemoji_variants-3'
-            => rscandir($iconDir . '/twemoji/'),
-            default => []
-        };
+        if ($type === '') {
+            return $this->adminJson([]);
+        } elseif ($type === null) {
+            $classIcons = rscandir($iconDir . '/object-icons/');
+            $colorIcons = rscandir($iconDir . '/flat-color-icons/');
+            $twemoji = rscandir($iconDir . '/twemoji/');
+
+            $icons = array_merge($classIcons, $colorIcons, $twemoji);
+        } else {
+            $icons = match($type) {
+                'color' => rscandir($iconDir . '/flat-color-icons/'),
+                'white' => rscandir($iconDir . '/flat-white-icons/'),
+                'twemoji-1', 'twemoji-2', 'twemoji-3',
+                'twemoji_variants-1', 'twemoji_variants-2', 'twemoji_variants-3'
+                => rscandir($iconDir . '/twemoji/'),
+                default => [],
+            };
+        }
 
         $style = '';
         if ($type === 'white') {
             $style = 'background-color:#000';
         }
+
         foreach ($icons as &$icon) {
             $icon = str_replace(PIMCORE_WEB_ROOT, '', $icon);
         }
@@ -1845,7 +1852,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $startIndex = 0;
         $result = [];
 
-        if (str_starts_with($type, 'twemoji')) {
+        if ($type !== null && str_starts_with($type, 'twemoji')) {
             foreach ($icons as $index => $twemojiIcon) {
                 $iconBase = basename($twemojiIcon);
 
