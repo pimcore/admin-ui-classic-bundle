@@ -97,7 +97,7 @@ pimcore.iconlibrary = {
         pimcore.globalmanager.get("layout_toolbar").showIconLibrary()
     },
 
-    createIconSelectionWidget: function (value,  classId, labelWidth = 200) {
+^^    createIconSelectionWidget: function (value,  classId, fieldName = 'icon', width = 396, labelWidth = 200) {
         const iconCss = ' left center no-repeat; text-indent: 20px';
 
         const iconTypes = Ext.create('Ext.data.Store', {
@@ -147,13 +147,12 @@ pimcore.iconlibrary = {
         });
 
         const iconField = new Ext.form.field.Text({
-            name: "icon",
-            width: 396,
+            name: fieldName,
+            width: width,
             renderer: Ext.util.Format.htmlEncode,
             value: value,
             listeners: {
                 "afterrender": function (el) {
-                    console.log(iconCss);
                     el.inputEl.applyStyles("background:url(" + el.getValue() + ")" + iconCss);
                 }.bind(this)
             }
