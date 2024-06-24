@@ -757,7 +757,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $domains = $request->get('domains');
         $domains = str_replace(' ', '', $domains);
-        $domains = explode("\n", $domains);
+        $domains = $domains ? explode("\n", $domains) : [];
 
         if (!$site = Site::getByRootId((int)$request->get('id'))) {
             $site = Site::create([
