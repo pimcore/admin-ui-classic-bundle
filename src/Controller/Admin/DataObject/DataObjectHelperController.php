@@ -508,6 +508,7 @@ class DataObjectHelperController extends AdminAbstractController
         $settings['setAsFavourite'] = $setAsFavourite ?? null;
         $settings['saveFilters'] = $saveFilters ?? null;
         $settings['isShared'] = !$gridConfigId || ($shared ?? null);
+        $settings['allowVariants'] = $class && $class->getAllowVariants();
 
         $context = $gridConfig['context'] ?? null;
         if ($context) {
