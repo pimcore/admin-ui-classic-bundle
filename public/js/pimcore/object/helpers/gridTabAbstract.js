@@ -199,45 +199,47 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 }.bind(this)
             });
 
+            if (this.settings.allowVariants) {
+                var selectObjectOptions = Ext.create('Ext.data.Store', {
+                    fields: ['name', 'value'],
+                    data: [
+                        [t("all_types"), "all_objects"],
+                        [t("only_object"), "only_objects"],
+                        [t("only_variant"), "only_variant_objects"],
+                    ]
+                });
 
-            var selectObjectOptions = Ext.create('Ext.data.Store', {
-                fields: ['name', 'value'],
-                data: [
-                    [t("all_types"), "all_objects"],
-                    [t("only_object"), "only_objects"],
-                    [t("only_variant"), "only_variant_objects"],
-                ]
-            });
+                this.selectObjectType = new Ext.form.ComboBox({
+                    fieldLabel: t('select_objects_type'),
+                    name: 'objects_type',
+                    labelWidth: 120,
+                    xtype: "combo",
+                    displayField:'name',
+                    valueField: "value",
+                    hidden: !this.element.data.general.allowInheritance,
+                    store: selectObjectOptions,
+                    editable: false,
+                    width : 300,
+                    triggerAction: 'all',
+                    value: 'all_objects',
+                    listeners: {
+                        change: function(comboBox,selected){
+                            this.grid.getStore().setRemoteFilter(false);
+                            this.grid.filters.clearFilters();
+                            this.grid.getStore().clearFilter();
 
-            this.selectObjectType = new Ext.form.ComboBox({
-                fieldLabel: t('select_objects_type'),
-                name: 'objects_type',
-                labelWidth: 120,
-                xtype: "combo",
-                displayField:'name',
-                valueField: "value",
-                hidden: !this.element.data.general.allowInheritance,
-                store: selectObjectOptions,
-                editable: false,
-                width : 300,
-                triggerAction: 'all',
-                value: 'all_objects',
-                listeners: {
-                    change: function(comboBox,selected){
-                        this.grid.getStore().setRemoteFilter(false);
-                        this.grid.filters.clearFilters();
-                        this.grid.getStore().clearFilter();
+                            this.store.getProxy().setExtraParam("filter_by_object_type", selected);
 
-                        this.store.getProxy().setExtraParam("filter_by_object_type", selected);
+                            this.pagingtoolbar.moveFirst();
 
-                        this.pagingtoolbar.moveFirst();
+                            this.grid.getStore().setRemoteFilter(true);
 
-                        this.grid.getStore().setRemoteFilter(true);
+                            this.saveColumnConfigButton.show();
+                        }.bind(this)
+                    }
+                });
+            }
 
-                        this.saveColumnConfigButton.show();
-                    }.bind(this)
-                }
-            });
 
             this.checkboxOnlyDirectChildren = new Ext.form.Checkbox({
                 name: "onlyDirectChildren",
@@ -302,7 +304,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
             this.languageInfo, "-",
             this.toolbarFilterInfo,
             this.clearFilterButton, "->",
-            this.selectObjectType, "-",
+            this.selectObjectType, this.selectObjectType ? "-" : null,
             this.checkboxOnlyDirectChildren, "-",
             this.exportButton, "-",
             this.columnConfigButton,
