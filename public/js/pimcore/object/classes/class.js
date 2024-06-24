@@ -22,7 +22,6 @@ pimcore.object.classes.klass = Class.create({
     context: "class",
     uploadRoute: 'pimcore_admin_dataobject_class_importclass',
     exportRoute: 'pimcore_admin_dataobject_class_exportclass',
-    iconCss: ' left center no-repeat; text-indent: 20px',
     initialize: function (data, parentPanel, reopen, editorPrefix) {
         this.parentPanel = parentPanel;
         this.data = data;
@@ -701,64 +700,6 @@ pimcore.object.classes.klass = Class.create({
             return "Pimcore\\Model\\DataObject\\" + ucfirst(name);
         };
 
-        const iconTypes = Ext.create('Ext.data.Store', {
-            fields: ['text', 'value'],
-            data: [
-                { "text": t('color_icons'), "value": 'color' },
-                { "text": t('white_icons'), "value": 'white' },
-                { "text": t('twemoji') + ' (1/3)', "value": 'twemoji-1' },
-                { "text": t('twemoji') + ' (2/3)', "value": 'twemoji-2' },
-                { "text": t('twemoji') + ' (3/3)', "value": 'twemoji-3' },
-                { "text": t('twemoji_variants') + ' (1/3)', "value": 'twemoji_variants-1' },
-                { "text": t('twemoji_variants') + ' (2/3)', "value": 'twemoji_variants-2' },
-                { "text": t('twemoji_variants') + ' (3/3)', "value": 'twemoji_variants-3' },
-            ]
-        });
-
-        const iconTypeBox = Ext.create('Ext.form.ComboBox', {
-            store: iconTypes,
-            width: 180,
-            displayField: 'text',
-            valueField: 'value',
-            emptyText: t('type'),
-            listeners: {
-                select: function (elem) {
-                    iconStore.proxy.extraParams = {
-                       'type' : elem.value,
-                        classId: this.getId(),
-                    };
-                    iconStore.load();
-                }.bind(this)
-            }
-        });
-
-        const iconStore = new Ext.data.ArrayStore({
-            proxy: {
-                url: Routing.generate('pimcore_admin_dataobject_class_geticons'),
-                type: 'ajax',
-                reader: {
-                    type: 'json'
-                },
-                extraParams: {
-                    classId: this.getId()
-                }
-            },
-            fields: ["text", "value"]
-        });
-
-        var iconField = new Ext.form.field.Text({
-            id: "iconfield-" + this.getId(),
-            name: "icon",
-            width: 396,
-            renderer: Ext.util.Format.htmlEncode,
-            value: this.data.icon,
-            listeners: {
-                "afterrender": function (el) {
-                    el.inputEl.applyStyles("background:url(" + el.getValue() + ")" + this.iconCss);
-                }.bind(this)
-            }
-        });
-
         this.compositeIndexTypeStore = new Ext.data.ArrayStore({
             data: [['query'], ['localized_query'],['store'], ['localized_store']],
             fields: ['value']
@@ -895,61 +836,7 @@ pimcore.object.classes.klass = Class.create({
                     renderer: Ext.util.Format.htmlEncode,
                     value: this.data.previewGeneratorReference
                 },
-                {
-                    xtype: "fieldcontainer",
-                    layout: "hbox",
-                    fieldLabel: t("icon"),
-                    defaults: {
-                        labelWidth: 200
-                    },
-                    items: [
-                        iconField
-                    ]
-                },
-                {
-                    xtype: "fieldcontainer",
-                    layout: "hbox",
-                    fieldLabel: t("icon_tools"),
-                    defaults: {
-                        labelWidth: 200
-                    },
-                    items: [
-                        iconTypeBox,
-                        {
-                            xtype: "combobox",
-                            store: iconStore,
-                            width: 75,
-                            valueField: 'value',
-                            displayField: 'text',
-                            emptyText: t('select_type_first'),
-                            listeners: {
-                                select: function (ele, rec, idx) {
-                                    const icon = Ext.getCmp("iconfield-" + this.getId());
-                                    const newValue = rec.data.value;
-                                    icon.setValue(newValue);
-                                    icon.inputEl.applyStyles("background:url(" + newValue + ")" + this.iconCss);
-                                    return newValue;
-                                }.bind(this)
-                            }
-                        },
-                        {
-                            iconCls: "pimcore_icon_refresh",
-                            xtype: "button",
-                            tooltip: t("refresh"),
-                            handler: function(iconField) {
-                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ")" + this.iconCss);
-                            }.bind(this, iconField)
-                        },
-                        {
-                            xtype: "button",
-                            iconCls: "pimcore_icon_icons",
-                            text: t('icon_library'),
-                            handler: function () {
-                                pimcore.globalmanager.get("layout_toolbar").showIconLibrary();
-                            }
-                        }
-                    ]
-                },
+                pimcore.iconlibrary.createIconSelectionWidget(this.data.icon, this.getId()),
                 {
                     xtype: "textfield",
                     fieldLabel: t("group"),
