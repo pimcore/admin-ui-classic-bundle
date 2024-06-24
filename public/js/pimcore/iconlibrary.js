@@ -97,7 +97,7 @@ pimcore.iconlibrary = {
         pimcore.globalmanager.get("layout_toolbar").showIconLibrary()
     },
 
-^^    createIconSelectionWidget: function (value,  classId, fieldName = 'icon', width = 396, labelWidth = 200) {
+    createIconSelectionWidget: function (value,  classId, fieldName = 'icon', width = 396, labelWidth = 200) {
         const iconCss = ' left center no-repeat; text-indent: 20px';
 
         const iconTypes = Ext.create('Ext.data.Store', {
