@@ -50,6 +50,8 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 
 /**
  * @Route("/object", name="pimcore_admin_dataobject_dataobject_")
@@ -1587,7 +1589,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function previewVersionAction(Request $request): Response
+    public function previewVersionAction(Request $request, Environment $twig): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1598,6 +1600,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         if ($object) {
 
             Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+            if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+                $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
+            }
 
             if (method_exists($object, 'getLocalizedFields')) {
                 /** @var DataObject\Localizedfield $localizedFields */
@@ -1627,7 +1633,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function diffVersionsAction(Request $request, int $from, int $to): Response
+    public function diffVersionsAction(Request $request, Environment $twig, int $from, int $to): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1655,6 +1661,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+        if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+            $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
+        }
 
         if (method_exists($object2, 'getLocalizedFields')) {
             /** @var DataObject\Localizedfield $localizedFields2 */
