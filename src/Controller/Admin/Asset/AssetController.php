@@ -61,6 +61,8 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 
 /**
  * @Route("/asset")
@@ -918,7 +920,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * @Route("/show-version", name="pimcore_admin_asset_showversion", methods={"GET"})
      */
-    public function showVersionAction(Request $request): Response
+    public function showVersionAction(Request $request, Environment $twig): Response
     {
         $id = (int)$request->get('id');
         $version = Model\Version::getById($id);
@@ -939,6 +941,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+        if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+            $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
+        }
 
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
 
