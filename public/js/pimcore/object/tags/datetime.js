@@ -43,7 +43,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
             sortable:true,
             dataIndex:field.key,
             getEditor:this.getWindowCellEditor.bind(this, field),
-            renderer:function (key, value, metaData, record) {
+            renderer:function (key, fieldConfig, value, metaData, record) {
                         this.applyPermissionStyle(key, value, metaData, record);
 
                         if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
@@ -58,14 +58,14 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                                 let timestamp = intval(value) * 1000;
                                 date = new Date(timestamp);
 
-                                if (!this.isRespectTimezone()) {
+                                if (!this.isRespectTimezone(fieldConfig)) {
                                     date = dateToServerTimezone(date);
                                 }
                             }
                             return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
                         }
                         return "";
-                    }.bind(this, field.key)};
+                    }.bind(this, field.key, field.layout)};
     },
 
     getGridColumnFilter:function (field) {
@@ -200,7 +200,9 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
         return this.getValue() / 1000;
     },
 
-    isRespectTimezone: function() {
-       return this.fieldConfig.respectTimezone !== false;
+    isRespectTimezone: function(fieldConfig) {
+       fieldConfig = fieldConfig || this.fieldConfig;
+
+       return fieldConfig && fieldConfig.respectTimezone !== false;
     }
 });
