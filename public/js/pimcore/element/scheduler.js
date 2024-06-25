@@ -311,7 +311,6 @@ pimcore.element.scheduler = Class.create({
         var value;
         for (var i = 0; i < data.length; i++) {
             let dateString = data[i].data.date;
-            debugger;
             if(data[i].data.time !== undefined) {
                 dateString += " " +  data[i].data.time;
             } else {
