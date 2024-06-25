@@ -311,12 +311,13 @@ pimcore.element.scheduler = Class.create({
         var value;
         for (var i = 0; i < data.length; i++) {
             let dateString = data[i].data.date;
+            debugger;
             if(data[i].data.time !== undefined) {
                 dateString += " " +  data[i].data.time;
             } else {
                 dateString += " 00:00";
             }
-            let dateTime = new Date(dateString);
+            let dateTime = Ext.Date.parseDate(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
             value = {
                 date:  Math.floor(dateTime / 1000),
                 action: data[i].data.action,
