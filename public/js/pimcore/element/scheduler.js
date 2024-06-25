@@ -316,7 +316,7 @@ pimcore.element.scheduler = Class.create({
             } else {
                 dateString += " 00:00";
             }
-            let dateTime = new Date(dateString);
+            let dateTime = Ext.Date.parseDate(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
             value = {
                 date:  Math.floor(dateTime / 1000),
                 action: data[i].data.action,
