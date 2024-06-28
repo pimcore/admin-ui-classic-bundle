@@ -86,11 +86,9 @@ pimcore.element.helpers.gridColumnConfig = {
 
         if (this.gridType === 'asset') {
             route = 'pimcore_admin_asset_assethelper_griddeletecolumnconfig';
-        }
-        else if(this.gridType === 'object') {
+        } else if (this.gridType === 'object') {
             route = 'pimcore_admin_dataobject_dataobjecthelper_griddeletecolumnconfig';
-        }
-        else {
+        } else {
             throw new Error('Type unknown');
         }
 
@@ -125,7 +123,7 @@ pimcore.element.helpers.gridColumnConfig = {
         this.getTableDescription();
     },
 
-    addGridConfigMenuItems: function(menu, list, onlyConfigs) {
+    addGridConfigMenuItems: function (menu, list, onlyConfigs) {
         for (var i = 0; i < list.length; i++) {
             var disabled = false;
             var config = list[i];
@@ -375,7 +373,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 batchAppendSelectedMenu.hide();
             }
 
-            if (!Ext.Array.contains(this.systemColumns,columnDataIndex) && Ext.Array.contains(this.batchRemoveColumns ? this.batchRemoveColumns : [], columnDataIndex)) {
+            if (!Ext.Array.contains(this.systemColumns, columnDataIndex) && Ext.Array.contains(this.batchRemoveColumns ? this.batchRemoveColumns : [], columnDataIndex)) {
                 batchRemoveAllMenu.show();
                 batchRemoveSelectedMenu.show();
             } else {
@@ -406,7 +404,7 @@ pimcore.element.helpers.gridColumnConfig = {
 
         var fieldInfo = this.grid.getColumns()[columnIndex].config;
 
-        if((this.objecttype === "object") || (this.objecttype === "variant")) {
+        if ((this.objecttype === "object") || (this.objecttype === "variant")) {
             if (!fieldInfo.layout || !fieldInfo.layout.layout) {
                 return;
             }
@@ -431,7 +429,7 @@ pimcore.element.helpers.gridColumnConfig = {
                     iconCls: "pimcore_icon_filter_condition pimcore_icon_overlay_delete",
                     handler: function () {
                         this.filterByRelationWindow.close();
-                        this.grid.store.filters.removeByKey("x-gridfilter-"+fieldInfo.dataIndex);
+                        this.grid.store.filters.removeByKey("x-gridfilter-" + fieldInfo.dataIndex);
                     }.bind(this)
                 },
                 {
@@ -530,7 +528,7 @@ pimcore.element.helpers.gridColumnConfig = {
         }
         // HACK END
 
-        if((this.objecttype === "object") || (this.objecttype === "variant")) {
+        if ((this.objecttype === "object") || (this.objecttype === "variant")) {
             if (!fieldInfo.layout || !fieldInfo.layout.layout) {
                 return;
             }
@@ -607,7 +605,7 @@ pimcore.element.helpers.gridColumnConfig = {
         this.batchWin.updateLayout();
     },
 
-    batchProcess: function (jobs, append,  remove, editor, fieldInfo, initial) {
+    batchProcess: function (jobs, append, remove, editor, fieldInfo, initial) {
         if (initial) {
             this.batchErrors = [];
             this.batchJobCurrent = 0;
@@ -640,7 +638,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 scale: 'small',
                 text: t('cancel'),
                 tooltip: t('cancel'),
-                icon : '/bundles/pimcoreadmin/img/flat-color-icons/cancel.svg',
+                icon: '/bundles/pimcoreadmin/img/flat-color-icons/cancel.svg',
                 style: 'margin-left:5px;height:30px',
                 handler: () => {
                     // Stop the batch processing
@@ -675,7 +673,7 @@ pimcore.element.helpers.gridColumnConfig = {
 
         if (this.batchJobCurrent >= jobs.length) {
             this.batchProgressWin.close();
-            this.pagingtoolbar.moveFirst();
+            this.store.loadPage(this.store.currentPage);
             try {
                 var tree = pimcore.globalmanager.get("layout_object_tree").tree;
                 tree.getStore().load({
@@ -727,7 +725,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 } catch (e) {
                     this.batchErrors.push({
                         job: currentJob,
-                        error: (typeof(rdata.message) !== "undefined" && rdata.message) ?
+                        error: (typeof (rdata.message) !== "undefined" && rdata.message) ?
                             rdata.message : 'Not Successful'
                     });
                 }
@@ -744,7 +742,10 @@ pimcore.element.helpers.gridColumnConfig = {
         let params = this.getGridParams();
 
         var fields = this.getGridConfig().columns;
-        var fieldKeys = Object.entries(fields).map(([key, value]) => ({ key: key, label: value.fieldConfig?.label || key }));
+        var fieldKeys = Object.entries(fields).map(([key, value]) => ({
+            key: key,
+            label: value.fieldConfig?.label || key
+        }));
         fieldKeys = Ext.encode(fieldKeys);
         params["fields[]"] = fieldKeys;
         if (this.context) {
@@ -794,7 +795,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 style: "margin-top: 0px;",
                 width: 500
             });
-            
+
             this.cancelBtn = Ext.create('Ext.Button', {
                 scale: 'small',
                 text: t('cancel'),
@@ -930,10 +931,10 @@ pimcore.element.helpers.gridColumnConfig = {
         }
 
         //tags filter
-        if(this.tagsTree) {
+        if (this.tagsTree) {
             params["tagIds[]"] = this.tagsTree.getCheckedTagIds();
 
-            if(this.tagsPanel) {
+            if (this.tagsPanel) {
                 params["considerChildTags"] = this.tagsPanel.considerChildTags;
             }
         }
