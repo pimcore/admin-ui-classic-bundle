@@ -236,7 +236,7 @@ class QuantityValueController extends AdminAbstractController
      */
     public function convertAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
-        $this->checkPermission('quantityValueUnits');
+        $this->checkPermission('objects');
 
         $fromUnitId = $request->get('fromUnit');
         $toUnitId = $request->get('toUnit');
@@ -261,7 +261,7 @@ class QuantityValueController extends AdminAbstractController
      */
     public function convertAllAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
-        $this->checkPermission('quantityValueUnits');
+        $this->checkPermission('objects');
 
         $unitId = $request->get('unit');
 

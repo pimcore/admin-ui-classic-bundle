@@ -56,6 +56,11 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
         self::SCRIPT_OPT => [
             'https://buttons.github.io/buttons.js', // GitHub star button on login page
         ],
+        self::FRAME_OPT => [
+            'https://www.youtube-nocookie.com/', // Video preview thumbnail for YouTube
+            'https://www.dailymotion.com/',      // Video preview thumbnail for Dailymotion
+            'https://player.vimeo.com/',         // Video preview thumbnail for Vimeo
+        ],
     ];
 
     public function __construct(protected Config $config, protected array $cspHeaderOptions = [])
