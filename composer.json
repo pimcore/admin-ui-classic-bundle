@@ -31,7 +31,7 @@
     "psr-4": {
       "Pimcore\\Bundle\\AdminBundle\\": "src/"
     }
-  }
+  },
   "autoload-dev": {
     "psr-4": {
       "Pimcore\\Bundle\\AdminBundle\\Tests\\": "tests"
