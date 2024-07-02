@@ -32,7 +32,7 @@
       "Pimcore\\Bundle\\AdminBundle\\": "src/"
     }
   },
-  "conflicts": {
+  "conflict": {
     "psr/container": "^1.1"
   }, 
   "autoload-dev": {
