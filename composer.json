@@ -16,8 +16,10 @@
     "cbschuld/browser.php": "^1.9.6",
     "phpoffice/phpspreadsheet": "^1.24 || ^2.1",
     "pimcore/pimcore": "^11.3.0",
-    "symfony/webpack-encore-bundle": "^1.13.2",
-    "symfony/string": "^6.0"
+    "symfony/webpack-encore-bundle": "^1.13.2"
+  },
+  "conflict": {
+    "symfony/symfony": "<6.0"
   },
   "require-dev": {
     "codeception/codeception": "^5.0.11",
