@@ -755,7 +755,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
      */
     public function updateSiteAction(Request $request): JsonResponse
     {
-        $domains = $request->request->get('domains', '');
+        $domains = $request->request->getString('domains');
         $domains = str_replace(' ', '', $domains);
         $domains = $domains ? explode("\n", $domains) : [];
 
@@ -778,8 +778,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         $site->setDomains($domains);
-        $site->setMainDomain($request->request->get('mainDomain', ''));
-        $site->setErrorDocument($request->request->get('errorDocument', ''));
+        $site->setMainDomain($request->request->getString('mainDomain'));
+        $site->setErrorDocument($request->request->getString('errorDocument'));
         $site->setLocalizedErrorDocuments($localizedErrorDocuments);
         $site->setRedirectToMainDomain($request->request->getBoolean('redirectToMainDomain'));
         $site->save();
