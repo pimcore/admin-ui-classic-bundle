@@ -35,10 +35,7 @@
   "autoload-dev": {
     "psr-4": {
       "Pimcore\\Bundle\\AdminBundle\\Tests\\": "tests"
-    },
-    "files": [
-      "kernel/Kernel.php"
-    ]
+    }
   },
   "conflict": {
      "symfony/string": "<6.0"
