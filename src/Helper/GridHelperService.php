@@ -428,6 +428,7 @@ class GridHelperService
                 $db = \Pimcore\Db::get();
 
                 $alreadyJoined = [];
+
                 foreach ($featureJoins as $featureJoin) {
                     $fieldname = $featureJoin['fieldname'];
                     $mappedKey = 'cskey_' . $fieldname . '_' . $featureJoin['groupId'] . '_' . $featureJoin['keyId'];

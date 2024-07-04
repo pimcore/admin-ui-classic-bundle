@@ -81,7 +81,7 @@ class GridHelperTest extends ModelTestCase
             'joinCondition' => "(cskey_teststore_1_1.id = object_localized_inheritance_en.id and cskey_teststore_1_1.fieldname = 'teststore' and cskey_teststore_1_1.groupId=1 and cskey_teststore_1_1.keyId=1 and cskey_teststore_1_1.language = 'default')",
         ];
 
-        $expectedJoin1 = [
+        $expectedJoin2 = [
             'joinType' => 'left',
             'joinTable' => 'object_classificationstore_data_inheritance',
             'joinAlias' => 'cskey_teststore_1_2',
@@ -96,9 +96,9 @@ class GridHelperTest extends ModelTestCase
         $joins = $queryBuilder->getQueryPart('join')['object_localized_inheritance_en'];
 
         $this->assertEquals($expectedJoin0, $joins[0]);
-        $this->assertEquals($expectedJoin1, $joins[1]);
+        $this->assertEquals($expectedJoin2, $joins[2]);
 
-        $this->assertEquals("`cskey_teststore_1_1` LIKE '%t%' AND `cskey_teststore_1_2` LIKE '%t77%'", $queryBuilder->getQueryPart('having')->__toString());
+        $this->assertEquals("(`cskey_teststore_1_1` LIKE '%t%' OR `cskey_teststore_1_1_parent` LIKE '%t%') AND (`cskey_teststore_1_2` LIKE '%t77%' OR `cskey_teststore_1_2_parent` LIKE '%t77%')", $queryBuilder->getQueryPart('having')->__toString());
     }
 
     public function getPrivateMethod(mixed $className, string $methodName): \ReflectionMethod
