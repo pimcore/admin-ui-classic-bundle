@@ -64,8 +64,8 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
     },
 
     getValue: function () {
-        var date = this.component.getValue();
-        return Ext.Date.format(date, "H:i");
+        const date = this.component.getValue();
+        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
     },
 
     getName: function () {

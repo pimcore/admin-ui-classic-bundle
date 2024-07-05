@@ -301,8 +301,13 @@ Ext.onReady(function () {
         }
     });
 
-    var user = new pimcore.user(pimcore.currentuser);
+    let user = new pimcore.user(pimcore.currentuser);
     pimcore.globalmanager.add("user", user);
+
+    // set the default date time format according to user locale settings
+    let localeDateTime = pimcore.localeDateTime;
+    pimcore.globalmanager.add("localeDateTime", localeDateTime);
+    localeDateTime.setDefaultDateTime(user.datetimeLocale);
 
     // document types
     Ext.define('pimcore.model.doctypes', {
@@ -579,6 +584,7 @@ Ext.onReady(function () {
         data.append('id', pimcore.settings.instanceId);
         data.append('revision', pimcore.settings.build);
         data.append('version', pimcore.settings.version);
+        data.append('platform_version', pimcore.settings.platform_version);
         data.append('debug', pimcore.settings.debug);
         data.append('devmode', pimcore.settings.devmode);
         data.append('environment', pimcore.settings.environment);

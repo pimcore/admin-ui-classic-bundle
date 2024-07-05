@@ -2483,8 +2483,14 @@ pimcore.helpers.showAbout = function () {
 
     var html = '<div class="pimcore_about_window">';
     html += '<br><img src="/bundles/pimcoreadmin/img/logo-gray.svg" style="width: 300px;"><br>';
-    html += '<br><b>Version: ' + pimcore.settings.version + '</b>';
-    html += '<br><b>Git Hash: <a href="https://github.com/pimcore/pimcore/commit/' + pimcore.settings.build + '" target="_blank">' + pimcore.settings.build + '</a></b>';
+
+    if(pimcore.settings.platform_version) {
+        html += '<br><b>Platform Version: ' + pimcore.settings.platform_version + '</b>';
+    } else {
+        html += '<br><b>Core Version: ' + pimcore.settings.version + '</b>';
+    }
+
+
     html += '<br><br>&copy; by pimcore GmbH (<a href="https://pimcore.com/" target="_blank">pimcore.com</a>)';
     html += '<br><br><a href="https://github.com/pimcore/pimcore/blob/11.x/LICENSE.md" target="_blank">License</a> | ';
     html += '<a href="https://pimcore.com/en/about/contact" target="_blank">Contact</a>';
@@ -3359,14 +3365,31 @@ pimcore.helpers.treeDragDropValidate = function (node, oldParent, newParent) {
         if (disabledLayoutTypes.includes(newParent.data.editor.type)) {
             return false;
         }
+
+        return this.isComponentAsChildAllowed(newParent, node);
     }
 
-    if (newParent.data.root) {
+    if (newParent.data.root && node.data.type !== 'layout') {
         return false;
     }
 
     return true;
 };
+
+pimcore.helpers.isComponentAsChildAllowed = function (parentNode, childNode) {
+    const parentType = parentNode.data.editor.type;
+    const childType = childNode.data.editor.type;
+    const allowedChildren = pimcore.object.helpers.layout.getRawAllowedTypes();
+
+    if (allowedChildren[parentType] &&
+        allowedChildren[parentType].includes(childType) ||
+        (allowedChildren[parentType].includes('data') && childNode.data.type === 'data')
+    ) {
+        return true
+    }
+
+    return false;
+}
 
 /**
  * Building menu with priority

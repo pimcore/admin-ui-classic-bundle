@@ -174,36 +174,6 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 this.pagingtoolbar.moveFirst();
             }.bind(this);
 
-            this.searchField = new Ext.form.TextField(
-                {
-                    name: "query",
-                    width: 200,
-                    hideLabel: true,
-                    enableKeyEvents: true,
-                    value: this.searchFilter,
-                    triggers: {
-                        search: {
-                            weight: 1,
-                            cls: 'x-form-search-trigger',
-                            scope: 'this',
-                            handler: function(field, trigger, e) {
-                                this.searchQuery(field);
-                            }.bind(this)
-                        }
-                    },
-                    listeners: {
-                        "change": function() {
-                            this.saveColumnConfigButton.show();
-                        }.bind(this),
-                        "keydown" : function (field, key) {
-                            if (key.getKey() == key.ENTER) {
-                                this.searchQuery(field);
-                            }
-                        }.bind(this)
-                    }
-                }
-            );
-
             this.languageInfo = new Ext.Toolbar.TextItem();
 
             this.toolbarFilterInfo = new Ext.Button({
@@ -229,7 +199,47 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 }.bind(this)
             });
 
-            this.store.getProxy().setExtraParam("query", this.searchFilter);
+            if (this.settings.allowVariants) {
+                var selectObjectOptions = Ext.create('Ext.data.Store', {
+                    fields: ['name', 'value'],
+                    data: [
+                        [t("all_types"), "all_objects"],
+                        [t("only_object"), "only_objects"],
+                        [t("only_variant"), "only_variant_objects"],
+                    ]
+                });
+
+                this.selectObjectType = new Ext.form.ComboBox({
+                    fieldLabel: t('select_objects_type'),
+                    name: 'objects_type',
+                    labelWidth: 120,
+                    xtype: "combo",
+                    displayField:'name',
+                    valueField: "value",
+                    hidden: !this.element.data.general.allowInheritance,
+                    store: selectObjectOptions,
+                    editable: false,
+                    width : 300,
+                    triggerAction: 'all',
+                    value: 'all_objects',
+                    listeners: {
+                        change: function(comboBox,selected){
+                            this.grid.getStore().setRemoteFilter(false);
+                            this.grid.filters.clearFilters();
+                            this.grid.getStore().clearFilter();
+
+                            this.store.getProxy().setExtraParam("filter_by_object_type", selected);
+
+                            this.pagingtoolbar.moveFirst();
+
+                            this.grid.getStore().setRemoteFilter(true);
+
+                            this.saveColumnConfigButton.show();
+                        }.bind(this)
+                    }
+                });
+            }
+
 
             this.checkboxOnlyDirectChildren = new Ext.form.Checkbox({
                 name: "onlyDirectChildren",
@@ -290,17 +300,56 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
 
         this.buildColumnConfigMenu();
 
+        let items = [
+            this.languageInfo, "-",
+            this.toolbarFilterInfo,
+            this.clearFilterButton, "->",
+            this.selectObjectType, this.selectObjectType ? "-" : null,
+            this.checkboxOnlyDirectChildren, "-",
+            this.exportButton, "-",
+            this.columnConfigButton,
+            this.saveColumnConfigButton
+        ];
+
+        if (pimcore.helpers.hasSearchImplementation()) {
+            this.searchField = new Ext.form.TextField(
+                {
+                    name: "query",
+                    width: 200,
+                    hideLabel: true,
+                    enableKeyEvents: true,
+                    value: this.searchFilter,
+                    triggers: {
+                        search: {
+                            weight: 1,
+                            cls: 'x-form-search-trigger',
+                            scope: 'this',
+                            handler: function (field, trigger, e) {
+                                this.searchQuery(field);
+                            }.bind(this)
+                        }
+                    },
+                    listeners: {
+                        "change": function () {
+                            this.saveColumnConfigButton.show();
+                        }.bind(this),
+                        "keydown": function (field, key) {
+                            if (key.getKey() == key.ENTER) {
+                                this.searchQuery(field);
+                            }
+                        }.bind(this)
+                    }
+                }
+            );
+
+            this.store.getProxy().setExtraParam("query", this.searchFilter);
+
+            items.unshift(this.searchField, "-");
+        }
+
         var toolbar = new Ext.Toolbar({
             scrollable: "x",
-            items: [this.searchField, "-",
-                this.languageInfo, "-",
-                this.toolbarFilterInfo,
-                this.clearFilterButton, "->",
-                this.checkboxOnlyDirectChildren, "-",
-                this.exportButton, "-",
-                this.columnConfigButton,
-                this.saveColumnConfigButton
-            ]
+            items: items
         });
 
         return toolbar;

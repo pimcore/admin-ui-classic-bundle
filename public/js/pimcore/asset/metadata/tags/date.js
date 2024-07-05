@@ -45,7 +45,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
                     var timestamp = intval(value) * 1000;
                     var date = new Date(timestamp);
 
-                    return Ext.Date.format(date, "Y-m-d");
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
                 return "";
             }.bind(this, field.key)
@@ -53,7 +53,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: 'c'};
     },
 
     getLayoutEdit:function () {
@@ -63,7 +63,6 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
             name:this.fieldConfig.name,
             componentCls:"object_field",
             width:130,
-            format: "Y-m-d"
         };
 
         if (this.fieldConfig.labelWidth) {
@@ -96,9 +95,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
     },
 
     getGridCellEditor: function (gridtype, record) {
-        return Ext.create('Ext.form.field.Date', {
-            format: "Y-m-d"
-        });
+        return Ext.create('Ext.form.field.Date');
     },
 
     convertPredefinedGridData: function(v, r) {
@@ -114,7 +111,7 @@ pimcore.asset.metadata.tags.date = Class.create(pimcore.asset.metadata.tags.abst
             if(!(value instanceof Date)) {
                 value = new Date(value * 1000);
             }
-            return Ext.Date.format(value, "Y-m-d");
+            return Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
         }
 
         return Ext.util.Format.htmlEncode(value);

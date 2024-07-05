@@ -111,8 +111,8 @@ pimcore.settings.email.log = Class.create({
                 flex: false,
                 sortable: false,
                 renderer: function (d) {
-                    var date = new Date(intval(d) * 1000);
-                    return Ext.Date.format(date, 'Y-m-d H:i:s');
+                    const date = new Date(intval(d) * 1000);
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }
             },
             {

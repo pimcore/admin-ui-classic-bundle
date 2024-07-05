@@ -139,7 +139,7 @@ pimcore.element.notes = Class.create({
                 }},
                 {text: t("date"), sortable: true, dataIndex: 'date', flex: 100, filter: 'date', renderer: function(d) {
                     var date = new Date(d * 1000);
-                    return Ext.Date.format(date, "Y-m-d H:i:s");
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }}
             ];
 
@@ -291,7 +291,7 @@ pimcore.element.notes = Class.create({
                         } else if (record.get("type") == "date") {
                             if(value) {
                                 var date = new Date(value * 1000);
-                                return Ext.Date.format(date, "Y-m-d H:i:s");
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                             }
                         }
 

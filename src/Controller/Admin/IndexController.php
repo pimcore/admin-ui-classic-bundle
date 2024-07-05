@@ -146,6 +146,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 'pimcore_major_version' => Version::getMajorVersion(),
                 'pimcore_version' => Version::getVersion(),
                 'pimcore_hash' => Version::getRevision(),
+                'pimcore_platform_version' => Version::getPlatformVersion(),
                 'php_version' => PHP_VERSION,
                 'mysql_version' => $mysqlVersion,
                 'bundles' => array_keys($kernel->getBundles()),
@@ -196,6 +197,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $config = $templateParams['config'];
         $systemSettings = $templateParams['systemSettings'];
         $adminSettings = $templateParams['adminSettings'];
+        $requiredLanguages = $systemSettings['general']['valid_languages'];
         $dashboardHelper = new Dashboard($user);
         $customAdminEntrypoint = $this->getParameter('pimcore_admin.custom_admin_route_name');
 
@@ -206,10 +208,15 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             $adminEntrypointUrl = null;
         }
 
+        if (array_key_exists('required_languages', $systemSettings['general'])) {
+            $requiredLanguages = $systemSettings['general']['required_languages'];
+        }
+
         $settings = [
             'instanceId'          => $this->getInstanceId(),
             'version'             => Version::getVersion(),
             'build'               => Version::getRevision(),
+            'platform_version'    => Version::getPlatformVersion(),
             'debug'               => \Pimcore::inDebugMode(),
             'devmode'             => \Pimcore::inDevMode(),
             'disableMinifyJs'     => \Pimcore::disableMinifyJs(),
@@ -224,6 +231,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 $systemSettings['general']['valid_languages'],
                 true
             ),
+            'requiredLanguages' => $requiredLanguages,
 
             // flags
             'showCloseConfirmation'          => true,
@@ -244,6 +252,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'document_tree_paging_limit'     => $config['documents']['tree_paging_limit'],
             'object_tree_paging_limit'       => $config['objects']['tree_paging_limit'],
             'hostname'                       => htmlentities(\Pimcore\Tool::getHostname(), ENT_QUOTES, 'UTF-8'),
+            'dependency'                     => $config['dependency']['enabled'],
 
             'document_auto_save_interval' => $config['documents']['auto_save_interval'],
             'object_auto_save_interval'   => $config['objects']['auto_save_interval'],
@@ -313,7 +322,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         // upload limit
         $max_upload = filesize2bytes(ini_get('upload_max_filesize') . 'B');
         $max_post = filesize2bytes(ini_get('post_max_size') . 'B');
-        $upload_mb = min($max_upload, $max_post);
+        $upload_mb = min($max_upload, $max_post) ?: $max_upload;
 
         $settings['upload_max_filesize'] = (int) $upload_mb;
 

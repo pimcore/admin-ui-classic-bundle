@@ -19,13 +19,17 @@ pimcore.object.classes.data.data = Class.create({
 
     invalidFieldNames: false,
     forbiddenNames: [
-        "id", "key", "path", "type", "index", "classname", "creationdate", "userowner", "value", "class", "list",
-        "fullpath", "childs", "children", "values", "cachetag", "cachetags", "parent", "published", "valuefromparent",
-        "userpermissions", "dependencies", "modificationdate", "usermodification", "byid", "bypath", "data",
-        "versions", "properties", "permissions", "permissionsforuser", "childamount", "apipluginbroker", "resource",
-        "parentClass", "definition", "locked", "language", "omitmandatorycheck", "idpath", "object", "fieldname",
-        "property", "localizedfields", "parentid", "scheduledtasks", "latestVersion", "haschildren", "siblings", "hassiblings",
-        "childrenSortby", "childrensortorder", "versioncount", "dirtylanguages", "dirtyfields", "classtitle"
+        "apipluginbroker", "baseobject", "byid", "bypath", "cachekey", "cachetag", "cachetags", "childamount",
+        "childpermissions", "children", "childrensortby", "childrensortorder", "childs", "class", "classid",
+        "classname", "classtitle", "closestparentofclass", "creationdate", "currentfullpath", "dao", "data",
+        "definition", "dependencies", "dirtyfields", "dirtylanguages", "dodelete", "fieldname", "fullpath",
+        "getinheritedvalues", "haschildren", "hassiblings", "hideunpublished", "id", "idpath", "index", "key",
+        "language", "latestversion", "lazyloadedfieldnames", "list", "listingcachekey", "localizedfields", "locked",
+        "modelfactory", "modificationdate", "nextparentforinheritance", "object", "objectvar", "objectvars",
+        "omitmandatorycheck", "parent", "parentclass", "parentid", "path", "permissions", "permissionsforuser",
+        "properties", "property", "published", "realfullpath", "realpath", "relationdata", "resource",
+        "scheduledtasks", "siblings", "type", "types", "usermodification", "userowner", "userpermissions",
+        "validtablecolumns", "value", "valueforfieldname", "valuefromparent", "values", "versioncount", "versions",
     ],
 
     /**
