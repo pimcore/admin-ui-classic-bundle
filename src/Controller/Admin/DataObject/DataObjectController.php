@@ -40,6 +40,7 @@ use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Schedule\Task;
 use Pimcore\Tool;
+use Pimcore\Workflow\Manager;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -1312,7 +1313,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function saveAction(Request $request): JsonResponse
+    public function saveAction(Request $request, Manager $workflowManager): JsonResponse
     {
         $objectFromDatabase = DataObject\Concrete::getById((int) $request->get('id'));
 
@@ -1359,6 +1360,36 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         $this->assignPropertiesFromEditmode($request, $object);
         $this->applySchedulerDataToElement($request, $object);
+
+        $data = [
+            'userPermissions' => []
+        ];
+        foreach ($workflowManager->getAllWorkflows() as $workflowName) {
+            $workflow = $workflowManager->getWorkflowIfExists($object, $workflowName);
+
+            if (empty($workflow)) {
+                continue;
+            }
+
+            $marking = $workflow->getMarking($object);
+
+            if (!count($marking->getPlaces())) {
+                continue;
+            }
+
+            foreach ($workflowManager->getOrderedPlaceConfigs($workflow, $marking) as $placeConfig) {
+                if (!empty($placeConfig->getPermissions($workflow, $object))) {
+                    $data['userPermissions'] = array_merge(
+                        (array)$data['userPermissions'],
+                        $placeConfig->getUserPermissions($workflow, $object)
+                    );
+                }
+            }
+        }
+
+        if (!empty($data['userPermissions']) && (array_key_exists('unpublish', $data['userPermissions']) && !$data['userPermissions']['unpublish'] && $request->get('task') === 'unpublish') || (array_key_exists('publish', $data['userPermissions']) && !$data['userPermissions']['publish'] && $request->get('task') === 'publish') || (array_key_exists('save', $data['userPermissions']) && !$data['userPermissions']['save'] && $request->get('task') === 'version')) {
+            throw $this->createAccessDeniedHttpException();
+        }
 
         if (($request->get('task') === 'unpublish' && !$object->isAllowed('unpublish')) || ($request->get('task') === 'publish' && !$object->isAllowed('publish'))) {
             throw $this->createAccessDeniedHttpException();
