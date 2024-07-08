@@ -1362,7 +1362,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $this->applySchedulerDataToElement($request, $object);
 
         $data = [
-            'userPermissions' => []
+            'userPermissions' => [],
         ];
         foreach ($workflowManager->getAllWorkflows() as $workflowName) {
             $workflow = $workflowManager->getWorkflowIfExists($object, $workflowName);
