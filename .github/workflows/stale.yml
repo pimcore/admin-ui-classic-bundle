@@ -7,4 +7,4 @@ on:
 
 jobs:
   call-stale-workflow:
-    uses: pimcore/workflows-collection-public/.github/workflows/stale.yml@v1.1.0
+    uses: pimcore/workflows-collection-public/.github/workflows/stale.yml@cstest

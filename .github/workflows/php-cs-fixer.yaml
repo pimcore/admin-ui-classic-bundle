@@ -16,6 +16,4 @@ jobs:
     php-style:
         uses: pimcore/workflows-collection-public/.github/workflows/reusable-php-cs-fixer.yaml@cstest
         with:
-            head_ref: ${{ github.event.pull_request.head.ref }}
-            repository: ${{ github.event.pull_request.head.repo.full_name }}
             config_file: .php-cs-fixer.dist.php
