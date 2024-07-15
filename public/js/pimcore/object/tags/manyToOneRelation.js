@@ -286,6 +286,22 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
         this.composite = Ext.create('Ext.form.FieldContainer', compositeCfg);
 
+        if (this.fieldConfig.assetsAllowed && this.name.endsWith('DataSheet')) {
+            this.composite.remove(
+                this.composite.items.getAt(4)
+            );
+
+            this.composite.add({
+                xtype: "button",
+                iconCls: "pimcore_icon_download",
+                cls: "pimcore_inline_download",
+                style: "margin-left: 5px",
+                handler: function () {
+                    pimcore.helpers.download(Routing.generate('pimcore_admin_asset_download', {id: this.data.id}));
+                }.bind(this)
+            });
+        }
+
         return this.composite;
     },
 
