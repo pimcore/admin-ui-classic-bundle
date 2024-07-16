@@ -430,8 +430,7 @@ conversionOffset: conversionOffset
 default_unit: default_unit
 min_max_times: min_max_times
 reset: Reiniciar
-password_hint: "La contrase\xF1a debe tener por lo menos 10 caracteres, uno en min\xFAsculas,
-  otro en may\xFAsculas, un n\xFAmero y un caracter especial!"
+password_hint: "La contrase\u00F1a no cumple los criterios"
 editor_settings: editor_settings
 language_order: language_order
 preview_width: preview_width

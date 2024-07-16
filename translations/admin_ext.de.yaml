@@ -452,7 +452,7 @@ conversionOffset: Umwandlungsversatz
 default_unit: Standard Einheit
 min_max_times: Min / Max Zeiten
 reset: "Zur\xFCcksetzen"
-password_hint: Passwort muss mindestens 10 Zeichen umfassen!
+password_hint: Das Passwort erfüllt die Kriterien nicht
 editor_settings: Editoreinstellungen
 language_order: Reihenfolge der Sprachen
 preview_width: Vorschau Breite

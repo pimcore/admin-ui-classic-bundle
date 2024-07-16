@@ -440,8 +440,7 @@ conversionOffset: Scostamento conversione
 default_unit: "Unit\xE0 predefinita"
 min_max_times: Tempi min/max
 reset: Reimposta
-password_hint: 'La password deve contenere come minimo 10 caratteri, una lettera minuscola,
-  una maiuscola, un numero e un carattere speciale (@ # ...)'
+password_hint: 'La password non soddisfa i criteri'
 editor_settings: Impostazioni editor
 language_order: Ordine lingua
 preview_width: Larghezza anteprima
