@@ -2936,6 +2936,42 @@ pimcore.helpers.isValidPassword = function (pass) {
     return true;
 };
 
+pimcore.helpers.isValidBSIPassword = function (pass) {
+    if (this.isComplexPassword(pass) || this.isLongLessComplexPassword(pass)) {
+        return true;
+    }
+
+    return false;
+}
+
+pimcore.helpers.isComplexPassword = function (pass) {
+    if (pass.length < 8 || pass.length > 12) {
+        return false;
+    }
+
+    const uppercase = /[A-Z]/.test(pass);
+    const lowercase = /[a-z]/.test(pass);
+    const numbers = /[0-9]/.test(pass);
+    const specialCharacters = /[^\w]/.test(pass);
+
+    return !(!uppercase || !lowercase || !numbers || !specialCharacters);
+}
+
+pimcore.helpers.isLongLessComplexPassword = function (pass) {
+    if (pass.length < 25) {
+        return false;
+    }
+
+    const uppercase = /[A-Z]/.test(pass);
+    const lowercase = /[a-z]/.test(pass);
+    const numbers = /[0-9]/.test(pass);
+    const specialCharacters = /[^\w]/.test(pass);
+
+    const typesCount = [uppercase, lowercase, numbers, specialCharacters].filter(Boolean).length;
+
+    return typesCount >= 2;
+}
+
 pimcore.helpers.getDeeplink = function (type, id, subtype) {
     let target = type + "_" + id + "_" + subtype;
     let url    = Routing.generate('pimcore_admin_login_deeplink', {}, true) + '?' + target;

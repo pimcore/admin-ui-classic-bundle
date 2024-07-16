@@ -23,6 +23,18 @@ pimcore.settings.user.user.settings = Class.create({
 
         this.data = this.userPanel.data;
         this.currentUser = this.data.user;
+
+        this.getConfig();
+    },
+
+    getConfig: function () {
+        Ext.Ajax.request({
+            url: Routing.generate('pimcore_admin_settings_getsystem'),
+            success: function (response) {
+
+                this.config = Ext.decode(response.responseText);
+            }.bind(this)
+        });
     },
 
     getPanel: function () {
@@ -625,6 +637,7 @@ pimcore.settings.user.user.settings = Class.create({
     getValues: function () {
 
         var values = this.panel.getForm().getFieldValues();
+
         if (values["password"]) {
             if (!pimcore.helpers.isValidPassword(values["password"])) {
                 delete values["password"];
@@ -644,7 +657,15 @@ pimcore.settings.user.user.settings = Class.create({
         var theEl = el.getEl();
         var hintItem = this.generalSet.getComponent("password_hint");
 
-        if (pimcore.helpers.isValidPassword(el.getValue())) {
+        var bsiStandards = this.config['values']['password']['bsi_standards'];
+
+        if (!bsiStandards && pimcore.helpers.isValidPassword(el.getValue())) {
+            theEl.addCls("password_valid");
+            theEl.removeCls("password_invalid");
+            hintItem.hide();
+        } else if(bsiStandards && (
+            pimcore.helpers.isComplexPassword(el.getValue()) || pimcore.helpers.isLongLessComplexPassword(el.getValue()))
+        ) {
             theEl.addCls("password_valid");
             theEl.removeCls("password_invalid");
             hintItem.hide();
