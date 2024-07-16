@@ -712,4 +712,6 @@ options_provider_type_configure: Configure
 options_provider_type_select_options: Select Options
 options_provider_type_class: Options Provider
 selectoptions: Select Options
+password_security: Passwort Sicherheit
+bsi_password_standards: BSI-konforme Kennwortstandards
 ...

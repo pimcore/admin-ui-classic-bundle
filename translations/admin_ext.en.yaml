@@ -714,3 +714,5 @@ booleanSelect: Boolean Select
 quantityValue: Quantity Value
 inputQuantityValue: Input Quantity Value
 calculatedValue: Calculated Value
+password_security: Password security
+bsi_password_standards: BSI compliant password standards

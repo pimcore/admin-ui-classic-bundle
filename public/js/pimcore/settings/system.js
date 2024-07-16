@@ -197,6 +197,22 @@ pimcore.settings.system = Class.create({
                     },
                     {
                         xtype: 'fieldset',
+                        title: t('password_security'),
+                        collapsible: true,
+                        collapsed: true,
+                        autoHeight: true,
+                        labelWidth: 150,
+                        defaultType: 'textfield',
+                        defaults: {width: 300},
+                        items: [{
+                            boxLabel: t('bsi_password_standards'),
+                            xtype: "checkbox",
+                            name: "password.bsi_standards",
+                            checked: this.getValue("password.bsi_standards")
+                        }]
+                    },
+                    {
+                        xtype: 'fieldset',
                         title: "Debug",
                         collapsible: true,
                         collapsed: true,
