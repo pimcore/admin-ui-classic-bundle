@@ -246,6 +246,13 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                 }
 
                 if (this.toolbarButtons.save && this.toolbarButtons.publish) {
+                    if (this.isAllowed("save")) {
+                        this.toolbarButtons.publish.menu.items.items[1].setHidden(false)
+                    }
+                    if (this.isAllowed("settings")) {
+                        this.toolbarButtons.publish.menu.items.items[2].setHidden(false)
+                    }
+
                     this.toolbarButtons.publish.show();
                 }
 
