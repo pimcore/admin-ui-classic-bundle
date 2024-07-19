@@ -38,8 +38,8 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             height: 49,
         });
 
-        const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
+        const tabPanel = this.getTabPanel();
 
         if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
