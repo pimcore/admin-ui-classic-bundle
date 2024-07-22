@@ -18,6 +18,12 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    Pimcore\Bundle\AdminBundle\Controller\Admin\IndexController:
+        public: true
+        arguments:
+            $httpClient: '@pimcore.http_client'
+        tags: [ 'controller.service_arguments' ]
+
     #
     # COMMANDS
     #
