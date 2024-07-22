@@ -169,8 +169,9 @@ class IndexController extends AdminAbstractController implements KernelResponseE
                 'body' => json_encode($data),
             ]
         );
+
         return $this->adminJson([
-            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400)
+            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400),
         ]);
     }
 
