@@ -657,7 +657,7 @@ pimcore.settings.user.user.settings = Class.create({
         var theEl = el.getEl();
         var hintItem = this.generalSet.getComponent("password_hint");
 
-        var passwordStandard = this.config['values']['password']['standard'];
+        let passwordStandard = this.config['values']['password']['standard'];
 
         if (
             (passwordStandard === 'pimcore' && pimcore.helpers.isValidPassword(el.getValue())) ||

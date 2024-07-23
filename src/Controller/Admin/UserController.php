@@ -282,12 +282,24 @@ class UserController extends AdminAbstractController implements KernelController
                 $settings = SystemSettingsConfig::get();
                 $passwordStandard = $settings['password.standard'];
 
-                if ($passwordStandard == 'pimcore' && strlen($values['password']) < 10) {
-                    throw new \Exception('Passwords have to be at least 10 characters long');
-                } else if ($passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['password'])) {
-                    throw new \Exception('Passwords must be at least 8 to 12 characters long and must consist of 4 different character types');
-                } else if ($passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['password'])) {
-                    throw new \Exception('Passwords must be at least 25 characters long and consist of 2 character types');
+                if (
+                    $passwordStandard == 'pimcore' && strlen($values['password']) < 10
+                ) {
+                    throw new \Exception(
+                        'Passwords have to be at least 10 characters long'
+                    );
+                } elseif (
+                    $passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['password'])
+                ) {
+                    throw new \Exception(
+                        'Passwords must be at least 8 to 12 characters long and must consist of 4 different character types'
+                    );
+                } elseif (
+                    $passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['password'])
+                ) {
+                    throw new \Exception(
+                        'Passwords must be at least 25 characters long and consist of 2 character types'
+                    );
                 }
 
                 $values['password'] = Tool\Authentication::getPasswordHash($user->getName(), $values['password']);
@@ -564,12 +576,24 @@ class UserController extends AdminAbstractController implements KernelController
                     $settings = SystemSettingsConfig::get();
                     $passwordStandard = $settings['password.standard'];
 
-                    if ($passwordStandard == 'pimcore' && strlen($values['new_password']) < 10) {
-                        throw new \Exception('Passwords have to be at least 10 characters long');
-                    } else if ($passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['new_password'])) {
-                        throw new \Exception('Passwords must be at least 8 to 12 characters long and must consist of 4 different character types');
-                    } else if ($passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['new_password'])) {
-                        throw new \Exception('Passwords must be at least 25 characters long and consist of 2 character types');
+                    if (
+                        $passwordStandard == 'pimcore' && strlen($values['password']) < 10
+                    ) {
+                        throw new \Exception(
+                            'Passwords have to be at least 10 characters long'
+                        );
+                    } elseif (
+                        $passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['password'])
+                    ) {
+                        throw new \Exception(
+                            'Passwords must be at least 8 to 12 characters long and must consist of 4 different character types'
+                        );
+                    } elseif (
+                        $passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['password'])
+                    ) {
+                        throw new \Exception(
+                            'Passwords must be at least 25 characters long and consist of 2 character types'
+                        );
                     }
 
                     if ($oldPasswordCheck && $values['new_password'] == $values['retype_password']) {
@@ -1170,28 +1194,30 @@ class UserController extends AdminAbstractController implements KernelController
         return $loginUrl;
     }
 
-    function isComplexPassword($pass) {
-        if (strlen($pass) < 8 || strlen($pass) > 12) {
+    function isComplexPassword(string $password): bool
+    {
+        if (strlen($password) < 8 || strlen($password) > 12) {
             return false;
         }
 
-        $uppercase = preg_match('/[A-Z]/', $pass);
-        $lowercase = preg_match('/[a-z]/', $pass);
-        $numbers = preg_match('/[0-9]/', $pass);
-        $specialCharacters = preg_match('/[^\w]/', $pass);
+        $uppercase = preg_match('/[A-Z]/', $password);
+        $lowercase = preg_match('/[a-z]/', $password);
+        $numbers = preg_match('/d/', $password);
+        $specialCharacters = preg_match('/[^\w]/', $password);
 
         return $uppercase && $lowercase && $numbers && $specialCharacters;
     }
 
-    function isLongLessComplexPassword($pass) {
-        if (strlen($pass) < 25) {
+    function isLongLessComplexPassword(string $password): bool
+    {
+        if (strlen($password) < 25) {
             return false;
         }
 
-        $uppercase = preg_match('/[A-Z]/', $pass);
-        $lowercase = preg_match('/[a-z]/', $pass);
-        $numbers = preg_match('/[0-9]/', $pass);
-        $specialCharacters = preg_match('/[^\w]/', $pass);
+        $uppercase = preg_match('/[A-Z]/', $password);
+        $lowercase = preg_match('/[a-z]/', $password);
+        $numbers = preg_match('/d/', $password);
+        $specialCharacters = preg_match('/[^\w]/', $password);
 
         $typesCount = count(array_filter([$uppercase, $lowercase, $numbers, $specialCharacters]));
 
