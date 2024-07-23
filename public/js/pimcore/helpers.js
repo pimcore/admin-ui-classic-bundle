@@ -2936,14 +2936,6 @@ pimcore.helpers.isValidPassword = function (pass) {
     return true;
 };
 
-pimcore.helpers.isValidBSIPassword = function (pass) {
-    if (this.isComplexPassword(pass) || this.isLongLessComplexPassword(pass)) {
-        return true;
-    }
-
-    return false;
-}
-
 pimcore.helpers.isComplexPassword = function (pass) {
     if (pass.length < 8 || pass.length > 12) {
         return false;

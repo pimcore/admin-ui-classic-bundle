@@ -657,14 +657,12 @@ pimcore.settings.user.user.settings = Class.create({
         var theEl = el.getEl();
         var hintItem = this.generalSet.getComponent("password_hint");
 
-        var bsiStandards = this.config['values']['password']['bsi_standards'];
+        var passwordStandard = this.config['values']['password']['standard'];
 
-        if (!bsiStandards && pimcore.helpers.isValidPassword(el.getValue())) {
-            theEl.addCls("password_valid");
-            theEl.removeCls("password_invalid");
-            hintItem.hide();
-        } else if(bsiStandards && (
-            pimcore.helpers.isComplexPassword(el.getValue()) || pimcore.helpers.isLongLessComplexPassword(el.getValue()))
+        if (
+            (passwordStandard === 'pimcore' && pimcore.helpers.isValidPassword(el.getValue())) ||
+            (passwordStandard === 'bsi_standard_less' && pimcore.helpers.isLongLessComplexPassword(el.getValue())) ||
+            (passwordStandard === 'bsi_standard_complex' && pimcore.helpers.isComplexPassword(el.getValue()))
         ) {
             theEl.addCls("password_valid");
             theEl.removeCls("password_invalid");
