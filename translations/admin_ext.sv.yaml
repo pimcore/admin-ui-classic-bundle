@@ -685,4 +685,9 @@ options_provider_type_configure: Configure
 options_provider_type_select_options: Select Options
 options_provider_type_class: Options Provider
 selectoptions: Select Options
+password_security: Lösenordssäkerhet
+password_standards: Lösenordsstandarder
+password_pimcore_standard: Pimcore-standarder
+password_bsi_standard_less: BSI mindre komplex
+password_bsi_standard_complex: BSI komplex
 ...
