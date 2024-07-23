@@ -206,11 +206,11 @@ pimcore.settings.system = Class.create({
                         items: [{
                             fieldLabel: t('password_standards'),
                             xtype: "combobox",
-                            name: "password.standards",
+                            name: "password.standard",
                             queryMode: 'local',
                             displayField: 'name',
                             valueField: 'abbr',
-                            value: this.getValue("password.standards"),
+                            value: this.getValue("password.standard"),
                             store: [
                                 {
                                     abbr: 'pimcore',
