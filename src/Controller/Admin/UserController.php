@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\PasswordHasher\Exception\LogicException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -285,19 +286,20 @@ class UserController extends AdminAbstractController implements KernelController
                 if (
                     $passwordStandard == 'pimcore' && strlen($values['password']) < 10
                 ) {
-                    throw new \Exception(
+                    throw new LogicException(
                         'Passwords have to be at least 10 characters long'
                     );
                 } elseif (
                     $passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['password'])
                 ) {
-                    throw new \Exception(
-                        'Passwords must be at least 8 to 12 characters long and must consist of 4 different character types'
+                    throw new LogicException(
+                        'Passwords must be at least 8 to 12 characters long
+                        and must consist of 4 different character types'
                     );
                 } elseif (
                     $passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['password'])
                 ) {
-                    throw new \Exception(
+                    throw new LogicException(
                         'Passwords must be at least 25 characters long and consist of 2 character types'
                     );
                 }
@@ -579,19 +581,20 @@ class UserController extends AdminAbstractController implements KernelController
                     if (
                         $passwordStandard == 'pimcore' && strlen($values['password']) < 10
                     ) {
-                        throw new \Exception(
+                        throw new LogicException(
                             'Passwords have to be at least 10 characters long'
                         );
                     } elseif (
                         $passwordStandard == 'bsi_standard_less' && $this->isLongLessComplexPassword($values['password'])
                     ) {
-                        throw new \Exception(
-                            'Passwords must be at least 8 to 12 characters long and must consist of 4 different character types'
+                        throw new LogicException(
+                            'Passwords must be at least 8 to 12 characters long
+                            and must consist of 4 different character types'
                         );
                     } elseif (
                         $passwordStandard == 'bsi_standard_complex' && $this->isComplexPassword($values['password'])
                     ) {
-                        throw new \Exception(
+                        throw new LogicException(
                             'Passwords must be at least 25 characters long and consist of 2 character types'
                         );
                     }
