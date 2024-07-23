@@ -713,5 +713,8 @@ options_provider_type_select_options: Select Options
 options_provider_type_class: Options Provider
 selectoptions: Select Options
 password_security: Passwort Sicherheit
-bsi_password_standards: BSI-konforme Kennwortstandards
+password_standards: Passwort Standards
+password_pimcore_standard: Pimcore Standards
+password_bsi_standard_less: BSI weniger Komplexe
+password_bsi_standard_complex: BSI Komplexe
 ...

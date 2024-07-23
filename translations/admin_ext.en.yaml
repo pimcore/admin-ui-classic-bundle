@@ -715,4 +715,7 @@ quantityValue: Quantity Value
 inputQuantityValue: Input Quantity Value
 calculatedValue: Calculated Value
 password_security: Password security
-bsi_password_standards: BSI compliant password standards
+password_standards: Password standards
+password_pimcore_standard: Pimcore standard
+password_bsi_standard_less: BSI less standard
+password_bsi_standard_complex: BSI complex standard
