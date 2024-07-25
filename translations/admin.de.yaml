@@ -148,6 +148,8 @@ resize: "Gr\xF6\xDFe \xE4ndern"
 scalebyheight: "Skaliere der H\xF6he nach"
 scalebywidth: Skaliere der Breite nach
 crop: Zuschneiden
+crop_error_image_too_small: 'Das Bild ist zu klein, um zugeschnitten zu werden'
+crop_error_selection_smaller_than_thumbnail: 'Auswahl ist kleiner als die Thumbnail Einstellungen'
 cleanup: Bereinigung
 this_element_cannot_be_edited: Dieses Element kann nicht editiert werden
 details: Details

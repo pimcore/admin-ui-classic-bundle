@@ -15693,6 +15693,10 @@ div.x-border-layout-ct {
     z-index: 101;
 }
 
+.x-resizable-handle-error {
+    background-color: rgba(255,0,0,.2);
+}
+
 .x-tablet .x-resizable-handle-north,
 .x-tablet .x-resizable-handle-south {
     height: 20px;

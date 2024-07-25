@@ -37,6 +37,18 @@ pimcore.element.tag.imagecropper = Class.create({
         this.ratioY = null;
         this.preserveRatio = false;
 
+        this.alertMessage = '';
+
+        this.allowedMethods = [
+            'scaleByHeight',
+            'scaleByWidth',
+            'frame',
+            'resize',
+            'contain',
+            'crop',
+            'cover'
+        ];
+
         // Has thumbnail, load asset and thumbnail data
         if (this.imageId && this.data.thumbnail) {
             this.promiseImage = this.loadAsset(this.imageId);
@@ -119,7 +131,19 @@ pimcore.element.tag.imagecropper = Class.create({
             modal: this.modal,
             resizable: false,
             bodyStyle: "background: url('/bundles/pimcoreadmin/img/tree-preview-transparent-background.png');",
-            bbar: ["->", button],
+            bbar: [
+                {
+                    xtype: 'tbtext',
+                    id: 'alertMessage',
+                    text: this.alertMessage,
+                    style: {
+                        'margin-right': '10px',
+                        'color': '#FF0000',
+                        'font-weight': 'bold'
+                    }
+                },
+                "->",
+                button],
             html: validImage ? '<img id="selectorImage" src="' + imageUrl + '" />' : '<span style="padding:10px;">' + t("no_data_to_display") + '</span>',
         });
 
@@ -156,25 +180,31 @@ pimcore.element.tag.imagecropper = Class.create({
         if(image && image.getWidth() > 30) {
             const imageFactor = this.assetWidth / image.getWidth();
 
+            let sizeError = false;
+
             for (let i = 0; i < 2; i++) {
                 // Has thumbnail
                 if (this.hasThumbnail) {
                     if (this.thumbnailHeight && this.thumbnailHeight > this.assetHeight) {
                         // Is asset smaller than thumbnail, set size to asset size
-                        sel.setStyle("height", image.getHeight() + "px");
-                    } else if (this.thumbnailWidth && this.thumbnailWidth > this.assetWidth){
+                        this.alertMessage = 'crop_error_image_too_small'
+                        sizeError = true;
+                    } else if (this.thumbnailWidth && this.thumbnailWidth > this.assetWidth) {
                         // Is asset smaller than thumbnail, set size to asset size
-                        sel.setStyle("width", image.getWidth() + "px");
+                        this.alertMessage = 'crop_error_image_too_small'
+                        sizeError = true;
                     }
 
-                    // Fix min thumbnail size width
+                    // Selection width is smaller than the thumbnail settings
                     if (this.thumbnailWidth && (sel.getWidth() < (this.thumbnailWidth / imageFactor))) {
-                        sel.setStyle("width", (this.thumbnailWidth / imageFactor) + "px");
+                        sizeError = true;
+                        this.alertMessage = 'crop_error_selection_smaller_than_thumbnail'
                     }
 
-                    // Fix min thumbnail size height
+                    // Selection height is smaller than the thumbnail settings
                     if (this.thumbnailHeight && (sel.getHeight() < (this.thumbnailHeight / imageFactor))) {
-                        sel.setStyle("height", (this.thumbnailHeight / imageFactor) + "px");
+                        sizeError = true;
+                        this.alertMessage = 'crop_error_selection_smaller_than_thumbnail'
                     }
 
                     // Max width and fix height for dimension
@@ -234,6 +264,14 @@ pimcore.element.tag.imagecropper = Class.create({
                 if ((sel.getLeft(true) + sel.getWidth()) > image.getWidth()) {
                     sel.setStyle("left", (image.getWidth() - sel.getWidth()) + "px");
                 }
+            }
+
+            if(sizeError) {
+                sel.addCls("x-resizable-handle-error");
+                Ext.get("alertMessage").update(t(this.alertMessage));
+            } else {
+                sel.removeCls("x-resizable-handle-error");
+                Ext.get("alertMessage").update('');
             }
         }
     },
@@ -311,13 +349,12 @@ pimcore.element.tag.imagecropper = Class.create({
                 this.thumbnailData = Ext.decode(response.responseText);
                 if (this.thumbnailData.items) {
                     Ext.each(this.thumbnailData.items, (item) => {
-                        const allowedMethods = ['scaleByHeight', 'scaleByWidth', 'frame', 'resize', 'contain', 'crop', 'cover'];
-                        if (allowedMethods.includes(item.method) && item.arguments.width
+                        if (this.allowedMethods.includes(item.method) && item.arguments.width
                           && (!this.thumbnailWidth || this.thumbnailWidth > item.arguments.width)) {
                             this.thumbnailWidth = item.arguments.width;
                         }
 
-                        if (allowedMethods.includes(item.method) && item.arguments.height
+                        if (this.allowedMethods.includes(item.method) && item.arguments.height
                           && (!this.thumbnailHeight || this.thumbnailHeight > item.arguments.height)) {
                             this.thumbnailHeight = item.arguments.height;
                         }

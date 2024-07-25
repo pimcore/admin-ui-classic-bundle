@@ -135,6 +135,8 @@ resize: Resize
 scalebyheight: 'Scale by Height'
 scalebywidth: 'Scale by Width'
 crop: Crop
+crop_error_image_too_small: 'The image is too small to be cropped'
+crop_error_selection_smaller_than_thumbnail: 'Selection is smaller than the thumbnail settings'
 cleanup: Cleanup
 this_element_cannot_be_edited: 'This element cannot be edited'
 details: Details
