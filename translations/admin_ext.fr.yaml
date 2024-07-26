@@ -719,9 +719,4 @@ options_provider_type_configure: Configure
 options_provider_type_select_options: Select Options
 options_provider_type_class: Options Provider
 selectoptions: Select Options
-password_security: "S\xE9curit\xE9 du mot de passe"
-password_standards: Normes de mot de passe
-password_pimcore_standard: Normes Pimcore
-password_bsi_standard_less: BSI moins complexe
-password_bsi_standard_complex: BSI complexe
 ...
