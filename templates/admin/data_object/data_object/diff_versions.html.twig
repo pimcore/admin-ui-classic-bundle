@@ -125,7 +125,7 @@
                 {% endif %}
 
                 {% for activeGroupId, enabled in existingGroups %}
-                    {% if activeGroups1[activeGroupId] is defined and activeGroups2[activeGroupId] is defined %}
+                    {% if activeGroups1[activeGroupId] is defined or activeGroups2[activeGroupId] is defined %}
                         {% set groupDefinition = pimcore_object_classificationstore_group(activeGroupId) %}
                         {% if groupDefinition is not empty %}
                             {% set keyGroupRelations = groupDefinition.getRelations() %}
@@ -146,7 +146,8 @@
                                             {% if isImportPreview is not defined or isNew is not defined %}
                                                 <td>{{ preview1 | raw }}</td>
                                             {% endif %}
-                                            {% set fieldIsEqual = keyDef is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not keyDef.isEqual(keyData1, keyData2) ? 'modified' : '' %}
+                                            {% set isActiveInOneVersionOnly = activeGroups1[activeGroupId] is not defined or activeGroups2[activeGroupId] is not defined %}
+                                            {% set fieldIsEqual = keyDef is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not keyDef.isEqual(keyData1, keyData2) or isActiveInOneVersionOnly ? 'modified' : '' %}
                                             <td class="{{ fieldIsEqual }}">{{ preview2 }}</td>
                                         </tr>
                                     {% endfor %}
