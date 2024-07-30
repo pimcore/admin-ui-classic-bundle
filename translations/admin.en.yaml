@@ -790,6 +790,7 @@ there_are_more_items: 'There are more items than displayed'
 workflow_actions: Actions
 workflow_notes_requred_field_message: '"%s" is a required field.'
 workflow_transition_applied_successfully: 'Action applied successfully'
+workflow_transition_unsaved_data: 'Your data changes have not been saved yet. Please, save changes before applying workflow transition.'
 workflow_change_email_notification_subject: "Workflow update for %s in workflow '%s'"
 workflow_details: 'Workflow Details'
 workflow_graph: 'Workflow Graph'
