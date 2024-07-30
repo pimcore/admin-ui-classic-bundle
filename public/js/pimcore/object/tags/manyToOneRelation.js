@@ -206,7 +206,11 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             }.bind(this));
         }.bind(this));
         this.component.on('afterrender', function (el) {
-            el.inputEl.setWidth(href.width);
+            if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo') {
+                el.inputEl.setWidth(href.width - 34);
+            } else {
+                el.inputEl.setWidth(href.width);
+            }
             el.inputEl.setStyle({
                 'overflow': 'hidden'
             });
