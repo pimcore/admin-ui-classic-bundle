@@ -293,7 +293,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     public function getAction(Request $request, EventDispatcherInterface $eventDispatcher, PreviewGeneratorInterface $defaultPreviewGenerator): JsonResponse
     {
         $objectId = $request->query->getInt('id');
-        $objectFromDatabase = DataObject\Concrete::getById($objectId);
+        $objectFromDatabase = DataObject\Concrete::getById($objectId, ['force' => true]);
         if ($objectFromDatabase === null) {
             return $this->adminJson(['success' => false, 'message' => 'element_not_found'], JsonResponse::HTTP_NOT_FOUND);
         }
