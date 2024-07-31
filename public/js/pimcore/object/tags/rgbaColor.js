@@ -91,8 +91,6 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
         );
 
         var colorConfig =  {
-            fieldLabel: this.fieldConfig.title,
-            labelWidth: labelWidth,
             format: '#hex8',
             isNull: !this.data,
             hidden: true,
@@ -107,27 +105,39 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
             colorConfig
         );
 
-        var panel = new Ext.panel.Panel({
+        const compositeCfg = {
             viewModel: {
                 data: {
                     color: this.data ? this.data : "FFFFFFFF"
                 }
             },
+            fieldLabel: this.fieldConfig.title,
+            labelWidth: labelWidth,
             layout: 'hbox',
-            width: width,
-            componentCls: this.getWrapperClassNames(),
-            items: [this.colorField, this.selector,
+            items: [
+                this.colorField,
+                this.selector,
                 {
-                xtype: "button",
-                iconCls: "pimcore_icon_delete",
-                style: "margin-left: 5px",
-                handler: this.empty.bind(this),
-            }],
-            style: "padding-bottom: 10px;"
-        });
+                    xtype: "button",
+                    iconCls: "pimcore_icon_delete",
+                    style: "margin-left: 5px",
+                    handler: this.empty.bind(this),
+                }
+            ],
+            componentCls: this.getWrapperClassNames(),
+            border: false,
+            style: {
+                padding: 0
+            }
+        };
+
+        if (this.fieldConfig.labelAlign) {
+            compositeCfg.labelAlign = this.fieldConfig.labelAlign;
+        }
 
         this.colorField.setVisible(true);
-        this.component = panel;
+        this.component = Ext.create('Ext.form.FieldContainer', compositeCfg);
+
         return this.component;
     },
 
