@@ -108,7 +108,7 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
         const compositeCfg = {
             viewModel: {
                 data: {
-                    color: this.data ? this.data : "FFFFFFFF"
+                    color: this.data ? this.data : 'FFFFFFFF'
                 }
             },
             fieldLabel: this.fieldConfig.title,
@@ -118,9 +118,9 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
                 this.colorField,
                 this.selector,
                 {
-                    xtype: "button",
-                    iconCls: "pimcore_icon_delete",
-                    style: "margin-left: 5px",
+                    xtype: 'button',
+                    iconCls: 'pimcore_icon_delete',
+                    style: 'margin-left: 5px',
                     handler: this.empty.bind(this),
                 }
             ],
