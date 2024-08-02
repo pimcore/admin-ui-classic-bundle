@@ -72,12 +72,26 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                     messageProperty: 'message'
                 }
             };
-            storeConfig.fields = ['id', 'label'];
+            storeConfig.fields = [
+                'id',
+                'type',
+                'label',
+                {
+                    name: 'nicePathKey',
+                    convert: function(v, rec){
+                        return rec.data.type + '_' + rec.data.id;
+                    },
+                    depends : ['type', 'id']
+                }
+            ];
             storeConfig.autoLoad = true;
             storeConfig.listeners = {
                 beforeload: function(store) {
                     store.getProxy().setExtraParam('unsavedChanges', this.object && typeof this.object.getSaveData === "function" ? this.object.getSaveData().data : {});
                     store.getProxy().setExtraParam('context', JSON.stringify(this.getContext()));
+                }.bind(this),
+                load: function () {
+                    this.requestNicePathData();
                 }.bind(this)
             };
         }
@@ -644,44 +658,61 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
     },
 
     requestNicePathData: function () {
-        if (this.data.id) {
-            var targets = new Ext.util.Collection();
-            var target = Ext.clone(this.data)
-            target.nicePathKey = target.type + "_" + target.id;
-            var targetRecord = {
+        if (!this.object) {
+            return;
+        }
+        let targets, responseHandler;
+        if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo') {
+            targets = this.store.data;
+            responseHandler = function (responseData) {
+                this.component.removeCls('grid_nicepath_requested');
+
+                this.store.ignoreDataChanged = true;
+                this.store.each(function (record, id) {
+                    const recordId = record.data.nicePathKey;
+                    if (typeof responseData[recordId] !== 'undefined') {
+                        record.set('label', responseData[recordId], {dirty: false});
+                    }
+                });
+                this.store.ignoreDataChanged = false;
+            }.bind(this);
+        } else {
+            if (!this.data.id) {
+                return;
+            }
+            targets = new Ext.util.Collection();
+            const target = Ext.clone(this.data)
+            target.nicePathKey = target.type + '_' + target.id;
+            const targetRecord = {
                 id: 0,
                 data: target
             };
             targets.add(targetRecord);
+            responseHandler = function (target, responseData) {
+                this.component.removeCls('grid_nicepath_requested');
 
-            pimcore.helpers.requestNicePathData(
-                {
-                    type: "object",
-                    id: this.object.id
-                },
-                targets,
-                {
-                    idProperty: "nicePathKey"
-                },
-                this.fieldConfig,
-                this.getContext(),
-                function () {
-                    this.component.addCls("grid_nicepath_requested");
-                }.bind(this),
-                function (target, responseData) {
-                    this.component.removeCls("grid_nicepath_requested");
-
-                    if (typeof responseData[target["nicePathKey"]] !== "undefined") {
-                        if (this.fieldConfig.displayMode == 'combo') {
-                            this.component.setValue(target["id"]);
-                        } else {
-                            this.component.setValue(responseData[target["nicePathKey"]]);
-                        }
-                    }
-
-                }.bind(this, target)
-            );
+                if (typeof responseData[target['nicePathKey']] !== 'undefined') {
+                    this.component.setValue(responseData[target['nicePathKey']]);
+                }
+            }.bind(this, target);
         }
+
+        pimcore.helpers.requestNicePathData(
+            {
+                type: 'object',
+                id: this.object.id
+            },
+            targets,
+            {
+                idProperty: 'nicePathKey'
+            },
+            this.fieldConfig,
+            this.getContext(),
+            function () {
+                this.component.addCls('grid_nicepath_requested');
+            }.bind(this),
+            responseHandler
+        );
     },
 
     getCellEditValue: function () {
