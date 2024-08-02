@@ -160,7 +160,7 @@
                                     <tr {% if loop.index is odd %}class="odd"{% endif %}>
                                         <td>{{ lfd.getTitle()|trans([],'admin') }} ({{ language }})</td>
                                         <td>{{ fieldItem.fieldName }} - {{ lfd.getName() }}/{{ language }}</td>
-                                        <td>{{ fieldItem.Localizedfields.getLocalizedValue(lfd.getName(), language) }}</td>
+                                        <td>{{ lfd.getVersionPreview(fieldItem.Localizedfields.getLocalizedValue(lfd.getName(), language)) | raw }}</td>
                                     </tr>
                                 {% endfor %}
                             {% endfor %}
