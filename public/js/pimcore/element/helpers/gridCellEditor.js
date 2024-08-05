@@ -71,6 +71,9 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
         if(fieldType == 'object') {
             var object = Ext.clone(this.context.record);
             tag.setObject(object);
+            tag.updateContext({
+                objectId: object.id
+            });
         }
 
         tag.updateContext({
