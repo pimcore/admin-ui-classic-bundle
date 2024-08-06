@@ -1042,7 +1042,7 @@ class DataObjectHelperController extends AdminAbstractController
             $favourite->setGridConfigId($gridConfig->getId());
             $favourite->setClassId($gridConfig->getClassId());
             $favourite->setObjectId($objectId);
-            $favourite->setOwnerId($id);
+            $favourite->setOwnerId((int) $id);
             $favourite->setType($gridConfig->getType());
             $favourite->setSearchType($gridConfig->getSearchType());
             $favourite->save();
