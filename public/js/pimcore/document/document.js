@@ -250,13 +250,13 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                         const menuItem = this.toolbarButtons.publish.menu.items.items.find(
                             element => element.text === t('save_draft')
                         )
-                        menuItem.setHidden(false)
+                        menuItem?.setHidden(false)
                     }
                     if (this.isAllowed("settings")) {
                         const menuItem = this.toolbarButtons.publish.menu.items.items.find(
                             element => element.text === t('save_only_scheduled_tasks')
                         )
-                        menuItem.setHidden(false)
+                        menuItem?.setHidden(false)
                     }
 
                     this.toolbarButtons.publish.show();
