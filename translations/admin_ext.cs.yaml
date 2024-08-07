@@ -1,5 +1,5 @@
 ---
-invert_colors_on_login_screen: Invert Colors on Login Screen
+invert_colors_on_login_screen: "Invertovat barvy na p\u0159ihla\u0161ovac\xED obrazovce"
 encrypt_data: Encrypt Data
 encrypt_data_description: Data-at-Rest/Tablespace Encryption needs to be enabled on
   your Database Server
@@ -14,7 +14,7 @@ url_slug_datatype_info: Enter the controller & action in the following format:<b
 controller_action: Controller & Action
 admin_interface: Admin Interface
 admin_interface_background: Admin Interface Background
-icon_library: Icon Library
+icon_library: Knihovna ikon
 system_performance_stability_warning: Please do not perform this action unless you
   are sure what you are doing.<br /><b style='color:red'>This action can have a major
   impact onto the stability and performance of the entire system, and may causes an
@@ -27,7 +27,7 @@ custom_logo: Custom Logo
 custom_login_background_image: Custom Login Background Image
 branding_logo_description: Used on the login and start screen. We recommend to use
   a SVG (JPG & PNG are supported as well).
-appearance_and_branding: Appearance & Branding
+appearance_and_branding: Vzhled a branding
 brightness: Jas
 saturation: Sytost
 hue: "Odst\xEDn"
@@ -141,7 +141,7 @@ debug_admin_translations: "Debugovat p\u0159eklady administrace (budou obaleny z
 short_url: "Kr\xE1tk\xE1 URL"
 width_and_height_must_be_an_even_number: "\u0160\xED\u0159ka a v\xFD\u0161ka mus\xED
   b\xFDt sud\xE1"
-this_filter_has_no_settings: this filter has no settings
+this_filter_has_no_settings: "Tento filtr nem\xE1 \u017E\xE1dn\xE1 nastaven\xED"
 mute: Mute
 effect: Effect
 colorChannelMixer: Color Channel Mixer
@@ -487,7 +487,7 @@ language_permissions: "Opr\xE1vn\u011Bn\xED jazyk\u016F (neza\u0161krtnuto zname
   v\u0161e)"
 rendering_class: "Vlastn\xED renderovac\xED t\u0159\xEDda"
 rendering_data: "Data zaslan\xE1 rendereru"
-drag_object_preview: Drag Object for Preview
+drag_object_preview: "P\u0159et\xE1hnout z\xE1znam pro n\xE1hled"
 rows_fixed: "Zafixovan\xE9 \u0159\xE1dky"
 cols_fixed: "Zafixovan\xE9 sloupce"
 force_resize: Vynutit resize
@@ -536,8 +536,8 @@ deactivate_maintenance: "Deaktivovat \xFAdr\u017Ebov\xFD m\xF3d"
 maintenance_mode: "\xDAdr\u017Eba"
 maintenance_not_active: "Zd\xE1 se, \u017Ee nen\xED nastaven \xFAdr\u017Ebov\xFD script"
 mail_settings_incomplete: "Zd\xE1 se, \u017Ee nastaven\xED mailu nen\xED kompletn\xED"
-bulk_export: "Hromadn\xFD import"
-bulk_import: "Hromadn\xFD export"
+bulk_export: "Hromadn\xFD export"
+bulk_import: "Hromadn\xFD import"
 warning_bulk_import: "Hromadn\xFD import p\u0159ep\xED\u0161e Va\u0161e definice t\u0159\xEDd/kolekc\xED
   pol\xED/podz\xE1znam\u016F bez varov\xE1n\xED! Chcete pokra\u010Dovat?"
 environment: "Prost\u0159ed\xED (Environment)"
@@ -635,7 +635,7 @@ custom_report_class: "T\u0159\xEDda pro report"
 hide: "Skr\xFDt"
 clear_full_page_cache: Clear Full Page Cache
 all_caches: All Caches
-admin_translations: Admin Translations
+admin_translations: Překlady administrace
 lock: Uzamknout
 unlock: Odemknout
 lock_and_propagate_to_children: Lock and propagate to children
@@ -692,7 +692,7 @@ quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
 objectsMetadata_type_number: Number
-localized_fields: Localized Fields
+localized_fields: "Lokalizovan\xE1 pole"
 field_collections: Field-Collections
 special_settings_tooltip: Special Settings
 application_logging: Application Logger

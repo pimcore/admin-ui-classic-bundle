@@ -237,7 +237,7 @@ info: Info
 or: nebo
 paste_contents: "Vlo\u017Eit sem pouze obsah"
 paste_as_child: "Vlo\u017Eit jako potomka"
-paste_recursive_as_child: Paste as child (recursive)
+paste_recursive_as_child: "Vlo\u017Eit jako potomka (rekurzivně)"
 view_original: "Zobrazit origin\xE1l"
 feed: Feed
 no_items_found: "Nebyly nalezeny \u017E\xE1dn\xE9 polo\u017Eky"
@@ -374,8 +374,8 @@ version: Verze
 active: "Aktivn\xED"
 success: Hotovo
 translations: "P\u0159eklady webu"
-translation_simple: Simple Text
-translation_custom: ICU Format
+translation_simple: "Jednoduch\xFD text"
+translation_custom: "ICU form\xE1t"
 firstname: "Jm\xE9no"
 lastname: "P\u0159\xEDjmen\xED"
 email: E-mail
@@ -400,9 +400,9 @@ stop: Zastavit
 dependencies: "Z\xE1vislosti"
 requires: "Vy\u017Eaduje"
 required_by: "Vy\u017E\xE1dov\xE1no z"
-search_edit: Hledat, Upravit a Exportovat
+search_edit: Hledat, upravit a exportovat
 subtype: Podtyp
-initializing: Inicializuji ...
+initializing: Inicializuji...
 please_select_a_type: Vyberte typ
 filter: Filtr
 field: Pole
@@ -426,7 +426,7 @@ anchor: Kotva
 accesskey: "Kl\xED\u010D (accesskey)"
 relation: Relace (Relation)
 tabindex: Tab-index
-not_set: nenastaveno
+not_set: Nenastaveno
 export_csv: CSV export
 import_csv: CSV import
 show_welcome_screen: "Zobrazit uv\xEDtac\xED n\xE1st\u011Bnku po startu"
@@ -466,13 +466,13 @@ delete_message_dependencies: "Existuj\xED z\xE1vislosti, p\u0159esto smazat?"
 delete_message: "Skute\u010Dn\u011B si p\u0159ejete smazat tento element?"
 delete_message_advanced: Do you really want to delete %s '%s' ?
 delete_message_batch: "Skute\u010Dn\u011B si p\u0159ejete smazat tyto elementy?"
-delete_group_message: Do you really want to delete this group and all of its contents?
+delete_group_message: "Opravdu chcete odstranit tuto skupinu a ve\u0161ker\xFD jej\xED obsah?"
 no_further_objectbricks_allowed: "\u017D\xE1dn\xE9 dal\u0161\xED podz\xE1znamy (object
   bricks) nejsou povoleny"
 grid_current_language: "Aktu\xE1ln\xED jazyk"
 object_columns: "Z\xE1znamov\xE9 sloupce"
 system_columns: "Syst\xE9mov\xE9 sloupce"
-columns: sloupce
+columns: Sloupce
 children_grid: "Tabulka (grid) potomk\u016F"
 only_children: "pouze p\u0159\xEDm\xED potomci"
 cut: Vyjmout
@@ -510,11 +510,11 @@ previous_page: "P\u0159edchoz\xED str\xE1nka"
 next_page: "Dal\u0161\xED str\xE1nka"
 last_page: "Posledn\xED str\xE1nka"
 no_data_to_display: "\u017D\xE1dn\xE1 data k zobrazen\xED"
-classificationstore_property: Property
-classificationstore_group: Group
-classificationstore_relation: Relation
-classificationstore_collection: Collection
-classificationstore_collection_relation: Collection relation
+classificationstore_property: Vlastnost
+classificationstore_group: Skupina
+classificationstore_relation: Relace
+classificationstore_collection: Kolekce
+classificationstore_collection_relation: Relace kolekce
 classificationstore_no_groups: "\u017D\xE1dn\xE9 skupiny"
 classificationstore_no_keys: "\u017D\xE1dn\xE9 kl\xED\u010De nenalezeny"
 remove_group: Odstranit skupinu
@@ -581,7 +581,7 @@ workflow_additional_info: "Dodate\u010Dn\xE9 informace"
 workflow_perform_action: "Prov\xE9st akci"
 workflow_notes_required: "Pozn\xE1mky (povinn\xE9)"
 workflow_notes_optional: "Pozn\xE1mky (voliteln\xE9)"
-please_enter_the_id_of_the_asset: Zadejte ID nebo cestu ke zdroju
+please_enter_the_id_of_the_asset: Zadejte ID nebo cestu ke zdroji
 please_enter_the_id_of_the_object: "Zadejte ID nebo cestu k z\xE1znamu"
 please_enter_the_id_of_the_document: "Zadejte ID, cestu nebo URL (v\u010Detn\u011B
   http://) dokumentu"
@@ -657,7 +657,7 @@ flatten: Vyrovnat
 return_last_result: "Vr\xE1tit posledn\xED v\xFDsledek"
 skip_null: "P\u0159esko\u010Dit nulov\xE9 (Null)"
 expand_children: Zobrazit potomky
-collapse_children: Collapse children
+collapse_children: Sbalit potomky
 multiply: "Vyn\xE1sobit"
 divide: "Vyd\u011Blit"
 apply_to_all_objects: "Pou\u017E\xEDt na v\u0161e"
@@ -686,7 +686,7 @@ string: "\u0158et\u011Bzec"
 row: "\u0158\xE1dek"
 import_report: Report z importu
 import_errors: Vyskytly se chyby. Zkontrolujte report z importu
-import_is_done: Import je hotov
+import_is_done: "Import je dokon\x10den"
 import_file_prefix: "P\u0159edpona pro nov\xE9 soubory"
 create_parents: "Vytvo\u0159it rodi\u010De"
 fullpath: "Cel\xE1 cesta"
@@ -724,23 +724,23 @@ successful_object_change_children_sort_to_index: "\u0158azen\xED potomk\u016F z\
   bylo zm\u011Bn\u011Bno na \u0159azen\xED podle indexu"
 successful_object_change_children_sort_to_key: "\u0158azen\xED potomk\u016F z\xE1znamu
   bylo zm\u011Bn\u011Bno na \u0159azen\xED podle kl\xED\u010De"
-successful_publish_document: Document successfully published
-successful_publish_object: Object successfully published
-successful_unpublish_document: Document successfully unpublished
-successful_unpublish_object: Object successfully unpublished
+successful_publish_document: "Dokument \xFAsp\x11\u0161n\x11 publikov\xE1n"
+successful_publish_object: "Z\xE1znam \xFAsp\x11\u0161n\x11 publikov\xE1n"
+successful_unpublish_document: "Dokument \xFAsp\x11\u0161n\x11 odpublikov\xE1n"
+successful_unpublish_object: "Z\xE1znam \xFAsp\x11\u0161n\x11 odpublikov\xE1n"
 error_object_change_children_sort_to_index: "\u0158azen\xED potomk\u016F z\xE1znamu
   podle indexu nelze nastavit"
 error_object_change_children_sort_to_key: "\u0158azen\xED potomk\u016F z\xE1znamu
   podle kl\xED\u010De nelze nastavit"
-error_publish_document: Document could not be published
-error_publish_object: Object could not be published
-error_unpublish_document: Document could not be unpublished
-error_unpublish_object: Object could not be unpublished
-edit_as_html: Upravit ako HTML
-edit_as_plain_text: Upravit ako text
+error_publish_document: "Dokument nemohl b\xFDt publikov\xE1n"
+error_publish_object: "Z\xE1znam nemohl b\xFDt publikov\xE1n"
+error_unpublish_document: "Dokument nemohl b\xFDt odpublikov\xE1n"
+error_unpublish_object: "Z\xE1znam nemohl b\xFDt odpublikov\xE1n"
+edit_as_html: Upravit jako HTML
+edit_as_plain_text: Upravit jako text
 error_empty_file_upload: "Soubor je pr\xE1zdn\xFD!"
 type_column: Sloupec typ
-keep: zachovat
+keep: Zachovat
 clear_version_message: "Opravdu chcete smazat v\u0161echny nepublikovan\xE9 verze
   tohoto elementu?"
 clear_all: "Smazat v\u0161echno"
@@ -797,7 +797,7 @@ merge_translations: "Slou\u010Dit p\u0159eklady"
 prefix: "P\u0159edpona"
 load: "Nahr\xE1t"
 saving_failed: "Ulo\u017Een\xED selhalo!"
-failed_to_create_new_item: "Vytvo\u0159en\xED nov\xE9 polo\u017Eky zlyhalo, zkuste
+failed_to_create_new_item: "Vytvo\u0159en\xED nov\xE9 polo\u017Eky selhalo, zkuste
   to znovu, pros\xEDm."
 bundle: "Bal\xED\u010Dek (bundle)"
 product: Produkt
@@ -913,20 +913,20 @@ auto_convert: "Automatick\xE1 konverze"
 web2print_enableDebugMode: Enable debug mode
 set_to_null: "Pr\xE1zdn\xE9 (nastaveno na null)"
 bundles: Bundles
-target_document_invalid: Please select a target document with valid language
+target_document_invalid: "Vyberte pros\xEDm c\xEDlov\xFD dokument s validn\xEDm jazykem"
 metainfo_copy_id: "Zkop\xEDrovat ID do schr\xE1nky"
-metainfo_copy_fullpath: "Zkip\xEDrovat celou cestu do schr\xE1nky"
-metainfo_copy_deeplink: Copy deeplink to clipboard
+metainfo_copy_fullpath: "Zkop\xEDrovat celou cestu do schr\xE1nky"
+metainfo_copy_deeplink: "Zkop\xEDrovat deeplink do schr\xE1nky"
 plain_text: "Prost\xFD text"
 plain_text_email_part: Email Plain Text Part
 error_message: Error Message
-access_denied: Access Denied!
-access_denied_description: You don't have sufficient permissions to open the element
-  or perform the desired action.
-validation_failed: Validation Failed!
+access_denied: "P\u0159\xEDstup odep\u0159en!"
+access_denied_description: "Nem\xE1te dostate\x10dn\xE1 opr\xE1vn\x11bn\xED k otev\x159en\xED
+  elementu nebo proveden\xED po\x17eadovan\xE9 akce."
+validation_failed: Validace selhala!
 export_xlsx: Export do XLSX
-object_export_warning: Please note that the export does not support all data types.
-  Press OK to continue with the export.
+object_export_warning: "Pros\xEDm vemte v potaz, \u017ee export nepodporuje v\x9aechny typy
+  dat. Pokra\u010dujte v exportu stisknut\xEDm tla\x10dtka OK."
 web2print_enableLenientHttpsMode: Enable lenient HTTPS mode
 web2print_enableLenientHttpsMode_txt: "Povolit tuto volbu, kdy\u017E sel\u017Ee p\u0159ipojen\xED
   PDFFreactoru p\u0159es HTTPS"
@@ -935,8 +935,8 @@ paste_here: "Zde vlo\u017Eit data ze schr\xE1nky"
 asset_metadata: Asset Metadata
 predefined_metadata: "P\u0159eddefinovan\xE1 metadata"
 default_metadata: "V\xFDchoz\xED metadata"
-asset_export_warning: Please note that the export does not support some fields(e.g.
-  preview, size). Press OK to continue with the export.
+asset_export_warning: "Pros\xEDm vemte v potaz, \u017ee export nepodporuje n\x11kter\xE1
+  pole (nap\u0159. n\xE1hled, velikost)."
 share_via_notifications: "Sd\xEDlet p\u0159es upozorn\u011Bn\xED"
 cannot_save_metadata_please_try_to_edit_the_metadata_in_asset: <b>Cannot save Metadata!</b><br
   />Please try to edit the metadata in Asset.
@@ -944,8 +944,8 @@ email_log_forward: "P\u0159eposlat e-mail"
 sum: Sum
 area_brick_assign_info_message: Please use drag & drop to assign a brick to the desired
   block
-batch_remove_all: Batch remove from all
-batch_remove_selected: Batch remove from selected
+batch_remove_all: "Hromadn\x11 odstranit ze v\x9aech"
+batch_remove_selected: "Hromadn\x11 odstranit z vybran\xFDch"
 batch_remove_from: "Odstranit data za v\u0161ech"
 batch_remove_selected_from: "Odstranit data z vybran\xFDch"
 unit_tooltip: Alternative units tooltip
@@ -993,23 +993,23 @@ bricks: Bricks
 draft: Draft
 auto_save: Auto save
 save_draft: Save draft
-selected_grid_columns: Selected grid columns
+selected_grid_columns: "Vybran\xE9 sloupce gridu"
 ungrouped: ungrouped
-reindex_warning: Changing it from alphabetical sort order to index will reindex all
-  items. Do you want to continue?
-filter_by_relation: Filter by relation
-filter_by_relation_field: Filter by relation field
-clear_relation_filter: Clear active relation filter
-apply_filter: Apply filter
-config_not_writeable: Not writable, this can have several reasons. For details please
-  have a look into the docs.
+reindex_warning: "Zm\u011Bn\xEDm z abecedn\xEDho \u0159azen\xED na index se v\u0161echny
+  polo\u017eky reindexuj\xED. Chcete pokra\u010Dovat?"
+filter_by_relation: Filtrovat podle relace
+filter_by_relation_field: Filtrovat podle pole relace
+clear_relation_filter: "Zru\u0161it aktivn\xED filtr relace"
+apply_filter: Filtrovat
+config_not_writeable: "Nelze zapsat, co\u017E m\u016F\u017Ee m\xEDt v\xEDce
+  d\u016Fvod\u016F. Detaily naleznete v dokumentaci."
 sites: Sites
-file_exists: File already exists
-asset_upload_want_to_overwrite: Do you want to overwrite file %s?
-asset_upload_overwrite: Overwrite
-asset_upload_keep_both: Keep both files
-asset_upload_apply_to_all: Apply to all
-asset_upload_skip: Skip
+file_exists: "Soubor ji\u017E existuje"
+asset_upload_want_to_overwrite: "Chcete p\u0159epsat soubor %s?"
+asset_upload_overwrite: "P\u0159epsat"
+asset_upload_keep_both: Zachovat oba soubory
+asset_upload_apply_to_all: "Pou\u017E\xEDt na v\u0161e"
+asset_upload_skip: "P\u0159esko\u010Dit"
 could_not_open_zip_file: The uploaded zip file could not be opened.
 objects_sort_method: Change data objects sort method
 link_recursion_error: The link is redirecting to itself, causing an infinite loop
@@ -1022,23 +1022,22 @@ delete_data_from_it: This will also delete all data from it.
 display_mode: Display Mode
 display_mode_grid: Grid view
 display_mode_combo: Tag field
-batch_confirmation: You are about to update %s dataObjects. Do you want to continue
-  ?
+batch_confirmation: "Chyst\xE1te se upravit %s z\xE1znam\u016F. Chcete pokra\u010Dovat?"
 field_collections: Field Collections
 display_mode_display: Display path reference
-display_mode_inline_search: Inline Search
-gdpr_dataSource_dataObjects: Data Objects
-parent_id: Parent ID
-modificationDate: Modification Date
-creationDate: Creation Date
-classificationstore_tag_col_group: Group
+display_mode_inline_search: "Inline vyhled\xE1v\xE1n\xED"
+gdpr_dataSource_dataObjects: "Z\xE1znamy"
+parent_id: "ID rodi\u010De"
+modificationDate: "Datum posledn\xED modifikace"
+creationDate: "Datum vytvo\u0159en\xED"
+classificationstore_tag_col_group: Skupina
 none: None
 redirects_type_path: Path
-email_subject: Subject
-gdpr_dataSource_sentMail: Sent Emails
-email_log_subject: Subject
-gdpr_data_extractor_label_email: Email Address
-workflow_notes: Notes
+email_subject: "P\u0159edm\u011Bt"
+gdpr_dataSource_sentMail: "Odeslan\xE9 e-maily"
+email_log_subject: "P\u0159edm\u011Bt"
+gdpr_data_extractor_label_email: "E-mailov\xE1 adresa"
+workflow_notes: "Pozn\xE1mky"
 2fa_code: Code
 password: Password
 show_metainfo: Info
@@ -1072,28 +1071,27 @@ email_log_cc: Cc
 email_log_bcc: Bcc
 cols: Columns
 log_search_message: Message
-batch_export_confirmation: You are about to export %s dataObjects. Do you want to
-  continue ?
+batch_export_confirmation: "Chyst\xE1te se vyexportovat %s z\xE1znam\u016F. Chcete pokra\u010Dovat?"
 header: Header
 no_header: No Header
-delete_entire_folder_question: This operation will delete the entire parent/folder.
-  You may not be able to fully undo this operation.
-allow_to_clear_relation: Allow to clear all relations of this field
-allow_asset_inline_download: Allow inline download
+delete_entire_folder_question: "Tato operace odstran\xED cel\xE9ho rodi\u010De/slo\u017Eku. Tuto
+  operaci nemus\xED b\xFDt mo\u017En\xE9 vr\xE1tit zp\u011Bt."
+allow_to_clear_relation: "Povolit smaz\xE1n\xED v\u0161ech relac\xED tohoto pole"
+allow_asset_inline_download: "Povolit inline sta\u017Een\xED"
 email_blocklist: Email Blocklist
-password_does_not_match: New password and confirm password doesn't match
+password_does_not_match: "Nov\xE9 heslo a potvrzen\xED hesla se neshoduj\xED"
 incorrect_password: Given password is incorrect
 content_main_document: Content-Main Document
 2fa_wrong: Wrong code entered!
 language_main: Main
-system_appearance_settings: Appearance & Branding
+system_appearance_settings: "Vzhled a branding"
 male: Male
 female: Female
-preview_generator_locale: Language
+preview_generator_locale: Jazyk
 preview_generator_site: Site
-failed_to_create_new_item_select_options: Failed to create new item. Name must be
-  UpperCamelCase format, at least 3 characters long and may not contain any reserved
-  words.
+failed_to_create_new_item_select_options: "Nepoda\u0159ilo se vytvo\u0159it novou polo\u017Eku.
+  N\xE1zev mus\xED b\xFDt ve form\xE1tu UpperCamelCase, alespo\u0148 3 znaky dlouh\xFD a
+  nesm\xED obsahovat \u017E\xE1dn\xE1 rezervovan\xE1 slova."
 pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
   and open it in your local PDF viewer.
 pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
