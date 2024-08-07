@@ -101,14 +101,14 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
 
     getGridColumnConfig: function (field) {
-        var renderer = function (key, value, metaData, record) {
+        const renderer = function (key, value, metaData, record) {
             this.applyPermissionStyle(key, value, metaData, record);
 
-            if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
+            if (record.data.inheritedFields?.[key]?.inherited) {
                 metaData.tdCls += " grid_value_inherited";
             }
 
-            if (value && value.path) {
+            if (value?.path) {
                 return value.path;
 
             }
@@ -124,7 +124,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
     },
 
     getRelationFilter: function (dataIndex, editor) {
-        var filterValue = editor.data && editor.data.id !== undefined ? editor.data.type + "|" + editor.data.id : null;
+        const filterValue = editor.data && editor.data.id !== undefined ? editor.data.type + "|" + editor.data.id : null;
         return new Ext.util.Filter({
             operator: "=",
             type: "int",
@@ -137,9 +137,9 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
     getLayoutEdit: function () {
 
-        var href = {};
+        const href = {};
 
-        var labelWidth = this.fieldConfig.labelWidth ? this.fieldConfig.labelWidth : 100;
+        const labelWidth = this.fieldConfig.labelWidth ? this.fieldConfig.labelWidth : 100;
 
         if (this.data) {
             if (this.data.path) {
@@ -217,7 +217,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             el.getEl().on("contextmenu", this.onContextMenu.bind(this));
 
             el.getEl().on('dblclick', function () {
-                var subtype = this.data.subtype;
+                let subtype = this.data.subtype;
                 if (this.data.type === "object" && this.data.subtype !== "folder" && this.data.subtype !== null) {
                     subtype = "object";
                 }
@@ -226,7 +226,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             }.bind(this));
         }.bind(this));
 
-        var items = [this.component, {
+        const items = [this.component, {
             xtype: "button",
             iconCls: "pimcore_icon_open",
             tooltip: t("open"),
@@ -277,7 +277,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             });
         }
 
-        var compositeCfg = {
+        const compositeCfg = {
             fieldLabel: this.fieldConfig.title,
             labelWidth: labelWidth,
             layout: 'hbox',
@@ -306,10 +306,10 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
     getLayoutShow: function () {
 
-        var href = {
+        const href = {
             name: this.fieldConfig.name
         };
-        var labelWidth = this.fieldConfig.labelWidth ? this.fieldConfig.labelWidth : 100;
+        const labelWidth = this.fieldConfig.labelWidth ? this.fieldConfig.labelWidth : 100;
 
         if (this.data) {
             if (this.data.path) {
@@ -330,7 +330,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             this.component.addCls("strikeThrough");
         }
 
-        var compositeCfg = {
+        const compositeCfg = {
             fieldLabel: this.fieldConfig.title,
             labelWidth: labelWidth,
             layout: 'hbox',
@@ -364,7 +364,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
     uploadDialog: function () {
         pimcore.helpers.assetSingleUploadDialog(this.fieldConfig.assetUploadPath, "path", function (res) {
             try {
-                var data = Ext.decode(res.response.responseText);
+                const data = Ext.decode(res.response.responseText);
                 if (data["id"]) {
                     this.data.id = data["id"];
                     this.data.type = "asset";
@@ -392,13 +392,21 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         function (res) {
             const response = Ext.decode(res.response.responseText);
             if (response && response.success === false) {
-                pimcore.helpers.showNotification(t("error"), response.message, "error",
-                    res.response.responseText);
+                pimcore.helpers.showNotification(
+                    t("error"),
+                    response.message,
+                    "error",
+                    res.response.responseText
+                );
             } else {
-                pimcore.helpers.showNotification(t("error"), res, "error",
-                    res.response.responseText);
+                pimcore.helpers.showNotification(
+                    t("error"),
+                    res,
+                    "error",
+                    res.response.responseText
+                );
             }
-        }.bind(this), this.context);
+        }, this.context);
     },
 
     onNodeDrop: function (target, dd, e, data) {
@@ -442,7 +450,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
     onContextMenu: function (e) {
 
-        var menu = new Ext.menu.Menu();
+        const menu = new Ext.menu.Menu();
         menu.add(new Ext.menu.Item({
             text: t('empty'),
             iconCls: "pimcore_icon_delete",
@@ -493,10 +501,10 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
     },
 
     openSearchEditor: function () {
-        var allowedTypes = [];
-        var allowedSpecific = {};
-        var allowedSubtypes = {};
-        var i;
+        const allowedTypes = [];
+        const allowedSpecific = {};
+        const allowedSubtypes = {};
+        let i;
 
         if (this.fieldConfig.objectsAllowed) {
             allowedTypes.push("object");
@@ -597,20 +605,19 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
     dndAllowed: function (data) {
 
-        var elementType = data.elementType;
-        var i;
-        var subType;
-        var isAllowed = false;
+        const elementType = data.elementType;
+        let i;
+        let subType;
+        let isAllowed = false;
         if (elementType == "object" && this.fieldConfig.objectsAllowed) {
 
-            if(data.type == 'folder') {
-                if(this.dataObjectFolderAllowed || this.fieldConfig.classes.length <= 0) {
+            if (data.type == 'folder') {
+                if (this.dataObjectFolderAllowed || this.fieldConfig.classes.length <= 0) {
                     isAllowed = true;
                 }
             } else {
-                var classname = data.className;
+                const classname = data.className;
 
-                isAllowed = false;
                 if (this.fieldConfig.classes != null && this.fieldConfig.classes.length > 0) {
                     for (i = 0; i < this.fieldConfig.classes.length; i++) {
                         if (this.fieldConfig.classes[i].classes == classname) {
@@ -618,15 +625,12 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                             break;
                         }
                     }
-                } else {
-                    if(!this.dataObjectFolderAllowed) {
-                        isAllowed = true;
-                    }
+                } else if (!this.dataObjectFolderAllowed) {
+                    isAllowed = true;
                 }
             }
         } else if (elementType == "asset" && this.fieldConfig.assetsAllowed) {
             subType = data.type;
-            isAllowed = false;
             if (this.fieldConfig.assetTypes != null && this.fieldConfig.assetTypes.length > 0) {
                 for (i = 0; i < this.fieldConfig.assetTypes.length; i++) {
                     if (this.fieldConfig.assetTypes[i].assetTypes == subType) {
@@ -641,7 +645,6 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
         } else if (elementType == "document" && this.fieldConfig.documentsAllowed) {
             subType = data.type;
-            isAllowed = false;
             if (this.fieldConfig.documentTypes != null && this.fieldConfig.documentTypes.length > 0) {
                 for (i = 0; i < this.fieldConfig.documentTypes.length; i++) {
                     if (this.fieldConfig.documentTypes[i].documentTypes == subType) {
