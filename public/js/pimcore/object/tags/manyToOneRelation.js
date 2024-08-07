@@ -171,6 +171,12 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             href.cls = 'pimcore_droptarget_display_edit';
             href.fieldBodyCls = 'pimcore_droptarget_display x-form-trigger-wrap';
             this.component = new Ext.form.field.Display(href);
+            this.component.on('afterrender', function (el) {
+                el.inputEl.setWidth(href.width);
+                el.inputEl.setStyle({
+                    'overflow': 'hidden'
+                });
+            });
         }
 
         if (this.data.published === false) {
@@ -205,12 +211,6 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                 pimcore.helpers.openElement(this.data.id, this.data.type, subtype);
             }.bind(this));
         }.bind(this));
-        this.component.on('afterrender', function (el) {
-            el.inputEl.setWidth(href.width);
-            el.inputEl.setStyle({
-                'overflow': 'hidden'
-            });
-        });
 
         var items = [this.component, {
             xtype: "button",
