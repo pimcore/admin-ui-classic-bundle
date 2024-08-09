@@ -87,7 +87,7 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
         });
 
         const colorConfig =  {
-            flex: '1',
+            flex: 1,
             format: '#hex8',
             isNull: !this.data,
             hidden: true,
