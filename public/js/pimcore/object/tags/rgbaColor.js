@@ -72,9 +72,11 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
 
     getLayoutEdit: function () {
         let labelWidth = 100;
+        let width = this.fieldConfig.width ? this.fieldConfig.width : 400;
         if (this.fieldConfig.labelWidth) {
             labelWidth = this.fieldConfig.labelWidth;
         }
+        width = this.sumWidths(width, labelWidth);
 
         this.selector = new Ext.ux.colorpick.Selector({
             showPreviousColor: true,
@@ -110,6 +112,7 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
             fieldLabel: this.fieldConfig.title,
             labelWidth: labelWidth,
             layout: 'hbox',
+            width: width,
             items: [
                 this.colorField,
                 this.selector,
