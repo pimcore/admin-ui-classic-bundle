@@ -76,7 +76,9 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
         if (this.fieldConfig.labelWidth) {
             labelWidth = this.fieldConfig.labelWidth;
         }
-        width = this.sumWidths(width, labelWidth);
+        if (!this.fieldConfig.labelAlign || 'left' === this.fieldConfig.labelAlign) {
+            width = this.sumWidths(width, labelWidth);
+        }
 
         this.selector = new Ext.ux.colorpick.Selector({
             showPreviousColor: true,
