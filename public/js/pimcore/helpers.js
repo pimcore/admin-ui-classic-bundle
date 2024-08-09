@@ -3379,7 +3379,7 @@ pimcore.helpers.treeDragDropValidate = function (node, oldParent, newParent) {
 pimcore.helpers.isComponentAsChildAllowed = function (parentNode, childNode) {
     const parentType = parentNode.data.editor.type;
     const childType = childNode.data.editor.type;
-    const allowedChildren = pimcore.object.helpers.layout.getRawAllowedTypes();
+    const allowedChildren = pimcore.object.helpers.layout.getAllowedTypes();
 
     if (allowedChildren[parentType] &&
         allowedChildren[parentType].includes(childType) ||
