@@ -11,7 +11,7 @@ Ext.define('cas.helper.plugin.DragDropTag', {
         cmp.on('render', this.afterRender, this, { single: true });
     },
     afterRender: function () {
-        var me = this.getCmp();
+        let me = this.getCmp();
         me.boundList = me.getPicker();
         me.dragGroup = me.dropGroup = 'MultiselectDD-' + Ext.id();
         me.dragZone = Ext.create('Ext.dd.DragZone', me.itemList, {
@@ -19,10 +19,10 @@ Ext.define('cas.helper.plugin.DragDropTag', {
             dragText: me.dragText,
             getDragData: function (e) {
 
-                var sourceEl = e.getTarget(me.tagItemSelector, 10);
+                let sourceEl = e.getTarget(me.tagItemSelector, 10);
                 //todo sprawdzić czy w tagfield-item-selected jest ten który jest w source el bo jeśli tak, to przenioś całą zgraję
                 if (sourceEl) {
-                    var d = sourceEl.cloneNode(true);
+                    let d = sourceEl.cloneNode(true);
                     d.id = Ext.id();
                     return {
                         ddel: d,
@@ -40,19 +40,19 @@ Ext.define('cas.helper.plugin.DragDropTag', {
         me.dropZone = Ext.create('Ext.dd.DropZone', me.itemList, {
             ddGroup: me.dropGroup,
             getTargetFromEvent: function (e) {
-                var allItems = me.itemList.query(me.tagItemSelector, false);
-                var mouseY = e.getY();
-                var mouseX = e.getX();
-                var itemsOnLine = [];
-                var bestDistance = Infinity, bestIsAfter, bestItem;
-                for (var i = 0; i < allItems.length; i++) {
-                    var item = allItems[i];
-                    var t = item.getY(), l = item.getX();
-                    var b = item.getBottom(), r = item.getRight();
-                    var middle = (l + r) / 2;
+                let allItems = me.itemList.query(me.tagItemSelector, false);
+                let mouseY = e.getY();
+                let mouseX = e.getX();
+                let itemsOnLine = [];
+                let bestDistance = Infinity, bestIsAfter, bestItem;
+                for (let i = 0; i < allItems.length; i++) {
+                    let item = allItems[i];
+                    let t = item.getY(), l = item.getX();
+                    let b = item.getBottom(), r = item.getRight();
+                    let middle = (l + r) / 2;
                     if (mouseY > t && mouseY < b) {
                         //ten element jest na lini kursora
-                        var distance;
+                        let distance;
                         if (mouseX <= middle) {
                             //kursor jest z lewej strony elementu
                             distance = l - mouseX;
@@ -87,9 +87,9 @@ Ext.define('cas.helper.plugin.DragDropTag', {
             },
             onNodeDrop: function (target, dd, e, data) {
                 //console.info(target.element.dom, target.after ? 'after' : 'before');
-                var sourceIndex = Ext.fly(data.sourceEl).getAttribute('data-selectionindex');
-                var targetIndex = parseInt(target.element.getAttribute('data-selectionindex'));
-                var value = Ext.Array.clone(me.getValue());
+                let sourceIndex = Ext.fly(data.sourceEl).getAttribute('data-selectionindex');
+                let targetIndex = parseInt(target.element.getAttribute('data-selectionindex'));
+                let value = Ext.Array.clone(me.getValue());
                 cas.helper.Array.moveItem(value, sourceIndex, targetIndex, target.after);
                 me.setValue(null);
                 me.setValue(value);
