@@ -400,15 +400,11 @@ Ext.define('pimcore.data.PagingTreeStore', {
                 node.set('expandable', true);
             });
 
-            if (me.pageSize < total || node.inSearch) {
-                node.needsPaging = true;
-                node.pagingData = {
-                    total: data.total,
-                    offset: data.offset,
-                    limit: data.limit
-                }
-            } else {
-                node.needsPaging = false;
+            node.needsPaging = true;
+            node.pagingData = {
+                total: data.total,
+                offset: data.offset,
+                limit: data.limit
             }
 
             me.superclass.onProxyLoad.call(this, operation);
@@ -503,7 +499,7 @@ Ext.define('pimcore.toolbar.Paging', {
         var currPage = pagingData.offset / pagingData.limit + 1;
 
         this.inSearch = node.inSearch;
-        var hidden = this.inSearch
+        var hidden = this.inSearch || pagingData.total <= pagingData.limit;
         pimcore.isTreeFiltering = false;
 
         inputListeners[Ext.supports.SpecialKeyDownRepeat ? 'keydown' : 'keypress'] = me.onPagingKeyDown;
@@ -544,8 +540,7 @@ Ext.define('pimcore.toolbar.Paging', {
                 }.bind(this, node)
             }
 
-        })
-        ;
+        });
 
         var result = [this.filterField];
 
