@@ -513,7 +513,7 @@ Ext.define('pimcore.toolbar.Paging', {
             height: 18,
             value: node.filter ? node.filter : "",
             enableKeyEvents: true,
-            hidden: !hidden,
+            hidden: !this.inSearch,
             listeners: {
                 "keydown": function (node, inputField, event) {
                     if (event.keyCode == 13) {
