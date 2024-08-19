@@ -257,7 +257,7 @@ trait DataObjectActionsTrait
                     $localizedFields = $brick->getLocalizedfields();
                     $localizedFields->setLocalizedValue($brickKey, $value);
                 } else {
-                    $brick->$valueSetter($value);
+                    $brick->setObjectVar($brickKey, $value);
                 }
             } else {
                 if ($languagePermissions) {
