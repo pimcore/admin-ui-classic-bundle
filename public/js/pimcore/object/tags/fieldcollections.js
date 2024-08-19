@@ -48,8 +48,35 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
         return {text: t(field.label), width: 150, sortable: false, dataIndex: field.key,
                 renderer: function (key, value, metaData, record) {
                     this.applyPermissionStyle(key, value, metaData, record);
+                    if(typeof record.data[key] === 'string') {
+                        return record.data[key];
+                    }
 
-                    return t("not_supported");
+                    let preview = '';
+
+                    const fieldCollectionItems = record.data[key];
+
+
+                    for (let fieldCollectionItemKey in fieldCollectionItems) {
+                        if (!fieldCollectionItems.hasOwnProperty(fieldCollectionItemKey)) {
+                            continue;
+                        }
+                        let fieldCollectionItem = fieldCollectionItems[fieldCollectionItemKey];
+
+                        preview += `<h3 style="margin-top: 0">${t(fieldCollectionItemKey)}</h3>`;
+
+                        preview += `<div style="margin-bottom: 10px; border-bottom: 1px solid #e9e9e9; overflow: auto; white-space: normal">`;
+                        for (let fieldKey in fieldCollectionItem) {
+                            if (!fieldCollectionItem.hasOwnProperty(fieldKey)) {
+                                continue;
+                            }
+
+                            preview += `<div style=""><b>${t(fieldCollectionItem[fieldKey].title)}:</b></div>`;
+                            preview += `<div style="margin-bottom: 5px">${fieldCollectionItem[fieldKey].value ? fieldCollectionItem[fieldKey].value : '-'}</div>`;
+                        }
+                        preview += `</div>`;
+                    }
+                    return preview;
                 }.bind(this, field.key)};
     },
 
