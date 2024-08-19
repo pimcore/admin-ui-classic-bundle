@@ -229,7 +229,6 @@ trait DataObjectActionsTrait
 
                 $fieldGetter = 'get' . ucfirst($brickField);
                 $brickGetter = 'get' . ucfirst($brickType);
-                $valueSetter = 'set' . ucfirst($brickKey);
 
                 $brick = $object->$fieldGetter()->$brickGetter();
                 if (empty($brick)) {
