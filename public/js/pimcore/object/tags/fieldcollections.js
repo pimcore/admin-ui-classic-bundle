@@ -56,23 +56,24 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
 
                     const fieldCollectionItems = record.data[key];
 
+                    console.log(fieldCollectionItems);
 
-                    for (let fieldCollectionItemKey in fieldCollectionItems) {
-                        if (!fieldCollectionItems.hasOwnProperty(fieldCollectionItemKey)) {
-                            continue;
+                    let previousFieldCollectionItemType = null;
+                    for (let fieldCollectionItem of fieldCollectionItems) {
+
+                        if(previousFieldCollectionItemType !== fieldCollectionItem.type) {
+                            preview += `<h3 style="margin-top: 0">${t(fieldCollectionItem.type)}</h3>`;
+                            previousFieldCollectionItemType = fieldCollectionItem.type;
                         }
-                        let fieldCollectionItem = fieldCollectionItems[fieldCollectionItemKey];
-
-                        preview += `<h3 style="margin-top: 0">${t(fieldCollectionItemKey)}</h3>`;
 
                         preview += `<div style="margin-bottom: 10px; border-bottom: 1px solid #e9e9e9; overflow: auto; white-space: normal">`;
-                        for (let fieldKey in fieldCollectionItem) {
-                            if (!fieldCollectionItem.hasOwnProperty(fieldKey)) {
+                        for (let fieldKey in fieldCollectionItem.data) {
+                            if (!fieldCollectionItem.data.hasOwnProperty(fieldKey)) {
                                 continue;
                             }
 
-                            preview += `<div style=""><b>${t(fieldCollectionItem[fieldKey].title)}:</b></div>`;
-                            preview += `<div style="margin-bottom: 5px">${fieldCollectionItem[fieldKey].value ? fieldCollectionItem[fieldKey].value : '-'}</div>`;
+                            preview += `<div style=""><b>${t(fieldCollectionItem.data[fieldKey].title)}:</b></div>`;
+                            preview += `<div style="margin-bottom: 5px">${fieldCollectionItem.data[fieldKey].value ? fieldCollectionItem.data[fieldKey].value : '-'}</div>`;
                         }
                         preview += `</div>`;
                     }
