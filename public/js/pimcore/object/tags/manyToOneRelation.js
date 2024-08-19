@@ -286,7 +286,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
 
         this.composite = Ext.create('Ext.form.FieldContainer', compositeCfg);
 
-        if (this.fieldConfig.assetsAllowed && this.name.endsWith('DataSheet')) {
+        if (this.fieldConfig.assetInlineDownloadAllowed) {
             this.composite.remove(
                 this.composite.items.getAt(4)
             );
