@@ -277,7 +277,10 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             autoHeight: autoHeight,
-            bodyCssClass: "pimcore_object_tag_multihref"
+            bodyCssClass: "pimcore_object_tag_multihref",
+            plugins: [
+              'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -436,12 +439,55 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
 
 
     getVisibleColumns: function () {
-        var columns = [
-            {text: 'ID', dataIndex: 'id', width: 50},
-            {text: t("reference"), dataIndex: 'fullpath', flex: 200, renderer:this.fullPathRenderCheck.bind(this)},
-            {text: t("type"), dataIndex: 'type', width: 100},
-            {text: t("subtype"), dataIndex: 'subtype', width: 100},
+        var columnDefinitions = [
+            {text: 'ID', dataIndex: 'id', width: 50, type: 'input'},
+            {text: t("reference"), dataIndex: 'fullpath', type: 'input', flex: 200, renderer:this.fullPathRenderCheck.bind(this)},
+            {text: t("type"), dataIndex: 'type', width: 100, type: 'input'},
+            {text: t("subtype"), dataIndex: 'subtype', width: 100, type: 'input'},
         ];
+
+        var columns =[];
+
+        for (i = 0; i < columnDefinitions.length; i++) {
+            var field = {
+                key: columnDefinitions[i].dataIndex,
+                label: columnDefinitions[i].title == "fullpath" ? t("reference") : columnDefinitions[i].text,
+                layout: columnDefinitions[i],
+                position: i,
+                type: columnDefinitions[i].type
+            };
+
+            let fc = pimcore.object.tags[columnDefinitions[i].type].prototype.getGridColumnConfig(field);
+
+            fc.width = 100;
+            fc.flex = 100;
+            fc.hidden = false;
+            fc.layout = field;
+            fc.editor = null;
+            fc.sortable = false;
+
+            if (fc.layout.key === "fullpath") {
+                fc.renderer = this.fullPathRenderCheck.bind(this);
+            } else if (fc.layout.layout.fieldtype == 'select'
+                || fc.layout.layout.fieldtype == 'multiselect'
+                || fc.layout.layout.fieldtype == 'booleanSelect'
+            ) {
+                fc.layout.layout.options.forEach(option => {
+                    option.key = t(option.key);
+                });
+            }
+
+            var filterType = 'list';
+
+            if (fc.layout.layout.fieldtype === 'checkbox') {
+              filterType = 'boolean';
+            }
+            fc.filter = {
+              type: filterType
+            }
+
+            columns.push(fc);
+        }
 
         return columns;
     },
