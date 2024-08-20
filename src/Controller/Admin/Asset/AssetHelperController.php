@@ -604,7 +604,7 @@ class AssetHelperController extends AdminAbstractController
             $sharedUserIds = $metadata['sharedUserIds'];
 
             if ($sharedUserIds) {
-                $sharedUsers = explode(',', $sharedUserIds);
+                $sharedUsers = array_map('intval', explode(',', $sharedUserIds));
             }
         }
 
@@ -620,7 +620,7 @@ class AssetHelperController extends AdminAbstractController
         foreach ($sharedUsers as $id) {
             // Check if the user has already a favourite
             $favourite = GridConfigFavourite::getByOwnerAndClassAndObjectId(
-                (int) $id,
+                $id,
                 $gridConfig->getClassId(),
                 0,
                 $gridConfig->getSearchType()
@@ -636,7 +636,7 @@ class AssetHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the favourite
-                    if ((int) $favouriteGridConfig->getOwnerId() === (int) $id) {
+                    if ((int) $favouriteGridConfig->getOwnerId() === $id) {
                         continue;
                     }
                 }
