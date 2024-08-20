@@ -390,6 +390,15 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox') {
+                    filterType = 'boolean';
+                }
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
