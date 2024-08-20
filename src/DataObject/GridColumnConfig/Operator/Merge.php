@@ -36,9 +36,6 @@ final class Merge extends AbstractOperator
         $this->unique = $config->unique ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

@@ -32,10 +32,6 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 {
     /**
      * @Route("/recyclebin/list", name="pimcore_admin_recyclebin_list", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function listAction(Request $request): JsonResponse
     {
@@ -144,10 +140,6 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 
     /**
      * @Route("/recyclebin/restore", name="pimcore_admin_recyclebin_restore", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function restoreAction(Request $request): JsonResponse
     {
@@ -162,8 +154,6 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 
     /**
      * @Route("/recyclebin/flush", name="pimcore_admin_recyclebin_flush", methods={"DELETE"})
-     *
-     * @return JsonResponse
      */
     public function flushAction(): JsonResponse
     {
@@ -175,10 +165,6 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 
     /**
      * @Route("/recyclebin/add", name="pimcore_admin_recyclebin_add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {

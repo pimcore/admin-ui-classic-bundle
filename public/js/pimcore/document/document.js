@@ -87,6 +87,11 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
             return;
         }
 
+        if (this.saveInProgress()){
+            pimcore.helpers.showNotification(t("warning"), t("Another saving process is in progress, please wait and retry again"), "info");
+            return;
+        }
+
         if(typeof task !== 'string') {
             task = '';
         }
@@ -112,9 +117,12 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                 cancelable: true
             });
 
+            this.saving = true;
+
             const isAllowed = document.dispatchEvent(preSaveDocument);
             if (!isAllowed) {
                 this.tab.unmask();
+                this.saving = false;
                 return false;
             }
 
@@ -188,6 +196,9 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                 failure: function () {
                     this.tab.unmask();
                 }.bind(this),
+                callback: function (){
+                    this.saving = false;
+                }.bind(this),
             });
         } else {
             this.tab.unmask();
@@ -234,6 +245,23 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                     this.toolbarButtons.save.hide();
                 }
 
+                if (this.toolbarButtons.save && this.toolbarButtons.publish) {
+                    if (this.isAllowed("save")) {
+                        const menuItem = this.toolbarButtons.publish.menu.items.items.find(
+                            element => element.text === t('save_draft')
+                        )
+                        menuItem.setHidden(false)
+                    }
+                    if (this.isAllowed("settings")) {
+                        const menuItem = this.toolbarButtons.publish.menu.items.items.find(
+                            element => element.text === t('save_only_scheduled_tasks')
+                        )
+                        menuItem.setHidden(false)
+                    }
+
+                    this.toolbarButtons.publish.show();
+                }
+
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "document",
                     id: this.id,
@@ -257,6 +285,10 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                     this.toolbarButtons.save.show();
                 }
 
+                if (this.toolbarButtons.publish && this.toolbarButtons.save) {
+                    this.toolbarButtons.publish.hide();
+                }
+
                 pimcore.elementservice.setElementPublishedState({
                     elementType: "document",
                     id: this.id,
@@ -272,7 +304,6 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
     },
 
     reload: function () {
-
         this.tab.on("close", function () {
             var currentTabIndex = this.tab.ownerCt.items.indexOf(this.tab);
             window.setTimeout(function (id, type) {
@@ -585,7 +616,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
         win.show();
     },
 
-    getTranslationButtons: function () {
+    getTranslationButtons: function (asMenuItem = false) {
 
         var translationsMenu = [];
         var unlinkTranslationsMenu = [];
@@ -594,7 +625,7 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
             Ext.iterate(this.data["translations"], function (language, documentId, myself) {
                 translationsMenu.push({
                     text: pimcore.available_languages[language] + " [" + language + "]",
-                    iconCls: "pimcore_icon_language_" + language,
+                    iconCls: "pimcore_icon_language_" + language.toLowerCase(),
                     handler: function () {
                         pimcore.helpers.openElement(documentId, "document");
                     }
@@ -633,15 +664,15 @@ pimcore.document.document = Class.create(pimcore.element.abstract, {
                             }.bind(this)
                         });
                     }.bind(this),
-                    iconCls: "pimcore_icon_language_" + language
+                    iconCls: "pimcore_icon_language_" + language.toLowerCase()
                 });
             });
         }
 
         return {
-            tooltip: t("translation"),
+            ...(() => asMenuItem ? { text: t("translation") } : { tooltip: t("translation") })(),
             iconCls: "pimcore_material_icon_translation pimcore_material_icon",
-            scale: "medium",
+            ...(() => asMenuItem ? {} : { scale: "medium" })(),
             menu: [{
                 text: t("new_document"),
                 hidden: !pimcore.helpers.documentTypeHasSpecificRole(this.getType(), "translatable"),

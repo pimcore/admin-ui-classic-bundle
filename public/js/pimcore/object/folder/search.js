@@ -416,7 +416,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
         var config = $super();
         config.onlyDirectChildren = this.onlyDirectChildren;
         config.pageSize = this.pagingtoolbar.pageSize;
-        config.searchFilter = this.searchField.getValue();
+        config.searchFilter = this.searchField ? this.searchField.getValue() : '';
         config.onlyDirectChildren = this.checkboxOnlyDirectChildren.getValue();
         config.filter = this.filter;
         return config;

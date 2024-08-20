@@ -4,42 +4,26 @@
         <title>Welcome to Pimcore!</title>
 
         <meta charset="UTF-8">
-        <meta name="robots" content="noindex, follow"/>
+        <meta name="robots" content="noindex, follow">
 
-        <link rel="icon" type="image/png" href="/bundles/pimcoreadmin/img/favicon/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" href="/bundles/pimcoreadmin/img/favicon/favicon-32x32.png">
 
-        <link rel="stylesheet" href="/bundles/pimcoreadmin/css/login.css" type="text/css"/>
+        <link rel="stylesheet" href="/bundles/pimcoreadmin/css/login.css" type="text/css">
 
         {% for pluginCssPath in pluginCssPaths %}
-            <link rel="stylesheet" type="text/css" href="{{ pluginCssPath }}?_dc={{ 'now'|date('U') }}"/>
+            <link rel="stylesheet" type="text/css" href="{{ pluginCssPath }}?_dc={{ 'now'|date('U') }}">
         {% endfor %}
     </head>
     <body class="pimcore_version_11 {{ adminSettings['branding']['login_screen_invert_colors'] ? 'inverted' : '' }}">
-        {% set backgroundImageUrl = "" %}
-        {% set customImage = adminSettings['branding']['login_screen_custom_image'] %}
-        {# https://github.com/pimcore/pimcore/issues/8016 #}
-        {# https://github.com/pimcore/pimcore/issues/8129 #}
-        {% if customImage matches '@^https?://@' %}
-            {% set backgroundImageUrl = customImage %}
-        {% elseif pimcore_file_exists(constant('PIMCORE_WEB_ROOT') ~ '/var/assets' ~ customImage) %}
-            {% set backgroundImageUrl = customImage %}
-        {% elseif pimcore_file_exists(constant('PIMCORE_WEB_ROOT') ~ customImage) %}
-            {% set backgroundImageUrl = customImage %}
-        {% else %}
-{#            {% set defaultImages = ['pimconaut-ecommerce.svg', 'pimconaut-world.svg', 'pimconaut-engineer.svg', 'pimconaut-moon.svg', 'pimconaut-rocket.svg'] %}#}
-{#            {% set backgroundImageUrl = '/bundles/pimcoreadmin/img/login/' ~ random(defaultImages) %}#}
-            {% set backgroundImageUrl = '/bundles/pimcoreadmin/img/login/pcx.svg' %}
-        {% endif %}
-
-        <style type="text/css">
+        <style>
             #background {
-                background-image: url("{{ backgroundImageUrl }}");
+                background-image: url("{{ pimcore_login_background_image('/bundles/pimcoreadmin/img/login/pimconaut2024.jpg') }}");
             }
         </style>
 
         {% set customColor = adminSettings['branding']['color_login_screen'] %}
         {% if (customColor is not empty) %}
-        <style type="text/css">
+        <style>
             #content button {
                 background: {{ customColor }};
             }
@@ -51,7 +35,7 @@
         {% endif %}
 
         <div id="logo">
-            <img src="{{ path('pimcore_settings_display_custom_logo') ~ (adminSettings['branding']['login_screen_invert_colors'] ? '' : '?white=true') }}">
+            <img alt="{{ "Pimcore's logotype"|trans([], 'admin') }}" src="{{ path('pimcore_settings_display_custom_logo') ~ (adminSettings['branding']['login_screen_invert_colors'] ? '' : '?white=true') }}">
         </div>
 
         <div id="content">

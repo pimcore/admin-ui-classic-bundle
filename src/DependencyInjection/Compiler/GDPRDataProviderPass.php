@@ -31,8 +31,6 @@ final class GDPRDataProviderPass implements CompilerPassInterface
 {
     /**
      * Registers each service with tag pimcore.gdpr.data-provider as dataprovider for gdpr data extractor
-     *
-     * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container): void
     {

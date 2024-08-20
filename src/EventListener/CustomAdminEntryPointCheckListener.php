@@ -38,9 +38,6 @@ class CustomAdminEntryPointCheckListener implements EventSubscriberInterface
         $this->customAdminPathIdentifier = $customAdminPathIdentifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

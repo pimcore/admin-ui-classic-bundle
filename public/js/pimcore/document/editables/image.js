@@ -22,6 +22,10 @@ pimcore.document.editables.image = Class.create(pimcore.document.editable, {
 
         this.datax = data ?? {};
 
+        if (typeof this.config['uploadPath'] === 'undefined') {
+            this.config['uploadPath'] = pimcore.settings.asset_default_upload_path;
+        }
+
         this.originalDimensions = {
             width: this.config.width,
             height: this.config.height

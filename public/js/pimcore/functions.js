@@ -72,7 +72,7 @@ function t(key, defaultValue, placeholders) {
         }
     }
 
-    if(parent.pimcore.settings.debug_admin_translations){ // use parent here, because it's also used in the editmode iframe
+    if(parent.pimcore && parent.pimcore.settings.debug_admin_translations){ // use parent here, because it's also used in the editmode iframe
         return "+" + key + "+";
     }  else if (defaultValue) {
         return defaultValue;
@@ -1624,8 +1624,11 @@ sprintf = function ()
             else if (pType == 'x') subst = ('' + parseInt(param).toString(16)).toLowerCase();
             else if (pType == 'X') subst = ('' + parseInt(param).toString(16)).toUpperCase();
         }
-        str = leftpart + subst + rightPart;
+        arguments[numSubstitutions] = subst;
+        str = leftpart + '${'+numSubstitutions+'}' + rightPart;
     }
+    str = str.replace(/\${(\d+)}/g, (match, num) => arguments[num]);
+
     return str;
 }
 
@@ -1789,4 +1792,20 @@ function htmlspecialchars (string, quoteStyle, charset, doubleEncode) {
     }
 
     return string
+}
+
+function getUserTimezone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+}
+
+function dateToServerTimezone(date) {
+
+    let utcDate = new Date(date.toLocaleString('en-US', {
+        timeZone: pimcore.settings.timezone ? pimcore.settings.timezone : 'UTC'
+    }));
+
+    let diff = date.getTime() - utcDate.getTime();
+
+    return new Date(date.getTime() - diff);
+
 }

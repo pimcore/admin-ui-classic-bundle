@@ -18,6 +18,12 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    Pimcore\Bundle\AdminBundle\Controller\Admin\IndexController:
+        public: true
+        arguments:
+            $httpClient: '@pimcore.http_client'
+        tags: [ 'controller.service_arguments' ]
+
     #
     # COMMANDS
     #
@@ -92,3 +98,9 @@ services:
     # Admin Config Services
     #
     Pimcore\Bundle\AdminBundle\System\AdminConfig: ~
+
+    #
+    # Element Services
+    #
+    Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface:
+        class: Pimcore\Bundle\AdminBundle\Service\ElementService

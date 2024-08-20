@@ -107,11 +107,13 @@ pimcore.element.dependencies = Class.create({
                 }
             },
             autoLoad: false,
+            remoteFilter: true,
             model: requiresModel
         });
 
         this.requiresGrid = new Ext.grid.GridPanel({
             store: this.requiresStore,
+            plugins: ['pimcore.gridfilters'],
             columns: [
                 {text: "ID", sortable: true, dataIndex: 'id', hidden:true},
                 {text: t("type"), sortable: true, dataIndex: 'type', hidden: true},
@@ -122,7 +124,7 @@ pimcore.element.dependencies = Class.create({
                             + '" name="' + t(record.data.subtype) + '">&nbsp;</div>';
                     }
                 },
-                {text: t("path"), sortable: true, dataIndex: 'path', flex: 1,
+                {text: t("path"), sortable: true, dataIndex: 'path', flex: 1,filter: 'string',
                     renderer:
                         function (value, metaData, record, rowIndex, colIndex, store) {
                             if(record.data.published === false) {
@@ -214,12 +216,14 @@ pimcore.element.dependencies = Class.create({
                 }
             },
             autoLoad: false,
+            remoteFilter: true,
             model: requiredByModel
 
         });
 
         this.requiredByGrid = Ext.create('Ext.grid.Panel', {
             store: this.requiredByStore,
+            plugins: ['pimcore.gridfilters'],
             columns: [
                 {text: "ID", sortable: true, dataIndex: 'id', hidden:true},
                 {text: t("type"), sortable: true, dataIndex: 'type', hidden: true},
@@ -230,7 +234,7 @@ pimcore.element.dependencies = Class.create({
                             + '" name="' + t(record.data.subtype) + '">&nbsp;</div>';
                     }
                 },
-                {text: t("path"), sortable: true, dataIndex: 'path', flex: 1,
+                {text: t("path"), sortable: true, dataIndex: 'path', flex: 1,filter: 'string',
                     renderer:
                         function (value, metaData, record, rowIndex, colIndex, store) {
                             if(record.data.published === false) {

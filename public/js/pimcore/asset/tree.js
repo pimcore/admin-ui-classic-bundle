@@ -428,7 +428,7 @@
  
      onTreeNodeClick: function (tree, record, item, index, event, eOpts ) {
          if (event.ctrlKey === false && event.shiftKey === false && event.altKey === false) {
-             if (record.data.permissions.view) {
+             if (record.data.permissions && record.data.permissions.view) {
                  pimcore.helpers.treeNodeThumbnailPreviewHide();
                  pimcore.helpers.openAsset(record.data.id, record.data.type);
              }
@@ -633,8 +633,8 @@
  
                  }
              }
- 
-             if (record.data.permissions.rename && record.data.id != 1 && !record.data.locked) {
+
+             if (record.data.permissions && record.data.permissions.rename && record.data.id != 1 && !record.data.locked) {
                  if (perspectiveCfg.inTreeContextMenu("asset.rename")) {
                      menu.add(new Ext.menu.Item({
                          text: t('rename'),
@@ -644,7 +644,7 @@
                  }
              }
  
-             if (this.id != 1 && record.data.permissions.view) {
+             if (this.id != 1 && record.data.permissions && record.data.permissions.view) {
                  if (perspectiveCfg.inTreeContextMenu("asset.copy")) {
                      menu.add(new Ext.menu.Item({
                          text: t('copy'),
@@ -655,7 +655,7 @@
              }
  
              //cut
-             if (record.data.id != 1 && !record.data.locked && record.data.permissions.rename) {
+             if (record.data.id != 1 && !record.data.locked && record.data.permissions && record.data.permissions.rename) {
                  if (perspectiveCfg.inTreeContextMenu("asset.cut")) {
                      menu.add(new Ext.menu.Item({
                          text: t('cut'),
@@ -668,6 +668,7 @@
  
              //paste
              if (pimcore.cachedAssetId
+                 && record.data.permissions
                  && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.paste")) {
  
@@ -687,6 +688,7 @@
              }
  
              if (record.data.type == "folder" && pimcore.cutAsset
+                 && record.data.permissions
                  && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.pasteCut")) {
                  menu.add(new Ext.menu.Item({
@@ -701,7 +703,7 @@
                  }));
              }
  
-             if (record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("asset.delete")) {
+             if (record.data.permissions && record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("asset.delete")) {
                  menu.add(new Ext.menu.Item({
                      text: t('delete'),
                      iconCls: "pimcore_icon_delete",
@@ -710,7 +712,7 @@
              }
  
              // upload & download
-             if (record.data.permissions.view) {
+             if (record.data.permissions && record.data.permissions.view) {
                  menu.add("-");
  
                  if (record.data.type == "folder") {
@@ -748,7 +750,7 @@
              var advancedMenuItems = [];
              var user = pimcore.globalmanager.get("user");
  
-             if (record.data.permissions.create &&
+             if (record.data.permissions && record.data.permissions.create &&
                  !record.data.locked &&
                  perspectiveCfg.inTreeContextMenu("asset.searchAndMove") &&
                  pimcore.helpers.hasSearchImplementation()) {
@@ -1184,7 +1186,7 @@
              elementType: "asset",
              elementSubType: record.data.type,
              id: record.data.id,
-             default: Ext.util.Format.htmlDecode(record.data.text)
+             default: Ext.util.Format.htmlDecode(record.data.key)
          };
          pimcore.elementservice.editElementKey(options);
      },

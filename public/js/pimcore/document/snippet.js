@@ -63,7 +63,10 @@ pimcore.document.snippet = Class.create(pimcore.document.page_snippet, {
             this.versions = new pimcore.document.versions(this);
         }
 
-        this.dependencies = new pimcore.element.dependencies(this, "document");
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "document");
+        }
+
         if(pimcore.globalmanager.get('customReportsPanelImplementationFactory').hasImplementation()) {
             this.reports = pimcore.globalmanager.get('customReportsPanelImplementationFactory').getNewReportInstance("document_snippet");
         }
@@ -93,7 +96,9 @@ pimcore.document.snippet = Class.create(pimcore.document.page_snippet, {
             items.push(this.scheduler.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if(this.reports) {
             var reportLayout = this.reports.getLayout();
@@ -114,16 +119,7 @@ pimcore.document.snippet = Class.create(pimcore.document.page_snippet, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

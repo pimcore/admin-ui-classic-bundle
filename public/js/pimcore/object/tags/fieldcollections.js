@@ -64,12 +64,9 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
             allowedTypes: allowedTypes.join(","),
             object_id: this.object.id,
             field_name: this.fieldConfig.name,
+            layoutId: this.object.data.currentLayoutId,
             forObjectEditor: 1
         };
-
-        if (typeof this.fieldConfig.layoutId !== "undefined") {
-            extraParams.layoutId = this.fieldConfig.layoutId;
-        }
 
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_dataobject_class_fieldcollectiontree'),

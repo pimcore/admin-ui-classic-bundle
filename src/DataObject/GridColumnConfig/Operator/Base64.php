@@ -33,9 +33,6 @@ final class Base64 extends AbstractOperator
         $this->mode = $config->mode ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

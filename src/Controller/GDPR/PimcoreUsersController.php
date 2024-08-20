@@ -44,11 +44,6 @@ class PimcoreUsersController extends AdminAbstractController implements KernelCo
 
     /**
      * @Route("/search-users", name="pimcore_admin_gdpr_pimcoreusers_searchusers", methods={"GET"})
-     *
-     * @param Request $request
-     * @param PimcoreUsers $pimcoreUsers
-     *
-     * @return JsonResponse
      */
     public function searchUsersAction(Request $request, PimcoreUsers $pimcoreUsers): JsonResponse
     {
@@ -69,11 +64,6 @@ class PimcoreUsersController extends AdminAbstractController implements KernelCo
 
     /**
      * @Route("/export-user-data", name="pimcore_admin_gdpr_pimcoreusers_exportuserdata", methods={"GET"})
-     *
-     * @param Request $request
-     * @param PimcoreUsers $pimcoreUsers
-     *
-     * @return JsonResponse
      */
     public function exportUserDataAction(Request $request, PimcoreUsers $pimcoreUsers): JsonResponse
     {

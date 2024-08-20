@@ -242,6 +242,14 @@ pimcore.helpers.updateTreeElementStyle = function (type, id, treeData) {
                 if (typeof treeData.qtipCfg !== "undefined") {
                     record.set("qtipCfg", treeData.qtipCfg);
                 }
+
+                if (typeof treeData.key !== "undefined") {
+                    record.set("key", treeData.key);
+                }
+
+                if (typeof treeData.text !== "undefined") {
+                    record.set("text", treeData.text);
+                }
             }
         }
     }
@@ -876,7 +884,23 @@ pimcore.helpers.download = function (url) {
         pimcore.settings.showCloseConfirmation = true;
     }, 1000);
 
-    location.href = url;
+    let iframe = document.getElementById('download_helper_iframe');
+    if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.setAttribute('id', 'download_helper_iframe');
+        document.body.appendChild(iframe);
+    }
+    iframe.src = url;
+
+    iframe.onload = function() {
+        // if avoids infinity loop, which is caused by setting the src in the load function
+        if (iframe.src !== 'about:blank') {
+            const title = iframe.contentDocument.title;
+            pimcore.helpers.showNotification(t('error'), title, 'error');
+            iframe.src = 'about:blank'; //clear iframe because otherwise the error will stay in the dom
+        }
+    }
 };
 
 pimcore.helpers.getFileExtension = function (filename) {
@@ -1013,7 +1037,7 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         filename = "Filedata";
     }
 
-    var uploadWindowCompatible = new Ext.Window({
+    const uploadWindowCompatible = new Ext.Window({
         autoHeight: true,
         title: t('upload'),
         closeAction: 'close',
@@ -1021,55 +1045,123 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
         modal: true
     });
 
-    var items = [];
+    const items = [];
 
     if (description) {
         items.push({
-           xtype: 'displayfield',
-           value: description
+            xtype: 'displayfield',
+            value: description
         });
     }
 
     items.push({
         xtype: 'fileuploadfield',
-        emptyText: t("select_a_file"),
+        emptyText: t("select_files"),
         fieldLabel: t("file"),
         width: 470,
-        name: filename,
+        name: filename+'[]',
         buttonText: "",
         buttonConfig: {
             iconCls: 'pimcore_icon_upload'
         },
         listeners: {
             change: function (fileUploadField) {
-                if(fileUploadField.fileInputEl.dom.files[0].size > pimcore.settings["upload_max_filesize"]) {
-                    pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + fileUploadField.fileInputEl.dom.files[0].name, "error");
-                    return;
-                }
+                let activeUploads = 0;
+                const filesCount = fileUploadField.fileInputEl.dom.files.length;
 
-                uploadForm.getForm().submit({
-                    url: url,
-                    params: {
-                        csrfToken: pimcore.settings['csrfToken']
-                    },
-                    waitMsg: t("please_wait"),
-                    success: function (el, res) {
-                        // content-type in response has to be text/html, otherwise (when application/json is sent)
-                        // chrome will complain in Ext.form.Action.Submit and mark the submission as failed
-                        success(res);
-                        uploadWindowCompatible.close();
-                    },
-                    failure: function (el, res) {
-                        failure(res);
-                        uploadWindowCompatible.close();
+                const win = new Ext.Window({
+                    items: [],
+                    modal: true,
+                    closable: false,
+                    bodyStyle: "padding:10px;",
+                    width: 500,
+                    autoHeight: true,
+                    autoScroll: true
+                });
+                win.show();
+
+                const finishedErrorHandler = function (pbar) {
+                    activeUploads--;
+                    win.remove(pbar);
+
+                    if (activeUploads < 1) {
+                        win.close();
                     }
+                }.bind(this);
+
+                Ext.each(fileUploadField.fileInputEl.dom.files, function (file) {
+                    if (file.size > pimcore.settings["upload_max_filesize"]) {
+                        pimcore.helpers.showNotification(t("error"), t("file_is_bigger_that_upload_limit") + " " + file.name, "error");
+                        return;
+                    }
+
+                    const pbar = new Ext.ProgressBar({
+                        width: 465,
+                        text: file.name,
+                        style: "margin-bottom: 5px"
+                    });
+
+                    win.add(pbar);
+                    win.updateLayout();
+
+                    activeUploads++;
+                    const percentComplete = activeUploads / filesCount;
+                    let progressText = file.name + " ( " + Math.floor(percentComplete * 100) + "% )";
+                    if (percentComplete == 1) {
+                        progressText = file.name + " " + t("please_wait");
+                    }
+
+                    pbar.updateProgress(percentComplete, progressText);
+
+                    const data = new FormData();
+                    data.append(filename, file);
+                    data.append("filename", file.name);
+                    data.append("csrfToken", pimcore.settings['csrfToken']);
+
+                    const request = new XMLHttpRequest();
+                    const res = {
+                        'response': request
+                    };
+
+                    const successWrapper = function (ev) {
+                        let data = {success: false};
+                        try {
+                            data = JSON.parse(request.responseText);
+                        } catch (e) {}
+                        if (ev.currentTarget.status < 400 && data.success === true) {
+                            success(res);
+                            if (activeUploads == filesCount) {
+                                win.close();
+                                uploadWindowCompatible.close();
+                            }
+                        } else {
+                            failure(res);
+                            finishedErrorHandler(pbar);
+                        }
+                    };
+
+                    const errorWrapper = function (ev) {
+                        failure(res);
+                        finishedErrorHandler(pbar);
+                    };
+
+                    request.addEventListener("load", successWrapper, false);
+                    request.addEventListener("error", errorWrapper, false);
+                    request.addEventListener("abort", errorWrapper, false);
+                    request.open('POST', url);
+                    request.send(data);
+
+                });
+            },
+            afterrender: function(cmp){
+                cmp.fileInputEl.set({
+                    multiple:'multiple'
                 });
             }
         }
     });
 
-
-    var uploadForm = new Ext.form.FormPanel({
+    const uploadForm = new Ext.form.FormPanel({
         fileUpload: true,
         width: 500,
         bodyStyle: 'padding: 10px;',
@@ -2391,8 +2483,14 @@ pimcore.helpers.showAbout = function () {
 
     var html = '<div class="pimcore_about_window">';
     html += '<br><img src="/bundles/pimcoreadmin/img/logo-gray.svg" style="width: 300px;"><br>';
-    html += '<br><b>Version: ' + pimcore.settings.version + '</b>';
-    html += '<br><b>Git Hash: <a href="https://github.com/pimcore/pimcore/commit/' + pimcore.settings.build + '" target="_blank">' + pimcore.settings.build + '</a></b>';
+
+    if(pimcore.settings.platform_version) {
+        html += '<br><b>Platform Version: ' + pimcore.settings.platform_version + '</b>';
+    } else {
+        html += '<br><b>Core Version: ' + pimcore.settings.version + '</b>';
+    }
+
+
     html += '<br><br>&copy; by pimcore GmbH (<a href="https://pimcore.com/" target="_blank">pimcore.com</a>)';
     html += '<br><br><a href="https://github.com/pimcore/pimcore/blob/11.x/LICENSE.md" target="_blank">License</a> | ';
     html += '<a href="https://pimcore.com/en/about/contact" target="_blank">Contact</a>';
@@ -3022,10 +3120,12 @@ pimcore.helpers.registerAssetDnDSingleUpload = function (element, parent, parent
 
                     var params = {};
 
-                    if(parentType === 'path') {
-                        params['parentPath'] = parent;
-                    } else if (parentType === 'id') {
-                        params['parentId'] = parent;
+                    if(parent !== undefined){
+                        if(parentType === 'path') {
+                            params['parentPath'] = parent;
+                        } else if (parentType === 'id') {
+                            params['parentId'] = parent;
+                        }
                     }
 
                     if (context) {
@@ -3265,14 +3365,31 @@ pimcore.helpers.treeDragDropValidate = function (node, oldParent, newParent) {
         if (disabledLayoutTypes.includes(newParent.data.editor.type)) {
             return false;
         }
+
+        return this.isComponentAsChildAllowed(newParent, node);
     }
 
-    if (newParent.data.root) {
+    if (newParent.data.root && node.data.type !== 'layout') {
         return false;
     }
 
     return true;
 };
+
+pimcore.helpers.isComponentAsChildAllowed = function (parentNode, childNode) {
+    const parentType = parentNode.data.editor.type;
+    const childType = childNode.data.editor.type;
+    const allowedChildren = pimcore.object.helpers.layout.getRawAllowedTypes();
+
+    if (allowedChildren[parentType] &&
+        allowedChildren[parentType].includes(childType) ||
+        (allowedChildren[parentType].includes('data') && childNode.data.type === 'data')
+    ) {
+        return true
+    }
+
+    return false;
+}
 
 /**
  * Building menu with priority
@@ -3370,7 +3487,73 @@ pimcore.helpers.priorityCompare = function(a, b) {
     return 0;
 }
 
-
 pimcore.helpers.documentTypeHasSpecificRole = function(documentType, role) {
+
     return pimcore.settings.document_types_configuration[documentType][role];
 }
+
+pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled = function() {
+    return pimcore?.settings?.new_admin_style;
+}
+
+pimcore.helpers.getTabBar = function (attributes) {
+    let tabBar;
+
+    if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+        tabBar = {
+            ...(() => attributes?.tabBar || {})(),
+            layout: {
+                pack: 'end'
+            },
+            defaults: {
+                height: 46,
+            },
+            cls: 'pimcore_editor_tabbar'
+        };
+    } else {
+        tabBar = {
+            ...(() => attributes?.tabBar || {})(),
+            cls: 'pimcore_editor_tabbar'
+        };
+    }
+
+    let tabAttr = Object.assign(attributes, {
+        tabBar: tabBar,
+        tabPosition: 'top',
+        region:'center',
+        deferredRender:true,
+        enableTabScroll:true,
+        border: false,
+        activeTab: 0
+    });
+
+    return new Ext.TabPanel(tabAttr);
+}
+
+// Sends an Ajax request, it is recommended to be used when doing simple calls or to third-party services, in contrast to Ext.Ajax.request which, by default, sends extra info (eg. custom headers) that are usually needed to be working within Pimcore interface.
+pimcore.helpers.sendRequest = function (
+    method,
+    url,
+    successCallback = function (response) {},
+    failureCallback = function (response) {},
+    alwaysCallback = function (response) {}
+) {
+    const request = new XMLHttpRequest();
+
+    request.onload = function() {
+        if (this.status >= 200 && this.status < 400) {
+            successCallback(this);
+        } else {
+            failureCallback(this);
+        }
+        alwaysCallback(this);
+    };
+
+    request.onerror = function () {
+        failureCallback(this);
+        alwaysCallback(this);
+    }
+
+    request.open(method, url);
+    request.send();
+};

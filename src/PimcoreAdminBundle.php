@@ -30,9 +30,6 @@ use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
 class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundleInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container): void
     {
         // auto-tag GDPR data providers

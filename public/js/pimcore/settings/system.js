@@ -125,23 +125,6 @@ pimcore.settings.system = Class.create({
                         defaultType: 'textfield',
                         defaults: {width: 300},
                         items: [{
-                            xtype: 'combo',
-                            fieldLabel: t('language_admin'),
-                            typeAhead: true,
-                            value: this.getValue("general.language"),
-                            queryMode: 'local',
-                            mode: 'local',
-                            listWidth: 100,
-                            width: 500,
-                            //editable: true,     // If typeAhead is enabled the combo must be editable: true -- please change one of those settings.
-                            store: pimcore.globalmanager.get("pimcorelanguages"),
-                            displayField: 'display',
-                            valueField: 'language',
-                            forceSelection: true,
-                            triggerAction: 'all',
-                            name: 'general.language',
-                            cls: "pimcore_extra_label_bottom"
-                        }, {
                             xtype: "container",
                             html: '<strong>' + t('frontend_languages') + '</strong>'
                         }, {
@@ -185,6 +168,11 @@ pimcore.settings.system = Class.create({
                                 id: "system_settings_general_validLanguages",
                                 name: 'general.validLanguages',
                                 value: this.getValue("general.valid_languages", true)
+                            }, {
+                                xtype: "hidden",
+                                id: "system_settings_general_requiredLanguages",
+                                name: 'general.requiredLanguages',
+                                value: this.getValue("general.required_languages", true)
                             }, {
                                 xtype: "hidden",
                                 id: "system_settings_general_defaultLanguage",
@@ -597,10 +585,37 @@ pimcore.settings.system = Class.create({
                         }.bind(this)
                     }
                 }, {
+                    xtype: "checkbox",
+                    name: "general.requiredLanguage",
+                    boxLabel: t("required_language"),
+                    checked: this.getValue("general.required_languages", true).includes(language),
+                    listeners: {
+                        change: function (el, checked) {
+                            var requiredLanguagesField = Ext.getCmp("system_settings_general_requiredLanguages");
+                            var requiredLanguages = [];
+
+                            if (requiredLanguagesField.getValue() != '') {
+                                requiredLanguages = requiredLanguagesField.getValue().split(",");
+                            }
+
+                            if (checked) {
+                                if (!in_array(language, requiredLanguages)) {
+                                    requiredLanguages.push(language);
+                                }
+                            } else {
+                                if (in_array(language, requiredLanguages)) {
+                                    requiredLanguages.splice(array_search(language, requiredLanguages), 1);
+                                }
+                            }
+
+                            requiredLanguagesField.setValue(requiredLanguages.join(","));
+                        }.bind(this)
+                    }
+                }, {
                     xtype: "button",
                     title: t("delete"),
                     iconCls: "pimcore_icon_delete",
-                    style: "position:absolute; right: 5px; top:12px;",
+                    style: "position:absolute; right: 5px; top:40px;",
                     handler: this.removeLanguage.bind(this, language)
                 }]
             });
@@ -616,6 +631,14 @@ pimcore.settings.system = Class.create({
         if (in_array(language, addedLanguages)) {
             addedLanguages.splice(array_search(language, addedLanguages), 1);
             languageField.setValue(addedLanguages.join(","));
+        }
+
+        // remove the required language out of the hidden field
+        var requiredLanguagesField = Ext.getCmp("system_settings_general_requiredLanguages");
+        var addedRequiredLanguages = requiredLanguagesField.getValue().split(",");
+        if (in_array(language, addedRequiredLanguages)) {
+            addedRequiredLanguages.splice(array_search(language, addedRequiredLanguages), 1);
+            requiredLanguagesField.setValue(addedRequiredLanguages.join(","));
         }
 
         // remove the default language from hidden field

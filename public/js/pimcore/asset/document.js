@@ -43,7 +43,10 @@ pimcore.asset.document = Class.create(pimcore.asset.asset, {
         this.properties = new pimcore.element.properties(this, "asset");
         this.versions = new pimcore.asset.versions(this);
         this.scheduler = new pimcore.element.scheduler(this, "asset");
-        this.dependencies = new pimcore.element.dependencies(this, "asset");
+
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "asset");
+        }
 
         if (user.isAllowed("notes_events")) {
             this.notes = new pimcore.element.notes(this, "asset");
@@ -65,7 +68,7 @@ pimcore.asset.document = Class.create(pimcore.asset.asset, {
             items.push(this.getEditPanel());
         }
 
-        if (this.isAllowed("publish")) {
+        if (this.isAllowed("view") || this.isAllowed("publish")) {
             items.push(this.metadata.getLayout());
         }
         if (this.isAllowed("properties")) {
@@ -79,7 +82,9 @@ pimcore.asset.document = Class.create(pimcore.asset.asset, {
             items.push(this.scheduler.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if (user.isAllowed("notes_events")) {
             items.push(this.notes.getLayout());
@@ -93,16 +98,7 @@ pimcore.asset.document = Class.create(pimcore.asset.asset, {
             items.push(this.workflows.getLayout());
         }
 
-        this.tabbar = new Ext.TabPanel({
-            tabPosition: "top",
-            region:'center',
-            deferredRender:true,
-            enableTabScroll:true,
-            border: false,
-            items: items,
-            activeTab: 0
-        });
-
+        this.tabbar = pimcore.helpers.getTabBar({items: items});
         return this.tabbar;
     },
 

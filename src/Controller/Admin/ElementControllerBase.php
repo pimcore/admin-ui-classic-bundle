@@ -22,6 +22,7 @@ use Pimcore\Bundle\AdminBundle\Event\Model\AssetDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\DataObjectDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\DocumentDeleteInfoEvent;
 use Pimcore\Bundle\AdminBundle\Event\Model\ElementDeleteInfoEventInterface;
+use Pimcore\Bundle\AdminBundle\Service\ElementServiceInterface;
 use Pimcore\Event\DataObjectEvents;
 use Pimcore\Event\DocumentEvents;
 use Pimcore\Logger;
@@ -40,6 +41,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 abstract class ElementControllerBase extends AdminAbstractController
 {
+    public function __construct(
+        protected ElementServiceInterface $elementService
+    ) {
+    }
+
     /**
      * @return array<string, mixed>
      */
@@ -50,10 +56,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -66,11 +68,12 @@ abstract class ElementControllerBase extends AdminAbstractController
         }
 
         if (in_array($type, $allowedTypes)) {
-            /** @var Document|Asset|AbstractObject $root */
             $root = Service::getElementById($type, $id);
-            if ($root->isAllowed('list')) {
+            if ($root?->isAllowed('list')) {
                 return $this->adminJson($this->getTreeNodeConfig($root));
             }
+
+            return $this->adminJson(['success' => false, 'id' =>  $id]);
         }
 
         return $this->adminJson(['success' => false, 'message' => 'missing_permission']);
@@ -78,11 +81,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

@@ -167,7 +167,7 @@ pimcore.settings.website = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return Ext.Date.format(date, "Y-m-d H:i:s");
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     } else {
                         return "";
                     }
@@ -182,7 +182,7 @@ pimcore.settings.website = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return Ext.Date.format(date, "Y-m-d H:i:s");
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     } else {
                         return "";
                     }
@@ -400,9 +400,7 @@ pimcore.settings.website = Class.create({
                 value: data.data
             }
         } else if (type == "date") {
-            property = Ext.create('Ext.form.field.Date', {
-                format: "Y-m-d"
-            });
+            property = Ext.create('Ext.form.field.Date');
         } else if (type == "checkbox" || type == "bool") {
             property =  {
                 xtype: 'checkbox',
@@ -557,7 +555,9 @@ pimcore.settings.website = Class.create({
         let res = store.add({
             name: key,
             data: value,
-            type: type
+            type: type,
+            language: '',
+            siteId: null
         });
 
         this.rowEditing.completeEdit();

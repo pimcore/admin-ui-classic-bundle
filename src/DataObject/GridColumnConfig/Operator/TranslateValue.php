@@ -46,9 +46,6 @@ final class TranslateValue extends AbstractOperator
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $children = $this->getChildren();

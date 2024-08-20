@@ -43,9 +43,6 @@ class WorkflowManagementListener implements EventSubscriberInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -58,7 +55,6 @@ class WorkflowManagementListener implements EventSubscriberInterface
     /**
      * Fired before information is sent back to the admin UI about an element
      *
-     * @param GenericEvent $e
      *
      * @throws \Exception
      */
@@ -107,7 +103,7 @@ class WorkflowManagementListener implements EventSubscriberInterface
             foreach ($this->workflowManager->getOrderedPlaceConfigs($workflow, $marking) as $placeConfig) {
                 if (!$permissionsRespected && !empty($placeConfig->getPermissions($workflow, $element))) {
                     $data['userPermissions'] = array_merge(
-                        (array)$data['userPermissions'],
+                        isset($data['userPermissions']) ? (array)$data['userPermissions'] : [],
                         $placeConfig->getUserPermissions($workflow, $element)
                     );
 

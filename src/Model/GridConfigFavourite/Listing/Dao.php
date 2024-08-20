@@ -28,8 +28,6 @@ class Dao extends Model\Listing\Dao\AbstractDao
 {
     /**
      * Loads a list of gridconfigs for the specicified parameters, returns an array of GridConfigFavourite elements
-     *
-     * @return array
      */
     public function load(): array
     {

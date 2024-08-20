@@ -367,7 +367,7 @@ edit_current_page: Editer cette page
 close: Fermer
 name_already_in_use: "Le nom est d\xE9j\xE0 utilis\xE9"
 name_and_key_must_be_defined: "Le nom et le type doivent \xEAtre d\xE9finis"
-mandatory_field_empty: Veuillez remplire tous les champs requis
+mandatory_field_empty: Veuillez remplir tous les champs requis
 reload: Recharger
 schedule: Calendrier
 time: Temps
@@ -1096,7 +1096,6 @@ batch_export_confirmation: "Vous \xEAtes sur le point d'exporter %s objets de do
   Voulez-vous continuer ?"
 header: "Ent\xEAte"
 no_header: "Aucune ent\xEAte"
-url-slug-invalid-chars: "Caract\xE8re non valide fourni dans le slug d'URL"
 delete_entire_folder_question: "Cette op\xE9ration supprimera l'int\xE9gralit\xE9
   du parent/dossier. Vous ne pourrez peut-\xEAtre pas annuler compl\xE8tement cette
   op\xE9ration."
@@ -1109,4 +1108,39 @@ content_main_document: Content-Main Document
 2fa_wrong: Wrong code entered!
 language_main: Main
 system_appearance_settings: Appearance & Branding
+male: Male
+female: Female
+preview_generator_locale: Language
+preview_generator_site: Site
+failed_to_create_new_item_select_options: Failed to create new item. Name must be
+  UpperCamelCase format, at least 3 characters long and may not contain any reserved
+  words.
+pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download
+  and open it in your local PDF viewer.
+pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take
+  a while.'
+keybinding_save: Save
+keybinding_publish: Publish
+keybinding_unpublish: Unpublish
+keybinding_rename: Rename
+keybinding_refresh: Reload
+keybinding_openDocument: Open Document
+keybinding_openAsset: Open Asset
+keybinding_openObject: Open Object
+keybinding_openInTree: Show in Tree
+keybinding_searchDocument: Search Documents
+keybinding_searchAsset: Search Assets
+keybinding_searchObject: Search Objects
+keybinding_showElementHistory: Recently Opened Elements
+keybinding_closeAllTabs: Close all tabs
+keybinding_searchAndReplaceAssignments: Search & Replace Assignments
+keybinding_redirects: Redirects
+keybinding_sharedTranslations: Shared Translations
+keybinding_recycleBin: Recycle Bin
+keybinding_notesEvents: Notes &amp; Events
+keybinding_tagConfiguration: Tag Configuration
+keybinding_users: Users
+keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: Nom d'utilisateur
 ...

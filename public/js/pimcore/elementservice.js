@@ -359,8 +359,16 @@ pimcore.elementservice.getAffectedNodes = function(elementType, id) {
         });
     }
 
-    return affectedNodes;
+    const prepareAffectedNodes = new CustomEvent(pimcore.events.prepareAffectedNodes, {
+        detail: {
+            affectedNodes: affectedNodes,
+            id: id,
+            elementType: elementType
+        }
+    });
+    document.dispatchEvent(prepareAffectedNodes);
 
+    return affectedNodes;
 };
 
 
@@ -431,20 +439,32 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
             for (index = 0; index < affectedNodes.length; index++) {
                 record = affectedNodes[index];
-                pimcore.elementservice.refreshNode(record.parentNode);
+                pimcore.elementservice.refreshNode(record);
             }
 
-            if (pimcore.globalmanager.exists("document_" + id)) {
-                try {
-                    if (rdata && rdata.success) {
-                        pimcore.elementservice.reopenElement(options);
-                    }  else {
-                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                            t(rdata.message));
+            try {
+                if (rdata && rdata.success) {
+                    if (rdata.treeData) {
+                        pimcore.helpers.updateTreeElementStyle('document', id, rdata.treeData);
                     }
-                } catch (e) {
-                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
+
+                    pimcore.elementservice.reopenElement(options);
+
+                    //trigger edit document key complete event
+                    const postEditDocumentKey = new CustomEvent(pimcore.events.postEditDocumentKey, {
+                        detail: {
+                            document: record,
+                            key: value
+                        }
+                    });
+
+                    document.dispatchEvent(postEditDocumentKey);
+                }  else {
+                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
+                        t(rdata.message));
                 }
+            } catch (e) {
+                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
             }
         }.bind(this));
     }
@@ -488,9 +508,23 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
                 try {
                     var rdata = Ext.decode(response.responseText);
                     if (rdata && rdata.success) {
+                        if (rdata.treeData) {
+                            pimcore.helpers.updateTreeElementStyle('object', id, rdata.treeData);
+                        }
+
                         pimcore.elementservice.reopenElement(options);
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
+
+                        //trigger edit object key complete event
+                        const postEditObjectKey = new CustomEvent(pimcore.events.postEditObjectKey, {
+                            detail: {
+                                object: record,
+                                key: value
+                            }
+                        });
+
+                        document.dispatchEvent(postEditObjectKey);
                     }  else {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
                             t(rdata.message));
@@ -569,7 +603,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         return;
                     }
 
-                    if(rdata && rdata.success) {
+                    if (rdata && rdata.success) {
                         // removes loading indicator added in the applyNewKey method
                         pimcore.helpers.removeTreeNodeLoadingIndicator(elementType, id);
                     }
@@ -579,18 +613,30 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         pimcore.elementservice.refreshNode(record);
                     }
 
-                    if (pimcore.globalmanager.exists("asset_" + id)) {
-                        try {
-                            if (rdata && rdata.success) {
-                                pimcore.elementservice.reopenElement(options);
-                            }  else {
-                                pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                    "error", t(rdata.message));
+                    try {
+                        if (rdata && rdata.success) {
+                            if (rdata.treeData) {
+                                pimcore.helpers.updateTreeElementStyle('asset', id, rdata.treeData);
                             }
-                        } catch (e) {
+
+                            pimcore.elementservice.reopenElement(options);
+
+                            //trigger edit asset key complete event
+                            const postEditAssetKey = new CustomEvent(pimcore.events.postEditAssetKey, {
+                                detail: {
+                                    asset: record,
+                                    key: value
+                                }
+                            });
+
+                            document.dispatchEvent(postEditAssetKey);
+                        }  else {
                             pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                "error");
+                                "error", t(rdata.message));
                         }
+                    } catch (e) {
+                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
+                            "error");
                     }
                 }.bind(this))
             ;
@@ -998,7 +1044,6 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
         var workflowTransitionHandler = function (workflow, transition, elementEditor, elementId, elementType) {
             var applyWorkflow = function (workflow, transition, elementEditor, elementId, elementType) {
-                transition.isGlobalAction = false;
                 if (transition.notes) {
                     new pimcore.workflow.transitionPanel(elementType, elementId, elementEditor, workflow.name, transition);
                 } else {
@@ -1031,7 +1076,7 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
             for (i = 0; i < workflow.allowedTransitions.length; i++) {
                 var transition = workflow.allowedTransitions[i];
-
+                transition.isGlobalAction = false;
                 items.push({
                     text: t(transition.label),
                     iconCls: transition.iconCls,
@@ -1044,7 +1089,7 @@ pimcore.elementservice.getWorkflowActionsButton = function(workflows, elementTyp
 
             for (i = 0; i < workflow.globalActions.length; i++) {
                 var transition = workflow.globalActions[i];
-
+                transition.isGlobalAction = true;
                 items.push({
                     text: t(transition.label),
                     iconCls: transition.iconCls,

@@ -18,7 +18,9 @@ namespace Pimcore\Bundle\AdminBundle\Security\Authenticator;
 
 use Pimcore\Security\User\User;
 use Pimcore\Tool\Authentication;
+use Pimcore\Tool\Session;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -45,6 +47,15 @@ class AdminTokenAuthenticator extends AdminAbstractAuthenticator
             $userBadge = new UserBadge($pimcoreUser->getUsername(), function () use ($pimcoreUser) {
                 return new User($pimcoreUser);
             });
+
+            if ($request->get('reset', false)) {
+                // save the information to session when the user want's to reset the password
+                // this is because otherwise the old password is required => see also PIMCORE-1468
+
+                Session::useBag($request->getSession(), function (AttributeBagInterface $adminSession) {
+                    $adminSession->set('password_reset', true);
+                });
+            }
 
             return new SelfValidatingPassport($userBadge);
         }

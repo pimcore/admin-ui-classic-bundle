@@ -152,6 +152,21 @@ class AdminEvents
     const OBJECT_LIST_AFTER_LIST_LOAD = 'pimcore.admin.object.list.afterListLoad';
 
     /**
+     * Allows to implement an additional condition for the object list when the search field within the grid is used.
+     *
+     * Subject: \Pimcore\Bundle\AdminBundle\Helper\GridHelperService
+     * Arguments:
+     *  - query | the fulltext query search terms
+     *  - condition | set the condition for the search
+     *  - list | the data object list
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const OBJECT_LIST_HANDLE_FULLTEXT_QUERY = 'pimcore.admin.object.list.handleFulltextQuery';
+
+    /**
      * Fired before the request params are parsed. This event apply to both the folder content preview list and the grid list.
      *
      * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
@@ -181,9 +196,6 @@ class AdminEvents
     /**
      * Arguments:
      *  - field
-     *  - language
-     *  - keyPrefix
-     *  - processed
      *  - result
      *
      * @Event("Symfony\Component\EventDispatcher\GenericEvent")
@@ -326,6 +338,20 @@ class AdminEvents
     const DOCUMENT_TREE_GET_CHILDREN_BY_ID_PRE_SEND_DATA = 'pimcore.admin.document.treeGetChildrenById.preSendData';
 
     /**
+     * Fired before the edit lock is handled.
+     *
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\DataObjectController
+     * Arguments:
+     *  - data | array | editLock behaviour, this can be modified
+     *  - object | AbstractObject | the current object
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const OBJECT_GET_IS_LOCKED = 'pimcore.admin.dataobject.get.isLocked';
+
+    /**
      * Fired before the request params are parsed.
      *
      * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\DataObjectController
@@ -410,6 +436,28 @@ class AdminEvents
      * @var string
      */
     const CLASS_OBJECTBRICK_UPDATE_DEFINITION = 'pimcore.admin.class.objectbrick.updateDefinition';
+
+    /**
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\ClassController
+     * Arguments:
+     *  - list | array | the list of select options
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const CLASS_SELECTOPTIONS_LIST_PRE_SEND_DATA = 'pimcore.admin.class.selectoptionsList.preSendData';
+
+    /**
+     * Subject: \Pimcore\Bundle\AdminBundle\Controller\Admin\ClassController
+     * Arguments:
+     *  - selectOptionsConfiguration | \Pimcore\Model\DataObject\SelectOptions\Config
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const CLASS_SELECTOPTIONS_UPDATE_CONFIGURATION = 'pimcore.admin.class.selectoptions.updateDefinition';
 
     /**
      * Fired before an element is opened

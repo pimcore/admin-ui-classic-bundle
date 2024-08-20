@@ -48,9 +48,6 @@ class PreviewGenerator implements PreviewGeneratorInterface
     }
 
     /**
-     * @param Concrete $object
-     * @param array $parameters
-     *
      * @return array only parameters that are part of the preview generator config and are not empty
      */
     protected function filterParameters(Concrete $object, array $parameters): array
@@ -70,9 +67,6 @@ class PreviewGenerator implements PreviewGeneratorInterface
         return $filteredParameters;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getPreviewConfig(Concrete $object): array
     {
         return array_filter([
@@ -105,22 +99,32 @@ class PreviewGenerator implements PreviewGeneratorInterface
         $sites = new Site\Listing();
         $sites->setOrderKey('mainDomain')->setOrder('ASC');
 
-        $sitesOptions = [];
+        if ($sites->count() == 0) {
+            return [];
+        }
 
+        $sitesOptions = [
+            $this->translator->trans('main_site', [], Translation::DOMAIN_ADMIN) => '0',
+        ];
+
+        $preSelectedSite = null;
         foreach ($sites as $site) {
             $label = $site->getRootDocument()?->getKey();
             $sitesOptions[$label] = $site->getId();
-        }
 
-        if (empty($sitesOptions)) {
-            return [];
+            $domains = $site->getDomains();
+            array_unshift($domains, $site->getMainDomain());
+
+            if(is_null($preSelectedSite) && in_array(Tool::getHostname(), $domains)) {
+                $preSelectedSite = $sitesOptions[$label];
+            }
         }
 
         return [
             'name' => PreviewGeneratorInterface::PARAMETER_SITE,
             'label' => $this->translator->trans('preview_generator_site', [], Translation::DOMAIN_ADMIN),
             'values' => $sitesOptions,
-            'defaultValue' => current($sitesOptions),
+            'defaultValue' => $preSelectedSite ?? reset($sitesOptions),
         ];
     }
 

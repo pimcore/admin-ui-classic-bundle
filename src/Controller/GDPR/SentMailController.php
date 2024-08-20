@@ -44,10 +44,6 @@ class SentMailController extends AdminAbstractController implements KernelContro
 
     /**
      * @Route("/export", name="pimcore_admin_gdpr_sentmail_exportdataobject", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function exportDataObjectAction(Request $request): JsonResponse
     {

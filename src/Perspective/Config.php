@@ -78,9 +78,6 @@ final class Config
     }
 
     /**
-     * @param array $data
-     * @param array|null $deletedRecords
-     *
      * @throws \Exception
      */
     public static function save(array $data, ?array $deletedRecords): void
@@ -89,7 +86,7 @@ final class Config
 
         foreach ($data as $key => $value) {
             $key = (string) $key;
-            list($configKey, $dataSource) = $repository->loadConfigByKey($key);
+            [$configKey, $dataSource] = $repository->loadConfigByKey($key);
             if ($repository->isWriteable($key, $dataSource) === true) {
                 unset($value['writeable']);
                 $repository->saveConfig($key, $value, function ($key, $data) {
@@ -108,7 +105,7 @@ final class Config
 
         if ($deletedRecords) {
             foreach ($deletedRecords as $key) {
-                list($configKey, $dataSource) = $repository->loadConfigByKey(($key));
+                [$configKey, $dataSource] = $repository->loadConfigByKey(($key));
                 if (!empty($configKey)) {
                     $repository->deleteData($key, $dataSource);
                 }
@@ -242,10 +239,6 @@ final class Config
     }
 
     /**
-     * @param string $name
-     *
-     * @return array
-     *
      * @internal
      */
     protected static function getRuntimeElementTreeConfig(string $name): array

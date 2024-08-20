@@ -183,7 +183,7 @@
 }
 
 .x-tree-view .x-grid-cell-inner-treecolumn, .pimcore_document_seo_tree .x-grid-cell-inner  {
-    padding: 3px 6px 0 0;
+    padding: 3px 6px 3px 0;
     height: 24px;
 }
 
@@ -677,12 +677,16 @@ body > .x-mask {
     z-index: 1;
 }
 
-/* Ext override for making disabled fields show tooltip on mouseover - should be fixed in 6.2.0 */
-.x-item-disabled, .x-item-disabled * {
+/* Ext override for making the text in disabled fields selectable */
+.x-item-disabled *:not(.x-mask) {
     cursor: default;
-    pointer-events: all !important; /* enables tooltip for disabled elements */
+    pointer-events: auto!important;
 }
 
+/* Ext override to allow click through not editable object-brick's mask eg. relation buttons*/
+.pimcore_objectbrick_item.x-masked .x-mask{
+    pointer-events: none;
+}
 
 /** ExtJS7 changes starting from here */
 /* base color is #5fa2dd */

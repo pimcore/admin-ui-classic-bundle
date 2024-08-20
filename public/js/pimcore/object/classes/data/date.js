@@ -124,7 +124,7 @@ pimcore.object.classes.data.date = Class.create(pimcore.object.classes.data.data
 
         if (!inEncryptedField) {
 
-            var columnTypeData = [["bigint(20)", "BIGINT"], ["date", "DATE"]];
+            var columnTypeData = [["date", "DATE"],["bigint(20)", "BIGINT"]];
 
             var columnTypeField = new Ext.form.ComboBox({
                 name: "columnType",
@@ -133,7 +133,7 @@ pimcore.object.classes.data.date = Class.create(pimcore.object.classes.data.data
                 forceSelection: true,
                 editable: false,
                 fieldLabel: t("column_type"),
-                value: datax.columnType != "bigint(20)" && datax.columnType != "date" ? 'bigint(20)' : datax.columnType,
+                value: datax.columnType != "bigint(20)" && datax.columnType != "date" ? 'date' : datax.columnType,
                 store: new Ext.data.ArrayStore({
                     fields: [
                         'id',

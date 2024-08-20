@@ -37,11 +37,6 @@ class NotificationController extends AdminAbstractController
 {
     /**
      * @Route("/recipients", name="pimcore_admin_notification_recipients", methods={"GET"})
-     *
-     * @param UserService $service
-     * @param TranslatorInterface $translator
-     *
-     * @return JsonResponse
      */
     public function recipientsAction(UserService $service, TranslatorInterface $translator): JsonResponse
     {
@@ -64,24 +59,22 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/send", name="pimcore_admin_notification_send", methods={"POST"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function sendAction(Request $request, NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications_send');
 
-        $recipientId = (int) $request->get('recipientId', 0);
+        $recipientId = $request->request->getInt('recipientId');
         $fromUser = (int) $this->getAdminUser()->getId();
-        $title = $request->get('title', '');
-        $message = $request->get('message', '');
-        $elementId = $request->get('elementId');
-        $elementType = $request->get('elementType', '');
+        $title = $request->request->get('title', '');
+        $message = $request->request->get('message', '');
+        $element = null;
+        $elementId = $request->request->getInt('elementId');
+        $elementType = $request->request->get('elementType');
 
-        $element = Service::getElementById($elementType, $elementId);
+        if ($elementId && $elementType) {
+            $element = Service::getElementById($elementType, $elementId);
+        }
 
         if (User::getById($recipientId) instanceof User) {
             $service->sendToUser($recipientId, $fromUser, $title, $message, $element);
@@ -93,22 +86,17 @@ class NotificationController extends AdminAbstractController
     }
 
     /**
-     * @Route("/find", name="pimcore_admin_notification_find")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
+     * @Route("/find", name="pimcore_admin_notification_find", methods={"GET"})
      */
     public function findAction(Request $request, NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications');
 
-        $id = (int) $request->get('id', 0);
+        $id = $request->query->getInt('id');
 
         try {
             $notification = $service->findAndMarkAsRead($id, $this->getAdminUser()->getId());
-        } catch (\UnexpectedValueException $e) {
+        } catch (\UnexpectedValueException) {
             return $this->adminJson(
                 [
                     'success' => false,
@@ -125,12 +113,7 @@ class NotificationController extends AdminAbstractController
     }
 
     /**
-     * @Route("/find-all", name="pimcore_admin_notification_findall")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
+     * @Route("/find-all", name="pimcore_admin_notification_findall", methods={"POST"})
      */
     public function findAllAction(Request $request, NotificationService $service): JsonResponse
     {
@@ -144,8 +127,8 @@ class NotificationController extends AdminAbstractController
         }
 
         $options = [
-            'offset' => $request->get('start', 0),
-            'limit' => $request->get('limit', 40),
+            'offset' => $request->request->getInt('start'),
+            'limit' => $request->request->getInt('limit', 40),
         ];
 
         $result = $service->findAll($filter, $options);
@@ -164,19 +147,14 @@ class NotificationController extends AdminAbstractController
     }
 
     /**
-     * @Route("/find-last-unread", name="pimcore_admin_notification_findlastunread")
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
+     * @Route("/find-last-unread", name="pimcore_admin_notification_findlastunread", methods={"GET"})
      */
     public function findLastUnreadAction(Request $request, NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications');
 
         $user = $this->getAdminUser();
-        $lastUpdate = (int) $request->get('lastUpdate', time());
+        $lastUpdate = $request->query->getInt('lastUpdate', time());
         $result = $service->findLastUnread((int) $user->getId(), $lastUpdate);
         $unread = $service->countAllUnread((int) $user->getId());
 
@@ -196,17 +174,12 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/mark-as-read", name="pimcore_admin_notification_markasread", methods={"PUT"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function markAsReadAction(Request $request, NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications');
 
-        $id = (int) $request->get('id', 0);
+        $id = $request->query->getInt('id');
         $service->findAndMarkAsRead($id, $this->getAdminUser()->getId());
 
         return $this->adminJson(['success' => true]);
@@ -214,17 +187,12 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/delete", name="pimcore_admin_notification_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
     public function deleteAction(Request $request, NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications');
 
-        $id = (int) $request->get('id', 0);
+        $id = $request->query->getInt('id');
         $service->delete($id, $this->getAdminUser()->getId());
 
         return $this->adminJson(['success' => true]);
@@ -232,13 +200,8 @@ class NotificationController extends AdminAbstractController
 
     /**
      * @Route("/delete-all", name="pimcore_admin_notification_deleteall", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param NotificationService $service
-     *
-     * @return JsonResponse
      */
-    public function deleteAllAction(Request $request, NotificationService $service): JsonResponse
+    public function deleteAllAction(NotificationService $service): JsonResponse
     {
         $this->checkPermission('notifications');
 

@@ -25,6 +25,7 @@ use Pimcore\Db;
 use Pimcore\Event\SystemEvents;
 use Pimcore\Helper\StopMessengerWorkersTrait;
 use Pimcore\Localization\LocaleServiceInterface;
+use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
@@ -43,6 +44,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -65,10 +67,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/display-custom-logo", name="pimcore_settings_display_custom_logo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return StreamedResponse
      */
     public function displayCustomLogoAction(Request $request): StreamedResponse
     {
@@ -102,10 +100,6 @@ class SettingsController extends AdminAbstractController
     /**
      * @Route("/upload-custom-logo", name="pimcore_admin_settings_uploadcustomlogo", methods={"POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function uploadCustomLogoAction(Request $request): JsonResponse
@@ -132,10 +126,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/delete-custom-logo", name="pimcore_admin_settings_deletecustomlogo", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteCustomLogoAction(Request $request): JsonResponse
     {
@@ -150,10 +140,6 @@ class SettingsController extends AdminAbstractController
      * Used by the predefined metadata grid
      *
      * @Route("/predefined-metadata", name="pimcore_admin_settings_metadata", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function metadataAction(Request $request): JsonResponse
     {
@@ -249,10 +235,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-predefined-metadata", name="pimcore_admin_settings_getpredefinedmetadata", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getPredefinedMetadataAction(Request $request): JsonResponse
     {
@@ -276,10 +258,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/properties", name="pimcore_admin_settings_properties", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function propertiesAction(Request $request): JsonResponse
     {
@@ -370,8 +348,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-admin-system", name="pimcore_appearance_admin_settings_get", methods={"GET"})
-     *
-     * @return JsonResponse
      */
     public function getAppearanceSystemAction(AdminConfig $config): JsonResponse
     {
@@ -387,16 +363,17 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-system", name="pimcore_admin_settings_getsystem", methods={"GET"})
-     *
-     * @param Request $request
-     * @param SystemSettingsConfig $config
-     *
-     * @return JsonResponse
      */
     public function getSystemAction(Request $request, SystemSettingsConfig $config): JsonResponse
     {
         $this->checkPermission('system_settings');
         $config = $config->getSystemSettingsConfig();
+
+        // If required languages is empty it's the same as if all langauges are required. Therefore, we
+        // need to overwrite the value with the valid languages value to have all languages required
+        if (empty($config['general']['required_languages']) === true) {
+            $config['general']['required_languages'] = $config['general']['valid_languages'];
+        }
 
         $valueArray = [
             'general' => $config['general'],
@@ -442,8 +419,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/set-appearance", name="pimcore_admin_settings_appearance_set", methods={"PUT"})
-     *
-     *
      */
     public function setAppearanceSystemAction(
         Request $request,
@@ -478,8 +453,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/set-system", name="pimcore_admin_settings_setsystem", methods={"PUT"})
-     *
-     *
      */
     public function setSystemAction(
         Request $request,
@@ -514,15 +487,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/clear-cache", name="pimcore_admin_settings_clearcache", methods={"DELETE"})
-     *
-     * @param Request $request
-     * @param KernelInterface $kernel
-     * @param EventDispatcherInterface $eventDispatcher
-     * @param CoreCacheHandler $cache
-     * @param Filesystem $filesystem
-     * @param CacheClearer $symfonyCacheClearer
-     *
-     * @return JsonResponse
      */
     public function clearCacheAction(
         Request $request,
@@ -635,10 +599,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/clear-output-cache", name="pimcore_admin_settings_clearoutputcache", methods={"DELETE"})
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function clearOutputCacheAction(EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -657,10 +617,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/clear-temporary-files", name="pimcore_admin_settings_cleartemporaryfiles", methods={"DELETE"})
-     *
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function clearTemporaryFilesAction(EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -682,10 +638,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-available-admin-languages", name="pimcore_admin_settings_getavailableadminlanguages", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAvailableAdminLanguagesAction(Request $request): JsonResponse
     {
@@ -711,13 +663,19 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-available-sites", name="pimcore_admin_settings_getavailablesites", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAvailableSitesAction(Request $request): JsonResponse
     {
+        try {
+            // we need to check documents permission for listing purposes in sites ext model & url-slugs
+            $this->checkPermission('documents');
+        } catch (AccessDeniedHttpException $e) {
+            Logger::log('[Startup] Sites are not loaded as "documents" permission is missing');
+
+            //return empty string to avoid error on startup
+            return $this->adminJson([]);
+        }
+
         $excludeMainSite = $request->get('excludeMainSite');
 
         $sitesList = new Model\Site\Listing();
@@ -755,10 +713,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-available-countries", name="pimcore_admin_settings_getavailablecountries", methods={"GET"})
-     *
-     * @param LocaleServiceInterface $localeService
-     *
-     * @return JsonResponse
      */
     public function getAvailableCountriesAction(LocaleServiceInterface $localeService): JsonResponse
     {
@@ -783,10 +737,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-adapter-check", name="pimcore_admin_settings_thumbnailadaptercheck", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function thumbnailAdapterCheckAction(Request $request, TranslatorInterface $translator): Response
     {
@@ -804,8 +754,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-tree", name="pimcore_admin_settings_thumbnailtree", methods={"GET", "POST"})
-     *
-     * @return JsonResponse
      */
     public function thumbnailTreeAction(): JsonResponse
     {
@@ -860,8 +808,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-downloadable", name="pimcore_admin_settings_thumbnaildownloadable", methods={"GET"})
-     *
-     * @return JsonResponse
      */
     public function thumbnailDownloadableAction(): JsonResponse
     {
@@ -884,10 +830,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-add", name="pimcore_admin_settings_thumbnailadd", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function thumbnailAddAction(Request $request): JsonResponse
     {
@@ -918,10 +860,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-delete", name="pimcore_admin_settings_thumbnaildelete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function thumbnailDeleteAction(Request $request): JsonResponse
     {
@@ -940,10 +878,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-get", name="pimcore_admin_settings_thumbnailget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function thumbnailGetAction(Request $request): JsonResponse
     {
@@ -958,10 +892,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/thumbnail-update", name="pimcore_admin_settings_thumbnailupdate", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function thumbnailUpdateAction(Request $request): JsonResponse
     {
@@ -1014,11 +944,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-adapter-check", name="pimcore_admin_settings_videothumbnailadaptercheck", methods={"GET"})
-     *
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     *
-     * @return Response
      */
     public function videoThumbnailAdapterCheckAction(Request $request, TranslatorInterface $translator): Response
     {
@@ -1035,8 +960,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-tree", name="pimcore_admin_settings_videothumbnailtree", methods={"GET", "POST"})
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailTreeAction(): JsonResponse
     {
@@ -1091,8 +1014,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-list", name="pimcore_admin_settings_videothumbnail_list", methods={"GET"})
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailListAction(): JsonResponse
     {
@@ -1113,10 +1034,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-add", name="pimcore_admin_settings_videothumbnailadd", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailAddAction(Request $request): JsonResponse
     {
@@ -1147,10 +1064,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-delete", name="pimcore_admin_settings_videothumbnaildelete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailDeleteAction(Request $request): JsonResponse
     {
@@ -1169,10 +1082,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-get", name="pimcore_admin_settings_videothumbnailget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailGetAction(Request $request): JsonResponse
     {
@@ -1188,10 +1097,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/video-thumbnail-update", name="pimcore_admin_settings_videothumbnailupdate", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function videoThumbnailUpdateAction(Request $request): JsonResponse
     {
@@ -1240,10 +1145,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/website-settings", name="pimcore_admin_settings_websitesettings", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1375,10 +1276,6 @@ class SettingsController extends AdminAbstractController
 
     /**
      * @Route("/get-available-algorithms", name="pimcore_admin_settings_getavailablealgorithms", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getAvailableAlgorithmsAction(Request $request): JsonResponse
     {
@@ -1392,7 +1289,7 @@ class SettingsController extends AdminAbstractController
         $algorithms = hash_algos();
         foreach ($algorithms as $algorithm) {
             $options[] = [
-                'key' => $algorithm,
+                'key' => $algorithm . ' (' . $this->translator->trans('deprecated', [], 'admin') . ')',
                 'value' => $algorithm,
             ];
         }
@@ -1406,9 +1303,6 @@ class SettingsController extends AdminAbstractController
      * deleteViews
      * delete views for localized fields when languages are removed to
      * prevent mysql errors
-     *
-     * @param string $language
-     * @param string $dbName
      */
     protected function deleteViews(string $language, string $dbName): void
     {

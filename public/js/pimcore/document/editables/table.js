@@ -20,7 +20,7 @@ pimcore.document.editables.table = Class.create(pimcore.document.editable, {
     initialize: function($super, id, name, config, data, inherited) {
         $super(id, name, config, data, inherited);
 
-        if (!data) {
+        if (!data || data.length === 0) {
             data = [
                 [" "]
             ];
