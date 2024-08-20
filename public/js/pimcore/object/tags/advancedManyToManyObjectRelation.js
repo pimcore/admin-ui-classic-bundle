@@ -141,7 +141,13 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
 
                 let fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.flex = 1;
+                let columnWidth = this.getColumnWidth(visibleFields[i]);
+                if (columnWidth > 0) {
+                    fc.width = columnWidth;
+                } else {
+                    fc.flex = 1;
+                }
+
                 fc.hidden = false;
                 fc.layout = field;
                 fc.editor = null;
@@ -165,11 +171,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             let width = 100;
             if (this.fieldConfig.columns[i].width) {
                 width = this.fieldConfig.columns[i].width;
+            } else {
+                let columnWidth = this.getColumnWidth(this.fieldConfig.columns[i].key);
+                if(columnWidth > 0) {
+                    width = columnWidth;
+                }
             }
 
             let cellEditor = null;
             let renderer = null;
-            let listeners = null;
+            let listeners = {};
 
         if (this.fieldConfig.columns[i].type == "number") {
             if(!readOnly) {
@@ -253,7 +264,7 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                 }.bind(this);
 
                 listeners = {
-                    "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type)
+                    "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type),
                 };
 
                 if (readOnly) {
@@ -282,6 +293,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             columns.push(columnConfig);
         }
 
+        columns = Ext.Array.map(columns, function(column) {
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         if (!readOnly) {
             columns.push({
@@ -631,4 +652,20 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
         return this.getValue();
     },
 
+    getColumnWidthLocalStorageKey: function(column) {
+        let context = this.context;
+        delete context.objectId;
+        context.column = column;
+
+        return Object.values(context).join('_');
+    },
+
+    getColumnWidth: function(column) {
+        let width = parseInt(localStorage.getItem(this.getColumnWidthLocalStorageKey(column)));
+
+        if(width > 0) {
+            return width;
+        }
+        return null;
+    }
 });
