@@ -449,7 +449,8 @@ conversionOffset: "Konverzi\xF3s Eltol\xE1s"
 default_unit: "Alap\xE9rtelmezett egys\xE9g"
 min_max_times: "Min / Max Id\u0151k"
 reset: "Vissza\xE1ll\xEDt\xE1s"
-password_hint: "A jelsz\u00F3 nem felel meg a krit\u00E9riumoknak"
+password_hint: "A jelsz\xF3 legal\xE1bb 10 karaktert, egy kisbet\u0171t, egy nagybet\u0171t,
+  egy sz\xE1mot \xE9s egy speci\xE1lis karaktert kell tartalmaznia."
 editor_settings: "Szerkeszt\u0151 be\xE1ll\xEDt\xE1sok"
 language_order: Nyelvi sorrend
 preview_width: "El\u0151n\xE9zet sz\xE9less\xE9ge"

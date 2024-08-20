@@ -444,7 +444,8 @@ conversionOffset: Conversion Offset
 default_unit: "Domy\u015Blna Jednostka"
 min_max_times: Min / Max Times
 reset: Reset
-password_hint: "Has\u0142o nie spe\u0142nia kryteri\u00F3w"
+password_hint: "Has\u0142o musi zawiera\u0107 co najmniej 10 znak\xF3w, w tym ma\u0142a
+  litera, du\u017Ca litera, cyfra oraz znak specjalny!"
 editor_settings: Ustawienia edytora
 language_order: "Kolejno\u015B\u0107 j\u0119zyk\xF3w"
 preview_width: "Szeroko\u015B\u0107 podgl\u0105du"

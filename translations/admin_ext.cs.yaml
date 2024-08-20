@@ -447,7 +447,9 @@ conversionOffset: "Konverzn\xED offset"
 default_unit: "V\xFDchoz\xED jednotka"
 min_max_times: "Min / Max po\u010Det"
 reset: Reset
-passwort_hint: "Heslo nespl\u0148uje krit\u00E9ria"
+password_hint: "Heslo mus\xED obsahovat minim\xE1ln\u011B 10 znak\u016F, jedno mal\xE9
+  p\xEDsmeno, jedno velk\xE9 p\xEDsmeno, jednu \u010D\xEDslici a jeden speci\xE1ln\xED
+  znak!"
 editor_settings: "Nastaven\xED editoru"
 language_order: "Po\u0159ad\xED jazyk\u016F"
 preview_width: "\u0160\xED\u0159ka n\xE1hledu"

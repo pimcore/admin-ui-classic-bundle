@@ -432,7 +432,7 @@ conversionOffset: Conversion Offset
 default_unit: Standardenhet
 min_max_times: Min / Max Times
 reset: "\xC5terst\xE4ll"
-password_hint: "L\u00F6senordet uppfyller inte kriterierna"
+password_hint: "L\xF6senordet m\xE5ste inneh\xE5lla minst 10 tecken!"
 editor_settings: Editor Settings
 language_order: Language Order
 preview_width: Preview Width

@@ -447,7 +447,9 @@ conversionOffset: "Konverzn\xFD offset"
 default_unit: "Defaultn\xE1 jednotka"
 min_max_times: "Min / Max po\u010Det"
 reset: Reset
-password_hint: "Heslo nesp\u013A\u0148a krit\u00E9ri\u00E1"
+password_hint: "Heslo mus\xED obsahova\u0165 minim\xE1lne 10 znakov, jedno mal\xE9
+  p\xEDsmeno, jedno ve\u013Ek\xE9 p\xEDsmeno, jednu \u010D\xEDslicu a jeden \u0161peci\xE1lny
+  znak!"
 editor_settings: Nastavenia editoru
 language_order: Poradie jazykov
 preview_width: "\u0160\xEDrka n\xE1h\u013Eadu"

@@ -453,7 +453,7 @@ conversionOffset: Offset Conversion
 default_unit: "Unit\xE9 par d\xE9faut"
 min_max_times: Min / Max Temps
 reset: "Remise \xE0 z\xE9ro"
-password_hint: "Le mot de passe ne r\u00E9pond pas aux crit\u00E8res"
+password_hint: "Le mot de passe doit contenir au moins 10 caract\xE8res !"
 editor_settings: "R\xE9glages Editeur"
 language_order: Ordre des langages
 preview_width: "Pr\xE9visualisation de la largeur"
