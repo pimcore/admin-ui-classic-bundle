@@ -2,7 +2,7 @@
 invert_colors_on_login_screen: Invert Colors on Login Screen
 encrypt_data: Encrypt Data
 encrypt_data_description: Data-at-Rest/Tablespace Encryption needs to be enabled on
-  your Database Server
+    your Database Server
 many_to_one_relation: Many-To-One Relation
 many_to_many_relation: Many-To-Many Relation
 many_to_many_object_relation: Many-To-Many Object Relation
@@ -16,9 +16,9 @@ admin_interface: admin_interface
 admin_interface_background: Admin Interface Background
 icon_library: Icon Library
 system_performance_stability_warning: Please do not perform this action unless you
-  are sure what you are doing.<br /><b style='color:red'>This action can have a major
-  impact onto the stability and performance of the entire system, and may causes an
-  overload or complete crash of the server!</b><br /><br />Are you sure?
+    are sure what you are doing.<br /><b style='color:red'>This action can have a major
+    impact onto the stability and performance of the entire system, and may causes an
+    overload or complete crash of the server!</b><br /><br />Are you sure?
 login_screen: Log in scherm
 color_description: color_description
 colors: kleuren
@@ -38,10 +38,10 @@ ratio: Verhouding
 decimal_size: Decimaal maat
 decimal_precision: Decimaalnauwkeurigheid
 decimal_mysql_type_info: Indien decimaal of precisie gespecificeerd zijn, wordt <code>DECIMAL(decimalSize,
-  decimalPrecision)</code> als MySQL type gebruikt. Standaard waardes indien ontbrekend
-  zijn <code>64</code> als formaat en <code>0<code> as precisie.
+    decimalPrecision)</code> als MySQL type gebruikt. Standaard waardes indien ontbrekend
+    zijn <code>64</code> als formaat en <code>0<code> as precisie.
 decimal_mysql_type_naming_warning: Let op, in MySQL heeft <code>decimalSize</code>
-  de benaming <code>precision</code> en <code>decimalPrecision</code> heet <code>scale</code>.
+    de benaming <code>precision</code> en <code>decimalPrecision</code> heet <code>scale</code>.
 only_unsigned: Uitsluitend niet toegewezen
 integer: Geheel getal
 static: Static
@@ -55,13 +55,13 @@ good: Goed
 best: Beste
 1x1_pixel_placeholder: 1x1 Pixel Placeholder
 1x1_pixel_placeholder_description: Just returns a 1x1 pixel GIF base64 encoded, in
-  case you don't want to display an image for a certain condition
+    case you don't want to display an image for a certain condition
 average: Gemiddelde
 enter_media_query: Please enter a valid CSS media query
 add_media_query: Media Query Toevoegen
 add_media_segment: Add Media Segment
 enter_media_segment: Please enter a valid bitrate(e.g. 400k, 1500k, 1M) for video
-  segment
+    segment
 dash_media_message: This option generates a single .mpd file with media segments(bitrates)
 specific_settings: Specifieke instellingen
 login_as_this_user_description: 'De volgende link is een tijdelijke link die je toestaat
@@ -70,7 +70,7 @@ login_as_this_user: Inloggen als deze gebruiker in een andere browser
 allowed_types_to_create: Toegestane types om aan te maken
 defaults_to_all: Standaard naar alles
 use_different_email_delivery_settings: Gebruik verschillende e-mailafleverinstellingen
-  voor nieuwsbrieven
+    voor nieuwsbrieven
 action_scope: Actie bereik
 hit: Hit
 session: Sessie
@@ -105,13 +105,13 @@ redirects_import_error_line: Regel
 gender: Geslacht
 use_original_tiff: Gebruik originele TIFF (alleen voor printen)
 use_original_tiff_description: Gebruik originele TIFF indien het bronformaat TIFF
-  is -> niet wijzigen
+    is -> niet wijzigen
 port: Poort
 delivery_settings: Bezorgingsinstellingen
 generate_previews: Genereer previews
 invalid_class_name: Ongeldige class naam
 redirect_unknown_domains_to_main_domain: Verwijs onbekende domeinen (die niet gebruikt
-  worden voor sites en redirects, ...) door naar het hoofddomein (bovenaan)
+    worden voor sites en redirects, ...) door naar het hoofddomein (bovenaan)
 hours: Uren
 minutes: Minuten
 seconds: Seconden
@@ -136,7 +136,7 @@ save_order: Order opslaan
 debug_admin_translations: Debug adminvertalingen (staan tussen +)
 short_url: Verkorte URL
 width_and_height_must_be_an_even_number: hoogte and breedte moeten een even getal
-  zijn
+    zijn
 this_filter_has_no_settings: this filter has no settings
 mute: Mute
 effect: Effect
@@ -161,7 +161,7 @@ beginning: Start
 element_css_selector: Element (CSS selector)
 insert_position: invoeg positie
 robots_txt_exists_on_filesystem: De robots.txt bestaat al in de document-root op het
-  systeem
+    systeem
 save_error: Kan gegevens niet opslaan
 all_roles: Alle rollen
 add_role: Rol toevoegen
@@ -172,13 +172,13 @@ video_bitrate: Video Bitrate (kB/s)
 audio_bitrate: Audio Bitrate (kB/s)
 rasterize_svg: Rasterize SVGs
 rasterize_svg_info_text: SVGs get automatically rasterized when a transformation other
-  than resize or scale by width/height is used.
+    than resize or scale by width/height is used.
 preserve_animation: Preserve animations for GIF
 preserve_animation_info_text: 'Supported transformations are: Frame, Cover, Contain,
   Resize, ScaleByWidth, ScaleByHeight'
 valid_languages_frontend_description: Deze instelling wordt gebruikt om in documenten
-  de inhoudstaal te bepalen (eigenschappen tab) en voor objecten in taalafhankelijk
-  velden,... simpelweg overal waar de editor een inhoudstaal kan kiezen.
+    de inhoudstaal te bepalen (eigenschappen tab) en voor objecten in taalafhankelijk
+    velden,... simpelweg overal waar de editor een inhoudstaal kan kiezen.
 delete_language_note: 'Note: Removing language from the list will not delete its respective
   data. Please use console command ''pimcore:locale:delete-unused-tables'' for cleanup.'
 maximum_items: max. items
@@ -198,7 +198,7 @@ applymask: Masker toepassen
 addoverlay: Toplaag toevoegen
 transformations: Transformaties
 you_can_drag_the_tabs_to_reorder_the_media_queries: You can drag the tabs to reorder
-  the priority of the media queries
+    the priority of the media queries
 frame: Frame
 setbackgroundcolor: Achtergrondkleur instellen
 setbackgroundimage: Achtergrondafbeelding instellen
@@ -247,15 +247,15 @@ geopolygon: Geografische veelhoek
 geopolyline: Geographic Polyline
 geobounds: Geografische begrenzing
 sure_to_install_unstable_update: Weet u zeker dat u een mogelijk niet werkende versie
-  wilt installeren?
+    wilt installeren?
 multiselect: Multiselectie
 handler: Verwerker
 invisible: Onzichtbaar
 only_configured_languages: Toon alleen de talen die in de systeeminstellingen zijn
-  geconfigureerd
+    geconfigureerd
 permissions: Rechten
 you_are_not_allowed_to_manage_admin_users: Geen bevoegdheid om admin gebruikers te
-  beheren
+    beheren
 content_type: Content Type
 new_property: Eigenschap nieuw
 all_users: Alle gebruikers
@@ -340,19 +340,19 @@ email_debug_addresses: Debug e-mailadressen
 user_object_dependencies_description: 'De gebruiker heeft verwijzingen in de volgende
   objecten:'
 user_admin_description: Beheerders krijgen niet alleen automatisch alle hieronder
-  genoemde machtigingen, ze zijn ook toegestaan om alle acties op documenten, assets
-  en objecten uit te voeren zonder enige beperkingen. Bovendien kunnen beheerders
-  toegang krijgen tot pimcore assets door gebruik van WebDAV en de pimcore SOAP API
-  (op voorwaarde dat toegang tot WebDAV en webservices zijn ingeschakeld en geconfigureerd
-  in de systeeminstellingen).
+    genoemde machtigingen, ze zijn ook toegestaan om alle acties op documenten, assets
+    en objecten uit te voeren zonder enige beperkingen. Bovendien kunnen beheerders
+    toegang krijgen tot pimcore assets door gebruik van WebDAV en de pimcore SOAP API
+    (op voorwaarde dat toegang tot WebDAV en webservices zijn ingeschakeld en geconfigureerd
+    in de systeeminstellingen).
 user_apikey_description: API key is verplicht voor webservices-toegang door deze gebruiker
 apikey: API key
 lazy_loading: Gepland laden
 non_owner_description: Non-owner objecten vertegenwoordigen relaties naar een ander
-  object, zoals objecten dat ook doen. Het verschil is dat een non-owner objectveld
-  niet de eigenaar is van de relatie-gegevens, maar slechts een view van de gegevens
-  van andere objecten. Kies aub de eigenaar en veldnaam waar de gegevens oorspronkelijk
-  zijn opgeslagen.
+    object, zoals objecten dat ook doen. Het verschil is dat een non-owner objectveld
+    niet de eigenaar is van de relatie-gegevens, maar slechts een view van de gegevens
+    van andere objecten. Kies aub de eigenaar en veldnaam waar de gegevens oorspronkelijk
+    zijn opgeslagen.
 allow_variants: Varianten toestaan
 show_variants: Variants tonen in boom
 allowed_class_field: Toegestane class/veld
@@ -367,7 +367,7 @@ reserved_field_names_error: 'De volgende gereserveerde veldnamen kunnen niet wor
   gebruikt:'
 use_current_date: Gebruik huidige datum
 inherited_default_value_warning: The default value is used if either inheritance is
-  deactivated or if the parent value is empty
+    deactivated or if the parent value is empty
 restrict_selection_to: Beperk selectie tot
 maximum_tabs: Maximaal aantal tabs
 algorithm: Algoritme
@@ -396,7 +396,7 @@ predefined_metadata_definitions: vooraf gedefinieerde metadata definities
 default_layout: Als standaard layout gebruiken
 hide_edit_image_tab: Tabblad afbeelding bewerken verbergen
 are_you_sure_recursive: Er zijn onderliggende niveaus die ook verwijderd zullen worden!
-  Ben je zeker?
+    Ben je zeker?
 classificationstore_group_definition: Groepen
 classificationstore_group_limitation: Max. group items
 classificationstore_mbx_entergroup_title: Nieuwe groep
@@ -414,7 +414,7 @@ allowed_group_ids: toegestane groep Ids (csv)
 key_id: sleutel ID
 sorter: sorteren op
 classificationstore_tooltip_sorter: items met een lagere waarde zullen eerst getoond
-  worden
+    worden
 classificationstore_collection_definition: groep colecties
 group_id: groep ID
 collection: collectie
@@ -440,7 +440,7 @@ default_unit: Standaard eenheid
 min_max_times: Min / Max Tijden
 reset: Wissen
 password_hint: Wachtwoord moet minimum 10 karakters, 1 kleine letter, 1 hoofdletter,
-1 nummer en 1 speciaal teken bevatten.
+    1 nummer en 1 speciaal teken bevatten.
 editor_settings: Editor instellingen
 language_order: Taal volgorde
 preview_width: Breedte voorvertoning
@@ -455,16 +455,16 @@ classificationstore_mbx_enterstore_prompt: Geef winkel
 classificationstore_error_addstore_msg: fout bij het aanmaken van een store
 search_for_key: zoek sleutel
 width_explanation: The width of this component. A numeric value will be interpreted
-  as the number of pixels; a string value will be treated as a CSS value with units.
+    as the number of pixels; a string value will be treated as a CSS value with units.
 height_explanation: The height of this component. A numeric value will be interpreted
-  as the number of pixels; a string value will be treated as a CSS value with units.
+    as the number of pixels; a string value will be treated as a CSS value with units.
 disable_tree_preview: boomstructuur voorvertoning uitschakelen
 PHP Class Name: naam PHP klasse
 editor_configuration: Editor instellingen
 allow_dirty_close: 'Deactiveer waarschuwing voor niet-opgeslagen inhoud '
 high_resolution_info_text: Vb. Voor Web-to-Print of op overal waar srcset niet mogelijk/voldoende
-  is, niet noodzakelijk voor gewone web-thumbnails welke automatisch een srcset attribuut
-  toegewezen krijgen met 1x en 2x
+    is, niet noodzakelijk voor gewone web-thumbnails welke automatisch een srcset attribuut
+    toegewezen krijgen met 1x en 2x
 advanced_settings: Geavanceerde instellingen
 preserve_meta_data: Meta data behouden (niet verwijderen)
 preserve_color: Kleur behouden (profiel, ruimte)
@@ -494,7 +494,7 @@ analyze: analyseren
 link_generator_reference: link_generator_reference
 preview_generator_reference: Preview Generator Class or Service Name
 unique_qtip: Unieke beperking zal toegevoegd worden. Het is niet nodig om 'index"'
-  ook aan te duiden.
+    ook aan te duiden.
 temporarily_disabled: tijdelijk uitgeschakeld
 enabled_in_editmode: ingeschakeld in bewerkmodus
 boolean_select: Boolean selecteren
@@ -525,7 +525,7 @@ mail_settings_incomplete: De e-mailinstellingen zijn incompleet
 bulk_export: Bulk export
 bulk_import: Bulk import
 warning_bulk_import: De bulk import zal je klasse/veldcollectie/object bouwsteen definities
-  overschrijven zonder waarschuwing! Ben je zeker?
+    overschrijven zonder waarschuwing! Ben je zeker?
 environment: Omgeving
 local: Lokaal
 example: Voorbeeld
@@ -548,7 +548,7 @@ order: Volgorde
 filter_type: Filtertype
 generate_page_previews: Paginavoorbeelden genereren
 success_generating_previews: Generating page previews in the background. Please reload
-  the admin interface after some time to take effect.
+    the admin interface after some time to take effect.
 error_generating_previews: Error generating page previews.
 custom_report_chart_settings: Grafiekinstellingen
 custom_report_charttype: Grafiektype
@@ -571,7 +571,7 @@ style: Stijl
 foreground_color: Voorgrond kleur
 background_color: Achtergrond kleur
 use_current_player_position_as_preview: Gebruik de huidige positie van de speler als
-  voorbeeldweergave
+    voorbeeldweergave
 system_infos_and_tools: Systeem info & Tools
 system_requirements_check: Systeemvereisten check
 server_info: Server informatie
@@ -608,7 +608,7 @@ revision: Versie
 objectbricks: Objectsteen
 class_definitions: Klasse-definities
 custom_layout_changed: De layout is in tussentijd gewijzigd. Herlaad de layout en
-  probeer het opnieuw.
+    probeer het opnieuw.
 rule_violation: regel validatie
 emails: E-mails
 classification_store: Classification Store
@@ -664,14 +664,14 @@ max_characters: Maximum Characters
 sites: Sites
 show_hide_areablock: Show or Hide on frontend
 asset_type_changed: Asset type was changed in the meantime. Please reload the admin
-  interface to see the latest changes.
+    interface to see the latest changes.
 numeric_range: Numeric Range
 date_range: Date Range
 quantityValueRange_field: Quantity Value Range
 allowed_targets: Allowed Targets
 disabled_fields: Disabled Fields
 predefined_metadata_definitions_error_name_exists_msg: Definition with this name already
-  exists
+    exists
 quantityValueUnits: Quantity Value Units
 numeric: Number
 structuredtable_type_number: Number
