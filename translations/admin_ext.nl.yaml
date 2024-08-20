@@ -440,7 +440,7 @@ default_unit: Standaard eenheid
 min_max_times: Min / Max Tijden
 reset: Wissen
 password_hint: Wachtwoord moet minimum 10 karakters, 1 kleine letter, 1 hoofdletter,
-    1 nummer en 1 speciaal teken bevatten.
+1 nummer en 1 speciaal teken bevatten.
 editor_settings: Editor instellingen
 language_order: Taal volgorde
 preview_width: Breedte voorvertoning
