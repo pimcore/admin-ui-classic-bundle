@@ -159,7 +159,7 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
 
                 let filterType = 'list';
 
-                if (fc.layout.layout.fieldtype === 'checkbox') {
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
                     filterType = 'boolean';
                 }
                 fc.filter = {
@@ -181,14 +181,14 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             let listeners = null;
 
             let filterType = 'list';
-        if (this.fieldConfig.columns[i].type == "number") {
-            if(!readOnly) {
-            cellEditor = function() {
-                    return new Ext.form.NumberField({});
-                }.bind();
-            }
+            if (this.fieldConfig.columns[i].type == "number") {
+                if(!readOnly) {
+                cellEditor = function() {
+                        return new Ext.form.NumberField({});
+                    }.bind();
+                }
 
-            renderer = Ext.util.Format.numberRenderer();
+                renderer = Ext.util.Format.numberRenderer();
             } else if (this.fieldConfig.columns[i].type == "text" && !readOnly) {
             cellEditor = function() {
                     return new Ext.form.TextField({});

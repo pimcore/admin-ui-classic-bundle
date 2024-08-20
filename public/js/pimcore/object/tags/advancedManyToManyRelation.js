@@ -103,47 +103,6 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
     },
 
 
-    addDefaultColumn: function (columnDefinition) {
-        let field = {
-          key: columnDefinition.dataIndex,
-          label: columnDefinition.title == "fullpath" ? t("reference") : columnDefinition.text,
-          layout: columnDefinition,
-          position: i,
-          type: columnDefinition.type
-        };
-
-        let fc = pimcore.object.tags[columnDefinition.type].prototype.getGridColumnConfig(field);
-
-        fc.width = 100;
-        fc.flex = 100;
-        fc.hidden = false;
-        fc.layout = field;
-        fc.editor = null;
-        fc.sortable = false;
-
-        if (fc.layout.key === "fullpath") {
-          fc.renderer = this.fullPathRenderCheck.bind(this);
-        } else if (fc.layout.layout.fieldtype == 'select'
-          || fc.layout.layout.fieldtype == 'multiselect'
-          || fc.layout.layout.fieldtype == 'booleanSelect'
-        ) {
-          fc.layout.layout.options.forEach(option => {
-            option.key = t(option.key);
-          });
-        }
-
-        let filterType = 'list';
-
-        if (fc.layout.layout.fieldtype === 'checkbox') {
-          filterType = 'boolean';
-        }
-        fc.filter = {
-          type: filterType
-        }
-
-        return fc;
-    },
-
     createLayout: function (readOnly) {
         var autoHeight = false;
         if (!this.fieldConfig.height) {
@@ -153,12 +112,12 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
         var i;
 
         var columns = [];
-
-        columns.push(this.addDefaultColumn({text: 'ID', dataIndex: 'id', type: 'input', width: 50}));
-        columns.push(this.addDefaultColumn({text: t('reference'), dataIndex: 'path', type: 'input', flex: 1, renderer: this.fullPathRenderCheck.bind(this)}));
+        columns.push({text: 'ID', dataIndex: 'id', width: 50});
+        columns.push({text: t('reference'), dataIndex: 'path', flex: 1, renderer: this.fullPathRenderCheck.bind(this)});
 
         var visibleFieldsCount = columns.length;
 
+        var filterType = 'list';
         for (i = 0; i < this.fieldConfig.columns.length; i++) {
             var width = 100;
             if (this.fieldConfig.columns[i].width) {
@@ -266,11 +225,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                     }));
                     continue;
                 }
-            } else if (this.fieldConfig.columns[i].type === "checkbox" ) {
-                filterType = 'boolean';
             }
-
-            filterType = 'boolean';
 
             var columnConfig = {
                 text: t(this.fieldConfig.columns[i].label),
@@ -290,8 +245,10 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             columns.push(columnConfig);
         }
 
-        columns.push(this.addDefaultColumn({text: t("type"), dataIndex: 'type', type: 'input', width: 100}));
-        columns.push(this.addDefaultColumn({text: t("subtype"), dataIndex: 'subtype', type: 'input', width: 100}));
+
+        columns.push({text: t("type"), dataIndex: 'type', width: 100});
+        columns.push({text: t("subtype"), dataIndex: 'subtype', width: 100});
+
 
         if (!readOnly) {
             columns.push({
