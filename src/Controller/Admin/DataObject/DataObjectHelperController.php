@@ -975,7 +975,7 @@ class DataObjectHelperController extends AdminAbstractController
             $sharedUserIds = $metadata['sharedUserIds'];
 
             if ($sharedUserIds) {
-                $sharedUsers = explode(',', $sharedUserIds);
+                $sharedUsers = array_map('intval', explode(',', $sharedUserIds));
             }
         }
 
@@ -991,7 +991,7 @@ class DataObjectHelperController extends AdminAbstractController
         foreach ($sharedUsers as $id) {
             $global    = true;
             $favourite = GridConfigFavourite::getByOwnerAndClassAndObjectId(
-                (int) $id,
+                $id,
                 $gridConfig->getClassId(),
                 $objectId,
                 $gridConfig->getSearchType()
@@ -1008,7 +1008,7 @@ class DataObjectHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the favourite
-                    if ((int) $favouriteGridConfig->getOwnerId() === (int) $id) {
+                    if ((int) $favouriteGridConfig->getOwnerId() === $id) {
                         continue;
                     }
                 }
@@ -1016,7 +1016,7 @@ class DataObjectHelperController extends AdminAbstractController
 
             // Check if the user has already a global favourite then we do not save the favourite as global
             $favourite = GridConfigFavourite::getByOwnerAndClassAndObjectId(
-                (int) $id,
+                $id,
                 $gridConfig->getClassId(),
                 0,
                 $gridConfig->getSearchType()
@@ -1032,7 +1032,7 @@ class DataObjectHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the global favourite
-                    if ($favouriteGridConfig->getOwnerId() === (int) $id) {
+                    if ($favouriteGridConfig->getOwnerId() === $id) {
                         $global = false;
                     }
                 }
@@ -1042,7 +1042,7 @@ class DataObjectHelperController extends AdminAbstractController
             $favourite->setGridConfigId($gridConfig->getId());
             $favourite->setClassId($gridConfig->getClassId());
             $favourite->setObjectId($objectId);
-            $favourite->setOwnerId((int) $id);
+            $favourite->setOwnerId($id);
             $favourite->setType($gridConfig->getType());
             $favourite->setSearchType($gridConfig->getSearchType());
             $favourite->save();
