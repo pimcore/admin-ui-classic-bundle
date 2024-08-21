@@ -636,7 +636,7 @@ class AssetHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the favourite
-                    if ((int) $favouriteGridConfig->getOwnerId() === $id) {
+                    if ($favouriteGridConfig->getOwnerId() === $id) {
                         continue;
                     }
                 }
