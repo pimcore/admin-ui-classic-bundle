@@ -117,7 +117,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
         var visibleFieldsCount = columns.length;
 
-        var filterType = 'list';
+        let filterType = 'list';
         for (i = 0; i < this.fieldConfig.columns.length; i++) {
             var width = 100;
             if (this.fieldConfig.columns[i].width) {
