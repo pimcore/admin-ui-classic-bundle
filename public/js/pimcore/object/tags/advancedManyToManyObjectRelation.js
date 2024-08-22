@@ -264,7 +264,7 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                 }.bind(this);
 
                 listeners = {
-                    "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type),
+                    "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type)
                 };
 
                 if (readOnly) {
@@ -650,22 +650,5 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
 
     getCellEditValue: function () {
         return this.getValue();
-    },
-
-    getColumnWidthLocalStorageKey: function(column) {
-        let context = this.context;
-        delete context.objectId;
-        context.column = column;
-
-        return Object.values(context).join('_');
-    },
-
-    getColumnWidth: function(column) {
-        let width = parseInt(localStorage.getItem(this.getColumnWidthLocalStorageKey(column)));
-
-        if(width > 0) {
-            return width;
-        }
-        return null;
     }
 });

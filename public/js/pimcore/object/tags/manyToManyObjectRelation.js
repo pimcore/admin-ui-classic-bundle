@@ -371,13 +371,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
 
                 var fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                let columnWidth = this.getColumnWidth(visibleFields[i]);
-                if (columnWidth > 0) {
-                    fc.width = columnWidth;
-                } else {
-                    fc.flex = 1;
-                }
-
+                fc.flex = 100;
                 fc.hidden = false;
                 fc.layout = field;
                 fc.editor = null;
@@ -399,6 +393,15 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
         }
 
         columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if (typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
             if(typeof column.listeners === "undefined") {
                 column.listeners = {};
             }
@@ -1026,20 +1029,4 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
         return newItem;
     },
 
-    getColumnWidthLocalStorageKey: function(column) {
-        let context = this.context;
-        delete context.objectId;
-        context.column = column;
-
-        return Object.values(context).join('_');
-    },
-
-    getColumnWidth: function(column) {
-        let width = parseInt(localStorage.getItem(this.getColumnWidthLocalStorageKey(column)));
-
-        if(width > 0) {
-           return width;
-        }
-        return null;
-    }
 });

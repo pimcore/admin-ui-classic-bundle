@@ -205,5 +205,22 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             subtype = "object";
         }
         pimcore.helpers.openElement(record.get('id'), record.get('type'), subtype);
+    },
+
+    getColumnWidthLocalStorageKey: function (column) {
+        let context = this.context;
+        delete context.objectId;
+        context.column = column;
+
+        return Object.values(context).join('_');
+    },
+
+    getColumnWidth: function (column) {
+        let width = parseInt(localStorage.getItem(this.getColumnWidthLocalStorageKey(column)));
+
+        if (width > 0) {
+            return width;
+        }
+        return null;
     }
 });

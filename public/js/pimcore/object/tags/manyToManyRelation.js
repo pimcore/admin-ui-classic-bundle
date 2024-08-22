@@ -438,21 +438,17 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
     getVisibleColumns: function () {
         var columns = [
             {text: 'ID', dataIndex: 'id', width: 50},
-            {text: t("reference"), dataIndex: 'fullpath', renderer:this.fullPathRenderCheck.bind(this)},
+            {text: t("reference"), dataIndex: 'fullpath', flex: 200, renderer:this.fullPathRenderCheck.bind(this)},
             {text: t("type"), dataIndex: 'type', width: 100},
             {text: t("subtype"), dataIndex: 'subtype', width: 100},
         ];
 
-        for (i = 0; i < columns.length; i++) {
-            let columnWidth = this.getColumnWidth(columns[i].dataIndex);
-            if (columnWidth > 0) {
-              columns[i].width = columnWidth;
-            } else {
-              columns[i].flex = 1;
-            }
-        }
-
         columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
             if(typeof column.listeners === "undefined") {
                 column.listeners = {};
             }
