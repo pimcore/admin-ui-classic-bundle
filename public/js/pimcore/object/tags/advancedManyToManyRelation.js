@@ -128,6 +128,8 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             var renderer = null;
             var listeners = null;
 
+            filterType = 'list';
+
             if (this.fieldConfig.columns[i].type == "number") {
                 if(!readOnly) {
                     cellEditor = function () {
