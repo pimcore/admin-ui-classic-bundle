@@ -292,7 +292,7 @@ class UserController extends AdminAbstractController implements KernelController
                     );
                 } elseif (
                     $passwordStandard == 'bsi_standard_less'
-                    && $this->isLongLessComplexPassword($values['password'])
+                    && $this->isBsiLongLessComplexPassword($values['password'])
                 ) {
                     throw new LogicException(
                         'Passwords must be at least 8 to 12 characters long
@@ -300,7 +300,7 @@ class UserController extends AdminAbstractController implements KernelController
                     );
                 } elseif (
                     $passwordStandard == 'bsi_standard_complex'
-                    && $this->isComplexPassword($values['password'])
+                    && $this->isBsiComplexPassword($values['password'])
                 ) {
                     throw new LogicException(
                         'Passwords must be at least 25 characters long and consist of 2 character types'
@@ -590,7 +590,7 @@ class UserController extends AdminAbstractController implements KernelController
                         );
                     } elseif (
                         $passwordStandard == 'bsi_standard_less'
-                        && $this->isLongLessComplexPassword($values['password'])
+                        && $this->isBsiLongLessComplexPassword($values['password'])
                     ) {
                         throw new LogicException(
                             'Passwords must be at least 8 to 12 characters long
@@ -598,7 +598,7 @@ class UserController extends AdminAbstractController implements KernelController
                         );
                     } elseif (
                         $passwordStandard == 'bsi_standard_complex'
-                        && $this->isComplexPassword($values['password'])
+                        && $this->isBsiComplexPassword($values['password'])
                     ) {
                         throw new LogicException(
                             'Passwords must be at least 25 characters long and consist of 2 character types'
@@ -1203,7 +1203,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $loginUrl;
     }
 
-    private function isComplexPassword(string $password): bool
+    private function isBsiComplexPassword(string $password): bool
     {
         if (strlen($password) < 8 || strlen($password) > 12) {
             return false;
@@ -1217,7 +1217,7 @@ class UserController extends AdminAbstractController implements KernelController
         return $uppercase && $lowercase && $numbers && $specialCharacters;
     }
 
-    private function isLongLessComplexPassword(string $password): bool
+    private function isBsiLongLessComplexPassword(string $password): bool
     {
         if (strlen($password) < 25) {
             return false;
