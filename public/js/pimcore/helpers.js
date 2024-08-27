@@ -2941,8 +2941,8 @@ pimcore.helpers.isComplexPassword = function (pass) {
         return false;
     }
 
-    const uppercase = /[A-ZÖÄÜ]/.test(pass);
-    const lowercase = /[a-zöäü]/.test(pass);
+    const uppercase = /\p{Lu}/.test(pass);
+    const lowercase = /\p{Ll}/.test(pass);
     const numbers = /d/.test(pass);
     const specialCharacters = /[^\w]/.test(pass);
 
@@ -2954,8 +2954,8 @@ pimcore.helpers.isLongLessComplexPassword = function (pass) {
         return false;
     }
 
-    const uppercase = /[A-ZÖÄÜ]/.test(pass);
-    const lowercase = /[a-zöäü]/.test(pass);
+    const uppercase = /\p{Lu}/.test(pass);
+    const lowercase = /\p{Ll}/.test(pass);
     const numbers = /d/.test(pass);
     const specialCharacters = /[^\w]/.test(pass);
 
