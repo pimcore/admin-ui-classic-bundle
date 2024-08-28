@@ -518,14 +518,14 @@ class DataObjectHelperController extends AdminAbstractController
     private function injectCustomLayoutValues(array $fieldConfig, array $savedColumn): array
     {
         $keys = ['width', 'locked'];
-        foreach ($keys as $key){
+        foreach ($keys as $key) {
             if (isset($savedColumn[$key])) {
                 $fieldConfig[$key] = $savedColumn[$key];
             }
         }
 
         $fieldConfigKeys = ['noteditable'];
-        foreach ($fieldConfigKeys as $fieldConfigKey){
+        foreach ($fieldConfigKeys as $fieldConfigKey) {
             if (isset($savedColumn['fieldConfig']['layout'][$fieldConfigKey])) {
                 $setter = 'set' . ucfirst($fieldConfigKey);
                 $fieldConfig['layout']->$setter($savedColumn['fieldConfig']['layout'][$fieldConfigKey]);
