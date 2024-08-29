@@ -43,7 +43,7 @@ pimcore.element.scheduler = Class.create({
                     td = [
                         rawTask.id,
                         d,
-                        Ext.Date.format(d, "H:i"),
+                        Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat()),
                         rawTask.action
                     ];
 
@@ -63,7 +63,7 @@ pimcore.element.scheduler = Class.create({
                     convert: function (v, rec) {
                         var ret = v;
                         if (v instanceof Date) {
-                            ret = Ext.Date.format(v, "Y-m-d");
+                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                         }
                         return ret;
                     }
@@ -73,7 +73,7 @@ pimcore.element.scheduler = Class.create({
                     convert: function (v, rec) {
                         var ret = v;
                         if (v instanceof Date) {
-                            ret = Ext.Date.format(v, "H:i");
+                            ret = Ext.Date.format(v, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
                         }
                         return ret;
                     }
@@ -112,7 +112,7 @@ pimcore.element.scheduler = Class.create({
                     fields: ['id', {name: 'date', convert: function (v, rec) {
                             var d = new Date(intval(v) * 1000);
 
-                            var ret = Ext.Date.format(d, "Y-m-d H:i");
+                            var ret = Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
                             if (rec.data.note) {
                                 ret += " - " + rec.data.note;
@@ -141,9 +141,9 @@ pimcore.element.scheduler = Class.create({
             });
 
             var propertiesColumns = [
-                {text: t("date"), width: 120, sortable: true, dataIndex: 'date', editor: new Ext.form.DateField()                },
+                {text: t("date"), width: 120, sortable: true, dataIndex: 'date', editor: new Ext.form.DateField()
+                },
                 {text: t("time"), width: 100, sortable: true, dataIndex: 'time', editor: new Ext.form.TimeField({
-                        format: "H:i",
                         listeners: {
                             focus : function(component) {
                                 component.setValue(Ext.util.Format.htmlDecode(component.value));
@@ -316,7 +316,7 @@ pimcore.element.scheduler = Class.create({
             } else {
                 dateString += " 00:00";
             }
-            let dateTime = new Date(dateString);
+            let dateTime = Ext.Date.parseDate(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
             value = {
                 date:  Math.floor(dateTime / 1000),
                 action: data[i].data.action,

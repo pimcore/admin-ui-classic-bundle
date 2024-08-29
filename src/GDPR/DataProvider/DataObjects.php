@@ -18,8 +18,8 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\GDPR\DataProvider;
 
 use Pimcore\Bundle\AdminBundle\Helper\QueryParams;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Model\Asset;
-use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\DataObject\Data\ElementMetadata;
@@ -41,17 +41,11 @@ class DataObjects extends Elements implements DataProviderInterface
         $this->config = $config;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName(): string
     {
         return 'dataObjects';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getJsClassName(): string
     {
         return 'pimcore.settings.gdpr.dataproviders.dataObjects';
@@ -59,10 +53,6 @@ class DataObjects extends Elements implements DataProviderInterface
 
     /**
      * Exports data of given object as json including all references that are configured to be included
-     *
-     * @param AbstractObject $object
-     *
-     * @return array
      */
     public function doExportData(AbstractObject $object): array
     {
@@ -120,17 +110,6 @@ class DataObjects extends Elements implements DataProviderInterface
         }
     }
 
-    /**
-     * @param int $id
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $email
-     * @param int $start
-     * @param int $limit
-     * @param string|null $sort
-     *
-     * @return array
-     */
     public function searchData(int $id, string $firstname, string $lastname, string $email, int $start, int $limit, string $sort = null): array
     {
         if (empty($id) && empty($firstname) && empty($lastname) && empty($email)) {
@@ -171,7 +150,7 @@ class DataObjects extends Elements implements DataProviderInterface
             foreach ($query->fetchAllAssociative() as $hit) {
                 $element = Element\Service::getElementById($hit['type'], $hit['id']);
                 if ($element instanceof Concrete) {
-                    $data = DataObject\Service::gridObjectData($element);
+                    $data = GridData\DataObject::getData($element);
                     $data['__gdprIsDeletable'] = $this->config['classes'][$element->getClassName()]['allowDelete'] ?? false;
                     $elements[] = $data;
                 }
@@ -181,9 +160,6 @@ class DataObjects extends Elements implements DataProviderInterface
         return ['data' => $elements, 'success' => true, 'total' => $query->rowCount()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortPriority(): int
     {
         return 10;

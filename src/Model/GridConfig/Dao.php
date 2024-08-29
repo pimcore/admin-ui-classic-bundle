@@ -28,8 +28,6 @@ use Pimcore\Model\Exception\NotFoundException;
 class Dao extends Model\Dao\AbstractDao
 {
     /**
-     * @param int $id
-     *
      * @throws NotFoundException
      */
     public function getById(int $id): void
@@ -45,8 +43,6 @@ class Dao extends Model\Dao\AbstractDao
 
     /**
      * Save object to database
-     *
-     * @return int
      */
     public function save(): int
     {

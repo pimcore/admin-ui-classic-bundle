@@ -41,9 +41,6 @@ class HttpCacheListener implements EventSubscriberInterface
         $this->responseHelper = $responseHelper;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

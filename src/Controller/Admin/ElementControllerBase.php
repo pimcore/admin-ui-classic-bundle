@@ -56,10 +56,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -72,9 +68,8 @@ abstract class ElementControllerBase extends AdminAbstractController
         }
 
         if (in_array($type, $allowedTypes)) {
-            /** @var Document|Asset|AbstractObject $root */
             $root = Service::getElementById($type, $id);
-            if ($root->isAllowed('list')) {
+            if ($root?->isAllowed('list')) {
                 return $this->adminJson($this->getTreeNodeConfig($root));
             }
 
@@ -86,11 +81,6 @@ abstract class ElementControllerBase extends AdminAbstractController
 
     /**
      * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

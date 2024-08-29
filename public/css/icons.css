@@ -126,6 +126,16 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/overlay-google.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_overlay_clone:before {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    bottom: 0px;
+    right: 0px;
+    content: "";
+    background: url(/bundles/pimcoreadmin/img/flat-color-icons/copy.svg) center center no-repeat !important;
+}
+
 .pimcore_main_nav_icon_file {
     background: url(/bundles/pimcoreadmin/img/material-icons/outline-file-24px.svg) center center no-repeat !important;
 }
@@ -1095,6 +1105,10 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/more.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_more_white {
+    background: url(/bundles/pimcoreadmin/img/flat-white-icons/more.svg) center center no-repeat !important;
+}
+
 .pimcore_icon_export{
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/external.svg) center center no-repeat !important;
 }
@@ -1311,7 +1325,6 @@
 .pimcore_icon_booleanSelect {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/more.svg) center center no-repeat !important;
 }
-
 
 .pimcore_icon_gender {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/manager.svg) center center no-repeat !important;
@@ -1558,6 +1571,11 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/focal_point.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_focal_point_remove {
+    background: url(/bundles/pimcoreadmin/img/flat-color-icons/focal_point.svg) center center no-repeat !important;
+    filter: invert(1);
+}
+
 .pimcore_icon_icons {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/library.svg) center center no-repeat !important;
 }
@@ -1775,6 +1793,14 @@
     background: url(/bundles/pimcoreadmin/img/material-icons/outline-style-24px.svg) center center no-repeat;
 }
 
+.pimcore_material_icon_logout {
+    background: url(/bundles/pimcoreadmin/img/material-icons/outline-logout-24px.svg) center center no-repeat;
+}
+
 .pimcore_icon_share {
     background: url(/bundles/pimcoreadmin/img/flat-white-icons/share.svg) center center no-repeat;
+}
+
+.pimcore_icon_profile {
+    background: url(/bundles/pimcoreadmin/img/flat-white-icons/profile.svg) center center no-repeat;
 }

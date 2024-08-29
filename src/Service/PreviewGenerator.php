@@ -48,9 +48,6 @@ class PreviewGenerator implements PreviewGeneratorInterface
     }
 
     /**
-     * @param Concrete $object
-     * @param array $parameters
-     *
      * @return array only parameters that are part of the preview generator config and are not empty
      */
     protected function filterParameters(Concrete $object, array $parameters): array
@@ -70,9 +67,6 @@ class PreviewGenerator implements PreviewGeneratorInterface
         return $filteredParameters;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getPreviewConfig(Concrete $object): array
     {
         return array_filter([

@@ -15,7 +15,13 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
+use function base64_encode;
+use function basename;
+use function date;
 use Exception;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use Imagick;
 use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
@@ -27,8 +33,9 @@ use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
+use Pimcore\Document\Renderer\DocumentRenderer;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
-use Pimcore\Image\Chromium;
+use Pimcore\Image\HtmlToImage;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
 use Pimcore\Model\Document\DocType;
@@ -40,6 +47,7 @@ use Pimcore\Model\Version;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
 use RuntimeException;
+use function sprintf;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -49,7 +57,10 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function uniqid;
+use function unlink;
 
 /**
  * @Route("/document")
@@ -66,10 +77,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/tree-get-root", name="pimcore_admin_document_document_treegetroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
@@ -78,11 +85,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/delete-info", name="pimcore_admin_document_document_deleteinfo", methods={"GET"})
-     *
-     * @param Request $request
-     * @param EventDispatcherInterface $eventDispatcher
-     *
-     * @return JsonResponse
      */
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -91,8 +93,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/get-data-by-id", name="pimcore_admin_document_document_getdatabyid", methods={"GET"})
-     *
-     *
      */
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -136,8 +136,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/tree-get-children-by-id", name="pimcore_admin_document_document_treegetchildrenbyid", methods={"GET"})
-     *
-     *
      */
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
@@ -245,10 +243,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/add", name="pimcore_admin_document_document_add", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addAction(Request $request): JsonResponse
     {
@@ -390,10 +384,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/delete", name="pimcore_admin_document_document_delete", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteAction(Request $request): JsonResponse
     {
@@ -443,10 +433,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/update", name="pimcore_admin_document_document_update", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws Exception
      * @throws RuntimeException
@@ -614,10 +600,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/doc-types", name="pimcore_admin_document_document_doctypesget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function docTypesGetAction(Request $request): JsonResponse
     {
@@ -638,10 +620,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/doc-types", name="pimcore_admin_document_document_doctypes", methods={"PUT", "POST", "DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function docTypesAction(Request $request): JsonResponse
     {
@@ -699,11 +677,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     /**
      * @Route("/get-doc-types", name="pimcore_admin_document_document_getdoctypes", methods={"GET"})
      *
-     * @param Request $request
-     *
      * @throws BadRequestHttpException If type is invalid
-     *
-     * @return JsonResponse
      */
     public function getDocTypesAction(Request $request): JsonResponse
     {
@@ -727,10 +701,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/version-to-session", name="pimcore_admin_document_document_versiontosession", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function versionToSessionAction(Request $request): Response
     {
@@ -747,10 +717,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/publish-version", name="pimcore_admin_document_document_publishversion", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function publishVersionAction(Request $request): JsonResponse
     {
@@ -786,20 +752,16 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/update-site", name="pimcore_admin_document_document_updatesite", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function updateSiteAction(Request $request): JsonResponse
     {
-        $domains = $request->get('domains');
+        $domains = $request->request->getString('domains');
         $domains = str_replace(' ', '', $domains);
-        $domains = explode("\n", $domains);
+        $domains = $domains ? explode("\n", $domains) : [];
 
-        if (!$site = Site::getByRootId((int)$request->get('id'))) {
+        if (!$site = Site::getByRootId($request->request->getInt('id'))) {
             $site = Site::create([
-                'rootId' => (int)$request->get('id'),
+                'rootId' => $request->request->getInt('id'),
             ]);
         }
 
@@ -808,7 +770,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
         foreach ($validLanguages as $language) {
             // localized error pages
-            $requestValue = $request->get('errorDocument_localized_' . $language);
+            $requestValue = $request->request->get('errorDocument_localized_' . $language);
 
             if (isset($requestValue)) {
                 $localizedErrorDocuments[$language] = $requestValue;
@@ -816,10 +778,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         $site->setDomains($domains);
-        $site->setMainDomain($request->get('mainDomain'));
-        $site->setErrorDocument($request->get('errorDocument'));
+        $site->setMainDomain($request->request->getString('mainDomain'));
+        $site->setErrorDocument($request->request->getString('errorDocument'));
         $site->setLocalizedErrorDocuments($localizedErrorDocuments);
-        $site->setRedirectToMainDomain(($request->get('redirectToMainDomain') == 'true') ? true : false);
+        $site->setRedirectToMainDomain($request->request->getBoolean('redirectToMainDomain'));
         $site->save();
 
         $site->setRootDocument(null); // do not send the document to the frontend
@@ -829,10 +791,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/remove-site", name="pimcore_admin_document_document_removesite", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function removeSiteAction(Request $request): JsonResponse
     {
@@ -844,10 +802,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy-info", name="pimcore_admin_document_document_copyinfo", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyInfoAction(Request $request): JsonResponse
     {
@@ -943,10 +897,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy-rewrite-ids", name="pimcore_admin_document_document_copyrewriteids", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyRewriteIdsAction(Request $request): JsonResponse
     {
@@ -988,10 +938,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/copy", name="pimcore_admin_document_document_copy", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function copyAction(Request $request): JsonResponse
     {
@@ -1067,17 +1013,11 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="pimcore_admin_document_document_diffversions", requirements={"from": "\d+", "to": "\d+"}, methods={"GET"})
-     *
-     * @param Request $request
-     * @param int $from
-     * @param int $to
-     *
-     * @return Response
      */
-    public function diffVersionsAction(Request $request, int $from, int $to): Response
+    public function diffVersionsAction(Request $request, int $from, int $to, DocumentRenderer $documentRenderer, RouterInterface $router): Response
     {
         // return with error if prerequisites do not match
-        if (!Chromium::isSupported() || !class_exists('Imagick')) {
+        if (!HtmlToImage::isSupported() || !class_exists('Imagick')) {
             return $this->render('@PimcoreAdmin/admin/document/document/diff_versions_unsupported.html.twig');
         }
 
@@ -1088,45 +1028,56 @@ class DocumentController extends ElementControllerBase implements KernelControll
             throw $this->createNotFoundException('Version with id [' . $from . "] doesn't exist");
         }
 
+        $versionTo = Version::getById($to);
+        $docTo = $versionTo?->loadData();
+
+        if (!$docTo) {
+            throw $this->createNotFoundException('Version with id [' . $to . "] doesn't exist");
+        }
+
+        $comparisonId = uniqid(date('Y-m-d') . '-', true);
+        $tempFileTemplate = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $comparisonId . '-%s.%s';
+        $fromImageFile = sprintf($tempFileTemplate, 'from', 'png');
+        $toImageFile = sprintf($tempFileTemplate, 'to', 'png');
+        $fromHtmlFile = sprintf($tempFileTemplate, 'from', 'html');
+        $toHtmlFile = sprintf($tempFileTemplate, 'to', 'html');
+
+        $viewParams = [];
+
+        $docContentFrom = $documentRenderer->render($docFrom);
+        $docContentTo = $documentRenderer->render($docTo);
+
+        file_put_contents($fromHtmlFile, $docContentFrom);
+        file_put_contents($toHtmlFile, $docContentTo);
+
         $prefix = Config::getSystemConfiguration('documents')['preview_url_prefix'];
         if (empty($prefix)) {
             $prefix = $request->getSchemeAndHttpHost();
         }
 
-        $prefix .= $docFrom->getRealFullPath() . '?pimcore_version=';
+        try {
+            HtmlToImage::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($fromHtmlFile)]), $fromImageFile);
+            HtmlToImage::convert($prefix . $router->generate('pimcore_admin_document_document_diff_versions_html', ['id' => basename($toHtmlFile)]), $toImageFile);
+        } finally {
+            unlink($fromHtmlFile);
+            unlink($toHtmlFile);
+        }
 
-        $fromUrl = $prefix . $from;
-        $toUrl = $prefix . $to;
-
-        $toFileId = uniqid();
-        $fromFileId = uniqid();
-        $diffFileId = uniqid();
-        $fromFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $fromFileId . '.png';
-        $toFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $toFileId . '.png';
-        $diffFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $diffFileId . '.png';
-
-        $viewParams = [];
-
-        $session = $request->getSession();
-
-        Chromium::convert($fromUrl, $fromFile, $session->getName(), $session->getId());
-        Chromium::convert($toUrl, $toFile, $session->getName(), $session->getId());
-
-        $image1 = new Imagick($fromFile);
-        $image2 = new Imagick($toFile);
+        $image1 = new Imagick($fromImageFile);
+        $image2 = new Imagick($toImageFile);
 
         if ($image1->getImageWidth() == $image2->getImageWidth() && $image1->getImageHeight() == $image2->getImageHeight()) {
             $result = $image1->compareImages($image2, Imagick::METRIC_MEANSQUAREERROR);
             $result[0]->setImageFormat('png');
 
-            $result[0]->writeImage($diffFile);
+            $viewParams['image'] = base64_encode($result[0]->getImageBlob());
+
             $result[0]->clear();
             $result[0]->destroy();
 
-            $viewParams['image'] = $diffFileId;
         } else {
-            $viewParams['image1'] = $fromFileId;
-            $viewParams['image2'] = $toFileId;
+            $viewParams['image1'] = base64_encode(file_get_contents($fromImageFile));
+            $viewParams['image2'] = base64_encode(file_get_contents($toImageFile));
         }
 
         // cleanup
@@ -1135,22 +1086,17 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $image2->clear();
         $image2->destroy();
 
+        unlink($fromImageFile);
+        unlink($toImageFile);
+
         return $this->render('@PimcoreAdmin/admin/document/document/diff_versions.html.twig', $viewParams);
     }
 
-    /**
-     * @Route("/diff-versions-image", name="pimcore_admin_document_document_diffversionsimage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return BinaryFileResponse
-     */
-    public function diffVersionsImageAction(Request $request): BinaryFileResponse
+    public function diffVersionsHtmlAction(Request $request): BinaryFileResponse
     {
-        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/version-diff-tmp-' . $request->get('id') . '.png';
+        $file = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/' . basename($request->get('id'));
         if (file_exists($file)) {
             $response = new BinaryFileResponse($file);
-            $response->headers->set('Content-Type', 'image/png');
 
             return $response;
         }
@@ -1160,10 +1106,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/get-id-for-path", name="pimcore_admin_document_document_getidforpath", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getIdForPathAction(Request $request): JsonResponse
     {
@@ -1179,10 +1121,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/language-tree", name="pimcore_admin_document_document_languagetree", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function languageTreeAction(Request $request): JsonResponse
     {
@@ -1200,10 +1138,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/language-tree-root", name="pimcore_admin_document_document_languagetreeroot", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws Exception
      */
@@ -1298,10 +1232,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/convert", name="pimcore_admin_document_document_convert", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function convertAction(Request $request): JsonResponse
     {
@@ -1342,10 +1272,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-determine-parent", name="pimcore_admin_document_document_translationdetermineparent", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationDetermineParentAction(Request $request): JsonResponse
     {
@@ -1373,10 +1299,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-add", name="pimcore_admin_document_document_translationadd", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationAddAction(Request $request): JsonResponse
     {
@@ -1406,10 +1328,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-remove", name="pimcore_admin_document_document_translationremove", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationRemoveAction(Request $request): JsonResponse
     {
@@ -1427,10 +1345,6 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
     /**
      * @Route("/translation-check-language", name="pimcore_admin_document_document_translationchecklanguage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function translationCheckLanguageAction(Request $request): JsonResponse
     {
@@ -1463,7 +1377,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         // check permissions
-        $this->checkActionPermission($event, 'documents', ['docTypesGetAction']);
+        $this->checkActionPermission($event, 'documents', ['docTypesGetAction', 'diffVersionsHtmlAction']);
 
         $this->_documentService = new Document\Service($this->getAdminUser());
     }

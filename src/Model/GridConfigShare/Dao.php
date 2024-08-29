@@ -27,9 +27,6 @@ use Pimcore\Model;
 class Dao extends Model\Dao\AbstractDao
 {
     /**
-     * @param int $gridConfigId
-     * @param int $sharedWithUserId
-     *
      * @throws Model\Exception\NotFoundException|\Doctrine\DBAL\Exception
      */
     public function getByGridConfigAndSharedWithId(int $gridConfigId, int $sharedWithUserId): void

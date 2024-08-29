@@ -174,7 +174,7 @@ all_roles: "Tous les r\xF4les"
 add_role: "Ajouter un r\xF4le"
 role_creation_error: "Le r\xF4le n'a pas \xE9t\xE9 cr\xE9\xE9"
 workspaces: Zone de travail
-Username: Login
+Username: Nom d'utilisateur
 video_bitrate: "Taux d'\xE9chantillonnage vid\xE9o"
 audio_bitrate: "Taux d'\xE9chantillonnage audio"
 rasterize_svg: Rasteriser les SVG
@@ -704,7 +704,6 @@ quantityValueUnits: Quantity Value Units
 numeric: "Num\xE9ro"
 structuredtable_type_number: "Num\xE9ro"
 objectsMetadata_type_number: "Num\xE9ro"
-username: Nom d'utilisateur
 localized_fields: "Champs localis\xE9s"
 field_collections: Collections de champs
 special_settings_tooltip: "Param\xE8tres sp\xE9ciaux"

@@ -79,11 +79,6 @@ class Exporter
     }
 
     /**
-     * @param Concrete $object
-     * @param array $result
-     * @param Fieldcollection $container
-     * @param Data\Fieldcollections $containerDef
-     *
      * @throws \Exception
      */
     public static function doExportFieldcollection(Concrete $object, array &$result, Fieldcollection $container, Data\Fieldcollections $containerDef): void
@@ -122,9 +117,6 @@ class Exporter
     }
 
     /**
-     * @param Concrete $object
-     * @param array $result
-     *
      * @throws \Exception
      */
     public static function doExportObject(Concrete $object, array &$result = []): void

@@ -65,8 +65,10 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
         if (this.isAllowed("versions")) {
             this.versions = new pimcore.document.versions(this);
         }
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "document");
+        }
 
-        this.dependencies = new pimcore.element.dependencies(this, "document");
         this.preview = new pimcore.document.pages.preview(this);
         if(pimcore.globalmanager.get('customReportsPanelImplementationFactory').hasImplementation()) {
             this.reports = pimcore.globalmanager.get('customReportsPanelImplementationFactory').getNewReportInstance("document_snippet");
@@ -96,7 +98,9 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
             items.push(this.versions.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if(this.reports) {
             var reportLayout = this.reports.getLayout();
@@ -182,16 +186,30 @@ pimcore.document.email = Class.create(pimcore.document.page_snippet, {
     getLayoutToolbar : function ($super) {
         $super();
 
-        this.toolbar.add(
-            new Ext.Button({
-                text: t('send_test_email'),
-                iconCls: "pimcore_material_icon_email pimcore_material_icon",
-                scale: "medium",
-                handler: function() {
-                    pimcore.helpers.sendTestEmail(this.settings.document.data['from']? this.settings.document.data['from'] : pimcore.settings.mailDefaultAddress, this.settings.document.data['to'], this.settings.document.data['subject'], 'document', this.settings.document.data['path'] + this.settings.document.data['key'], null);
-                }.bind(this)
-            })
-        );
+        const config = {
+            text: t('send_test_email'),
+            iconCls: "pimcore_material_icon_email pimcore_material_icon",
+            scale: "medium",
+            handler: function() {
+                pimcore.helpers.sendTestEmail(
+                    this.settings.document.data['from'] ?? pimcore.settings.mailDefaultAddress,
+                    this.settings.document.data['to'],
+                    this.settings.document.data['subject'],
+                    'document', 
+                    this.settings.document.data['path'] + this.settings.document.data['key'], 
+                    null
+                );
+            }.bind(this)
+        }
+
+        if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+            const submenu = this.toolbar.query('[cls*=pimcore_headbar_submenu]')[0];
+            submenu.menu.add(config);
+        } else {
+            this.toolbar.add(
+                new Ext.Button(config)
+            );
+        }
 
         return this.toolbar;
     }

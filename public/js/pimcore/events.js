@@ -247,6 +247,19 @@ pimcore.events.prepareAffectedNodes = "pimcore.treeNode.prepareAffectedNodes";
  pimcore.events.preMenuBuild = "pimcore.menu.preBuild";
 
 /**
+ * post building menu
+ * for having full menu
+ */
+pimcore.events.postMenuBuild = "pimcore.menu.postBuild";
+
+/**
+ *  event for manipulating the wysiwyg config
+ *  use it to change the final config that is passed
+ *  the config and the editor context are passed as parameters
+ */
+pimcore.events.createWysiwygConfig = "pimcore.wysiwyg.createConfig";
+
+/**
  *  start event for the editor to create the config
  *  config and context are passed as parameters
  */

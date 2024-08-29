@@ -123,6 +123,7 @@ a, a:hover, a:visited, a:active {
     left: 90px;
     width: 300px;
     z-index: 200;
+    text-align: center;
 }
 
 #logo img {

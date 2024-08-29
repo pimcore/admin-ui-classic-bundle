@@ -205,8 +205,6 @@ class ModelDataObjectPermissionsTest extends AbstractPermissionTest
     }
 
     /**
-     * @param DataObject\AbstractObject $element
-     * @param User $user
      * @param array|null $expectedChildren When null,the main permission is disabled
      *
      * @throws \ReflectionException

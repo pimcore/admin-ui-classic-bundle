@@ -90,11 +90,6 @@ pimcore.object.edit = Class.create({
 
                 //only include changed values in save response.
                 if(currentField.isDirty()) {
-                    if (currentField.fieldConfig.fieldtype === "wysiwyg" &&
-                        currentField.data.replace(/(<([^>]+)>)/gm, "") === "")
-                        {
-                        currentField.data = "";
-                    }
                     values[currentField.getName()] =  currentField.getValue();
                 }
             }

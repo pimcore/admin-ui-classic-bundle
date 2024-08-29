@@ -31,9 +31,6 @@ trait DocumentTreeConfigTrait
 
     protected ElementServiceInterface $elementService;
 
-    /**
-     * @param ElementServiceInterface $elementService
-     */
     #[Required]
     public function setElementService(ElementServiceInterface $elementService): void
     {
@@ -41,10 +38,6 @@ trait DocumentTreeConfigTrait
     }
 
     /**
-     * @param ElementInterface $element
-     *
-     * @return array
-     *
      * @throws \Exception
      */
     public function getTreeNodeConfig(ElementInterface $element): array

@@ -36,9 +36,6 @@ final class Boolean extends AbstractOperator
         $this->operator = $config->operator ?? '';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

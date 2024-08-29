@@ -68,12 +68,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     }
 
     /**
-     * @param array $data
-     * @param Model\Document $document
-     * @param Version|null $draftVersion
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     protected function preSendDataActions(array &$data, Model\Document $document, ?Version $draftVersion = null): JsonResponse
@@ -177,7 +171,12 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     protected function addDataToDocument(Request $request, Model\Document $document): void
     {
         if ($document instanceof Model\Document\PageSnippet) {
-            if($request->get('appendEditables') || (interface_exists(TargetingDocumentInterface::class) && $document instanceof TargetingDocumentInterface)) {
+            $isTargetSpecificEditable =
+                interface_exists(TargetingDocumentInterface::class)
+                && $document instanceof TargetingDocumentInterface
+                && $document->hasTargetGroupSpecificEditables();
+
+            if ($request->get('appendEditables') || $isTargetSpecificEditable) {
                 $document->getEditables();
             } else {
                 // ensure no editables (e.g. from session, version, ...) are still referenced
@@ -208,10 +207,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
     /**
      * @Route("/save-to-session", name="savetosession", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function saveToSessionAction(Request $request): JsonResponse
     {
@@ -245,8 +240,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     }
 
     /**
-     * @param Model\Document $doc
-     *
      * @return Model\Document|null $sessionDocument
      */
     protected function getFromSession(Model\Document $doc, SessionInterface $session): ?Model\Document
@@ -267,10 +260,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
     /**
      * @Route("/remove-from-session", name="removefromsession", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function removeFromSessionAction(Request $request): JsonResponse
     {
@@ -297,7 +286,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      * @template T of Model\Document\PageSnippet
      *
      * @param T $document
-     * @param null|Version $draftVersion
      *
      * @return T
      */
@@ -320,10 +308,6 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      * This is used for pages and snippets to change the main document (which is not saved with the normal save button)
      *
      * @Route("/change-main-document", name="changemaindocument", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */

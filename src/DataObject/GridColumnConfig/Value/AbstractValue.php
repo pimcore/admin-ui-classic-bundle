@@ -23,7 +23,7 @@ abstract class AbstractValue implements ValueInterface
 
     protected string $label;
 
-    protected mixed $context = null;
+    protected mixed $context;
 
     public function __construct(\stdClass $config, mixed $context = null)
     {

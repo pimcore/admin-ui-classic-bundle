@@ -24,8 +24,6 @@ use Carbon\Carbon;
 class QueryParams
 {
     /**
-     * @param array $params
-     *
      * @return array  [orderKey => null|string, order => null|string]
      */
     public static function extractSortingSettings(array $params): array
@@ -70,12 +68,7 @@ class QueryParams
     /**
      * Creates a condition string from the passed ExtJs filter definitions
      *
-     * @param string $filterString
-     * @param array $matchExact
-     * @param bool $returnString
-     * @param array $callbacks
      *
-     * @return array|string
      *
      * @throws \Exception
      */

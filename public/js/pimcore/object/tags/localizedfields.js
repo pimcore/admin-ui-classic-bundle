@@ -276,12 +276,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                             if (oldLanguage == newLanguage) {
                                 return;
                             }
+                            this.switchLocalizedPanels(oldLanguage, newLanguage);
 
-                            this.availablePanels[oldLanguage].hide();
-                            this.component.updateLayout();
-                            this.availablePanels[newLanguage].show();
-                            this.currentLanguage = newLanguage;
-                            this.component.updateLayout();
                         }.bind(this),
                         pimcoreGlobalLanguageChanged: function (language) {
                             let globalLanguageIndex = 0;
@@ -289,6 +285,8 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                                 globalLanguageIndex = this.frontendLanguages.indexOf(language);
                             }
                             this.countrySelect.setValue(this.frontendLanguages[globalLanguageIndex]);
+                            this.switchLocalizedPanels(this.currentLanguage, language);
+
                         }.bind(this)
                     }
                 };
@@ -500,12 +498,13 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
 
     styleLanguageTab: function(item, hideLabels, language) {
         item.currentLanguage = language;
+        var languageTitle = t(pimcore.available_languages[language]);
         if (hideLabels) {
-            item.title = '<div class="pimcore_icon_language_' + language.toLowerCase() + '" title="' + pimcore.available_languages[language] + '" style="width: 20px; height:20px;"></div>';
+            item.title = '<div class="pimcore_icon_language_' + language.toLowerCase() + '" title="' + languageTitle + '" style="width: 20px; height:20px;"></div>';
             item.tbar = Ext.create('Ext.toolbar.Toolbar', {
                 style: 'margin-bottom:10px;',
                 items: [{
-                    text: t('grid_current_language') + ': ' + pimcore.available_languages[language],
+                    text: t('grid_current_language') + ': ' + languageTitle,
                     xtype: "tbtext",
                     style: 'font-size: 13px;'
                 }
@@ -513,7 +512,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
             });
         } else {
             item.iconCls = "pimcore_icon_language_" + language.toLowerCase();
-            item.title = t(pimcore.available_languages[language]);
+            item.title = languageTitle;
         }
     },
 
@@ -644,17 +643,19 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
         for (var i = 0; i < this.frontendLanguages.length; i++) {
             var currentLanguage = this.frontendLanguages[i];
 
-            for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
-                if (this.metaData[currentLanguage]) {
-                    var languageElement = this.languageElements[currentLanguage][s];
-                    var key = languageElement.name;
-                    if (this.metaData[currentLanguage][key]) {
-                        if (this.metaData[currentLanguage][key].inherited) {
-                            if (languageElement.isDirty()) {
-                                this.metaData[currentLanguage][key].inherited = false;
-                                languageElement.unmarkInherited();
-                            } else {
-                                foundUnmodifiedInheritedField = true;
+            if (typeof this.languageElements[currentLanguage] !== "undefined") {
+                for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
+                    if (this.metaData[currentLanguage]) {
+                        var languageElement = this.languageElements[currentLanguage][s];
+                        var key = languageElement.name;
+                        if (this.metaData[currentLanguage][key]) {
+                            if (this.metaData[currentLanguage][key].inherited) {
+                                if (languageElement.isDirty()) {
+                                    this.metaData[currentLanguage][key].inherited = false;
+                                    languageElement.unmarkInherited();
+                                } else {
+                                    foundUnmodifiedInheritedField = true;
+                                }
                             }
                         }
                     }
@@ -1004,6 +1005,14 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                 languageTab.setActiveTab(tabLanguage);
             }
         });
+    },
+
+    switchLocalizedPanels: function (oldLanguage, newLanguage){
+        this.availablePanels[oldLanguage].hide();
+        this.component.updateLayout();
+        this.availablePanels[newLanguage].show();
+        this.currentLanguage = newLanguage;
+        this.component.updateLayout();
     }
 });
 

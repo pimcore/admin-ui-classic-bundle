@@ -311,4 +311,13 @@ pimcore.object.tags.abstract = Class.create({
             this.globalLanguage = pimcore.globalmanager.get('global_language_' + this.getContext().objectId);
         }
     },
+
+    initEditorConfig: function (field) {
+        const editorConfig = {};
+        if (field.config && field.config.width && field.config.width !== '100%' && intval(field.config.width) > 10) {
+            editorConfig.width = field.config.width;
+        }
+
+        return editorConfig;
+    }
 });

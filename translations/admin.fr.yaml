@@ -367,7 +367,7 @@ edit_current_page: Editer cette page
 close: Fermer
 name_already_in_use: "Le nom est d\xE9j\xE0 utilis\xE9"
 name_and_key_must_be_defined: "Le nom et le type doivent \xEAtre d\xE9finis"
-mandatory_field_empty: Veuillez remplire tous les champs requis
+mandatory_field_empty: Veuillez remplir tous les champs requis
 reload: Recharger
 schedule: Calendrier
 time: Temps
@@ -1141,4 +1141,6 @@ keybinding_notesEvents: Notes &amp; Events
 keybinding_tagConfiguration: Tag Configuration
 keybinding_users: Users
 keybinding_roles: Roles
+remove_focal_point: Remove Focal Point
+username: Nom d'utilisateur
 ...

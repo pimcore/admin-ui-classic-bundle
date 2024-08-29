@@ -48,10 +48,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/dashboard-list", name="pimcore_admin_portal_dashboardlist", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function dashboardListAction(Request $request): JsonResponse
     {
@@ -69,10 +65,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/create-dashboard", name="pimcore_admin_portal_createdashboard", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function createDashboardAction(Request $request): JsonResponse
     {
@@ -92,10 +84,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/delete-dashboard", name="pimcore_admin_portal_deletedashboard", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteDashboardAction(Request $request): JsonResponse
     {
@@ -107,10 +95,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/get-configuration", name="pimcore_admin_portal_getconfiguration", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getConfigurationAction(Request $request): JsonResponse
     {
@@ -119,10 +103,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/remove-widget", name="pimcore_admin_portal_removewidget", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function removeWidgetAction(Request $request): JsonResponse
     {
@@ -147,10 +127,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/add-widget", name="pimcore_admin_portal_addwidget", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addWidgetAction(Request $request): JsonResponse
     {
@@ -173,10 +149,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/reorder-widget", name="pimcore_admin_portal_reorderwidget", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function reorderWidgetAction(Request $request): JsonResponse
     {
@@ -206,10 +178,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/update-portlet-config", name="pimcore_admin_portal_updateportletconfig", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function updatePortletConfigAction(Request $request): JsonResponse
     {
@@ -234,10 +202,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/portlet-modified-documents", name="pimcore_admin_portal_portletmodifieddocuments", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function portletModifiedDocumentsAction(Request $request): JsonResponse
     {
@@ -267,10 +231,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/portlet-modified-assets", name="pimcore_admin_portal_portletmodifiedassets", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function portletModifiedAssetsAction(Request $request): JsonResponse
     {
@@ -303,10 +263,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/portlet-modified-objects", name="pimcore_admin_portal_portletmodifiedobjects", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function portletModifiedObjectsAction(Request $request): JsonResponse
     {
@@ -336,10 +292,6 @@ class PortalController extends AdminAbstractController implements KernelControll
 
     /**
      * @Route("/portlet-modification-statistics", name="pimcore_admin_portal_portletmodificationstatistics", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function portletModificationStatisticsAction(Request $request): JsonResponse
     {

@@ -35,9 +35,6 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
 
     const PARAM_DOCUMENTS_NOTES_EVENTS_TYPES = 'pimcore_admin.documents.notes_events.types';
 
-    /**
-     * {@inheritdoc}
-     */
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();

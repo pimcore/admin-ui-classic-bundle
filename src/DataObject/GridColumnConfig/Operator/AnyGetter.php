@@ -56,9 +56,6 @@ final class AnyGetter extends AbstractOperator
         $this->returnLastResult = $config->returnLastResult ?? false;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

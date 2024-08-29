@@ -16,7 +16,7 @@ Ext.define('Ext.pimcore.slider.Milestone', {
         this.useTips = true;
         this.tipText = function(thumb){
             var date = new Date(thumb.value * 1000);
-            return Ext.Date.format(date, 'H:i');
+            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
         };
 
         this.callParent();

@@ -36,11 +36,6 @@ class LinkController extends DocumentControllerBase
     /**
      * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
      *
-     * @param Request $request
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getDataByIdAction(Request $request, SerializerInterface $serializer): JsonResponse
@@ -81,10 +76,6 @@ class LinkController extends DocumentControllerBase
     /**
      * @Route("/save", name="save", methods={"POST", "PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request): JsonResponse
@@ -110,7 +101,6 @@ class LinkController extends DocumentControllerBase
     }
 
     /**
-     * @param Request $request
      * @param Document\Link $document
      */
     protected function setValuesToDocument(Request $request, Document $document): void

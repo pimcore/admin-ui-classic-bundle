@@ -63,10 +63,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/delete-collection-relation", name="deletecollectionrelation", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteCollectionRelationAction(Request $request): JsonResponse
     {
@@ -86,10 +82,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/delete-relation", name="deleterelation", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteRelationAction(Request $request): JsonResponse
     {
@@ -109,10 +101,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/delete-group", name="deletegroup", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deleteGroupAction(Request $request): JsonResponse
     {
@@ -128,10 +116,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/create-group", name="creategroup", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -158,10 +142,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
     /**
      * @Route("/create-store", name="createstore", methods={"POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function createStoreAction(Request $request): JsonResponse
@@ -186,10 +166,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
     /**
      * @Route("/create-collection", name="createcollection", methods={"POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function createCollectionAction(Request $request): JsonResponse
@@ -212,10 +188,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/collections", name="collectionsactionget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function collectionsActionGet(Request $request): JsonResponse
     {
@@ -355,10 +327,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/collections", name="collections", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function collectionsAction(Request $request): JsonResponse
     {
@@ -386,10 +354,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/groups", name="groupsactionget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function groupsActionGet(Request $request): JsonResponse
     {
@@ -517,10 +481,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/groups", name="groupsaction", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function groupsAction(Request $request): JsonResponse
     {
@@ -548,10 +508,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/collection-relations", name="collectionrelationsget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function collectionRelationsGetAction(Request $request): JsonResponse
     {
@@ -649,10 +605,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/collection-relations", name="collectionrelations", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function collectionRelationsAction(Request $request): JsonResponse
     {
@@ -687,8 +639,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/list-stores", name="liststores", methods={"GET"})
-     *
-     * @return JsonResponse
      */
     public function listStoresAction(): JsonResponse
     {
@@ -705,10 +655,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/search-relations", name="searchrelations", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function searchRelationsAction(Request $request): JsonResponse
     {
@@ -828,10 +774,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/relations", name="relationsactionget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function relationsActionGet(Request $request): JsonResponse
     {
@@ -954,10 +896,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/relations", name="relations", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function relationsAction(Request $request): JsonResponse
     {
@@ -987,10 +925,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/add-collections", name="addcollections", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1101,10 +1035,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
     /**
      * @Route("/add-groups", name="addgroups", methods={"POST"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function addGroupsAction(Request $request): JsonResponse
@@ -1181,10 +1111,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/properties", name="propertiesget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1333,10 +1259,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/properties", name="properties", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function propertiesAction(Request $request): JsonResponse
     {
@@ -1406,10 +1328,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/add-property", name="addproperty", methods={"POST"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function addPropertyAction(Request $request): JsonResponse
     {
@@ -1436,10 +1354,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/delete-property", name="deleteproperty", methods={"DELETE"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function deletePropertyAction(Request $request): JsonResponse
     {
@@ -1455,10 +1369,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/edit-store", name="editstore", methods={"PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -1493,10 +1403,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/storetree", name="storetree", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function storetreeAction(Request $request): JsonResponse
     {
@@ -1506,7 +1412,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         foreach ($list as $item) {
             $resultItem = [
                 'id' => $item->getId(),
-                'text' => htmlspecialchars($item->getName(), ENT_QUOTES),
+                'text' => htmlspecialchars($item->getName() ?? '', ENT_QUOTES),
                 'expandable' => false,
                 'leaf' => true,
                 'expanded' => true,
@@ -1527,10 +1433,6 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
     /**
      * @Route("/get-page", name="getpage", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function getPageAction(Request $request): JsonResponse
     {

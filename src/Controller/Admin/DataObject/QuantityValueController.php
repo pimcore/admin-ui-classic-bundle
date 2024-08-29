@@ -40,10 +40,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-import",name="unitimport", methods={"POST","PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function unitImportAction(Request $request): JsonResponse
     {
@@ -57,10 +53,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-export", name="unitexport", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function unitExportAction(Request $request): Response
     {
@@ -74,10 +66,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-proxy", name="unitproxyget", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -133,10 +121,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-proxy", name="unitproxy", methods={"POST", "PUT"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      *
      * @throws \Exception
      */
@@ -209,10 +193,6 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/unit-list", name="unitlist", methods={"GET"})
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
      */
     public function unitListAction(Request $request): JsonResponse
     {
@@ -253,15 +233,10 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/convert", name="convert", methods={"GET"})
-     *
-     * @param Request $request
-     * @param UnitConversionService $conversionService
-     *
-     * @return JsonResponse
      */
     public function convertAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
-        $this->checkPermission('quantityValueUnits');
+        $this->checkPermission('objects');
 
         $fromUnitId = $request->get('fromUnit');
         $toUnitId = $request->get('toUnit');
@@ -283,15 +258,10 @@ class QuantityValueController extends AdminAbstractController
 
     /**
      * @Route("/convert-all", name="convertall", methods={"GET"})
-     *
-     * @param Request $request
-     * @param UnitConversionService $conversionService
-     *
-     * @return JsonResponse
      */
     public function convertAllAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
-        $this->checkPermission('quantityValueUnits');
+        $this->checkPermission('objects');
 
         $unitId = $request->get('unit');
 

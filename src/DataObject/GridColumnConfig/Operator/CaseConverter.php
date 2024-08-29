@@ -33,9 +33,6 @@ final class CaseConverter extends AbstractOperator
         $this->capitalization = $config->capitalization ?? 0;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

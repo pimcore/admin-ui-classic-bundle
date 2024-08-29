@@ -36,9 +36,6 @@ class AdminExceptionListener implements EventSubscriberInterface
 {
     use PimcoreContextAwareTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -57,7 +54,7 @@ class AdminExceptionListener implements EventSubscriberInterface
                 return;
             }
 
-            list($code, $headers, $message) = $this->getResponseData($ex);
+            [$code, $headers, $message] = $this->getResponseData($ex);
 
             $data = [
                 'success' => false,
@@ -116,8 +113,6 @@ class AdminExceptionListener implements EventSubscriberInterface
 
     /**
      * @param \Exception[] $items
-     * @param string $message
-     * @param string $detailedInfo
      */
     protected function recursiveAddValidationExceptionSubItems(array $items, string &$message, string &$detailedInfo): void
     {
