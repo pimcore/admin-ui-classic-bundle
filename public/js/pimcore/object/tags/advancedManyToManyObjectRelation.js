@@ -157,6 +157,15 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
+                    filterType = 'boolean';
+                }
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
@@ -171,14 +180,15 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             let renderer = null;
             let listeners = null;
 
-        if (this.fieldConfig.columns[i].type == "number") {
-            if(!readOnly) {
-            cellEditor = function() {
-                    return new Ext.form.NumberField({});
-                }.bind();
-            }
+            let filterType = 'list';
+            if (this.fieldConfig.columns[i].type == "number") {
+                if(!readOnly) {
+                cellEditor = function() {
+                        return new Ext.form.NumberField({});
+                    }.bind();
+                }
 
-            renderer = Ext.util.Format.numberRenderer();
+                renderer = Ext.util.Format.numberRenderer();
             } else if (this.fieldConfig.columns[i].type == "text" && !readOnly) {
             cellEditor = function() {
                     return new Ext.form.TextField({});
@@ -256,12 +266,17 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type)
                 };
 
+                filterType = 'boolean';
+
                 if (readOnly) {
                     columns.push(Ext.create('Ext.grid.column.Check', {
                         text: t(this.fieldConfig.columns[i].label),
                         dataIndex: this.fieldConfig.columns[i].key,
                         width: width,
-                        renderer: renderer
+                        renderer: renderer,
+                        filter: {
+                            type: filterType
+                        }
                     }));
                     continue;
                 }
@@ -272,7 +287,10 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                 dataIndex: this.fieldConfig.columns[i].key,
                 renderer: renderer,
                 listeners: listeners,
-                width: width
+                width: width,
+                filter: {
+                    type: filterType
+                }
             };
 
             if (cellEditor) {
@@ -448,7 +466,8 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             autoHeight: autoHeight,
             bodyCls: "pimcore_object_tag_objects pimcore_editable_grid",
             plugins: [
-                this.cellEditing
+                this.cellEditing,
+                'gridfilters'
             ]
         });
 

@@ -9,9 +9,13 @@
       "*": "dist"
     }
   },
+  "prefer-stable": true,
+  "minimum-stability": "dev",
   "require": {
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
     "cbschuld/browser.php": "^1.9.6",
-    "pimcore/pimcore": "^11.1.4",
+    "phpoffice/phpspreadsheet": "^1.24 || ^2.1",
+    "pimcore/pimcore": "^11.3.1",
     "symfony/webpack-encore-bundle": "^1.13.2"
   },
   "require-dev": {
@@ -37,6 +41,9 @@
     ]
   },
   "extra": {
+    "branch-alias": {
+      "1.x-dev": "1.6.x-dev"
+    },
     "pimcore": {
       "bundles": [
         "Pimcore\\Bundle\\AdminBundle\\PimcoreAdminBundle"

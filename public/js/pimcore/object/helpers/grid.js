@@ -84,7 +84,7 @@ pimcore.object.helpers.grid = Class.create({
                 var key = fieldConfig.key;
                 var readerFieldConfig = {name: key};
                 // dynamic select returns data + options on cell level
-                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CLASS && fieldConfig.layout.optionsProviderClass) {
+                if ((type == "select" || type == "multiselect") && fieldConfig.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE && fieldConfig.layout.optionsProviderClass) {
                     if (typeof noBatchColumns != "undefined") {
                         if (fieldConfig.layout.dynamicOptions) {
                             noBatchColumns.push(key);
@@ -336,13 +336,13 @@ pimcore.object.helpers.grid = Class.create({
             } else if(field.key == "creationDate") {
                 gridColumns.push({text: t("creationdate") + " (System)", width: this.getColumnWidth(field, 160), sortable: true,
                     dataIndex: "creationDate", filter: 'date', editable: false, locked: this.getColumnLock(field), renderer: function(d) {
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     }/*, hidden: !propertyVisibility.creationDate*/});
             } else if(field.key == "modificationDate") {
                 gridColumns.push({text: t("modificationdate") + " (System)", width: this.getColumnWidth(field, 160), sortable: true,
                     dataIndex: "modificationDate", filter: 'date', editable: false, locked: this.getColumnLock(field), renderer: function(d) {
 
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     }/*, hidden: !propertyVisibility.modificationDate*/});
             } else {
                 if (fields[i].isOperator) {
@@ -429,7 +429,7 @@ pimcore.object.helpers.grid = Class.create({
     getColumnWidth: function(field, defaultValue) {
         if (field.width) {
             return field.width;
-        } else if(field.layout && field.layout.width) {
+        } else if (field.layout && field.layout.width && field.layout.width !== '100%' && intval(field.layout.width) > 10) {
             return field.layout.width;
         } else {
             return defaultValue;

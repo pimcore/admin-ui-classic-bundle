@@ -47,32 +47,24 @@ pimcore.asset.metadata.tags.select = Class.create(pimcore.asset.metadata.tags.ab
     },
 
     getCellEditor: function (field, record) {
-        var key = field.key;
+        const key = field.key;
 
-        var value = record.data[key];
-        var options = record.data[key +  "%options"];
+        const value = record.data[key];
+        let options = record.data[key +  '%options'];
         options = this.prepareStoreDataAndFilterLabels(options);
 
-        var store = new Ext.data.Store({
+        const store = new Ext.data.Store({
             autoDestroy: true,
             fields: ['key', 'value'],
             data: options
         });
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
-            triggerAction: "all",
+            triggerAction: 'all',
             editable: false,
-            mode: "local",
+            mode: 'local',
             valueField: 'value',
             displayField: 'key',
             value: value,
@@ -87,29 +79,19 @@ pimcore.asset.metadata.tags.select = Class.create(pimcore.asset.metadata.tags.ab
     },
 
     getGridColumnEditor: function(field) {
-
-        var storeData = this.prepareStoreDataAndFilterLabels(field.layout.config);
-        var store = new Ext.data.Store({
+        const storeData = this.prepareStoreDataAndFilterLabels(field.layout.config);
+        const store = new Ext.data.Store({
             autoDestroy: true,
             fields: ['key', 'value'],
             data: storeData
         });
-
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                if (intval(field.config.width) > 10) {
-                    editorConfig.width = field.config.width;
-                }
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
-            triggerAction: "all",
+            triggerAction: 'all',
             editable: false,
-            mode: "local",
+            mode: 'local',
             valueField: 'value',
             displayField: 'key',
             displayTpl: Ext.create('Ext.XTemplate',

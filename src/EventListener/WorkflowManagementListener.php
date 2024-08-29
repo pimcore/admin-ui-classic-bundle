@@ -103,7 +103,7 @@ class WorkflowManagementListener implements EventSubscriberInterface
             foreach ($this->workflowManager->getOrderedPlaceConfigs($workflow, $marking) as $placeConfig) {
                 if (!$permissionsRespected && !empty($placeConfig->getPermissions($workflow, $element))) {
                     $data['userPermissions'] = array_merge(
-                        (array)$data['userPermissions'],
+                        isset($data['userPermissions']) ? (array)$data['userPermissions'] : [],
                         $placeConfig->getUserPermissions($workflow, $element)
                     );
 

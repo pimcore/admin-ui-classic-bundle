@@ -126,6 +126,16 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/overlay-google.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_overlay_clone:before {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    bottom: 0px;
+    right: 0px;
+    content: "";
+    background: url(/bundles/pimcoreadmin/img/flat-color-icons/copy.svg) center center no-repeat !important;
+}
+
 .pimcore_main_nav_icon_file {
     background: url(/bundles/pimcoreadmin/img/material-icons/outline-file-24px.svg) center center no-repeat !important;
 }

@@ -227,7 +227,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
                 icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
                 handler: function (grid, rowIndex) {
                     let data = grid.getStore().getAt(rowIndex);
-                    pimcore.helpers.deleteConfirm(t('relation'), data.data.path, function () {
+
+                    pimcore.helpers.deleteConfirm(t('relation'), data.data.fullpath, function () {
                         grid.getStore().removeAt(rowIndex);
                     }.bind(this));
                 }.bind(this)
@@ -276,7 +277,10 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             autoHeight: autoHeight,
-            bodyCssClass: "pimcore_object_tag_multihref"
+            bodyCssClass: "pimcore_object_tag_multihref",
+            plugins: [
+              'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -393,6 +397,7 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             toolbarItems.push({
                 xtype: "button",
                 iconCls: "pimcore_icon_delete",
+                tooltip: t("empty"),
                 handler: function () {
                     pimcore.helpers.deleteConfirm(t('all'), t('relations'), function () {
                         this.empty();
@@ -401,23 +406,25 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             });
         }
 
+        if (this.fieldConfig.assetsAllowed) {
+            toolbarItems.push({
+                xtype: "button",
+                iconCls: "pimcore_icon_upload",
+                tooltip: t("upload"),
+                cls: "pimcore_inline_upload",
+                handler: this.uploadDialog.bind(this)
+            });
+        }
+
         if(pimcore.helpers.hasSearchImplementation()) {
             toolbarItems = toolbarItems.concat([
                 {
                     xtype: "button",
                     iconCls: "pimcore_icon_search",
+                    tooltip: t("search"),
                     handler: this.openSearchEditor.bind(this)
                 }
             ]);
-        }
-
-        if (this.fieldConfig.assetsAllowed) {
-            toolbarItems.push({
-                xtype: "button",
-                cls: "pimcore_inline_upload",
-                iconCls: "pimcore_icon_upload",
-                handler: this.uploadDialog.bind(this)
-            });
         }
 
         return toolbarItems;
@@ -438,6 +445,13 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             {text: t("type"), dataIndex: 'type', width: 100},
             {text: t("subtype"), dataIndex: 'subtype', width: 100},
         ];
+
+        columns = Ext.Array.map(columns, function(column) {
+            column.filter = {
+                type: 'list'
+            }
+            return column;
+        });
 
         return columns;
     },

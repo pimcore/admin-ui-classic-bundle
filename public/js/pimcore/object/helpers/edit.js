@@ -302,6 +302,14 @@ pimcore.object.helpers.edit = {
                 // add asterisk to mandatory field
                 l.titleOriginal = l.title;
                 let icons = '';
+                let wasMandatory = false;
+
+                if (context.containerType == 'localizedfield') {
+                    if (l.mandatory && !in_array(context.language, pimcore.settings.requiredLanguages)) {
+                        l.mandatory = false;
+                        wasMandatory = true;
+                    }
+                }
 
                 if(l.mandatory) {
                     icons += '<span style="color:red;">*</span>';
@@ -456,6 +464,10 @@ pimcore.object.helpers.edit = {
                         console.log(l.name + " event render not supported (tag type: " + l.fieldtype + ")");
                         console.log(e7);
                     }
+                }
+
+                if (wasMandatory) {
+                    l.mandatory = true;
                 }
 
                 return dLayout;

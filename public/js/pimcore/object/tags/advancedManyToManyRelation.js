@@ -117,6 +117,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
         var visibleFieldsCount = columns.length;
 
+        let filterType = 'list';
         for (i = 0; i < this.fieldConfig.columns.length; i++) {
             var width = 100;
             if (this.fieldConfig.columns[i].width) {
@@ -126,6 +127,8 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             var cellEditor = null;
             var renderer = null;
             var listeners = null;
+
+            filterType = 'list';
 
             if (this.fieldConfig.columns[i].type == "number") {
                 if(!readOnly) {
@@ -210,12 +213,17 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                     "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type, readOnly)
                 };
 
+                filterType = 'boolean';
+
                 if (readOnly) {
                     columns.push(Ext.create('Ext.grid.column.Check', {
                         text: t(this.fieldConfig.columns[i].label),
                         dataIndex: this.fieldConfig.columns[i].key,
                         width: width,
                         renderer: renderer,
+                        filter: {
+                            type: filterType
+                        }
                     }));
                     continue;
                 }
@@ -226,7 +234,10 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 dataIndex: this.fieldConfig.columns[i].key,
                 renderer: renderer,
                 listeners: listeners,
-                width: width
+                width: width,
+                filter: {
+                    type: filterType
+                }
             };
 
             if (cellEditor) {
@@ -432,7 +443,8 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             autoHeight: autoHeight,
             bodyCls: "pimcore_object_tag_objects pimcore_editable_grid",
             plugins: [
-                this.cellEditing
+                this.cellEditing,
+                'gridfilters'
             ]
         });
 
@@ -600,6 +612,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_delete",
+                    tooltip: t("empty"),
                     handler: function () {
                         pimcore.helpers.deleteConfirm(t('all'), t('relations'), function () {
                             this.empty();
@@ -611,8 +624,9 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             if (this.fieldConfig.assetsAllowed && this.fieldConfig.noteditable == false) {
                 toolbarItems.push({
                     xtype: "button",
-                    cls: "pimcore_inline_upload",
                     iconCls: "pimcore_icon_upload",
+                    tooltip: t("upload"),
+                    cls: "pimcore_inline_upload",
                     handler: this.uploadDialog.bind(this)
                 });
             }
@@ -622,6 +636,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                     {
                         xtype: "button",
                         iconCls: "pimcore_icon_search",
+                        tooltip: t("search"),
                         handler: this.openSearchEditor.bind(this)
                     }
                     //,

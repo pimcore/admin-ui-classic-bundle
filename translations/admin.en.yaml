@@ -22,6 +22,7 @@ creationdate: 'Creation Date'
 usermodification: 'User Modification'
 userowner: Owner
 languages: Languages
+datetime_locale: Date Time Locale
 password_was_not_changed: "Password wasn't changed because it isn't secure enough"
 password_does_not_match: "New password and confirm password doesn't match"
 incorrect_password: "Given password is incorrect"
@@ -140,6 +141,7 @@ details: Details
 cannot_save_object_please_try_to_edit_the_object_in_detail_view: '<b>Cannot save object!</b><br />Please try to edit the object in the detail view.'
 size: Size
 select_a_file: 'Select a file'
+select_files: 'Select files'
 upload_compatibility_mode: 'Upload File (Compatibility Mode)'
 the_system_is_in_maintenance_mode_please_wait: 'The system is in maintenance mode, please wait'
 activate: Activate
@@ -431,6 +433,9 @@ system_columns: 'System columns'
 columns: Columns
 children_grid: 'Children Grid'
 only_children: 'just direct children'
+only_object: 'just objects'
+only_variant: 'just variants object'
+select_objects_type: "Type to show"
 cut: Cut
 paste_cut_element: 'Paste cut-out element'
 memorize_tabs: 'Memorize open tabs'
@@ -785,6 +790,7 @@ there_are_more_items: 'There are more items than displayed'
 workflow_actions: Actions
 workflow_notes_requred_field_message: '"%s" is a required field.'
 workflow_transition_applied_successfully: 'Action applied successfully'
+workflow_transition_unsaved_data: 'Your data changes have not been saved yet. Please, save changes before applying workflow transition.'
 workflow_change_email_notification_subject: "Workflow update for %s in workflow '%s'"
 workflow_details: 'Workflow Details'
 workflow_graph: 'Workflow Graph'
@@ -1018,3 +1024,5 @@ overwrite_zip_files: 'Overwrite with zip files'
 zip_upload_want_to_overwrite: 'Do you want to overwrite the files?'
 zip_upload_want_to_overwrite_yes_option: 'Yes'
 zip_upload_want_to_overwrite_no_option: 'No'
+invalid_option: 'Invalid Option field [ {field} ]: Please choose a valid option for select / multiselect field [ {field} ]. Current value: "{option}"'
+respect_timezone: 'Respect timezone'

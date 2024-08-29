@@ -282,8 +282,8 @@ pimcore.settings.user.user.settings = Class.create({
             xtype: 'combo',
             fieldLabel: t('language'),
             typeAhead: true,
+            queryMode: 'local',
             value: this.currentUser.language,
-            mode: 'local',
             listWidth: 100,
             store: pimcore.globalmanager.get("pimcorelanguages"),
             displayField: 'display',
@@ -291,6 +291,43 @@ pimcore.settings.user.user.settings = Class.create({
             forceSelection: true,
             triggerAction: 'all',
             name: 'language',
+            listeners: {
+                change: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this),
+                select: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this)
+            }
+        });
+
+        const validLocales = [
+            ['', '(system)']
+        ];
+        const allLocales = this.data.validLocales ?? [];
+        // Rely on supportedLocalesOf to exclude any non-supported locales
+        Intl.DateTimeFormat.supportedLocalesOf(Object.keys(allLocales), {localeMatcher: "lookup"}).forEach(function (locale) {
+           validLocales.push([locale, allLocales[locale]])
+        });
+
+        const localesStore = new Ext.data.ArrayStore({
+            fields: ['code', 'text'],
+            data : validLocales
+        });
+
+        generalItems.push({
+            xtype: 'combo',
+            fieldLabel: t('datetime_locale'),
+            typeAhead: true,
+            queryMode: 'local',
+            value: this.currentUser.datetimeLocale ?? '',
+            listWidth: 400,
+            store: localesStore,
+            displayField: 'text',
+            valueField: 'code',
+            forceSelection: true,
+            triggerAction: 'all',
+            name: 'datetimeLocale',
             listeners: {
                 change: function () {
                     this.forceReloadOnSave = true;

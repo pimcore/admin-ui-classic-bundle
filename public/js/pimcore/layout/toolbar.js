@@ -302,19 +302,19 @@ pimcore.layout.toolbar = Class.create({
                      handler: this.editTranslations.bind(this, 'messages'),
                      priority: 10
                  }];
-             }
 
-             extrasItems.push({
-                 text: t("translations"),
-                 iconCls: "pimcore_nav_icon_translations",
-                 itemId: 'pimcore_menu_extras_translations',
-                 hideOnClick: false,
-                 menu: {
-                     cls: "pimcore_navigation_flyout",
-                     shadow: false,
-                     items: translationItems
-                 }
-             });
+                 extrasItems.push({
+                     text: t("translations"),
+                     iconCls: "pimcore_nav_icon_translations",
+                     itemId: 'pimcore_menu_extras_translations',
+                     hideOnClick: false,
+                     menu: {
+                         cls: "pimcore_navigation_flyout",
+                         shadow: false,
+                         items: translationItems
+                     }
+                 });
+             }
  
              if (user.isAllowed("recyclebin") && perspectiveCfg.inToolbar("extras.recyclebin")) {
                  extrasItems.push({
@@ -812,9 +812,7 @@ pimcore.layout.toolbar = Class.create({
                      iconCls: "pimcore_nav_icon_icons",
                      itemId: 'pimcore_menu_settings_icon_library',
                      text: t('icon_library'),
-                     handler: function() {
-                         pimcore.helpers.openGenericIframeWindow("icon-library", Routing.generate('pimcore_admin_misc_iconlist'), "pimcore_icon_icons", t("icon_library"));
-                     }
+                     handler: this.showIconLibrary.bind(this)
                  });
              }
  
@@ -1366,6 +1364,16 @@ pimcore.layout.toolbar = Class.create({
          }
  
          pimcore.globalmanager.add("new_notifications", new pimcore.notification.modal());
-     }
+     },
+
+    showIconLibrary: function () {
+        try {
+            pimcore.globalmanager.get("iconlibrary").activate();
+        }
+        catch (e) {
+            pimcore.globalmanager.add("iconlibrary", new pimcore.iconlibrary.panel());
+            pimcore.globalmanager.get("iconlibrary").activate();
+        }
+    }
  });
  

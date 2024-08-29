@@ -38,8 +38,8 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
             height: 49,
         });
 
-        const tabPanel = this.getTabPanel();
         const toolbar = this.getLayoutToolbar();
+        const tabPanel = this.getTabPanel();
 
         if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
             this.tab = new Ext.Panel({
@@ -474,6 +474,15 @@ pimcore.document.page_snippet = Class.create(pimcore.document.document, {
                 } else {
                     buttons.push(shareViaNotificationsConfig);
                 }
+            }
+
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
             }
 
             //workflow management

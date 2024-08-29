@@ -15,6 +15,13 @@ controller_action: Controller & Action
 admin_interface: Admin Interface
 admin_interface_background: Admin Interface Background
 icon_library: Icon Library
+color_icons: Color Icons
+white_icons: White Icons
+twemoji: Twemoji
+twemoji_variants: Twemoji variants
+select_type_first: Please select a type first
+icon_tools: Icon Tools
+flags: Flags
 system_performance_stability_warning: >-
     Please do not perform this action unless you are sure what you are doing.<br
     /><b style='color:red'>This action can have a major impact onto the stability
@@ -213,6 +220,7 @@ setbackgroundcolor: Set Backgroundcolor
 setbackgroundimage: Set Background Image
 roundcorners: Round Corners
 rotate: Rotate
+mirror: Mirror
 color: Color
 angle: Angle
 label_width: Label Width
@@ -317,7 +325,6 @@ non_stable_updates: Available non-stable updates
 latest_pimcore_version_already_installed: You have installed the latest version of pimcore.
 table: Table
 rows: Rows
-language_admin: Default-Language in Admin-Interface
 exclude_patterns: Exclude Patterns
 cover: Cover
 contain: Contain
@@ -325,6 +332,7 @@ min_value: min. Value
 max_value: max. Value
 increment: Increment Step
 vertical: Vertical
+horizontal: Horizontal
 country: Country
 zoom_level: Zoom level
 map_type: Map type
@@ -700,3 +708,9 @@ classificationstore_error_addcollection_msg: Error adding group
 log_search_pid: PID
 log_refresh_seconds: Seconds
 system_requirements_check: System-Requirements Check
+required_language: 'Mandatory language'
+rgbaColor: RGBA Color
+booleanSelect: Boolean Select
+quantityValue: Quantity Value
+inputQuantityValue: Input Quantity Value
+calculatedValue: Calculated Value

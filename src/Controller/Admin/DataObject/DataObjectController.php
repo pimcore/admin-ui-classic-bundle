@@ -50,6 +50,8 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 
 /**
  * @Route("/object", name="pimcore_admin_dataobject_dataobject_")
@@ -63,6 +65,15 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     use ApplySchedulerDataTrait;
     use DataObjectActionsTrait;
     use UserNameTrait;
+
+    /** On active edit lock answer with editlock response */
+    const TASK_RESPONSE = 'response';
+
+    /** On active edit lock overwrite with new user */
+    const TASK_OVERWRITE = 'overwrite';
+
+    /** On active edit lock keep existing entry */
+    const TASK_KEEP = 'keep';
 
     protected DataObject\Service $_objectService;
 
@@ -295,10 +306,25 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         // check for lock
         if ($object->isAllowed('save') || $object->isAllowed('publish') || $object->isAllowed('unpublish') || $object->isAllowed('delete')) {
             if (Element\Editlock::isLocked($objectId, 'object', $request->getSession()->getId())) {
-                return $this->getEditLockResponse($objectId, 'object');
-            }
+                //Hook for modifying editlock handling - e.g. no editLockResponse but keep old lock
+                $lockData = [
+                    'task' => self::TASK_RESPONSE,
+                ];
+                $event = new GenericEvent($this, [
+                    'data' => $lockData,
+                    'object' => $object,
+                ]);
+                $eventDispatcher->dispatch($event, AdminEvents::OBJECT_GET_IS_LOCKED);
+                $lockData = $event->getArgument('data');
 
-            Element\Editlock::lock($request->get('id'), 'object', $request->getSession()->getId());
+                if ($lockData['task'] === self::TASK_RESPONSE) {
+                    return $this->getEditLockResponse($objectId, 'object');
+                } elseif ($lockData['task'] === self::TASK_OVERWRITE) {
+                    Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
+                }
+            } else {
+                Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
+            }
         }
 
         // we need to know if the latest version is published or not (a version), because of lazy loaded fields in $this->getDataForObject()
@@ -1308,11 +1334,16 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             // Mark fields that have changed as dirty
             if ($request->get('task') !== 'autoSave' && $request->get('task') !== 'unpublish') {
-                $fields = array_keys($object->getClass()->getFieldDefinitions());
-                foreach ($fields as $field) {
-                    $getter  ='get' . ucfirst($field);
-                    if ($object->$getter() !== $objectFromDatabase->$getter()) {
-                        $object->markFieldDirty($field);
+                foreach ($object->getClass()->getFieldDefinitions() as $fieldName => $fieldDefinition) {
+                    $getter = 'get' . ucfirst($fieldName);
+                    $oldValue = $objectFromDatabase->$getter();
+                    $newValue = $object->$getter();
+                    $isEqual = $fieldDefinition instanceof DataObject\ClassDefinition\Data\EqualComparisonInterface
+                        ? $fieldDefinition->isEqual($oldValue, $newValue)
+                        : $oldValue === $newValue;
+
+                    if (!$isEqual) {
+                        $object->markFieldDirty($fieldName);
                     }
                 }
             }
@@ -1558,7 +1589,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function previewVersionAction(Request $request): Response
+    public function previewVersionAction(Request $request, Environment $twig): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1567,6 +1598,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $object = $version?->loadData();
 
         if ($object) {
+
+            Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+            if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+                $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
+            }
+
             if (method_exists($object, 'getLocalizedFields')) {
                 /** @var DataObject\Localizedfield $localizedFields */
                 $localizedFields = $object->getLocalizedFields();
@@ -1595,7 +1633,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function diffVersionsAction(Request $request, int $from, int $to): Response
+    public function diffVersionsAction(Request $request, Environment $twig, int $from, int $to): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1620,6 +1658,12 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         if (!$object2) {
             throw $this->createNotFoundException('Version with id [' . $id2 . "] doesn't exist");
+        }
+
+        Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+        if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+            $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
         }
 
         if (method_exists($object2, 'getLocalizedFields')) {
