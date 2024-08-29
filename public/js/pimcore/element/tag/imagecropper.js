@@ -155,7 +155,7 @@ pimcore.element.tag.imagecropper = Class.create({
                     target: "selector",
                     pinned: true,
                     width: 100,
-                    height: (100 / (this.ratioX * this.ratioY)) || 100,
+                    height: this.ratioX && this.ratioY ? (100 / (this.ratioX * this.ratioY)) : 100,
                     preserveRatio: this.preserveRatio,
                     dynamic: true,
                     handles: 'all',
