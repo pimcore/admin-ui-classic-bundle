@@ -56,8 +56,6 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
 
                     const fieldCollectionItems = record.data[key];
 
-                    console.log(fieldCollectionItems);
-
                     let previousFieldCollectionItemType = null;
                     for (let fieldCollectionItem of fieldCollectionItems) {
 
