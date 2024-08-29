@@ -314,15 +314,16 @@ pimcore.object.tags.block = Class.create(pimcore.object.tags.abstract, {
 
         this.updateBlockIndices();
     },
-    updateBlockIndices: function() {
-        for (var itemIndex = 0; itemIndex < this.component.items.items.length; itemIndex++) {
-            var item = this.component.items.items[itemIndex];
 
-            for (j = 0; j < this.currentElements.length; j++) {
+    updateBlockIndices: function() {
+        for (let itemIndex = 0; itemIndex < this.component.items.items.length; itemIndex++) {
+            let item = this.component.items.items[itemIndex];
+
+            for (let j = 0; j < this.currentElements.length; j++) {
                 if (item !== this.currentElements[j].container) continue;
 
-                var fields = this.currentElements[j].fields;
-                for (fieldName in fields) {
+                let fields = this.currentElements[j].fields;
+                for (let fieldName in fields) {
                     if (this.currentElements[j].fields.hasOwnProperty(fieldName)) {
                         fields[fieldName].context.index = itemIndex;
                     }
