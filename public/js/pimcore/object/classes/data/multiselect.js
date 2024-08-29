@@ -241,7 +241,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
         editor.edit();
     },
 
-    createoptionsgrid(store) {
+    createoptionsgrid: function(store) {
         return Ext.create('Ext.grid.Panel', {
             itemId: "optionseditor",
             viewConfig: {

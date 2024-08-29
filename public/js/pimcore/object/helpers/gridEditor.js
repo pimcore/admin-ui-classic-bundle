@@ -17,7 +17,7 @@
  * pimcore.object.tags.localizedfields
  */
 
-pimcore.registerNS("pimcore.object.helpers.optionEditor");
+pimcore.registerNS("pimcore.object.helpers.gridEditor");
 /**
  * @private
  */
