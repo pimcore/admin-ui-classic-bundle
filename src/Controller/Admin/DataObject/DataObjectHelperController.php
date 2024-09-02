@@ -316,7 +316,7 @@ class DataObjectHelperController extends AdminAbstractController
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
 
-                foreach($gridConfig['columns'] as &$column) {
+                foreach ($gridConfig['columns'] as &$column) {
                     if (array_key_exists('isOperator', $column) && $column['isOperator']) {
                         $colAttributes = &$column['fieldConfig']['attributes'];
                         SecurityHelper::convertHtmlSpecialCharsArrayKeys($colAttributes, ['label', 'attribute', 'param1']);
@@ -1177,7 +1177,7 @@ class DataObjectHelperController extends AdminAbstractController
         //prepare fields
         $fieldnames = [];
         $fields = json_decode($allParams['fields'][0], true);
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $fieldnames[] = $field['key'];
         }
         $allParams['fields'] = $fieldnames;
