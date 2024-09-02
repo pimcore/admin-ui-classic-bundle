@@ -363,15 +363,15 @@
                      }.bind(this));
                  } else if (item.isDirectory) {
                      // Get folder contents
-                     var dirReader = item.createReader();
-                     var entries = [];
-                     var readEntries = function() {
+                     const dirReader = item.createReader();
+                     let entries = [];
+                     const readEntries = function() {
                          dirReader.readEntries(function(results) {
                              if (results.length) {
                                  entries = entries.concat(Array.from(results));
                                  readEntries();
                              } else {
-                                 for (var i = 0; i < entries.length; i++) {
+                                 for (let i = 0; i < entries.length; i++) {
                                      traverseFileTree(entries[i], path + item.name + "/");
                                  }
                              }
