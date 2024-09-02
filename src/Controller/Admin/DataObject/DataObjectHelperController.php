@@ -317,7 +317,7 @@ class DataObjectHelperController extends AdminAbstractController
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
 
-                foreach($gridConfig['columns'] as &$column) {
+                foreach ($gridConfig['columns'] as &$column) {
                     if (array_key_exists('isOperator', $column) && $column['isOperator']) {
                         $colAttributes = &$column['fieldConfig']['attributes'];
                         SecurityHelper::convertHtmlSpecialCharsArrayKeys($colAttributes, ['label', 'attribute', 'param1']);
@@ -360,12 +360,9 @@ class DataObjectHelperController extends AdminAbstractController
                             'key' => $key,
                             'type' => 'system',
                             'label' => $key,
-                            'locked' => $sc['locked'] ?? null,
                             'position' => $sc['position'],
                         ];
-                        if (isset($sc['width'])) {
-                            $colConfig['width'] = $sc['width'];
-                        }
+                        $this->injectCustomLayoutValues($colConfig, $sc);
                         $availableFields[] = $colConfig;
                     } else {
                         $keyParts = explode('~', $key);
@@ -387,9 +384,7 @@ class DataObjectHelperController extends AdminAbstractController
                                         if ($fieldConfig) {
                                             $fieldConfig['key'] = $key;
                                             $fieldConfig['label'] = '#' . $keyFieldDef->getTitle();
-                                            if (isset($sc['locked'])) {
-                                                $fieldConfig['locked'] = $sc['locked'];
-                                            }
+                                            $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                             $availableFields[] = $fieldConfig;
                                         }
                                     }
@@ -427,12 +422,7 @@ class DataObjectHelperController extends AdminAbstractController
                             if ($fd !== null) {
                                 $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, $keyPrefix, $class, $objectId);
                                 if (!empty($fieldConfig)) {
-                                    if (isset($sc['width'])) {
-                                        $fieldConfig['width'] = $sc['width'];
-                                    }
-                                    if (isset($sc['locked'])) {
-                                        $fieldConfig['locked'] = $sc['locked'];
-                                    }
+                                    $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                     $availableFields[] = $fieldConfig;
                                 }
                             }
@@ -457,12 +447,7 @@ class DataObjectHelperController extends AdminAbstractController
                                 if (!empty($fd)) {
                                     $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, null, $class, $objectId);
                                     if (!empty($fieldConfig)) {
-                                        if (isset($sc['width'])) {
-                                            $fieldConfig['width'] = $sc['width'];
-                                        }
-                                        if (isset($sc['locked'])) {
-                                            $fieldConfig['locked'] = $sc['locked'];
-                                        }
+                                        $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                         $availableFields[] = $fieldConfig;
                                     }
                                 }
@@ -528,6 +513,26 @@ class DataObjectHelperController extends AdminAbstractController
             'searchFilter' => $gridConfig['searchFilter'] ?? '',
             'filter' => $gridConfig['filter'] ?? [],
         ];
+    }
+
+    private function injectCustomLayoutValues(array $fieldConfig, array $savedColumn): array
+    {
+        $keys = ['width', 'locked'];
+        foreach ($keys as $key) {
+            if (isset($savedColumn[$key])) {
+                $fieldConfig[$key] = $savedColumn[$key];
+            }
+        }
+
+        $fieldConfigKeys = ['noteditable'];
+        foreach ($fieldConfigKeys as $fieldConfigKey) {
+            if (isset($savedColumn['fieldConfig']['layout'][$fieldConfigKey])) {
+                $setter = 'set' . ucfirst($fieldConfigKey);
+                $fieldConfig['layout']->$setter($savedColumn['fieldConfig']['layout'][$fieldConfigKey]);
+            }
+        }
+
+        return $fieldConfig;
     }
 
     /**
@@ -1179,7 +1184,7 @@ class DataObjectHelperController extends AdminAbstractController
         //prepare fields
         $fieldnames = [];
         $fields = json_decode($allParams['fields'][0], true);
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $fieldnames[] = $field['key'];
         }
         $allParams['fields'] = $fieldnames;

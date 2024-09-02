@@ -634,10 +634,10 @@ class TranslationController extends AdminAbstractController
             ];
         }
 
-        if(!empty($conditionFilters)) {
+        if (!empty($conditionFilters)) {
             $conditions = [];
             $params = [];
-            foreach($conditionFilters as $conditionFilter) {
+            foreach ($conditionFilters as $conditionFilter) {
                 $conditions[] = $conditionFilter['condition'];
                 $params[$conditionFilter['field']] = $conditionFilter['value'];
             }

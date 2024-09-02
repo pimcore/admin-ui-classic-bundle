@@ -703,7 +703,7 @@ class ElementController extends AdminAbstractController
                     'requires' => [],  // Initialize 'requires' as an empty array
                 ];
 
-                if(count($elements) > 0) {
+                if (count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiresForFrontend($elements);
                     $result['total'] = count($result['requires']);
 
@@ -765,7 +765,7 @@ class ElementController extends AdminAbstractController
                     'requiredBy' => [], // Initialize 'requiredBy' as an empty array
                 ];
 
-                if(count($elements) > 0) {
+                if (count($elements) > 0) {
                     $result = Model\Element\Service::getFilterRequiredByPathForFrontend($elements);
                     $result['total'] = count($result['requiredBy']);
 
