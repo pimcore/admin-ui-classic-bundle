@@ -46,6 +46,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     public const FRAME_OPT = 'frame-src';
 
+    public const FRAME_ANCHESTORS = 'frame-ancestors';
+
     public const WORKER_OPT = 'worker-src';
 
     private array $allowedUrls = [
@@ -80,6 +82,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
             self::SCRIPT_OPT => "'self' 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
             self::STYLE_OPT => "'self' 'unsafe-inline'",
             self::FRAME_OPT => "'self' data:",
+            self::FRAME_ANCHESTORS => "'self'",
             self::CONNECT_OPT => "'self' blob:",
             self::FONT_OPT => "'self'",
             self::WORKER_OPT => "'self' blob:",
