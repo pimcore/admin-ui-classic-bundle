@@ -1,3 +1,6 @@
+#### v1.6.0
+- show tree search even if all child elements fit on one page (according to `tree_paging_limit`) - if there are at least 30 children in total
+
 #### v1.4.0
 - [DataObject] Password data type algorithms other than `password_hash` are deprecated since `pimcore/pimcore:^11.2` and will be removed in `pimcore/pimcore:^12`.
 
