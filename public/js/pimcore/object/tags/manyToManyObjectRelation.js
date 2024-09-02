@@ -388,6 +388,16 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
+                    filterType = 'boolean';
+                }
+
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
@@ -575,7 +585,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 bodyCssClass: "pimcore_object_tag_objects",
                 listeners: {
                     rowdblclick: this.gridRowDblClickHandler
-                }
+                },
+                plugins: [
+                    'gridfilters'
+                ]
             });
 
             this.component.on("rowcontextmenu", this.onRowContextmenu);

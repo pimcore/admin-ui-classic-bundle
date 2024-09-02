@@ -277,7 +277,10 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             autoHeight: autoHeight,
-            bodyCssClass: "pimcore_object_tag_multihref"
+            bodyCssClass: "pimcore_object_tag_multihref",
+            plugins: [
+              'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -444,6 +447,10 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
         ];
 
         columns = Ext.Array.map(columns, function(column) {
+            column.filter = {
+                type: 'list'
+            }
+
             let columnWidth = this.getColumnWidth(column.dataIndex);
             if (columnWidth > 0) {
                 column.width = columnWidth;

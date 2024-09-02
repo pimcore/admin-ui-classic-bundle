@@ -36,41 +36,43 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
 
         value = Ext.clone(value);
 
-        var fieldInfo = Ext.clone(this.config.fieldInfo);
-        var fieldType = this.config.elementType;
+        const fieldInfo = Ext.clone(this.config.fieldInfo);
+        const fieldType = this.config.elementType;
 
         //make sure that no relation data is loaded async
         fieldInfo.layout.optimizedAdminLoading = false;
 
-        if(!fieldInfo || !fieldInfo.layout) {
+        if (!fieldInfo?.layout) {
             return;
         }
 
-        if(fieldInfo.layout.noteditable) {
+        if (fieldInfo.layout.noteditable) {
             pimcore.helpers.showNotification(t('warning'), t('this_element_cannot_be_edited'), 'warning');
             return;
         }
 
         this.context = this.editingPlugin.context;
-        // this.callParent(arguments);
 
-        var tagType = fieldInfo.layout.fieldtype;
+        const tagType = fieldInfo.layout.fieldtype;
 
         // translate title
         if(typeof fieldInfo.layout.title != "undefined") {
             fieldInfo.layout.title = t(fieldInfo.layout.title);
         }
 
-
+        let tag;
         if (fieldType == "assetmetadata") {
-            var tag = new pimcore.asset.metadata.tags[tagType](value, fieldInfo.layout);
+            tag = new pimcore.asset.metadata.tags[tagType](value, fieldInfo.layout);
         } else {
-            var tag = new pimcore[fieldType].tags[tagType](value, fieldInfo.layout);
+            tag = new pimcore[fieldType].tags[tagType](value, fieldInfo.layout);
         }
 
         if(fieldType == 'object') {
-            var object = Ext.clone(this.context.record);
+            const object = Ext.clone(this.context.record);
             tag.setObject(object);
+            tag.updateContext({
+                objectId: object.id
+            });
         }
 
         tag.updateContext({
@@ -82,7 +84,7 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             tag.finishSetup();
         }
 
-        var formPanel = Ext.create('Ext.form.Panel', {
+        const formPanel = Ext.create('Ext.form.Panel', {
             xtype: "form",
             border: false,
             items: [tag.getLayoutEdit()],
@@ -145,10 +147,10 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
     },
 
     completeEdit: function(remainVisible) {
-        var me = this,
+        const me = this,
             fieldInfo = me.config.fieldInfo,
-            startValue = me.startValue,
-            value;
+            startValue = me.startValue;
+        let value;
 
         if (fieldInfo.layout.noteditable) {
             return;
