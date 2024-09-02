@@ -237,7 +237,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 var value = filterData[i].getValue();
 
                 if (value instanceof Date) {
-                    value = Ext.Date.format(value, "Y-m-d");
+                    value = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
 
                 if (value && typeof value == "object") {
@@ -857,6 +857,7 @@ pimcore.element.helpers.gridColumnConfig = {
         this.exportParameters.initial = initial ? 1 : 0;
         this.exportParameters.language = this.gridLanguage;
         this.exportParameters.context = Ext.encode(this.context);
+        this.exportParameters.userTimezone = getUserTimezone();
 
         Ext.Ajax.request({
             url: this.exportProcessUrl,

@@ -92,14 +92,14 @@ pimcore.asset.versions = Class.create({
                         return "";
                     }.bind(this), editable: false},
                     {text: t("date"), width:150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function(d) {
-                        return Ext.Date.format(d, "Y-m-d H:i:s");
+                        return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     }},
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
                     {text: t("user"), sortable: true, dataIndex: 'name', filter: 'list'},
                     {text: t("scheduled"), width:130, sortable: true, dataIndex: 'scheduled', renderer: function(d) {
                         if (d != null){
                         	var date = new Date(d * 1000);
-                            return Ext.Date.format(date, "Y-m-d H:i:s");
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     	}
                     }, editable: false},
                     {text: t("note"), sortable: true, dataIndex: 'note', editor: new Ext.form.TextField(), filter: 'string', renderer: Ext.util.Format.htmlEncode}
@@ -155,7 +155,10 @@ pimcore.asset.versions = Class.create({
         var data = grid.getStore().getAt(rowIndex).data;
 
         var versionId = data.id;
-        var url = Routing.generate('pimcore_admin_asset_showversion', {id: versionId});
+        var url = Routing.generate('pimcore_admin_asset_showversion', {
+            id: versionId,
+            userTimezone: getUserTimezone()
+        });
         Ext.get(this.frameId).dom.src = url;
     },
 
@@ -213,7 +216,7 @@ pimcore.asset.versions = Class.create({
                     Ext.Ajax.request({
                         url: Routing.generate('pimcore_admin_element_deleteallversion'),
                         method: 'DELETE',
-                        params: {id: elememntId, date: modificationDate}
+                        params: {id: elememntId, date: modificationDate, type: 'asset'}
                     });
 
                     //get sub collection of versions for removel. Keep current version

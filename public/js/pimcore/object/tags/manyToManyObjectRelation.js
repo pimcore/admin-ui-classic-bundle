@@ -85,7 +85,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             storeConfig.autoLoad = true;
             storeConfig.listeners = {
                 beforeload: function(store) {
-                    store.getProxy().setExtraParam('unsavedChanges', this.object ? this.object.getSaveData().data : {});
+                    store.getProxy().setExtraParam('unsavedChanges', this.object && typeof this.object.getSaveData === "function" ? this.object.getSaveData().data : {});
                     store.getProxy().setExtraParam('context', JSON.stringify(this.getContext()));
                 }.bind(this)
             };
@@ -389,6 +389,16 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
+                    filterType = 'boolean';
+                }
+
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
@@ -556,7 +566,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 bodyCssClass: "pimcore_object_tag_objects",
                 listeners: {
                     rowdblclick: this.gridRowDblClickHandler
-                }
+                },
+                plugins: [
+                    'gridfilters'
+                ]
             });
 
             this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -733,7 +746,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {
                     afterrender: function (gridview) {
-                        this.requestNicePathData(this.store.data);
+                        this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
             }

@@ -57,7 +57,10 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             this.notes = new pimcore.element.notes(this, "document");
         }
 
-        this.dependencies = new pimcore.element.dependencies(this, "document");
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "document");
+        }
+
         this.tagAssignment = new pimcore.element.tag.assignment(this, "document");
         this.workflows = new pimcore.element.workflows(this, "document");
     },
@@ -281,6 +284,15 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
                 buttons.push(this.getTranslationButtons());
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             this.toolbar = new Ext.Toolbar({
                 id: "document_toolbar_" + this.id,
                 region: "north",
@@ -304,7 +316,9 @@ pimcore.document.folder = Class.create(pimcore.document.document, {
             items.push(this.properties.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if (user.isAllowed("notes_events")) {
             items.push(this.notes.getLayout());

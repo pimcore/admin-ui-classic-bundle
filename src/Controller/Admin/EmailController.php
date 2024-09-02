@@ -76,6 +76,10 @@ class EmailController extends AdminAbstractController
                 $filterTerm = implode(' ', $parts);
             }
 
+            if (str_starts_with($filterTerm, '@')) {
+                $filterTerm = str_replace('@', '', $filterTerm);
+            }
+
             $condition = '( MATCH (`from`,`to`,`cc`,`bcc`,`subject`,`params`) AGAINST (' . $list->quote($filterTerm) . ' IN BOOLEAN MODE) )';
 
             if ($request->get('documentId')) {

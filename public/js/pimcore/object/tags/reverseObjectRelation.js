@@ -178,7 +178,7 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                 markDirty: false,
                 listeners: {
                     afterrender: function (gridview) {
-                        this.requestNicePathData(this.store.data);
+                        this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
             },

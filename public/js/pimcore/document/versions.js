@@ -125,7 +125,7 @@ pimcore.document.versions = Class.create({
                     },
                     {
                         text: t("date"), width: 150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function (d) {
-                            return Ext.Date.format(d, "Y-m-d H:i:s");
+                            return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }, editable: false
                     },
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
@@ -138,7 +138,7 @@ pimcore.document.versions = Class.create({
                         renderer: function (d) {
                             if (d != null) {
                                 var date = new Date(d * 1000);
-                                return Ext.Date.format(date, "Y-m-d H:i:s");
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                             }
                             return d;
                         },
@@ -297,7 +297,7 @@ pimcore.document.versions = Class.create({
                     Ext.Ajax.request({
                         url: Routing.generate('pimcore_admin_element_deleteallversion'),
                         method: 'DELETE',
-                        params: {id: elememntId, date: modificationDate}
+                        params: {id: elememntId, date: modificationDate, type: 'document'}
                     });
 
                     //get sub collection of versions for removel. Keep current version

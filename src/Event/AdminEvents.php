@@ -152,6 +152,21 @@ class AdminEvents
     const OBJECT_LIST_AFTER_LIST_LOAD = 'pimcore.admin.object.list.afterListLoad';
 
     /**
+     * Allows to implement an additional condition for the object list when the search field within the grid is used.
+     *
+     * Subject: \Pimcore\Bundle\AdminBundle\Helper\GridHelperService
+     * Arguments:
+     *  - query | the fulltext query search terms
+     *  - condition | set the condition for the search
+     *  - list | the data object list
+     *
+     * @Event("Symfony\Component\EventDispatcher\GenericEvent")
+     *
+     * @var string
+     */
+    const OBJECT_LIST_HANDLE_FULLTEXT_QUERY = 'pimcore.admin.object.list.handleFulltextQuery';
+
+    /**
      * Fired before the request params are parsed. This event apply to both the folder content preview list and the grid list.
      *
      * Subject: A controller extending \Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController
