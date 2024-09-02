@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\GDPR\DataProvider;
 
 use Doctrine\DBAL\Exception;
 use Pimcore\Bundle\AdminBundle\Helper\QueryParams;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Model\Asset;
 use Pimcore\Model\Element;
 use Symfony\Component\HttpFoundation\Response;
@@ -160,7 +161,7 @@ class Assets extends Elements implements DataProviderInterface
                 $element = Element\Service::getElementById('asset', $hit['id']);
 
                 if ($element instanceof Asset) {
-                    $data = Asset\Service::gridAssetData($element);
+                    $data = GridData\Asset::getData($element);
                     $data['permissions'] = $element->getUserPermissions();
                     $elements[] = $data;
                 }

@@ -104,7 +104,7 @@ pimcore.object.versions = Class.create({
                     },
                     {
                         text: t("date"), width: 150, sortable: true, dataIndex: 'date', filter: 'date', renderer: function (d) {
-                            return Ext.Date.format(d, "Y-m-d H:i:s");
+                            return Ext.Date.format(d, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }
                     },
                     {text: "ID", sortable: true, dataIndex: 'id', editable: false, width: 60},
@@ -117,7 +117,7 @@ pimcore.object.versions = Class.create({
                         renderer: function (d) {
                             if (d != null) {
                                 var date = new Date(d * 1000);
-                                return Ext.Date.format(date, "Y-m-d H:i:s");
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                             }
                         },
                         editable: false
@@ -201,7 +201,11 @@ pimcore.object.versions = Class.create({
 
             var selections = grid.getSelectionModel().getSelection();
 
-            var url = Routing.generate('pimcore_admin_dataobject_dataobject_diffversions', {from: selections[0].data.id, to: selections[1].data.id});
+            var url = Routing.generate('pimcore_admin_dataobject_dataobject_diffversions', {
+                from: selections[0].data.id,
+                to: selections[1].data.id,
+                userTimezone: getUserTimezone()
+            });
             Ext.get(this.iframeId).dom.src = url;
         }
     },
@@ -211,8 +215,10 @@ pimcore.object.versions = Class.create({
         var store = grid.getStore();
         var data = store.getAt(rowIndex).data;
         var versionId = data.id;
-
-        var url = Routing.generate('pimcore_admin_dataobject_dataobject_previewversion', {id: versionId});
+        var url = Routing.generate('pimcore_admin_dataobject_dataobject_previewversion', {
+            id: versionId,
+            userTimezone: getUserTimezone()
+        });
         Ext.get(this.iframeId).dom.src = url;
     },
 
@@ -270,7 +276,7 @@ pimcore.object.versions = Class.create({
                     Ext.Ajax.request({
                         url: Routing.generate('pimcore_admin_element_deleteallversion'),
                         method: 'DELETE',
-                        params: {id: elememntId, date: modificationDate}
+                        params: {id: elememntId, date: modificationDate, type: 'object'}
                     });
 
                     //get sub collection of versions for removel. Keep current version

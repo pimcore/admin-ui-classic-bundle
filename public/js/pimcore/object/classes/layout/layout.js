@@ -293,7 +293,7 @@ pimcore.object.classes.layout.layout = Class.create({
                     iconCls: "pimcore_icon_icons",
                     text: t('icon_library'),
                     handler: function () {
-                        pimcore.helpers.openGenericIframeWindow("icon-library", Routing.generate('pimcore_admin_misc_iconlist'), "pimcore_icon_icons", t("icon_library"));
+                        pimcore.globalmanager.get("layout_toolbar").showIconLibrary();
                     }
                 }
             ]

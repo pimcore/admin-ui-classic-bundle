@@ -94,7 +94,7 @@ pimcore.notification.panel = Class.create({
             {
                 header: t("date"), flex: 3, sortable: true, filter: 'date', dataIndex: 'timestamp',
                 renderer: function(d) {
-                    return Ext.Date.format(new Date(d*1000), "Y-m-d H:i:s");
+                    return Ext.Date.format(new Date(d*1000), pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                 }
             },
             {

@@ -21,7 +21,7 @@ final class Tool
     /**
      * @internal
      */
-    public static function getLanguageFlagFile(string $language, bool $absolutePath = true): string
+    public static function getLanguageFlagFile(string $language, bool $absolutePath = true, bool $includeUnknown = true): string
     {
         $basePath = '/bundles/pimcoreadmin/img/flags';
         $iconFsBasePath = PIMCORE_WEB_ROOT . $basePath;
@@ -45,7 +45,10 @@ final class Tool
         $countryFsPath = $iconFsBasePath . '/countries/' . $countryCode . '.svg';
         $fallbackFsLanguagePath = $iconFsBasePath . '/languages/' . $fallbackLanguageCode . '.svg';
 
-        $iconPath = ($absolutePath === true ? $iconFsBasePath : $basePath) . '/countries/_unknown.svg';
+        $iconPath = '';
+        if ($includeUnknown) {
+            $iconPath = ($absolutePath === true ? $iconFsBasePath : $basePath) . '/countries/_unknown.svg';
+        }
 
         $languageCountryMapping = [
             'aa' => 'er', 'af' => 'za', 'am' => 'et', 'as' => 'in', 'ast' => 'es', 'asa' => 'tz',

@@ -22,6 +22,7 @@ creationdate: 'Creation Date'
 usermodification: 'User Modification'
 userowner: Owner
 languages: Languages
+datetime_locale: Date Time Locale
 password_was_not_changed: "Password wasn't changed because it isn't secure enough"
 password_does_not_match: "New password and confirm password doesn't match"
 incorrect_password: "Given password is incorrect"
@@ -789,6 +790,7 @@ there_are_more_items: 'There are more items than displayed'
 workflow_actions: Actions
 workflow_notes_requred_field_message: '"%s" is a required field.'
 workflow_transition_applied_successfully: 'Action applied successfully'
+workflow_transition_unsaved_data: 'Your data changes have not been saved yet. Please, save changes before applying workflow transition.'
 workflow_change_email_notification_subject: "Workflow update for %s in workflow '%s'"
 workflow_details: 'Workflow Details'
 workflow_graph: 'Workflow Graph'
@@ -1019,3 +1021,4 @@ female: Female
 pdf_js_unsafe: This PDF file contains JavaScript. If you want to view it, please download and open it in your local PDF viewer.
 pdf_scan_in_progress: 'Preview not available: PDF is being scanned. This may take a while.'
 invalid_option: 'Invalid Option field [ {field} ]: Please choose a valid option for select / multiselect field [ {field} ]. Current value: "{option}"'
+respect_timezone: 'Respect timezone'

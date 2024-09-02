@@ -23,6 +23,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
@@ -60,6 +61,8 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 
 /**
  * @Route("/asset")
@@ -576,7 +579,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($newType != $asset->getType()) {
             return $this->adminJson([
                 'success' => false,
-                'message' => sprintf($translator->trans('asset_type_change_not_allowed', [], 'admin'), $asset->getType(), $newType),
+                'message' => sprintf($translator->trans('asset_type_change_not_allowed', [], 'admin'), $newType, $asset->getType()),
             ]);
         }
 
@@ -917,7 +920,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * @Route("/show-version", name="pimcore_admin_asset_showversion", methods={"GET"})
      */
-    public function showVersionAction(Request $request): Response
+    public function showVersionAction(Request $request, Environment $twig): Response
     {
         $id = (int)$request->get('id');
         $version = Model\Version::getById($id);
@@ -935,6 +938,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             if ($scanResponse) {
                 return $scanResponse;
             }
+        }
+
+        Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+        if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+            $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
         }
 
         $loader = \Pimcore::getContainer()->get('pimcore.implementation_loader.asset.metadata.data');
@@ -2350,7 +2359,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             foreach ($list->getAssets() as $index => $asset) {
                 // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_asset is insufficient and could lead security breach
                 if ($asset->isAllowed('list')) {
-                    $a = Asset\Service::gridAssetData($asset, $allParams['fields'], $allParams['language'] ?? '');
+                    $a = GridData\Asset::getData($asset, $allParams['fields'], $allParams['language'] ?? '');
                     $assets[] = $a;
                 }
             }

@@ -299,7 +299,7 @@ pimcore.object.helpers.gridConfigDialog = Class.create(pimcore.element.helpers.g
                             if (key == "modificationDate" || key == "creationDate") {
                                 var timestamp = intval(value) * 1000;
                                 var date = new Date(timestamp);
-                                return Ext.Date.format(date, "Y-m-d H:i");
+                                return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
 
                             } else if (key == "published") {
                                 return Ext.String.format('<div style="text-align: left"><div role="button" class="x-grid-checkcolumn{0}" style=""></div></div>', value ? '-checked' : '');
@@ -488,7 +488,6 @@ pimcore.object.helpers.gridConfigDialog = Class.create(pimcore.element.helpers.g
                         }
                     }
                 },
-                id: 'tree',
                 region: 'east',
                 title: t('selected_grid_columns'),
                 layout: 'fit',
