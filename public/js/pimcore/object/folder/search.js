@@ -423,6 +423,10 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
     },
 
     onRawDeleteSelectedRows: function () {
+        if (typeof this.grid === "undefined") {
+            return null;
+        }
+
         var ids = [];
         var selectedRows = this.grid.getSelectionModel().getSelection();
         for (var i = 0; i < selectedRows.length; i++) {
