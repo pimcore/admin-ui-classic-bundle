@@ -29,9 +29,9 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
     use LoggerAwareTrait;
 
     private ?string $nonce = null;
-    
+
     private const SELF = "'self'";
-    
+
     public const DEFAULT_OPT = 'default-src';
 
     public const IMG_OPT = 'img-src';
@@ -80,14 +80,14 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
         $resolver->setDefaults([
             self::DEFAULT_OPT => self::SELF,
             self::IMG_OPT => '* data: blob:',
-            self::MEDIA_OPT => self::SELF . " data:",
+            self::MEDIA_OPT => self::SELF . ' data:',
             self::SCRIPT_OPT => self::SELF . " 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
             self::STYLE_OPT => self::SELF . " 'unsafe-inline'",
-            self::FRAME_OPT => self::SELF . " data:",
+            self::FRAME_OPT => self::SELF . ' data:',
             self::FRAME_ANCHESTORS => self::SELF,
-            self::CONNECT_OPT => self::SELF . " blob:",
+            self::CONNECT_OPT => self::SELF . ' blob:',
             self::FONT_OPT => self::SELF,
-            self::WORKER_OPT => self::SELF . " blob:",
+            self::WORKER_OPT => self::SELF . ' blob:',
         ]);
     }
 
