@@ -1,3 +1,6 @@
+#### v1.6.0
+- show tree search even if all child elements fit on one page (according to `tree_paging_limit`) - if there are at least 30 children in total
+
 #### v1.5.0
 - [Assets] Metadata can be now displayed as a read-only tab when the user is granted `view` permissions to the asset.
 - [Composer] Added `phpoffice/phpspreadsheet` requirement (which got moved out from `pimcore/pimcore`) and extended support to `v2`.
