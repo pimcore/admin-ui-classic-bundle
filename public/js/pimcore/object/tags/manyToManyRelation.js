@@ -450,8 +450,21 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             column.filter = {
                 type: 'list'
             }
+
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
             return column;
-        });
+        }.bind(this));
 
         return columns;
     },

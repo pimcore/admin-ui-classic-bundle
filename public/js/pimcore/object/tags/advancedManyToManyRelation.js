@@ -126,7 +126,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
             var cellEditor = null;
             var renderer = null;
-            var listeners = null;
+            var listeners = {};
 
             filterType = 'list';
 
@@ -251,6 +251,25 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
         columns.push({text: t("type"), dataIndex: 'type', width: 100});
         columns.push({text: t("subtype"), dataIndex: 'subtype', width: 100});
 
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if(typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         if (!readOnly) {
             columns.push({

@@ -371,7 +371,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
 
                 var fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.width = 100;
                 fc.flex = 100;
                 fc.hidden = false;
                 fc.layout = field;
@@ -402,6 +401,26 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 columns.push(fc);
             }
         }
+
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if (typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         return columns;
     },
