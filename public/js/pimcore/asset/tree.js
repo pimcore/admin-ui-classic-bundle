@@ -1071,7 +1071,7 @@
  
      uploadZip: function (tree, record) {
 
-         var uploadFunction = function(allowOverwrite) {
+         const uploadFunction = function(allowOverwrite) {
              pimcore.helpers.uploadDialog(Routing.generate('pimcore_admin_asset_importzip', {parentId: record.id, allowOverwrite: allowOverwrite ? 'true' : 'false' }), "Filedata", function (response) {
                  // this.attributes.reference
                  var res = Ext.decode(response.response.responseText);
@@ -1133,7 +1133,7 @@
              }.bind(this));
          }
 
-         let messageBox = new Ext.window.MessageBox({
+         const messageBox = new Ext.window.MessageBox({
              layout: {
                  type: 'vbox',
                  align: 'center'
