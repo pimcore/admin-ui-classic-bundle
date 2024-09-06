@@ -116,6 +116,7 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             store: this.store,
             border: true,
             style: "margin-bottom: 10px",
+            cls: "reverse-object-relation-panel",
             selModel: Ext.create('Ext.selection.RowModel', {}),
             columns: {
                 defaults: {
@@ -163,12 +164,24 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                 cls: "pimcore_force_auto_width"
             },
             bbar: {
-                items: [{
-                    xtype: "tbtext",
-                    text: ' <span class="warning">' + t('nonownerobject_warning') + " | " + t('owner_class')
-                                    + ':<b>' + t(className) + "</b> " + t('owner_field') + ': <b>'
-                                    + t(this.fieldConfig.ownerFieldName) + '</b></span>'
-                }],
+               items: [
+                    {
+                        xtype: "tbtext",
+                        text:
+                            ' <div class="warning reverse-object-relation-warning">' +
+                            t("nonownerobject_warning") +
+                            "<br>" +
+                            t("owner_class") +
+                            ": <b>" +
+                            t(className) +
+                            "</b> " +
+                            t("owner_field") +
+                            ": <b>" +
+                            t(this.fieldConfig.ownerFieldName) +
+                            "</b></div>",
+                        height: "fit-content",
+                    },
+                ],
                 ctCls: "pimcore_force_auto_width",
                 cls: "pimcore_force_auto_width"
             },
