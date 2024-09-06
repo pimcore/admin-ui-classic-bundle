@@ -112,11 +112,11 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
 
         let columns = this.getVisibleColumns();
 
-        this.component = new Ext.grid.GridPanel({
+       this.component = new Ext.grid.GridPanel({
             store: this.store,
             border: true,
             style: "margin-bottom: 10px",
-            cls: "reverse-object-relation-panel",
+            cls: "pimcore_reverse-object-relation-panel",
             selModel: Ext.create('Ext.selection.RowModel', {}),
             columns: {
                 defaults: {
@@ -161,14 +161,14 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             tbar: {
                 items: this.getEditToolbarItems(),
                 ctCls: "pimcore_force_auto_width",
-                cls: "pimcore_force_auto_width"
+                cls: "pimcore_force_auto_width",
             },
             bbar: {
-               items: [
+                items: [
                     {
                         xtype: "tbtext",
                         text:
-                            ' <div class="warning reverse-object-relation-warning">' +
+                            ' <div class="warning pimcore_reverse-object-relation-warning">' +
                             t("nonownerobject_warning") +
                             "<br>" +
                             t("owner_class") +
@@ -183,7 +183,8 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                     },
                 ],
                 ctCls: "pimcore_force_auto_width",
-                cls: "pimcore_force_auto_width"
+                cls: "pimcore_force_auto_width pimcore_reverse-object-relation-bottom-bar",
+                height: "4.5rem",
             },
             autoHeight: autoHeight,
             bodyCssClass: "pimcore_object_tag_objects",
@@ -192,12 +193,12 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                 listeners: {
                     afterrender: function (gridview) {
                         this.requestNicePathData(this.store.data);
-                    }.bind(this)
-                }
+                    }.bind(this),
+                },
             },
             listeners: {
-                rowdblclick: this.gridRowDblClickHandler
-            }
+                rowdblclick: this.gridRowDblClickHandler,
+            },
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
