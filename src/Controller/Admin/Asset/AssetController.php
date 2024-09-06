@@ -2161,8 +2161,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
                         if ($parent->isAllowed('create')) {
                             if ($request->get('allowOverwrite') && $request->get('allowOverwrite') === 'true'
-                                && Asset\Service::pathExists($parent->getRealFullPath().'/'.$filename))
-                            {
+                                && Asset\Service::pathExists($parent->getRealFullPath().'/'.$filename)) {
                                 $asset = Asset::getByPath($parent->getRealFullPath().'/'.$filename);
                                 $asset->setStream(fopen($tmpFile, 'rb', false, File::getContext()));
                                 $asset->save();
