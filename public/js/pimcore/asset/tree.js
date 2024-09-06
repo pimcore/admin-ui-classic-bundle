@@ -1070,66 +1070,94 @@
      },
  
      uploadZip: function (tree, record) {
- 
-         pimcore.helpers.uploadDialog(Routing.generate('pimcore_admin_asset_importzip', {parentId: record.id}), "Filedata", function (response) {
-             // this.attributes.reference
-             var res = Ext.decode(response.response.responseText);
-             pimcore.helpers.addTreeNodeLoadingIndicator("asset", record.get("id"));
- 
-             this.downloadProgressBar = new Ext.ProgressBar({
-                 text: t('initializing')
-             });
- 
-             this.downloadProgressWin = new Ext.Window({
-                 title: t("upload_zip"),
-                 layout:'fit',
-                 width:200,
-                 bodyStyle: "padding: 10px;",
-                 closable:false,
-                 plain: true,
-                 items: [this.downloadProgressBar],
-                 listeners: pimcore.helpers.getProgressWindowListeners()
-             });
- 
-             this.downloadProgressWin.show();
- 
-             var pj = new pimcore.tool.paralleljobs({
-                 success: function (jobId) {
-                     if(this.downloadProgressWin) {
+
+         const uploadFunction = function(allowOverwrite) {
+             pimcore.helpers.uploadDialog(Routing.generate('pimcore_admin_asset_importzip', {parentId: record.id, allowOverwrite: allowOverwrite ? 'true' : 'false' }), "Filedata", function (response) {
+                 // this.attributes.reference
+                 var res = Ext.decode(response.response.responseText);
+                 pimcore.helpers.addTreeNodeLoadingIndicator("asset", record.get("id"));
+
+                 this.downloadProgressBar = new Ext.ProgressBar({
+                     text: t('initializing')
+                 });
+
+                 this.downloadProgressWin = new Ext.Window({
+                     title: t("upload_zip"),
+                     layout: 'fit',
+                     width: 200,
+                     bodyStyle: "padding: 10px;",
+                     closable: false,
+                     plain: true,
+                     items: [this.downloadProgressBar],
+                     listeners: pimcore.helpers.getProgressWindowListeners()
+                 });
+
+                 this.downloadProgressWin.show();
+
+                 var pj = new pimcore.tool.paralleljobs({
+                     success: function (jobId) {
+                         if (this.downloadProgressWin) {
+                             this.downloadProgressWin.close();
+                         }
+
+                         this.downloadProgressBar = null;
+                         this.downloadProgressWin = null;
+
+                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
+                     }.bind(this, res.jobId),
+                     update: function (currentStep, steps, percent) {
+                         if (this.downloadProgressBar) {
+                             var status = currentStep / steps;
+                             this.downloadProgressBar.updateProgress(status, percent + "%");
+                         }
+                     }.bind(this),
+                     failure: function (message) {
                          this.downloadProgressWin.close();
-                     }
- 
-                     this.downloadProgressBar = null;
-                     this.downloadProgressWin = null;
- 
-                     pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
-                 }.bind(this, res.jobId),
-                 update: function (currentStep, steps, percent) {
-                     if(this.downloadProgressBar) {
-                         var status = currentStep / steps;
-                         this.downloadProgressBar.updateProgress(status, percent + "%");
-                     }
-                 }.bind(this),
-                 failure: function (message) {
-                     this.downloadProgressWin.close();
-                     pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
-                     pimcore.helpers.showNotification(t("error"), t("error"),
-                         "error", t(message));
-                 }.bind(this),
-                 jobs: res.jobs
-             });
-         }.bind(this), function (res) {
-             var response = Ext.decode(res.response.responseText);
-             if (response && response.success === false) {
-                 pimcore.helpers.showNotification(t("error"), response.message, "error",
-                     res.response.responseText);
-             } else {
-                 pimcore.helpers.showNotification(t("error"), res, "error",
-                     res.response.responseText);
+                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
+                         pimcore.helpers.showNotification(t("error"), t("error"),
+                             "error", t(message));
+                     }.bind(this),
+                     jobs: res.jobs
+                 });
+             }.bind(this), function (res) {
+                 var response = Ext.decode(res.response.responseText);
+                 if (response && response.success === false) {
+                     pimcore.helpers.showNotification(t("error"), response.message, "error",
+                         res.response.responseText);
+                 } else {
+                     pimcore.helpers.showNotification(t("error"), res, "error",
+                         res.response.responseText);
+                 }
+
+                 pimcore.elementservice.refreshNodeAllTrees("asset", record.parentNode.get("id"));
+             }.bind(this));
+         }
+
+         const messageBox = new Ext.window.MessageBox({
+             layout: {
+                 type: 'vbox',
+                 align: 'center'
              }
- 
-             pimcore.elementservice.refreshNodeAllTrees("asset", record.parentNode.get("id"));
-         }.bind(this));
+         });
+
+         messageBox.show({
+             title: t('overwrite_zip_files'),
+             msg: t('zip_upload_want_to_overwrite'),
+             buttons: Ext.Msg.OK & Ext.Msg.NO,
+             buttonText: {
+                 yes: t('zip_upload_want_to_overwrite_yes_option'),
+                 no: t('zip_upload_want_to_overwrite_no_option')
+             },
+             prompt: false,
+             icon: Ext.MessageBox.QUESTION,
+             fn: function (action) {
+                 if (action === 'yes') {
+                     uploadFunction(action === 'yes'); // currently visible message box if not visible anymore after clicking a button -> action for current message box gets executed here instead of in above loop
+                 } else {
+                     uploadFunction()
+                 }
+             }
+         });
      },
  
      enableHtml5Upload: function (node, rowIdx, out) {
