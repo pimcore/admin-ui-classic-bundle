@@ -2091,6 +2091,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                         'limit' => $filesPerJob,
                         'jobId' => $jobId,
                         'last' => (($i + 1) >= $jobAmount) ? 'true' : '',
+                        'allowOverwrite' => $request->get('allowOverwrite') ? $request->get('allowOverwrite') : 'false',
                     ],
                 ]];
             }
@@ -2154,15 +2155,25 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                         $parent = Asset\Service::createFolderByPath($parentPath);
 
                         // check for duplicate filename
-                        $filename = $this->getSafeFilename($parent->getRealFullPath(), $filename);
+                        if ($request->get('allowOverwrite') && $request->get('allowOverwrite') !== 'true') {
+                            $filename = $this->getSafeFilename($parent->getRealFullPath(), $filename);
+                        }
 
                         if ($parent->isAllowed('create')) {
-                            $asset = Asset::create($parent->getId(), [
-                                'filename' => $filename,
-                                'sourcePath' => $tmpFile,
-                                'userOwner' => $this->getAdminUser()->getId(),
-                                'userModification' => $this->getAdminUser()->getId(),
-                            ]);
+                            if ($request->get('allowOverwrite') && $request->get('allowOverwrite') === 'true'
+                                && Asset\Service::pathExists($parent->getRealFullPath().'/'.$filename))
+                            {
+                                $asset = Asset::getByPath($parent->getRealFullPath().'/'.$filename);
+                                $asset->setStream(fopen($tmpFile, 'rb', false, File::getContext()));
+                                $asset->save();
+                            } else {
+                                Asset::create($parent->getId(), [
+                                    'filename' => $filename,
+                                    'sourcePath' => $tmpFile,
+                                    'userOwner' => $this->getAdminUser()->getId(),
+                                    'userModification' => $this->getAdminUser()->getId(),
+                                ]);
+                            }
 
                             @unlink($tmpFile);
                         } else {
