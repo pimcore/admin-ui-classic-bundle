@@ -694,6 +694,12 @@ pimcore.element.helpers.gridColumnConfig = {
                 Ext.Msg.alert(t("error"), t("error_jobs") + ":<br>" + jobErrors.join("<br>"));
             }
 
+            // Due to some ExtJS bug, when using a lock, the selection is visually cleared after batch operation
+            // To avoid confusion and disalignment on what we see from what is actually selected, everything is unselected
+            if (this.grid.hasOwnProperty('enableLocking') && this.grid.enableLocking){
+                this.grid.getSelectionModel().deselectAll();
+            }
+
             return;
         }
 
