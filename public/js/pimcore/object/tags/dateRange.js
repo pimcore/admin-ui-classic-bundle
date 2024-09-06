@@ -82,8 +82,8 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
 
     getLayoutShow: function () {
         this.component = this.getLayoutEdit();
-        this.component.items[0].setReadonly(true);
-        this.component.items[2].setReadonly(true);
+        this.component.items[0].setReadOnly(true);
+        this.component.items[2].setReadOnly(true);
 
         return this.component;
     },
