@@ -456,7 +456,7 @@ pimcore.element.helpers.gridColumnConfig = {
             title: title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: width: formPanel.items.items[0].width + 25,
             maxHeight: 650
         });
         this.filterByRelationWindow.show();
