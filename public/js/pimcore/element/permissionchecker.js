@@ -254,7 +254,7 @@ pimcore.element.permissionchecker = Class.create({
         this.resultPanel.removeAll();
 
         var columns = [
-            {text: t("Username"), sortable: false, dataIndex: "userName", editable: false, flex: 150, filter: 'string'}
+            {text: t("username"), sortable: false, dataIndex: "userName", editable: false, flex: 150, filter: 'string'}
         ];
 
         var columnCount = data.columns.length;

@@ -85,7 +85,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             storeConfig.autoLoad = true;
             storeConfig.listeners = {
                 beforeload: function(store) {
-                    store.getProxy().setExtraParam('unsavedChanges', this.object ? this.object.getSaveData().data : {});
+                    store.getProxy().setExtraParam('unsavedChanges', this.object && typeof this.object.getSaveData === "function" ? this.object.getSaveData().data : {});
                     store.getProxy().setExtraParam('context', JSON.stringify(this.getContext()));
                 }.bind(this)
             };
@@ -283,7 +283,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
     },
 
     getCreateControl: function () {
-
         var allowedClasses;
         var i;
 
@@ -324,12 +323,14 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 items.push({
                     cls: "pimcore_block_button_plus",
                     iconCls: "pimcore_icon_plus",
+                    tooltip: t("add"),
                     handler: collectionMenu[0].handler
                 });
             } else if (collectionMenu.length > 1) {
                 items.push({
                     cls: "pimcore_block_button_plus",
                     iconCls: "pimcore_icon_plus",
+                    tooltip: t("add"),
                     menu: collectionMenu
                 });
             } else {
@@ -340,10 +341,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             }
         }
 
-
         return items[0];
-    }
-    ,
+    },
 
     getVisibleColumns: function () {
         var visibleFields = this.visibleFields || [];
@@ -372,7 +371,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
 
                 var fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.width = 100;
                 fc.flex = 100;
                 fc.hidden = false;
                 fc.layout = field;
@@ -390,9 +388,39 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
+                    filterType = 'boolean';
+                }
+
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
+
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if (typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         return columns;
     },
@@ -557,7 +585,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 bodyCssClass: "pimcore_object_tag_objects",
                 listeners: {
                     rowdblclick: this.gridRowDblClickHandler
-                }
+                },
+                plugins: [
+                    'gridfilters'
+                ]
             });
 
             this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -658,6 +689,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_delete",
+                    tooltip: t("empty"),
                     handler: function () {
                         pimcore.helpers.deleteConfirm(t('all'), t('relations'), function () {
                             this.empty();
@@ -666,15 +698,16 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 });
             }
 
+            toolbarItems = toolbarItems.concat(this.getCreateControl());
+
             if(pimcore.helpers.hasSearchImplementation()) {
                 toolbarItems.push({
                     xtype: "button",
                     iconCls: "pimcore_icon_search",
+                    tooltip: t("search"),
                     handler: this.openSearchEditor.bind(this)
                 });
             }
-
-            toolbarItems = toolbarItems.concat(this.getCreateControl());
         }
 
         return toolbarItems;
@@ -732,7 +765,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {
                     afterrender: function (gridview) {
-                        this.requestNicePathData(this.store.data);
+                        this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
             }
@@ -960,11 +993,9 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
         // - https://github.com/pimcore/pimcore/pull/4337
         // - https://github.com/pimcore/pimcore/pull/4909
         // - https://github.com/pimcore/pimcore/pull/5367
-        if (nicePathRequested) {
-            window.setTimeout(function () {
-                this.component.getView().refresh();
-            }.bind(this), 500);
-        }
+        window.setTimeout(function () {
+            this.component.getView().refresh();
+        }.bind(this), 500);
     },
 
     normalizeTargetData: function (targets) {

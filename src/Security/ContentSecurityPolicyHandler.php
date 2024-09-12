@@ -46,6 +46,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     public const FRAME_OPT = 'frame-src';
 
+    public const WORKER_OPT = 'worker-src';
+
     private array $allowedUrls = [
         self::CONNECT_OPT => [
             'https://liveupdate.pimcore.org/', // AdminBundle statistics & update-check service
@@ -53,6 +55,11 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
         ],
         self::SCRIPT_OPT => [
             'https://buttons.github.io/buttons.js', // GitHub star button on login page
+        ],
+        self::FRAME_OPT => [
+            'https://www.youtube-nocookie.com/', // Video preview thumbnail for YouTube
+            'https://www.dailymotion.com/',      // Video preview thumbnail for Dailymotion
+            'https://player.vimeo.com/',         // Video preview thumbnail for Vimeo
         ],
     ];
 
@@ -75,6 +82,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
             self::FRAME_OPT => "'self' data:",
             self::CONNECT_OPT => "'self' blob:",
             self::FONT_OPT => "'self'",
+            self::WORKER_OPT => "'self' blob:",
         ]);
     }
 

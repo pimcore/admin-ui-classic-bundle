@@ -428,7 +428,7 @@
  
      onTreeNodeClick: function (tree, record, item, index, event, eOpts ) {
          if (event.ctrlKey === false && event.shiftKey === false && event.altKey === false) {
-             if (record.data.permissions.view) {
+             if (record.data.permissions && record.data.permissions.view) {
                  pimcore.helpers.treeNodeThumbnailPreviewHide();
                  pimcore.helpers.openAsset(record.data.id, record.data.type);
              }
@@ -633,8 +633,8 @@
  
                  }
              }
- 
-             if (record.data.permissions.rename && record.data.id != 1 && !record.data.locked) {
+
+             if (record.data.permissions && record.data.permissions.rename && record.data.id != 1 && !record.data.locked) {
                  if (perspectiveCfg.inTreeContextMenu("asset.rename")) {
                      menu.add(new Ext.menu.Item({
                          text: t('rename'),
@@ -644,7 +644,7 @@
                  }
              }
  
-             if (this.id != 1 && record.data.permissions.view) {
+             if (this.id != 1 && record.data.permissions && record.data.permissions.view) {
                  if (perspectiveCfg.inTreeContextMenu("asset.copy")) {
                      menu.add(new Ext.menu.Item({
                          text: t('copy'),
@@ -655,7 +655,7 @@
              }
  
              //cut
-             if (record.data.id != 1 && !record.data.locked && record.data.permissions.rename) {
+             if (record.data.id != 1 && !record.data.locked && record.data.permissions && record.data.permissions.rename) {
                  if (perspectiveCfg.inTreeContextMenu("asset.cut")) {
                      menu.add(new Ext.menu.Item({
                          text: t('cut'),
@@ -668,6 +668,7 @@
  
              //paste
              if (pimcore.cachedAssetId
+                 && record.data.permissions
                  && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.paste")) {
  
@@ -687,6 +688,7 @@
              }
  
              if (record.data.type == "folder" && pimcore.cutAsset
+                 && record.data.permissions
                  && (record.data.permissions.create || record.data.permissions.publish)
                  && perspectiveCfg.inTreeContextMenu("asset.pasteCut")) {
                  menu.add(new Ext.menu.Item({
@@ -701,7 +703,7 @@
                  }));
              }
  
-             if (record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("asset.delete")) {
+             if (record.data.permissions && record.data.permissions.remove && record.data.id != 1 && !record.data.locked && perspectiveCfg.inTreeContextMenu("asset.delete")) {
                  menu.add(new Ext.menu.Item({
                      text: t('delete'),
                      iconCls: "pimcore_icon_delete",
@@ -710,7 +712,7 @@
              }
  
              // upload & download
-             if (record.data.permissions.view) {
+             if (record.data.permissions && record.data.permissions.view) {
                  menu.add("-");
  
                  if (record.data.type == "folder") {
@@ -748,7 +750,7 @@
              var advancedMenuItems = [];
              var user = pimcore.globalmanager.get("user");
  
-             if (record.data.permissions.create &&
+             if (record.data.permissions && record.data.permissions.create &&
                  !record.data.locked &&
                  perspectiveCfg.inTreeContextMenu("asset.searchAndMove") &&
                  pimcore.helpers.hasSearchImplementation()) {
@@ -1068,66 +1070,94 @@
      },
  
      uploadZip: function (tree, record) {
- 
-         pimcore.helpers.uploadDialog(Routing.generate('pimcore_admin_asset_importzip', {parentId: record.id}), "Filedata", function (response) {
-             // this.attributes.reference
-             var res = Ext.decode(response.response.responseText);
-             pimcore.helpers.addTreeNodeLoadingIndicator("asset", record.get("id"));
- 
-             this.downloadProgressBar = new Ext.ProgressBar({
-                 text: t('initializing')
-             });
- 
-             this.downloadProgressWin = new Ext.Window({
-                 title: t("upload_zip"),
-                 layout:'fit',
-                 width:200,
-                 bodyStyle: "padding: 10px;",
-                 closable:false,
-                 plain: true,
-                 items: [this.downloadProgressBar],
-                 listeners: pimcore.helpers.getProgressWindowListeners()
-             });
- 
-             this.downloadProgressWin.show();
- 
-             var pj = new pimcore.tool.paralleljobs({
-                 success: function (jobId) {
-                     if(this.downloadProgressWin) {
+
+         const uploadFunction = function(allowOverwrite) {
+             pimcore.helpers.uploadDialog(Routing.generate('pimcore_admin_asset_importzip', {parentId: record.id, allowOverwrite: allowOverwrite ? 'true' : 'false' }), "Filedata", function (response) {
+                 // this.attributes.reference
+                 var res = Ext.decode(response.response.responseText);
+                 pimcore.helpers.addTreeNodeLoadingIndicator("asset", record.get("id"));
+
+                 this.downloadProgressBar = new Ext.ProgressBar({
+                     text: t('initializing')
+                 });
+
+                 this.downloadProgressWin = new Ext.Window({
+                     title: t("upload_zip"),
+                     layout: 'fit',
+                     width: 200,
+                     bodyStyle: "padding: 10px;",
+                     closable: false,
+                     plain: true,
+                     items: [this.downloadProgressBar],
+                     listeners: pimcore.helpers.getProgressWindowListeners()
+                 });
+
+                 this.downloadProgressWin.show();
+
+                 var pj = new pimcore.tool.paralleljobs({
+                     success: function (jobId) {
+                         if (this.downloadProgressWin) {
+                             this.downloadProgressWin.close();
+                         }
+
+                         this.downloadProgressBar = null;
+                         this.downloadProgressWin = null;
+
+                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
+                     }.bind(this, res.jobId),
+                     update: function (currentStep, steps, percent) {
+                         if (this.downloadProgressBar) {
+                             var status = currentStep / steps;
+                             this.downloadProgressBar.updateProgress(status, percent + "%");
+                         }
+                     }.bind(this),
+                     failure: function (message) {
                          this.downloadProgressWin.close();
-                     }
- 
-                     this.downloadProgressBar = null;
-                     this.downloadProgressWin = null;
- 
-                     pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
-                 }.bind(this, res.jobId),
-                 update: function (currentStep, steps, percent) {
-                     if(this.downloadProgressBar) {
-                         var status = currentStep / steps;
-                         this.downloadProgressBar.updateProgress(status, percent + "%");
-                     }
-                 }.bind(this),
-                 failure: function (message) {
-                     this.downloadProgressWin.close();
-                     pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
-                     pimcore.helpers.showNotification(t("error"), t("error"),
-                         "error", t(message));
-                 }.bind(this),
-                 jobs: res.jobs
-             });
-         }.bind(this), function (res) {
-             var response = Ext.decode(res.response.responseText);
-             if (response && response.success === false) {
-                 pimcore.helpers.showNotification(t("error"), response.message, "error",
-                     res.response.responseText);
-             } else {
-                 pimcore.helpers.showNotification(t("error"), res, "error",
-                     res.response.responseText);
+                         pimcore.elementservice.refreshNodeAllTrees("asset", record.get("id"));
+                         pimcore.helpers.showNotification(t("error"), t("error"),
+                             "error", t(message));
+                     }.bind(this),
+                     jobs: res.jobs
+                 });
+             }.bind(this), function (res) {
+                 var response = Ext.decode(res.response.responseText);
+                 if (response && response.success === false) {
+                     pimcore.helpers.showNotification(t("error"), response.message, "error",
+                         res.response.responseText);
+                 } else {
+                     pimcore.helpers.showNotification(t("error"), res, "error",
+                         res.response.responseText);
+                 }
+
+                 pimcore.elementservice.refreshNodeAllTrees("asset", record.parentNode.get("id"));
+             }.bind(this));
+         }
+
+         const messageBox = new Ext.window.MessageBox({
+             layout: {
+                 type: 'vbox',
+                 align: 'center'
              }
- 
-             pimcore.elementservice.refreshNodeAllTrees("asset", record.parentNode.get("id"));
-         }.bind(this));
+         });
+
+         messageBox.show({
+             title: t('overwrite_zip_files'),
+             msg: t('zip_upload_want_to_overwrite'),
+             buttons: Ext.Msg.OK & Ext.Msg.NO,
+             buttonText: {
+                 yes: t('zip_upload_want_to_overwrite_yes_option'),
+                 no: t('zip_upload_want_to_overwrite_no_option')
+             },
+             prompt: false,
+             icon: Ext.MessageBox.QUESTION,
+             fn: function (action) {
+                 if (action === 'yes') {
+                     uploadFunction(action === 'yes'); // currently visible message box if not visible anymore after clicking a button -> action for current message box gets executed here instead of in above loop
+                 } else {
+                     uploadFunction()
+                 }
+             }
+         });
      },
  
      enableHtml5Upload: function (node, rowIdx, out) {
@@ -1184,7 +1214,7 @@
              elementType: "asset",
              elementSubType: record.data.type,
              id: record.data.id,
-             default: Ext.util.Format.htmlDecode(record.data.text)
+             default: Ext.util.Format.htmlDecode(record.data.key)
          };
          pimcore.elementservice.editElementKey(options);
      },

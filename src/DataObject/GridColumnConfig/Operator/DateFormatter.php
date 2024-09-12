@@ -34,9 +34,6 @@ final class DateFormatter extends AbstractOperator
         $this->format = ($config->format ? $config->format : null);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLabeledValue(array|ElementInterface $element): ResultContainer|\stdClass|null
     {
         $result = new \stdClass();

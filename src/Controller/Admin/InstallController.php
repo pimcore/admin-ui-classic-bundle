@@ -33,12 +33,6 @@ class InstallController extends AdminAbstractController
 {
     /**
      * @Route("/check", name="pimcore_admin_install_check", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     * @param Connection $db
-     * @param Profiler|null $profiler
-     *
-     * @return Response
      */
     public function checkAction(Request $request, Connection $db, ?Profiler $profiler): Response
     {

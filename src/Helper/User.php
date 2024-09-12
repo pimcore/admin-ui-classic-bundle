@@ -31,7 +31,7 @@ final class User
      */
     public static function getDefaultKeyBindings(Pimcore\Model\User|UserProxy|null $user = null): string
     {
-        if(method_exists($user, 'getKeyBindings') && $user->getKeyBindings()) {
+        if ($user instanceof Pimcore\Model\User && $user->getKeyBindings()) {
             return $user->getKeyBindings();
         }
 

@@ -112,7 +112,10 @@ pimcore.object.classes.data.calculatedValue = Class.create(pimcore.object.classe
                     store: [
                         ['input', t('input')],
                         ['textarea', t('textarea')],
-                        ['html', t('html')]
+                        ['html', t('html')],
+                        ['numeric', t('number')],
+                        ['date', t('date')],
+                        ['boolean', t('bool')]
                     ]
                 },
                 {

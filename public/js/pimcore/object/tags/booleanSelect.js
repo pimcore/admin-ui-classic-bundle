@@ -56,28 +56,22 @@ pimcore.object.tags.booleanSelect = Class.create(pimcore.object.tags.abstract, {
 
     },
 
-    getCellEditor: function ( field, record) {
-        var key = field.key;
-        if(field.layout.noteditable) {
+    getCellEditor: function (field, record) {
+        if (field.layout.noteditable) {
             return null;
         }
 
-        var value = record.data[key];
-        var options = record.data[key +  "%options"];
+        const key = field.key;
+        const value = record.data[key];
+        const options = record.data[key +  "%options"];
 
-        var store = new Ext.data.Store({
+        const store = new Ext.data.Store({
             autoDestroy: true,
             fields: ['key',"value"],
             data: options
         });
 
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                editorConfig.width = field.config.width;
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
@@ -93,11 +87,11 @@ pimcore.object.tags.booleanSelect = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnEditor: function(field) {
-        if(field.layout.noteditable) {
+        if (field.layout.noteditable) {
             return null;
         }
 
-        var store = new Ext.data.JsonStore({
+        const store = new Ext.data.JsonStore({
             autoDestroy: true,
             proxy: {
                 type: 'memory',
@@ -111,19 +105,13 @@ pimcore.object.tags.booleanSelect = Class.create(pimcore.object.tags.abstract, {
             data: field.layout
         });
 
-        var editorConfig = {};
-
-        if (field.config) {
-            if (field.config.width) {
-                editorConfig.width = field.config.width;
-            }
-        }
+        let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
             store: store,
-            triggerAction: "all",
+            triggerAction: 'all',
             editable: false,
-            mode: "local",
+            mode: 'local',
             valueField: 'value',
             displayField: 'key'
         });

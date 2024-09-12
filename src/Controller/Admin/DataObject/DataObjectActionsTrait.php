@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
@@ -92,7 +93,7 @@ trait DataObjectActionsTrait
 
                 return [
                     'success' => true,
-                    'data' => DataObject\Service::gridObjectData($object, $allParams['fields'], $requestedLanguage),
+                    'data' => GridData\DataObject::getData($object, $allParams['fields'], $requestedLanguage),
                 ];
             } catch (\Exception $e) {
                 return [
@@ -122,15 +123,17 @@ trait DataObjectActionsTrait
             $objects = [];
             foreach ($list->getObjects() as $object) {
                 if ($csvMode) {
-                    $o = DataObject\Service::getCsvDataForObject($object, $requestedLanguage, $request->get('fields'), DataObject\Service::getHelperDefinitions(), $localeService, 'title', false, $allParams['context']);
+                    $o = DataObject\Service::getCsvDataForObject($object, $requestedLanguage, $request->get('fields'), GridData\DataObject::getHelperDefinitions(), $localeService, 'title', false, $allParams['context']);
+                    // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_object is insufficient and could lead security breach
+                    if ($object->isAllowed('list')) {
+                        $objects[] = $o;
+                    }
                 } else {
-                    $o = DataObject\Service::gridObjectData($object, $allParams['fields'] ?? null, $requestedLanguage,
+                    $o = GridData\DataObject::getData($object, $allParams['fields'] ?? null, $requestedLanguage,
                         ['csvMode' => $csvMode]);
-                }
-
-                // Like for treeGetChildrenByIdAction, so we respect isAllowed method which can be extended (object DI) for custom permissions, so relying only users_workspaces_object is insufficient and could lead security breach
-                if ($object->isAllowed('list')) {
-                    $objects[] = $o;
+                    if ($o['permissions']['list']) {
+                        $objects[] = $o;
+                    }
                 }
             }
 
@@ -177,11 +180,11 @@ trait DataObjectActionsTrait
         foreach ($data as $key => $value) {
             $parts = explode('~', $key);
             if (substr($key, 0, 1) == '~') {
-                list(, $type, $field, $keyId) = $parts;
+                [, $type, $field, $keyId] = $parts;
 
                 if ($type == 'classificationstore') {
                     $groupKeyId = array_map('intval', explode('-', $keyId));
-                    list($groupId, $keyId) = $groupKeyId;
+                    [$groupId, $keyId] = $groupKeyId;
 
                     $getter = 'get' . ucfirst($field);
                     if (method_exists($object, $getter)) {
@@ -226,7 +229,6 @@ trait DataObjectActionsTrait
 
                 $fieldGetter = 'get' . ucfirst($brickField);
                 $brickGetter = 'get' . ucfirst($brickType);
-                $valueSetter = 'set' . ucfirst($brickKey);
 
                 $brick = $object->$fieldGetter()->$brickGetter();
                 if (empty($brick)) {
@@ -254,7 +256,7 @@ trait DataObjectActionsTrait
                     $localizedFields = $brick->getLocalizedfields();
                     $localizedFields->setLocalizedValue($brickKey, $value);
                 } else {
-                    $brick->$valueSetter($value);
+                    $brick->setObjectVar($brickKey, $value);
                 }
             } else {
                 if ($languagePermissions) {

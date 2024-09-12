@@ -42,6 +42,8 @@ pimcore.settings.user.user.keyBindings = Class.create({
         if (code.key) {
             if (code.key >= 112 && code.key <= 123) {
                 parts.push("F" + (code.key - 111));
+            } else if(code.key === 32) {
+                parts.push(t("Space"));
             } else {
                 parts.push(String.fromCharCode(code.key));
             }

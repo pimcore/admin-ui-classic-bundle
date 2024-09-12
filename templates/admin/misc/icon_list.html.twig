@@ -13,10 +13,10 @@
         }
 
         .icons {
-            width:1200px;
             margin: 0 auto;
+            display:inline-block;
+            padding-top: 20px;
         }
-
         .icon {
             text-align: center;
             width:100px;
@@ -25,25 +25,30 @@
             float: left;
             font-size: 10px;
             word-wrap: break-word;
-            cursor: copy;
             padding-top: 5px;
             box-sizing: border-box;
         }
 
-        .icon.black {
+        .icon img:hover {
+            cursor: copy;
+        }
+
+        #white .icon {
             background-color: #0C0F12;
         }
 
-        .icon.black .label {
+        #white .icon .label {
             color: #fff;
+        }
+
+        #flags .icon{
+            height: 100px;
         }
 
         .info {
             text-align: center;
-            margin-bottom: 30px;
             clear: both;
             font-size: 22px;
-            padding-top: 50px;
         }
 
         .info small {
@@ -66,126 +71,124 @@
             display: none;
             background-color: #eee;
         }
+
     </style>
 </head>
 <body>
 
 <div class="info">
-    <a target="_blank">Color Icons</a>
-    <br>
-    <small>based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a></small>
+    {% if source is defined %}
+        <small>{{ source|raw }}</small>
+    {% endif %}
 </div>
 
-<div id="color_icons" class="icons">
+<div id="{{ type }}" class="icons">
     <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon to copy path to clipboard.</div>
-    {% for icon in colorIcons %}
-        {% set iconPath = icon|replace({(webRoot): ''}) %}
-        <div class="icon">
-            {{ icon | pimcore_inline_icon | raw }}
-            <div class="label">
-                {{ iconPath in iconsCss  ? '*' : '' }}
-                {{ iconPath|basename }}
-            </div>
-        </div>
-    {% endfor %}
-</div>
 
-<div class="info">
-    <a target="_blank">White Icons</a>
-    <br>
-    <small>based on the <a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a></small>
-</div>
+    {% if extraInfo is defined %}
+        <div style="margin-bottom: 20px; text-align: left">{{ extraInfo }}</div>
+    {% endif %}
 
-<div id="white_icons" class="icons">
-    {% for icon in whiteIcons %}
-        {% set iconPath = icon|replace({(webRoot): ''}) %}
-        <div class="icon black">
-            {{ icon | pimcore_inline_icon | raw }}
-            <div class="label">
-                {{ iconPath in iconsCss  ? '*' : '' }}
-                {{ iconPath|basename }}
-            </div>
-        </div>
-    {% endfor %}
-</div>
-
-<div class="info">
-    <a href="https://github.com/twitter/twemoji" target="_blank">Source (Twemoji)</a>
-</div>
-
-<div id="twemoji" class="icons">
-    <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon to copy path to clipboard.</div>
-    <div style="margin-bottom: 20px; text-align: left">ℹ Click on icon with green border to display all its related variants. Click on the letter to display flags with the clicked initial</div>
-    {% for icon in twemoji %}
+    {% for icon in icons %}
         {% set iconPath = icon|replace({(webRoot): ''}) %}
         {#
             Any icon with basename that has a dash will be considered as a variant to avoid recurisvely searching for "parent" icon.
             It happens that all icon that have variants have at least a prefix of 4-5 characters.
         #}
-        {% if '-' in iconPath and iconPath|basename|split('-')[0]|length > 3 %}
+        {% if ('-' in iconPath and iconPath|basename|split('-')[0]|length > 3) and (type =='twemoji') %}
             <div class="icon variant">
                 {{ icon | pimcore_twemoji_variant_icon | raw }}
                 <div class="label">{{ iconPath|basename }}</div>
             </div>
         {% else %}
             <div class="icon">
-                {{ icon | pimcore_inline_icon | raw }}
-                <div class="label">{{ iconPath|basename }}</div>
+
+                {% if type == 'flags' %}
+                    {% set country = iconPath|basename|replace({'.svg': ''}) %}
+                    <div class="country_name" data-isocode="{{ country }}"></div>
+                {% endif %}
+
+                {% if loop.index < 100 %}
+                    {{ icon | pimcore_inline_icon | raw }}
+                {% else %}
+                    {{ icon | pimcore_lazy_icon | raw }}
+                {% endif %}
+
+                <div class="label">
+                    {{ iconPath in iconsCss  ? '*' : '' }}
+                    {{ iconPath|basename }}
+                </div>
             </div>
         {% endif %}
     {% endfor %}
 </div>
 
-<div class="info">
-    Flags
-</div>
-
-<table>
-    <tr>
-        <th>Flag</th>
-        <th>Code</th>
-        <th>Name</th>
-    </tr>
-    {% for langOpt in languageOptions %}
-        <tr>
-            <td class="language-icon">{{ langOpt['flag'] | pimcore_inline_icon | raw }}</td>
-            <td>{{ langOpt['language'] }}</td>
-            <td>{{ langOpt['display'] }}</td>
-        </tr>
-    {% endfor %}
-</table>
-
 <script
-    src="https://code.jquery.com/jquery-3.7.0.slim.js"
-    integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c="
-    crossorigin="anonymous"
-    {{ pimcore_csp.getNonceHtmlAttribute()|raw }}></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/common.js"></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/functions.js"></script>
-<script src="/bundles/pimcoreadmin/js/pimcore/helpers.js"></script>
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
 
 <script {{ pimcore_csp.getNonceHtmlAttribute()|raw }}>
     $( document ).ready(function() {
-        // Add click event to copy icon path on all icons
-        $('img').each(function () {
-            $(this).click(function () {
-                pimcore.helpers.copyStringToClipboard($(this).data('imgpath'));
-            });
-        });
+
+        // Add click event to copy icon path to clipboard
+        $('body').on('click', 'img', function () { copyStringToClipboard($(this).data('imgpath')); });
+
         // Twimoji only: clicking on icon with green border displays all its variants
         $('.icon:not(.variant)').each(function () {
-            $(this).click(function () {
-                let variants = $(this).prevUntil('div.icon:not(.variant)');
-                variants.each(function () {
-                    if (!$(this).is(':visible')) {
-                        let img = $(this).children('img');
-                        img.attr('src', img.data('imgpath'));
-                        $(this).show();
-                    }
+            let variants = $(this).prevUntil('div.icon:not(.variant)');
+            if (variants.length > 0) {
+                $(this).on('click', function () {
+                    variants.each(function () {
+                        if (!$(this).is(':visible')) {
+                            let img = $(this).children('img');
+                            img.attr('src', img.data('imgpath'));
+                            $(this).show();
+                        }
+                    });
                 });
-            });
+            }
         });
+
+        // Country name from country ISO code
+        const regionNames = new Intl.DisplayNames(['en'], {type: 'region'});
+        $('.country_name').each(function(){
+            try {
+                let country = regionNames.of($(this).data('isocode').toUpperCase());
+                $(this).text(country);
+            } catch{
+                // quick workaround for the ones that breaks it, eg. Scotland and Wels
+                $(this).text($(this).data('isocode'));
+            }
+        })
+
     });
+
+    const copyStringToClipboard = function (str) {
+        let selection = document.getSelection(),
+            prevSelection = (selection.rangeCount > 0) ? selection.getRangeAt(0) : false,
+            el;
+
+        // create element and insert string
+        el = document.createElement('textarea');
+        el.value = str;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+
+        // insert element, select all text and copy
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+
+        // restore previous selection
+        if (prevSelection) {
+            selection.removeAllRanges();
+            selection.addRange(prevSelection);
+        }
+    };
+
 </script>
 
 </body>

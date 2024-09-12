@@ -25,11 +25,6 @@ trait ControllerTypeTrait
 {
     /**
      * Get controller of specified type
-     *
-     * @param ControllerEvent $event
-     * @param string $type
-     *
-     * @return mixed
      */
     protected function getControllerType(ControllerEvent $event, string $type): mixed
     {
@@ -49,11 +44,6 @@ trait ControllerTypeTrait
 
     /**
      * Test if event controller is of the given type
-     *
-     * @param ControllerEvent $event
-     * @param string $type
-     *
-     * @return bool
      */
     protected function isControllerType(ControllerEvent $event, string $type): bool
     {

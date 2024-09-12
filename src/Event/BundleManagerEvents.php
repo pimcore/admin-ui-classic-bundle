@@ -16,41 +16,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Event;
 
-final class BundleManagerEvents
+/**
+ * @TODO this class is only here for BC reasons and should be removed in Pimcore 12
+ */
+final class BundleManagerEvents extends \Pimcore\Event\BundleManagerEvents
 {
-    /**
-     * The CSS_PATHS event is triggered for paths to CSS files which are about to be loaded for the admin interface.
-     *
-     * @Event("Pimcore\Bundle\AdminBundle\Event\BundleManager\PathsEvent")
-     *
-     * @var string
-     */
-    const CSS_PATHS = 'pimcore.bundle_manager.paths.css';
-
-    /**
-     * The JS_PATHS event is triggered for paths to JS files which are about to be loaded for the admin interface.
-     *
-     * @Event("Pimcore\Bundle\AdminBundle\Event\BundleManager\PathsEvent")
-     *
-     * @var string
-     */
-    const JS_PATHS = 'pimcore.bundle_manager.paths.js';
-
-    /**
-     * The EDITMODE_CSS_PATHS event is triggered for paths to CSS files which are about to be loaded in editmode.
-     *
-     * @Event("Pimcore\Bundle\AdminBundle\Event\BundleManager\PathsEvent")
-     *
-     * @var string
-     */
-    const EDITMODE_CSS_PATHS = 'pimcore.bundle_manager.paths.editmode_css';
-
-    /**
-     * The EDITMODE_JS_PATHS event is triggered for paths to JS files which are about to be loaded in editmode.
-     *
-     * @Event("Pimcore\Bundle\AdminBundle\Event\BundleManager\PathsEvent")
-     *
-     * @var string
-     */
-    const EDITMODE_JS_PATHS = 'pimcore.bundle_manager.paths.editmode_js';
 }

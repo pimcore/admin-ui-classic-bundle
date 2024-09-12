@@ -61,9 +61,6 @@ abstract class AdminAbstractAuthenticator extends AbstractAuthenticator implemen
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $requestParameters = [
@@ -80,9 +77,6 @@ abstract class AdminAbstractAuthenticator extends AbstractAuthenticator implemen
         return new RedirectResponse($url);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $securityUser = $token->getUser();

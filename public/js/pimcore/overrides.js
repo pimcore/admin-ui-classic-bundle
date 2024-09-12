@@ -400,15 +400,11 @@ Ext.define('pimcore.data.PagingTreeStore', {
                 node.set('expandable', true);
             });
 
-            if (me.pageSize < total || node.inSearch) {
-                node.needsPaging = true;
-                node.pagingData = {
-                    total: data.total,
-                    offset: data.offset,
-                    limit: data.limit
-                }
-            } else {
-                node.needsPaging = false;
+            node.needsPaging = true;
+            node.pagingData = {
+                total: data.total,
+                offset: data.offset,
+                limit: data.limit
             }
 
             me.superclass.onProxyLoad.call(this, operation);
@@ -503,7 +499,7 @@ Ext.define('pimcore.toolbar.Paging', {
         var currPage = pagingData.offset / pagingData.limit + 1;
 
         this.inSearch = node.inSearch;
-        var hidden = this.inSearch
+        var hidePagination = this.inSearch || pagingData.total <= pagingData.limit;
         pimcore.isTreeFiltering = false;
 
         inputListeners[Ext.supports.SpecialKeyDownRepeat ? 'keydown' : 'keypress'] = me.onPagingKeyDown;
@@ -517,7 +513,7 @@ Ext.define('pimcore.toolbar.Paging', {
             height: 18,
             value: node.filter ? node.filter : "",
             enableKeyEvents: true,
-            hidden: !hidden,
+            hidden: !this.inSearch,
             listeners: {
                 "keydown": function (node, inputField, event) {
                     if (event.keyCode == 13) {
@@ -544,8 +540,7 @@ Ext.define('pimcore.toolbar.Paging', {
                 }.bind(this, node)
             }
 
-        })
-        ;
+        });
 
         var result = [this.filterField];
 
@@ -586,7 +581,7 @@ Ext.define('pimcore.toolbar.Paging', {
                     this.last.hide();
                 }.bind(this),
                 scope: me,
-                hidden: this.inSearch
+                hidden: this.inSearch || pagingData.total < 30
             });
 
         this.cancelFilterButton = new Ext.button.Button(
@@ -614,7 +609,7 @@ Ext.define('pimcore.toolbar.Paging', {
             width: 38,
             disabled: true,
             margin: '-1 2 3 2',
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -638,7 +633,7 @@ Ext.define('pimcore.toolbar.Paging', {
             isFormField: false,
             margin: '-1 2 3 2',
             listeners: inputListeners,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -652,7 +647,7 @@ Ext.define('pimcore.toolbar.Paging', {
                 handler: me.moveFirst,
                 scope: me,
                 border: false,
-                hidden: hidden
+                hidden: hidePagination
 
             });
 
@@ -666,13 +661,13 @@ Ext.define('pimcore.toolbar.Paging', {
             handler: me.movePrevious,
             scope: me,
             border: false,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
         this.spacer = new Ext.toolbar.Spacer({
             xtype: "tbspacer",
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -684,7 +679,7 @@ Ext.define('pimcore.toolbar.Paging', {
             disabled: (Math.ceil(me.node.pagingData.total / me.node.pagingData.limit) - 1) * me.node.pagingData.limit == me.node.pagingData.offset,
             handler: me.moveNext,
             scope: me,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -696,7 +691,7 @@ Ext.define('pimcore.toolbar.Paging', {
             disabled: (Math.ceil(me.node.pagingData.total / me.node.pagingData.limit) - 1) * me.node.pagingData.limit == me.node.pagingData.offset,
             handler: me.moveLast,
             scope: me,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -1065,4 +1060,302 @@ Ext.define('Ext.overrides.grid.RowEditor', {
         }
         return scrollDelta;
     },
+});
+
+Ext.define('Ext.local.grid.filters.filter.TriFilter', {
+    extend: 'Ext.grid.filters.filter.TriFilter',
+    menuItems: [
+        'lt',
+        'gt',
+        '-',
+        'eq',
+        'in'
+    ],
+    constructor: function(config) {
+        var me = this,
+            stateful = false,
+            filter = {},
+            filterGt, filterLt, filterEq, filterIn, value, operator;
+        me.callParent([
+            config
+        ]);
+        value = me.value;
+        filterLt = me.getStoreFilter('lt');
+        filterGt = me.getStoreFilter('gt');
+        filterEq = me.getStoreFilter('eq');
+        filterIn = me.getStoreFilter('in');
+
+        if (filterLt || filterGt || filterEq || filterIn) {
+            stateful = me.active = true;
+            if (filterLt) {
+                me.onStateRestore(filterLt);
+            }
+            if (filterGt) {
+                me.onStateRestore(filterGt);
+            }
+            if (filterEq) {
+                me.onStateRestore(filterEq);
+            }
+            if (filterIn) {
+                me.onStateRestore(filterIn);
+            }
+        } else {
+            if (me.grid.stateful && me.getGridStore().saveStatefulFilters) {
+                value = undefined;
+            }
+            me.active = me.getActiveState(config, value);
+        }
+        filter.lt = filterLt || me.createFilter({
+            operator: 'lt',
+            value: (!stateful && value && value.lt) || null
+        }, 'lt');
+        filter.gt = filterGt || me.createFilter({
+            operator: 'gt',
+            value: (!stateful && value && value.gt) || null
+        }, 'gt');
+        filter.eq = filterEq || me.createFilter({
+            operator: 'eq',
+            value: (!stateful && value && value.eq) || null
+        }, 'eq');
+        filter.in = filterIn || me.createFilter({
+            operator: 'in',
+            type: 'numeric',
+            value: (!stateful && value && value.in) || null
+        }, 'in');
+        me.filter = filter;
+        if (me.active) {
+            me.setColumnActive(true);
+            if (!stateful) {
+                for (operator in value) {
+                    me.addStoreFilter(me.filter[operator]);
+                }
+            }
+        }
+    },
+    setValue: function(value) {
+        var me = this,
+            filters = me.filter,
+            add = [],
+            remove = [],
+            active = false,
+            filterCollection = me.getGridStore().getFilters(),
+            field, filter, v, i, len, rLen, aLen;
+        if (me.preventFilterRemoval) {
+            return;
+        }
+        me.preventFilterRemoval = true;
+        if ('eq' in value) {
+            v = filters.lt.getValue();
+            if (v || v === 0) {
+                remove.push(filters.lt);
+            }
+            v = filters.gt.getValue();
+            if (v || v === 0) {
+                remove.push(filters.gt);
+            }
+            v = filters.in.getValue();
+            if (v || v === 0) {
+                remove.push(filters.in);
+            }
+            v = value.eq;
+            if (v || v === 0) {
+                add.push(filters.eq);
+                filters.eq.setValue(v);
+            } else {
+                remove.push(filters.eq);
+            }
+        } else {
+            v = filters.eq.getValue();
+            if (v || v === 0) {
+                remove.push(filters.eq);
+            }
+            if ('lt' in value) {
+                v = value.lt;
+                if (v || v === 0) {
+                    add.push(filters.lt);
+                    filters.lt.setValue(v);
+                } else {
+                    remove.push(filters.lt);
+                }
+            }
+            if ('gt' in value) {
+                v = value.gt;
+                if (v || v === 0) {
+                    add.push(filters.gt);
+                    filters.gt.setValue(v);
+                } else {
+                    remove.push(filters.gt);
+                }
+            }
+            if ('in' in value) {
+                v = value.in;
+                if (typeof v === "object" && v[0][0] == '') {
+                    remove.push(filters.in);
+                } else if (v || v === 0) {
+                    add.push(filters.in);
+                    filters.in.setValue(v);
+                } else {
+                    remove.push(filters.in);
+                }
+            }
+        }
+        rLen = remove.length;
+        aLen = add.length;
+        active = !!(me.countActiveFilters() + aLen - rLen);
+        if (rLen || aLen || active !== me.active) {
+            filterCollection.beginUpdate();
+            if (rLen) {
+                for (i = 0; i < rLen; i++) {
+                    filter = remove[i];
+                    me.fields[filter.getOperator()].setValue(null);
+                    filter.setValue(null);
+                    me.removeStoreFilter(filter);
+                }
+            }
+            if (aLen) {
+                for (i = 0; i < aLen; i++) {
+                    me.addStoreFilter(add[i]);
+                }
+            }
+            me.setActive(active);
+            filterCollection.endUpdate();
+        }
+        me.preventFilterRemoval = false;
+    }
+});
+
+Ext.define('Ext.grid.filters.filter.Number', {
+    extend: 'Ext.local.grid.filters.filter.TriFilter',
+    alias: ['grid.filter.number', 'grid.filter.numeric'],
+
+    uses: ['Ext.form.field.Number'],
+
+    type: 'number',
+
+    config: {
+        fields: {
+            gt: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-gt',
+                margin: '0 0 3px 0'
+            },
+            lt: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-lt',
+                margin: '0 0 3px 0'
+            },
+            eq: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-eq',
+                margin: '0 0 3px 0'
+            },
+            in: {
+                iconCls: Ext.baseCSSPrefix + 'grid-filters-find',
+                margin: 0
+            }
+        }
+    },
+
+    itemDefaults: {
+        enableKeyEvents: true,
+        hideEmptyLabel: false,
+        labelSeparator: '',
+        labelWidth: 29,
+        selectOnFocus: false
+    },
+
+    menuDefaults: {
+        bodyPadding: 3,
+        showSeparator: false
+    },
+
+    createMenu: function() {
+        var me = this,
+            listeners = {
+                scope: me,
+                keyup: me.onValueChange,
+                spin: {
+                    fn: me.onInputSpin,
+                    buffer: 200
+                },
+                el: {
+                    click: me.stopFn
+                }
+            },
+            itemDefaults = me.getItemDefaults(),
+            menuItems = me.menuItems,
+            fields = me.getFields(),
+            field, i, len, key, item, cfg;
+
+        me.callParent();
+
+        me.fields = {};
+
+        for (i = 0, len = menuItems.length; i < len; i++) {
+            key = menuItems[i];
+
+            if (key !== '-' && key !== 'in') {
+                itemDefaults.xtype = 'numberfield';
+                field = fields[key];
+
+                cfg = {
+                    labelClsExtra: Ext.baseCSSPrefix + 'grid-filters-icon ' + field.iconCls,
+                    emptyText: 'Enter Number...'
+                };
+
+                if (itemDefaults) {
+                    Ext.merge(cfg, itemDefaults);
+                }
+
+                Ext.merge(cfg, field);
+                cfg.emptyText = cfg.emptyText || me.emptyText;
+                delete cfg.iconCls;
+
+                me.fields[key] = item = me.menu.add(cfg);
+
+                item.filter = me.filter[key];
+                item.filterKey = key;
+                item.on(listeners);
+            } else if (key === 'in') {
+                itemDefaults.xtype = 'textfield';
+                field = fields.in;
+
+                cfg = {
+                    labelClsExtra: Ext.baseCSSPrefix + 'grid-filters-icon ' + field.iconCls,
+                    emptyText: 'Enter Numbers...'
+                };
+
+                if (itemDefaults) {
+                    Ext.merge(cfg, itemDefaults);
+                }
+
+                Ext.merge(cfg, field);
+                cfg.emptyText = cfg.emptyText || me.emptyText;
+                delete cfg.iconCls;
+
+                me.fields[key] = item = me.menu.add(cfg);
+
+                item.filter = me.filter[key];
+                item.filterKey = key;
+                item.on(listeners);
+            }
+            else {
+                me.menu.add(key);
+            }
+        }
+    },
+    getValue: function(field) {
+        var value = {};
+
+        value[field.filterKey] = field.getValue();
+
+        return value;
+    },
+    onInputSpin: function(field, direction) {
+        var value = {};
+
+        value[field.filterKey] = field.getValue();
+
+        this.setValue(value);
+    },
+    stopFn: function(e) {
+        e.stopPropagation();
+    }
 });

@@ -32,9 +32,6 @@ class AdminSessionBagListener implements EventSubscriberInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [
@@ -46,6 +43,10 @@ class AdminSessionBagListener implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         if (!$event->isMainRequest()) {
+            return;
+        }
+
+        if ($event->getRequest()->attributes->get('_stateless', false)) {
             return;
         }
 

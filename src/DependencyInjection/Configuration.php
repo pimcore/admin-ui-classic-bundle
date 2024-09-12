@@ -30,9 +30,6 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 final class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('pimcore_admin');
@@ -136,7 +133,11 @@ final class Configuration implements ConfigurationInterface
 
         $this->addAdminNode($rootNode);
 
-        ConfigurationHelper::addConfigLocationWithWriteTargetNodes($rootNode, ['admin_system_settings' => '/var/config/admin_system_settings'], ['read_target']);
+        ConfigurationHelper::addConfigLocationWithWriteTargetNodes(
+            $rootNode,
+            ['admin_system_settings' => PIMCORE_CONFIGURATION_DIRECTORY . '/admin_system_settings'],
+            ['read_target']
+        );
 
         return $treeBuilder;
     }

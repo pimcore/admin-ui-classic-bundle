@@ -273,25 +273,13 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
             value: datax.defaultValueGenerator
         });
 
-        stylingItems.push({
-            xtype: "textfield",
-            fieldLabel: t("options_provider_class"),
-            width: 600,
-            name: "optionsProviderClass",
-            value: datax.optionsProviderClass
-        });
+        let appendedStylingItems = stylingItems.concat(
+            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, valueGrid)
+        )
 
-        stylingItems.push({
-            xtype: "textfield",
-            fieldLabel: t("options_provider_data"),
-            width: 600,
-            value: datax.optionsProviderData,
-            name: "optionsProviderData"
-        });
+        appendedStylingItems.push(valueGrid);
 
-        stylingItems.push(valueGrid);
-
-        return stylingItems;
+        return appendedStylingItems;
     },
 
     applyData: function ($super) {
@@ -323,6 +311,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
                 {
                     options: source.datax.options,
                     width: source.datax.width,
+                    optionsProviderType: source.datax.optionsProviderType,
                     optionsProviderClass: source.datax.optionsProviderClass,
                     optionsProviderData: source.datax.optionsProviderData,
                     defaultValue: source.datax.defaultValue,

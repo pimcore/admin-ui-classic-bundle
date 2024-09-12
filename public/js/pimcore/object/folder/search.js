@@ -416,7 +416,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
         var config = $super();
         config.onlyDirectChildren = this.onlyDirectChildren;
         config.pageSize = this.pagingtoolbar.pageSize;
-        config.searchFilter = this.searchField.getValue();
+        config.searchFilter = this.searchField ? this.searchField.getValue() : '';
         config.onlyDirectChildren = this.checkboxOnlyDirectChildren.getValue();
         config.filter = this.filter;
         return config;
@@ -481,7 +481,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
             }
 
             menu.add(new Ext.menu.Item({
-                hidden: data.data.locked,
+                hidden: data.data.locked || !data.data.permissions.delete,
                 text: t('delete'),
                 iconCls: "pimcore_icon_delete",
                 handler: function (data) {

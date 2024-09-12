@@ -233,6 +233,12 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
                     var data = Ext.decode(res.response.responseText);
                     if (data["id"] && data["type"] == "video") {
                         this.data.id = data["id"];
+                        this.data.type = "asset";
+                        this.data.data = data["fullpath"];
+                        this.data.poster = null;
+                        this.data.title = '';
+                        this.data.description = '';
+
                         this.dirty = true;
                     }
                     this.updateVideo();
@@ -295,10 +301,13 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
                 var match, regExp;
 
                 if (values["type"] == "youtube") {
-                    regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                    match = values["data"].match(regExp);
-                    if (match && match[2].length == 11) {
-                        values["data"] = match[2];
+                    // https://gist.github.com/afeld/1254889
+                    const ytRegex = /^(?:https?:\/\/|\/\/)?(?:www\.|m\.|.+\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|feeds\/api\/videos\/|watch\?v=|watch\?.+&v=))(?<videoId>[\w-]{11})(?![\w-])/g;
+                    match = values["data"].matchAll(ytRegex);
+                    let matches = [...match]
+                    let videoIds = Array.from(matches, m => m[1]);
+                    if (videoIds && (videoIds[0] ?? null)) {
+                        values["data"] = videoIds[0];
                     }
                 } else if (values["type"] == "vimeo") {
                     regExp = /vimeo.com\/(\d+)($|\/)/;

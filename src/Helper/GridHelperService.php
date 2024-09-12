@@ -21,21 +21,29 @@ use League\Flysystem\FilesystemOperator;
 use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Pimcore\Db;
+use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\User;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @internal
  */
 class GridHelperService
 {
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher
+    ) {
+
+    }
+
     public function getFeatureAndSlugFilters(string $filterJson, ClassDefinition $class, string $requestedLanguage): array
     {
         $featureJoins = [];
@@ -204,6 +212,22 @@ class GridHelperService
                     } elseif ($filter['type'] == 'boolean') {
                         $operator = '=';
                         $filter['value'] = (int)$filter['value'];
+                    } elseif ($filterOperator == 'in' && is_array($filter['value'])) {
+                        $operator = 'in';
+                        $matches = preg_split('/[^0-9\.]+/', $filter['value'][0][0] ?? [], -1, PREG_SPLIT_NO_EMPTY);
+                        if (is_array($matches) && count($matches) > 0) {
+                            $filter['value'][0][0] = implode(',', array_unique(array_map(floatval(...), $matches)));
+                        } else {
+                            continue;
+                        }
+                    } elseif ($filterOperator == 'in' && !is_array($filter['value'])) {
+                        $operator = 'in';
+                        $matches = preg_split('/[^0-9\.]+/', $filter['value'], -1, PREG_SPLIT_NO_EMPTY);
+                        if (is_array($matches) && count($matches) > 0) {
+                            $filter['value'] = implode(',', array_unique(array_map(floatval(...), $matches)));
+                        } else {
+                            continue;
+                        }
                     } else {
                         if ($filterOperator == 'lt') {
                             $operator = '<';
@@ -320,12 +344,16 @@ class GridHelperService
                         }
                     } elseif (in_array($filterField, $systemFields)) {
                         // system field
+                        $lowerCasedFilterValue = strtolower($filter['value']); // lowercase for case insensitive search
+                        $lowerCasedFilterValue = str_replace('*', '%', $lowerCasedFilterValue); // replace wildcard
                         if ($filterField == 'fullpath') {
-                            $conditionPartsFilters[] = 'concat(`path`, `key`) ' . $operator . ' ' . $db->quote('%' . $filter['value'] . '%');
+                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
                         } elseif ($filterField == 'key') {
-                            $conditionPartsFilters[] = '`key` ' . $operator . ' ' . $db->quote('%' . $filter['value'] . '%');
-                        } elseif ($filterField == 'id') {
+                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
+                        } elseif ($filterField == 'id' && $operator !== 'in') {
                             $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
+                        } elseif ($filterField == 'id' && $operator === 'in') {
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filter['value'] . ')';
                         } else {
                             $filterField = $db->quoteIdentifier($filterField);
                             if ($filter['type'] == 'date' && $operator == '=') {
@@ -342,7 +370,9 @@ class GridHelperService
                         }
                     }
                 } elseif ($filter['property'] !== 'fullpath') {
-                    $conditionPartsFilters[] = $filter['property'] . ' IS NULL OR ' . $filter['property'] . " = ''";
+                    $conditionPartsFilters[] = '( ' .
+                        $db->quoteIdentifier($filter['property']) . ' IS NULL OR ' .
+                        $db->quoteIdentifier($filter['property']) . " = '' )";
                 }
             }
         }
@@ -385,11 +415,6 @@ class GridHelperService
 
     /**
      * Adds all the query stuff that is needed for displaying, filtering and exporting the feature grid data.
-     *
-     * @param DataObject\Listing\Concrete $list
-     * @param array $featureJoins
-     * @param ClassDefinition $class
-     * @param array $featureAndSlugFilters
      */
     public function addGridFeatureJoins(DataObject\Listing\Concrete $list, array $featureJoins, ClassDefinition $class, array $featureAndSlugFilters): void
     {
@@ -441,10 +466,6 @@ class GridHelperService
 
     /**
      * Adds all the query stuff that is needed for displaying, filtering and exporting the slug grid data.
-     *
-     * @param DataObject\Listing\Concrete $list
-     * @param array $slugJoins
-     * @param array $featureAndSlugFilters
      */
     public function addSlugJoins(DataObject\Listing\Concrete $list, array $slugJoins, array $featureAndSlugFilters): void
     {
@@ -491,7 +512,7 @@ class GridHelperService
     public function prepareListingForGrid(array $requestParams, string $requestedLanguage, User $adminUser): DataObject\Listing\Concrete
     {
         $folder = Model\DataObject::getById((int) $requestParams['folderId']);
-        $class = ClassDefinition::getById($requestParams['classId']);
+        $class = ClassDefinition::getById((string) $requestParams['classId']);
         $className = $class->getName();
 
         $listClass = '\\Pimcore\\Model\\DataObject\\' . ucfirst($className) . '\\Listing';
@@ -552,15 +573,16 @@ class GridHelperService
                     if (strpos($orderKey, '?') !== false) {
                         $brickDescriptor = substr($orderKeyParts[0], 1);
                         $brickDescriptor = json_decode($brickDescriptor, true);
-                        $db = Db::get();
-                        $orderKey = $db->quoteIdentifier($brickDescriptor['containerKey'] . '_localized') . '.' . $db->quoteIdentifier($brickDescriptor['brickfield']);
+                        $orderKey = $list->quoteIdentifier($brickDescriptor['containerKey'] . '_localized')
+                            . '.' . $list->quoteIdentifier($brickDescriptor['brickfield']);
                         $doNotQuote = true;
                     } elseif (count($orderKeyParts) === 2) {
-                        $orderKey = $orderKeyParts[0].'.'.$orderKeyParts[1];
+                        $orderKey = $list->quoteIdentifier($orderKeyParts[0])
+                            . '.' . $list->quoteIdentifier($orderKeyParts[1]);
                         $doNotQuote = true;
                     }
                 } else {
-                    $orderKey = $list->getDao()->getTableName().'.'.$orderKey;
+                    $orderKey = $list->getDao()->getTableName() . '.' . $list->quoteIdentifier($orderKey);
                     $doNotQuote = true;
                 }
             }
@@ -610,7 +632,20 @@ class GridHelperService
         if (!empty($requestParams['query'])) {
             $query = $this->filterQueryParam($requestParams['query']);
             if (!empty($query)) {
-                $conditionFilters[] = 'oo_id IN (SELECT id FROM search_backend_data WHERE maintype = "object" AND MATCH (`data`,`properties`) AGAINST (' . $list->quote($query) . ' IN BOOLEAN MODE))';
+                $handleFullTextQueryEvent = new GenericEvent($this, [
+                    'query' => $query,
+                    'condition' => null,
+                    'list' => $list,
+                ]);
+                $this->eventDispatcher->dispatch(
+                    $handleFullTextQueryEvent,
+                    AdminEvents::OBJECT_LIST_HANDLE_FULLTEXT_QUERY
+                );
+
+                $condition = $handleFullTextQueryEvent->getArgument('condition');
+                if ($condition !== null) {
+                    $conditionFilters[] = $condition;
+                }
             }
         }
 
@@ -659,8 +694,17 @@ class GridHelperService
             }
         }
 
-        if ($class->getShowVariants()) {
-            $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_VARIANT]);
+        if ($class->getAllowVariants()) {
+            if ($class->getShowVariants()) {
+                $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_VARIANT]);
+            }
+            if (isset($requestParams['filter_by_object_type'])) {
+                if ($requestParams['filter_by_object_type'] === 'only_objects') {
+                    $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT]);
+                } elseif ($requestParams['filter_by_object_type'] === 'only_variant_objects') {
+                    $list->setObjectTypes([DataObject::OBJECT_TYPE_VARIANT]);
+                }
+            }
         }
 
         $this->addGridFeatureJoins($list, $featureJoins, $class, $featureAndSlugFilters);
@@ -678,7 +722,7 @@ class GridHelperService
     public function prepareAssetListingForGrid(array $allParams, User $adminUser): Model\Asset\Listing
     {
         $db = \Pimcore\Db::get();
-        $folder = Model\Asset::getById($allParams['folderId']);
+        $folder = Model\Asset::getById((int) $allParams['folderId']);
 
         $start = 0;
         $limit = null;
@@ -765,6 +809,9 @@ class GridHelperService
                 if ($operator == 'LIKE') {
                     $value = $db->quote('%' . $value . '%');
                 } elseif ($operator == 'IN') {
+                    if (empty($value)) {
+                        continue;
+                    }
                     $quoted = array_map(function ($val) use ($db) {
                         return $db->quote($val);
                     }, $value);

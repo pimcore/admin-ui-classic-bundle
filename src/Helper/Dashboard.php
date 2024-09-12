@@ -115,10 +115,6 @@ final class Dashboard
         return $dashboard ? $dashboard : ['positions' => [[], []]];
     }
 
-    /**
-     * @param string $key
-     * @param array|null $configuration
-     */
     public function saveDashboard(string $key, array $configuration = null): void
     {
         $this->loadFile();

@@ -119,6 +119,43 @@ pimcore.settings.profile.panel = Class.create({
             }
         });
 
+        const validLocales = [
+            ['', '(system)']
+        ];
+        const allLocales = this.currentUser.validLocales ?? [];
+        // Rely on supportedLocalesOf to exclude any non-supported locales
+        Intl.DateTimeFormat.supportedLocalesOf(Object.keys(allLocales), {localeMatcher: "lookup"}).forEach(function (locale) {
+            validLocales.push([locale, allLocales[locale]])
+        });
+
+        const localesStore = new Ext.data.ArrayStore({
+            fields: ['code', 'text'],
+            data : validLocales
+        });
+
+        baseItems.push({
+            xtype: 'combo',
+            fieldLabel: t('datetime_locale'),
+            typeAhead: true,
+            queryMode: 'local',
+            value: this.currentUser.datetimeLocale ?? '',
+            listWidth: 400,
+            store: localesStore,
+            displayField: 'text',
+            valueField: 'code',
+            forceSelection: true,
+            triggerAction: 'all',
+            name: 'datetimeLocale',
+            listeners: {
+                change: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this),
+                select: function () {
+                    this.forceReloadOnSave = true;
+                }.bind(this)
+            }
+        });
+
         baseItems.push({
             xtype: "checkbox",
             boxLabel: t("show_welcome_screen"),

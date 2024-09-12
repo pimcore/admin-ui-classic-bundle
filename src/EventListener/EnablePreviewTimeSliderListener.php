@@ -49,9 +49,6 @@ class EnablePreviewTimeSliderListener implements EventSubscriberInterface
         $this->documentResolver = $documentResolver;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

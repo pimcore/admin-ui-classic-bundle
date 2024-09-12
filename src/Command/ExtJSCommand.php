@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\Command;
 use MatthiasMullie\Minify\JS;
 use Pimcore\Console\AbstractCommand;
 use Pimcore\Logger;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,19 +28,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @internal
  */
+#[AsCommand('pimcore:extjs')]
 class ExtJSCommand extends AbstractCommand
 {
-    protected static $defaultName = 'pimcore:extjs';
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     protected function configure(): void
     {
         $this
-            ->setName('pimcore:extjs')
             ->setHidden(true)
             ->setDescription('Regenerate minified ext-js file')
             ->addArgument(
@@ -64,16 +58,16 @@ class ExtJSCommand extends AbstractCommand
         $dest = $input->getArgument('dest');
 
         if (!$src) {
-            $src = 'dev/pimcore/pimcore/bundles/AdminBundle/public/extjs/js/pimcore-ext-all.json';
+            $src = 'dev/pimcore/admin-ui-classic-bundle/public/extjs/js/pimcore-ext-all.json';
         }
 
         if (!$dest) {
-            $dest = 'dev/pimcore/pimcore/bundles/AdminBundle/public/extjs/js/ext-all';
+            $dest = 'dev/pimcore/admin-ui-classic-bundle/public/extjs/js/ext-all';
         }
 
         $absoluteManifest = getcwd() . '/' . $src;
 
-        $bootstrapFile = getcwd() . '/dev/pimcore/pimcore/bundles/AdminBundle/public/extjs/js/bootstrap-ext-all.js';
+        $bootstrapFile = getcwd() . '/dev/pimcore/admin-ui-classic-bundle/public/extjs/js/bootstrap-ext-all.js';
         $bootstrap = file_get_contents($bootstrapFile);
         if (!$bootstrap) {
             throw new \Exception('bootstrap file not found');

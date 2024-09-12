@@ -26,9 +26,6 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  */
 class AdminConfigListener implements EventSubscriberInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedEvents(): array
     {
         return [

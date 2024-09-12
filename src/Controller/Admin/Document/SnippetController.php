@@ -33,10 +33,6 @@ class SnippetController extends DocumentControllerBase
     /**
      * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function getDataByIdAction(Request $request): JsonResponse
@@ -87,10 +83,6 @@ class SnippetController extends DocumentControllerBase
     /**
      * @Route("/save", name="save", methods={"POST","PUT"})
      *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     *
      * @throws \Exception
      */
     public function saveAction(Request $request): JsonResponse
@@ -113,7 +105,7 @@ class SnippetController extends DocumentControllerBase
             $snippet->setMissingRequiredEditable(($request->get('missingRequiredEditable') == 'true') ? true : false);
         }
 
-        list($task, $snippet, $version) = $this->saveDocument($snippet, $request);
+        [$task, $snippet, $version] = $this->saveDocument($snippet, $request);
 
         if ($task == self::TASK_PUBLISH || $task === self::TASK_UNPUBLISH) {
             $this->saveToSession($snippet, $request->getSession());

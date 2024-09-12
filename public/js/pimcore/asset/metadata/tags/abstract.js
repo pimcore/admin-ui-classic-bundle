@@ -160,5 +160,14 @@ pimcore.asset.metadata.tags.abstract = Class.create({
 
     handleGridOpenAction:function (grid, rowIndex) {
 
+    },
+
+    initEditorConfig: function (field) {
+        const editorConfig = {};
+        if (field.config && field.config.width && field.config.width !== '100%' && intval(field.config.width) > 10) {
+            editorConfig.width = field.config.width;
+        }
+
+        return editorConfig;
     }
 });
