@@ -150,6 +150,7 @@ abstract class ElementControllerBase extends AdminAbstractController
                     'id' => $element->getId(),
                     'type' => $element->getType(),
                     'key' => $element->getKey(),
+                    'path' => $element->getPath(),
                     'allowed' => true,
                 ];
 
