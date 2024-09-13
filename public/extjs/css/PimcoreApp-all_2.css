@@ -5376,6 +5376,10 @@
     background-position: 2px -2px;
 }
 
+.x-resizable-handle-error {
+    background-color: rgba(255,0,0,.2);
+}
+
 .fa-spin {
     animation: fa-spin 2s infinite linear;
 }
