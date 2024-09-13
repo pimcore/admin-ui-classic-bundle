@@ -1232,7 +1232,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             fpassthru($stream);
         }, 200, [
             'Content-Type' => $thumbnail->getMimeType(),
-            'Access-Control-Allow-Origin', '*',
+            'Access-Control-Allow-Origin' => '*',
         ]);
 
         $this->addThumbnailCacheHeaders($response);
