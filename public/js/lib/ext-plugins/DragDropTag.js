@@ -20,7 +20,7 @@ Ext.define('cas.helper.plugin.DragDropTag', {
             getDragData: function (e) {
 
                 let sourceEl = e.getTarget(me.tagItemSelector, 10);
-                //todo sprawdzić czy w tagfield-item-selected jest ten który jest w source el bo jeśli tak, to przenioś całą zgraję
+
                 if (sourceEl) {
                     let d = sourceEl.cloneNode(true);
                     d.id = Ext.id();
@@ -51,10 +51,10 @@ Ext.define('cas.helper.plugin.DragDropTag', {
                     let b = item.getBottom(), r = item.getRight();
                     let middle = (l + r) / 2;
                     if (mouseY > t && mouseY < b) {
-                        //ten element jest na lini kursora
+                        // cursor currently is at this item
                         let distance;
                         if (mouseX <= middle) {
-                            //kursor jest z lewej strony elementu
+                            // cursor is left of the element
                             distance = l - mouseX;
                             if (distance < bestDistance) {
                                 bestDistance = distance;
@@ -62,13 +62,12 @@ Ext.define('cas.helper.plugin.DragDropTag', {
                                 bestItem = item;
                             }
                         } else {
-                            //kursor jest z prawej strony elementu
+                            // cursor is right of the element
                             distance = mouseX - r;
                             if (distance < bestDistance) {
                                 bestDistance = distance;
                                 bestIsAfter = true;
                                 bestItem = item;
-                                //break;//następne już tylko będą dalej w tej linii
                             }
                         }
                     }
@@ -86,7 +85,6 @@ Ext.define('cas.helper.plugin.DragDropTag', {
                 return Ext.dd.DropZone.prototype.dropAllowed;
             },
             onNodeDrop: function (target, dd, e, data) {
-                //console.info(target.element.dom, target.after ? 'after' : 'before');
                 let sourceIndex = Ext.fly(data.sourceEl).getAttribute('data-selectionindex');
                 let targetIndex = parseInt(target.element.getAttribute('data-selectionindex'));
                 let value = Ext.Array.clone(me.getValue());
