@@ -77,8 +77,15 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                 'type',
                 'label',
                 {
+                    name: 'path',
+                    convert: function (v, rec) {
+                        return rec.data.label;
+                    },
+                    depends : ['label']
+                },
+                {
                     name: 'nicePathKey',
-                    convert: function(v, rec){
+                    convert: function (v, rec) {
                         return rec.data.type + '_' + rec.data.id;
                     },
                     depends : ['type', 'id']
