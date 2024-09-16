@@ -30,8 +30,8 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         }
         this.fieldConfig = fieldConfig;
 
-        this.fieldConfig.classes =  this.fieldConfig.classes.filter(function (x) {
-            if(x.classes == 'folder') {
+        this.fieldConfig.classes = this.fieldConfig.classes.filter(function (x) {
+            if (x.classes == 'folder') {
                 this.dataObjectFolderAllowed = true;
                 return false;
             }
@@ -81,19 +81,19 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                     convert: function (v, rec) {
                         return rec.data.label;
                     },
-                    depends : ['label']
+                    depends: ['label']
                 },
                 {
                     name: 'nicePathKey',
                     convert: function (v, rec) {
                         return rec.data.type + '_' + rec.data.id;
                     },
-                    depends : ['type', 'id']
+                    depends: ['type', 'id']
                 }
             ];
             storeConfig.autoLoad = true;
             storeConfig.listeners = {
-                beforeload: function(store) {
+                beforeload: function (store) {
                     store.getProxy().setExtraParam('unsavedChanges', this.object && typeof this.object.getSaveData === "function" ? this.object.getSaveData().data : {});
                     store.getProxy().setExtraParam('context', JSON.stringify(this.getContext()));
                 }.bind(this),
