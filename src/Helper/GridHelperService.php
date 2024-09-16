@@ -699,7 +699,7 @@ class GridHelperService
             if (isset($requestParams['filter_by_object_type'])) {
                 if ($requestParams['filter_by_object_type'] === 'only_objects') {
                     $list->setObjectTypes([DataObject::OBJECT_TYPE_OBJECT]);
-                } elseif($requestParams['filter_by_object_type'] === 'only_variant_objects') {
+                } elseif ($requestParams['filter_by_object_type'] === 'only_variant_objects') {
                     $list->setObjectTypes([DataObject::OBJECT_TYPE_VARIANT]);
                 }
             }

@@ -20,7 +20,6 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     type: "rgbaColor",
 
     initialize: function (data, fieldConfig) {
-
         this.data = null;
 
         if (data) {
@@ -31,21 +30,22 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnConfig: function (field) {
-
         return {
-            text: t(field.label), width: 120, sortable: false, dataIndex: field.key, sortable: true,
+            text: t(field.label),
+            width: 120,
+            dataIndex: field.key,
+            sortable: true,
             getEditor: this.getWindowCellEditor.bind(this, field),
             renderer: function (key, value, metaData, record) {
                 this.applyPermissionStyle(key, value, metaData, record);
 
-                if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
+                if (record.data.inheritedFields?.[key]?.inherited) {
                     metaData.tdCls += " grid_value_inherited";
                 }
 
                 if (value) {
-                    var result = '<div style="float: left;"><div style="float: left; margin-right: 5px; background-image: ' + ' url(/bundles/pimcoreadmin/img/ext/colorpicker/checkerboard.png);">'
+                    return '<div style="float: left;"><div style="float: left; margin-right: 5px; background-image: ' + ' url(/bundles/pimcoreadmin/img/ext/colorpicker/checkerboard.png);">'
                         + '<div style="background-color: ' + value + '; width:15px; height:15px;"></div></div>' + value + '</div>';
-                    return result;
                 }
 
             }.bind(this, field.key)
@@ -71,28 +71,23 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     getLayoutEdit: function () {
-
-        var labelWidth = 100;
-        var width = this.fieldConfig.width ? this.fieldConfig.width : 400;
-        if (this.fieldConfig.labelWidth) {
-            labelWidth = this.fieldConfig.labelWidth;
+        const labelWidth = this.fieldConfig.labelWidth ? this.fieldConfig.labelWidth : 100;
+        let width = this.fieldConfig.width ? this.fieldConfig.width : 400;
+        if (!this.fieldConfig.labelAlign || 'left' === this.fieldConfig.labelAlign) {
+            width = this.sumWidths(width, labelWidth);
         }
-        width = this.sumWidths(width, labelWidth);
 
-        this.selector = new Ext.ux.colorpick.Selector(
-            {
-                showPreviousColor: true,
-                hidden: true,
-                bind: {
-                    value: '{color}',
-                    visible: '{full}'
-                }
+        this.selector = new Ext.ux.colorpick.Selector({
+            showPreviousColor: true,
+            hidden: true,
+            bind: {
+                value: '{color}',
+                visible: '{full}'
             }
-        );
+        });
 
-        var colorConfig =  {
-            fieldLabel: this.fieldConfig.title,
-            labelWidth: labelWidth,
+        const colorConfig = {
+            flex: 1,
             format: '#hex8',
             isNull: !this.data,
             hidden: true,
@@ -103,31 +98,45 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
             colorConfig["value"] = this.data;
         }
 
-        this.colorField = Ext.create('pimcore.colorpick.Field',
+        this.colorField = Ext.create(
+            'pimcore.colorpick.Field',
             colorConfig
         );
 
-        var panel = new Ext.panel.Panel({
+        const compositeCfg = {
             viewModel: {
                 data: {
-                    color: this.data ? this.data : "FFFFFFFF"
+                    color: this.data ? this.data : 'FFFFFFFF'
                 }
             },
+            fieldLabel: this.fieldConfig.title,
+            labelWidth: labelWidth,
             layout: 'hbox',
             width: width,
-            componentCls: this.getWrapperClassNames(),
-            items: [this.colorField, this.selector,
+            items: [
+                this.colorField,
+                this.selector,
                 {
-                xtype: "button",
-                iconCls: "pimcore_icon_delete",
-                style: "margin-left: 5px",
-                handler: this.empty.bind(this),
-            }],
-            style: "padding-bottom: 10px;"
-        });
+                    xtype: 'button',
+                    iconCls: 'pimcore_icon_delete',
+                    style: 'margin-left: 5px',
+                    handler: this.empty.bind(this),
+                }
+            ],
+            componentCls: this.getWrapperClassNames(),
+            border: false,
+            style: {
+                padding: 0
+            }
+        };
+
+        if (this.fieldConfig.labelAlign) {
+            compositeCfg.labelAlign = this.fieldConfig.labelAlign;
+        }
 
         this.colorField.setVisible(true);
-        this.component = panel;
+        this.component = Ext.create('Ext.form.FieldContainer', compositeCfg);
+
         return this.component;
     },
 
@@ -137,7 +146,6 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     getLayoutShow: function () {
-
         this.component = this.getLayoutEdit();
         this.component.disable();
 
@@ -145,13 +153,13 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     getValue: function () {
-        var viewModel = this.component.getViewModel();
-        var isNull = this.colorField.getIsNull();
+        const viewModel = this.component.getViewModel();
+        const isNull = this.colorField.getIsNull();
         if (isNull) {
             return null;
         }
-        var value = viewModel.get("color");
-        return value;
+
+        return viewModel.get("color");
     },
 
     getName: function () {
@@ -159,8 +167,6 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
     },
 
     isDirty: function () {
-        var dirty = this.getValue() != this.data
-
-        return dirty;
+        return this.getValue() != this.data;
     }
 });

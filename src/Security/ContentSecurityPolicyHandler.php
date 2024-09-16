@@ -30,6 +30,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     private ?string $nonce = null;
 
+    private const SELF = "'self'";
+
     public const DEFAULT_OPT = 'default-src';
 
     public const IMG_OPT = 'img-src';
@@ -45,6 +47,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
     public const MEDIA_OPT = 'media-src';
 
     public const FRAME_OPT = 'frame-src';
+
+    public const FRAME_ANCHESTORS = 'frame-ancestors';
 
     public const WORKER_OPT = 'worker-src';
 
@@ -74,15 +78,16 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            self::DEFAULT_OPT => "'self'",
+            self::DEFAULT_OPT => self::SELF,
             self::IMG_OPT => '* data: blob:',
-            self::MEDIA_OPT => "'self' data:",
-            self::SCRIPT_OPT => "'self' 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
-            self::STYLE_OPT => "'self' 'unsafe-inline'",
-            self::FRAME_OPT => "'self' data:",
-            self::CONNECT_OPT => "'self' blob:",
-            self::FONT_OPT => "'self'",
-            self::WORKER_OPT => "'self' blob:",
+            self::MEDIA_OPT => self::SELF . ' data:',
+            self::SCRIPT_OPT => self::SELF . " 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
+            self::STYLE_OPT => self::SELF . " 'unsafe-inline'",
+            self::FRAME_OPT => self::SELF . ' data:',
+            self::FRAME_ANCHESTORS => self::SELF,
+            self::CONNECT_OPT => self::SELF . ' blob:',
+            self::FONT_OPT => self::SELF,
+            self::WORKER_OPT => self::SELF . ' blob:',
         ]);
     }
 
