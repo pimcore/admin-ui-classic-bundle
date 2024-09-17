@@ -575,7 +575,8 @@ class GridHelperService
                             . '.' . $list->quoteIdentifier($brickDescriptor['brickfield']);
                         $doNotQuote = true;
                     } elseif (count($orderKeyParts) === 2) {
-                        $orderKey = $list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1]);
+                        $orderKey = $list->quoteIdentifier($orderKeyParts[0])
+                            . '.' . $list->quoteIdentifier($orderKeyParts[1]);
                         $doNotQuote = true;
 
                         $brickDefinition = Objectbrick\Definition::getByKey($orderKeyParts[0]);
