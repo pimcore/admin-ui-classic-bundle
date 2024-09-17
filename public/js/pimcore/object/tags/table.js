@@ -225,16 +225,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             tbar: tbar,
             viewConfig: {
                 markDirty: false,
-                forceFit: true,
-                listeners: {
-                    refresh: function (dataview) {
-                        Ext.suspendLayouts();
-                        Ext.each(dataview.panel.columns, function (column) {
-                            column.autoSize();
-                        });
-                        Ext.resumeLayouts(true);
-                    }
-                }
+                forceFit: true
             }
         });
         this.component.add(this.grid);
