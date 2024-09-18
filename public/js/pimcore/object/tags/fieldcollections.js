@@ -95,7 +95,11 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
                 continue;
             }
             preview += `<b>${t(fieldCollectionItem.data[fieldKey].title)}:</b><br>`;
-            preview += `${fieldCollectionItem.data[fieldKey].value ? fieldCollectionItem.data[fieldKey].value.replace(/<[^>]*>/g, '') : '-'}`;
+            if (fieldCollectionItem.data[fieldKey].value) {
+                preview += `${Ext.util.Format.stripTags(fieldCollectionItem.data[fieldKey].value)}`;
+            }else{
+                preview += '-';
+            }
         }
 
         return preview;
