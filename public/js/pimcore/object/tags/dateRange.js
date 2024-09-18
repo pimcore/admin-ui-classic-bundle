@@ -82,8 +82,8 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
 
     getLayoutShow: function () {
         this.component = this.getLayoutEdit();
-        this.component.items[0].setReadonly(true);
-        this.component.items[2].setReadonly(true);
+        this.component.items.items[0].setReadOnly(true);
+        this.component.items.items[2].setReadOnly(true);
 
         return this.component;
     },
@@ -98,15 +98,16 @@ pimcore.object.tags.dateRange = Class.create(pimcore.object.tags.abstract, {
             renderer: function (key, value, metaData, record) {
                 this.applyPermissionStyle(key, value, metaData, record);
 
-                if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited === true) {
+                if (record.data.inheritedFields?.[key]?.inherited) {
                     metaData.tdCls += ' grid_value_inherited';
                 }
 
                 if (value) {
                     const minDate = new Date(intval(value['start_date'] || 0) * 1000);
                     const maxDate = new Date(intval(value['end_date'] || 0) * 1000);
+                    const shortDateFormat = pimcore.globalmanager.get('localeDateTime').getShortDateFormat();
 
-                    return `${Ext.Date.format(minDate, pimcore.globalmanager.get('localeDateTime').getShortDateFormat()), Ext.Date.format(maxDate, pimcore.globalmanager.get('localeDateTime').getShortDateFormat())}`;
+                    return `${Ext.Date.format(minDate, shortDateFormat)}, ${Ext.Date.format(maxDate, shortDateFormat)}`;
                 }
 
                 return '';

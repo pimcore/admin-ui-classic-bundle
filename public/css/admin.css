@@ -2376,3 +2376,27 @@ ul.leaflet-draw-actions.leaflet-draw-actions-top.leaflet-draw-actions-bottom li:
 .pimcore_cb_middle_two_lines .x-form-cb-default {
     top: -9px
 }
+
+.pimcore_reverse-object-relation-warning {
+    width: inherit;
+    padding: 0 5px 0 20px;
+
+    white-space: initial;
+    background:url("/bundles/pimcoreadmin/img/icon/error.png") no-repeat scroll 0 0 transparent;
+}
+
+.pimcore_reverse-object-relation-panel {
+    overflow: visible !important;
+}
+
+.pimcore_reverse-object-relation-panel > .x-panel-bodyWrap {
+    overflow: visible !important;
+}
+
+.pimcore_reverse-object-relation-bottom-bar {
+    overflow: visible !important;
+}
+
+.pimcore_reverse-object-relation-bottom-bar > div {
+    height: 4.5rem !important;
+}

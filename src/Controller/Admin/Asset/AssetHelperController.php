@@ -1054,6 +1054,12 @@ class AssetHelperController extends AdminAbstractController
 
                     try {
                         if ($dirty) {
+                            $metadataEvent = new GenericEvent($this, [
+                                'id' => $asset->getId(),
+                                'metadata' => $metadata,
+                            ]);
+                            $eventDispatcher->dispatch($metadataEvent, AdminEvents::ASSET_METADATA_PRE_SET);
+
                             // $metadata = Asset\Service::minimizeMetadata($metadata, "grid");
                             $asset->setMetadataRaw($metadata);
                             $asset->save();

@@ -1232,7 +1232,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             fpassthru($stream);
         }, 200, [
             'Content-Type' => $thumbnail->getMimeType(),
-            'Access-Control-Allow-Origin', '*',
+            'Access-Control-Allow-Origin' => '*',
         ]);
 
         $this->addThumbnailCacheHeaders($response);
@@ -2340,6 +2340,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                     }
 
                     if ($dirty) {
+                        $metadataEvent = new GenericEvent($this, [
+                            'id' => $asset->getId(),
+                            'metadata' => $metadata,
+                        ]);
+                        $eventDispatcher->dispatch($metadataEvent, AdminEvents::ASSET_METADATA_PRE_SET);
+
                         // $metadata = Asset\Service::minimizeMetadata($metadata, "grid");
                         $asset->setMetadataRaw($metadata);
                         $asset->save();

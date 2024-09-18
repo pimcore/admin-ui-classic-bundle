@@ -9,6 +9,7 @@
 - [Date/time fields] Date/time fields now support the usage without timezone support.
 - [Icons] Overhauled Icon library and icon dropdown selector in class definition editor.
 - [System Settings] Removed "Default-Language in Admin-Interface" setting.
+- [Security] Add CSP configuration option `frame-ancestors` (default: `self`).
 
 #### v1.4.0
 - [DataObject] Password data type algorithms other than `password_hash` are deprecated since `pimcore/pimcore:^11.2` and will be removed in `pimcore/pimcore:^12`.
