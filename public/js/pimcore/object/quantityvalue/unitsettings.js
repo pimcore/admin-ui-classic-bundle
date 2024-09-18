@@ -147,7 +147,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                         if (btn === 'yes'){
                             grid.getStore().removeAt(rowIndex);
                         }
-                    }.bind(this));
+                    });
                 }.bind(this)
             }]
         });
