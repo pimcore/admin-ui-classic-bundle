@@ -48,11 +48,62 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
         return {text: t(field.label), width: 150, sortable: false, dataIndex: field.key,
                 renderer: function (key, value, metaData, record) {
                     this.applyPermissionStyle(key, value, metaData, record);
+                    if(typeof record.data[key] === 'string') {
+                        return record.data[key];
+                    }
 
-                    return t("not_supported");
+                    let preview = '';
+                    let plainText = false;
+                    let fieldCollectionItems = record.data[key];
+
+                    if (typeof record.data.preview !== 'undefined'){
+                        fieldCollectionItems = record.data.preview;
+                        plainText = true;
+                    }
+
+                    let previousFieldCollectionItemType = null;
+                    for (let fieldCollectionItem of fieldCollectionItems) {
+
+                        if (plainText) {
+                            preview += this.generatePlainTextPreview(fieldCollectionItem);
+                        } else {
+                            if (previousFieldCollectionItemType !== fieldCollectionItem.type) {
+                                preview += `<h3 style="margin-top: 0">${t(fieldCollectionItem.type)}</h3>`;
+                                previousFieldCollectionItemType = fieldCollectionItem.type;
+                            }
+
+                            preview += `<div style="margin-bottom: 10px; border-bottom: 1px solid #e9e9e9; overflow: auto; white-space: normal">`;
+                            for (let fieldKey in fieldCollectionItem.data) {
+                                if (!fieldCollectionItem.data.hasOwnProperty(fieldKey)) {
+                                    continue;
+                                }
+
+                                preview += `<div style=""><b>${t(fieldCollectionItem.data[fieldKey].title)}:</b></div>`;
+                                preview += `<div style="margin-bottom: 5px">${fieldCollectionItem.data[fieldKey].value ? fieldCollectionItem.data[fieldKey].value : '-'}</div>`;
+                            }
+                            preview += `</div>`;
+                        }
+                    }
+
+                    return preview;
                 }.bind(this, field.key)};
     },
+    generatePlainTextPreview: function (fieldCollectionItem) {
+        let preview = `<b>${t(fieldCollectionItem.type)}</b> - `;
+        for (let fieldKey in fieldCollectionItem.data) {
+            if (!fieldCollectionItem.data.hasOwnProperty(fieldKey)) {
+                continue;
+            }
+            preview += `<b>${t(fieldCollectionItem.data[fieldKey].title)}:</b><br>`;
+            if (fieldCollectionItem.data[fieldKey].value) {
+                preview += `${Ext.util.Format.stripTags(fieldCollectionItem.data[fieldKey].value)}`;
+            }else{
+                preview += '-';
+            }
+        }
 
+        return preview;
+    },
     loadFieldDefinitions: function () {
 
         var allowedTypes = this.fieldConfig.allowedTypes;
