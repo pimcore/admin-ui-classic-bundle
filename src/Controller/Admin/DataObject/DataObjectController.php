@@ -1881,7 +1881,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         $user = Tool\Admin::getCurrentUser();
-        if ($target->isAllowed('create') && $source instanceof DataObject\Concrete && $user->isAllowed($source->getClassId(), 'class')) {
+        if ($target->isAllowed('create') && ($source instanceof DataObject\Concrete ? $user->isAllowed($source->getClassId(), 'class') : true)) {
             $source = DataObject::getById($sourceId);
             if ($source != null) {
                 if ($source instanceof DataObject\Concrete && $latestVersion = $source->getLatestVersion()) {
