@@ -244,6 +244,7 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
             if(hasHTMLContent) {
                 options.labelTpl = '{[Ext.util.Format.stripTags(values.text)]}';
             }
+            options.plugins = 'dragdroptag';
             this.component = Ext.create('Ext.form.field.Tag', options);
         } else {
             this.component = Ext.create('Ext.ux.form.MultiSelect', options);
