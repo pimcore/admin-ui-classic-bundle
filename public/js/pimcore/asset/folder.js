@@ -285,7 +285,16 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                         scale: "medium",
-                        handler: this.remove.bind(this)
+                        handler: function () {
+                            var options = this.listfolder.onRawDeleteSelectedRows();
+                            if (!options) {
+                                options = {
+                                    "elementType" : "asset",
+                                    "id": this.id
+                                };
+                            }
+                            pimcore.elementservice.deleteElement(options);
+                        }.bind(this)
                     });
                 } else {
                     buttons.push(this.toolbarButtons.remove);
