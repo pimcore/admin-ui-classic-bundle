@@ -501,6 +501,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             cls: "multihref_field",
+            componentCls: this.getWrapperClassNames(),
+            bodyCssClass: "pimcore_object_tag_multihref",
             autoExpandColumn: 'fullpath',
             border: true,
             style: "margin-bottom: 10px",
