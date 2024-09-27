@@ -578,6 +578,17 @@ class GridHelperService
                         $orderKey = $list->quoteIdentifier($orderKeyParts[0])
                             . '.' . $list->quoteIdentifier($orderKeyParts[1]);
                         $doNotQuote = true;
+
+                        $brickDefinition = Objectbrick\Definition::getByKey($orderKeyParts[0]);
+                        if ($brickDefinition instanceof Objectbrick\Definition) {
+                            $brickFieldDefinition = $brickDefinition->getFieldDefinition($orderKeyParts[1]);
+
+                            if ($brickFieldDefinition instanceof ClassDefinition\Data\QuantityValue) {
+                                $orderKey = 'CONCAT('.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__unit').', '.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__value').')';
+                            } elseif ($brickFieldDefinition instanceof ClassDefinition\Data\RgbaColor) {
+                                $orderKey = 'CONCAT('.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__rgb').', '.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__a').')';
+                            }
+                        }
                     }
                 } else {
                     $orderKey = $list->getDao()->getTableName() . '.' . $list->quoteIdentifier($orderKey);
