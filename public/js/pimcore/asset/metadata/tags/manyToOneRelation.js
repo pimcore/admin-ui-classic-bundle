@@ -159,6 +159,7 @@ pimcore.asset.metadata.tags.manyToOneRelation = Class.create(pimcore.asset.metad
             if (data.published === false) {
                 this.component.addCls("strikeThrough");
             }
+            this.dataChanged = true;
             this.component.setValue(data.path);
 
             return true;
