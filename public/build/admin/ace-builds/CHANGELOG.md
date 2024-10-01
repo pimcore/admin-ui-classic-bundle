@@ -2,6 +2,81 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.36.2](https://github.com/ajaxorg/ace/compare/v1.36.1...v1.36.2) (2024-08-30)
+
+
+### Bug Fixes
+
+* apply padding to right side multi-line markers ([#5636](https://github.com/ajaxorg/ace/issues/5636)) ([c7549aa](https://github.com/ajaxorg/ace/commit/c7549aa5d53fb62f134b31a44d09029ceee3c800))
+
+### [1.36.1](https://github.com/ajaxorg/ace/compare/v1.36.0...v1.36.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* improve type getMarkerAtPosition markergroup ([#5631](https://github.com/ajaxorg/ace/issues/5631)) ([89bd40a](https://github.com/ajaxorg/ace/commit/89bd40a66a2f06fb8806f174e5559021540a5b1e))
+* update cloudeditor light colours ([#5633](https://github.com/ajaxorg/ace/issues/5633)) ([0e2813e](https://github.com/ajaxorg/ace/commit/0e2813ed9e858d9359c2a79f2a9255d675308ad1))
+
+## [1.36.0](https://github.com/ajaxorg/ace/compare/v1.35.5...v1.36.0) (2024-08-21)
+
+
+### Features
+
+* allow setting marker type for MarkerGroups ([#5630](https://github.com/ajaxorg/ace/issues/5630)) ([214df9c](https://github.com/ajaxorg/ace/commit/214df9cea8d729f3071f9c02889cba2b2e7051b3))
+* **forced-color:** do not adjust the forced colors for the editor ([#5624](https://github.com/ajaxorg/ace/issues/5624)) ([c8f9df8](https://github.com/ajaxorg/ace/commit/c8f9df84e70ee29e8e989966985bcea95a9bef9b))
+
+### [1.35.5](https://github.com/ajaxorg/ace/compare/v1.35.4...v1.35.5) (2024-08-20)
+
+### [1.35.4](https://github.com/ajaxorg/ace/compare/v1.35.3...v1.35.4) (2024-07-22)
+
+
+### Bug Fixes
+
+* move right of cursor tokens to end of ghost text. ([#5616](https://github.com/ajaxorg/ace/issues/5616)) ([063ef9b](https://github.com/ajaxorg/ace/commit/063ef9bbe0934dfe75d9b447e8a92b69bfa41a3a))
+
+### [1.35.3](https://github.com/ajaxorg/ace/compare/v1.35.2...v1.35.3) (2024-07-18)
+
+
+### Bug Fixes
+
+* ghost text rendering of empty lines ([#5615](https://github.com/ajaxorg/ace/issues/5615)) ([1ae0bdc](https://github.com/ajaxorg/ace/commit/1ae0bdcfb9da4078713d116e93a9c9a935a1258d))
+
+### [1.35.2](https://github.com/ajaxorg/ace/compare/v1.35.1...v1.35.2) (2024-07-01)
+
+### [1.35.1](https://github.com/ajaxorg/ace/compare/v1.35.0...v1.35.1) (2024-06-27)
+
+
+### Bug Fixes
+
+* explicitly construct Number from window zoom attribute ([#5600](https://github.com/ajaxorg/ace/issues/5600)) ([2591c36](https://github.com/ajaxorg/ace/commit/2591c36b9e768305a9f837bf74c828c2d8d76e05))
+* use dom builder for gutter tooltip and inline widget ([#5601](https://github.com/ajaxorg/ace/issues/5601)) ([e81a299](https://github.com/ajaxorg/ace/commit/e81a299a8be39a7245a334ebc844eaeac6864bb3))
+* workaround for safari rendering bug ([#5573](https://github.com/ajaxorg/ace/issues/5573)) ([f9a152f](https://github.com/ajaxorg/ace/commit/f9a152fd925a8a16b10c65c909201100486c71e8))
+* wrong doc comment * insert behaviour ([#5571](https://github.com/ajaxorg/ace/issues/5571)) ([16c95b3](https://github.com/ajaxorg/ace/commit/16c95b32197c0ec952e52be85d21269005875940))
+
+## [1.35.0](https://github.com/ajaxorg/ace/compare/v1.34.2...v1.35.0) (2024-06-11)
+
+
+### Features
+
+* allow '{n}' as placeholder for translated strings ([#5581](https://github.com/ajaxorg/ace/issues/5581)) ([2206024](https://github.com/ajaxorg/ace/commit/220602488b95748c74141d647e13114c7a4569fb))
+
+
+### Bug Fixes
+
+* allow setting the placeholder type for nls ([#5584](https://github.com/ajaxorg/ace/issues/5584)) ([3e2d50f](https://github.com/ajaxorg/ace/commit/3e2d50f5307e201c20825311585e1f612f1ff23c))
+* not closed generic state in case of left-shift operator ([#5572](https://github.com/ajaxorg/ace/issues/5572)) ([e5bea6f](https://github.com/ajaxorg/ace/commit/e5bea6f63290003ff3270d56dbf9610e8a3091a8))
+* wrong vue-directives regexp ([#5586](https://github.com/ajaxorg/ace/issues/5586)) ([5f89a33](https://github.com/ajaxorg/ace/commit/5f89a334e69640bb395e74ae86530217d08f141c))
+
+### [1.34.2](https://github.com/ajaxorg/ace/compare/v1.34.1...v1.34.2) (2024-05-27)
+
+### [1.34.1](https://github.com/ajaxorg/ace/compare/v1.34.0...v1.34.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* always set aria-label to text input in a11y mode ([#5563](https://github.com/ajaxorg/ace/issues/5563)) ([00346fd](https://github.com/ajaxorg/ace/commit/00346fde824beabb69f677631ad52815665eaef4))
+* Folding for comments and different modes ([#5533](https://github.com/ajaxorg/ace/issues/5533)) ([f4d0e33](https://github.com/ajaxorg/ace/commit/f4d0e33dac270ce21df09a96a39f50e16d6354db))
+
 ## [1.34.0](https://github.com/ajaxorg/ace/compare/v1.33.3...v1.34.0) (2024-05-22)
 
 
