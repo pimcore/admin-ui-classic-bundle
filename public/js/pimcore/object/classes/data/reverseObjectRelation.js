@@ -235,7 +235,7 @@ pimcore.object.classes.data.reverseObjectRelation = Class.create(pimcore.object.
             }
             Ext.apply(this.datax,
                 {
-                    allowToCreateNewObject: source.data.allowToCreateNewObject,
+                    allowToCreateNewObject: source.datax.allowToCreateNewObject,
                     remoteOwner: source.datax.remoteOwner,
                     width: source.datax.width,
                     height: source.datax.height,
