@@ -59,7 +59,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
         $super();
 
         this.specificPanel.removeAll();
-        var specificItems = this.getSpecificPanelItems(this.datax, false);
+        let specificItems = this.getSpecificPanelItems(this.datax, false);
         this.specificPanel.add(specificItems);
 
         return this.layout;
@@ -68,6 +68,10 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     getSpecificPanelItems: function (datax, inEncryptedField) {
         if (typeof datax.options != "object") {
             datax.options = [];
+        }
+
+        if (typeof datax.defaultValue != "object") {
+            datax.defaultValue = [];
         }
 
         const stylingItems = [
@@ -99,13 +103,147 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
             return stylingItems;
         }
 
-        const valueStore = new Ext.data.JsonStore({
+        const optionsStore = new Ext.data.JsonStore({
             fields: ["key", {name: "value", allowBlank: false}],
             data: datax.options
         });
+        let optionsGrid = this.createoptionsgrid(optionsStore);
+        this.optionsModel = optionsGrid.getSelectionModel();
 
-        let valueGrid = Ext.create('Ext.grid.Panel', {
-            itemId: "valueeditor",
+        const defaultValueStore = new Ext.data.JsonStore({
+            fields: ["value"],
+            data: datax.defaultValue
+        });
+        let defaultValueGrid = this.createdefaultvaluegrid(defaultValueStore);
+        this.defaultValueModel = defaultValueGrid.getSelectionModel();
+
+        let appendedStylingItems = stylingItems.concat([
+            {
+                xtype: "numberfield",
+                fieldLabel: t("maximum_items"),
+                name: "maxItems",
+                value: datax.maxItems,
+                minValue: 0
+            },
+            {
+                xtype: "combo",
+                fieldLabel: t("multiselect_render_type"),
+                name: "renderType",
+                itemId: "renderType",
+                mode: 'local',
+                store: [
+                    ['list', 'List'],
+                    ['tags', 'Tags']
+                ],
+                value: datax["renderType"] ? datax["renderType"] : 'list',
+                triggerAction: "all",
+                editable: false,
+                forceSelection: true
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("options_provider_class"),
+                width: 600,
+                name: "optionsProviderClass",
+                value: datax.optionsProviderClass
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("options_provider_data"),
+                width: 600,
+                value: datax.optionsProviderData,
+                name: "optionsProviderData"
+            },
+            {
+                xtype: "textfield",
+                fieldLabel: t("default_value"),
+                name: "defaultValue",
+                value: datax.defaultValue
+            },
+            {
+                xtype: 'textfield',
+                width: 600,
+                fieldLabel: t("default_value_generator"),
+                labelWidth: 140,
+                name: 'defaultValueGenerator',
+                value: datax.defaultValueGenerator
+            },
+        ]);
+
+        appendedStylingItems = appendedStylingItems.concat(
+            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, optionsGrid)
+        );
+        appendedStylingItems.push(optionsGrid);
+        appendedStylingItems.push(defaultValueGrid);
+
+        return appendedStylingItems;
+    },
+
+    applyData: function ($super) {
+
+        $super();
+
+        let options = [];
+
+        let optionsEditor = this.specificPanel.getComponent("optionseditor");
+        if (optionsEditor) {
+            let valueStore = optionsEditor.getStore();
+            valueStore.commitChanges();
+            valueStore.each(function (rec) {
+                options.push({
+                    key: rec.get("key"),
+                    value: rec.get("value")
+                });
+            });
+        }
+
+        this.datax.options = options;
+
+        const defaultValue = [];
+
+        let defaultValueEditor = this.specificPanel.getComponent("defaultvalueeditor");
+        if (defaultValueEditor) {
+            let defaultValueStore = defaultValueEditor.getStore();
+            defaultValueStore.commitChanges();
+            defaultValueStore.each(function (rec) {
+                defaultValue.push({
+                    value: rec.get("value")
+                });
+            });
+        }
+
+        this.datax.defaultValue = defaultValue;
+    },
+
+    applySpecialData: function (source) {
+        if (source.datax) {
+            if (!this.datax) {
+                this.datax = {};
+            }
+            Ext.apply(this.datax,
+                {
+                    options: source.datax.options,
+                    width: source.datax.width,
+                    height: source.datax.height,
+                    maxItems: source.datax.maxItems,
+                    renderType: source.datax.renderType,
+                    optionsProviderType: source.datax.optionsProviderType,
+                    defaultValue: source.datax.defaultValue,
+                    defaultValueGenerator: source.datax.defaultValueGenerator,
+                    optionsProviderClass: source.datax.optionsProviderClass,
+                    optionsProviderData: source.datax.optionsProviderData
+                });
+        }
+    },
+
+    showoptioneditor: function (store) {
+        let editor = new pimcore.object.helpers.gridEditor(store);
+        editor.edit();
+    },
+
+    createoptionsgrid: function(store) {
+        return Ext.create('Ext.grid.Panel', {
+            itemId: "optionseditor",
             viewConfig: {
                 plugins: [
                     {
@@ -126,26 +264,26 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                         value: ""
                     };
 
-                    let selection = this.selectionModel.getSelection();
+                    let selection = this.optionsModel.getSelection();
                     let idx;
                     if (selection.length > 0) {
                         let selectedRow = selection[0];
-                        idx = valueStore.indexOf(selectedRow) + 1;
+                        idx = store.indexOf(selectedRow) + 1;
                     } else {
-                        idx = valueStore.getCount();
+                        idx = store.getCount();
                     }
-                    valueStore.insert(idx, u);
-                    this.selectionModel.select(idx);
+                    store.insert(idx, u);
+                    this.optionsModel.select(idx);
                 }.bind(this)
             },
                 {
                     xtype: "button",
                     iconCls: "pimcore_icon_edit",
-                    handler: this.showoptioneditor.bind(this, valueStore)
+                    handler: this.showoptioneditor.bind(this, store)
 
                 }],
             style: "margin-top: 10px",
-            store: valueStore,
+            store: store,
             selModel: Ext.create('Ext.selection.RowModel', {}),
             clicksToEdit: 1,
             columnLines: true,
@@ -182,7 +320,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                                     var rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(--rowIndex, [rec]);
-                                    this.selectionModel.select(rowIndex);
+                                    this.optionsModel.select(rowIndex);
                                 }
                             }.bind(this)
                         }
@@ -201,7 +339,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                                     const rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(++rowIndex, [rec]);
-                                    this.selectionModel.select(rowIndex);
+                                    this.optionsModel.select(rowIndex);
                                 }
                             }.bind(this)
                         }
@@ -244,8 +382,8 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                             }
 
                             // Iterate to all store data
-                            for(let i=0; i < valueStore.data.length; i++) {
-                                const existingRecord = valueStore.getAt(i);
+                            for(let i=0; i < store.data.length; i++) {
+                                const existingRecord = store.getAt(i);
                                 if(i != e.rowIdx && existingRecord.get('value') === e.value) {
                                     return false;
                                 }
@@ -256,84 +394,128 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 })
             ]
         });
+    },
 
-        this.selectionModel = valueGrid.getSelectionModel();
-
-        let appendedStylingItems = stylingItems.concat([
-            {
-                xtype: "numberfield",
-                fieldLabel: t("maximum_items"),
-                name: "maxItems",
-                value: datax.maxItems,
-                minValue: 0
+    createdefaultvaluegrid: function (store) {
+        return Ext.create('Ext.grid.Panel', {
+            itemId: "defaultvalueeditor",
+            viewConfig: {
+                plugins: [
+                    {
+                        ptype: 'gridviewdragdrop',
+                        dragroup: 'objectclassselect'
+                    }
+                ]
             },
-            {
-                xtype: "combo",
-                fieldLabel: t("multiselect_render_type"),
-                name: "renderType",
-                itemId: "renderType",
-                mode: 'local',
-                store: [
-                    ['list', 'List'],
-                    ['tags', 'Tags']
-                ],
-                value: datax["renderType"] ? datax["renderType"] : 'list',
-                triggerAction: "all",
-                editable: false,
-                forceSelection: true
-            }
-        ]);
-
-        appendedStylingItems = appendedStylingItems.concat(
-            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, valueGrid)
-        );
-        appendedStylingItems.push(valueGrid);
-
-        return appendedStylingItems;
-    },
-
-    applyData: function ($super) {
-
-        $super();
-
-        var options = [];
-
-        var valueEditor = this.specificPanel.getComponent("valueeditor");
-        if (valueEditor) {
-            var valueStore = valueEditor.getStore();
-            valueStore.commitChanges();
-            valueStore.each(function (rec) {
-                options.push({
-                    key: rec.get("key"),
-                    value: rec.get("value")
-                });
-            });
-        }
-
-        this.datax.options = options;
-    },
-
-    applySpecialData: function (source) {
-        if (source.datax) {
-            if (!this.datax) {
-                this.datax = {};
-            }
-            Ext.apply(this.datax,
+            tbar: [{
+                xtype: "tbtext",
+                text: t("default_value")
+            }, "-", {
+                xtype: "button",
+                iconCls: "pimcore_icon_add",
+                handler: function () {
+                    let u = {
+                        value: ""
+                    };
+                    let selection = this.defaultValueModel.getSelection();
+                    let idx;
+                    if (selection.length > 0) {
+                        let selectedRow = selection[0];
+                        idx = store.indexOf(selectedRow) + 1;
+                    } else {
+                        idx = store.getCount();
+                    }
+                    store.insert(idx, u);
+                    this.defaultValueModel.select(idx);
+                }.bind(this)
+            },
                 {
-                    options: source.datax.options,
-                    width: source.datax.width,
-                    height: source.datax.height,
-                    maxItems: source.datax.maxItems,
-                    renderType: source.datax.renderType,
-                    optionsProviderType: source.datax.optionsProviderType,
-                    optionsProviderClass: source.datax.optionsProviderClass,
-                    optionsProviderData: source.datax.optionsProviderData
-                });
-        }
-    },
+                    xtype: "button",
+                    iconCls: "pimcore_icon_edit",
+                    handler: this.showgrideditor.bind(this, store)
 
-    showoptioneditor: function (valueStore) {
-        var editor = new pimcore.object.helpers.optionEditor(valueStore);
-        editor.edit();
-    }
+                }],
+            style: "margin-top: 10px",
+            store: store,
+            selModel: Ext.create('Ext.selection.RowModel', {}),
+            clicksToEdit: 1,
+            columnLines: true,
+            columns: [
+                {
+                    text: t("value"),
+                    sortable: true,
+                    dataIndex: 'value',
+                    editor: new Ext.form.TextField({
+                        allowBlank: false
+                    }),
+                    flex: 1
+                },
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('up'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('up'),
+                            icon: "/bundles/pimcoreadmin/img/flat-color-icons/up.svg",
+                            handler: function (grid, rowIndex) {
+                                if (rowIndex > 0) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    grid.getStore().removeAt(rowIndex);
+                                    grid.getStore().insert(--rowIndex, [rec]);
+                                    model.select(rowIndex);
+                                }
+                            }.bind(this)
+                        }
+                    ]
+                },
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('down'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('down'),
+                            icon: "/bundles/pimcoreadmin/img/flat-color-icons/down.svg",
+                            handler: function (grid, rowIndex) {
+                                if (rowIndex < (grid.getStore().getCount() - 1)) {
+                                    const rec = grid.getStore().getAt(rowIndex);
+                                    grid.getStore().removeAt(rowIndex);
+                                    grid.getStore().insert(++rowIndex, [rec]);
+                                    this.defaultValueModel.select(rowIndex);
+                                }
+                            }.bind(this)
+                        }
+                    ]
+                },
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('remove'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('remove'),
+                            icon: "/bundles/pimcoreadmin/img/flat-color-icons/delete.svg",
+                            handler: function (grid, rowIndex) {
+                                grid.getStore().removeAt(rowIndex);
+                            }.bind(this)
+                        }
+                    ]
+                }
+            ],
+            autoHeight: true,
+            plugins: [
+                Ext.create('Ext.grid.plugin.CellEditing', {
+                    clicksToEdit: 1,
+                    listeners: {
+                        edit: function(editor, e) {
+                            if(!e.record.get('value')) {
+                                e.record.set('value');
+                            }
+                        },
+                    }
+                })
+            ]
+        });
+    },
 });
