@@ -168,7 +168,6 @@ pimcore.element.abstract = Class.create({
     },
 
     checkForChanges: function () {
-
         // do not run when browser tab is not active
         if(document.hidden) {
             return;
