@@ -1078,7 +1078,6 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     autoHeight: true,
                     autoScroll: true
                 });
-                win.show();
 
                 const finishedErrorHandler = function (pbar) {
                     activeUploads--;
@@ -1100,6 +1099,10 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         text: file.name,
                         style: "margin-bottom: 5px"
                     });
+
+                    if (!win.isVisible()){
+                        win.show();
+                    }
 
                     win.add(pbar);
                     win.updateLayout();
