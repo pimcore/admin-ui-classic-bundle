@@ -41,7 +41,10 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
         var user = pimcore.globalmanager.get("user");
 
         this.properties = new pimcore.element.properties(this, "asset");
-        this.dependencies = new pimcore.element.dependencies(this, "asset");
+
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "asset");
+        }
 
         if (user.isAllowed("notes_events")) {
             this.notes = new pimcore.element.notes(this, "asset");
@@ -147,7 +150,9 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             items.push(this.properties.getLayout());
         }
 
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
 
         if (user.isAllowed("notes_events")) {
@@ -242,10 +247,19 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
             }
 
             this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete_folder'),
+                tooltip: t('delete'),
                 iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                 scale: "medium",
-                handler: this.remove.bind(this)
+                handler: function () {
+                    var options = this.listfolder.onRawDeleteSelectedRows();
+                    if (!options) {
+                        options = {
+                            "elementType" : "asset",
+                            "id": this.id
+                        };
+                    }
+                    pimcore.elementservice.deleteElement(options);
+                }.bind(this)
             });
 
             this.toolbarButtons.rename = new Ext.Button({
@@ -271,7 +285,16 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                         scale: "medium",
-                        handler: this.remove.bind(this)
+                        handler: function () {
+                            var options = this.listfolder.onRawDeleteSelectedRows();
+                            if (!options) {
+                                options = {
+                                    "elementType" : "asset",
+                                    "id": this.id
+                                };
+                            }
+                            pimcore.elementservice.deleteElement(options);
+                        }.bind(this)
                     });
                 } else {
                     buttons.push(this.toolbarButtons.remove);
@@ -329,7 +352,16 @@ pimcore.asset.folder = Class.create(pimcore.asset.asset, {
                 handler: this.showMetaInfo.bind(this),
                 menu: this.getMetaInfoMenuItems()
             });
-            
+
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.id,
+                    scale: "medium"
+                });
+            }
+
             this.toolbar = new Ext.Toolbar({
                 id: "asset_toolbar_" + this.id,
                 region: "north",

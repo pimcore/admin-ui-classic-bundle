@@ -24,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Model\GridConfig;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigFavourite;
 use Pimcore\Bundle\AdminBundle\Model\GridConfigShare;
+use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Db;
 use Pimcore\File;
@@ -66,7 +67,7 @@ class DataObjectHelperController extends AdminAbstractController
         if ($object) {
             $result['success'] = true;
             $fields = $request->get('fields');
-            $result['fields'] = DataObject\Service::gridObjectData($object, $fields);
+            $result['fields'] = GridData\DataObject::getData($object, $fields);
         } else {
             $result['success'] = false;
         }
@@ -316,7 +317,7 @@ class DataObjectHelperController extends AdminAbstractController
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
 
-                foreach($gridConfig['columns'] as &$column) {
+                foreach ($gridConfig['columns'] as &$column) {
                     if (array_key_exists('isOperator', $column) && $column['isOperator']) {
                         $colAttributes = &$column['fieldConfig']['attributes'];
                         SecurityHelper::convertHtmlSpecialCharsArrayKeys($colAttributes, ['label', 'attribute', 'param1']);
@@ -359,12 +360,9 @@ class DataObjectHelperController extends AdminAbstractController
                             'key' => $key,
                             'type' => 'system',
                             'label' => $key,
-                            'locked' => $sc['locked'] ?? null,
                             'position' => $sc['position'],
                         ];
-                        if (isset($sc['width'])) {
-                            $colConfig['width'] = $sc['width'];
-                        }
+                        $this->injectCustomLayoutValues($colConfig, $sc);
                         $availableFields[] = $colConfig;
                     } else {
                         $keyParts = explode('~', $key);
@@ -386,9 +384,7 @@ class DataObjectHelperController extends AdminAbstractController
                                         if ($fieldConfig) {
                                             $fieldConfig['key'] = $key;
                                             $fieldConfig['label'] = '#' . $keyFieldDef->getTitle();
-                                            if (isset($sc['locked'])) {
-                                                $fieldConfig['locked'] = $sc['locked'];
-                                            }
+                                            $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                             $availableFields[] = $fieldConfig;
                                         }
                                     }
@@ -426,12 +422,7 @@ class DataObjectHelperController extends AdminAbstractController
                             if ($fd !== null) {
                                 $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, $keyPrefix, $class, $objectId);
                                 if (!empty($fieldConfig)) {
-                                    if (isset($sc['width'])) {
-                                        $fieldConfig['width'] = $sc['width'];
-                                    }
-                                    if (isset($sc['locked'])) {
-                                        $fieldConfig['locked'] = $sc['locked'];
-                                    }
+                                    $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                     $availableFields[] = $fieldConfig;
                                 }
                             }
@@ -456,12 +447,7 @@ class DataObjectHelperController extends AdminAbstractController
                                 if (!empty($fd)) {
                                     $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, null, $class, $objectId);
                                     if (!empty($fieldConfig)) {
-                                        if (isset($sc['width'])) {
-                                            $fieldConfig['width'] = $sc['width'];
-                                        }
-                                        if (isset($sc['locked'])) {
-                                            $fieldConfig['locked'] = $sc['locked'];
-                                        }
+                                        $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                         $availableFields[] = $fieldConfig;
                                     }
                                 }
@@ -507,6 +493,7 @@ class DataObjectHelperController extends AdminAbstractController
         $settings['setAsFavourite'] = $setAsFavourite ?? null;
         $settings['saveFilters'] = $saveFilters ?? null;
         $settings['isShared'] = !$gridConfigId || ($shared ?? null);
+        $settings['allowVariants'] = $class && $class->getAllowVariants();
 
         $context = $gridConfig['context'] ?? null;
         if ($context) {
@@ -526,6 +513,26 @@ class DataObjectHelperController extends AdminAbstractController
             'searchFilter' => $gridConfig['searchFilter'] ?? '',
             'filter' => $gridConfig['filter'] ?? [],
         ];
+    }
+
+    private function injectCustomLayoutValues(array $fieldConfig, array $savedColumn): array
+    {
+        $keys = ['width', 'locked'];
+        foreach ($keys as $key) {
+            if (isset($savedColumn[$key])) {
+                $fieldConfig[$key] = $savedColumn[$key];
+            }
+        }
+
+        $fieldConfigKeys = ['noteditable'];
+        foreach ($fieldConfigKeys as $fieldConfigKey) {
+            if (isset($savedColumn['fieldConfig']['layout'][$fieldConfigKey])) {
+                $setter = 'set' . ucfirst($fieldConfigKey);
+                $fieldConfig['layout']->$setter($savedColumn['fieldConfig']['layout'][$fieldConfigKey]);
+            }
+        }
+
+        return $fieldConfig;
     }
 
     /**
@@ -973,7 +980,7 @@ class DataObjectHelperController extends AdminAbstractController
             $sharedUserIds = $metadata['sharedUserIds'];
 
             if ($sharedUserIds) {
-                $sharedUsers = explode(',', $sharedUserIds);
+                $sharedUsers = array_map('intval', explode(',', $sharedUserIds));
             }
         }
 
@@ -989,7 +996,7 @@ class DataObjectHelperController extends AdminAbstractController
         foreach ($sharedUsers as $id) {
             $global    = true;
             $favourite = GridConfigFavourite::getByOwnerAndClassAndObjectId(
-                (int) $id,
+                $id,
                 $gridConfig->getClassId(),
                 $objectId,
                 $gridConfig->getSearchType()
@@ -1006,7 +1013,7 @@ class DataObjectHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the favourite
-                    if ((int) $favouriteGridConfig->getOwnerId() === (int) $id) {
+                    if ($favouriteGridConfig->getOwnerId() === $id) {
                         continue;
                     }
                 }
@@ -1014,7 +1021,7 @@ class DataObjectHelperController extends AdminAbstractController
 
             // Check if the user has already a global favourite then we do not save the favourite as global
             $favourite = GridConfigFavourite::getByOwnerAndClassAndObjectId(
-                (int) $id,
+                $id,
                 $gridConfig->getClassId(),
                 0,
                 $gridConfig->getSearchType()
@@ -1030,7 +1037,7 @@ class DataObjectHelperController extends AdminAbstractController
                     }
 
                     // Check if the user is the owner. If that is the case we do not update the global favourite
-                    if ($favouriteGridConfig->getOwnerId() === (int) $id) {
+                    if ($favouriteGridConfig->getOwnerId() === $id) {
                         $global = false;
                     }
                 }
@@ -1177,7 +1184,7 @@ class DataObjectHelperController extends AdminAbstractController
         //prepare fields
         $fieldnames = [];
         $fields = json_decode($allParams['fields'][0], true);
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $fieldnames[] = $field['key'];
         }
         $allParams['fields'] = $fieldnames;
@@ -1219,6 +1226,7 @@ class DataObjectHelperController extends AdminAbstractController
         $settings = json_decode($request->get('settings'), true);
         $delimiter = $settings['delimiter'] ?? ';';
         $header = $settings['header'] ?? 'title';
+        Tool\UserTimezone::setUserTimezone($request->request->get('userTimezone'));
 
         $allParams = array_merge($request->request->all(), $request->query->all());
 

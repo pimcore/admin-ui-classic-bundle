@@ -186,8 +186,12 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
                     this.tree.getStore().load();
 
                     var data = Ext.decode(response.responseText);
-                    if(data && data.success) {
+                    if (data && data.success) {
                         this.openBrick(data.id);
+                    } else if (data && data.message) {
+                        Ext.Msg.alert(t('error'), data.message);
+                    } else {
+                        Ext.Msg.alert(t('error'), t('failed_to_create_new_item'));
                     }
                 }.bind(this)
             });
@@ -196,7 +200,7 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
             return;
         }
         else {
-            Ext.Msg.alert(' ', t('failed_to_create_new_item'));
+            Ext.Msg.alert(t('error'), t('failed_to_create_new_item'));
         }
     },
 

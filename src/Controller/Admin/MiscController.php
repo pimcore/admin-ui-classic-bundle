@@ -129,7 +129,7 @@ class MiscController extends AdminAbstractController
     public function scriptProxyAction(Request $request): Response
     {
         $storageFile = $request->get('storageFile');
-        if(!$storageFile) {
+        if (!$storageFile) {
             throw new \InvalidArgumentException('The parameter storageFile is required');
         }
 
@@ -297,34 +297,65 @@ class MiscController extends AdminAbstractController
             $profiler->disable();
         }
 
+        $type = $request->get('type');
         $publicDir = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin';
         $iconDir = $publicDir . '/img';
-        $colorIcons = rscandir($iconDir . '/flat-color-icons/');
-        $whiteIcons = rscandir($iconDir . '/flat-white-icons/');
-        $twemoji = rscandir($iconDir . '/twemoji/');
+        $extraInfo = null;
 
-        //flag icons for locales
-        $locales = Tool::getSupportedLocales();
-        $languageOptions = [];
-        foreach ($locales as $short => $translation) {
-            if (!empty($short)) {
-                $languageOptions[] = [
-                    'language' => $short,
-                    'display' => $translation . " ($short)",
-                    'flag' => AdminTool::getLanguageFlagFile($short, true),
-                ];
-            }
+        $icons = match ($type) {
+            'color' => rscandir($iconDir . '/flat-color-icons/'),
+            'white' => rscandir($iconDir . '/flat-white-icons/'),
+            'twemoji' => rscandir($iconDir . '/twemoji/'),
+            'flags' => $this->getFlags(),
+            default => []
+        };
+
+        $source = match ($type) {
+            'color', 'white' =>
+                'based on the ' .
+                '<a href="https://github.com/google/material-design-icons/blob/master/LICENSE" target="_blank">Material Design Icons</a>',
+            'twemoji' =>
+                'based on the ' .
+                '<a href="https://github.com/twitter/twemoji/blob/master/LICENSE" target="_blank">Twemoji icons</a>',
+            default => ''
+        };
+
+        if ($type === 'twemoji') {
+            $extraInfo = 'ℹ Click on icon with green border to display all its related variants. Click on the letter to display flags with the clicked initial';
         }
 
         $iconsCss = file_get_contents($publicDir . '/css/icons.css');
 
+        if ($type === null) {
+            return $this->render('@PimcoreAdmin/admin/misc/icon_library_reload.html.twig');
+        }
+
         return $this->render('@PimcoreAdmin/admin/misc/icon_list.html.twig', [
-            'colorIcons' => $colorIcons,
-            'whiteIcons' => $whiteIcons,
-            'twemoji' => $twemoji,
-            'languageOptions' => $languageOptions,
+            'icons' => $icons,
             'iconsCss' => $iconsCss,
+            'type' => $type,
+            'extraInfo' => $extraInfo,
+            'source' => $source,
         ]);
+    }
+
+    private function getFlags(): array
+    {
+        $locales = Tool::getSupportedLocales();
+        $languageOptions = [];
+        foreach ($locales as $short => $translation) {
+            if (!empty($short)) {
+                $flag = AdminTool::getLanguageFlagFile($short, true, false);
+                if ($flag) {
+                    $languageOptions[] = $flag;
+                }
+            }
+        }
+
+        $languageOptions = array_unique($languageOptions);
+        sort($languageOptions);
+
+        return $languageOptions;
     }
 
     /**

@@ -237,7 +237,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 var value = filterData[i].getValue();
 
                 if (value instanceof Date) {
-                    value = Ext.Date.format(value, "Y-m-d");
+                    value = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                 }
 
                 if (value && typeof value == "object") {
@@ -456,7 +456,7 @@ pimcore.element.helpers.gridColumnConfig = {
             title: title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: formPanel.items.items[0].width + 25,
             maxHeight: 650
         });
         this.filterByRelationWindow.show();
@@ -694,6 +694,12 @@ pimcore.element.helpers.gridColumnConfig = {
                 Ext.Msg.alert(t("error"), t("error_jobs") + ":<br>" + jobErrors.join("<br>"));
             }
 
+            // Due to some ExtJS bug, when using a lock, the selection is visually cleared after batch operation
+            // To avoid confusion and disalignment on what we see from what is actually selected, everything is unselected
+            if (this.grid.hasOwnProperty('enableLocking') && this.grid.enableLocking){
+                this.grid.getSelectionModel().deselectAll();
+            }
+
             return;
         }
 
@@ -857,6 +863,7 @@ pimcore.element.helpers.gridColumnConfig = {
         this.exportParameters.initial = initial ? 1 : 0;
         this.exportParameters.language = this.gridLanguage;
         this.exportParameters.context = Ext.encode(this.context);
+        this.exportParameters.userTimezone = getUserTimezone();
 
         Ext.Ajax.request({
             url: this.exportProcessUrl,

@@ -50,6 +50,8 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 
 /**
  * @Route("/object", name="pimcore_admin_dataobject_dataobject_")
@@ -408,7 +410,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             try {
                 $this->getDataForObject($object, $objectFromVersion);
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $object = $objectFromDatabase;
                 $this->getDataForObject($object, false);
             }
@@ -1332,11 +1334,16 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             // Mark fields that have changed as dirty
             if ($request->get('task') !== 'autoSave' && $request->get('task') !== 'unpublish') {
-                $fields = array_keys($object->getClass()->getFieldDefinitions());
-                foreach ($fields as $field) {
-                    $getter  ='get' . ucfirst($field);
-                    if ($object->$getter() !== $objectFromDatabase->$getter()) {
-                        $object->markFieldDirty($field);
+                foreach ($object->getClass()->getFieldDefinitions() as $fieldName => $fieldDefinition) {
+                    $getter = 'get' . ucfirst($fieldName);
+                    $oldValue = $objectFromDatabase->$getter();
+                    $newValue = $object->$getter();
+                    $isEqual = $fieldDefinition instanceof DataObject\ClassDefinition\Data\EqualComparisonInterface
+                        ? $fieldDefinition->isEqual($oldValue, $newValue)
+                        : $oldValue === $newValue;
+
+                    if (!$isEqual) {
+                        $object->markFieldDirty($fieldName);
                     }
                 }
             }
@@ -1345,7 +1352,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         if ($request->get('data')) {
             try {
                 $this->applyChanges($object, $this->decodeJson($request->get('data')));
-            } catch(\Throwable $e) {
+            } catch (\Throwable $e) {
                 $this->applyChanges($objectFromDatabase, $this->decodeJson($request->get('data')));
             }
         }
@@ -1582,7 +1589,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function previewVersionAction(Request $request): Response
+    public function previewVersionAction(Request $request, Environment $twig): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1591,6 +1598,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $object = $version?->loadData();
 
         if ($object) {
+
+            Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+            if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+                $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
+            }
+
             if (method_exists($object, 'getLocalizedFields')) {
                 /** @var DataObject\Localizedfield $localizedFields */
                 $localizedFields = $object->getLocalizedFields();
@@ -1619,7 +1633,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      *
      * @throws \Exception
      */
-    public function diffVersionsAction(Request $request, int $from, int $to): Response
+    public function diffVersionsAction(Request $request, Environment $twig, int $from, int $to): Response
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
@@ -1644,6 +1658,12 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
         if (!$object2) {
             throw $this->createNotFoundException('Version with id [' . $id2 . "] doesn't exist");
+        }
+
+        Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
+
+        if ($timezone = Tool\UserTimezone::getUserTimezone()) {
+            $twig->getExtension(CoreExtension::class)->setTimezone($timezone);
         }
 
         if (method_exists($object2, 'getLocalizedFields')) {
@@ -1860,7 +1880,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $target = DataObject::getById($targetId);
         }
 
-        if ($target->isAllowed('create')) {
+        $user = Tool\Admin::getCurrentUser();
+        if ($target->isAllowed('create') && ($source instanceof DataObject\Concrete ? $user->isAllowed($source->getClassId(), 'class') : true)) {
             $source = DataObject::getById($sourceId);
             if ($source != null) {
                 if ($source instanceof DataObject\Concrete && $latestVersion = $source->getLatestVersion()) {

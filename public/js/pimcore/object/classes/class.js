@@ -22,7 +22,6 @@ pimcore.object.classes.klass = Class.create({
     context: "class",
     uploadRoute: 'pimcore_admin_dataobject_class_importclass',
     exportRoute: 'pimcore_admin_dataobject_class_exportclass',
-
     initialize: function (data, parentPanel, reopen, editorPrefix) {
         this.parentPanel = parentPanel;
         this.data = data;
@@ -701,33 +700,6 @@ pimcore.object.classes.klass = Class.create({
             return "Pimcore\\Model\\DataObject\\" + ucfirst(name);
         };
 
-        var iconStore = new Ext.data.ArrayStore({
-            proxy: {
-                url: Routing.generate('pimcore_admin_dataobject_class_geticons'),
-                type: 'ajax',
-                reader: {
-                    type: 'json'
-                },
-                extraParams: {
-                    classId: this.getId()
-                }
-            },
-            fields: ["text", "value"]
-        });
-
-        var iconField = new Ext.form.field.Text({
-            id: "iconfield-" + this.getId(),
-            name: "icon",
-            width: 396,
-            renderer: Ext.util.Format.htmlEncode,
-            value: this.data.icon,
-            listeners: {
-                "afterrender": function (el) {
-                    el.inputEl.applyStyles("background:url(" + el.getValue() + ") right center no-repeat;");
-                }
-            }
-        });
-
         this.compositeIndexTypeStore = new Ext.data.ArrayStore({
             data: [['query'], ['localized_query'],['store'], ['localized_store']],
             fields: ['value']
@@ -864,49 +836,7 @@ pimcore.object.classes.klass = Class.create({
                     renderer: Ext.util.Format.htmlEncode,
                     value: this.data.previewGeneratorReference
                 },
-                {
-                    xtype: "fieldcontainer",
-                    layout: "hbox",
-                    fieldLabel: t("icon"),
-                    defaults: {
-                        labelWidth: 200
-                    },
-                    items: [
-                        iconField,
-                        {
-                            xtype: "combobox",
-                            store: iconStore,
-                            width: 50,
-                            valueField: 'value',
-                            displayField: 'text',
-                            listeners: {
-                                select: function (ele, rec, idx) {
-                                    var icon = ele.container.down("#iconfield-" + this.getId());
-                                    var newValue = rec.data.value;
-                                    icon.component.setValue(newValue);
-                                    icon.component.inputEl.applyStyles("background:url(" + newValue + ") right center no-repeat;");
-                                    return newValue;
-                                }.bind(this)
-                            }
-                        },
-                        {
-                            iconCls: "pimcore_icon_refresh",
-                            xtype: "button",
-                            tooltip: t("refresh"),
-                            handler: function(iconField) {
-                                iconField.inputEl.applyStyles("background:url(" + iconField.getValue() + ") right center no-repeat;");
-                            }.bind(this, iconField)
-                        },
-                        {
-                            xtype: "button",
-                            iconCls: "pimcore_icon_icons",
-                            text: t('icon_library'),
-                            handler: function () {
-                                pimcore.helpers.openGenericIframeWindow("icon-library", Routing.generate('pimcore_admin_misc_iconlist'), "pimcore_icon_icons", t("icon_library"));
-                            }
-                        }
-                    ]
-                },
+                pimcore.iconlibrary.createIconSelectionWidget(this.data.icon, this.getId()),
                 {
                     xtype: "textfield",
                     fieldLabel: t("group"),

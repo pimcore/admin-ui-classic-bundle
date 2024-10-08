@@ -1,1 +1,1 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[328],{5947:(e,s,u)=>{u(5243),u(1787)}},e=>{e.O(0,[47],(()=>{return s=5947,e(e.s=s);var s}));e.O()}]);
+"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[884],{2170:(e,a,s)=>{var u=s(3481);s(6269);u.Icon.Default.imagePath="../bundles/pimcoreadmin/build/admin/images/"}},e=>{e.O(0,[213],(()=>{return a=2170,e(e.s=a);var a}));e.O()}]);

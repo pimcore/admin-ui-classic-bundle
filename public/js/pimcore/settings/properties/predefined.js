@@ -240,7 +240,7 @@ pimcore.settings.properties.predefined = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return Ext.Date.format(date, "Y-m-d H:i:s");
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     } else {
                         return "";
                     }
@@ -255,7 +255,7 @@ pimcore.settings.properties.predefined = Class.create({
                 renderer: function(d) {
                     if (d !== undefined) {
                         var date = new Date(d * 1000);
-                        return Ext.Date.format(date, "Y-m-d H:i:s");
+                        return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                     } else {
                         return "";
                     }

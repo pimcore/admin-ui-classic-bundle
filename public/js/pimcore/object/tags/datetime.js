@@ -43,7 +43,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
             sortable:true,
             dataIndex:field.key,
             getEditor:this.getWindowCellEditor.bind(this, field),
-            renderer:function (key, value, metaData, record) {
+            renderer:function (key, fieldConfig, value, metaData, record) {
                         this.applyPermissionStyle(key, value, metaData, record);
 
                         if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
@@ -51,23 +51,31 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                         }
 
                         if (value) {
-                            var timestamp = intval(value) * 1000;
-                            var date = new Date(timestamp);
-                            return Ext.Date.format(date, "Y-m-d H:i");
+                            let date;
+                            if (typeof value === "string" && value.match(/-/)) {
+                                date = new Date(value);
+                            } else {
+                                let timestamp = intval(value) * 1000;
+                                date = new Date(timestamp);
+
+                                if (!this.isRespectTimezone(fieldConfig)) {
+                                    date = dateToServerTimezone(date);
+                                }
+                            }
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
                         }
                         return "";
-                    }.bind(this, field.key)};
+                    }.bind(this, field.key, field.layout)};
     },
 
     getGridColumnFilter:function (field) {
-        return {type:'date', dataIndex:field.key, dateFormat: 'm/d/Y'};
+        return {type:'date', dataIndex:field.key, dateFormat: field.layout.respectTimezone !== false ? "c" : "Y-m-d"};
     },
 
     getLayoutEdit:function () {
 
         var date = {
             width:130,
-            format: "Y-m-d"
         };
 
         var time = {
@@ -78,6 +86,11 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.data) {
             var tmpDate = new Date(intval(this.data) * 1000);
+
+            if (!this.isRespectTimezone()) {
+                tmpDate = dateToServerTimezone(tmpDate);
+            }
+
             date.value = tmpDate;
             time.value = tmpDate;
         }
@@ -124,7 +137,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         if (this.datefield.getValue()) {
             var value = this.datefield.getValue();
-            var dateString = Ext.Date.format(value, "Y-m-d");
+            var dateString = Ext.Date.format(value, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
 
             if (this.timefield.getValue()) {
                 var timeValue = this.timefield.getValue();
@@ -135,7 +148,12 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
                 dateString += " 00:00";
             }
 
-            value = Ext.Date.parseDate(dateString, "Y-m-d H:i");
+            value = Ext.Date.parseDate(dateString, pimcore.globalmanager.get('localeDateTime').getShortDateTimeFormat());
+
+            if (value && this.fieldConfig.columnType === "datetime" && !this.isRespectTimezone()) {
+                return dateString;
+            }
+
             if (value && typeof value.getTime == "function") {
                 return value.getTime();
             }
@@ -176,7 +194,15 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
     },
 
     getCellEditValue: function () {
+        if (this.fieldConfig.columnType === "datetime" && !this.isRespectTimezone()) {
+            return this.getValue();
+        }
         return this.getValue() / 1000;
-    }
+    },
 
+    isRespectTimezone: function(fieldConfig) {
+       fieldConfig = fieldConfig || this.fieldConfig;
+
+       return fieldConfig && fieldConfig.respectTimezone !== false;
+    }
 });

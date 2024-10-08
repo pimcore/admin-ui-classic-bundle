@@ -117,6 +117,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
         var visibleFieldsCount = columns.length;
 
+        let filterType = 'list';
         for (i = 0; i < this.fieldConfig.columns.length; i++) {
             var width = 100;
             if (this.fieldConfig.columns[i].width) {
@@ -125,7 +126,9 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
             var cellEditor = null;
             var renderer = null;
-            var listeners = null;
+            var listeners = {};
+
+            filterType = 'list';
 
             if (this.fieldConfig.columns[i].type == "number") {
                 if(!readOnly) {
@@ -210,12 +213,17 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                     "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type, readOnly)
                 };
 
+                filterType = 'boolean';
+
                 if (readOnly) {
                     columns.push(Ext.create('Ext.grid.column.Check', {
                         text: t(this.fieldConfig.columns[i].label),
                         dataIndex: this.fieldConfig.columns[i].key,
                         width: width,
                         renderer: renderer,
+                        filter: {
+                            type: filterType
+                        }
                     }));
                     continue;
                 }
@@ -226,7 +234,10 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 dataIndex: this.fieldConfig.columns[i].key,
                 renderer: renderer,
                 listeners: listeners,
-                width: width
+                width: width,
+                filter: {
+                    type: filterType
+                }
             };
 
             if (cellEditor) {
@@ -240,6 +251,25 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
         columns.push({text: t("type"), dataIndex: 'type', width: 100});
         columns.push({text: t("subtype"), dataIndex: 'subtype', width: 100});
 
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if(typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         if (!readOnly) {
             columns.push({
@@ -432,7 +462,8 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             autoHeight: autoHeight,
             bodyCls: "pimcore_object_tag_objects pimcore_editable_grid",
             plugins: [
-                this.cellEditing
+                this.cellEditing,
+                'gridfilters'
             ]
         });
 

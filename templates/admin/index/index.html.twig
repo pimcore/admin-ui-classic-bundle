@@ -147,7 +147,7 @@
         </form>
     {% endblock %}
 
-    <div id="pimcore_signet" data-menu-tooltip="Pimcore Platform ({{ settings.version }}|{{ settings.build }})" style="text-indent: -10000px">
+    <div id="pimcore_signet" data-menu-tooltip="{{ settings.platform_version ? 'Pimcore Platform ' ~ settings.platform_version : 'Pimcore Core Version ' ~ settings.version }}" style="text-indent: -10000px">
         BE RESPECTFUL AND HONOR OUR WORK FOR FREE & OPEN SOURCE SOFTWARE BY NOT REMOVING OUR LOGO.
         WE OFFER YOU THE POSSIBILITY TO ADDITIONALLY ADD YOUR OWN LOGO IN PIMCORE'S SYSTEM SETTINGS. THANK YOU!
     </div>
@@ -198,6 +198,7 @@
     "lib/ext-plugins/portlet/Portlet.js",
     "lib/ext-plugins/portlet/PortalColumn.js",
     "lib/ext-plugins/portlet/PortalPanel.js",
+    "lib/ext-plugins/DragDropTag.js",
     "../build/admin/ace-builds/src-min-noconflict/ace.js",
     "../build/admin/ace-builds/src-min-noconflict/ext-modelist.js"
 ] %}
@@ -216,7 +217,7 @@
     "pimcore/helpers.js",
     "pimcore/error.js",
     "pimcore/events.js",
-
+    "pimcore/iconlibrary.js",
     "pimcore/treenodelocator.js",
     "pimcore/helpers/generic-grid.js",
     "pimcore/helpers/quantityValue.js",
@@ -224,6 +225,7 @@
 
     "pimcore/perspective.js",
     "pimcore/user.js",
+    "pimcore/localeDateTime.js",
 
     "pimcore/tool/paralleljobs.js",
     "pimcore/tool/genericiframewindow.js",

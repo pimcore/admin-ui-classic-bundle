@@ -85,7 +85,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             storeConfig.autoLoad = true;
             storeConfig.listeners = {
                 beforeload: function(store) {
-                    store.getProxy().setExtraParam('unsavedChanges', this.object ? this.object.getSaveData().data : {});
+                    store.getProxy().setExtraParam('unsavedChanges', this.object && typeof this.object.getSaveData === "function" ? this.object.getSaveData().data : {});
                     store.getProxy().setExtraParam('context', JSON.stringify(this.getContext()));
                 }.bind(this)
             };
@@ -371,7 +371,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
 
                 var fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.width = 100;
                 fc.flex = 100;
                 fc.hidden = false;
                 fc.layout = field;
@@ -389,9 +388,39 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
+                let filterType = 'list';
+
+                if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
+                    filterType = 'boolean';
+                }
+
+                fc.filter = {
+                    type: filterType
+                }
+
                 columns.push(fc);
             }
         }
+
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if (typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         return columns;
     },
@@ -429,7 +458,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     focus: function() {
                         this.store.getProxy().setExtraParam('data', '');
                     }.bind(this)
-                }
+                },
+                plugins: 'dragdroptag'
             });
         } else {
             let columns = this.getVisibleColumns();
@@ -556,7 +586,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 bodyCssClass: "pimcore_object_tag_objects",
                 listeners: {
                     rowdblclick: this.gridRowDblClickHandler
-                }
+                },
+                plugins: [
+                    'gridfilters'
+                ]
             });
 
             this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -733,7 +766,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {
                     afterrender: function (gridview) {
-                        this.requestNicePathData(this.store.data);
+                        this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
             }

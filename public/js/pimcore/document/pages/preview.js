@@ -124,8 +124,8 @@ Ext.define('pimcore.document.pages.preview', {
                 width: '100%',
                 cls: 'pimcore_document_preview_timeslider',
                 tipText: function(thumb){
-                    var date = new Date(thumb.value * 1000);
-                    return Ext.Date.format(date, 'H:i');
+                    const date = new Date(thumb.value * 1000);
+                    return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortTimeFormat());
                 },
                 listeners: {
                     change: function(field, newValue, oldValue) {

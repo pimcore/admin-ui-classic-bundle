@@ -374,7 +374,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
                     gridColumns.push({text: t(field.label), width: this.getColumnWidth(field, 150), sortable: true, dataIndex: field.key, editable: false, filter: 'date',
                        renderer: function(d) {
                             var date = new Date(d * 1000);
-                            return Ext.Date.format(date, "Y-m-d H:i:s");
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getDateTimeFormat());
                         }
                     });
                 } else if (key == "filename") {
@@ -396,7 +396,7 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
                     renderer: function(d) {
                         if (d) {
                             var date = new Date(d * 1000);
-                            return Ext.Date.format(date, "Y-m-d");
+                            return Ext.Date.format(date, pimcore.globalmanager.get('localeDateTime').getShortDateFormat());
                         }
 
                     }
@@ -458,6 +458,29 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
         config.onlyUnreferenced = this.onlyUnreferenced;
         config.pageSize = this.pagingtoolbar.pageSize;
         return config;
+    },
+
+    onRawDeleteSelectedRows: function () {
+        if(typeof this.grid === "undefined") {
+            return null;
+        }
+
+        let ids = [];
+        var selectedRows = this.grid.getSelectionModel().getSelection();
+        for (var i = 0; i < selectedRows.length; i++) {
+            ids.push(selectedRows[i].data.id);
+        }
+        ids = ids.join(',');
+
+        var options = {
+            "elementType" : "asset",
+            "id": ids,
+            "success": function() {
+                this.store.reload();
+            }.bind(this)
+        };
+
+        return ids.length ? options : null;
     },
 
     onRowContextmenu: function (grid, record, tr, rowIndex, e, eOpts ) {

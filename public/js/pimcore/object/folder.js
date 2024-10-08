@@ -56,7 +56,10 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             this.notes = new pimcore.element.notes(this, "object");
         }
 
-        this.dependencies = new pimcore.element.dependencies(this, "object");
+        if (pimcore.settings.dependency) {
+            this.dependencies = new pimcore.element.dependencies(this, "object");
+        }
+
         this.tagAssignment = new pimcore.element.tag.assignment(this, "object");
         this.workflows = new pimcore.element.workflows(this, "object");
     },
@@ -293,10 +296,19 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             });
 
             this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete_folder'),
+                tooltip: t('delete'),
                 iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                 scale: "medium",
-                handler: this.remove.bind(this)
+                handler: function () {
+                    var options = this.search.onRawDeleteSelectedRows();
+                    if (!options) {
+                        options = {
+                            "elementType" : "object",
+                            "id": this.id
+                        };
+                    }
+                    pimcore.elementservice.deleteElement(options);
+                }.bind(this)
             });
 
             this.toolbarButtons.rename = new Ext.Button({
@@ -328,7 +340,16 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                         scale: "medium",
-                        handler: this.remove.bind(this)
+                        handler: function () {
+                            var options = this.search.onRawDeleteSelectedRows();
+                            if (!options) {
+                                options = {
+                                    "elementType" : "object",
+                                    "id": this.id
+                                };
+                            }
+                            pimcore.elementservice.deleteElement(options);
+                        }.bind(this)
                     });
                 } else {
                     buttons.push(this.toolbarButtons.remove);
@@ -397,6 +418,15 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                 buttons.push(searchAndMoveConfig);
             }
 
+            if (!pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
+                buttons.push("-");
+                buttons.push({
+                    xtype: 'tbtext',
+                    text: t("id") + " " + this.data.general.id,
+                    scale: "medium"
+                });
+            }
+
             //workflow management
             pimcore.elementservice.integrateWorkflowManagement('object', this.id, this, buttons);
 
@@ -426,7 +456,9 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
         if (this.isAllowed("properties")) {
             items.push(this.properties.getLayout());
         }
-        items.push(this.dependencies.getLayout());
+        if (typeof this.dependencies !== "undefined") {
+            items.push(this.dependencies.getLayout());
+        }
 
         if (user.isAllowed("notes_events")) {
             items.push(this.notes.getLayout());
