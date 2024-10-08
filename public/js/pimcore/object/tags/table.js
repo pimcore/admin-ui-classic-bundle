@@ -451,13 +451,13 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
                                     line = line.split("\t");
                                     result.push(line);
                                 }
+
+                                this.dirty = true;
                             }
                             this.initStore(result);
                         }
 
-                        this.dirty = true;
-
-                        this.pasteWindow.hide();
+                        this.pasteWindow.close();
                     }.bind(this)
                 },
                 {
