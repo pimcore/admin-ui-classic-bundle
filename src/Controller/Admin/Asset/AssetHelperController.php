@@ -44,14 +44,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/asset-helper")
- *
  * @internal
  */
+#[Route(path: '/asset-helper', name: 'pimcore_admin_asset_assethelper_')]
 class AssetHelperController extends AdminAbstractController
 {
     public function __construct(
@@ -123,9 +122,7 @@ class AssetHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @Route("/grid-delete-column-config", name="pimcore_admin_asset_assethelper_griddeletecolumnconfig", methods={"DELETE"})
-     */
+    #[Route(path: '/grid-delete-column-config', name: 'griddeletecolumnconfig', methods: ['DELETE'])]
     public function gridDeleteColumnConfigAction(Request $request): JsonResponse
     {
         $gridConfigId = (int) $request->get('gridConfigId');
@@ -146,9 +143,7 @@ class AssetHelperController extends AdminAbstractController
         return $this->adminJson($newGridConfig);
     }
 
-    /**
-     * @Route("/grid-get-column-config", name="pimcore_admin_asset_assethelper_gridgetcolumnconfig", methods={"GET"})
-     */
+    #[Route(path: '/grid-get-column-config', name: 'gridgetcolumnconfig', methods: ['GET'])]
     public function gridGetColumnConfigAction(Request $request): JsonResponse
     {
         $result = $this->doGetGridColumnConfig($request);
@@ -355,9 +350,7 @@ class AssetHelperController extends AdminAbstractController
         return $availableFields;
     }
 
-    /**
-     * @Route("/prepare-helper-column-configs", name="pimcore_admin_asset_assethelper_preparehelpercolumnconfigs", methods={"POST"})
-     */
+    #[Route(path: '/prepare-helper-column-configs', name: 'preparehelpercolumnconfigs', methods: ['POST'])]
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
         $helperColumns = [];
@@ -385,9 +378,7 @@ class AssetHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'columns' => $newData]);
     }
 
-    /**
-     * @Route("/grid-mark-favourite-column-config", name="pimcore_admin_asset_assethelper_gridmarkfavouritecolumnconfig", methods={"POST"})
-     */
+    #[Route(path: '/grid-mark-favourite-column-config', name: 'gridmarkfavouritecolumnconfig', methods: ['POST'])]
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
         $classId = $request->get('classId');
@@ -451,9 +442,7 @@ class AssetHelperController extends AdminAbstractController
         return $result;
     }
 
-    /**
-     * @Route("/grid-save-column-config", name="pimcore_admin_asset_assethelper_gridsavecolumnconfig", methods={"POST"})
-     */
+    #[Route(path: '/grid-save-column-config', name: 'gridsavecolumnconfig', methods: ['POST'])]
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -653,9 +642,7 @@ class AssetHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/get-export-jobs", name="pimcore_admin_asset_assethelper_getexportjobs", methods={"POST"})
-     */
+    #[Route(path: '/get-export-jobs', name: 'getexportjobs', methods: ['POST'])]
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -675,10 +662,9 @@ class AssetHelperController extends AdminAbstractController
     }
 
     /**
-     * @Route("/do-export", name="pimcore_admin_asset_assethelper_doexport", methods={"POST"})
-     *
      * @throws FilesystemException
      */
+    #[Route(path: '/do-export', name: 'doexport', methods: ['POST'])]
     public function doExportAction(Request $request): JsonResponse
     {
         $fileHandle = File::getValidFilename($request->get('fileHandle'));
@@ -824,9 +810,7 @@ class AssetHelperController extends AdminAbstractController
         return $fileHandle . '.csv';
     }
 
-    /**
-     * @Route("/download-csv-file", name="pimcore_admin_asset_assethelper_downloadcsvfile", methods={"GET"})
-     */
+    #[Route(path: '/download-csv-file', name: 'downloadcsvfile', methods: ['GET'])]
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
@@ -852,9 +836,7 @@ class AssetHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/download-xlsx-file", name="pimcore_admin_asset_assethelper_downloadxlsxfile", methods={"GET"})
-     */
+    #[Route(path: '/download-xlsx-file', name: 'downloadxlsxfile', methods: ['GET'])]
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
@@ -869,9 +851,7 @@ class AssetHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/get-metadata-for-column-config", name="pimcore_admin_asset_assethelper_getmetadataforcolumnconfig", methods={"GET"})
-     */
+    #[Route(path: '/get-metadata-for-column-config', name: 'getmetadataforcolumnconfig', methods: ['GET'])]
     public function getMetadataForColumnConfigAction(Request $request): JsonResponse
     {
         $result = [];
@@ -924,9 +904,7 @@ class AssetHelperController extends AdminAbstractController
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/get-batch-jobs", name="pimcore_admin_asset_assethelper_getbatchjobs", methods={"POST"})
-     */
+    #[Route(path: '/get-batch-jobs', name: 'getbatchjobs', methods: ['POST'])]
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
         if ($request->get('language')) {
@@ -941,9 +919,7 @@ class AssetHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'jobs' => $jobs]);
     }
 
-    /**
-     * @Route("/batch", name="pimcore_admin_asset_assethelper_batch", methods={"PUT"})
-     */
+    #[Route(path: '/batch', name: 'batch', methods: ['PUT'])]
     public function batchAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         try {

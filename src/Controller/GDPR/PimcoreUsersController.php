@@ -22,15 +22,15 @@ use Pimcore\Controller\KernelControllerEventInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class PimcoreUsersController
  *
- * @Route("/pimcore-users")
  *
  * @internal
  */
+#[Route(path: '/pimcore-users', name: 'pimcore_admin_gdpr_pimcoreusers_')]
 class PimcoreUsersController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -42,9 +42,7 @@ class PimcoreUsersController extends AdminAbstractController implements KernelCo
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-users", name="pimcore_admin_gdpr_pimcoreusers_searchusers", methods={"GET"})
-     */
+    #[Route(path: '/search-users', name: 'searchusers', methods: ['GET'])]
     public function searchUsersAction(Request $request, PimcoreUsers $pimcoreUsers): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -62,9 +60,7 @@ class PimcoreUsersController extends AdminAbstractController implements KernelCo
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/export-user-data", name="pimcore_admin_gdpr_pimcoreusers_exportuserdata", methods={"GET"})
-     */
+    #[Route(path: '/export-user-data', name: 'exportuserdata', methods: ['GET'])]
     public function exportUserDataAction(Request $request, PimcoreUsers $pimcoreUsers): JsonResponse
     {
         $this->checkPermission('users');

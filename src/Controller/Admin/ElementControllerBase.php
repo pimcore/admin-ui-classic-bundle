@@ -33,7 +33,7 @@ use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -54,9 +54,7 @@ abstract class ElementControllerBase extends AdminAbstractController
         return [];
     }
 
-    /**
-     * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     */
+    #[Route(path: '/tree-get-root', name: 'treegetroot', methods: ['GET'])]
     public function treeGetRootAction(Request $request): JsonResponse
     {
         $type = $request->get('elementType');
@@ -80,10 +78,9 @@ abstract class ElementControllerBase extends AdminAbstractController
     }
 
     /**
-     * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/delete-info', name: 'deleteinfo', methods: ['GET'])]
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $hasDependency = false;

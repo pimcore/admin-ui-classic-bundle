@@ -22,15 +22,15 @@ use Pimcore\Model\Tool\Email\Log;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class SentMailController
  *
- * @Route("/sent-mail")
  *
  * @internal
  */
+#[Route(path: '/sent-mail', name: 'pimcore_admin_gdpr_sentmail_')]
 class SentMailController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -42,9 +42,7 @@ class SentMailController extends AdminAbstractController implements KernelContro
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/export", name="pimcore_admin_gdpr_sentmail_exportdataobject", methods={"GET"})
-     */
+    #[Route(path: '/export', name: 'exportdataobject', methods: ['GET'])]
     public function exportDataObjectAction(Request $request): JsonResponse
     {
         $this->checkPermission('emails');

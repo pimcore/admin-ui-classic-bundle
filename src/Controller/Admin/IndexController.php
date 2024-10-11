@@ -49,7 +49,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
@@ -68,10 +68,9 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     }
 
     /**
-     * @Route("/", name="pimcore_admin_index", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/', name: 'pimcore_admin_index', methods: ['GET'])]
     public function indexAction(
         Request $request,
         KernelInterface $kernel,
@@ -118,10 +117,9 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     }
 
     /**
-     * @Route("/index/statistics", name="pimcore_admin_index_statistics", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/index/statistics', name: 'pimcore_admin_index_statistics', methods: ['GET'])]
     public function statisticsAction(Request $request, Connection $db, KernelInterface $kernel): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {

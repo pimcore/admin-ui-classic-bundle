@@ -27,20 +27,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/email")
- *
  * @internal
  */
+#[Route(path: '/email', name: 'pimcore_admin_email_')]
 class EmailController extends AdminAbstractController
 {
     /**
-     * @Route("/email-logs", name="pimcore_admin_email_emaillogs", methods={"GET", "POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/email-logs', name: 'emaillogs', methods: ['GET', 'POST'])]
     public function emailLogsAction(Request $request): JsonResponse
     {
         if (!$this->getAdminUser()->isAllowed('emails') && !$this->getAdminUser()->isAllowed('gdpr_data_extractor')) {
@@ -111,10 +109,9 @@ class EmailController extends AdminAbstractController
     }
 
     /**
-     * @Route("/show-email-log", name="pimcore_admin_email_showemaillog", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/show-email-log', name: 'showemaillog', methods: ['GET'])]
     public function showEmailLogAction(Request $request, ?Profiler $profiler): JsonResponse|Response
     {
         if ($profiler) {
@@ -240,10 +237,9 @@ class EmailController extends AdminAbstractController
     }
 
     /**
-     * @Route("/delete-email-log", name="pimcore_admin_email_deleteemaillog", methods={"DELETE"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/delete-email-log', name: 'deleteemaillog', methods: ['DELETE'])]
     public function deleteEmailLogAction(Request $request): JsonResponse
     {
         if (!$this->getAdminUser()->isAllowed('emails')) {
@@ -263,10 +259,9 @@ class EmailController extends AdminAbstractController
     }
 
     /**
-     * @Route("/resend-email", name="pimcore_admin_email_resendemail", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/resend-email', name: 'resendemail', methods: ['POST'])]
     public function resendEmailAction(Request $request): JsonResponse
     {
         if (!$this->getAdminUser()->isAllowed('emails')) {
@@ -354,10 +349,9 @@ class EmailController extends AdminAbstractController
     }
 
     /**
-     * @Route("/send-test-email", name="pimcore_admin_email_sendtestemail", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/send-test-email', name: 'sendtestemail', methods: ['POST'])]
     public function sendTestEmailAction(Request $request): JsonResponse
     {
         if (!$this->getAdminUser()->isAllowed('emails')) {
@@ -418,10 +412,9 @@ class EmailController extends AdminAbstractController
     }
 
     /**
-     * @Route("/blocklist", name="pimcore_admin_email_blocklist", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/blocklist', name: 'blocklist', methods: ['POST'])]
     public function blocklistAction(Request $request): JsonResponse
     {
         if (!$this->getAdminUser()->isAllowed('emails')) {

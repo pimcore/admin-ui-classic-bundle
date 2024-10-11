@@ -24,17 +24,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class AssetController
  *
- * @Route("/asset")
  *
  * @package GDPRDataExtractorBundle\Controller
- *
  * @internal
  */
+#[Route(path: '/asset', name: 'pimcore_admin_gdpr_asset_')]
 class AssetController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -46,9 +45,7 @@ class AssetController extends AdminAbstractController implements KernelControlle
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-assets", name="pimcore_admin_gdpr_asset_searchasset", methods={"GET"})
-     */
+    #[Route(path: '/search-assets', name: 'searchasset', methods: ['GET'])]
     public function searchAssetAction(Request $request, Assets $service): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -67,10 +64,9 @@ class AssetController extends AdminAbstractController implements KernelControlle
     }
 
     /**
-     * @Route("/export", name="pimcore_admin_gdpr_asset_exportassets", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/export', name: 'exportassets', methods: ['GET'])]
     public function exportAssetsAction(Request $request, Assets $service): Response
     {
         $asset = Asset::getById((int) $request->get('id'));

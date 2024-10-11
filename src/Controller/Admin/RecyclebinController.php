@@ -23,16 +23,15 @@ use Pimcore\Model\Element\Recyclebin;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @internal
  */
+#[Route(path: '/recyclebin', name: 'pimcore_admin_recyclebin_')]
 class RecyclebinController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/recyclebin/list", name="pimcore_admin_recyclebin_list", methods={"POST"})
-     */
+    #[Route(path: '/list', name: 'list', methods: ['POST'])]
     public function listAction(Request $request): JsonResponse
     {
         if ($request->get('xaction') == 'destroy') {
@@ -138,9 +137,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         }
     }
 
-    /**
-     * @Route("/recyclebin/restore", name="pimcore_admin_recyclebin_restore", methods={"POST"})
-     */
+    #[Route(path: '/restore', name: 'restore', methods: ['POST'])]
     public function restoreAction(Request $request): JsonResponse
     {
         $item = Recyclebin\Item::getById((int) $request->get('id'));
@@ -152,9 +149,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/flush", name="pimcore_admin_recyclebin_flush", methods={"DELETE"})
-     */
+    #[Route(path: '/flush', name: 'flush', methods: ['DELETE'])]
     public function flushAction(): JsonResponse
     {
         $bin = new Element\Recyclebin();
@@ -163,9 +158,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/add", name="pimcore_admin_recyclebin_add", methods={"POST"})
-     */
+    #[Route(path: '/add', name: 'add', methods: ['POST'])]
     public function addAction(Request $request): JsonResponse
     {
         try {

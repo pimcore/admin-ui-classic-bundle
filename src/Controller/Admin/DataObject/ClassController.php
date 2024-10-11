@@ -35,20 +35,17 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/class", name="pimcore_admin_dataobject_class_")
- *
  * @internal
  */
+#[Route(path: '/class', name: 'pimcore_admin_dataobject_class_')]
 class ClassController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/get-document-types", name="getdocumenttypes", methods={"GET"})
-     */
+    #[Route(path: '/get-document-types', name: 'getdocumenttypes', methods: ['GET'])]
     public function getDocumentTypesAction(Request $request): JsonResponse
     {
         $documentTypes = Document::getTypes();
@@ -62,9 +59,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($typeItems);
     }
 
-    /**
-     * @Route("/get-asset-types", name="getassettypes", methods={"GET"})
-     */
+    #[Route(path: '/get-asset-types', name: 'getassettypes', methods: ['GET'])]
     public function getAssetTypesAction(Request $request): JsonResponse
     {
         $assetTypes = Asset::getTypes();
@@ -78,9 +73,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($typeItems);
     }
 
-    /**
-     * @Route("/get-tree", name="gettree", methods={"GET", "POST"})
-     */
+    #[Route(path: '/get-tree', name: 'gettree', methods: ['GET', 'POST'])]
     public function getTreeAction(Request $request): JsonResponse
     {
         try {
@@ -221,9 +214,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($treeNodes);
     }
 
-    /**
-     * @Route("/get", name="get", methods={"GET"})
-     */
+    #[Route(path: '/get', name: 'get', methods: ['GET'])]
     public function getAction(Request $request): JsonResponse
     {
         $class = DataObject\ClassDefinition::getById($request->get('id'));
@@ -238,9 +229,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($class);
     }
 
-    /**
-     * @Route("/get-custom-layout", name="getcustomlayout", methods={"GET"})
-     */
+    #[Route(path: '/get-custom-layout', name: 'getcustomlayout', methods: ['GET'])]
     public function getCustomLayoutAction(Request $request): JsonResponse
     {
         $customLayout = DataObject\ClassDefinition\CustomLayout::getById($request->get('id'));
@@ -276,9 +265,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true, 'data' => $customLayout]);
     }
 
-    /**
-     * @Route("/add", name="add", methods={"POST"})
-     */
+    #[Route(path: '/add', name: 'add', methods: ['POST'])]
     public function addAction(Request $request): JsonResponse
     {
         $className = $request->get('className');
@@ -302,9 +289,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true, 'id' => $class->getId()]);
     }
 
-    /**
-     * @Route("/add-custom-layout", name="addcustomlayout", methods={"POST"})
-     */
+    #[Route(path: '/add-custom-layout', name: 'addcustomlayout', methods: ['POST'])]
     public function addCustomLayoutAction(Request $request): JsonResponse
     {
         $layoutId = $request->get('layoutIdentifier');
@@ -335,9 +320,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                                  'data' => $data, ]);
     }
 
-    /**
-     * @Route("/delete", name="delete", methods={"DELETE"})
-     */
+    #[Route(path: '/delete', name: 'delete', methods: ['DELETE'])]
     public function deleteAction(Request $request): Response
     {
         $class = DataObject\ClassDefinition::getById($request->get('id'));
@@ -348,9 +331,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return new Response();
     }
 
-    /**
-     * @Route("/delete-custom-layout", name="deletecustomlayout", methods={"DELETE"})
-     */
+    #[Route(path: '/delete-custom-layout', name: 'deletecustomlayout', methods: ['DELETE'])]
     public function deleteCustomLayoutAction(Request $request): JsonResponse
     {
         $customLayouts = new DataObject\ClassDefinition\CustomLayout\Listing();
@@ -368,9 +349,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/save-custom-layout", name="savecustomlayout", methods={"PUT"})
-     */
+    #[Route(path: '/save-custom-layout', name: 'savecustomlayout', methods: ['PUT'])]
     public function saveCustomLayoutAction(Request $request): JsonResponse
     {
         $customLayout = DataObject\ClassDefinition\CustomLayout::getById($request->get('id'));
@@ -410,10 +389,9 @@ class ClassController extends AdminAbstractController implements KernelControlle
     }
 
     /**
-     * @Route("/save", name="save", methods={"PUT"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/save', name: 'save', methods: ['PUT'])]
     public function saveAction(Request $request): JsonResponse
     {
         $class = DataObject\ClassDefinition::getById($request->get('id'));
@@ -501,9 +479,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $name;
     }
 
-    /**
-     * @Route("/import-class", name="importclass", methods={"POST", "PUT"})
-     */
+    #[Route(path: '/import-class', name: 'importclass', methods: ['POST', 'PUT'])]
     public function importClassAction(Request $request): Response
     {
         $class = DataObject\ClassDefinition::getById($request->get('id'));
@@ -524,9 +500,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/import-custom-layout-definition", name="importcustomlayoutdefinition", methods={"POST", "PUT"})
-     */
+    #[Route(path: '/import-custom-layout-definition', name: 'importcustomlayoutdefinition', methods: ['POST', 'PUT'])]
     public function importCustomLayoutDefinitionAction(Request $request): Response
     {
         $success = false;
@@ -576,9 +550,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/get-custom-layout-definitions", name="getcustomlayoutdefinitions", methods={"GET"})
-     */
+    #[Route(path: '/get-custom-layout-definitions', name: 'getcustomlayoutdefinitions', methods: ['GET'])]
     public function getCustomLayoutDefinitionsAction(Request $request): JsonResponse
     {
         $classIds = explode(',', $request->get('classId'));
@@ -600,9 +572,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true, 'data' => $result]);
     }
 
-    /**
-     * @Route("/get-all-layouts", name="getalllayouts", methods={"GET"})
-     */
+    #[Route(path: '/get-all-layouts', name: 'getalllayouts', methods: ['GET'])]
     public function getAllLayoutsAction(Request $request): JsonResponse
     {
         // get all classes
@@ -649,9 +619,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['data' => $resultList]);
     }
 
-    /**
-     * @Route("/export-class", name="exportclass", methods={"GET"})
-     */
+    #[Route(path: '/export-class', name: 'exportclass', methods: ['GET'])]
     public function exportClassAction(Request $request): Response
     {
         $id = $request->get('id');
@@ -673,9 +641,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/export-custom-layout-definition", name="exportcustomlayoutdefinition", methods={"GET"})
-     */
+    #[Route(path: '/export-custom-layout-definition', name: 'exportcustomlayoutdefinition', methods: ['GET'])]
     public function exportCustomLayoutDefinitionAction(Request $request): Response
     {
         $id = $request->get('id');
@@ -700,13 +666,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         throw $this->createNotFoundException($errorMessage);
     }
 
-    /**
-     * FIELDCOLLECTIONS
-     */
-
-    /**
-     * @Route("/fieldcollection-get", name="fieldcollectionget", methods={"GET"})
-     */
+    #[Route(path: '/fieldcollection-get', name: 'fieldcollectionget', methods: ['GET'])]
     public function fieldcollectionGetAction(Request $request): JsonResponse
     {
         $fc = DataObject\Fieldcollection\Definition::getByKey($request->get('id'));
@@ -718,9 +678,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($fc);
     }
 
-    /**
-     * @Route("/fieldcollection-update", name="fieldcollectionupdate", methods={"PUT", "POST"})
-     */
+    #[Route(path: '/fieldcollection-update', name: 'fieldcollectionupdate', methods: ['PUT', 'POST'])]
     public function fieldcollectionUpdateAction(Request $request): JsonResponse
     {
         try {
@@ -771,9 +729,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
     }
 
-    /**
-     * @Route("/import-fieldcollection", name="importfieldcollection", methods={"POST"})
-     */
+    #[Route(path: '/import-fieldcollection', name: 'importfieldcollection', methods: ['POST'])]
     public function importFieldcollectionAction(Request $request): Response
     {
         $this->checkPermission('fieldcollections');
@@ -795,9 +751,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/export-fieldcollection", name="exportfieldcollection", methods={"GET"})
-     */
+    #[Route(path: '/export-fieldcollection', name: 'exportfieldcollection', methods: ['GET'])]
     public function exportFieldcollectionAction(Request $request): Response
     {
         $this->checkPermission('fieldcollections');
@@ -819,9 +773,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/fieldcollection-delete", name="fieldcollectiondelete", methods={"DELETE"})
-     */
+    #[Route(path: '/fieldcollection-delete', name: 'fieldcollectiondelete', methods: ['DELETE'])]
     public function fieldcollectionDeleteAction(Request $request): JsonResponse
     {
         $this->checkPermission('fieldcollections');
@@ -832,9 +784,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/fieldcollection-tree", name="fieldcollectiontree", methods={"GET", "POST"})
-     */
+    #[Route(path: '/fieldcollection-tree', name: 'fieldcollectiontree', methods: ['GET', 'POST'])]
     public function fieldcollectionTreeAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $list = new DataObject\Fieldcollection\Definition\Listing();
@@ -934,9 +884,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($definitions);
     }
 
-    /**
-     * @Route("/fieldcollection-list", name="fieldcollectionlist", methods={"GET"})
-     */
+    #[Route(path: '/fieldcollection-list', name: 'fieldcollectionlist', methods: ['GET'])]
     public function fieldcollectionListAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $user = \Pimcore\Tool\Admin::getCurrentUser();
@@ -983,9 +931,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['fieldcollections' => $list]);
     }
 
-    /**
-     * @Route("/get-class-definition-for-column-config", name="getclassdefinitionforcolumnconfig", methods={"GET"})
-     */
+    #[Route(path: '/get-class-definition-for-column-config', name: 'getclassdefinitionforcolumnconfig', methods: ['GET'])]
     public function getClassDefinitionForColumnConfigAction(Request $request): JsonResponse
     {
         $class = DataObject\ClassDefinition::getById($request->get('id'));
@@ -1057,13 +1003,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($result);
     }
 
-    /**
-     * OBJECT BRICKS
-     */
-
-    /**
-     * @Route("/objectbrick-get", name="objectbrickget", methods={"GET"})
-     */
+    #[Route(path: '/objectbrick-get', name: 'objectbrickget', methods: ['GET'])]
     public function objectbrickGetAction(Request $request): JsonResponse
     {
         $fc = DataObject\Objectbrick\Definition::getByKey($request->get('id'));
@@ -1075,9 +1015,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($fc);
     }
 
-    /**
-     * @Route("/objectbrick-update", name="objectbrickupdate", methods={"PUT", "POST"})
-     */
+    #[Route(path: '/objectbrick-update', name: 'objectbrickupdate', methods: ['PUT', 'POST'])]
     public function objectbrickUpdateAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         try {
@@ -1137,9 +1075,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
     }
 
-    /**
-     * @Route("/import-objectbrick", name="importobjectbrick", methods={"POST"})
-     */
+    #[Route(path: '/import-objectbrick', name: 'importobjectbrick', methods: ['POST'])]
     public function importObjectbrickAction(Request $request): JsonResponse
     {
         $this->checkPermission('objectbricks');
@@ -1160,9 +1096,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/export-objectbrick", name="exportobjectbrick", methods={"GET"})
-     */
+    #[Route(path: '/export-objectbrick', name: 'exportobjectbrick', methods: ['GET'])]
     public function exportObjectbrickAction(Request $request): Response
     {
         $this->checkPermission('objectbricks');
@@ -1184,9 +1118,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/objectbrick-delete", name="objectbrickdelete", methods={"DELETE"})
-     */
+    #[Route(path: '/objectbrick-delete', name: 'objectbrickdelete', methods: ['DELETE'])]
     public function objectbrickDeleteAction(Request $request): JsonResponse
     {
         $this->checkPermission('objectbricks');
@@ -1197,9 +1129,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/objectbrick-tree", name="objectbricktree", methods={"GET", "POST"})
-     */
+    #[Route(path: '/objectbrick-tree', name: 'objectbricktree', methods: ['GET', 'POST'])]
     public function objectbrickTreeAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $list = new DataObject\Objectbrick\Definition\Listing();
@@ -1342,9 +1272,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
     }
 
-    /**
-     * @Route("/objectbrick-list", name="objectbricklist", methods={"GET"})
-     */
+    #[Route(path: '/objectbrick-list', name: 'objectbricklist', methods: ['GET'])]
     public function objectbrickListAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $list = new DataObject\Objectbrick\Definition\Listing();
@@ -1404,14 +1332,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['objectbricks' => $list]);
     }
 
-    /**
-     * See http://www.pimcore.org/issues/browse/PIMCORE-2358
-     * Add option to export/import all class definitions/brick definitions etc. at once
-     */
-
-    /**
-     * @Route("/bulk-import", name="bulkimport", methods={"POST"})
-     */
+    #[Route(path: '/bulk-import', name: 'bulkimport', methods: ['POST'])]
     public function bulkImportAction(Request $request): JsonResponse
     {
         $result = [];
@@ -1469,12 +1390,10 @@ class ClassController extends AdminAbstractController implements KernelControlle
      * See http://www.pimcore.org/issues/browse/PIMCORE-2358
      * Add option to export/import all class definitions/brick definitions etc. at once
      */
-
     /**
-     * @Route("/bulk-commit", name="bulkcommit", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/bulk-commit', name: 'bulkcommit', methods: ['POST'])]
     public function bulkCommitAction(Request $request): JsonResponse
     {
         $data = json_decode($request->get('data'), true);
@@ -1572,14 +1491,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * See http://www.pimcore.org/issues/browse/PIMCORE-2358
-     * Add option to export/import all class definitions/brick definitions etc. at once
-     */
-
-    /**
-     * @Route("/bulk-export-prepare", name="bulkexportprepare", methods={"POST"})
-     */
+    #[Route(path: '/bulk-export-prepare', name: 'bulkexportprepare', methods: ['POST'])]
     public function bulkExportPrepareAction(Request $request): Response
     {
         $data = $request->get('data');
@@ -1591,9 +1503,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/bulk-export", name="bulkexport", methods={"GET"})
-     */
+    #[Route(path: '/bulk-export', name: 'bulkexport', methods: ['GET'])]
     public function bulkExportAction(Request $request): JsonResponse
     {
         $result = [];
@@ -1665,9 +1575,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return new JsonResponse(['success' => true, 'data' => $result]);
     }
 
-    /**
-     * @Route("/do-bulk-export", name="dobulkexport", methods={"GET"})
-     */
+    #[Route(path: '/do-bulk-export', name: 'dobulkexport', methods: ['GET'])]
     public function doBulkExportAction(Request $request): Response
     {
         $session = Session::getSessionBag($request->getSession(), 'pimcore_objects');
@@ -1731,9 +1639,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $this->checkActionPermission($event, 'classes', $unrestrictedActions);
     }
 
-    /**
-     * @Route("/get-fieldcollection-usages", name="getfieldcollectionusages", methods={"GET"})
-     */
+    #[Route(path: '/get-fieldcollection-usages', name: 'getfieldcollectionusages', methods: ['GET'])]
     public function getFieldcollectionUsagesAction(Request $request): Response
     {
         $key = $request->get('key');
@@ -1759,9 +1665,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/get-bricks-usages", name="getbrickusages", methods={"GET"})
-     */
+    #[Route(path: '/get-bricks-usages', name: 'getbrickusages', methods: ['GET'])]
     public function getBrickUsagesAction(Request $request): Response
     {
         $classId = $request->get('classId');
@@ -1804,9 +1708,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($usages);
     }
 
-    /**
-     * @Route("/get-icons", name="geticons", methods={"GET"})
-     */
+    #[Route(path: '/get-icons', name: 'geticons', methods: ['GET'])]
     public function getIconsAction(Request $request, EventDispatcherInterface $eventDispatcher): Response
     {
         $classId = $request->query->get('classId');
@@ -1901,9 +1803,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/suggest-class-identifier", name="suggestclassidentifier")
-     */
+    #[Route(path: '/suggest-class-identifier', name: 'suggestclassidentifier')]
     public function suggestClassIdentifierAction(): Response
     {
         $db = Db::get();
@@ -1919,9 +1819,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/suggest-custom-layout-identifier", name="suggestcustomlayoutidentifier")
-     */
+    #[Route(path: '/suggest-custom-layout-identifier', name: 'suggestcustomlayoutidentifier')]
     public function suggestCustomLayoutIdentifierAction(Request $request): Response
     {
         $classId = $request->get('classId');
@@ -1950,9 +1848,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson($result);
     }
 
-    /**
-     * @Route("/text-layout-preview", name="textlayoutpreview")
-     */
+    #[Route(path: '/text-layout-preview', name: 'textlayoutpreview')]
     public function textLayoutPreviewAction(Request $request): Response
     {
         $objPath = $request->get('previewObject', '');
@@ -1995,9 +1891,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $response;
     }
 
-    /**
-     * @Route("/video-supported-types", name="videosupportedTypestypes")
-     */
+    #[Route(path: '/video-supported-types', name: 'videosupportedTypestypes')]
     public function videoAllowedTypesAction(Request $request, TranslatorInterface $translator): Response
     {
         $videoDef = new DataObject\ClassDefinition\Data\Video();

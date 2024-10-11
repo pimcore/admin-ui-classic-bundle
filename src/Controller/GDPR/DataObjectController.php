@@ -23,15 +23,15 @@ use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class DataObjectController
  *
- * @Route("/data-object")
  *
  * @internal
  */
+#[Route(path: '/data-object', name: 'pimcore_admin_gdpr_dataobject_')]
 class DataObjectController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -43,9 +43,7 @@ class DataObjectController extends AdminAbstractController implements KernelCont
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-data-objects", name="pimcore_admin_gdpr_dataobject_searchdataobjects", methods={"GET"})
-     */
+    #[Route(path: '/search-data-objects', name: 'searchdataobjects', methods: ['GET'])]
     public function searchDataObjectsAction(Request $request, DataObjects $service): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -64,10 +62,9 @@ class DataObjectController extends AdminAbstractController implements KernelCont
     }
 
     /**
-     * @Route("/export", name="pimcore_admin_gdpr_dataobject_exportdataobject", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/export', name: 'exportdataobject', methods: ['GET'])]
     public function exportDataObjectAction(Request $request, DataObjects $service): JsonResponse
     {
         $object = DataObject::getById((int) $request->get('id'));

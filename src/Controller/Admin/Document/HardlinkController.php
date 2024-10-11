@@ -20,20 +20,18 @@ use Pimcore\Model\Document;
 use Pimcore\Model\Schedule\Task;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/hardlink", name="pimcore_admin_document_hardlink_")
- *
  * @internal
  */
+#[Route(path: '/hardlink', name: 'pimcore_admin_document_hardlink_')]
 class HardlinkController extends DocumentControllerBase
 {
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/get-data-by-id', name: 'getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int)$request->get('id'));
@@ -70,10 +68,9 @@ class HardlinkController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/save', name: 'save', methods: ['POST', 'PUT'])]
     public function saveAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int) $request->get('id'));

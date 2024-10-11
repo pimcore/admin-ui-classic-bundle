@@ -22,19 +22,16 @@ use Pimcore\Model\Element\Tag;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/tags")
- *
  * @internal
  */
+#[Route(path: '/tags', name: 'pimcore_admin_tags_')]
 class TagsController extends AdminAbstractController
 {
-    /**
-     * @Route("/add", name="pimcore_admin_tags_add", methods={"POST"})
-     */
+    #[Route(path: '/add', name: 'add', methods: ['POST'])]
     public function addAction(Request $request): JsonResponse
     {
         $this->checkPermission('tags_configuration');
@@ -52,10 +49,9 @@ class TagsController extends AdminAbstractController
     }
 
     /**
-     * @Route("/delete", name="pimcore_admin_tags_delete", methods={"DELETE"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/delete', name: 'delete', methods: ['DELETE'])]
     public function deleteAction(Request $request): JsonResponse
     {
         $this->checkPermission('tags_configuration');
@@ -71,10 +67,9 @@ class TagsController extends AdminAbstractController
     }
 
     /**
-     * @Route("/update", name="pimcore_admin_tags_update", methods={"PUT"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/update', name: 'update', methods: ['PUT'])]
     public function updateAction(Request $request): JsonResponse
     {
         $this->checkPermission('tags_configuration');
@@ -97,9 +92,7 @@ class TagsController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/tree-get-children-by-id", name="pimcore_admin_tags_treegetchildrenbyid", methods={"GET"})
-     */
+    #[Route(path: '/tree-get-children-by-id', name: 'treegetchildrenbyid', methods: ['GET'])]
     public function treeGetChildrenByIdAction(Request $request): JsonResponse
     {
         $showSelection = $request->get('showSelection') == 'true';
@@ -183,9 +176,7 @@ class TagsController extends AdminAbstractController
         return $tagArray;
     }
 
-    /**
-     * @Route("/load-tags-for-element", name="pimcore_admin_tags_loadtagsforelement", methods={"GET"})
-     */
+    #[Route(path: '/load-tags-for-element', name: 'loadtagsforelement', methods: ['GET'])]
     public function loadTagsForElementAction(Request $request): JsonResponse
     {
         $assginmentCId = (int)$request->get('assignmentCId');
@@ -203,9 +194,7 @@ class TagsController extends AdminAbstractController
         return $this->adminJson($assignedTagArray);
     }
 
-    /**
-     * @Route("/add-tag-to-element", name="pimcore_admin_tags_addtagtoelement", methods={"PUT"})
-     */
+    #[Route(path: '/add-tag-to-element', name: 'addtagtoelement', methods: ['PUT'])]
     public function addTagToElementAction(Request $request): JsonResponse
     {
         $assginmentCId = (int)$request->get('assignmentElementId');
@@ -222,9 +211,7 @@ class TagsController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/remove-tag-from-element", name="pimcore_admin_tags_removetagfromelement", methods={"DELETE"})
-     */
+    #[Route(path: '/remove-tag-from-element', name: 'removetagfromelement', methods: ['DELETE'])]
     public function removeTagFromElementAction(Request $request): JsonResponse
     {
         $assginmentCId = (int)$request->get('assignmentElementId');
@@ -241,9 +228,7 @@ class TagsController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/get-batch-assignment-jobs", name="pimcore_admin_tags_getbatchassignmentjobs", methods={"GET"})
-     */
+    #[Route(path: '/get-batch-assignment-jobs', name: 'getbatchassignmentjobs', methods: ['GET'])]
     public function getBatchAssignmentJobsAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $elementId = (int)$request->get('elementId');
@@ -375,9 +360,7 @@ class TagsController extends AdminAbstractController
         return $childrenList->loadIdList();
     }
 
-    /**
-     * @Route("/do-batch-assignment", name="pimcore_admin_tags_dobatchassignment", methods={"PUT"})
-     */
+    #[Route(path: '/do-batch-assignment', name: 'dobatchassignment', methods: ['PUT'])]
     public function doBatchAssignmentAction(Request $request): JsonResponse
     {
         $cType = strip_tags($request->get('elementType', ''));

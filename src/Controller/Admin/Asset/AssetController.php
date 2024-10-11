@@ -58,17 +58,16 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;
 
 /**
- * @Route("/asset")
- *
  * @internal
  */
+#[Route(path: '/asset', name: 'pimcore_admin_asset_')]
 class AssetController extends ElementControllerBase implements KernelControllerEventInterface
 {
     use AdminStyleTrait;
@@ -78,25 +77,19 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
     protected Asset\Service $_assetService;
 
-    /**
-     * @Route("/tree-get-root", name="pimcore_admin_asset_treegetroot", methods={"GET"})
-     */
+    #[Route(path: '/tree-get-root', name: 'treegetroot', methods: ['GET'])]
     public function treeGetRootAction(Request $request): JsonResponse
     {
         return parent::treeGetRootAction($request);
     }
 
-    /**
-     * @Route("/delete-info", name="pimcore_admin_asset_deleteinfo", methods={"GET"})
-     */
+    #[Route(path: '/delete-info', name: 'deleteinfo', methods: ['GET'])]
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         return parent::deleteInfoAction($request, $eventDispatcher);
     }
 
-    /**
-     * @Route("/get-data-by-id", name="pimcore_admin_asset_getdatabyid", methods={"GET"})
-     */
+    #[Route(path: '/get-data-by-id', name: 'getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $assetId = $request->query->getInt('id');
@@ -243,9 +236,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createAccessDeniedHttpException();
     }
 
-    /**
-     * @Route("/tree-get-children-by-id", name="pimcore_admin_asset_treegetchildrenbyid", methods={"GET"})
-     */
+    #[Route(path: '/tree-get-children-by-id', name: 'treegetchildrenbyid', methods: ['GET'])]
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -334,9 +325,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/add-asset", name="pimcore_admin_asset_addasset", methods={"POST"})
-     */
+    #[Route(path: '/add-asset', name: 'addasset', methods: ['POST'])]
     public function addAssetAction(Request $request, Config $config): JsonResponse
     {
         try {
@@ -363,9 +352,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/add-asset-compatibility", name="pimcore_admin_asset_addassetcompatibility", methods={"POST"})
-     */
+    #[Route(path: '/add-asset-compatibility', name: 'addassetcompatibility', methods: ['POST'])]
     public function addAssetCompatibilityAction(Request $request, Config $config): JsonResponse
     {
         try {
@@ -391,10 +378,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/exists", name="pimcore_admin_asset_exists", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/exists', name: 'exists', methods: ['GET'])]
     public function existsAction(Request $request): JsonResponse
     {
         $parentAsset = \Pimcore\Model\Asset::getById((int)$request->get('parentId'));
@@ -564,10 +550,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/replace-asset", name="pimcore_admin_asset_replaceasset", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/replace-asset', name: 'replaceasset', methods: ['POST', 'PUT'])]
     public function replaceAssetAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -618,9 +603,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/add-folder", name="pimcore_admin_asset_addfolder", methods={"POST"})
-     */
+    #[Route(path: '/add-folder', name: 'addfolder', methods: ['POST'])]
     public function addFolderAction(Request $request): JsonResponse
     {
         $success = false;
@@ -644,9 +627,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['success' => $success]);
     }
 
-    /**
-     * @Route("/delete", name="pimcore_admin_asset_delete", methods={"DELETE"})
-     */
+    #[Route(path: '/delete', name: 'delete', methods: ['DELETE'])]
     public function deleteAction(Request $request): JsonResponse
     {
         $type = $request->get('type');
@@ -698,11 +679,11 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/update", name="pimcore_admin_asset_update", methods={"PUT"})
      *
      * @throws \Exception
      * @throws RuntimeException
      */
+    #[Route(path: '/update', name: 'update', methods: ['PUT'])]
     public function updateAction(Request $request): JsonResponse
     {
         $data = ['success' => false];
@@ -786,10 +767,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     }
 
     /**
-     * @Route("/save", name="pimcore_admin_asset_save", methods={"PUT","POST"})
-     *
      * @throws \Exception
      */
+    #[Route(path: '/save', name: 'save', methods: ['PUT', 'POST'])]
     public function saveAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -887,9 +867,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/publish-version", name="pimcore_admin_asset_publishversion", methods={"POST"})
-     */
+    #[Route(path: '/publish-version', name: 'publishversion', methods: ['POST'])]
     public function publishVersionAction(Request $request): JsonResponse
     {
         $id = (int)$request->get('id');
@@ -917,9 +895,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createAccessDeniedHttpException();
     }
 
-    /**
-     * @Route("/show-version", name="pimcore_admin_asset_showversion", methods={"GET"})
-     */
+    #[Route(path: '/show-version', name: 'showversion', methods: ['GET'])]
     public function showVersionAction(Request $request, Environment $twig): Response
     {
         $id = (int)$request->get('id');
@@ -958,9 +934,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         );
     }
 
-    /**
-     * @Route("/download", name="pimcore_admin_asset_download", methods={"GET"})
-     */
+    #[Route(path: '/download', name: 'download', methods: ['GET'])]
     public function downloadAction(Request $request): StreamedResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -988,9 +962,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         ]);
     }
 
-    /**
-     * @Route("/download-image-thumbnail", name="pimcore_admin_asset_downloadimagethumbnail", methods={"GET"})
-     */
+    #[Route(path: '/download-image-thumbnail', name: 'downloadimagethumbnail', methods: ['GET'])]
     public function downloadImageThumbnailAction(Request $request): BinaryFileResponse
     {
         $image = Asset\Image::getById((int) $request->get('id'));
@@ -1119,9 +1091,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createNotFoundException('Thumbnail not found');
     }
 
-    /**
-     * @Route("/get-asset", name="pimcore_admin_asset_getasset", methods={"GET"})
-     */
+    #[Route(path: '/get-asset', name: 'getasset', methods: ['GET'])]
     public function getAssetAction(Request $request): StreamedResponse
     {
         $image = Asset::getById((int)$request->get('id'));
@@ -1151,9 +1121,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $response;
     }
 
-    /**
-     * @Route("/get-image-thumbnail", name="pimcore_admin_asset_getimagethumbnail", methods={"GET"})
-     */
+    #[Route(path: '/get-image-thumbnail', name: 'getimagethumbnail', methods: ['GET'])]
     public function getImageThumbnailAction(Request $request): BinaryFileResponse|JsonResponse|StreamedResponse
     {
         $fileinfo = $request->get('fileinfo');
@@ -1240,9 +1208,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $response;
     }
 
-    /**
-     * @Route("/get-folder-thumbnail", name="pimcore_admin_asset_getfolderthumbnail", methods={"GET"})
-     */
+    #[Route(path: '/get-folder-thumbnail', name: 'getfolderthumbnail', methods: ['GET'])]
     public function getFolderThumbnailAction(Request $request): StreamedResponse
     {
         $folder = null;
@@ -1274,9 +1240,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         throw $this->createNotFoundException('could not load asset folder');
     }
 
-    /**
-     * @Route("/get-video-thumbnail", name="pimcore_admin_asset_getvideothumbnail", methods={"GET"})
-     */
+    #[Route(path: '/get-video-thumbnail', name: 'getvideothumbnail', methods: ['GET'])]
     public function getVideoThumbnailAction(Request $request): StreamedResponse
     {
         $video = null;
@@ -1349,9 +1313,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $response;
     }
 
-    /**
-     * @Route("/get-document-thumbnail", name="pimcore_admin_asset_getdocumentthumbnail", methods={"GET"})
-     */
+    #[Route(path: '/get-document-thumbnail', name: 'getdocumentthumbnail', methods: ['GET'])]
     public function getDocumentThumbnailAction(Request $request): BinaryFileResponse|StreamedResponse
     {
         $document = Asset\Document::getById((int)$request->get('id'));
@@ -1418,9 +1380,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $response->headers->set('Pragma', '');
     }
 
-    /**
-     * @Route("/get-preview-document", name="pimcore_admin_asset_getpreviewdocument", methods={"GET"})
-     */
+    #[Route(path: '/get-preview-document', name: 'getpreviewdocument', methods: ['GET'])]
     public function getPreviewDocumentAction(
         Request $request,
         TranslatorInterface $translator
@@ -1505,9 +1465,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $stream;
     }
 
-    /**
-     * @Route("/get-preview-video", name="pimcore_admin_asset_getpreviewvideo", methods={"GET"})
-     */
+    #[Route(path: '/get-preview-video', name: 'getpreviewvideo', methods: ['GET'])]
     public function getPreviewVideoAction(Request $request): Response
     {
         $asset = Asset\Video::getById((int) $request->get('id'));
@@ -1555,9 +1513,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/serve-video-preview", name="pimcore_admin_asset_servevideopreview", methods={"GET"})
-     */
+    #[Route(path: '/serve-video-preview', name: 'servevideopreview', methods: ['GET'])]
     public function serveVideoPreviewAction(Request $request): StreamedResponse
     {
         $asset = Asset\Video::getById((int) $request->get('id'));
@@ -1597,9 +1553,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/image-editor", name="pimcore_admin_asset_imageeditor", methods={"GET"})
-     */
+    #[Route(path: '/image-editor', name: 'imageeditor', methods: ['GET'])]
     public function imageEditorAction(Request $request): Response
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -1614,9 +1568,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         );
     }
 
-    /**
-     * @Route("/image-editor-save", name="pimcore_admin_asset_imageeditorsave", methods={"PUT"})
-     */
+    #[Route(path: '/image-editor-save', name: 'imageeditorsave', methods: ['PUT'])]
     public function imageEditorSaveAction(Request $request): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -1639,9 +1591,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/get-folder-content-preview", name="pimcore_admin_asset_getfoldercontentpreview", methods={"GET"})
-     */
+    #[Route(path: '/get-folder-content-preview', name: 'getfoldercontentpreview', methods: ['GET'])]
     public function getFolderContentPreviewAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -1731,9 +1681,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['assets' => $result['data'], 'success' => $result['success'], 'total' => $result['total']]);
     }
 
-    /**
-     * @Route("/copy-info", name="pimcore_admin_asset_copyinfo", methods={"GET"})
-     */
+    #[Route(path: '/copy-info', name: 'copyinfo', methods: ['GET'])]
     public function copyInfoAction(Request $request): JsonResponse
     {
         $transactionId = time();
@@ -1806,9 +1754,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         ]);
     }
 
-    /**
-     * @Route("/copy", name="pimcore_admin_asset_copy", methods={"POST"})
-     */
+    #[Route(path: '/copy', name: 'copy', methods: ['POST'])]
     public function copyAction(Request $request): JsonResponse
     {
         $success = false;
@@ -1868,9 +1814,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['success' => $success]);
     }
 
-    /**
-     * @Route("/download-as-zip-jobs", name="pimcore_admin_asset_downloadaszipjobs", methods={"GET"})
-     */
+    #[Route(path: '/download-as-zip-jobs', name: 'downloadaszipjobs', methods: ['GET'])]
     public function downloadAsZipJobsAction(Request $request): JsonResponse
     {
         $jobId = uniqid();
@@ -1941,9 +1885,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         ]);
     }
 
-    /**
-     * @Route("/download-as-zip-add-files", name="pimcore_admin_asset_downloadaszipaddfiles", methods={"GET"})
-     */
+    #[Route(path: '/download-as-zip-add-files', name: 'downloadaszipaddfiles', methods: ['GET'])]
     public function downloadAsZipAddFilesAction(Request $request): JsonResponse
     {
         $zipFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/download-zip-' . $request->get('jobId') . '.zip';
@@ -2025,9 +1967,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * Download all assets contained in the folder with parameter id as ZIP file.
      * The suggested filename is either [folder name].zip or assets.zip for the root folder.
-     *
-     * @Route("/download-as-zip", name="pimcore_admin_asset_downloadaszip", methods={"GET"})
      */
+    #[Route(path: '/download-as-zip', name: 'downloadaszip', methods: ['GET'])]
     public function downloadAsZipAction(Request $request): BinaryFileResponse
     {
         $asset = Asset::getById((int) $request->get('id'));
@@ -2048,9 +1989,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $response;
     }
 
-    /**
-     * @Route("/import-zip", name="pimcore_admin_asset_importzip", methods={"POST"})
-     */
+    #[Route(path: '/import-zip', name: 'importzip', methods: ['POST'])]
     public function importZipAction(Request $request, TranslatorInterface $translator): Response
     {
         $jobId = uniqid();
@@ -2115,9 +2054,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    /**
-     * @Route("/import-zip-files", name="pimcore_admin_asset_importzipfiles", methods={"POST"})
-     */
+    #[Route(path: '/import-zip-files', name: 'importzipfiles', methods: ['POST'])]
     public function importZipFilesAction(Request $request, Filesystem $filesystem): JsonResponse
     {
         $jobId = $request->get('jobId');
@@ -2193,9 +2130,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         ]);
     }
 
-    /**
-     * @Route("/clear-thumbnail", name="pimcore_admin_asset_clearthumbnail", methods={"POST"})
-     */
+    #[Route(path: '/clear-thumbnail', name: 'clearthumbnail', methods: ['POST'])]
     public function clearThumbnailAction(Request $request): JsonResponse
     {
         $success = false;
@@ -2216,9 +2151,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['success' => $success]);
     }
 
-    /**
-     * @Route("/grid-proxy", name="pimcore_admin_asset_gridproxy", methods={"GET", "POST", "PUT"})
-     */
+    #[Route(path: '/grid-proxy', name: 'gridproxy', methods: ['GET', 'POST', 'PUT'])]
     public function gridProxyAction(Request $request, EventDispatcherInterface $eventDispatcher, GridHelperService $gridHelperService, CsrfProtectionHandler $csrfProtection): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -2395,9 +2328,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         return $this->adminJson(['success' => false]);
     }
 
-    /**
-     * @Route("/get-text", name="pimcore_admin_asset_gettext", methods={"GET"})
-     */
+    #[Route(path: '/get-text', name: 'gettext', methods: ['GET'])]
     public function getTextAction(Request $request): JsonResponse
     {
         $asset = Asset::getById((int) $request->get('id'));

@@ -22,17 +22,16 @@ use Pimcore\Bundle\AdminBundle\GDPR\DataProvider\Manager;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  *
  * @internal
  */
+#[Route(name: 'pimcore_admin_gdpr_admin_')]
 class AdminController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/get-data-providers", name="pimcore_admin_gdpr_admin_getdataproviders", methods={"GET"})
-     */
+    #[Route(path: '/get-data-providers', name: 'getdataproviders', methods: ['GET'])]
     public function getDataProvidersAction(Manager $manager): JsonResponse
     {
         $response = [];

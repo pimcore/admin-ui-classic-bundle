@@ -1,13 +1,13 @@
 _pimcore_admin:
     resource: "../../src/Controller/Admin/"
-    type:     annotation
+    type:     attribute
     prefix:   /admin
     options:
         expose: true
 
 _pimcore_gdpr:
     resource: "../../src/Controller/GDPR/"
-    type:     annotation
+    type:     attribute
     prefix:   /admin/gdpr
     options:
         expose: true

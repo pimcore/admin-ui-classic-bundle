@@ -32,21 +32,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/translation")
- *
  * @internal
  */
+#[Route(path: '/translation', name: 'pimcore_admin_translation_')]
 class TranslationController extends AdminAbstractController
 {
     protected const PLACEHOLDER_NAME = 'placeHolder';
 
-    /**
-     * @Route("/import", name="pimcore_admin_translation_import", methods={"POST"})
-     */
+    #[Route(path: '/import', name: 'import', methods: ['POST'])]
     public function importAction(Request $request, LocaleServiceInterface $localeService): JsonResponse
     {
         $domain = $request->get('domain', Translation::DOMAIN_DEFAULT);
@@ -108,9 +105,7 @@ class TranslationController extends AdminAbstractController
         return $response;
     }
 
-    /**
-     * @Route("/upload-import", name="pimcore_admin_translation_uploadimportfile", methods={"POST"})
-     */
+    #[Route(path: '/upload-import', name: 'uploadimportfile', methods: ['POST'])]
     public function uploadImportFileAction(Request $request, Filesystem $filesystem): JsonResponse
     {
         $tmpData = file_get_contents($_FILES['Filedata']['tmp_name']);
@@ -140,9 +135,7 @@ class TranslationController extends AdminAbstractController
         ]);
     }
 
-    /**
-     * @Route("/export", name="pimcore_admin_translation_export", methods={"GET"})
-     */
+    #[Route(path: '/export', name: 'export', methods: ['GET'])]
     public function exportAction(Request $request): Response
     {
         $domain = $request->get('domain', Translation::DOMAIN_DEFAULT);
@@ -273,9 +266,7 @@ class TranslationController extends AdminAbstractController
         return $response;
     }
 
-    /**
-     * @Route("/add-admin-translation-keys", name="pimcore_admin_translation_addadmintranslationkeys", methods={"POST"})
-     */
+    #[Route(path: '/add-admin-translation-keys', name: 'addadmintranslationkeys', methods: ['POST'])]
     public function addAdminTranslationKeysAction(Request $request): JsonResponse
     {
         $keys = $request->get('keys');
@@ -314,10 +305,9 @@ class TranslationController extends AdminAbstractController
     }
 
     /**
-     * @Route("/translations", name="pimcore_admin_translation_translations", methods={"POST"})
-     *
      * @param Translator $translator
      */
+    #[Route(path: '/translations', name: 'translations', methods: ['POST'])]
     public function translationsAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         $domain = $request->get('domain', Translation::DOMAIN_DEFAULT);
@@ -651,9 +641,7 @@ class TranslationController extends AdminAbstractController
         return $conditionFilters;
     }
 
-    /**
-     * @Route("/cleanup", name="pimcore_admin_translation_cleanup", methods={"DELETE"})
-     */
+    #[Route(path: '/cleanup', name: 'cleanup', methods: ['DELETE'])]
     public function cleanupAction(Request $request): JsonResponse
     {
         $domain = $request->get('domain', Translation::DOMAIN_DEFAULT);
@@ -666,16 +654,7 @@ class TranslationController extends AdminAbstractController
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * -----------------------------------------------------------------------------------
-     * THE FOLLOWING ISN'T RELATED TO THE SHARED TRANSLATIONS OR ADMIN-TRANSLATIONS
-     * XLIFF CONTENT-EXPORT & MS WORD CONTENT-EXPORT
-     * -----------------------------------------------------------------------------------
-     */
-
-    /**
-     * @Route("/content-export-jobs", name="pimcore_admin_translation_contentexportjobs", methods={"POST"})
-     */
+    #[Route(path: '/content-export-jobs', name: 'contentexportjobs', methods: ['POST'])]
     public function contentExportJobsAction(Request $request): JsonResponse
     {
         $data = $this->decodeJson($request->get('data'));
@@ -785,9 +764,7 @@ class TranslationController extends AdminAbstractController
         );
     }
 
-    /**
-     * @Route("/merge-item", name="pimcore_admin_translation_mergeitem", methods={"PUT"})
-     */
+    #[Route(path: '/merge-item', name: 'mergeitem', methods: ['PUT'])]
     public function mergeItemAction(Request $request): JsonResponse
     {
         $domain = $request->get('domain', Translation::DOMAIN_DEFAULT);
@@ -809,9 +786,7 @@ class TranslationController extends AdminAbstractController
         );
     }
 
-    /**
-     * @Route("/get-website-translation-languages", name="pimcore_admin_translation_getwebsitetranslationlanguages", methods={"GET"})
-     */
+    #[Route(path: '/get-website-translation-languages', name: 'getwebsitetranslationlanguages', methods: ['GET'])]
     public function getWebsiteTranslationLanguagesAction(Request $request): JsonResponse
     {
         return $this->adminJson(
@@ -825,9 +800,7 @@ class TranslationController extends AdminAbstractController
         );
     }
 
-    /**
-     * @Route("/get-translation-domains", name="pimcore_admin_translation_gettranslationdomains", methods={"GET"})
-     */
+    #[Route(path: '/get-translation-domains', name: 'gettranslationdomains', methods: ['GET'])]
     public function getTranslationDomainsAction(Request $request): JsonResponse
     {
         $translation = new Translation();
