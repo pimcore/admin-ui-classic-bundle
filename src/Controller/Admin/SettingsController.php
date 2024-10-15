@@ -377,6 +377,7 @@ class SettingsController extends AdminAbstractController
 
         $valueArray = [
             'general' => $config['general'],
+            'password' => $config['password'],
             'documents' => $config['documents'],
             'assets' => $config['assets'],
             'objects' => $config['objects'],

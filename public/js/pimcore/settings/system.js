@@ -94,7 +94,6 @@ pimcore.settings.system = Class.create({
                 pimcore.globalmanager.remove("settings_system");
             }.bind(this));
 
-
             this.layout = Ext.create('Ext.form.Panel', {
                 bodyStyle: 'padding:20px 5px 20px 5px;',
                 border: false,
@@ -194,6 +193,39 @@ pimcore.settings.system = Class.create({
                                     }.bind(this)
                                 }
                             }]
+                    },
+                    {
+                        xtype: 'fieldset',
+                        title: t('password_security'),
+                        collapsible: true,
+                        collapsed: true,
+                        autoHeight: true,
+                        labelWidth: 150,
+                        defaultType: 'textfield',
+                        defaults: {width: 500},
+                        items: [{
+                            fieldLabel: t('password_standards'),
+                            xtype: "combobox",
+                            name: "password.standard",
+                            queryMode: 'local',
+                            displayField: 'name',
+                            valueField: 'abbr',
+                            value: this.getValue("password.standard"),
+                            store: [
+                                {
+                                    abbr: 'pimcore',
+                                    name: t('password_pimcore_standard')
+                                },
+                                {
+                                    abbr: 'bsi_standard_less',
+                                    name: t('password_bsi_standard_less')
+                                },
+                                {
+                                    abbr: 'bsi_standard_complex',
+                                    name: t('password_bsi_standard_complex')
+                                }
+                            ]
+                        }]
                     },
                     {
                         xtype: 'fieldset',
