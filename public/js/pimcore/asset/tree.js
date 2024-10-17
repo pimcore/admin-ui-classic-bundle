@@ -278,7 +278,8 @@
                  url: Routing.generate('pimcore_admin_asset_exists'),
                  params: {
                      parentId: parentNode.id,
-                     filename: file.name
+                     filename: file.name,
+                     dir: path
                  },
                  async: false,
                  success: function (response) {

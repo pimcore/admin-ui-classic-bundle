@@ -398,9 +398,21 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     public function existsAction(Request $request): JsonResponse
     {
         $parentAsset = \Pimcore\Model\Asset::getById((int)$request->get('parentId'));
+        if ($dir = $request->get('dir')){
+            // this is for uploading folders with Drag&Drop
+            // param "dir" contains the relative path of the file
+            if (strpos($dir, '..') !== false) {
+                throw new \Exception('not allowed');
+            }
+            $dir = trim($dir, '/ ');
+        } else {
+            $dir = '';
+        }
+
+        $assetPath = $parentAsset->getRealFullPath() . $dir . '/' . $request->get('filename');
 
         return new JsonResponse([
-            'exists' => Asset\Service::pathExists($parentAsset->getRealFullPath().'/'.$request->get('filename')),
+            'exists' => Asset\Service::pathExists($assetPath),
         ]);
     }
 
