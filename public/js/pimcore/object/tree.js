@@ -1212,6 +1212,7 @@ pimcore.registerNS("pimcore.object.tree");
      },
 
      changeObjectChildrenSortBy: function (tree, record, sortBy, childrenSortOrder = 'ASC') {
+
          let currentSortMethod = record.data.sortBy;
 
          if (currentSortMethod != sortBy && sortBy == "index") {
