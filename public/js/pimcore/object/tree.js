@@ -1212,13 +1212,12 @@ pimcore.registerNS("pimcore.object.tree");
      },
 
      changeObjectChildrenSortBy: function (tree, record, sortBy, childrenSortOrder = 'ASC') {
-
          let currentSortMethod = record.data.sortBy;
 
          if (currentSortMethod != sortBy && sortBy == "index") {
 
              // Do not allow sort by index(Manual Indexes) for a paginated tree/folder
-             if(record.needsPaging) {
+             if(record.pagingData.total > tree.store.pageSize) {
                  Ext.MessageBox.alert(
                      t("error"),
                      t("error_object_change_children_sort_to_index"));
