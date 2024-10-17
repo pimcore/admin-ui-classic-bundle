@@ -61,7 +61,6 @@ use Twig\Extension\CoreExtension;
 class DataObjectController extends ElementControllerBase implements KernelControllerEventInterface
 {
     use AdminStyleTrait;
-    use ElementEditLockHelperTrait;
     use ApplySchedulerDataTrait;
     use DataObjectActionsTrait;
     use UserNameTrait;

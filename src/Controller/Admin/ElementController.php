@@ -48,9 +48,9 @@ class ElementController extends AdminAbstractController
      */
     public function isLockedAction(Request $request): JsonResponse
     {
-        $isLocked = Element\Editlock::isLocked($request->request->getInt('id'), $request->request->get('type'), $request->getSession()->getId());
+        $isLocked = Element\Editlock::isLocked($request->query->getInt('id'), $request->query->get('type'), $request->getSession()->getId());
         if($isLocked) {
-            return $this->getEditLockResponse($request->request->getInt('id'), $request->request->get('type'));
+            return $this->getEditLockResponse($request->query->getInt('id'), $request->query->get('type'));
         }
 
 

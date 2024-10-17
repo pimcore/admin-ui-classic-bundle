@@ -766,9 +766,6 @@ pimcore.helpers.lockManager = function (cid, ctype, csubtype, data) {
                     params: {
                         id: lock[0],
                         type: lock[1]
-                    },
-                    success: function () {
-                        pimcore.helpers.openElement(lock[0], lock[1], lock[2]);
                     }
                 });
             }

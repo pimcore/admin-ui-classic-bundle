@@ -212,7 +212,7 @@ pimcore.element.abstract = Class.create({
                     success: function (response) {
                         var result = Ext.decode(response.responseText);
 
-                        if (result.editLock) {
+                        if (result.editlock) {
                             pimcore.helpers.lockManager(this.id, elementType, null, result);
                         } else {
                             Ext.Ajax.request({
