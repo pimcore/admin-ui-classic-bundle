@@ -51,6 +51,19 @@ class ElementController extends AdminAbstractController
     }
 
     /**
+     * @Route("/element/is-locked", name="pimcore_admin_element_islocked", methods={"GET"})
+     */
+    public function isElementLockedAction(Request $request): JsonResponse
+    {
+        $isLocked = Element\Editlock::isLocked($request->query->getInt('id'), $request->query->get('type'));
+
+        return $this->adminJson([
+            'success' => true,
+            'locked' => $isLocked
+        ]);
+    }
+
+    /**
      * @Route("/element/unlock-element", name="pimcore_admin_element_unlockelement", methods={"PUT"})
      */
     public function unlockElementAction(Request $request): Response

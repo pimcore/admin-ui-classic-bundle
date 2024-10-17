@@ -197,7 +197,37 @@ pimcore.element.abstract = Class.create({
             this.changeDetectorInitData[key] = liveData[key];
         });
 
-        if(this.isDirty()){
+        if (this.isDirty()) {
+            Ext.Ajax.request({
+                url: Routing.generate('pimcore_admin_element_islocked'),
+                method: 'GET',
+                params: {
+                    id: this.id,
+                    type: 'object'
+                },
+                success: function (response) {
+                    var result = Ext.decode(response.responseText);
+
+                    if (result.locked) {
+
+                        //Here you need to understand and correct what to send the message
+                        // pimcore.helpers.lockManager(this.id, 'object', 'object', result);
+                    } else {
+                        Ext.Ajax.request({
+                            url: Routing.generate('pimcore_admin_element_lockelement'),
+                            method: 'PUT',
+                            params: {
+                                id: this.id,
+                                type: 'object'
+                            }
+                        });
+                    }
+                }.bind(this),
+                failure: function () {
+                    Ext.Msg.alert('Error', 'Failed to check lock status.');
+                }
+            });
+
             this.autoSaveDetectorInitData = {};
             this.startAutoSaving();
         }

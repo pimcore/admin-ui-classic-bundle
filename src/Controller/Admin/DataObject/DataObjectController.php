@@ -323,7 +323,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                     Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
                 }
             } else {
-                Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
             }
         }
 
