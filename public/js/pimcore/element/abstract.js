@@ -19,6 +19,7 @@ pimcore.element.abstract = Class.create({
 
     dirty: false,
     saving: false,
+    lockChecked: false,
 
     /**
      * if allowDirtyClose is true, a tab can be closed whether
@@ -198,35 +199,37 @@ pimcore.element.abstract = Class.create({
         });
 
         if (this.isDirty()) {
-            Ext.Ajax.request({
-                url: Routing.generate('pimcore_admin_element_islocked'),
-                method: 'GET',
-                params: {
-                    id: this.id,
-                    type: 'object'
-                },
-                success: function (response) {
-                    var result = Ext.decode(response.responseText);
+            if(!this.lockChecked) {
+                let elementType = pimcore.helpers.getElementTypeByObject(this);
+                Ext.Ajax.request({
+                    url: Routing.generate('pimcore_admin_element_islocked'),
+                    method: 'GET',
+                    async: false,
+                    params: {
+                        id: this.id,
+                        type: elementType
+                    },
+                    success: function (response) {
+                        var result = Ext.decode(response.responseText);
 
-                    if (result.locked) {
-
-                        //Here you need to understand and correct what to send the message
-                        // pimcore.helpers.lockManager(this.id, 'object', 'object', result);
-                    } else {
-                        Ext.Ajax.request({
-                            url: Routing.generate('pimcore_admin_element_lockelement'),
-                            method: 'PUT',
-                            params: {
-                                id: this.id,
-                                type: 'object'
-                            }
-                        });
-                    }
-                }.bind(this),
-                failure: function () {
-                    Ext.Msg.alert('Error', 'Failed to check lock status.');
-                }
-            });
+                        if (result.editLock) {
+                            pimcore.helpers.lockManager(this.id, elementType, null, result);
+                        } else {
+                            Ext.Ajax.request({
+                                url: Routing.generate('pimcore_admin_element_lockelement'),
+                                method: 'PUT',
+                                params: {
+                                    id: this.id,
+                                    type: elementType
+                                },
+                                success: function () {
+                                    this.lockChecked = true;
+                                }.bind(this)
+                            });
+                        }
+                    }.bind(this)
+                });
+            }
 
             this.autoSaveDetectorInitData = {};
             this.startAutoSaving();
