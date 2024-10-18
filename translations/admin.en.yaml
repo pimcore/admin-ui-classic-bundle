@@ -386,8 +386,8 @@ show: Show
 public: Public
 maximum_2_versions: 'You can compare max. 2 versions'
 error: Error
-element_is_locked: 'The desired element is currently opened by another person:'
-element_lock_question: 'Would you like to open it anyway?'
+element_is_locked: 'The desired element is currently being edited by another person:'
+element_lock_question: 'Would you like to continue editing?'
 since: Since
 longitude: Longitude
 latitude: Latitude

@@ -72,7 +72,6 @@ use Twig\Extension\CoreExtension;
 class AssetController extends ElementControllerBase implements KernelControllerEventInterface
 {
     use AdminStyleTrait;
-    use ElementEditLockHelperTrait;
     use ApplySchedulerDataTrait;
     use UserNameTrait;
 
@@ -105,15 +104,6 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $asset = Asset::getById($assetId);
         if (!$asset instanceof Asset) {
             return $this->adminJson(['success' => false, 'message' => "asset doesn't exist"]);
-        }
-
-        // check for lock on non-folder items only.
-        if ($type !== 'folder' && ($asset->isAllowed('publish') || $asset->isAllowed('delete'))) {
-            if (Element\Editlock::isLocked($assetId, 'asset', $request->getSession()->getId())) {
-                return $this->getEditLockResponse($assetId, 'asset');
-            }
-
-            Element\Editlock::lock($assetId, 'asset', $request->getSession()->getId());
         }
 
         $asset = clone $asset;

@@ -19,6 +19,7 @@ pimcore.element.abstract = Class.create({
 
     dirty: false,
     saving: false,
+    lockChecked: false,
 
     /**
      * if allowDirtyClose is true, a tab can be closed whether
@@ -197,7 +198,39 @@ pimcore.element.abstract = Class.create({
             this.changeDetectorInitData[key] = liveData[key];
         });
 
-        if(this.isDirty()){
+        if (this.isDirty()) {
+            if(!this.lockChecked) {
+                let elementType = pimcore.helpers.getElementTypeByObject(this);
+                Ext.Ajax.request({
+                    url: Routing.generate('pimcore_admin_element_islocked'),
+                    method: 'GET',
+                    async: false,
+                    params: {
+                        id: this.id,
+                        type: elementType
+                    },
+                    success: function (response) {
+                        var result = Ext.decode(response.responseText);
+
+                        if (result.editlock) {
+                            pimcore.helpers.lockManager(this.id, elementType, null, result);
+                        } else {
+                            Ext.Ajax.request({
+                                url: Routing.generate('pimcore_admin_element_lockelement'),
+                                method: 'PUT',
+                                params: {
+                                    id: this.id,
+                                    type: elementType
+                                },
+                                success: function () {
+                                    this.lockChecked = true;
+                                }.bind(this)
+                            });
+                        }
+                    }.bind(this)
+                });
+            }
+
             this.autoSaveDetectorInitData = {};
             this.startAutoSaving();
         }

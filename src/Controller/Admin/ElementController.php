@@ -19,6 +19,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
+use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
 use Pimcore\Event\Model\ResolveElementEvent;
 use Pimcore\Logger;
@@ -40,6 +41,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ElementController extends AdminAbstractController
 {
+    use ElementEditLockHelperTrait;
+
+    /**
+     * @Route("/is-locked", name="pimcore_admin_element_islocked", methods={"GET"})
+     */
+    public function isLockedAction(Request $request): JsonResponse
+    {
+        $isLocked = Element\Editlock::isLocked($request->query->getInt('id'), $request->query->get('type'), $request->getSession()->getId());
+        if($isLocked) {
+            return $this->getEditLockResponse($request->query->getInt('id'), $request->query->get('type'));
+        }
+
+
+        return $this->adminJson(['success' => true, 'editLock' => null]);
+    }
+
     /**
      * @Route("/element/lock-element", name="pimcore_admin_element_lockelement", methods={"PUT"})
      */

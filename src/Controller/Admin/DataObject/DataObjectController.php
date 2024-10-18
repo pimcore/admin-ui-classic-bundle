@@ -61,7 +61,6 @@ use Twig\Extension\CoreExtension;
 class DataObjectController extends ElementControllerBase implements KernelControllerEventInterface
 {
     use AdminStyleTrait;
-    use ElementEditLockHelperTrait;
     use ApplySchedulerDataTrait;
     use DataObjectActionsTrait;
     use UserNameTrait;
@@ -302,30 +301,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         // set the latest available version for editmode
         $draftVersion = null;
         $object = $this->getLatestVersion($objectFromDatabase, $draftVersion);
-
-        // check for lock
-        if ($object->isAllowed('save') || $object->isAllowed('publish') || $object->isAllowed('unpublish') || $object->isAllowed('delete')) {
-            if (Element\Editlock::isLocked($objectId, 'object', $request->getSession()->getId())) {
-                //Hook for modifying editlock handling - e.g. no editLockResponse but keep old lock
-                $lockData = [
-                    'task' => self::TASK_RESPONSE,
-                ];
-                $event = new GenericEvent($this, [
-                    'data' => $lockData,
-                    'object' => $object,
-                ]);
-                $eventDispatcher->dispatch($event, AdminEvents::OBJECT_GET_IS_LOCKED);
-                $lockData = $event->getArgument('data');
-
-                if ($lockData['task'] === self::TASK_RESPONSE) {
-                    return $this->getEditLockResponse($objectId, 'object');
-                } elseif ($lockData['task'] === self::TASK_OVERWRITE) {
-                    Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
-                }
-            } else {
-                Element\Editlock::lock($objectId, 'object', $request->getSession()->getId());
-            }
-        }
 
         // we need to know if the latest version is published or not (a version), because of lazy loaded fields in $this->getDataForObject()
         $objectFromVersion = $object !== $objectFromDatabase;
