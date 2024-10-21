@@ -451,30 +451,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             width: '100%',
             emptyText: t("paste_here"),
             validateOnChange: false,
-            enableKeyEvents: true,
-            listeners: {
-                change: function(){
-                    var value = this.pasteField.getValue();
-                    if (value) {
-
-                        var lines = value.split("\n");
-
-                        var result = [];
-
-                        if (lines) {
-                            for (var i = 0; i < lines.length; i++) {
-                                var line = lines[i];
-                                line = line.split("\t");
-                                result.push(line);
-                            }
-                            this.dirty = true;
-                        }
-                    }
-
-                    this.initStore(result);
-                    this.pasteWindow.close();
-                }.bind(this)
-            }
+            enableKeyEvents: true
         });
 
         this.pasteWindow = new Ext.Window({
@@ -491,6 +468,31 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
                 this.pasteField,
             ],
             buttons: [
+                {
+                    text: t("save"),
+                    iconCls: "pimcore_icon_save",
+                    handler: function () {
+                        let value = this.pasteField.getValue();
+
+                        if (value) {
+                            let lines = value.split("\n");
+                            let result = [];
+
+                            if (lines) {
+                                for (let i = 0; i < lines.length; i++) {
+                                    let line = lines[i];
+                                    line = line.split("\t");
+                                    result.push(line);
+                                }
+
+                                this.dirty = true;
+                            }
+                            this.initStore(result);
+                        }
+
+                        this.pasteWindow.close();
+                    }.bind(this)
+                },
                 {
                     text: t("cancel"),
                     iconCls: "pimcore_icon_cancel",
