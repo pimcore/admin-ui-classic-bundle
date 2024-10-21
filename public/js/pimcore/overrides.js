@@ -404,7 +404,8 @@ Ext.define('pimcore.data.PagingTreeStore', {
             node.pagingData = {
                 total: data.total,
                 offset: data.offset,
-                limit: data.limit
+                limit: data.limit,
+                canSortManually: data.total < data.limit
             }
 
             me.superclass.onProxyLoad.call(this, operation);
