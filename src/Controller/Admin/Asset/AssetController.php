@@ -933,7 +933,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
         }
 
-        if ($asset->getMimeType() === 'application/pdf') {
+        if ($asset instanceof Asset\Document && $asset->getMimeType() === 'application/pdf') {
             $scanResponse = $this->getResponseByScanStatus($asset, false);
             if ($scanResponse) {
                 return $scanResponse;
@@ -1432,7 +1432,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
-            if ($asset->getMimeType() === 'application/pdf') {
+            if ($asset instanceof Asset\Document && $asset->getMimeType() === 'application/pdf') {
                 $scanResponse = $this->getResponseByScanStatus($asset);
                 if ($scanResponse) {
                     return $scanResponse;
