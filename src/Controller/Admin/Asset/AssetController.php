@@ -75,6 +75,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     use ElementEditLockHelperTrait;
     use ApplySchedulerDataTrait;
     use UserNameTrait;
+    const string PDF_MIMETYPE =  'application/pdf';
 
     protected Asset\Service $_assetService;
 
@@ -933,7 +934,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
         }
 
-        if ($asset instanceof Asset\Document && $asset->getMimeType() === 'application/pdf') {
+        if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
             $scanResponse = $this->getResponseByScanStatus($asset, false);
             if ($scanResponse) {
                 return $scanResponse;
@@ -1432,7 +1433,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
-            if ($asset instanceof Asset\Document && $asset->getMimeType() === 'application/pdf') {
+            if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
                 $scanResponse = $this->getResponseByScanStatus($asset);
                 if ($scanResponse) {
                     return $scanResponse;
@@ -1444,7 +1445,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 return new StreamedResponse(function () use ($stream) {
                     fpassthru($stream);
                 }, 200, [
-                    'Content-Type' => 'application/pdf',
+                    'Content-Type' => self::PDF_MIMETYPE,
                 ]);
             } else {
                 throw $this->createNotFoundException('Unable to get preview for asset ' . $asset->getId());
@@ -1484,7 +1485,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     {
         $stream = null;
 
-        if ($asset->getMimeType() == 'application/pdf') {
+        if ($asset->getMimeType() == self::PDF_MIMETYPE) {
             $stream = $asset->getStream();
         }
 
