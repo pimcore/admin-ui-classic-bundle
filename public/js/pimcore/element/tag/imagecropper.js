@@ -207,33 +207,16 @@ pimcore.element.tag.imagecropper = Class.create({
                         this.alertMessage = 'crop_error_selection_smaller_than_thumbnail'
                     }
 
-                    // Max width and fix height for dimension
+                    // Max width
                     if (sel.getWidth() >= image.getWidth()) {
                         sel.setStyle("width", image.getWidth() + "px");
-
-                        if(this.thumbnailHeight && this.thumbnailWidth) {
-                            sel.setStyle("height", (image.getWidth() / this.ratioX * this.ratioY) + "px");
-                        }
                     }
 
-                    // Max height & fix width for dimension
+                    // Max height
                     if (sel.getHeight() >= image.getHeight()) {
                         sel.setStyle("height", image.getHeight() + "px");
-
-                        if(this.thumbnailHeight && this.thumbnailWidth) {
-                            sel.setStyle("width", (image.getHeight() / this.ratioY * this.ratioX) + "px");
-                        }
                     }
                 } else {
-                    // check the ratio if given
-                    if (this.ratioX && this.ratioY) {
-                        if (sel.getHeight() > image.getHeight()) {
-                            sel.setStyle("height", (sel.getWidth() * (this.ratioY / this.ratioX)) + "px");
-                        } else if (sel.getWidth() > image.getWidth()) {
-                            sel.setStyle("width", (sel.getHeight() * (this.ratioX / this.ratioY)) + "px");
-                        }
-                    }
-
                     // Max width
                     if (sel.getWidth() > image.getWidth()) {
                         sel.setStyle("width", image.getWidth() + "px");
