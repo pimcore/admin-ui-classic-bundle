@@ -91,7 +91,7 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             bodyStyle: "padding: 10px;"
         });
         let width = 700;
-        if (tagType === 'manyToManyObjectRelation' && fieldInfo?.layout?.width) {
+        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.width) {
             width = fieldInfo.layout.width + 25;
         }
         this.editWin = new Ext.Window({
