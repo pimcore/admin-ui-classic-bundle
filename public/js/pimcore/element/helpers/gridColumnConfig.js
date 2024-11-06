@@ -449,8 +449,8 @@ pimcore.element.helpers.gridColumnConfig = {
 
             const title = t("filter_by_relation_field") + " " + fieldInfo.text;
             let width = 700;
-            if (tagType === 'manyToManyObjectRelation' && fieldInfo.width) {
-                width = fieldInfo.width + 25;
+            if (tagType === 'manyToManyObjectRelation' && fieldInfo?.layout?.layout?.width) {
+                width = fieldInfo.layout.layout.width + 25;
             }
             this.filterByRelationWindow = new Ext.Window({
                 autoScroll: true,
