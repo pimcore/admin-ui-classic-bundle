@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator;
 
 use Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\ResultContainer;
 use Pimcore\Model\Element\ElementInterface;
+use Pimcore\Model\DataObject\Concrete;
 
 /**
  * @internal
@@ -28,6 +29,11 @@ final class VersionGetter extends AbstractOperator
     {
         $result = new \stdClass();
         $result->label = $this->label;
+
+        if(!$element instanceof Concrete){
+            // TODO: Should we handle arrays?
+            return $result;
+        }
 
         $children = $this->getChildren();
 
