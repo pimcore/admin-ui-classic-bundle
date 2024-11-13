@@ -44,11 +44,9 @@ final class VersionGetter extends AbstractOperator
 
             $valueArray = [];
 
-            if($element){
-                $latestVersion = $element->getLatestVersion(null, false);
-                if($latestVersion){
-                    $element = $latestVersion->loadData();
-                }
+            $latestVersion = $element->getLatestVersion(null, false);
+            if($latestVersion){
+                $element = $latestVersion->loadData();
             }
 
             $childResult = $c->getLabeledValue($element);
