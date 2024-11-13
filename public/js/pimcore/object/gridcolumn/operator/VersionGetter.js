@@ -15,11 +15,11 @@
  */
 
 
-pimcore.registerNS("pimcore.object.gridcolumn.operator.version_getter");
+pimcore.registerNS("pimcore.object.gridcolumn.operator.versiongetter");
 /**
  * @private
  */
-pimcore.object.gridcolumn.operator.version_getter = Class.create(pimcore.object.gridcolumn.operator.text, {
+pimcore.object.gridcolumn.operator.versiongetter = Class.create(pimcore.object.gridcolumn.operator.text, {
     type: "operator",
     operatorGroup: null, 
     class: "VersionGetter",
