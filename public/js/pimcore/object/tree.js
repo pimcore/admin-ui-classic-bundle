@@ -276,7 +276,9 @@ pimcore.registerNS("pimcore.object.tree");
                      this.onTreeNodeMove(record, record.parentNode, overModel, 0);
                  }
              }.bind(this));
+         }
 
+         if (typeof this.treeNodeMoveParameter.oldParent.getOwnerTree !== "function") {
              return;
          }
 
