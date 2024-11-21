@@ -278,6 +278,7 @@ pimcore.registerNS("pimcore.object.tree");
              }.bind(this));
          }
 
+         // recheck wheter the getOwnerTree is a function after reassignment onTreeNodeMove()
          if (typeof this.treeNodeMoveParameter.oldParent.getOwnerTree !== "function") {
              return;
          }
