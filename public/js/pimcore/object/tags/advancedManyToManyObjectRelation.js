@@ -163,13 +163,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     });
                 }
 
-                let filterType = 'list';
+                fc.filter = {
+                    type: 'list'
+                };
 
                 if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
-                    filterType = 'boolean';
-                }
-                fc.filter = {
-                    type: filterType
+                    fc.filter.type = 'boolean';
+                } else {
+                    fc.filter.labelField = visibleFields[i];
+                    fc.filter.idField = visibleFields[i];
+                    fc.filter.store = this.getSortedStore(this.store, visibleFields[i]);
                 }
 
                 columns.push(fc);
@@ -303,6 +306,12 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     type: filterType
                 }
             };
+
+            if (filterType === 'list') {
+                columnConfig.filter.labelField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.idField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.store = this.getSortedStore(this.store, this.fieldConfig.columns[i].key);
+            }
 
             if (cellEditor) {
                 columnConfig.getEditor = cellEditor;

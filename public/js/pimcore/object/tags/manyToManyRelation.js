@@ -448,8 +448,11 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
 
         columns = Ext.Array.map(columns, function(column) {
             column.filter = {
-                type: 'list'
-            }
+                type: 'list',
+                labelField: column.dataIndex,
+                idField: column.dataIndex,
+                store: this.getSortedStore(this.store, column.dataIndex)
+            };
 
             let columnWidth = this.getColumnWidth(column.dataIndex);
             if (columnWidth > 0) {

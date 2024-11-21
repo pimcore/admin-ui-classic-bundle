@@ -240,6 +240,12 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 }
             };
 
+            if(filterType === 'list') {
+                columnConfig.filter.labelField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.idField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.store = this.getSortedStore(this.store, this.fieldConfig.columns[i].key);
+            }
+
             if (cellEditor) {
                 columnConfig.getEditor = cellEditor;
             }
