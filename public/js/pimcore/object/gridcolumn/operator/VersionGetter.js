@@ -21,15 +21,16 @@ pimcore.registerNS("pimcore.object.gridcolumn.operator.versiongetter");
  */
 pimcore.object.gridcolumn.operator.versiongetter = Class.create(pimcore.object.gridcolumn.operator.text, {
     type: "operator",
-    operatorGroup: null, 
+    operatorGroup: null,
     class: "VersionGetter",
     iconCls: "pimcore_icon_operator_alias",
     defaultText: "VersionGetter",
     group: "other",
-    
+
     getConfigTreeNode: function (configAttributes) {
+        let node;
         if (configAttributes) {
-            var node = {
+            node = {
                 draggable: true,
                 iconCls: this.iconCls,
                 text: configAttributes.label,
@@ -44,9 +45,9 @@ pimcore.object.gridcolumn.operator.versiongetter = Class.create(pimcore.object.g
         } else {
 
             //For building up operator list
-            var configAttributes = {type: this.type, class: this.class};
+            configAttributes = {type: this.type, class: this.class};
 
-            var node = {
+            node = {
                 draggable: true,
                 iconCls: this.iconCls,
                 text: this.getDefaultText(),
@@ -62,7 +63,7 @@ pimcore.object.gridcolumn.operator.versiongetter = Class.create(pimcore.object.g
 
 
     getCopyNode: function (source) {
-        var copy = source.createNode({
+        const copy = source.createNode({
             iconCls: this.iconCls,
             text: source.data.text,
             isTarget: true,
