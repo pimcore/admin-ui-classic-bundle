@@ -500,7 +500,7 @@ rows_fixed: Rows fixed
 cols_fixed: Cols fixed
 force_resize: Force resize
 site_ids: Site IDs
-site_ids_tooltip: Provide a comma-seperated list of site IDs
+site_ids_tooltip: Provide a comma-separated list of site IDs
 predefined_hotspot_data_templates: Predefined data templates
 hide_locale_labels_when_tabs_reached: Hide locale labels after number of tabs
 classificationstore_error_addkey_msg: Error adding Key
