@@ -22,11 +22,13 @@ use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
+use Pimcore\Db;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Model\DataObject\Objectbrick;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\User;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -186,7 +188,7 @@ class GridHelperService
         $conditionPartsFilters = [];
 
         if ($filterJson) {
-            $db = \Pimcore\Db::get();
+            $db = Db::get();
             $filters = json_decode($filterJson, true);
 
             foreach ($filters as $filter) {
@@ -297,7 +299,7 @@ class GridHelperService
                             $brickFilterField = $field->getName();
                         }
 
-                        $db = \Pimcore\Db::get();
+                        $db = Db::get();
 
                         if ($isLocalized) {
                             $brickPrefix = $db->quoteIdentifier($brickType . '_localized') . '.';
@@ -427,7 +429,7 @@ class GridHelperService
                 $featureAndSlugFilters,
                 $me
             ) {
-                $db = \Pimcore\Db::get();
+                $db = Db::get();
 
                 $alreadyJoined = [];
 
@@ -477,7 +479,7 @@ class GridHelperService
                 $featureAndSlugFilters,
                 $me
             ) {
-                $db = \Pimcore\Db::get();
+                $db = Db::get();
 
                 $alreadyJoined = [];
 
@@ -614,17 +616,7 @@ class GridHelperService
         }
 
         if (!$adminUser->isAdmin()) {
-            $userIds = $adminUser->getRoles();
-            $currentUserId = $adminUser->getId();
-            $userIds[] = $currentUserId;
-
-            $inheritedPermission = $folder->getDao()->isInheritingPermission('list', $userIds);
-
-            $anyAllowedRowOrChildren = 'EXISTS(SELECT list FROM users_workspaces_object uwo WHERE userId IN (' . implode(',', $userIds) . ') AND list=1 AND LOCATE(CONCAT(`path`,`key`),cpath)=1 AND
-                NOT EXISTS(SELECT list FROM users_workspaces_object WHERE userId =' . $currentUserId . '  AND list=0 AND cpath = uwo.cpath))';
-            $isDisallowedCurrentRow = 'EXISTS(SELECT list FROM users_workspaces_object WHERE userId IN (' . implode(',', $userIds) . ')  AND cid = `id` AND list=0)';
-
-            $conditionFilters[] = 'IF(' . $anyAllowedRowOrChildren . ',1,IF(' . $inheritedPermission . ', ' . $isDisallowedCurrentRow . ' = 0, 0)) = 1';
+            $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
         }
 
         $featureJoins = [];
@@ -736,7 +728,7 @@ class GridHelperService
 
     public function prepareAssetListingForGrid(array $allParams, User $adminUser): Model\Asset\Listing
     {
-        $db = \Pimcore\Db::get();
+        $db = Db::get();
         $folder = Model\Asset::getById((int) $allParams['folderId']);
 
         $start = 0;
@@ -855,17 +847,7 @@ class GridHelperService
         }
 
         if (!$adminUser->isAdmin()) {
-            $userIds = $adminUser->getRoles();
-            $currentUserId = $adminUser->getId();
-            $userIds[] = $currentUserId;
-
-            $inheritedPermission = $folder->getDao()->isInheritingPermission('list', $userIds);
-
-            $anyAllowedRowOrChildren = 'EXISTS(SELECT list FROM users_workspaces_asset uwa WHERE userId IN (' . implode(',', $userIds) . ') AND list=1 AND LOCATE(CONCAT(`path`,filename),cpath)=1 AND
-            NOT EXISTS(SELECT list FROM users_workspaces_asset WHERE userId =' . $currentUserId . '  AND list=0 AND cpath = uwa.cpath))';
-            $isDisallowedCurrentRow = 'EXISTS(SELECT list FROM users_workspaces_asset WHERE userId IN (' . implode(',', $userIds) . ')  AND cid = id AND list=0)';
-
-            $conditionFilters[] = 'IF(' . $anyAllowedRowOrChildren . ',1,IF(' . $inheritedPermission . ', ' . $isDisallowedCurrentRow . ' = 0, 0)) = 1';
+            $conditionFilters[] = $this->getPermittedPathsByUser('asset', $adminUser);
         }
 
         //filtering for tags
@@ -940,4 +922,66 @@ class GridHelperService
 
         return $response;
     }
+
+
+    /**
+     *
+     *
+     * @internal
+     */
+    protected function getPermittedPathsByUser(string $type, User $user): string
+    {
+        $db = Db::get();
+
+        $allowedTypes = [];
+
+        if ($user->isAllowed($type . 's')) { //the permissions are just plural
+            $elementPaths = Service::findForbiddenPaths($type, $user);
+
+            $forbiddenPathSql = [];
+            $allowedPathSql = [];
+            foreach ($elementPaths['forbidden'] as $forbiddenPath => $allowedPaths) {
+                $exceptions = '';
+                $folderSuffix = '';
+                if ($allowedPaths) {
+                    $exceptionsConcat = implode("%' OR `path` LIKE '", $allowedPaths);
+                    $exceptions = " OR (`path` LIKE '" . $exceptionsConcat . "%')";
+                    $folderSuffix = '/'; //if allowed children are found, the current folder is listable but its content is still blocked, can easily done by adding a trailing slash
+                }
+                $forbiddenPathSql[] = ' (`path` NOT LIKE ' . $db->quote($forbiddenPath . $folderSuffix . '%') . $exceptions . ') ';
+            }
+            foreach ($elementPaths['allowed'] as $allowedPaths) {
+                $allowedPathSql[] = ' `path` LIKE ' . $db->quote($allowedPaths  . '%');
+            }
+
+            // this is to avoid query error when implode is empty.
+            // the result would be like `(((path1 OR path2) AND (not_path3 AND not_path4)))`
+            $forbiddenAndAllowedSql = '(';
+
+            if ($allowedPathSql || $forbiddenPathSql) {
+                $forbiddenAndAllowedSql .= '(';
+                $forbiddenAndAllowedSql .= $allowedPathSql ? '( ' . implode(' OR ', $allowedPathSql) . ' )' : '';
+
+                if ($forbiddenPathSql) {
+                    //if $allowedPathSql "implosion" is present, we need `AND` in between
+                    $forbiddenAndAllowedSql .= $allowedPathSql ? ' AND ' : '';
+                    $forbiddenAndAllowedSql .= implode(' AND ', $forbiddenPathSql);
+                }
+                $forbiddenAndAllowedSql .= ' )';
+            }
+
+            $forbiddenAndAllowedSql.= ' )';
+
+            $allowedTypes[] = $forbiddenAndAllowedSql;
+        }
+
+        //if allowedTypes is still empty after getting the workspaces, it means that there are no any main permissions set
+        // by setting a `false` condition in the query makes sure that nothing would be displayed.
+        if (!$allowedTypes) {
+            $allowedTypes = ['false'];
+        }
+
+        return '('.implode(' OR ', $allowedTypes) .')';
+    }
+
 }
