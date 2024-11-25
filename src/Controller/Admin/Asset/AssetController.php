@@ -1673,12 +1673,16 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if (!$this->getAdminUser()->isAdmin()) {
             $userIds = $this->getAdminUser()->getRoles();
-            $userIds[] = $this->getAdminUser()->getId();
-            $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+            $currentUserId = $this->getAdminUser()->getId();
+            $userIds[] = $currentUserId;
+
+            $inheritedPermission = $folder->getDao()->isInheritingPermission('list', $userIds);
+
+            $anyAllowedRowOrChildren = 'EXISTS(SELECT list FROM users_workspaces_asset uwa WHERE userId IN (' . implode(',', $userIds) . ') AND list=1 AND LOCATE(CONCAT(`path`,filename),cpath)=1 AND
+            NOT EXISTS(SELECT list FROM users_workspaces_asset WHERE userId =' . $currentUserId . '  AND list=0 AND cpath = uwa.cpath))';
+            $isDisallowedCurrentRow = 'EXISTS(SELECT list FROM users_workspaces_asset WHERE userId IN (' . implode(',', $userIds) . ')  AND cid = id AND list=0)';
+
+            $conditionFilters[] = 'IF(' . $anyAllowedRowOrChildren . ',1,IF(' . $inheritedPermission . ', ' . $isDisallowedCurrentRow . ' = 0, 0)) = 1';
         }
 
         $condition = implode(' AND ', $conditionFilters);
