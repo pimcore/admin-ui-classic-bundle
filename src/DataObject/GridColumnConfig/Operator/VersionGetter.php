@@ -39,36 +39,36 @@ final class VersionGetter extends AbstractOperator
 
         if (!$children) {
             return $result;
+        }
+
+        $c = $children[0];
+
+        $valueArray = [];
+
+        $latestVersion = $element->getLatestVersion(null, false);
+        if($latestVersion){
+            $element = $latestVersion->loadData();
+        }
+
+        $childResult = $c->getLabeledValue($element);
+        $isArrayType = $childResult->isArrayType ?? null;
+        $childValues = $childResult->value;
+        if ($childValues && !$isArrayType) {
+            $childValues = [$childValues];
+        }
+
+        if ($childValues) {
+            /** @var string $childValue */
+            foreach ($childValues as $childValue) {
+                $valueArray[] = $childValue;
+            }
+        }
+
+        $result->isArrayType = $isArrayType;
+        if ($isArrayType) {
+            $result->value = $valueArray;
         } else {
-            $c = $children[0];
-
-            $valueArray = [];
-
-            $latestVersion = $element->getLatestVersion(null, false);
-            if($latestVersion){
-                $element = $latestVersion->loadData();
-            }
-
-            $childResult = $c->getLabeledValue($element);
-            $isArrayType = $childResult->isArrayType ?? null;
-            $childValues = $childResult->value;
-            if ($childValues && !$isArrayType) {
-                $childValues = [$childValues];
-            }
-
-            if ($childValues) {
-                /** @var string $childValue */
-                foreach ($childValues as $childValue) {
-                    $valueArray[] = $childValue;
-                }
-            }
-
-            $result->isArrayType = $isArrayType;
-            if ($isArrayType) {
-                $result->value = $valueArray;
-            } else {
-                $result->value = $valueArray[0] ?? null;
-            }
+            $result->value = $valueArray[0] ?? null;
         }
 
         return $result;
