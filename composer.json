@@ -17,7 +17,7 @@
     "endroid/qr-code": "^4 || ^5.1",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
     "pimcore/pimcore": "^11.5.0",
-    "symfony/webpack-encore-bundle": "^1.7 || ^2.0"
+    "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "require-dev": {
     "codeception/codeception": "^5.0.11",
