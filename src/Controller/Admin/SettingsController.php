@@ -71,7 +71,7 @@ class SettingsController extends AdminAbstractController
     public function displayCustomLogoAction(Request $request): StreamedResponse
     {
         $mime = 'image/svg+xml';
-        if ($request->get('white')) {
+        if ($request->query->has('white')) {
             $logo = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/logo-claim-white.svg';
         } else {
             $logo = PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/logo-claim-gray.svg';
@@ -145,9 +145,10 @@ class SettingsController extends AdminAbstractController
     {
         $this->checkPermission('asset_metadata');
 
-        if ($request->get('data')) {
-            if ($request->get('xaction') == 'destroy') {
-                $data = $this->decodeJson($request->get('data'));
+        if ($request->request->has('data')) {
+            $data = $this->decodeJson($request->request->getString('data'));
+
+            if ($request->query->getString('xaction') == 'destroy') {
                 $id = $data['id'];
                 $metadata = Metadata\Predefined::getById($id);
                 if (!$metadata->isWriteable()) {
@@ -157,8 +158,6 @@ class SettingsController extends AdminAbstractController
 
                 return $this->adminJson(['success' => true, 'data' => []]);
             } elseif ($request->get('xaction') == 'update') {
-                $data = $this->decodeJson($request->get('data'));
-
                 // save type
                 $metadata = Metadata\Predefined::getById($data['id']);
                 if (!$metadata->isWriteable()) {
@@ -183,7 +182,6 @@ class SettingsController extends AdminAbstractController
                 if (!(new Metadata\Predefined())->isWriteable()) {
                     throw new ConfigWriteException();
                 }
-                $data = $this->decodeJson($request->get('data'));
                 unset($data['id']);
 
                 // save type
@@ -676,7 +674,7 @@ class SettingsController extends AdminAbstractController
             return $this->adminJson([]);
         }
 
-        $excludeMainSite = $request->get('excludeMainSite');
+        $excludeMainSite = $request->query->getInt('excludeMainSite');
 
         $sitesList = new Model\Site\Listing();
         $sitesObjects = $sitesList->load();

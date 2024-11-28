@@ -31,17 +31,15 @@ trait ApplySchedulerDataTrait
         /** @var AdminAbstractController $this */
 
         // scheduled tasks
-        if ($request->get('scheduler')) {
+        if ($request->request->has('scheduler')) {
             $tasks = [];
-            $tasksData = $this->decodeJson($request->get('scheduler'));
+            $tasksData = $this->decodeJson($request->request->getString('scheduler'));
 
-            if (!empty($tasksData)) {
-                foreach ($tasksData as $taskData) {
-                    $taskData['userId'] = $this->getAdminUser()->getId();
+            foreach ($tasksData as $taskData) {
+                $taskData['userId'] = $this->getAdminUser()->getId();
 
-                    $task = new Task($taskData);
-                    $tasks[] = $task;
-                }
+                $task = new Task($taskData);
+                $tasks[] = $task;
             }
 
             if ($element->isAllowed('settings') && method_exists($element, 'setScheduledTasks')) {

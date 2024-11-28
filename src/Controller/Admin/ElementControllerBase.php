@@ -59,13 +59,9 @@ abstract class ElementControllerBase extends AdminAbstractController
      */
     public function treeGetRootAction(Request $request): JsonResponse
     {
-        $type = $request->get('elementType');
+        $type = $request->query->getString('elementType');
         $allowedTypes = ['asset', 'document', 'object'];
-
-        $id = 1;
-        if ($request->get('id')) {
-            $id = (int)$request->get('id');
-        }
+        $id = $request->query->getInt('id', 1);
 
         if (in_array($type, $allowedTypes)) {
             $root = Service::getElementById($type, $id);

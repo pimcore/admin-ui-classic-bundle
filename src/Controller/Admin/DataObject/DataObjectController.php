@@ -89,8 +89,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     public function treeGetChildrenByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
-        $filter = $request->get('filter');
-        $object = DataObject::getById((int) $request->get('node'));
+        $filter = $request->query->getString('filter');
+        $object = DataObject::getById($request->query->getInt('node'));
         $objectTypes = [DataObject::OBJECT_TYPE_OBJECT, DataObject::OBJECT_TYPE_FOLDER];
         $objects = [];
         $cv = [];
@@ -104,10 +104,10 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         }
 
         if ($object->hasChildren($objectTypes)) {
-            $offset = (int)$request->get('start');
-            $limit = (int)$request->get('limit', 100000000);
-            if ($view = $request->get('view', '')) {
-                $cv = $this->elementService->getCustomViewById($request->get('view'));
+            $offset = $request->query->getInt('start');
+            $limit = $request->query->getInt('limit', 100000000);
+            if ($view = $request->query->getString('view')) {
+                $cv = $this->elementService->getCustomViewById($view);
             }
 
             if (!is_null($filter)) {
@@ -180,9 +180,9 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 'total' => $total,
                 'overflow' => !is_null($filter) && ($filteredTotalCount > $limit),
                 'nodes' => $objects,
-                'fromPaging' => (int)$request->get('fromPaging'),
-                'filter' => $request->get('filter') ? $request->get('filter') : '',
-                'inSearch' => (int)$request->get('inSearch'),
+                'fromPaging' => $request->query->getInt('fromPaging'),
+                'filter' => $request->query->getString('filter'),
+                'inSearch' => $request->query->getInt('inSearch'),
             ]);
         }
 
@@ -756,7 +756,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
      */
     public function getFolderAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
-        $objectId = (int)$request->get('id');
+        $objectId = $request->query->getInt('id');
         $object = DataObject::getById($objectId);
 
         if (!$object) {
@@ -1595,7 +1595,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     {
         DataObject::setDoNotRestoreKeyAndPath(true);
 
-        $id = (int)$request->get('id');
+        $id = $request->query->getInt('id');
         $version = Model\Version::getById($id);
         $object = $version?->loadData();
 

@@ -372,7 +372,7 @@ class UserController extends AdminAbstractController implements KernelController
      */
     public function getAction(Request $request): JsonResponse
     {
-        $userId = (int)$request->get('id');
+        $userId = $request->query->getInt('id');
         if ($userId < 1) {
             throw $this->createNotFoundException();
         }
@@ -477,7 +477,7 @@ class UserController extends AdminAbstractController implements KernelController
      */
     public function getMinimalAction(Request $request): JsonResponse
     {
-        $user = User::getById((int)$request->get('id'));
+        $user = User::getById($request->query->getInt('id'));
 
         if (!$user) {
             throw $this->createNotFoundException();
@@ -696,7 +696,7 @@ class UserController extends AdminAbstractController implements KernelController
      */
     public function roleGetAction(Request $request): JsonResponse
     {
-        $role = User\Role::getById((int)$request->get('id'));
+        $role = User\Role::getById($request->query->getInt('id'));
 
         if (!$role) {
             throw $this->createNotFoundException();
@@ -1124,12 +1124,13 @@ class UserController extends AdminAbstractController implements KernelController
 
     protected function getUserId(Request $request): int
     {
-        if ($request->get('id')) {
-            if ($this->getAdminUser()->getId() != $request->get('id')) {
+        $userId = $request->query->getInt('id');
+        if ($userId) {
+            if ($this->getAdminUser()->getId() != $userId) {
                 $this->checkPermission('users');
             }
 
-            return (int) $request->get('id');
+            return $userId;
         }
 
         return $this->getAdminUser()->getId();

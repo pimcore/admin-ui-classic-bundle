@@ -128,7 +128,7 @@ class AssetHelperController extends AdminAbstractController
      */
     public function gridDeleteColumnConfigAction(Request $request): JsonResponse
     {
-        $gridConfigId = (int) $request->get('gridConfigId');
+        $gridConfigId = $request->request->getInt('gridConfigId');
         $gridConfig = GridConfig::getById($gridConfigId);
         $success = false;
         if ($gridConfig) {

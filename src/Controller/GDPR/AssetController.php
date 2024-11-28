@@ -73,7 +73,7 @@ class AssetController extends AdminAbstractController implements KernelControlle
      */
     public function exportAssetsAction(Request $request, Assets $service): Response
     {
-        $asset = Asset::getById((int) $request->get('id'));
+        $asset = Asset::getById($request->query->getInt('id'));
         if (!$asset) {
             throw $this->createNotFoundException('Asset not found');
         }

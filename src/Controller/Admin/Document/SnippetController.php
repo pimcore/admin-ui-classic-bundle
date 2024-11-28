@@ -37,7 +37,7 @@ class SnippetController extends DocumentControllerBase
      */
     public function getDataByIdAction(Request $request): JsonResponse
     {
-        $snippet = Document\Snippet::getById((int)$request->get('id'));
+        $snippet = Document\Snippet::getById($request->query->getInt('id'));
 
         if (!$snippet) {
             throw $this->createNotFoundException('Snippet not found');
@@ -87,7 +87,7 @@ class SnippetController extends DocumentControllerBase
      */
     public function saveAction(Request $request): JsonResponse
     {
-        $snippet = Document\Snippet::getById((int) $request->get('id'));
+        $snippet = Document\Snippet::getById($request->request->getInt('id'));
         if (!$snippet) {
             throw $this->createNotFoundException('Snippet not found');
         }
@@ -101,8 +101,8 @@ class SnippetController extends DocumentControllerBase
             $snippet = $this->getLatestVersion($snippet);
         }
 
-        if ($request->get('missingRequiredEditable') !== null) {
-            $snippet->setMissingRequiredEditable(($request->get('missingRequiredEditable') == 'true') ? true : false);
+        if ($request->request->has('missingRequiredEditable')) {
+            $snippet->setMissingRequiredEditable($request->request->getBoolean('missingRequiredEditable'));
         }
 
         [$task, $snippet, $version] = $this->saveDocument($snippet, $request);

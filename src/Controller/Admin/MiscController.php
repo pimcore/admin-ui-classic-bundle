@@ -85,7 +85,7 @@ class MiscController extends AdminAbstractController
      */
     public function jsonTranslationsSystemAction(Request $request, TranslatorInterface $translator): Response
     {
-        $language = $request->get('language');
+        $language = $request->query->getString('language');
 
         /** @var Translator $translator */
         $translator->lazyInitialize('admin', $language);

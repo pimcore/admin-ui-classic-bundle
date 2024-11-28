@@ -68,7 +68,7 @@ class PimcoreUsersController extends AdminAbstractController implements KernelCo
     public function exportUserDataAction(Request $request, PimcoreUsers $pimcoreUsers): JsonResponse
     {
         $this->checkPermission('users');
-        $userData = $pimcoreUsers->getExportData((int)$request->get('id'));
+        $userData = $pimcoreUsers->getExportData($request->query->getInt('id'));
 
         $json = $this->encodeJson($userData, [], JsonResponse::DEFAULT_ENCODING_OPTIONS | JSON_PRETTY_PRINT);
         $jsonResponse = new JsonResponse($json, 200, [

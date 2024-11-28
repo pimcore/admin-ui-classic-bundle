@@ -42,7 +42,7 @@ class TagsController extends AdminAbstractController
         try {
             $tag = new Tag();
             $tag->setName(strip_tags($request->get('text', '')));
-            $tag->setParentId((int)$request->get('parentId'));
+            $tag->setParentId($request->request->getInt('parentId'));
             $tag->save();
 
             return $this->adminJson(['success' => true, 'id' => $tag->getId()]);

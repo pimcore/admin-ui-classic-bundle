@@ -40,7 +40,7 @@ class LinkController extends DocumentControllerBase
      */
     public function getDataByIdAction(Request $request, SerializerInterface $serializer): JsonResponse
     {
-        $link = Document\Link::getById((int)$request->get('id'));
+        $link = Document\Link::getById($request->query->getInt('id'));
 
         if (!$link) {
             throw $this->createNotFoundException('Link not found');
@@ -80,7 +80,7 @@ class LinkController extends DocumentControllerBase
      */
     public function saveAction(Request $request): JsonResponse
     {
-        $link = Document\Link::getById((int) $request->get('id'));
+        $link = Document\Link::getById($request->request->getInt('id'));
         if (!$link) {
             throw $this->createNotFoundException('Link not found');
         }

@@ -256,7 +256,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $cv = [];
         $asset = Asset::getById((int) $allParams['node']);
 
-        $filter = $request->get('filter');
+        $filter = $request->query->getString('filter');
         $limit = (int)$allParams['limit'];
         if (!is_null($filter)) {
             if (substr($filter, -1) != '*') {
@@ -328,8 +328,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 'total' => $asset->getChildAmount($this->getAdminUser()),
                 'overflow' => !is_null($filter) && ($filteredTotalCount > $limit),
                 'nodes' => $assets,
-                'filter' => $request->get('filter') ? $request->get('filter') : '',
-                'inSearch' => (int)$request->get('inSearch'),
+                'filter' => $request->query->getString('filter'),
+                'inSearch' => $request->query->getInt('inSearch'),
             ]);
         } else {
             return $this->adminJson($assets);
@@ -399,10 +399,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      */
     public function existsAction(Request $request): JsonResponse
     {
-        $parentAsset = \Pimcore\Model\Asset::getById((int)$request->get('parentId'));
+        $parentAsset = \Pimcore\Model\Asset::getById($request->query->getInt('parentId'));
 
         return new JsonResponse([
-            'exists' => Asset\Service::pathExists($parentAsset->getRealFullPath().'/'.$request->get('filename')),
+            'exists' => Asset\Service::pathExists($parentAsset->getRealFullPath().'/'.$request->query->getString('filename')),
         ]);
     }
 
@@ -628,7 +628,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     public function addFolderAction(Request $request): JsonResponse
     {
         $success = false;
-        $parentAsset = Asset::getById((int)$request->get('parentId'));
+        $parentAsset = Asset::getById($request->request->getInt('parentId'));
         $equalAsset = Asset::getByPath($parentAsset->getRealFullPath() . '/' . $request->get('name'));
 
         if ($parentAsset->isAllowed('create')) {
@@ -926,7 +926,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      */
     public function showVersionAction(Request $request, Environment $twig): Response
     {
-        $id = (int)$request->get('id');
+        $id = $request->query->getInt('id');
         $version = Model\Version::getById($id);
         $asset = $version?->loadData();
         if (!$asset) {
@@ -1128,7 +1128,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      */
     public function getAssetAction(Request $request): StreamedResponse
     {
-        $image = Asset::getById((int)$request->get('id'));
+        $image = Asset::getById($request->query->getInt('id'));
 
         if (!$image) {
             throw $this->createNotFoundException('Asset not found');
@@ -1161,7 +1161,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     public function getImageThumbnailAction(Request $request): BinaryFileResponse|JsonResponse|StreamedResponse
     {
         $fileinfo = $request->get('fileinfo');
-        $image = Asset\Image::getById((int)$request->get('id'));
+        $image = Asset\Image::getById($request->query->getInt('id'));
 
         if (!$image) {
             throw $this->createNotFoundException('Asset not found');
@@ -1251,8 +1251,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     {
         $folder = null;
 
-        if ($request->get('id')) {
-            $folder = Asset\Folder::getById((int)$request->get('id'));
+        if ($request->query->has('id')) {
+            $folder = Asset\Folder::getById($request->query->getInt('id'));
             if ($folder instanceof  Asset\Folder) {
                 if (!$folder->isAllowed('view')) {
                     throw $this->createAccessDeniedException('not allowed to view thumbnail');
@@ -1286,9 +1286,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $video = null;
 
         if ($request->get('id')) {
-            $video = Asset\Video::getById((int)$request->get('id'));
-        } elseif ($request->get('path')) {
-            $video = Asset\Video::getByPath($request->get('path'));
+            $video = Asset\Video::getById($request->query->getInt('id'));
+        } elseif ($request->query->has('path')) {
+            $video = Asset\Video::getByPath($request->query->getString('path'));
         }
 
         if (!$video) {
@@ -1358,7 +1358,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
      */
     public function getDocumentThumbnailAction(Request $request): BinaryFileResponse|StreamedResponse
     {
-        $document = Asset\Document::getById((int)$request->get('id'));
+        $document = Asset\Document::getById($request->query->getInt('id'));
 
         if (!$document) {
             throw $this->createNotFoundException('could not load document asset');

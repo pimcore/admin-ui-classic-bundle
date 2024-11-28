@@ -101,7 +101,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $classes = $classesList->load();
 
         // filter classes
-        if ($request->get('createAllowed')) {
+        if ($request->query->getBoolean('createAllowed')) {
             $tmpClasses = [];
             foreach ($classes as $class) {
                 if ($this->getAdminUser()->isAllowed($class->getId(), 'class')) {
@@ -111,8 +111,8 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $classes = $tmpClasses;
         }
 
-        $withId = $request->get('withId');
-        $useTitle = $request->get('useTitle');
+        $withId = $request->query->has('withId');
+        $useTitle = $request->query->has('useTitle');
         $getClassConfig = function ($class) use ($defaultIcon, $withId, $useTitle) {
             $text = $class->getName();
             if ($useTitle) {
@@ -180,7 +180,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
             array_multisort($types, SORT_ASC, array_keys($groups), SORT_ASC, $groups);
         }
 
-        if (!$request->get('grouped')) {
+        if (!$request->query->getInt('grouped')) {
             // list output
             foreach ($groups as $groupName => $groupData) {
                 foreach ($groupData['classes'] as $class) {

@@ -110,7 +110,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     protected function addPropertiesToDocument(Request $request, Model\Document $document): void
     {
         // properties
-        if ($request->get('properties')) {
+        if ($request->request->has('properties')) {
             $properties = [];
             // assign inherited properties
             foreach ($document->getProperties() as $p) {
@@ -119,7 +119,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
                 }
             }
 
-            $propertiesData = $this->decodeJson($request->get('properties'));
+            $propertiesData = $this->decodeJson($request->request->getString('properties'));
 
             if (is_array($propertiesData)) {
                 foreach ($propertiesData as $propertyName => $propertyData) {
@@ -155,9 +155,9 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
     protected function addSettingsToDocument(Request $request, Model\Document $document): void
     {
         // settings
-        if ($request->get('settings')) {
+        if ($request->request->has('settings')) {
             if ($document->isAllowed('settings')) {
-                $settings = $this->decodeJson($request->get('settings'));
+                $settings = $this->decodeJson($request->request->getString('settings'));
 
                 if (array_key_exists('prettyUrl', $settings)) {
                     $settings['prettyUrl'] = htmlspecialchars($settings['prettyUrl']);
@@ -210,7 +210,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      */
     public function saveToSessionAction(Request $request): JsonResponse
     {
-        if ($documentId = (int) $request->get('id')) {
+        if ($documentId = $request->request->getInt('id')) {
             if (!$document = Model\Document\Service::getElementFromSession('document', $documentId, $request->getSession()->getId())) {
                 $document = Model\Document\PageSnippet::getById($documentId);
                 if (!$document) {
@@ -263,7 +263,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      */
     public function removeFromSessionAction(Request $request): JsonResponse
     {
-        Model\Document\Service::removeElementFromSession('document', $request->get('id'), $request->getSession()->getId());
+        Model\Document\Service::removeElementFromSession('document', $request->request->getInt('id'), $request->getSession()->getId());
 
         return $this->adminJson(['success' => true]);
     }
@@ -313,7 +313,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      */
     public function changeMainDocumentAction(Request $request): JsonResponse
     {
-        $doc = Model\Document\PageSnippet::getById((int) $request->get('id'));
+        $doc = Model\Document\PageSnippet::getById($request->request->getInt('id'));
         if ($doc instanceof Model\Document\PageSnippet) {
             $doc->setEditables([]);
             $doc->setContentMainDocumentId($request->get('contentMainDocumentPath'), true);
@@ -372,7 +372,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
         $document->setModificationDate(time());
         $document->setUserModification($this->getAdminUser()->getId());
 
-        $task = strtolower($task ?? $request->get('task'));
+        $task = strtolower($task ?? $request->query->getString('task'));
         $version = null;
         switch ($task) {
             case $task === self::TASK_PUBLISH && $document->isAllowed($task):

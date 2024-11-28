@@ -36,7 +36,7 @@ class HardlinkController extends DocumentControllerBase
      */
     public function getDataByIdAction(Request $request): JsonResponse
     {
-        $link = Document\Hardlink::getById((int)$request->get('id'));
+        $link = Document\Hardlink::getById($request->query->getInt('id'));
 
         if (!$link) {
             throw $this->createNotFoundException('Hardlink not found');
@@ -76,7 +76,7 @@ class HardlinkController extends DocumentControllerBase
      */
     public function saveAction(Request $request): JsonResponse
     {
-        $link = Document\Hardlink::getById((int) $request->get('id'));
+        $link = Document\Hardlink::getById($request->request->getInt('id'));
         if (!$link) {
             throw $this->createNotFoundException('Hardlink not found');
         }

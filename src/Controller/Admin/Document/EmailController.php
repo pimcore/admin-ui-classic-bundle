@@ -36,7 +36,7 @@ class EmailController extends DocumentControllerBase
      */
     public function getDataByIdAction(Request $request): JsonResponse
     {
-        $email = Document\Email::getById((int)$request->get('id'));
+        $email = Document\Email::getById($request->query->getInt('id'));
 
         if (!$email) {
             throw $this->createNotFoundException('Email not found');
@@ -77,7 +77,7 @@ class EmailController extends DocumentControllerBase
      */
     public function saveAction(Request $request): JsonResponse
     {
-        $page = Document\Email::getById((int) $request->get('id'));
+        $page = Document\Email::getById($request->request->getInt('id'));
         if (!$page) {
             throw $this->createNotFoundException('Email not found');
         }

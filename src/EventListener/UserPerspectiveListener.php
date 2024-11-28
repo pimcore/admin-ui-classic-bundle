@@ -69,7 +69,7 @@ class UserPerspectiveListener implements EventSubscriberInterface, LoggerAwareIn
     protected function setRequestedPerspective(User $user, Request $request): void
     {
         // update perspective settings
-        $requestedPerspective = $request->get('perspective');
+        $requestedPerspective = $request->query->getString('perspective');
 
         if ($requestedPerspective) {
             if ($requestedPerspective !== $user->getActivePerspective()) {

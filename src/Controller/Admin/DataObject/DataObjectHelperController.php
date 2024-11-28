@@ -62,7 +62,7 @@ class DataObjectHelperController extends AdminAbstractController
      */
     public function loadObjectDataAction(Request $request): JsonResponse
     {
-        $object = DataObject::getById((int) $request->get('id'));
+        $object = DataObject::getById($request->query->getInt('id'));
         $result = [];
         if ($object) {
             $result['success'] = true;

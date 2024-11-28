@@ -571,8 +571,8 @@ class ElementController extends AdminAbstractController
      */
     public function getVersionsAction(Request $request): JsonResponse
     {
-        $id = (int)$request->get('id');
-        $type = $request->get('elementType');
+        $id = $request->query->getInt('id');
+        $type = $request->query->getString('elementType');
         $allowedTypes = ['asset', 'document', 'object'];
 
         if ($id && in_array($type, $allowedTypes)) {

@@ -87,8 +87,8 @@ class ClassificationstoreController extends AdminAbstractController implements K
     {
         $this->checkPermission('classificationstore');
 
-        $keyId = (int) $request->get('keyId');
-        $groupId = (int) $request->get('groupId');
+        $keyId = $request->request->getInt('keyId');
+        $groupId = $request->request->getInt('groupId');
 
         $config = new Classificationstore\KeyGroupRelation();
         $config->setKeyId($keyId);

@@ -96,7 +96,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
      */
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
-        $document = Document::getById((int) $request->get('id'));
+        $document = Document::getById($request->query->get('id'));
 
         if (!$document) {
             throw $this->createNotFoundException('Document not found');
@@ -141,7 +141,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
 
-        $filter = $request->get('filter');
+        $filter = $request->query->getString('filter');
         $limit = (int)($allParams['limit'] ?? 100000000);
         $offset = (int)($allParams['start'] ?? 0);
 
@@ -233,8 +233,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 'limit' => $limit,
                 'total' => $document->getChildAmount($this->getAdminUser()),
                 'nodes' => $documents,
-                'filter' => $request->get('filter') ? $request->get('filter') : '',
-                'inSearch' => (int)$request->get('inSearch'),
+                'filter' => $request->query->getString('filter'),
+                'inSearch' => $request->query->getInt('inSearch'),
             ]);
         } else {
             return $this->adminJson($documents);
@@ -250,7 +250,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $errorMessage = '';
 
         // check for permission
-        $parentDocument = Document::getById((int)$request->get('parentId'));
+        $parentDocument = Document::getById($request->request->getInt('parentId'));
         $document = null;
         if ($parentDocument->isAllowed('create')) {
             $intendedPath = $parentDocument->getRealFullPath() . '/' . $request->get('key');
@@ -442,7 +442,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $data = ['success' => false];
         $allowUpdate = true;
 
-        $document = Document::getById((int) $request->get('id'));
+        $document = Document::getById($request->request->getInt('id'));
 
         $oldPath = $document->getDao()->getCurrentFullPath();
         $oldDocument = Document::getById($document->getId(), ['force' => true]);
@@ -464,7 +464,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
         if ($document->isAllowed('settings')) {
             // if the position is changed the path must be changed || also from the children
-            if ($parentId = $request->get('parentId')) {
+            if ($parentId = $request->request->getInt('parentId')) {
                 $parentDocument = Document::getById((int) $parentId);
 
                 //check if parent is changed
@@ -512,8 +512,8 @@ class DocumentController extends ElementControllerBase implements KernelControll
                 try {
                     $document->save();
 
-                    if ($request->get('index') !== null) {
-                        $this->updateIndexesOfDocumentSiblings($document, $request->get('index'));
+                    if ($request->request->has('index')) {
+                        $this->updateIndexesOfDocumentSiblings($document, $request->request->getInt('index'));
                     }
 
                     $data = [

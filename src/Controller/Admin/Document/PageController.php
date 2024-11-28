@@ -57,7 +57,7 @@ class PageController extends DocumentControllerBase
      */
     public function getDataByIdAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
     {
-        $page = Document\Page::getById((int)$request->get('id'));
+        $page = Document\Page::getById($request->query->getInt('id'));
 
         if (!$page) {
             throw $this->createNotFoundException('Page not found');
@@ -112,7 +112,7 @@ class PageController extends DocumentControllerBase
      */
     public function saveAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
     {
-        $oldPage = Document\Page::getById((int) $request->get('id'));
+        $oldPage = Document\Page::getById($request->request->getInt('id'));
         if (!$oldPage) {
             throw $this->createNotFoundException('Page not found');
         }
@@ -126,13 +126,13 @@ class PageController extends DocumentControllerBase
             $page = $this->getLatestVersion($oldPage);
         }
 
-        if ($request->get('missingRequiredEditable') !== null) {
-            $page->setMissingRequiredEditable(($request->get('missingRequiredEditable') == 'true') ? true : false);
+        if ($request->request->has('missingRequiredEditable')) {
+            $page->setMissingRequiredEditable($request->request->getBoolean('missingRequiredEditable'));
         }
 
         $settings = [];
-        if ($request->get('settings')) {
-            $settings = $this->decodeJson($request->get('settings'));
+        if ($request->request->has('settings')) {
+            $settings = $this->decodeJson($request->request->getString('settings'));
             if ($settings['published'] ?? false) {
                 $page->setMissingRequiredEditable(null);
             }
@@ -205,7 +205,7 @@ class PageController extends DocumentControllerBase
      */
     public function displayPreviewImageAction(Request $request): BinaryFileResponse
     {
-        $document = Document\Page::getById((int) $request->get('id'));
+        $document = Document\Page::getById($request->query->getInt('id'));
         if ($document instanceof Document\Page) {
             return new BinaryFileResponse($document->getPreviewImageFilesystemPath(), 200, [
                 'Content-Type' => 'image/jpg',
