@@ -90,12 +90,16 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             items: [tag.getLayoutEdit()],
             bodyStyle: "padding: 10px;"
         });
+        let width = 700;
+        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.width && fieldInfo.layout.width !== '100%') {
+            width = sumWidths(fieldInfo.layout.width, 25);
+        }
         this.editWin = new Ext.Window({
             modal: false,
             title: t("edit") + " " + fieldInfo.layout.title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: width,
             maxHeight: 600,
             autoScroll: true,
             preventRefocus: true,      // nasty hack because this is an internal property

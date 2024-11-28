@@ -208,7 +208,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
     },
 
     getColumnWidthLocalStorageKey: function (column) {
-        let context = this.context;
+        let context = { ...this.context };
         delete context.objectId;
         context.column = column;
 

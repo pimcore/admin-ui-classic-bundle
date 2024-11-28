@@ -1809,3 +1809,17 @@ function dateToServerTimezone(date) {
     return new Date(date.getTime() - diff);
 
 }
+
+function sumWidths(width1, width2) {
+    if (/^\d+$/.test(width1) && /^\d+$/.test(width2)) {
+        return parseInt(width1) + parseInt(width2);
+    }
+    if (/^\d+$/.test(width1)) {
+        width1 += 'px';
+    }
+    if (/^\d+$/.test(width2)) {
+        width2 += 'px';
+    }
+
+    return 'calc(' + width1 + ' + ' + width2 + ')';
+}

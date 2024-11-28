@@ -93,7 +93,6 @@ pimcore.document.tree = Class.create({
         }
 
         rootNodeConfig.text = rootNodeConfigText;
-        rootNodeConfig.id = "" + rootNodeConfig.id;
         rootNodeConfig.allowDrag = true;
         rootNodeConfig.iconCls = rootNodeConfigIconCls;
         rootNodeConfig.cls = "pimcore_tree_node_root";

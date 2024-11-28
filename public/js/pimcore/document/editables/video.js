@@ -20,6 +20,7 @@ pimcore.document.editables.video = Class.create(pimcore.document.editable, {
     initialize: function($super, id, name, config, data, inherited) {
         $super(id, name, config, data, inherited);
 
+        data.allowedTypes = config.allowedTypes;
         this.data = data;
     },
 

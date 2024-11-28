@@ -76,6 +76,8 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     use ApplySchedulerDataTrait;
     use UserNameTrait;
 
+    final const PDF_MIMETYPE =  'application/pdf';
+
     protected Asset\Service $_assetService;
 
     /**
@@ -481,7 +483,9 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
             $this->validateManyToManyRelationAssetType($context, $filename, $sourcePath);
 
-            $event = new ResolveUploadTargetEvent($parentId, $filename, $context);
+            $event = new ResolveUploadTargetEvent($parentId, $filename);
+            $event->setArgument('context', $context);
+
             \Pimcore::getEventDispatcher()->dispatch($event, AssetEvents::RESOLVE_UPLOAD_TARGET);
             $filename = Element\Service::getValidKey($event->getFilename(), 'asset');
             $parentId = $event->getParentId();
@@ -933,7 +937,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw $this->createAccessDeniedHttpException('Permission denied, version id [' . $id . ']');
         }
 
-        if ($asset->getMimeType() === 'application/pdf') {
+        if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
             $scanResponse = $this->getResponseByScanStatus($asset, false);
             if ($scanResponse) {
                 return $scanResponse;
@@ -1432,7 +1436,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset->isAllowed('view')) {
-            if ($asset->getMimeType() === 'application/pdf') {
+            if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
                 $scanResponse = $this->getResponseByScanStatus($asset);
                 if ($scanResponse) {
                     return $scanResponse;
@@ -1444,7 +1448,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 return new StreamedResponse(function () use ($stream) {
                     fpassthru($stream);
                 }, 200, [
-                    'Content-Type' => 'application/pdf',
+                    'Content-Type' => self::PDF_MIMETYPE,
                 ]);
             } else {
                 throw $this->createNotFoundException('Unable to get preview for asset ' . $asset->getId());
@@ -1484,7 +1488,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     {
         $stream = null;
 
-        if ($asset->getMimeType() == 'application/pdf') {
+        if ($asset->getMimeType() == self::PDF_MIMETYPE) {
             $stream = $asset->getStream();
         }
 

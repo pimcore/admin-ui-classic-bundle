@@ -23,6 +23,8 @@ pimcore.object.tags.encryptedField = Class.create(pimcore.object.tags.abstract, 
 
         if (typeof pimcore.object.tags[fieldConfig.delegateDatatype] !== "undefined") {
             var delegateFieldConfig = fieldConfig.delegate || {};
+            delegateFieldConfig.labelWidth = fieldConfig.labelWidth;
+            delegateFieldConfig.labelAlign = fieldConfig.labelAlign;
             this.delegate = new pimcore.object.tags[fieldConfig.delegateDatatype](data, delegateFieldConfig);
         }
         this.fieldConfig = fieldConfig;
