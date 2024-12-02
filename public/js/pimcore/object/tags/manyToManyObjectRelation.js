@@ -540,7 +540,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 }
             ]
         });
-            this.clearFilterButtonRelation = new Ext.Button({
+            this.clearFilterButtonRelation = Ext.create('Ext.Button', {
                 iconCls: "pimcore_icon_clear_filters",
                 hidden: true,
                 text: t("clear_filters"),
