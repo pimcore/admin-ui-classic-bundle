@@ -126,7 +126,7 @@ pimcore.object.gridcolumn.operator.versiongetter = Class.create(pimcore.object.g
         this.node.set('isOperator', true);
 
         this.window.close();
-        if (params && params.callback) {
+        if (params?.callback) {
             params.callback();
         }
     },
