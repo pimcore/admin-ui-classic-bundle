@@ -128,7 +128,7 @@ pimcore.treenodelocator = function()
                             fullPath: res.fullpath,  // mind lower case here!
                             typePath: res.typePath,
                             sortIndexPath: res.sortIndexPath,
-                            pathIds: res.idPath.replace(/^\//, "").split("/"),
+                            pathIds: res.idPath.replace(/^\//, "").split("/").map(Number),
                             elementType: elementType,
                             locateConfigs: locateConfigs,
                             currentTreeIndex: 0
@@ -260,7 +260,7 @@ pimcore.treenodelocator = function()
             if (pagingData) {
 
                 var nodePath = node.getPath();
-                var nodePathIds = nodePath.replace(/^\//, "").split("/");
+                var nodePathIds = nodePath.replace(/^\//, "").split("/").map(Number);
                 var childNodeId = treeState.pathIds[nodePathIds.length];
                 var total = parseInt(pagingData.total);
                 var limit = parseInt(pagingData.limit);
@@ -281,12 +281,12 @@ pimcore.treenodelocator = function()
 
                 // elementKey (from fullPath):
                 if (globalState.elementType == "document") {
-                    var sortIndexParts = globalState.sortIndexPath.replace(/^\//, "").split("/");
+                    var sortIndexParts = globalState.sortIndexPath.replace(/^\//, "").split("/").map(Number);
                     let sortIndexPath = sortIndexParts[pos];
                     var elementKey = sortIndexPath;
                 } else {
                     if (sortBy == "index") {
-                        var sortIndexParts = globalState.sortIndexPath.replace(/^\//, "").split("/");
+                        var sortIndexParts = globalState.sortIndexPath.replace(/^\//, "").split("/").map(Number);
                         let sortIndexPath = sortIndexParts[pos];
                         var elementKey = sortIndexPath;
                     } else {
