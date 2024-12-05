@@ -75,10 +75,6 @@ final class DefaultValue extends AbstractValue
             }
         }
 
-        if ($value instanceof ElementInterface) {
-            $value = $value->getFullPath();
-        }
-
         if (!$fieldDefinition instanceof Data) {
             return $this->getDefaultValue($value);
         }
