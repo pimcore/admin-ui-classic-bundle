@@ -609,14 +609,14 @@ class GridHelperService
 
         if (isset($requestParams['only_direct_children']) && $requestParams['only_direct_children'] === 'true') {
             $conditionFilters[] = 'parentId = ' . $folder->getId();
-        } else {
-            $quotedPath = $list->quote($folder->getRealFullPath());
-            $quotedWildcardPath = $list->quote($list->escapeLike(str_replace('//', '/', $folder->getRealFullPath() . '/')) . '%');
-            $conditionFilters[] = '(`path` = ' . $quotedPath . ' OR `path` like ' . $quotedWildcardPath . ')';
         }
 
         if (!$adminUser->isAdmin()) {
             $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
+        } else {
+            $quotedPath = $list->quote($folder->getRealFullPath());
+            $quotedWildcardPath = $list->quote($list->escapeLike(str_replace('//', '/', $folder->getRealFullPath() . '/')) . '%');
+            $conditionFilters[] = '(`path` = ' . $quotedPath . ' OR `path` like ' . $quotedWildcardPath . ')';
         }
 
         $featureJoins = [];
@@ -943,14 +943,14 @@ class GridHelperService
                 $exceptions = '';
                 $folderSuffix = '';
                 if ($allowedPaths) {
-                    $exceptionsConcat = implode("%' OR `path` LIKE '", $allowedPaths);
-                    $exceptions = " OR (`path` LIKE '" . $exceptionsConcat . "%')";
+                    $exceptionsConcat = implode("%' OR CONCAT(`path`,`key`) LIKE '", $allowedPaths);
+                    $exceptions = " OR (CONCAT(`path`,`key`) LIKE '" . $exceptionsConcat . "%')";
                     $folderSuffix = '/'; //if allowed children are found, the current folder is listable but its content is still blocked, can easily done by adding a trailing slash
                 }
-                $forbiddenPathSql[] = ' (`path` NOT LIKE ' . $db->quote($forbiddenPath . $folderSuffix . '%') . $exceptions . ') ';
+                $forbiddenPathSql[] = ' (CONCAT(`path`,`key`) NOT LIKE ' . $db->quote($forbiddenPath . $folderSuffix . '%') . $exceptions . ') ';
             }
             foreach ($elementPaths['allowed'] as $allowedPaths) {
-                $allowedPathSql[] = ' `path` LIKE ' . $db->quote($allowedPaths  . '%');
+                $allowedPathSql[] = ' CONCAT(`path`,`key`) LIKE ' . $db->quote($allowedPaths  . '%');
             }
 
             // this is to avoid query error when implode is empty.
