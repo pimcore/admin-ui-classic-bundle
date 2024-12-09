@@ -924,6 +924,39 @@ class GridHelperService
         return $response;
     }
 
+    private function optimizedConcatLike(string $fullpath): string
+    {
+        //CONCAT(`path`,`key`) LIKE '" . $fullpath . "%'
+        $pathParts = explode('/', $fullpath);
+        $leaf = array_pop($pathParts);
+        $path = implode('/', $pathParts);
+
+        return '(
+            (`path` = "' . $path . '/" AND `key` = "' . $leaf . '")
+            OR
+            `path` LIKE "' . $fullpath . '/%"
+        )';
+    }
+
+    private function optimizedConcatNotLike(string $fullpath, $onlyChildren = false): string
+    {
+        //CONCAT(`path`,`key`) NOT LIKE '" . $fullpath . "%'
+        $pathParts = explode('/', $fullpath);
+        $leaf = array_pop($pathParts);
+        $path = implode('/', $pathParts);
+
+        if ($onlyChildren){
+            return '`path` NOT LIKE "' . $fullpath . '/%"';
+        }
+
+        return '(
+            (`path` != "' . $path . '/" AND `key` != "' . $leaf . '")
+            AND
+            `path` NOT LIKE "' . $fullpath . '/%"
+        )';
+
+    }
+
     /**
      *
      *
@@ -931,27 +964,30 @@ class GridHelperService
      */
     protected function getPermittedPathsByUser(string $type, User $user): string
     {
-        $db = Db::get();
-
         $allowedTypes = [];
 
         if ($user->isAllowed($type . 's')) { //the permissions are just plural
             $elementPaths = Service::findForbiddenPaths($type, $user);
-
+            $onlyChildren = false;
             $forbiddenPathSql = [];
             $allowedPathSql = [];
             foreach ($elementPaths['forbidden'] as $forbiddenPath => $allowedPaths) {
                 $exceptions = '';
-                $folderSuffix = '';
                 if ($allowedPaths) {
-                    $exceptionsConcat = implode("%' OR CONCAT(`path`,`key`) LIKE '", $allowedPaths);
-                    $exceptions = " OR (CONCAT(`path`,`key`) LIKE '" . $exceptionsConcat . "%')";
-                    $folderSuffix = '/'; //if allowed children are found, the current folder is listable but its content is still blocked, can easily done by adding a trailing slash
+                    $exceptionsConcat = '';
+                    foreach ($allowedPaths as $path){
+                        if ($exceptionsConcat !== '') {
+                            $exceptionsConcat.= ' OR ';
+                        }
+                        $exceptionsConcat.= $this->optimizedConcatLike($path);
+                    }
+                    $exceptions = " OR (" . $exceptionsConcat . ")";
+                    $onlyChildren = true; //if allowed children are found, the current folder can be listed but its content is still blocked, can easily done by adding a trailing slash
                 }
-                $forbiddenPathSql[] = ' (CONCAT(`path`,`key`) NOT LIKE ' . $db->quote($forbiddenPath . $folderSuffix . '%') . $exceptions . ') ';
+                $forbiddenPathSql[] = $this->optimizedConcatNotLike($forbiddenPath, $onlyChildren) . $exceptions;
             }
             foreach ($elementPaths['allowed'] as $allowedPaths) {
-                $allowedPathSql[] = ' CONCAT(`path`,`key`) LIKE ' . $db->quote($allowedPaths  . '%');
+                $allowedPathSql[] = $this->optimizedConcatLike($allowedPaths );
             }
 
             // this is to avoid query error when implode is empty.
