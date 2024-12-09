@@ -609,15 +609,16 @@ class GridHelperService
 
         if (isset($requestParams['only_direct_children']) && $requestParams['only_direct_children'] === 'true') {
             $conditionFilters[] = 'parentId = ' . $folder->getId();
-        }
-
-        if (!$adminUser->isAdmin()) {
-            $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
         } else {
             $quotedPath = $list->quote($folder->getRealFullPath());
             $quotedWildcardPath = $list->quote($list->escapeLike(str_replace('//', '/', $folder->getRealFullPath() . '/')) . '%');
             $conditionFilters[] = '(`path` = ' . $quotedPath . ' OR `path` like ' . $quotedWildcardPath . ')';
         }
+
+        if (!$adminUser->isAdmin()) {
+            $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
+        }
+
 
         $featureJoins = [];
         $slugJoins = [];
