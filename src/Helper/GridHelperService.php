@@ -938,7 +938,7 @@ class GridHelperService
         )';
     }
 
-    private function optimizedConcatNotLike(string $fullpath, $onlyChildren = false): string
+    private function optimizedConcatNotLike(string $fullpath, bool $onlyChildren = false): string
     {
         //CONCAT(`path`,`key`) NOT LIKE '" . $fullpath . "%'
         $pathParts = explode('/', $fullpath);
