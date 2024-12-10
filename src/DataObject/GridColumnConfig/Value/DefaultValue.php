@@ -123,7 +123,7 @@ final class DefaultValue extends AbstractValue
                     $csFieldDefinition = $object->getClass()->getFieldDefinition($field);
                     $csLanguage = $this->localeService->getLocale();
 
-                    if (!$csFieldDefinition->isLocalized()) {
+                    if ($csLanguage === null || !$csFieldDefinition->isLocalized()) {
                         $csLanguage = 'default';
                     }
 
