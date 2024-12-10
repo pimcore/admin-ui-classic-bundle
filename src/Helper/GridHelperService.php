@@ -619,7 +619,6 @@ class GridHelperService
             $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
         }
 
-
         $featureJoins = [];
         $slugJoins = [];
         $featureAndSlugFilters = [];
@@ -924,9 +923,11 @@ class GridHelperService
         return $response;
     }
 
+    /**
+     * A more performant alternative to "CONCAT(`path`,`key`) LIKE $fullpath"
+     */
     private function optimizedConcatLike(string $fullpath): string
     {
-        //CONCAT(`path`,`key`) LIKE '" . $fullpath . "%'
         $pathParts = explode('/', $fullpath);
         $leaf = array_pop($pathParts);
         $path = implode('/', $pathParts);
@@ -938,9 +939,12 @@ class GridHelperService
         )';
     }
 
+    /**
+     * A more performant alternative to "CONCAT(`path`,`key`) NOT LIKE $fullpath"
+     * Set $onlyChildren to true when you want to exclude the folder/element itself
+     */
     private function optimizedConcatNotLike(string $fullpath, bool $onlyChildren = false): string
     {
-        //CONCAT(`path`,`key`) NOT LIKE '" . $fullpath . "%'
         $pathParts = explode('/', $fullpath);
         $leaf = array_pop($pathParts);
         $path = implode('/', $pathParts);
@@ -982,7 +986,8 @@ class GridHelperService
                         $exceptionsConcat.= $this->optimizedConcatLike($path);
                     }
                     $exceptions = " OR (" . $exceptionsConcat . ")";
-                    $onlyChildren = true; //if allowed children are found, the current folder can be listed but its content is still blocked, can easily done by adding a trailing slash
+                    //if any allowed child is found, the current folder can be listed but its content is still blocked
+                    $onlyChildren = true;
                 }
                 $forbiddenPathSql[] = $this->optimizedConcatNotLike($forbiddenPath, $onlyChildren) . $exceptions;
             }
@@ -1008,7 +1013,7 @@ class GridHelperService
 
             $forbiddenAndAllowedSql.= ' )';
 
-            $allowedTypes[] = $forbiddenAndAllowedSql;
+                $allowedTypes[] = $forbiddenAndAllowedSql;
         }
 
         //if allowedTypes is still empty after getting the workspaces, it means that there are no any main permissions set
