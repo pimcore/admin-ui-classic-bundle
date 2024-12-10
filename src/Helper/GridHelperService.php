@@ -1013,7 +1013,7 @@ class GridHelperService
 
             $forbiddenAndAllowedSql.= ' )';
 
-                $allowedTypes[] = $forbiddenAndAllowedSql;
+            $allowedTypes[] = $forbiddenAndAllowedSql;
         }
 
         //if allowedTypes is still empty after getting the workspaces, it means that there are no any main permissions set
