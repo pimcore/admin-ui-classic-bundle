@@ -59,6 +59,7 @@ var Class = (function() {
 
     function addMethods(source) {
         var ancestor = this.superclass && this.superclass.prototype;
+        const self = this.prototype;
         var properties = Object.keys(source);
 
         for ( var i = 0, length = properties.length; i < length; i++) {
@@ -68,8 +69,23 @@ var Class = (function() {
                 var method = value;
 
                 value = wrap.bind((function(m) {
+                    const method = ancestor[m];
                     return function() {
-                        return ancestor[m].apply(this, arguments);
+                        return method.apply(this, arguments);
+                    };
+                })(property))(method);
+
+                value.valueOf = method.valueOf.bind(method);
+                value.toString = method.toString.bind(method);
+            } else if (self && isFunction(value)
+                // TODO: reduce copy and patin here
+                && argumentNames(value)[0] == "$this") {
+                var method = value;
+
+                value = wrap.bind((function(m) {
+                    const method = self[m];
+                    return function() {
+                        return method.apply(this, arguments);
                     };
                 })(property))(method);
 
