@@ -64,9 +64,9 @@ var Class = (function() {
 
         for ( var i = 0, length = properties.length; i < length; i++) {
             var property = properties[i], value = source[property];
+            const method = value;
             if (ancestor && isFunction(value)
                     && argumentNames(value)[0] == "$super") {
-                var method = value;
 
                 value = wrap.bind((function(m) {
                     const method = ancestor[m];
@@ -78,10 +78,8 @@ var Class = (function() {
                 value.valueOf = method.valueOf.bind(method);
                 value.toString = method.toString.bind(method);
             } else if (self && isFunction(value)
-                // TODO: reduce copy and patin here
                 && argumentNames(value)[0] == "$this") {
-                var method = value;
-
+                // TODO: reduce copy and pasting here
                 value = wrap.bind((function(m) {
                     const method = self[m];
                     return function() {
