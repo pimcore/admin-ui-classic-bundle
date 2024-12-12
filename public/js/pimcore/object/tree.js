@@ -275,7 +275,10 @@ pimcore.registerNS("pimcore.object.tree");
                      this.onTreeNodeMove(record, record.parentNode, overModel, 0);
                  }
              }.bind(this));
+         }
 
+         // recheck wheter the getOwnerTree is a function after reassignment onTreeNodeMove()
+         if (typeof this.treeNodeMoveParameter.oldParent.getOwnerTree !== "function") {
              return;
          }
 
@@ -361,7 +364,7 @@ pimcore.registerNS("pimcore.object.tree");
          }
 
          // dropping objects not allowed if the tree/folder is paginated and sort by index (manual indexes) is enabled
-         if(((!newParent.pagingData.canSortManually) || (newParent.childNodes.length > pimcore.settings['object_tree_paging_limit'])) && (newParent.data.sortBy == "index")){
+         if(((!newParent.pagingData?.canSortManually) || (newParent.childNodes.length > pimcore.settings['object_tree_paging_limit'])) && (newParent.data.sortBy == "index")){
              pimcore.helpers.showNotification(t("error"), t("element_cannot_be_moved_because_target_is_paginated"), "error");
              return false;
          }

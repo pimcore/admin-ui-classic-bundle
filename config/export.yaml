@@ -248,6 +248,13 @@ services:
         tags:
             - { name: pimcore.data_object.grid_column_config.operator_factory, id: Alias }
 
+    pimcore.data_object.grid_column_config.operator.factory.versiongetter:
+        class: Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator\Factory\DefaultOperatorFactory
+        arguments:
+            $className: Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator\VersionGetter
+        tags:
+            - { name: pimcore.data_object.grid_column_config.operator_factory, id: VersionGetter }
+
     pimcore.data_object.grid_column_config.operator.factory.workflowstate:
         class: Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Operator\Factory\WorkflowStateFactory
         tags:

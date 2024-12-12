@@ -205,6 +205,7 @@ pimcore.object.tags.wysiwyg = Class.create(pimcore.object.tags.abstract, {
                 e: e,
                 data: data,
                 context: "object",
+                textareaId: this.editableDivId
             },
         });
 
