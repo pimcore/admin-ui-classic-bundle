@@ -20,6 +20,23 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
     getFilterEditToolbarItems: function () {
         return [
             {
+                iconCls: "pimcore_icon_clear_filters",
+                itemId: "clearFilters",
+                hidden: true,
+                text: t("clear_filters"),
+                tooltip: t("clear_filters"),
+                handler: function (button) {
+                    this.component.filters.clearFilters();
+                    this.component.getStore().clearFilter();
+                    const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+                    if (filterInput) {
+                        filterInput.setValue('');
+                        this.hideFilterInput(filterInput);
+                    }
+                    button.hide();
+                }.bind(this)
+            },
+            {
                 xtype: 'textfield',
                 hidden: true,
                 cls: 'relations_grid_filter_input',
@@ -46,6 +63,25 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
                 handler: this.showFilterInput.bind(this)
             }
         ];
+    },
+
+    addFilterChangeListener: function() {
+        this.component.on("filterchange", function () {
+            const filterData = this.component.getStore().getFilters().items;
+
+            const hasStoreFilters = filterData.some(function (filter) {
+                return filter.getValue() !== null && filter.getValue() !== '';
+            });
+
+            const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+            const hasTextFilter = filterInput && filterInput.getValue() !== '';
+
+            if (hasStoreFilters || hasTextFilter) {
+                this.component.queryById('clearFilters').show();
+            } else {
+                this.component.queryById('clearFilters').hide();
+            }
+        }.bind(this));
     },
 
     showFilterInput: function (filterBtn) {

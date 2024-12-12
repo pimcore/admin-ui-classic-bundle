@@ -235,23 +235,6 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             }]
         });
 
-        this.clearFilterButtonRelation = new Ext.Button({
-            iconCls: "pimcore_icon_clear_filters",
-            hidden: true,
-            text: t("clear_filters"),
-            tooltip: t("clear_filters"),
-            handler: function () {
-                this.component.filters.clearFilters();
-                this.component.getStore().clearFilter();
-                const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
-                if (filterInput) {
-                    filterInput.setValue('');
-                    this.hideFilterInput(filterInput);
-                }
-                this.clearFilterButtonRelation.hide();
-            }.bind(this)
-        });
-
         this.component = new Ext.grid.GridPanel({
             store: this.store,
             border: true,
@@ -302,23 +285,6 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
         this.component.reference = this;
-
-        this.component.on("filterchange", function () {
-            const filterData = this.component.getStore().getFilters().items;
-
-            const hasStoreFilters = filterData.some(function (filter) {
-                return filter.getValue() !== null && filter.getValue() !== '';
-            });
-
-            const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
-            const hasTextFilter = filterInput && filterInput.getValue() !== '';
-
-            if (hasStoreFilters || hasTextFilter) {
-                this.clearFilterButtonRelation.show();
-            } else {
-                this.clearFilterButtonRelation.hide();
-            }
-        }.bind(this));
 
         this.component.on("afterrender", function () {
 
@@ -407,6 +373,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             });
         }.bind(this));
 
+        this.addFilterChangeListener();
+
         return this.component;
     },
 
@@ -423,7 +391,6 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
                 xtype: "tbtext",
                 text: "<b>" + this.fieldConfig.title + "</b>"
             },
-            this.clearFilterButtonRelation,
             "->"
         ];
         toolbarItems = toolbarItems.concat(this.getFilterEditToolbarItems());

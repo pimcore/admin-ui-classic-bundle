@@ -376,23 +376,6 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             });
         }
 
-        this.clearFilterButtonRelation = new Ext.Button({
-            iconCls: "pimcore_icon_clear_filters",
-            hidden: true,
-            text: t("clear_filters"),
-            tooltip: t("clear_filters"),
-            handler: function () {
-                this.component.filters.clearFilters();
-                this.component.getStore().clearFilter();
-                const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
-                if (filterInput) {
-                    filterInput.setValue('');
-                    this.hideFilterInput(filterInput);
-                }
-                this.clearFilterButtonRelation.hide();
-            }.bind(this)
-        });
-
         var toolbarItems = this.getEditToolbarItems(readOnly);
 
 
@@ -486,23 +469,6 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
         this.component.on("rowcontextmenu", this.onRowContextmenu.bind(this));
         this.component.reference = this;
-
-        this.component.on("filterchange", function () {
-            const filterData = this.component.getStore().getFilters().items;
-
-            const hasStoreFilters = filterData.some(function (filter) {
-                return filter.getValue() !== null && filter.getValue() !== '';
-            });
-
-            const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
-            const hasTextFilter = filterInput && filterInput.getValue() !== '';
-
-            if (hasStoreFilters || hasTextFilter) {
-                this.clearFilterButtonRelation.show();
-            } else {
-                this.clearFilterButtonRelation.hide();
-            }
-        }.bind(this));
 
         if (!readOnly) {
             this.component.on("afterrender", function () {
@@ -631,6 +597,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             }.bind(this));
         }
 
+        this.addFilterChangeListener();
 
         return this.component;
     },
