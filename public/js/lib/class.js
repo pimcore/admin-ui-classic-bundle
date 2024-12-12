@@ -69,9 +69,9 @@ var Class = (function() {
                     && argumentNames(value)[0] == "$super") {
 
                 value = wrap.bind((function(m) {
-                    const method = ancestor[m];
+                    const shadowMethod = ancestor[m];
                     return function() {
-                        return method.apply(this, arguments);
+                        return shadowMethod.apply(this, arguments);
                     };
                 })(property))(method);
 
@@ -81,9 +81,9 @@ var Class = (function() {
                 && argumentNames(value)[0] == "$this") {
                 // TODO: reduce copy and pasting here
                 value = wrap.bind((function(m) {
-                    const method = self[m];
+                    const shadowMethod = self[m];
                     return function() {
-                        return method.apply(this, arguments);
+                        return shadowMethod.apply(this, arguments);
                     };
                 })(property))(method);
 
