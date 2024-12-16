@@ -26,6 +26,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
                 text: t("clear_filters"),
                 handler: function (button) {
                     this.component.filters.clearFilters();
+                    this.component.getStore().clearFilter();
 
                     let columns = this.component.getColumns();
                     for (let i = 0; i < columns.length; i++) {
