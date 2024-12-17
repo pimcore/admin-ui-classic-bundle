@@ -954,7 +954,7 @@ class GridHelperService
         }
 
         return '(
-            (`path` != "' . $path . '/" AND `key` != "' . $leaf . '")
+            NOT (`path` = "' . $path . '/" AND `key` = "' . $leaf . '")
             AND
             `path` NOT LIKE "' . $fullpath . '/%"
         )';
