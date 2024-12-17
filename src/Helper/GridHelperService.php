@@ -989,7 +989,9 @@ class GridHelperService
                     //if any allowed child is found, the current folder can be listed but its content is still blocked
                     $onlyChildren = true;
                 }
-                $forbiddenPathSql[] = '(' . $this->optimizedConcatNotLike($forbiddenPath, $onlyChildren) . $exceptions . ')';
+                $forbiddenPathSql[] =
+                    '(' . $this->optimizedConcatNotLike($forbiddenPath, $onlyChildren) . $exceptions . ')'
+                ;
             }
             foreach ($elementPaths['allowed'] as $allowedPaths) {
                 $allowedPathSql[] = $this->optimizedConcatLike($allowedPaths);
