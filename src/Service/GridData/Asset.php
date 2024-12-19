@@ -37,6 +37,7 @@ class Asset extends Element
                 'id' => $asset->getId(),
                 'id~system' => $asset->getId(),
                 'type~system' => $asset->getType(),
+                'mimetype~system' => $asset->getMimeType(),
                 'fullpath~system' => $asset->getRealFullPath(),
                 'filename~system' => $asset->getKey(),
                 'creationDate~system' => $asset->getCreationDate(),
