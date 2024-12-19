@@ -256,7 +256,7 @@ pimcore.asset.helpers.grid = Class.create({
                 } else if (key == "mimetype") {
                     gridColumns.push({
                         text: t(field.label), sortable: true, dataIndex: field.key, editable: false,
-                        width: this.getColumnWidth(field, 250), locked: this.getColumnLock(field), filter: 'string', renderer: Ext.util.Format.htmlEncode
+                        width: this.getColumnWidth(field, 210), locked: this.getColumnLock(field), filter: 'string', renderer: Ext.util.Format.htmlEncode
                     });
                 } else {
                     gridColumns.push({
