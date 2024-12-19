@@ -199,7 +199,7 @@ Ext.onReady(function () {
 
         var date = new Date();
         var errorMessage = "Timestamp: " + date.toString() + "\n";
-        var errorDetailMessage = "";
+        let errorDetailMessage = "";
 
         if (response.responseText){
             errorDetailMessage += "\n" + response.responseText;
