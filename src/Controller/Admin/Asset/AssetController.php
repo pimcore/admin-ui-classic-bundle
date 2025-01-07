@@ -37,6 +37,7 @@ use Pimcore\Messenger\AssetPreviewImageMessage;
 use Pimcore\Messenger\AssetUpdateTasksMessage;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
+use Pimcore\Model\Asset\Enum\PdfScanStatus;
 use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Element;
@@ -950,10 +951,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
-            $scanResponse = $this->getResponseByScanStatus($asset, false);
-            if ($scanResponse) {
-                return $scanResponse;
-            }
+            $previewData = ['thumbnailPath' => ''];
+            $previewData['assetPath'] = $asset->getRealFullPath();
+            return $this->render(
+                '@PimcoreAdmin/admin/asset/get_preview_pdf_open_in_new_tab.html.twig',
+                $previewData
+            );
         }
 
         Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
@@ -1450,8 +1453,23 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($asset->isAllowed('view')) {
             if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
                 $scanResponse = $this->getResponseByScanStatus($asset);
-                if ($scanResponse) {
-                    return $scanResponse;
+                $openPdfConfig = Config::getSystemConfiguration('assets')['document']['open_pdf_in_new_tab'];
+
+                if ($openPdfConfig === 'all-pdfs' ||
+                ($openPdfConfig === 'only-unsafe' && $scanResponse === PdfScanStatus::UNSAFE)) {
+                    $thumbnail = $asset->getImageThumbnail(Asset\Image\Thumbnail\Config::getPreviewConfig());
+                    $previewData = ['thumbnailPath' => $thumbnail->getPath()];
+                    $previewData['assetPath'] = $asset->getRealFullPath();
+                    return $this->render(
+                        '@PimcoreAdmin/admin/asset/get_preview_pdf_open_in_new_tab.html.twig',
+                        $previewData
+                    );
+                }
+
+                if ($scanResponse === PdfScanStatus::IN_PROGRESS) {
+                    return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig');
+                } elseif ($scanResponse === PdfScanStatus::UNSAFE) {
+                    return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig');
                 }
             }
 
@@ -1470,7 +1488,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true): ?Response
+    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true): ?PdfScanStatus
     {
         if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
             return null;
@@ -1486,11 +1504,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             }
         }
 
-        return match($scanStatus) {
-            Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
-            Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
-            default => null,
-        };
+        return $scanStatus;
     }
 
     /**
