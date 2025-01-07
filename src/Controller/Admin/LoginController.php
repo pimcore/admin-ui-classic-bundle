@@ -273,7 +273,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
             } else {
                 Logger::error('Lost password service: ' . $error);
                 //to avoid timing based enumeration
-                usleep(rand(500,2000));
+                usleep(random_int(500,2000));
             }
         }
 
