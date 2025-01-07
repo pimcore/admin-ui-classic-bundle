@@ -270,21 +270,14 @@ class LoginController extends AdminAbstractController implements KernelControlle
                     Logger::error('Error sending password recovery email: ' . $e->getMessage());
                     $error = 'lost_password_email_error';
                 }
-            }
-
-            if ($error) {
+            } else {
                 Logger::error('Lost password service: ' . $error);
+                //to avoid timing based enumeration
+                usleep(rand(500,2000));
             }
         }
 
         $csrfProtection->regenerateCsrfToken($request->getSession());
-
-        if ($error) {
-            $params['reset_error'] = 'Please make sure you are entering a correct input.';
-            if ($error === 'user_reset_password_too_many_attempts') {
-                $params['reset_error'] = 'Too many attempts. Please retry later.';
-            }
-        }
 
         return $this->render('@PimcoreAdmin/admin/login/lost_password.html.twig', $params);
     }
