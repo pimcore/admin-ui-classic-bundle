@@ -613,7 +613,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                             record.set("path", originalPath);
                         }
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                            "error");
+                        "error", t(rdata.message));
                         return;
                     }
 
@@ -650,7 +650,7 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                         }
                     } catch (e) {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                            "error");
+                            "error", t(rdata.message));
                     }
                 }.bind(this))
             ;
