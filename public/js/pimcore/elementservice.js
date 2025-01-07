@@ -474,8 +474,8 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
                     document.dispatchEvent(postEditDocumentKey);
                 }  else {
-                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                        t(rdata.message));
+                    const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
+                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error", message);
                 }
             } catch (e) {
                 pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
@@ -540,8 +540,8 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
 
                         document.dispatchEvent(postEditObjectKey);
                     }  else {
-                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                            t(rdata.message));
+                        const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
+                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error", message);
                         for (index = 0; index < affectedNodes.length; index++) {
                             record = affectedNodes[index];
                             pimcore.elementservice.refreshNode(record.parentNode);
@@ -612,8 +612,10 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                             record.set("text", originalText);
                             record.set("path", originalPath);
                         }
+
+                        const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                        "error", t(rdata.message));
+                        "error", message);
                         return;
                     }
 
@@ -645,12 +647,13 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
 
                             document.dispatchEvent(postEditAssetKey);
                         }  else {
+                            const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
                             pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                "error", t(rdata.message));
+                                "error", message);
                         }
                     } catch (e) {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                            "error", t(rdata.message));
+                            "error");
                     }
                 }.bind(this))
             ;
