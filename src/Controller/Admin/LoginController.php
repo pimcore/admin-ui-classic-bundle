@@ -270,7 +270,9 @@ class LoginController extends AdminAbstractController implements KernelControlle
                     Logger::error('Error sending password recovery email: ' . $e->getMessage());
                     $error = 'lost_password_email_error';
                 }
-            } else {
+            }
+
+            if ($error) {
                 Logger::error('Lost password service: ' . $error);
                 //to avoid timing based enumeration
                 usleep(random_int(50,200));
