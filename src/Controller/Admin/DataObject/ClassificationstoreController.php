@@ -1196,6 +1196,11 @@ class ClassificationstoreController extends AdminAbstractController implements K
             $conditionParts[] = '(name LIKE ' . $db->quote('%' . $searchfilter . '%') . ' OR description LIKE ' . $db->quote('%'. $searchfilter . '%') . ')';
         }
 
+        $type = $request->get('type');
+        if ($type) {
+            $conditionParts[] = 'type = '.$db->quote($type);
+        }
+
         if ($storeId) {
             $conditionParts[] = '(storeId = '. $db->quote($storeId) . ')';
         }

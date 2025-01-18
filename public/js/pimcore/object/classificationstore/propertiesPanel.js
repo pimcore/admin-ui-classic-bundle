@@ -46,18 +46,10 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
         }
     },
 
-    createGrid: function(response) {
-        this.fields = ['storeId','id', 'name', 'description', 'type',
-            'creationDate', 'modificationDate', 'definition', 'title', 'sorter'];
-
-        var readerFields = [];
-        for (var i = 0; i < this.fields.length; i++) {
-            readerFields.push({name: this.fields[i]});
-        }
-
-        var dataComps = Object.keys(pimcore.object.classes.data);
+    getAllowedDataTypes: function () {
         var allowedDataTypes = [];
 
+        var dataComps = Object.keys(pimcore.object.classes.data);
         for (var i = 0; i < dataComps.length; i++) {
             var dataComp = pimcore.object.classes.data[dataComps[i]];
 
@@ -74,9 +66,22 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
             }
         }
 
+        return allowedDataTypes;
+    },
+
+    createGrid: function(response) {
+        this.fields = ['storeId','id', 'name', 'description', 'type',
+            'creationDate', 'modificationDate', 'definition', 'title', 'sorter'];
+
+        var readerFields = [];
+        for (var i = 0; i < this.fields.length; i++) {
+            readerFields.push({name: this.fields[i]});
+        }
+
+
         this.allowedTypesStore = new Ext.data.SimpleStore({
             fields: ['key', 'name'],
-            data: allowedDataTypes
+            data: this.getAllowedDataTypes()
         });
 
         var proxy = {
@@ -256,6 +261,8 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
 
         var plugins = ['gridfilters', cellEditing];
 
+        this.initSearchComponents();
+
         var gridConfig = {
             frame: false,
             store: this.store,
@@ -273,7 +280,11 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
             selModel: Ext.create('Ext.selection.RowModel', {}),
             bbar: this.pagingtoolbar,
             tbar: [
-
+                this.searchField,
+                this.typesCombo,
+                this.clearFilterButton,
+                this.searchButton,
+                '-',
                 {
                     text: t('add'),
                     handler: this.onAdd.bind(this),
@@ -413,6 +424,12 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
        this.container.setActiveTab(this.layout);
        this.store.clearFilter(true);
 
+       this.searchField.setValue('');
+       this.typesCombo.setValue('');
+       this.store.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+       this.store.getProxy().setExtraParam('type', this.typesCombo.getValue());
+       this.clearFilterButton.hide();
+
        Ext.Ajax.request({
            url: Routing.generate('pimcore_admin_dataobject_classificationstore_getpage'),
            params: params,
@@ -447,6 +464,85 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
        });
 
 
+    },
+
+    initSearchComponents: function() {
+        this.searchField = new Ext.form.TextField(
+            {
+                name: 'query',
+                width: 200,
+                hideLabel: true,
+                enableKeyEvents: true,
+                value: '',
+                triggers: {
+                    search: {
+                        weight: 1,
+                        cls: 'x-form-search-trigger',
+                        scope: 'this',
+                        handler: function(field) {
+                            this.searchQuery(field);
+                        }.bind(this)
+                    }
+                },
+                listeners: {
+                    'keydown' : function (field, key) {
+                        if (key.getKey() === key.ENTER) {
+                            this.searchQuery(field);
+                        }
+                    }.bind(this)
+                }
+            }
+        );
+
+        var allowedTypesStore = new Ext.data.SimpleStore({
+            fields: ['key', 'name'],
+            data: this.getAllowedDataTypes()
+        });
+
+        this.typesCombo = new Ext.form.ComboBox({
+            name: 'type',
+            emptyText: 'Typ',
+            triggerAction: 'all',
+            editable: false,
+            store: allowedTypesStore,
+            displayField:'name',
+            valueField: 'key',
+        });
+
+        this.searchQuery = function() {
+            if (Ext.isEmpty(this.searchField.getValue()) && Ext.isEmpty(this.typesCombo.getValue())) {
+                return;
+            }
+
+            this.store.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+            this.store.getProxy().setExtraParam('type', this.typesCombo.getValue());
+            this.pagingtoolbar.moveFirst();
+
+            this.clearFilterButton.show();
+        }.bind(this);
+
+        this.searchButton = new Ext.Button({
+            text: t('search'),
+            handler: this.searchQuery,
+            iconCls: 'pimcore_icon_search'
+        });
+
+        this.clearFilterButton = new Ext.Button({
+            hidden: true,
+            tooltip: t('clear_filters'),
+            iconCls: 'pimcore_icon_clear_filters',
+            handler: function () {
+                this.searchField.setValue('');
+                this.typesCombo.setValue('');
+
+                this.store.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+                this.store.getProxy().setExtraParam('type', this.typesCombo.getValue());
+
+                this.pagingtoolbar.moveFirst();
+
+                this.clearFilterButton.hide();
+            }.bind(this)
+        });
     }
 
 });
