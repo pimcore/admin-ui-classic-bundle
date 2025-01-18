@@ -494,7 +494,7 @@ pimcore.object.classificationstore.propertiespanel = Class.create({
             }
         );
 
-        var allowedTypesStore = new Ext.data.SimpleStore({
+        const allowedTypesStore = new Ext.data.SimpleStore({
             fields: ['key', 'name'],
             data: this.getAllowedDataTypes()
         });
