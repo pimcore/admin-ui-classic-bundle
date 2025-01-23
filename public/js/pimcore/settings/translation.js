@@ -171,7 +171,7 @@ pimcore.settings.translation.domain = Class.create({
                 } catch (e) {
                     console.error(e);
                     Ext.MessageBox.alert(t('error'), t('translations_are_not_configured')
-                        + '<br /><br /><a href="http://www.pimcore.org/docs/" target="_blank">'
+                        + '<br /><br /><a href="https://docs.pimcore.com/" target="_blank">'
                         + t("read_more_here") + '</a>');
                 }
             }.bind(this)
