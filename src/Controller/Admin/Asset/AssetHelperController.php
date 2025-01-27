@@ -728,9 +728,10 @@ class AssetHelperController extends AdminAbstractController
                 }
             }
             $storage->writeStream($csvFile, $temp);
+            fclose($temp);
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
-
+            fclose($temp);
             return $this->adminJson(
                 [
                     'success' => false,
