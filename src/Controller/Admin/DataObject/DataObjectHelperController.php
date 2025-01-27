@@ -1324,9 +1324,9 @@ class DataObjectHelperController extends AdminAbstractController
                 }
             }
             $storage->writeStream($csvFile, $temp);
-
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
+
             return $this->adminJson(
                 [
                     'success' => false,

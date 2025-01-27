@@ -704,7 +704,6 @@ class AssetHelperController extends AdminAbstractController
 
         $csv = $this->getCsvData($language, $list, $fields, $header, $addTitles);
 
-
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
@@ -731,6 +730,7 @@ class AssetHelperController extends AdminAbstractController
             $storage->writeStream($csvFile, $temp);
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
+
             return $this->adminJson(
                 [
                     'success' => false,
