@@ -1288,13 +1288,13 @@ class DataObjectHelperController extends AdminAbstractController
             $context
         );
 
+        $temp = tmpfile();
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
 
             $fileStream = $storage->readStream($csvFile);
 
-            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
