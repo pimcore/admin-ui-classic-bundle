@@ -256,7 +256,7 @@ pimcore.workflow.transitionPanel = Class.create({
             var c = a.fieldTypeSettings;
             c.name = 'workflow[additional][' + a.name + ']';
             c.fieldType = a.fieldType;
-            c.title = a.title;
+            c.title = t(a.title);
             c.labelWidth = c.labelWidth ? c.labelWidth : 200;
 
 
