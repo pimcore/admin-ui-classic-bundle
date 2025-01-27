@@ -704,7 +704,6 @@ class AssetHelperController extends AdminAbstractController
 
         $csv = $this->getCsvData($language, $list, $fields, $header, $addTitles);
 
-        $temp = tmpfile();
 
         try {
             $storage = Storage::get('temp');
@@ -712,6 +711,7 @@ class AssetHelperController extends AdminAbstractController
 
             $fileStream = $storage->readStream($csvFile);
 
+            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
@@ -729,16 +729,16 @@ class AssetHelperController extends AdminAbstractController
                 }
             }
             $storage->writeStream($csvFile, $temp);
-            fclose($temp);
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
-            fclose($temp);
             return $this->adminJson(
                 [
                     'success' => false,
                     'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
+        } finally {
+            fclose($temp);
         }
 
         return $this->adminJson(['success' => true]);

@@ -1288,13 +1288,13 @@ class DataObjectHelperController extends AdminAbstractController
             $context
         );
 
-        $temp = tmpfile();
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
 
             $fileStream = $storage->readStream($csvFile);
 
+            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
@@ -1324,17 +1324,17 @@ class DataObjectHelperController extends AdminAbstractController
                 }
             }
             $storage->writeStream($csvFile, $temp);
-            fclose($temp);
 
         } catch (UnableToReadFile $exception) {
             Logger::err($exception->getMessage());
-            fclose($temp);
             return $this->adminJson(
                 [
                     'success' => false,
                     'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
+        } finally {
+            fclose($temp);
         }
 
         return $this->adminJson(['success' => true]);
