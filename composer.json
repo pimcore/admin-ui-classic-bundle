@@ -15,8 +15,6 @@
     "php": "~8.3.0 || ~8.4.0",
     "cbschuld/browser.php": "^1.9.6",
     "endroid/qr-code": "^6.0.1",
-    "knplabs/knp-components": "^5.1.0",
-    "knplabs/knp-paginator-bundle": "^6.0.0",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
     "pimcore/pimcore": "^12.x-dev",
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
