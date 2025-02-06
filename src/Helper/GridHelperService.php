@@ -976,7 +976,7 @@ class GridHelperService
      *
      * @internal
      */
-    protected function getPermittedPathsByUser(string $type, User $user): string
+    public function getPermittedPathsByUser(string $type, User $user): string
     {
         $allowedTypes = [];
 
