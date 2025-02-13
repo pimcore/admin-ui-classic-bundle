@@ -51,6 +51,7 @@ pimcore.layout.portlets.modificationStatistic = Class.create(pimcore.layout.port
             height: 275,
             items: {
                 xtype: 'cartesian',
+                downloadServerUrl: '/disabled-server-url/',
                 store: store,
                 legend: {
                     docked: 'right'
