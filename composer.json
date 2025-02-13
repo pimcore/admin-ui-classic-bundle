@@ -15,8 +15,9 @@
     "php": "~8.3.0 || ~8.4.0",
     "cbschuld/browser.php": "^1.9.6",
     "endroid/qr-code": "^6.0.1",
+    "nesbot/carbon": "^3.8.4",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
-    "pimcore/pimcore": "^12.x-dev",
+    "pimcore/pimcore": "^12.0",
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "require-dev": {

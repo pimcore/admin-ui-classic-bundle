@@ -104,7 +104,7 @@ class QueryParams
                  *
                  * filter: {type : 'date',dateFormat: 'timestamp'}
                  */
-                $date = Carbon::createFromTimestamp($f->value)->setTime(0, 0, 0);
+                $date = Carbon::createFromTimestamp($f->value, date_default_timezone_get())->setTime(0, 0, 0);
 
                 if ($f->operator == 'eq') {
                     $conditions[$f->property][] = ' ' . $f->property . ' >= ' . $db->quote($date->getTimestamp());
