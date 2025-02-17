@@ -237,7 +237,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'devmode'             => \Pimcore::inDevMode(),
             'disableMinifyJs'     => \Pimcore::disableMinifyJs(),
             'environment'         => $kernel->getEnvironment(),
-            'cached_environments' => Tool::getCachedSymfonyEnvironments(),
+            'cached_environments' => [Config::getEnvironment()],
             'sessionId'           => htmlentities($request->getSession()->getId(), ENT_QUOTES, 'UTF-8'),
 
             // languages
