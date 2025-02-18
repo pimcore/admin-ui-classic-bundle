@@ -168,12 +168,14 @@ pimcore.object.selectoptions = Class.create({
         e.stopEvent();
         tree.select();
 
-        var menu = new Ext.menu.Menu();
-        menu.add(new Ext.menu.Item({
-            text: t('delete'),
-            iconCls: 'pimcore_icon_select pimcore_icon_overlay_delete',
-            handler: this.deleteDefinition.bind(this, tree, record)
-        }));
+        let menu = new Ext.menu.Menu();
+        if (pimcore.currentuser.admin || record.data.adminOnly !== true) {
+            menu.add(new Ext.menu.Item({
+                text: t('delete'),
+                iconCls: 'pimcore_icon_select pimcore_icon_overlay_delete',
+                handler: this.deleteDefinition.bind(this, tree, record)
+            }));
+        }
 
         menu.showAt(e.pageX, e.pageY);
     },
