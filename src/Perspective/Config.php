@@ -198,7 +198,7 @@ final class Config
         ];
     }
 
-    public static function getRuntimePerspective(User $currentUser = null): mixed
+    public static function getRuntimePerspective(?User $currentUser = null): mixed
     {
         if (null === $currentUser) {
             $currentUser = Tool\Admin::getCurrentUser();

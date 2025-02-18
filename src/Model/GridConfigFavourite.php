@@ -41,7 +41,7 @@ class GridConfigFavourite extends AbstractModel
      */
     protected string $type;
 
-    public static function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, int $objectId = null, ?string $searchType = ''): ?GridConfigFavourite
+    public static function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, ?int $objectId = null, ?string $searchType = ''): ?GridConfigFavourite
     {
         try {
             $favourite = new self();

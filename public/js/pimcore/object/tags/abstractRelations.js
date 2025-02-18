@@ -208,7 +208,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
     },
 
     getColumnWidthLocalStorageKey: function (column) {
-        let context = this.context;
+        let context = { ...this.context };
         delete context.objectId;
         context.column = column;
 
@@ -222,5 +222,30 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             return width;
         }
         return null;
+    },
+
+    getSortedStore: function (store, sortField) {
+        return Ext.create('Ext.data.ChainedStore', {
+            source: store, sorters: [
+                {
+                    sorterFn: function (record1, record2) {
+                        let value1, value2;
+                        try {
+                            value1 = (record1.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value1 = '';
+                        }
+
+                        try {
+                            value2 = (record2.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value2 = '';
+                        }
+
+                        return value1 > value2 ? 1 : (value1 === value2) ? 0 : -1;
+                    }
+                }
+            ]
+        });
     }
 });

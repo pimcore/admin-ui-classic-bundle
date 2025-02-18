@@ -159,7 +159,7 @@ class EmailController extends AdminAbstractController
         }
     }
 
-    protected function enhanceLoggingData(array &$data, array &$fullEntry = null): void
+    protected function enhanceLoggingData(array &$data, ?array &$fullEntry = null): void
     {
         if (!empty($data['objectClass'])) {
             $class = '\\' . ltrim($data['objectClass'], '\\');

@@ -1199,7 +1199,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         ]);
     }
 
-    private function getTranslationTreeNodeConfig(Document $document, array $languages, array $translations = null): array
+    private function getTranslationTreeNodeConfig(Document $document, array $languages, ?array $translations = null): array
     {
         $service = new Document\Service();
 

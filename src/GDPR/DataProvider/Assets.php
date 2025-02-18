@@ -36,7 +36,7 @@ class Assets extends Elements implements DataProviderInterface
 
     protected ?array $config = [];
 
-    public function __construct(array $config = null)
+    public function __construct(?array $config = null)
     {
         $this->config = $config;
     }
@@ -94,7 +94,7 @@ class Assets extends Elements implements DataProviderInterface
     /**
      * @throws Exception
      */
-    public function searchData(int $id, string $firstname, string $lastname, string $email, int $start, int $limit, string $sort = null): array
+    public function searchData(int $id, string $firstname, string $lastname, string $email, int $start, int $limit, ?string $sort = null): array
     {
         if (empty($id) && empty($firstname) && empty($lastname) && empty($email)) {
             return ['data' => [], 'success' => true, 'total' => 0];

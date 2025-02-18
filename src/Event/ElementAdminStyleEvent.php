@@ -47,7 +47,7 @@ class ElementAdminStyleEvent extends Event
     /**
      * ElementAdminStyleEvent constructor.
      */
-    public function __construct(ElementInterface $element, AdminStyle $adminStyle, int $context = null)
+    public function __construct(ElementInterface $element, AdminStyle $adminStyle, ?int $context = null)
     {
         $this->element = $element;
         $this->adminStyle = $adminStyle;

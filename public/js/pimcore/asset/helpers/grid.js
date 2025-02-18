@@ -253,6 +253,16 @@ pimcore.asset.helpers.grid = Class.create({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,
                         dataIndex: field.key, filter: {type: 'list', options: ['image', 'text', 'audio', 'video', 'document', 'archive', 'unknown']}
                     });
+                } else if (key == "mimetype") {
+                    gridColumns.push({
+                        text: t(field.label), sortable: true, dataIndex: field.key, editable: false,
+                        width: this.getColumnWidth(field, 210), locked: this.getColumnLock(field), filter: 'string', renderer: Ext.util.Format.htmlEncode
+                    });
+                } else if (key === "id") {
+                    gridColumns.push({
+                        text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true, filter: 'numeric',
+                        dataIndex: field.key
+                    });
                 } else {
                     gridColumns.push({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,

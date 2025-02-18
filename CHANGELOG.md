@@ -1,6 +1,7 @@
 #### v1.6.0
 - Show tree search even if all child elements fit on one page (according to `tree_paging_limit`) - if there are at least 30 children in total
 - Prevent accidental deletion of folder if items get selected in grid and then the "Delete folder" button gets clicked. Instead: If grid items are selected, delete button asks if the selected items should be deleted. If no grid items are selected, the folder gets deleted (after confirmation).
+- [Composer] Added `endroid/qr-code` `v4`,`v5` requirement. Dropped `phpoffice/phpspreadsheet` `v1` support while extending it to `v3`. Extended `symfony/webpack-encore-bundle` to support `v2`.
 
 #### v1.5.0
 - [Assets] Metadata can be now displayed as a read-only tab when the user is granted `view` permissions to the asset.

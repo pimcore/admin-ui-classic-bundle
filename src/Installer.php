@@ -61,7 +61,13 @@ class Installer extends SettingsStoreAwareInstaller
     {
         $db = \Pimcore\Db::get();
 
+        $existingKeys = $db->fetchFirstColumn('SELECT ' . $db->quoteIdentifier('key') . ' FROM users_permission_definitions');
+
         foreach (self::USER_PERMISSIONS as $permission) {
+            if (in_array($permission, $existingKeys)) {
+                continue;
+            }
+
             $db->insert('users_permission_definitions', [
                 $db->quoteIdentifier('key') => $permission,
                 $db->quoteIdentifier('category') => self::USER_PERMISSIONS_CATEGORY,

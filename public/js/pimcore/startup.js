@@ -182,6 +182,8 @@ Ext.onReady(function () {
     Ext.Ajax.on('requestexception', function (conn, response, options) {
         if(response.aborted){
             console.log("xhr request to " + options.url + " aborted");
+        }else if(response.timedout){
+            console.error("xhr request to " + options.url + " timed out");
         }else{
             console.error("xhr request to " + options.url + " failed");
         }
@@ -197,7 +199,15 @@ Ext.onReady(function () {
 
         var date = new Date();
         var errorMessage = "Timestamp: " + date.toString() + "\n";
-        var errorDetailMessage = "\n" + response.responseText;
+        let errorDetailMessage = "";
+
+        if (response.responseText){
+            errorDetailMessage += "\n" + response.responseText;
+        }
+
+        if (response.timedout){
+            errorDetailMessage += "\nRequest timed out";
+        }
 
         try {
             errorMessage += "Status: " + response.status + " | " + response.statusText + "\n";

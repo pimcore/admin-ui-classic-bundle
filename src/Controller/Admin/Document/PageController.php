@@ -326,14 +326,14 @@ class PageController extends DocumentControllerBase
 
         $url = $page->getUrl();
 
-        $result = Builder::create()
-            ->writer(new PngWriter())
-            ->data($url)
-            ->size($request->query->get('download') ? 4000 : 500)
-            ->build();
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $url,
+            size: $request->query->get('download') ? 4000 : 500
+        );
 
         $tmpFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/qr-code-' . uniqid() . '.png';
-        $result->saveToFile($tmpFile);
+        $builder->build()->saveToFile($tmpFile);
 
         $response = new BinaryFileResponse($tmpFile);
         $response->headers->set('Content-Type', 'image/png');

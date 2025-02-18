@@ -45,7 +45,7 @@ class AdminUserTranslator implements TranslatorInterface, LocaleAwareInterface
         return null;
     }
 
-    public function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
+    public function trans(string $id, array $parameters = [], ?string $domain = null, ?string $locale = null): string
     {
         $domain = $domain ?? 'admin';
         $locale = $locale ?? $this->getUserLocale();

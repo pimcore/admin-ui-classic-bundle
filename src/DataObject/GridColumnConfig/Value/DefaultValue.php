@@ -40,7 +40,7 @@ final class DefaultValue extends AbstractValue
     /**
      * @throws \Exception
      */
-    private function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null): \stdClass
+    private function getValueForObject(Concrete $object, string $key, ?string $brickType = null, ?string $brickKey = null): \stdClass
     {
         if (!$key) {
             throw new \Exception('Empty key');
@@ -119,7 +119,7 @@ final class DefaultValue extends AbstractValue
                     $csFieldDefinition = $object->getClass()->getFieldDefinition($field);
                     $csLanguage = $this->localeService->getLocale();
 
-                    if (!$csFieldDefinition->isLocalized()) {
+                    if ($csLanguage === null || !$csFieldDefinition->isLocalized()) {
                         $csLanguage = 'default';
                     }
 

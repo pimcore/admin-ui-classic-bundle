@@ -27,7 +27,7 @@ use Pimcore\Model\Exception\UnsupportedException;
  */
 class Asset extends Element
 {
-    public static function getData(Model\Asset $asset, array $fields = null, string $requestedLanguage = null, array $params = []): array
+    public static function getData(Model\Asset $asset, ?array $fields = null, ?string $requestedLanguage = null, array $params = []): array
     {
         $data = self::gridElementData($asset);
         $loader = null;
@@ -37,6 +37,7 @@ class Asset extends Element
                 'id' => $asset->getId(),
                 'id~system' => $asset->getId(),
                 'type~system' => $asset->getType(),
+                'mimetype~system' => $asset->getMimeType(),
                 'fullpath~system' => $asset->getRealFullPath(),
                 'filename~system' => $asset->getKey(),
                 'creationDate~system' => $asset->getCreationDate(),

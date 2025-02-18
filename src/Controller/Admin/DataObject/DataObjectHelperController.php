@@ -75,7 +75,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($result);
     }
 
-    public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType = null): array
+    public function getMyOwnGridColumnConfigs(int $userId, string $classId, ?string $searchType = null): array
     {
         $db = Db::get();
         $configListingConditionParts = [];
@@ -103,7 +103,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
+    public function getSharedGridColumnConfigs(User $user, string $classId, ?string $searchType = null): array
     {
         $configListing = [];
 
@@ -612,7 +612,7 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * @param DataObject\ClassDefinition\Data[] $brickFields
      */
-    protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, array $context = null): void
+    protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, ?array $context = null): void
     {
         if (!empty($brickFields)) {
             foreach ($brickFields as $bf) {
@@ -1059,7 +1059,7 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, string $keyPrefix = null, DataObject\ClassDefinition $class = null, int $objectId = null): ?array
+    protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, ?string $keyPrefix = null, ?DataObject\ClassDefinition $class = null, ?int $objectId = null): ?array
     {
         $key = $keyPrefix . $field->getName();
         $config = null;
@@ -1288,13 +1288,14 @@ class DataObjectHelperController extends AdminAbstractController
             $context
         );
 
+        $temp = tmpfile();
+
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
 
             $fileStream = $storage->readStream($csvFile);
 
-            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
@@ -1333,6 +1334,8 @@ class DataObjectHelperController extends AdminAbstractController
                     'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
+        } finally {
+            fclose($temp);
         }
 
         return $this->adminJson(['success' => true]);

@@ -37,7 +37,7 @@ class DataObject extends Element
     /**
      * Language only user for classification store !!!
      */
-    public static function getData(AbstractObject $object, array $fields = null, string $requestedLanguage = null, array $params = []): array
+    public static function getData(AbstractObject $object, ?array $fields = null, ?string $requestedLanguage = null, array $params = []): array
     {
         $data = self::gridElementData($object);
         $csvMode = $params['csvMode'] ?? false;
@@ -238,7 +238,7 @@ class DataObject extends Element
      *
      * @return \stdClass value and objectid where the value comes from
      */
-    private static function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null, ClassDefinition\Data $fieldDefinition = null, array $context = [], array $brickDescriptor = null, string $requestedLanguage = null): \stdClass
+    private static function getValueForObject(Concrete $object, string $key, ?string $brickType = null, ?string $brickKey = null, ?ClassDefinition\Data $fieldDefinition = null, array $context = [], ?array $brickDescriptor = null, ?string $requestedLanguage = null): \stdClass
     {
         $getter = 'get' . ucfirst($key);
         $value = null;

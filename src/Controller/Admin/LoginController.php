@@ -274,17 +274,12 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
             if ($error) {
                 Logger::error('Lost password service: ' . $error);
+                //to avoid timing based enumeration
+                usleep(random_int(50, 200));
             }
         }
 
         $csrfProtection->regenerateCsrfToken($request->getSession());
-
-        if ($error) {
-            $params['reset_error'] = 'Please make sure you are entering a correct input.';
-            if ($error === 'user_reset_password_too_many_attempts') {
-                $params['reset_error'] = 'Too many attempts. Please retry later.';
-            }
-        }
 
         return $this->render('@PimcoreAdmin/admin/login/lost_password.html.twig', $params);
     }
@@ -407,13 +402,13 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
         $url = $twoFactor->getQRContent($proxyUser);
 
-        $result = Builder::create()
-            ->writer(new PngWriter())
-            ->data($url)
-            ->size(200)
-            ->build();
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $url,
+            size: 200
+        );
 
-        $params['image'] = $result->getDataUri();
+        $params['image'] = $builder->build()->getDataUri();
 
         return $this->render('@PimcoreAdmin/admin/login/two_factor_setup.html.twig', $params);
     }

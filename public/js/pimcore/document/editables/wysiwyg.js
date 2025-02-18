@@ -96,7 +96,7 @@ pimcore.document.editables.wysiwyg = Class.create(pimcore.document.editable, {
         }
 
         document.addEventListener(pimcore.events.changeWysiwyg, function (e) {
-            if(`${this.id}_textarea` === e.detail.e.target.id) {
+            if(this.textarea.id === e.detail.e.target.id) {
                 this.setValue(e.detail.data);
             }
         }.bind(this));
@@ -122,6 +122,7 @@ pimcore.document.editables.wysiwyg = Class.create(pimcore.document.editable, {
                 e: e,
                 data: data,
                 context: "document",
+                textareaId: this.textarea.id
             }
         });
 

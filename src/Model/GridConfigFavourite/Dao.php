@@ -29,7 +29,7 @@ class Dao extends Model\Dao\AbstractDao
     /**
      * @throws Model\Exception\NotFoundException
      */
-    public function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, int $objectId = null, string $searchType = null): void
+    public function getByOwnerAndClassAndObjectId(int $ownerId, string $classId, ?int $objectId = null, ?string $searchType = null): void
     {
         $query = 'SELECT * FROM gridconfig_favourites WHERE ownerId = ? AND classId = ? AND searchType = ?';
         $params = [$ownerId, $classId, $searchType];

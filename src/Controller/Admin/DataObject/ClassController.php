@@ -2042,9 +2042,13 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 if ((new DataObject\SelectOptions\Config\Listing())->hasConfig($id)) {
                     throw new \Exception('Select options with the same ID already exists (lower/upper cases may be different)');
                 }
+            } else {
+                // Check admin access
+                $this->getSelectOptionsConfig($id, true);
             }
 
             $group = $request->get(DataObject\SelectOptions\Config::PROPERTY_GROUP);
+            $adminOnly = $request->get(DataObject\SelectOptions\Config::PROPERTY_ADMIN_ONLY) === 'true';
             $useTraits = $request->get(DataObject\SelectOptions\Config::PROPERTY_USE_TRAITS, '');
             $implementsInterfaces = $request->get(DataObject\SelectOptions\Config::PROPERTY_IMPLEMENTS_INTERFACES, '');
             $selectOptionsData = $request->get(DataObject\SelectOptions\Config::PROPERTY_SELECT_OPTIONS, 'null');
@@ -2052,6 +2056,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 [
                     DataObject\SelectOptions\Config::PROPERTY_ID => $id,
                     DataObject\SelectOptions\Config::PROPERTY_GROUP => $group,
+                    DataObject\SelectOptions\Config::PROPERTY_ADMIN_ONLY => $adminOnly,
                     DataObject\SelectOptions\Config::PROPERTY_USE_TRAITS => $useTraits,
                     DataObject\SelectOptions\Config::PROPERTY_IMPLEMENTS_INTERFACES => $implementsInterfaces,
                     DataObject\SelectOptions\Config::PROPERTY_SELECT_OPTIONS => $this->decodeJson($selectOptionsData),
@@ -2081,12 +2086,14 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $this->checkPermission('selectoptions');
         $configurations = $groups = [];
 
+        /** @var DataObject\SelectOptions\Config $selectOptionConfig */
         $selectOptionConfigs = new DataObject\SelectOptions\Config\Listing();
         foreach ($selectOptionConfigs as $selectOptionConfig) {
             $id = $selectOptionConfig->getId();
             $configurationData = [
                 'id' => $id,
                 'text' => $id,
+                DataObject\SelectOptions\Config::PROPERTY_ADMIN_ONLY => $selectOptionConfig->getAdminOnly(),
                 'leaf' => true,
                 'iconCls' => 'pimcore_icon_select',
             ];
@@ -2132,7 +2139,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
 
         try {
             $id = $request->get(DataObject\SelectOptions\Config::PROPERTY_ID);
-            $this->getSelectOptionsConfig($id)->delete();
+            $this->getSelectOptionsConfig($id, true)->delete();
 
             return $this->adminJson(['success' => true]);
         } catch (\Exception $exception) {
@@ -2140,11 +2147,21 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
     }
 
-    protected function getSelectOptionsConfig(string $id): DataObject\SelectOptions\Config
-    {
+    protected function getSelectOptionsConfig(
+        string $id,
+        bool $checkAdminAccess = false,
+    ): DataObject\SelectOptions\Config {
         $selectOptions = DataObject\SelectOptions\Config::getById($id);
         if ($selectOptions === null) {
             throw new NotFoundHttpException('Not Found', code: 1677133720896);
+        }
+
+        if (
+            $checkAdminAccess
+            && $selectOptions->getAdminOnly()
+            && !$this->getAdminUser()->isAdmin()
+        ) {
+            throw new AccessDeniedHttpException('Restricted to admin users', code: 1732282192);
         }
 
         return $selectOptions;

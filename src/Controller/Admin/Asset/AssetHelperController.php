@@ -87,7 +87,7 @@ class AssetHelperController extends AdminAbstractController
         return $configData;
     }
 
-    public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
+    public function getSharedGridColumnConfigs(User $user, string $classId, ?string $searchType = null): array
     {
         $db = Db::get();
 
@@ -273,7 +273,7 @@ class AssetHelperController extends AdminAbstractController
         ];
     }
 
-    protected function getFieldGridConfig(array $field, string $language = '', string $keyPrefix = null): ?array
+    protected function getFieldGridConfig(array $field, string $language = '', ?string $keyPrefix = null): ?array
     {
         $defaulMetadataFields = ['copyright', 'alt', 'title'];
         $predefined = null;
@@ -704,13 +704,14 @@ class AssetHelperController extends AdminAbstractController
 
         $csv = $this->getCsvData($language, $list, $fields, $header, $addTitles);
 
+        $temp = tmpfile();
+
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
 
             $fileStream = $storage->readStream($csvFile);
 
-            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
@@ -737,6 +738,8 @@ class AssetHelperController extends AdminAbstractController
                     'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
+        } finally {
+            fclose($temp);
         }
 
         return $this->adminJson(['success' => true]);

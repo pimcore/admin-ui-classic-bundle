@@ -311,6 +311,23 @@ pimcore.object.tags.block = Class.create(pimcore.object.tags.abstract, {
 
         this.dataFields = {};
         this.currentData = {};
+
+        this.updateBlockIndices();
+    },
+
+    updateBlockIndices: function() {
+        for (let itemIndex = 0; itemIndex < this.component.items.items.length; itemIndex++) {
+            let item = this.component.items.items[itemIndex];
+
+            for (let j = 0; j < this.currentElements.length; j++) {
+                if (item !== this.currentElements[j].container) continue;
+
+                const fields = this.currentElements[j].fields;
+                for (const fieldName in fields) {
+                    fields[fieldName].context.index = itemIndex;
+                }
+            }
+        }
     },
 
     getDataForField: function (fieldConfig) {

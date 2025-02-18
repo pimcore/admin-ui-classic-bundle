@@ -80,7 +80,6 @@
 
          rootNodeConfig.text = rootNodeConfigText;
          rootNodeConfig.allowDrag = true;
-         rootNodeConfig.id = "" + rootNodeConfig.id;
          rootNodeConfig.iconCls = rootNodeConfigIconCls;
          rootNodeConfig.cls = "pimcore_tree_node_root";
          rootNodeConfig.expanded = true;
@@ -278,7 +277,8 @@
                  url: Routing.generate('pimcore_admin_asset_exists'),
                  params: {
                      parentId: parentNode.id,
-                     filename: file.name
+                     filename: file.name,
+                     dir: path
                  },
                  async: false,
                  success: function (response) {

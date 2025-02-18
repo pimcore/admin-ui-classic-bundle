@@ -59,6 +59,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
         ],
         self::SCRIPT_OPT => [
             'https://buttons.github.io/buttons.js', // GitHub star button on login page
+            'https://code.jquery.com/', // jQuery for the icon library
         ],
         self::FRAME_OPT => [
             'https://www.youtube-nocookie.com/', // Video preview thumbnail for YouTube

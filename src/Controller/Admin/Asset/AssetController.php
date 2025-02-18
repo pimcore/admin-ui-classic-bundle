@@ -37,6 +37,7 @@ use Pimcore\Messenger\AssetPreviewImageMessage;
 use Pimcore\Messenger\AssetUpdateTasksMessage;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
+use Pimcore\Model\Asset\Enum\PdfScanStatus;
 use Pimcore\Model\DataObject\ClassDefinition\Data\ManyToManyRelation;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\Element;
@@ -401,8 +402,20 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     {
         $parentAsset = \Pimcore\Model\Asset::getById((int)$request->get('parentId'));
 
+        $dir = $request->get('dir', '');
+        if ($dir) {
+            // this is for uploading folders with Drag&Drop
+            // param "dir" contains the relative path of the file
+            if (strpos($dir, '..') !== false) {
+                throw new \Exception('not allowed');
+            }
+            $dir =  '/' . trim($dir, '/ ');
+        }
+
+        $assetPath = $parentAsset->getRealFullPath() . $dir . '/' . $request->get('filename');
+
         return new JsonResponse([
-            'exists' => Asset\Service::pathExists($parentAsset->getRealFullPath().'/'.$request->get('filename')),
+            'exists' => Asset\Service::pathExists($assetPath),
         ]);
     }
 
@@ -938,10 +951,13 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
 
         if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
-            $scanResponse = $this->getResponseByScanStatus($asset, false);
-            if ($scanResponse) {
-                return $scanResponse;
-            }
+            $previewData = ['thumbnailPath' => ''];
+            $previewData['assetPath'] = $asset->getRealFullPath();
+
+            return $this->render(
+                '@PimcoreAdmin/admin/asset/get_preview_pdf_open_in_new_tab.html.twig',
+                $previewData
+            );
         }
 
         Tool\UserTimezone::setUserTimezone($request->query->get('userTimezone'));
@@ -1438,8 +1454,24 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($asset->isAllowed('view')) {
             if ($asset instanceof Asset\Document && $asset->getMimeType() === self::PDF_MIMETYPE) {
                 $scanResponse = $this->getResponseByScanStatus($asset);
-                if ($scanResponse) {
-                    return $scanResponse;
+                $openPdfConfig = Config::getSystemConfiguration('assets')['document']['open_pdf_in_new_tab'];
+
+                if ($openPdfConfig === 'all-pdfs' ||
+                ($openPdfConfig === 'only-unsafe' && $scanResponse === PdfScanStatus::UNSAFE)) {
+                    $thumbnail = $asset->getImageThumbnail(Asset\Image\Thumbnail\Config::getPreviewConfig());
+                    $previewData = ['thumbnailPath' => $thumbnail->getPath()];
+                    $previewData['assetPath'] = $asset->getRealFullPath();
+
+                    return $this->render(
+                        '@PimcoreAdmin/admin/asset/get_preview_pdf_open_in_new_tab.html.twig',
+                        $previewData
+                    );
+                }
+
+                if ($scanResponse === PdfScanStatus::IN_PROGRESS) {
+                    return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig');
+                } elseif ($scanResponse === PdfScanStatus::UNSAFE) {
+                    return $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig');
                 }
             }
 
@@ -1458,7 +1490,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         }
     }
 
-    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true): ?Response
+    private function getResponseByScanStatus(Asset\Document $asset, bool $processBackground = true): ?PdfScanStatus
     {
         if (!Config::getSystemConfiguration('assets')['document']['scan_pdf']) {
             return null;
@@ -1474,11 +1506,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             }
         }
 
-        return match($scanStatus) {
-            Asset\Enum\PdfScanStatus::IN_PROGRESS => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_in_progress.html.twig'),
-            Asset\Enum\PdfScanStatus::UNSAFE => $this->render('@PimcoreAdmin/admin/asset/get_preview_pdf_unsafe.html.twig'),
-            default => null,
-        };
+        return $scanStatus;
     }
 
     /**
@@ -1646,7 +1674,12 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     /**
      * @Route("/get-folder-content-preview", name="pimcore_admin_asset_getfoldercontentpreview", methods={"GET"})
      */
-    public function getFolderContentPreviewAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
+    /**
+     * @Route("/get-folder-content-preview", name="pimcore_admin_asset_getfoldercontentpreview", methods={"GET"})
+     */
+    public function getFolderContentPreviewAction(Request $request,
+        EventDispatcherInterface $eventDispatcher,
+        GridHelperService $gridHelperService): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
 
@@ -1673,14 +1706,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $list = new Asset\Listing();
         $conditionFilters[] = '`path` LIKE ' . ($folder->getRealFullPath() == '/' ? "'/%'" : $list->quote(Helper::escapeLike($folder->getRealFullPath()) . '/%')) . " AND `type` != 'folder'";
 
-        if (!$this->getAdminUser()->isAdmin()) {
-            $userIds = $this->getAdminUser()->getRoles();
-            $userIds[] = $this->getAdminUser()->getId();
-            $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+        $adminUser = $this->getAdminUser();
+
+        if (!$adminUser->isAdmin()) {
+            $conditionFilters[] = $gridHelperService->getPermittedPathsByUser('asset', $adminUser);
         }
 
         $condition = implode(' AND ', $conditionFilters);
