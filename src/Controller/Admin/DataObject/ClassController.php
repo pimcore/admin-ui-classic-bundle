@@ -2086,7 +2086,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
         $this->checkPermission('selectoptions');
         $configurations = $groups = [];
 
-        /** @var DataObject\SelectOptions\Config $selectOptionConfig */
         $selectOptionConfigs = new DataObject\SelectOptions\Config\Listing();
         foreach ($selectOptionConfigs as $selectOptionConfig) {
             $id = $selectOptionConfig->getId();
