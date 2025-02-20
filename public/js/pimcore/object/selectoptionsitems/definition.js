@@ -259,6 +259,11 @@ pimcore.object.selectoptionsitems.definition = Class.create({
                         this.selectionModel.select(idx);
                     }.bind(this),
                 },
+                {
+                    xtype: 'button',
+                    iconCls: 'pimcore_icon_edit',
+                    handler: this.showoptioneditor.bind(this, valueStore)
+                },
             );
 
             plugins.push(
@@ -540,5 +545,17 @@ pimcore.object.selectoptionsitems.definition = Class.create({
     reload: function() {
         this.parentPanel.getEditPanel().remove(this.panel);
         this.reopen();
+    },
+
+    showoptioneditor: function (valueStore) {
+        let editor = new pimcore.object.helpers.optionEditor(
+            valueStore,
+            [
+                'label',
+                'value',
+                'name',
+            ],
+        );
+        editor.edit();
     }
 });

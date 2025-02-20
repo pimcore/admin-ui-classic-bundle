@@ -23,25 +23,34 @@ pimcore.registerNS("pimcore.object.helpers.optionEditor");
  */
 pimcore.object.helpers.optionEditor = Class.create({
 
-    initialize: function (store) {
+    initialize: function (
+        store,
+        columnNames = [
+            'key',
+            'value',
+        ]
+    ) {
         this.store = store;
+        this.columnNames = columnNames;
     },
 
     edit: function() {
-
-        var displayField = {
+        let displayField = {
             xtype: "displayfield",
             region: "north",
             hideLabel: true,
             value: t('csv_seperated_options_info')
         };
 
-
-        var data = [];
-        this.store.each(function (rec) {
-                data.push([rec.get("key"), rec.get("value")]);
-            }
-        );
+        let data = [];
+        this.store.each(function (record) {
+            // Map column value to row data
+            let row = [];
+            this.iterateColumnNames(function (columnName) {
+                row.push(record.get(columnName));
+            });
+            data.push(row);
+        }.bind(this));
 
         data = Ext.util.CSV.encode(data);
 
@@ -55,7 +64,6 @@ pimcore.object.helpers.optionEditor = Class.create({
             padding: 20,
             items: [displayField, this.textarea]
         });
-
 
         this.window = new Ext.Window({
             width: 800,
@@ -73,24 +81,25 @@ pimcore.object.helpers.optionEditor = Class.create({
                     iconCls: "pimcore_icon_save",
                     handler: function(){
                         this.store.removeAll();
-                        var content = this.textarea.getValue();
+                        let content = this.textarea.getValue();
                         if (content.length > 0) {
-                           var csvData = Ext.util.CSV.decode(content);
+                            let csvData = Ext.util.CSV.decode(content);
 
-                            for(var i = 0;i < csvData.length;i++){
-                                var pair = csvData[i];
-                                var key = pair[0];
-                                var value = pair[1];
+                            for (let i = 0;i < csvData.length;i++) {
+                                let row = csvData[i];
 
-                                if(!value) {
-                                    value = key;
+                                // Set value with key if empty
+                                if (!row[1]) {
+                                    row[1] = row[0];
                                 }
 
-                                var u = {
-                                    key: key,
-                                    value: value
-                                };
-                                this.store.add(u);
+                                // Map row data to column value
+                                let record = {};
+                                this.iterateColumnNames(function (columnName, index) {
+                                    record[columnName] = row[index];
+                                });
+
+                                this.store.add(record);
                             }
                         }
 
@@ -111,5 +120,13 @@ pimcore.object.helpers.optionEditor = Class.create({
 
         this.window.add(this.configPanel);
         this.window.show();
+    },
+
+    iterateColumnNames: function (callable) {
+        let columnName;
+        for (let i = 0; i < this.columnNames.length; i++) {
+            columnName = this.columnNames[i];
+            callable(columnName, i);
+        }
     }
 });
