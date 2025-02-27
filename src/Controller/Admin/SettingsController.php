@@ -1275,31 +1275,6 @@ class SettingsController extends AdminAbstractController
     }
 
     /**
-     * @Route("/get-available-algorithms", name="pimcore_admin_settings_getavailablealgorithms", methods={"GET"})
-     */
-    public function getAvailableAlgorithmsAction(Request $request): JsonResponse
-    {
-        $options = [
-            [
-                'key' => 'password_hash',
-                'value' => 'password_hash',
-            ],
-        ];
-
-        $algorithms = hash_algos();
-        foreach ($algorithms as $algorithm) {
-            $options[] = [
-                'key' => $algorithm . ' (' . $this->translator->trans('deprecated', [], 'admin') . ')',
-                'value' => $algorithm,
-            ];
-        }
-
-        $result = ['data' => $options, 'success' => true, 'total' => count($options)];
-
-        return $this->adminJson($result);
-    }
-
-    /**
      * deleteViews
      * delete views for localized fields when languages are removed to
      * prevent mysql errors
