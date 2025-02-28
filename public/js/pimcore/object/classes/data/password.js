@@ -102,10 +102,7 @@ pimcore.object.classes.data.password = Class.create(pimcore.object.classes.data.
             Ext.apply(this.datax,
                 {
                     width: source.datax.width,
-                    minimumLength: source.datax.minimumLength,
-                    algorithm: source.datax.algorithm,
-                    salt: source.datax.salt,
-                    saltlocation: source.datax.saltlocation
+                    minimumLength: source.datax.minimumLength
                 });
         }
     }
