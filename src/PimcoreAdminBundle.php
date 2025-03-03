@@ -24,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\TranslatorPass;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\GDPR\DataProvider\DataProviderInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
 use Pimcore\HttpKernel\Bundle\DependentBundleInterface;
 use Pimcore\HttpKernel\BundleCollection\BundleCollection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32,6 +33,13 @@ use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
 class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundleInterface
 {
+    use PackageVersionTrait;
+
+    public function getComposerPackageName(): string
+    {
+        return 'pimcore/admin-ui-classic-bundle';
+    }
+
     public function getContainerExtension(): ExtensionInterface
     {
         return new PimcoreAdminExtension();
