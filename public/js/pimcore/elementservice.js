@@ -16,9 +16,6 @@ pimcore.registerNS("pimcore.elementservice.x");
 /**
  * @private
  */
-/**
- * @private
- */
 pimcore.elementservice.deleteElement = function (options) {
     var elementType = options.elementType;
     var url = Routing.getBaseUrl() + "/admin/"  + elementType + "/delete-info?";
