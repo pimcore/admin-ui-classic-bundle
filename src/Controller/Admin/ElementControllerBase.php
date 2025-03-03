@@ -128,7 +128,7 @@ abstract class ElementControllerBase extends AdminAbstractController
                     $event = new DataObjectDeleteInfoEvent($element);
                     $eventName = DataObjectEvents::DELETE_INFO;
                 }
-                if($element->isLocked()) {
+                if ($element->isLocked()) {
                     $itemResults[] = [
                         'id' => $element->getId(),
                         'type' => $element->getType(),
