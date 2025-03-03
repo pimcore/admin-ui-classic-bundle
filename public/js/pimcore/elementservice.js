@@ -16,6 +16,9 @@ pimcore.registerNS("pimcore.elementservice.x");
 /**
  * @private
  */
+/**
+ * @private
+ */
 pimcore.elementservice.deleteElement = function (options) {
     var elementType = options.elementType;
     var url = Routing.getBaseUrl() + "/admin/"  + elementType + "/delete-info?";
@@ -33,7 +36,6 @@ pimcore.elementservice.deleteElement = function (options) {
 pimcore.elementservice.deleteElementsComplete = function(options, response) {
     try {
         var res = Ext.decode(response.responseText);
-
         if (res.errors) {
             var message = res.batchDelete ? t('delete_error_batch') : t('delete_error');
             var hasDeleteable = true;
@@ -54,8 +56,13 @@ pimcore.elementservice.deleteElementsComplete = function(options, response) {
                 hasDeleteable = res.itemResults.filter(function (result) {
                     return result.allowed;
                 }).length > 0;
-            }
 
+                // remove all items that are not allowed to be deleted
+                res.itemResults = res.itemResults.filter(item => item.allowed);
+
+                if (res.itemResults.length === 1) {
+                }
+            }
             Ext.MessageBox.show({
                 title:t('delete'),
                 msg: message,
