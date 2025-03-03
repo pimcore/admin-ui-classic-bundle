@@ -53,7 +53,7 @@ pimcore.elementservice.deleteElementsComplete = function(options, response) {
                 // remove all items that are not allowed to be deleted
                 res.itemResults = res.itemResults.filter(item => item.allowed);
 
-                hasDeleteable = res.itemResults > 0;
+                hasDeleteable = res.itemResults.length > 0;
             }
             Ext.MessageBox.show({
                 title:t('delete'),
