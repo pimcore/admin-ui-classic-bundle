@@ -284,7 +284,9 @@ Ext.define('pimcore.tree.View', {
 
     doUpdatePaging: function(node) {
 
-        if (node.data.expanded && node.needsPaging) {
+        const tree = node.getOwnerTree();
+
+        if (node.data.expanded && node.needsPaging && tree) {
 
             node.ptb = ptb = Ext.create('pimcore.toolbar.Paging', {
                     node: node,
@@ -296,7 +298,6 @@ Ext.define('pimcore.tree.View', {
             node.ptb.store = this.store;
 
 
-            var tree = node.getOwnerTree();
             var view = tree.getView();
             var nodeEl = Ext.fly(view.getNodeByRecord(node));
             if (!nodeEl) {
