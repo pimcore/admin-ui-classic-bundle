@@ -31,6 +31,7 @@ use Pimcore\Db\Helper;
 use Pimcore\Event\AssetEvents;
 use Pimcore\Event\Model\Asset\ResolveUploadTargetEvent;
 use Pimcore\File;
+use Pimcore\Helper\MimeTypeHelper;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;
@@ -530,7 +531,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         // check if there is a requested type and if matches the asset type of the uploaded file
         $uploadAssetType = $request->get('uploadAssetType');
         if ($uploadAssetType) {
-            $mimetype = MimeTypes::getDefault()->guessMimeType($sourcePath);
+            $mimetype = (new MimeTypeHelper())->guessMimeTypeFrom($sourcePath);
             $assetType = Asset::getTypeFromMimeMapping($mimetype, $filename);
 
             if ($uploadAssetType !== $assetType) {
@@ -590,7 +591,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $asset = Asset::getById((int) $request->get('id'));
 
         $newFilename = Element\Service::getValidKey($_FILES['Filedata']['name'], 'asset');
-        $mimetype = MimeTypes::getDefault()->guessMimeType($_FILES['Filedata']['tmp_name']);
+        $mimetype = (new MimeTypeHelper())->guessMimeType($_FILES['Filedata']['tmp_name']);
         $newType = Asset::getTypeFromMimeMapping($mimetype, $newFilename);
 
         if ($newType != $asset->getType()) {
@@ -2479,7 +2480,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 return;
             }
 
-            $mimeType = MimeTypes::getDefault()->guessMimeType($sourcePath);
+            $mimeType = (new MimeTypeHelper())->guessMimeType($sourcePath);
             $type = Asset::getTypeFromMimeMapping($mimeType, $filename);
 
             $allowedAssetTypes = $fieldDefinition->getAssetTypes();
