@@ -416,7 +416,7 @@ pimcore.element.helpers.gridColumnConfig = {
             tagType = fieldInfo.layout.type;
             editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
-        } else {
+        } else if (this.gridType === 'asset') {
             let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
             tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
             try {
@@ -428,6 +428,8 @@ pimcore.element.helpers.gridColumnConfig = {
             }
             editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
             editor.setAsset(this.asset);
+        } else {
+            return;
         }
 
         editor.updateContext({
@@ -561,7 +563,7 @@ pimcore.element.helpers.gridColumnConfig = {
             var tagType = fieldInfo.layout.type;
             var editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
-        } else {
+        } else if (this.gridType === 'asset') {
             let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
             const tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
             try {
@@ -574,6 +576,8 @@ pimcore.element.helpers.gridColumnConfig = {
 
             var editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
             editor.setAsset(this.asset);
+        } else {
+            return;
         }
 
         editor.updateContext({
