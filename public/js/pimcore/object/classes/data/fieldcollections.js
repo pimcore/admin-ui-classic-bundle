@@ -124,6 +124,7 @@ pimcore.object.classes.data.fieldcollections = Class.create(pimcore.object.class
                 name: "disallowReorder",
                 checked: this.datax.disallowReorder
             }
+            ])
         ]);
         this.specificPanel.updateLayout();
     
