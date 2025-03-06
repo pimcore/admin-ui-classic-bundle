@@ -100,7 +100,7 @@ pimcore.object.classes.data.fieldcollections = Class.create(pimcore.object.class
             ]);            
         }
         this.specificPanel.add([
-            new Ext.ux.form.MultiSelect([{
+            {
                 xtype: "checkbox",
                 fieldLabel: t("lazy_loading"),
                 name: "lazyLoading",
@@ -124,7 +124,6 @@ pimcore.object.classes.data.fieldcollections = Class.create(pimcore.object.class
                 name: "disallowReorder",
                 checked: this.datax.disallowReorder
             }
-            ])
         ]);
         this.specificPanel.updateLayout();
     
