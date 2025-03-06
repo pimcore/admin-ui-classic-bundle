@@ -531,7 +531,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         // check if there is a requested type and if matches the asset type of the uploaded file
         $uploadAssetType = $request->get('uploadAssetType');
         if ($uploadAssetType) {
-            $mimetype = (new MimeTypeHelper())->guessMimeTypeFrom($sourcePath);
+            $mimetype = (new MimeTypeHelper())->guessMimeType($sourcePath);
             $assetType = Asset::getTypeFromMimeMapping($mimetype, $filename);
 
             if ($uploadAssetType !== $assetType) {
