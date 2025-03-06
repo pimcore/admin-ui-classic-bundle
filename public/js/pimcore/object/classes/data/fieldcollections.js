@@ -83,19 +83,24 @@ pimcore.object.classes.data.fieldcollections = Class.create(pimcore.object.class
     },
 
     initSelection: function () {
+        if(!this.isInCustomLayoutEditor()) {
+            this.specificPanel.add([
+                new Ext.ux.form.MultiSelect({
+                    name: "allowedTypes",
+                    triggerAction: "all",
+                    editable: false,
+                    fieldLabel: t("allowed_types"),
+                    store: this.store,
+                    value: this.datax.allowedTypes,
+                    displayField: "key",
+                    valueField: "key",
+                    width: 500,
+                    height: 200,
+                })
+            ]);            
+        }
         this.specificPanel.add([
-            new Ext.ux.form.MultiSelect({
-                name: "allowedTypes",
-                triggerAction: "all",
-                editable: false,
-                fieldLabel: t("allowed_types"),
-                store: this.store,
-                value: this.datax.allowedTypes,
-                displayField: "key",
-                valueField: "key",
-                width: 500,
-                height: 200,
-            }), {
+            new Ext.ux.form.MultiSelect([{
                 xtype: "checkbox",
                 fieldLabel: t("lazy_loading"),
                 name: "lazyLoading",
