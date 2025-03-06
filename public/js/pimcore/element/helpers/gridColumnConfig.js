@@ -406,64 +406,81 @@ pimcore.element.helpers.gridColumnConfig = {
 
         const fieldInfo = this.grid.getColumns()[columnIndex].config;
 
+        let editor;
+        let tagType;
         if (this.objecttype === "object" || this.objecttype === "variant") {
             if (!fieldInfo.layout || !fieldInfo.layout.layout) {
                 return;
             }
 
-            const tagType = fieldInfo.layout.type;
-            const editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
+            tagType = fieldInfo.layout.type;
+            editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
-            editor.updateContext({
-                containerType: "filterByRelationWindow"
-            });
-
-            const formPanel = Ext.create('Ext.form.Panel', {
-                xtype: "form",
-                border: false,
-                items: [editor.getLayoutEdit()],
-                bodyStyle: "padding: 10px;",
-                buttons: [
-                    {
-                        text: t("clear_relation_filter"),
-                        iconCls: "pimcore_icon_filter_condition pimcore_icon_overlay_delete",
-                        handler: function () {
-                            this.filterByRelationWindow.close();
-                            this.grid.store.filters.removeByKey("x-gridfilter-"+fieldInfo.dataIndex);
-                        }.bind(this)
-                    },
-                    {
-                        text: t("apply_filter"),
-                        iconCls: "pimcore_icon_filter pimcore_icon_overlay_add",
-                        handler: function () {
-                            if (formPanel.isValid() && typeof fieldInfo.getRelationFilter === "function") {
-                                this.grid.filters.getStore().addFilter(
-                                    fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)
-                                );
-                                this.filterByRelationWindow.close();
-                            }
-                        }.bind(this)
-                    }
-                ]
-            });
-
-            const title = t("filter_by_relation_field") + " " + fieldInfo.text;
-            let width = 700;
-            if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
-                width = sumWidths(fieldInfo.layout.layout.width, 25);
+        } else if (this.gridType === 'asset') {
+            let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
+            tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
+            try {
+                if (typeof pimcore.asset.metadata.tags[tagType].prototype.prepareFilterLayout == "function") {
+                    layoutInfo = pimcore.asset.metadata.tags[tagType].prototype.prepareFilterLayout(layoutInfo);
+                }
+            } catch (e) {
+                console.log(e);
             }
-            this.filterByRelationWindow = new Ext.Window({
-                autoScroll: true,
-                modal: false,
-                title: title,
-                items: [formPanel],
-                bodyStyle: "background: #fff;",
-                width: width,
-                maxHeight: 650
-            });
-            this.filterByRelationWindow.show();
-            this.filterByRelationWindow.updateLayout();
+            editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
+            editor.setAsset(this.asset);
+        } else {
+            return;
         }
+
+        editor.updateContext({
+            containerType: "filterByRelationWindow"
+        });
+
+        const formPanel = Ext.create('Ext.form.Panel', {
+            xtype: "form",
+            border: false,
+            items: [editor.getLayoutEdit()],
+            bodyStyle: "padding: 10px;",
+            buttons: [
+                {
+                    text: t("clear_relation_filter"),
+                    iconCls: "pimcore_icon_filter_condition pimcore_icon_overlay_delete",
+                    handler: function () {
+                        this.filterByRelationWindow.close();
+                        this.grid.store.filters.removeByKey("x-gridfilter-"+fieldInfo.dataIndex);
+                    }.bind(this)
+                },
+                {
+                    text: t("apply_filter"),
+                    iconCls: "pimcore_icon_filter pimcore_icon_overlay_add",
+                    handler: function () {
+                        if (formPanel.isValid() && typeof fieldInfo.getRelationFilter === "function") {
+                            this.grid.filters.getStore().addFilter(
+                                fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)
+                            );
+                            this.filterByRelationWindow.close();
+                        }
+                    }.bind(this)
+                }
+            ]
+        });
+
+        const title = t("filter_by_relation_field") + " " + fieldInfo.text;
+        let width = 700;
+        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
+            width = sumWidths(fieldInfo.layout.layout.width, 25);
+        }
+        this.filterByRelationWindow = new Ext.Window({
+            autoScroll: true,
+            modal: false,
+            title: title,
+            items: [formPanel],
+            bodyStyle: "background: #fff;",
+            width: width,
+            maxHeight: 650
+        });
+        this.filterByRelationWindow.show();
+        this.filterByRelationWindow.updateLayout();
     },
 
     batchPrepare: function (column, onlySelected, append, remove) {
@@ -546,7 +563,7 @@ pimcore.element.helpers.gridColumnConfig = {
             var tagType = fieldInfo.layout.type;
             var editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
-        } else {
+        } else if (this.gridType === 'asset') {
             let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
             const tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
             try {
@@ -559,6 +576,8 @@ pimcore.element.helpers.gridColumnConfig = {
 
             var editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
             editor.setAsset(this.asset);
+        } else {
+            return;
         }
 
         editor.updateContext({
