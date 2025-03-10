@@ -180,7 +180,7 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~') && empty($data[$key]['value'])) {
+                    if (str_starts_with($key, '~') && self::getClassificationStoreFieldDefinition($key)->isEmpty(is_array($data[$key]) ? $data[$key]['value'] : $data[$key])) {
                         $type = $keyParts[1];
 
                         if ($type === 'classificationstore') {
@@ -349,7 +349,7 @@ class DataObject extends Element
         }
 
         $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if (!empty($inheritedValue['value'])) {
+        if (!self::getClassificationStoreFieldDefinition($key)->isEmpty(is_array($inheritedValue) ? $inheritedValue['value'] : $inheritedValue)) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,
@@ -357,5 +357,18 @@ class DataObject extends Element
         }
 
         return self::getInheritedData($parent, $key, $requestedLanguage);
+    }
+
+    protected static function getClassificationStoreFieldDefinition(string $key)
+    {
+        $keyParts = explode('~', $key);
+        $groupKeyId = explode('-', $keyParts[3]);
+
+        $keyid = (int) $groupKeyId[1];
+
+        $keyConfig = Model\DataObject\Classificationstore\KeyConfig::getById($keyid);
+        $type = $keyConfig->getType();
+        $definition = json_decode($keyConfig->getDefinition(), true);
+        return \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
     }
 }
