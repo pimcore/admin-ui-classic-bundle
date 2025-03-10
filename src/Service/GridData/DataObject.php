@@ -26,6 +26,7 @@ use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\DataObject\Service;
 use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
+use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
@@ -359,7 +360,7 @@ class DataObject extends Element
         return self::getInheritedData($parent, $key, $requestedLanguage);
     }
 
-    protected static function getClassificationStoreFieldDefinition(string $key)
+    protected static function getClassificationStoreFieldDefinition(string $key): Data
     {
         $keyParts = explode('~', $key);
         $groupKeyId = explode('-', $keyParts[3]);
