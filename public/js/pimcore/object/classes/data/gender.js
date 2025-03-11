@@ -66,6 +66,9 @@ pimcore.object.classes.data.gender = Class.create(pimcore.object.classes.data.da
 
         $super();
 
+        let nameField = this.layout.getComponent("standardSettings").getComponent("name");
+        nameField.disable();
+
         if(this.mandatoryCheckbox.checked != true) {
             this.mandatoryCheckbox.disable();
         }
