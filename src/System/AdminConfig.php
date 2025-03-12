@@ -62,7 +62,7 @@ final class AdminConfig
 
         // If the read target is settings-store and no data is found there,
         // load the data from the container config
-        if(!$data && $loadType === $repository::LOCATION_SETTINGS_STORE) {
+        if (!$data && $loadType === $repository::LOCATION_SETTINGS_STORE) {
             $containerConfig = \Pimcore::getContainer()->getParameter('pimcore_admin.config');
             $data[self::BRANDING] = $containerConfig[self::BRANDING];
             $data[self::ASSETS] = $containerConfig[self::ASSETS];
