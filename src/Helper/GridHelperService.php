@@ -536,7 +536,6 @@ class GridHelperService
         $orderKey = 'id';
         $order = 'ASC';
 
-        $fields = [];
         $bricks = [];
         if (!empty($requestParams['fields'])) {
             $fields = $requestParams['fields'];
@@ -544,10 +543,10 @@ class GridHelperService
         }
 
         if (isset($requestParams['limit'])) {
-            $limit = $requestParams['limit'];
+            $limit = (int)$requestParams['limit'];
         }
         if (isset($requestParams['start'])) {
-            $start = $requestParams['start'];
+            $start = (int)$requestParams['start'];
         }
 
         $sortingSettings = \Pimcore\Bundle\AdminBundle\Helper\QueryParams::extractSortingSettings($requestParams);
@@ -738,10 +737,10 @@ class GridHelperService
         $order = 'ASC';
 
         if (isset($allParams['limit'])) {
-            $limit = $allParams['limit'];
+            $limit = (int)$allParams['limit'];
         }
         if (isset($allParams['start'])) {
-            $start = $allParams['start'];
+            $start = (int)$allParams['start'];
         }
 
         $orderKeyQuote = true;
