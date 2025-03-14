@@ -264,7 +264,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
      */
     public function removeFromSessionAction(Request $request): JsonResponse
     {
-        Model\Document\Service::removeElementFromSession('document', $request->get('id'), $request->getSession()->getId());
+        Model\Document\Service::removeElementFromSession('document', (int) $request->get('id'), $request->getSession()->getId());
 
         return $this->adminJson(['success' => true]);
     }

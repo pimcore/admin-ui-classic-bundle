@@ -647,7 +647,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
         if ($parentAsset->isAllowed('create')) {
             if (!$equalAsset) {
-                $asset = Asset::create($request->get('parentId'), [
+                $asset = Asset::create((int)$request->get('parentId'), [
                     'filename' => $request->get('name'),
                     'type' => 'folder',
                     'userOwner' => $this->getAdminUser()->getId(),
