@@ -1697,10 +1697,10 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         $limit = 10;
 
         if ($allParams['limit']) {
-            $limit = $allParams['limit'];
+            $limit = (int)$allParams['limit'];
         }
         if ($allParams['start']) {
-            $start = $allParams['start'];
+            $start = (int)$allParams['start'];
         }
 
         $conditionFilters = [];
@@ -1858,7 +1858,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
 
             // this is because the key can get the prefix "_copy" if the target does already exists
             if ($sessionBag['parentId']) {
-                $targetParent = Asset::getById($sessionBag['parentId']);
+                $targetParent = Asset::getById((int)$sessionBag['parentId']);
             } else {
                 $targetParent = Asset::getById((int) $request->get('targetParentId'));
             }

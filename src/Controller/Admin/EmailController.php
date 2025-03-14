@@ -166,7 +166,7 @@ class EmailController extends AdminAbstractController
             $reflection = new \ReflectionClass($class);
 
             if (!empty($data['objectId']) && $reflection->implementsInterface(ElementInterface::class)) {
-                $obj = $class::getById($data['objectId']);
+                $obj = $class::getById((int)$data['objectId']);
                 if (is_null($obj)) {
                     $data['objectPath'] = '';
                 } else {
@@ -509,7 +509,7 @@ class EmailController extends AdminAbstractController
             $reflection = new \ReflectionClass($class);
 
             if (!empty($params['data']['objectId']) && $reflection->implementsInterface(ElementInterface::class)) {
-                $obj = $class::getById($params['data']['objectId']);
+                $obj = $class::getById((int)$params['data']['objectId']);
                 if (!is_null($obj)) {
                     $data = $obj;
                 }

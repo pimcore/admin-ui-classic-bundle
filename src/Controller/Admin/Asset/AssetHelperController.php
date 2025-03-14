@@ -391,7 +391,7 @@ class AssetHelperController extends AdminAbstractController
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
         $classId = $request->get('classId');
-        $asset = Asset::getById($classId);
+        $asset = Asset::getById((int) $classId);
 
         if ($asset->isAllowed('list')) {
             $gridConfigId = (int) $request->get('gridConfigId');
@@ -483,7 +483,7 @@ class AssetHelperController extends AdminAbstractController
                 $gridConfigId = $metadata['gridConfigId'];
                 $gridConfig = null;
                 if ($gridConfigId) {
-                    $gridConfig = GridConfig::getById($gridConfigId);
+                    $gridConfig = GridConfig::getById((int)$gridConfigId);
                 }
 
                 if ($gridConfig && $gridConfig->getOwnerId() != $this->getAdminUser()->getId()) {
