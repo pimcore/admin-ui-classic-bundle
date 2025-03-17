@@ -107,12 +107,16 @@ class QueryParams
                 $date = Carbon::createFromTimestamp($f->value, date_default_timezone_get())->setTime(0, 0, 0);
 
                 if ($f->operator == 'eq') {
-                    $conditions[$f->property][] = ' ' . $f->property . ' >= ' . $db->quote($date->getTimestamp());
-                    $conditions[$f->property][] = ' ' . $f->property . ' <= ' . $db->quote($date->addDay()->subSecond()->getTimestamp());
+                    $conditions[$f->property][] = ' ' . $f->property . ' >= ' .
+                        $db->quote((string)$date->getTimestamp());
+                    $conditions[$f->property][] = ' ' . $f->property . ' <= ' .
+                        $db->quote((string)$date->addDay()->subSecond()->getTimestamp());
                 } elseif ($f->operator == 'lt') {
-                    $conditions[$f->property][] = ' ' . $f->property . ' < ' . $db->quote($date->getTimestamp());
+                    $conditions[$f->property][] = ' ' . $f->property . ' < ' .
+                        $db->quote((string)$date->getTimestamp());
                 } elseif ($f->operator == 'gt') {
-                    $conditions[$f->property][] = ' ' . $f->property . ' > ' . $db->quote($date->addDay()->subSecond()->getTimestamp());
+                    $conditions[$f->property][] = ' ' . $f->property . ' > ' .
+                        $db->quote((string)$date->addDay()->subSecond()->getTimestamp());
                 }
             } else {
                 throw new \Exception('Filer of type ' . $f->type . ' not jet supported.');

@@ -268,7 +268,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         $storeId = $request->get('storeId');
         $storeId = $storeId ? (int) $storeId : $storeIdFromDefinition;
 
-        $conditionParts[] = ' (storeId = ' . $db->quote($storeId) . ')';
+        $conditionParts[] = ' (storeId = ' . $db->quote((string)$storeId) . ')';
 
         if ($request->get('filter')) {
             $filterString = $request->get('filter');
@@ -414,7 +414,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
 
         if ($storeId = $request->query->getInt('storeId')) {
-            $conditionParts[] = '(storeId = ' . $db->quote($storeId) . ')';
+            $conditionParts[] = '(storeId = ' . $db->quote((string)$storeId) . ')';
         }
 
         if ($request->get('filter')) {
@@ -1129,7 +1129,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
                 // get all keys within that collection / frame
                 $frameId = $frameConfig->getId();
                 $groupList = new Classificationstore\CollectionGroupRelation\Listing();
-                $groupList->setCondition('colId = ' . $db->quote($frameId));
+                $groupList->setCondition('colId = ' . $db->quote((string)$frameId));
                 $groupList = $groupList->load();
                 $groupIdList = [];
                 foreach ($groupList as $groupEntry) {
@@ -1197,7 +1197,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
 
         if ($storeId) {
-            $conditionParts[] = '(storeId = '. $db->quote($storeId) . ')';
+            $conditionParts[] = '(storeId = '. $db->quote((string)$storeId) . ')';
         }
 
         if ($request->get('filter')) {

@@ -113,7 +113,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 
                     if ($filter['type'] == 'date' && $operator == '=') {
                         $maxTime = $value + (86400 - 1); //specifies the top point of the range used in the condition
-                        $condition = $field . ' BETWEEN ' . $db->quote($value) . ' AND ' . $db->quote($maxTime);
+                        $condition = $field . ' BETWEEN ' . $db->quote($value) . ' AND ' . $db->quote((string)$maxTime);
                         $conditionFilters[] = $condition;
                     } else {
                         $conditionFilters[] = $field . $operator . ' ' . $db->quote($value);
