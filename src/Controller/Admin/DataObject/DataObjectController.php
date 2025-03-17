@@ -1872,7 +1872,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             // this is because the key can get the prefix "_copy" if the target does already exists
             if ($sessionBag['parentId']) {
-                $targetParent = DataObject::getById($sessionBag['parentId']);
+                $targetParent = DataObject::getById((int) $sessionBag['parentId']);
             } else {
                 $targetParent = DataObject::getById((int) $request->get('targetParentId'));
             }
