@@ -769,7 +769,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                         this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
-            }
+            },
+            plugins: [
+                'gridfilters'
+            ]
         });
 
         return this.component;
