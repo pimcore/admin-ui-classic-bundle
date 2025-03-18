@@ -199,6 +199,9 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             listeners: {
                 rowdblclick: this.gridRowDblClickHandler,
             },
+            plugins: [
+                'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
