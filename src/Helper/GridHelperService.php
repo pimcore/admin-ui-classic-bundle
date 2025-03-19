@@ -444,11 +444,12 @@ class GridHelperService
                     $table = $me->getDao()->getTableName();
                     $mappedKeyParent = $mappedKey . '_parent';
                     $select->addSelect($mappedKey . '.value AS ' . $mappedKey);
-                    $select->addSelect($mappedKeyParent . '.value AS ' . $mappedKeyParent);
-
-                    if (!key_exists('parentId', $alreadyJoined)) {
-                        $select->addSelect('parentId');
-                        $alreadyJoined['parentId'] = 1;
+                    if ($class->getAllowInherit()) {
+                        $select->addSelect($mappedKeyParent . '.value AS ' . $mappedKeyParent);
+                        if (!key_exists('parentId', $alreadyJoined)) {
+                            $select->addSelect('parentId');
+                            $alreadyJoined['parentId'] = 1;
+                        }
                     }
 
                     $select->leftJoin(
@@ -464,25 +465,29 @@ class GridHelperService
                         . ')'
                     );
 
-                    $select->leftJoin(
-                        $table,
-                        'object_classificationstore_data_' . $class->getId(),
-                        $mappedKeyParent,
-                        '('
-                        . $mappedKeyParent . '.id = ' . $table . '.parentId'
-                        . ' and ' . $mappedKeyParent . '.fieldname = ' . $db->quote($fieldname)
-                        . ' and ' . $mappedKeyParent . '.groupId=' . $featureJoin['groupId']
-                        . ' and ' . $mappedKeyParent . '.keyId=' . $featureJoin['keyId']
-                        . ' and ' . $mappedKeyParent . '.language = ' . $db->quote($featureJoin['language'])
-                        . ')'
-                    );
+                    if ($class->getAllowInherit()) {
+                        $select->leftJoin(
+                            $table,
+                            'object_classificationstore_data_' . $class->getId(),
+                            $mappedKeyParent,
+                            '('
+                            . $mappedKeyParent . '.id = ' . $table . '.parentId'
+                            . ' and ' . $mappedKeyParent . '.fieldname = ' . $db->quote($fieldname)
+                            . ' and ' . $mappedKeyParent . '.groupId=' . $featureJoin['groupId']
+                            . ' and ' . $mappedKeyParent . '.keyId=' . $featureJoin['keyId']
+                            . ' and ' . $mappedKeyParent . '.language = ' . $db->quote($featureJoin['language'])
+                            . ')'
+                        );
+                    }
                 }
 
                 $havings = $featureAndSlugFilters['featureConditions'] ?? null;
 
                 if ($havings) {
-                    foreach ($havings as $key => &$having) {
-                        $having = "($having OR " . str_replace($key, $key . '_parent', $having) . ')';
+                    if ($class->getAllowInherit()) {
+                        foreach ($havings as $key => &$having) {
+                            $having = "($having OR " . str_replace($key, $key . '_parent', $having) . ')';
+                        }
                     }
 
                     $havings = implode(' AND ', $havings);
