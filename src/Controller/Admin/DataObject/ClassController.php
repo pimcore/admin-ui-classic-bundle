@@ -669,7 +669,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
     /**
      * FIELDCOLLECTIONS
      */
-
     #[Route('/fieldcollection-get', name: 'fieldcollectionget', methods: ['GET'])]
     public function fieldcollectionGetAction(Request $request): JsonResponse
     {
@@ -1010,7 +1009,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
     /**
      * OBJECT BRICKS
      */
-
     #[Route('/objectbrick-get', name: 'objectbrickget', methods: ['GET'])]
     public function objectbrickGetAction(Request $request): JsonResponse
     {
@@ -1344,7 +1342,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
      * See http://www.pimcore.org/issues/browse/PIMCORE-2358
      * Add option to export/import all class definitions/brick definitions etc. at once
      */
-
     #[Route('/bulk-import', name: 'bulkimport', methods: ['POST'])]
     public function bulkImportAction(Request $request): JsonResponse
     {
@@ -1509,7 +1506,6 @@ class ClassController extends AdminAbstractController implements KernelControlle
      * See http://www.pimcore.org/issues/browse/PIMCORE-2358
      * Add option to export/import all class definitions/brick definitions etc. at once
      */
-
     #[Route('/bulk-export-prepare', name: 'bulkexportprepare', methods: ['POST'])]
     public function bulkExportPrepareAction(Request $request): Response
     {

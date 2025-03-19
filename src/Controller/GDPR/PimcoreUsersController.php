@@ -26,6 +26,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class PimcoreUsersController
+ *
  * @internal
  */
 #[Route('/pimcore-users')]

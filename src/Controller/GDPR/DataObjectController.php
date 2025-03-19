@@ -27,6 +27,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class DataObjectController
+ *
  * @internal
  */
 #[Route('/data-object')]

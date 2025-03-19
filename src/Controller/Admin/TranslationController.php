@@ -26,7 +26,6 @@ use Pimcore\Model\Element;
 use Pimcore\Model\Translation;
 use Pimcore\Tool;
 use Pimcore\Tool\Session;
-use Pimcore\Translation\Translator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -305,9 +304,6 @@ class TranslationController extends AdminAbstractController
     }
 
     /**
-     * @param Request $request
-     * @param TranslatorInterface $translator
-     * @return JsonResponse
      * @throws \Exception
      */
     #[Route('/translations', name: 'pimcore_admin_translation_translations', methods: ['POST'])]
@@ -663,7 +659,6 @@ class TranslationController extends AdminAbstractController
      * XLIFF CONTENT-EXPORT & MS WORD CONTENT-EXPORT
      * -----------------------------------------------------------------------------------
      */
-
     #[Route('/content-export-jobs', name: 'pimcore_admin_translation_contentexportjobs', methods: ['POST'])]
     public function contentExportJobsAction(Request $request): JsonResponse
     {
