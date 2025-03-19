@@ -30,6 +30,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     private ?string $nonce = null;
 
+    private const SELF = "'self'";
+
     public const DEFAULT_OPT = 'default-src';
 
     public const IMG_OPT = 'img-src';
@@ -46,6 +48,8 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     public const FRAME_OPT = 'frame-src';
 
+    public const FRAME_ANCHESTORS = 'frame-ancestors';
+
     public const WORKER_OPT = 'worker-src';
 
     private array $allowedUrls = [
@@ -55,6 +59,12 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
         ],
         self::SCRIPT_OPT => [
             'https://buttons.github.io/buttons.js', // GitHub star button on login page
+            'https://code.jquery.com/', // jQuery for the icon library
+        ],
+        self::FRAME_OPT => [
+            'https://www.youtube-nocookie.com/', // Video preview thumbnail for YouTube
+            'https://www.dailymotion.com/',      // Video preview thumbnail for Dailymotion
+            'https://player.vimeo.com/',         // Video preview thumbnail for Vimeo
         ],
     ];
 
@@ -69,15 +79,16 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            self::DEFAULT_OPT => "'self'",
+            self::DEFAULT_OPT => self::SELF,
             self::IMG_OPT => '* data: blob:',
-            self::MEDIA_OPT => "'self' data:",
-            self::SCRIPT_OPT => "'self' 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
-            self::STYLE_OPT => "'self' 'unsafe-inline'",
-            self::FRAME_OPT => "'self' data:",
-            self::CONNECT_OPT => "'self' blob:",
-            self::FONT_OPT => "'self'",
-            self::WORKER_OPT => "'self' blob:",
+            self::MEDIA_OPT => self::SELF . ' data:',
+            self::SCRIPT_OPT => self::SELF . " 'nonce-" . $this->getNonce() . "' 'unsafe-inline' 'unsafe-eval'",
+            self::STYLE_OPT => self::SELF . " 'unsafe-inline'",
+            self::FRAME_OPT => self::SELF . ' data:',
+            self::FRAME_ANCHESTORS => self::SELF,
+            self::CONNECT_OPT => self::SELF . ' blob:',
+            self::FONT_OPT => self::SELF,
+            self::WORKER_OPT => self::SELF . ' blob:',
         ]);
     }
 

@@ -580,11 +580,13 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 : OptionsProviderResolver::MODE_SELECT
         );
 
+        $context = json_decode($request->get('context'), true) ?? [];
         $options = $optionsProvider->getOptions(
             [
                 'object' => $object,
                 'fieldname' => $fieldDefinition->getName(),
                 'class' => $object->getClass(),
+                'context' => $context,
             ],
             $fieldDefinition
         );
@@ -1880,7 +1882,8 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             $target = DataObject::getById($targetId);
         }
 
-        if ($target->isAllowed('create')) {
+        $user = Tool\Admin::getCurrentUser();
+        if ($target->isAllowed('create') && ($source instanceof DataObject\Concrete ? $user->isAllowed($source->getClassId(), 'class') : true)) {
             $source = DataObject::getById($sourceId);
             if ($source != null) {
                 if ($source instanceof DataObject\Concrete && $latestVersion = $source->getLatestVersion()) {

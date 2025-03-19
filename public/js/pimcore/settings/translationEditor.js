@@ -200,6 +200,7 @@ pimcore.settings.translation.editor = Class.create({
                 e: e,
                 data: data,
                 context: "translation",
+                textareaId: this.editableDivId
             },
         });
 

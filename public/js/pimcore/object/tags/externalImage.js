@@ -163,6 +163,7 @@ pimcore.object.tags.externalImage = Class.create(pimcore.object.tags.abstract, {
             backgroundSize: "contain",
             backgroundImage: "url(" + path + ")",
             backgroundPosition: "center center",
+            backgroundColor: "white",
             backgroundRepeat: "no-repeat"
         });
         body.repaint();

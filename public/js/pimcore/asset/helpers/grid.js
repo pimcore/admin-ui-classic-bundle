@@ -253,6 +253,11 @@ pimcore.asset.helpers.grid = Class.create({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,
                         dataIndex: field.key, filter: {type: 'list', options: ['image', 'text', 'audio', 'video', 'document', 'archive', 'unknown']}
                     });
+                } else if (key === "id") {
+                    gridColumns.push({
+                        text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true, filter: 'numeric',
+                        dataIndex: field.key
+                    });
                 } else {
                     gridColumns.push({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,

@@ -114,7 +114,10 @@ class LoginController extends AdminAbstractController implements KernelControlle
             return new RedirectResponse($redirectUrl);
         }
 
-        $csrfProtection->regenerateCsrfToken($request->getSession());
+        // check csrf token before generating a new one with force=true
+        if (!$csrfProtection->getCsrfToken($request->getSession())) {
+            $csrfProtection->regenerateCsrfToken($request->getSession());
+        }
 
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
@@ -271,17 +274,12 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
             if ($error) {
                 Logger::error('Lost password service: ' . $error);
+                //to avoid timing based enumeration
+                usleep(random_int(50, 200));
             }
         }
 
         $csrfProtection->regenerateCsrfToken($request->getSession());
-
-        if ($error) {
-            $params['reset_error'] = 'Please make sure you are entering a correct input.';
-            if ($error === 'user_reset_password_too_many_attempts') {
-                $params['reset_error'] = 'Too many attempts. Please retry later.';
-            }
-        }
 
         return $this->render('@PimcoreAdmin/admin/login/lost_password.html.twig', $params);
     }

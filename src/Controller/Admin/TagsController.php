@@ -154,12 +154,14 @@ class TagsController extends AdminAbstractController
 
     protected function convertTagToArray(Tag $tag, bool $showSelection, array $assignedTagIds, bool $loadChildren = false, bool $recursiveChildren = false): array
     {
+        $hasChildren = $tag->hasChildren();
+
         $tagArray = [
             'id' => $tag->getId(),
             'text' => $tag->getName(),
             'path' => $tag->getNamePath(),
-            'expandable' => $tag->hasChildren(),
-            'leaf' => !$tag->hasChildren(),
+            'expandable' => $hasChildren,
+            'leaf' => !$hasChildren,
             'iconCls' => 'pimcore_icon_element_tags',
             'qtipCfg' => [
                 'title' => 'ID: ' . $tag->getId(),
@@ -170,7 +172,7 @@ class TagsController extends AdminAbstractController
             $tagArray['checked'] = isset($assignedTagIds[$tag->getId()]);
         }
 
-        if ($loadChildren) {
+        if ($hasChildren && $loadChildren) {
             $children = $tag->getChildren();
             $loadChildren = $recursiveChildren;
             foreach ($children as $child) {

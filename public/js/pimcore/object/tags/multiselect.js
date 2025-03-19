@@ -179,7 +179,8 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
                             params: {
                                 objectId: this.object.id,
                                 changedData: this.object.getSaveData().data,
-                                fieldDefinition: JSON.stringify(this.fieldConfig)
+                                fieldDefinition: JSON.stringify(this.fieldConfig),
+                                context: JSON.stringify(this.context)
                             },
                             success: function (response) {
                                 response = Ext.decode(response.responseText);
@@ -244,6 +245,7 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
             if(hasHTMLContent) {
                 options.labelTpl = '{[Ext.util.Format.stripTags(values.text)]}';
             }
+            options.plugins = 'dragdroptag';
             this.component = Ext.create('Ext.form.field.Tag', options);
         } else {
             this.component = Ext.create('Ext.ux.form.MultiSelect', options);

@@ -229,7 +229,6 @@ trait DataObjectActionsTrait
 
                 $fieldGetter = 'get' . ucfirst($brickField);
                 $brickGetter = 'get' . ucfirst($brickType);
-                $valueSetter = 'set' . ucfirst($brickKey);
 
                 $brick = $object->$fieldGetter()->$brickGetter();
                 if (empty($brick)) {
@@ -257,7 +256,7 @@ trait DataObjectActionsTrait
                     $localizedFields = $brick->getLocalizedfields();
                     $localizedFields->setLocalizedValue($brickKey, $value);
                 } else {
-                    $brick->$valueSetter($value);
+                    $brick->setObjectVar($brickKey, $value);
                 }
             } else {
                 if ($languagePermissions) {

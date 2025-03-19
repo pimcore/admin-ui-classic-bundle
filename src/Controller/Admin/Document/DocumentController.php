@@ -755,13 +755,13 @@ class DocumentController extends ElementControllerBase implements KernelControll
      */
     public function updateSiteAction(Request $request): JsonResponse
     {
-        $domains = $request->get('domains');
+        $domains = $request->request->getString('domains');
         $domains = str_replace(' ', '', $domains);
-        $domains = explode("\n", $domains);
+        $domains = $domains ? explode("\n", $domains) : [];
 
-        if (!$site = Site::getByRootId((int)$request->get('id'))) {
+        if (!$site = Site::getByRootId($request->request->getInt('id'))) {
             $site = Site::create([
-                'rootId' => (int)$request->get('id'),
+                'rootId' => $request->request->getInt('id'),
             ]);
         }
 
@@ -770,7 +770,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
         foreach ($validLanguages as $language) {
             // localized error pages
-            $requestValue = $request->get('errorDocument_localized_' . $language);
+            $requestValue = $request->request->get('errorDocument_localized_' . $language);
 
             if (isset($requestValue)) {
                 $localizedErrorDocuments[$language] = $requestValue;
@@ -778,10 +778,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         }
 
         $site->setDomains($domains);
-        $site->setMainDomain($request->get('mainDomain'));
-        $site->setErrorDocument($request->get('errorDocument'));
+        $site->setMainDomain($request->request->getString('mainDomain'));
+        $site->setErrorDocument($request->request->getString('errorDocument'));
         $site->setLocalizedErrorDocuments($localizedErrorDocuments);
-        $site->setRedirectToMainDomain(($request->get('redirectToMainDomain') == 'true') ? true : false);
+        $site->setRedirectToMainDomain($request->request->getBoolean('redirectToMainDomain'));
         $site->save();
 
         $site->setRootDocument(null); // do not send the document to the frontend

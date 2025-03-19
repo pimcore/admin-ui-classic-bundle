@@ -542,7 +542,7 @@ class ElementController extends AdminAbstractController
             $idProperty = $request->get('idProperty', 'id');
             $methodName = 'get' . ucfirst($fieldname);
             if ($ownerType == 'object' && method_exists($source, $methodName)) {
-                $data = $source->$methodName();
+                $data = DataObject\Service::useInheritedValues(true, [$source, $methodName]);
                 $editModeData = $fd->getDataForEditmode($data, $source);
                 // Inherited values show as an empty array
                 if (is_array($editModeData) && !empty($editModeData)) {

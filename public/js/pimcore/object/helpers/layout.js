@@ -34,8 +34,8 @@ pimcore.object.helpers.layout = {
             button: [],
             text: [],
             root: ["panel", "region", "tabpanel", "accordion", "text", "iframe", "button", "fieldcontainer", "fieldset"],
-            localizedfields: ["panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"],
-            block: ["panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"]
+            localizedfields: ["data", "panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"],
+            block: ["data", "panel", "tabpanel", "accordion", "fieldset", "fieldcontainer", "text", "region", "button", "iframe"]
         };
     },
 

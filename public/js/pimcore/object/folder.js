@@ -296,10 +296,19 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
             });
 
             this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete_folder'),
+                tooltip: t('delete'),
                 iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                 scale: "medium",
-                handler: this.remove.bind(this)
+                handler: function () {
+                    var options = this.search.onRawDeleteSelectedRows();
+                    if (!options) {
+                        options = {
+                            "elementType" : "object",
+                            "id": this.id
+                        };
+                    }
+                    pimcore.elementservice.deleteElement(options);
+                }.bind(this)
             });
 
             this.toolbarButtons.rename = new Ext.Button({
@@ -331,7 +340,16 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                         text: t('delete'),
                         iconCls: "pimcore_material_icon_delete pimcore_material_icon",
                         scale: "medium",
-                        handler: this.remove.bind(this)
+                        handler: function () {
+                            var options = this.search.onRawDeleteSelectedRows();
+                            if (!options) {
+                                options = {
+                                    "elementType" : "object",
+                                    "id": this.id
+                                };
+                            }
+                            pimcore.elementservice.deleteElement(options);
+                        }.bind(this)
                     });
                 } else {
                     buttons.push(this.toolbarButtons.remove);

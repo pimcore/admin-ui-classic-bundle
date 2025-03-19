@@ -143,7 +143,11 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                 tooltip: t('delete'),
                 iconCls: "pimcore_icon_delete",
                 handler: function (grid, rowIndex) {
-                    grid.getStore().removeAt(rowIndex);
+                    Ext.Msg.confirm(t('warning'), t('delete_quantity_value_unit_confirmation'), function(btn){
+                        if (btn === 'yes'){
+                            grid.getStore().removeAt(rowIndex);
+                        }
+                    });
                 }.bind(this)
             }]
         });
@@ -322,11 +326,15 @@ pimcore.object.quantityValue.unitsettings = Class.create({
     },
 
     onDelete: function () {
-        const selections = this.grid.getSelectionModel().getSelected();
-        if (!selections || selections.length < 1) {
-            return false;
-        }
-        const rec = selections.getAt(0);
-        this.grid.store.remove(rec);
+        Ext.Msg.confirm(t('warning'), t('delete_quantity_value_unit_confirmation'), function(btn){
+            if (btn === 'yes'){
+                const selections = this.grid.getSelectionModel().getSelected();
+                if (!selections || selections.length < 1) {
+                    return false;
+                }
+                const rec = selections.getAt(0);
+                this.grid.store.remove(rec);
+            }
+        }.bind(this));
     }
 });

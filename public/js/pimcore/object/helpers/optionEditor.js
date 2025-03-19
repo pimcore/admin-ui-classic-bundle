@@ -33,7 +33,7 @@ pimcore.object.helpers.optionEditor = Class.create({
             xtype: "displayfield",
             region: "north",
             hideLabel: true,
-            value: t('csv_seperated_options_info')
+            value: t('csv_separated_options_info')
         };
 
 
@@ -60,7 +60,7 @@ pimcore.object.helpers.optionEditor = Class.create({
         this.window = new Ext.Window({
             width: 800,
             height: 500,
-            title: t('csv_seperated_options'),
+            title: t('csv_separated_options'),
             iconCls: "pimcore_icon_edit",
             layout: "fit",
             closeAction:'close',

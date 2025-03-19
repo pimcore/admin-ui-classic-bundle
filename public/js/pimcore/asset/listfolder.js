@@ -460,6 +460,29 @@ pimcore.asset.listfolder = Class.create(pimcore.asset.helpers.gridTabAbstract, {
         return config;
     },
 
+    onRawDeleteSelectedRows: function () {
+        if(typeof this.grid === "undefined") {
+            return null;
+        }
+
+        let ids = [];
+        var selectedRows = this.grid.getSelectionModel().getSelection();
+        for (var i = 0; i < selectedRows.length; i++) {
+            ids.push(selectedRows[i].data.id);
+        }
+        ids = ids.join(',');
+
+        var options = {
+            "elementType" : "asset",
+            "id": ids,
+            "success": function() {
+                this.store.reload();
+            }.bind(this)
+        };
+
+        return ids.length ? options : null;
+    },
+
     onRowContextmenu: function (grid, record, tr, rowIndex, e, eOpts ) {
 
         var menu = new Ext.menu.Menu();

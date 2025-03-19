@@ -284,7 +284,9 @@ Ext.define('pimcore.tree.View', {
 
     doUpdatePaging: function(node) {
 
-        if (node.data.expanded && node.needsPaging) {
+        const tree = node.getOwnerTree();
+
+        if (node.data.expanded && node.needsPaging && tree) {
 
             node.ptb = ptb = Ext.create('pimcore.toolbar.Paging', {
                     node: node,
@@ -296,7 +298,6 @@ Ext.define('pimcore.tree.View', {
             node.ptb.store = this.store;
 
 
-            var tree = node.getOwnerTree();
             var view = tree.getView();
             var nodeEl = Ext.fly(view.getNodeByRecord(node));
             if (!nodeEl) {
@@ -400,15 +401,12 @@ Ext.define('pimcore.data.PagingTreeStore', {
                 node.set('expandable', true);
             });
 
-            if (me.pageSize < total || node.inSearch) {
-                node.needsPaging = true;
-                node.pagingData = {
-                    total: data.total,
-                    offset: data.offset,
-                    limit: data.limit
-                }
-            } else {
-                node.needsPaging = false;
+            node.needsPaging = true;
+            node.pagingData = {
+                total: data.total,
+                offset: data.offset,
+                limit: data.limit,
+                canSortManually: data.total < data.limit
             }
 
             me.superclass.onProxyLoad.call(this, operation);
@@ -503,7 +501,7 @@ Ext.define('pimcore.toolbar.Paging', {
         var currPage = pagingData.offset / pagingData.limit + 1;
 
         this.inSearch = node.inSearch;
-        var hidden = this.inSearch
+        var hidePagination = this.inSearch || pagingData.total <= pagingData.limit;
         pimcore.isTreeFiltering = false;
 
         inputListeners[Ext.supports.SpecialKeyDownRepeat ? 'keydown' : 'keypress'] = me.onPagingKeyDown;
@@ -517,7 +515,7 @@ Ext.define('pimcore.toolbar.Paging', {
             height: 18,
             value: node.filter ? node.filter : "",
             enableKeyEvents: true,
-            hidden: !hidden,
+            hidden: !this.inSearch,
             listeners: {
                 "keydown": function (node, inputField, event) {
                     if (event.keyCode == 13) {
@@ -544,8 +542,7 @@ Ext.define('pimcore.toolbar.Paging', {
                 }.bind(this, node)
             }
 
-        })
-        ;
+        });
 
         var result = [this.filterField];
 
@@ -586,7 +583,7 @@ Ext.define('pimcore.toolbar.Paging', {
                     this.last.hide();
                 }.bind(this),
                 scope: me,
-                hidden: this.inSearch
+                hidden: this.inSearch || pagingData.total < 30
             });
 
         this.cancelFilterButton = new Ext.button.Button(
@@ -614,7 +611,7 @@ Ext.define('pimcore.toolbar.Paging', {
             width: 38,
             disabled: true,
             margin: '-1 2 3 2',
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -638,7 +635,7 @@ Ext.define('pimcore.toolbar.Paging', {
             isFormField: false,
             margin: '-1 2 3 2',
             listeners: inputListeners,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -652,7 +649,7 @@ Ext.define('pimcore.toolbar.Paging', {
                 handler: me.moveFirst,
                 scope: me,
                 border: false,
-                hidden: hidden
+                hidden: hidePagination
 
             });
 
@@ -666,13 +663,13 @@ Ext.define('pimcore.toolbar.Paging', {
             handler: me.movePrevious,
             scope: me,
             border: false,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
         this.spacer = new Ext.toolbar.Spacer({
             xtype: "tbspacer",
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -684,7 +681,7 @@ Ext.define('pimcore.toolbar.Paging', {
             disabled: (Math.ceil(me.node.pagingData.total / me.node.pagingData.limit) - 1) * me.node.pagingData.limit == me.node.pagingData.offset,
             handler: me.moveNext,
             scope: me,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 
@@ -696,7 +693,7 @@ Ext.define('pimcore.toolbar.Paging', {
             disabled: (Math.ceil(me.node.pagingData.total / me.node.pagingData.limit) - 1) * me.node.pagingData.limit == me.node.pagingData.offset,
             handler: me.moveLast,
             scope: me,
-            hidden: hidden
+            hidden: hidePagination
         });
 
 

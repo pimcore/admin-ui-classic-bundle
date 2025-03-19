@@ -562,19 +562,21 @@ Ext.onReady(function () {
                     request.open('GET', Routing.generate('pimcore_admin_index_statistics'));
                     request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-                    request.onload = function () {
-                        if (this.status >= 200 && this.status < 400) {
-                            var res = Ext.decode(this.response);
+                    if (pimcore.currentuser.admin) {
+                        request.onload = function () {
+                            if (this.status >= 200 && this.status < 400) {
+                                var res = Ext.decode(this.response);
 
-                            var request = new XMLHttpRequest();
-                            request.open('POST', "https://liveupdate.pimcore.org/statistics");
+                                var request = new XMLHttpRequest();
+                                request.open('POST', "https://liveupdate.pimcore.org/statistics");
 
-                            var data = new FormData();
-                            data.append('data', encodeURIComponent(JSON.stringify(res)));
+                                var data = new FormData();
+                                data.append('data', encodeURIComponent(JSON.stringify(res)));
 
-                            request.send(data);
-                        }
-                    };
+                                request.send(data);
+                            }
+                        };
+                    }
                     request.send(data);
                 }
             }
@@ -976,7 +978,6 @@ pimcore.helpers.unload = function () {
 
 };
 
-L.Icon.Default.imagePath = '../bundles/pimcoreadmin/build/admin/images/';
 if (!pimcore.wysiwyg) {
     pimcore.wysiwyg = {};
     pimcore.wysiwyg.editors = [];

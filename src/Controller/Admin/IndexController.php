@@ -18,6 +18,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Doctrine\DBAL\Connection;
 use Exception;
+use GuzzleHttp\ClientInterface;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
@@ -61,7 +62,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
-        protected TranslatorInterface $translator
+        protected TranslatorInterface $translator,
+        protected ClientInterface $httpClient
     ) {
     }
 
@@ -156,7 +158,21 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             $data = [];
         }
 
-        return $this->adminJson($data);
+        if ($this->getAdminUser()->isAdmin()) {
+            return $this->adminJson($data);
+        }
+
+        $response = $this->httpClient->request(
+            'POST',
+            'https://liveupdate.pimcore.org/statistics',
+            [
+                'body' => json_encode($data),
+            ]
+        );
+
+        return $this->adminJson([
+            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400),
+        ]);
     }
 
     protected function addRuntimePerspective(array &$templateParams, User $user): static
@@ -245,7 +261,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
-            'timezone'                       => $config['general']['timezone'],
+            'timezone'                       => $config['general']['timezone'] ?: date_default_timezone_get(),
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
             'geocoding_url_template'         => $config['maps']['geocoding_url_template'],
             'reverse_geocoding_url_template' => $config['maps']['reverse_geocoding_url_template'],

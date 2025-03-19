@@ -277,7 +277,10 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             autoHeight: autoHeight,
-            bodyCssClass: "pimcore_object_tag_multihref"
+            bodyCssClass: "pimcore_object_tag_multihref",
+            plugins: [
+              'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -443,6 +446,26 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             {text: t("subtype"), dataIndex: 'subtype', width: 100},
         ];
 
+        columns = Ext.Array.map(columns, function(column) {
+            column.filter = {
+                type: 'list'
+            }
+
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
+
         return columns;
     },
 
@@ -478,6 +501,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             cls: "multihref_field",
+            componentCls: this.getWrapperClassNames(),
+            bodyCssClass: "pimcore_object_tag_multihref",
             autoExpandColumn: 'fullpath',
             border: true,
             style: "margin-bottom: 10px",

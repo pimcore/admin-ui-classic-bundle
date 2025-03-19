@@ -123,6 +123,10 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
             data: options
         });
 
+        if (!field.layout.mandatory) {
+            options.unshift({'value': '', 'key': '(' + t('empty') + ')'});
+        }
+
         let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {
@@ -266,7 +270,8 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
                             params: {
                                 objectId: this.object.id,
                                 changedData: this.object.getSaveData().data,
-                                fieldDefinition: JSON.stringify(this.fieldConfig)
+                                fieldDefinition: JSON.stringify(this.fieldConfig),
+                                context: JSON.stringify(this.context)
                             },
                             success: function (response) {
                                 response = Ext.decode(response.responseText);
