@@ -23,21 +23,19 @@ use Pimcore\Model\Element;
 use Pimcore\Model\Schedule\Task;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * @Route("/link", name="pimcore_admin_document_link_")
- *
  * @internal
  */
+#[Route('/link', name: 'pimcore_admin_document_link_')]
 class LinkController extends DocumentControllerBase
 {
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/get-data-by-id', name: 'getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request, SerializerInterface $serializer): JsonResponse
     {
         $link = Document\Link::getById((int)$request->get('id'));
@@ -74,10 +72,9 @@ class LinkController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route('/save', name: 'save', methods: ['PUT', 'POST'])]
     public function saveAction(Request $request): JsonResponse
     {
         $link = Document\Link::getById((int) $request->get('id'));

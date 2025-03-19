@@ -29,7 +29,7 @@ use Symfony\Cmf\Bundle\RoutingBundle\Routing\DynamicRouter;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -39,9 +39,8 @@ class RenderletController extends AdminAbstractController
 {
     /**
      * Handles editmode preview for renderlets
-     *
-     * @Route("/document_tag/renderlet", name="pimcore_admin_document_renderlet_renderlet")
      */
+    #[Route('/document_tag/renderlet', name: 'pimcore_admin_document_renderlet_renderlet')]
     public function renderletAction(
         Request $request,
         ActionRenderer $actionRenderer,
