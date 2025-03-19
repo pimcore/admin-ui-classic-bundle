@@ -349,7 +349,7 @@ class DataObject extends Element
         }
 
         $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if (!empty($inheritedValue['value'])) {
+        if ((!is_array($inheritedValue) && $inheritedValue !== null) || !empty($inheritedValue['value'])) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,
