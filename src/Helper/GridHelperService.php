@@ -362,7 +362,8 @@ class GridHelperService
                             if ($filter['type'] == 'date' && $operator == '=') {
                                 //if the equal operator is chosen with the date type, condition has to be changed
                                 $maxTime = $filter['value'] + (86400 - 1); //specifies the top point of the range used in the condition
-                                $conditionPartsFilters[] = $filterField . ' BETWEEN ' . $db->quote($filter['value']) . ' AND ' . $db->quote($maxTime);
+                                $conditionPartsFilters[] = $filterField . ' BETWEEN ' .
+                                    $db->quote($filter['value']) . ' AND ' . $db->quote((string)$maxTime);
                             } else {
                                 // @see \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::getFilterConditionExt()
                                 if ($filter['type'] === 'boolean') {
@@ -803,7 +804,8 @@ class GridHelperService
                         $operator = 'BETWEEN';
                         //if the equal operator is chosen with the date type, condition has to be changed
                         $maxTime = $filter['value'] + (86400 - 1); //specifies the top point of the range used in the condition
-                        $filter['value'] = $db->quote($filter['value']) . ' AND ' . $db->quote($maxTime);
+                        $filter['value'] =
+                            $db->quote((string)$filter['value']) . ' AND ' . $db->quote((string)$maxTime);
                     }
                 } elseif ($filterType == 'list') {
                     $operator = 'IN';

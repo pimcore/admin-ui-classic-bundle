@@ -162,7 +162,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
 
             $list = new Document\Listing();
 
-            $condition = 'parentId =  ' . $db->quote($document->getId());
+            $condition = 'parentId =  ' . $db->quote((string)$document->getId());
 
             if (!$this->getAdminUser()->isAdmin()) {
                 $userIds = $this->getAdminUser()->getRoles();
