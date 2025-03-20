@@ -347,15 +347,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                         Ext.MessageBox.confirm(t("element_is_locked"), t("element_lock_message") + lockDetails,
                                 function (lock, buttonValue) {
                                     if (buttonValue == "yes") {
-                                        let storeItemData = {
-                                            id: item.id,
-                                            path: item.fullpath,
-                                            type: item.classname
-                                        };
-                                        this.store.add(storeItemData);
+                                        this.store.add(item);
 
                                         const toBeRequested = new Ext.util.Collection();
-                                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                                         this.requestNicePathData(toBeRequested, true);
                                     }
                                 }.bind(this, arguments));
@@ -367,16 +362,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                             params: {id: item.id, type: 'object'}
                         });
 
-                        let storeItemData = {
-                            id: item.id,
-                            path: item.fullpath,
-                            type: item.classname,
-                            published: item.published
-                        };
-                        this.store.add(storeItemData);
+                        this.store.add(item);
 
                         const toBeRequested = new Ext.util.Collection();
-                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                         this.requestNicePathData(toBeRequested, true);
                     }
 
@@ -389,16 +378,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             Ext.MessageBox.confirm(' ', t("element_open_message") + lockDetails,
                 function (item, buttonValue) {
                     if (buttonValue == "yes") {
-                        let storeItemData = {
-                            id: item.id,
-                            path: item.fullpath,
-                            type: item.classname,
-                            published: item.published
-                        };
-                        this.store.add(storeItemData);
+                        this.store.add(item);
 
                         const toBeRequested = new Ext.util.Collection();
-                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                         this.requestNicePathData(toBeRequested, true);
                     }
                 }.bind(this, item)
