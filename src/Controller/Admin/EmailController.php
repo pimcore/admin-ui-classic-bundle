@@ -370,7 +370,7 @@ class EmailController extends AdminAbstractController
         $mail = new Mail();
 
         if ($request->get('emailType') == 'text') {
-            $mail->text($request->get('content'));
+            $mail->text(strip_tags($request->get('content')));
         } elseif ($request->get('emailType') == 'html') {
             $mail->html($request->get('content'));
         } elseif ($request->get('emailType') == 'document') {
