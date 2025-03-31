@@ -353,6 +353,8 @@ pimcore.document.editables.image = Class.create(pimcore.document.editable, {
         let merged = Ext.merge(this.datax, additionalConfig);
         merged = Ext.clone(merged);
         delete merged["hotspots"];
+        delete merged["marker"];
+        delete merged["predefinedDataTemplates"];
         delete merged["path"];
         return merged;
 
