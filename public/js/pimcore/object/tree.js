@@ -555,7 +555,7 @@ pimcore.registerNS("pimcore.object.tree");
                      var pasteMenu = [];
 
                      if (perspectiveCfg.inTreeContextMenu("object.paste")) {
-                         if (pimcore.cachedObjectId) {
+                         if (pimcore.cachedObjectId && (typeof perspectiveCfg.classes === undefined || pimcore.copiedObject.getData().classId in perspectiveCfg.classes)) {
                              pasteMenu.push({
                                  text: t("paste_recursive_as_child"),
                                  iconCls: "pimcore_icon_paste",
@@ -583,28 +583,26 @@ pimcore.registerNS("pimcore.object.tree");
                          }
                      }
 
-                     if (!isVariant) {
-                         if (pimcore.cutObject) {
-                             pasteMenu.push({
-                                 text: t("paste_cut_element"),
-                                 iconCls: "pimcore_icon_paste",
-                                 handler: function () {
-                                     this.pasteCutObject(pimcore.cutObject,
-                                         pimcore.cutObjectParentNode, record, this.tree);
-                                     pimcore.cutObjectParentNode = null;
-                                     pimcore.cutObject = null;
-                                 }.bind(this)
-                             });
-                         }
+                     if (pimcore.cutObject && (typeof perspectiveCfg.classes === undefined || pimcore.cutObject.getData().classId in perspectiveCfg.classes)) {
+                         pasteMenu.push({
+                             text: t("paste_cut_element"),
+                             iconCls: "pimcore_icon_paste",
+                             handler: function () {
+                                 this.pasteCutObject(pimcore.cutObject,
+                                     pimcore.cutObjectParentNode, record, this.tree);
+                                 pimcore.cutObjectParentNode = null;
+                                 pimcore.cutObject = null;
+                             }.bind(this)
+                         });
+                     }
 
-                         if (pasteMenu.length > 0) {
-                             menu.add(new Ext.menu.Item({
-                                 text: t('paste'),
-                                 iconCls: "pimcore_icon_paste",
-                                 hideOnClick: false,
-                                 menu: pasteMenu
-                             }));
-                         }
+                     if (pasteMenu.length > 0) {
+                         menu.add(new Ext.menu.Item({
+                             text: t('paste'),
+                             iconCls: "pimcore_icon_paste",
+                             hideOnClick: false,
+                             menu: pasteMenu
+                         }));
                      }
                  }
              }
@@ -854,6 +852,7 @@ pimcore.registerNS("pimcore.object.tree");
 
      copy: function (tree, record) {
          pimcore.cachedObjectId = record.data.id;
+         pimcore.copiedObject = record;
      },
 
      cut: function (tree, record) {
