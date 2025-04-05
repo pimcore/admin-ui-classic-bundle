@@ -187,7 +187,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                     try {
                         baseUnitStore.reload({
                             page: this.store.currentPage,
-                            start: 1,
+                            start: 0,
                             limit: 9999
                         });
                         Ext.apply(baseUnitStore, {pageSize: this.pagingtoolbar.pageSize});
