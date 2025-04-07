@@ -418,6 +418,8 @@ pimcore.element.helpers.gridColumnConfig = {
                 containerType: "filterByRelationWindow"
             });
 
+            editor.fieldConfig.width = 300;
+
             const formPanel = Ext.create('Ext.form.Panel', {
                 xtype: "form",
                 border: false,
