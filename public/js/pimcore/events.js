@@ -162,6 +162,12 @@
   * url returning the metadata definitions is passed as parameter
   */
  pimcore.events.prepareAssetMetadataGridConfigurator = "pimcore.gridConfigurator.assetMetadata.prepare";
+
+ /**
+  * upload via asset tree and handle the error
+  * response is passed as parameter
+  */
+ pimcore.events.assetTreeAddAssetError = "pimcore.events.assetTree.addAssetError";
  
  /**
   * before context menu is opened
