@@ -68,8 +68,8 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
                 }
             });
 
-            var metadataTreeHelper = new pimcore.object.helpers.classTree(true);
-            var filterField = new Ext.form.field.Text(
+            let metadataTreeHelper = new pimcore.object.helpers.classTree(true);
+            let filterField = new Ext.form.field.Text(
               {
                 width: 130,
                 hideLabel: true,
@@ -77,7 +77,7 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
               }
             );
 
-            var filterButton = new Ext.button.Button({
+            let filterButton = new Ext.button.Button({
               iconCls: "pimcore_icon_search"
             });
 
