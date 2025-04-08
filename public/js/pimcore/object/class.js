@@ -74,6 +74,19 @@ pimcore.object.klass = Class.create({
                 }
             });
 
+            var metadataTreeHelper = new pimcore.object.helpers.classTree(true);
+            var filterField = new Ext.form.field.Text(
+              {
+                width: 130,
+                hideLabel: true,
+                enableKeyEvents: true
+              }
+            );
+
+            var filterButton = new Ext.button.Button({
+              iconCls: "pimcore_icon_search"
+            });
+
             this.tree = Ext.create('Ext.tree.Panel', {
                 id: "pimcore_panel_classes_tree",
                 store: this.store,
@@ -81,7 +94,7 @@ pimcore.object.klass = Class.create({
                 autoScroll: true,
                 animate: false,
                 containerScroll: true,
-                width: 250,
+                width: 300,
                 split: true,
                 root: {
                     id: '0'
@@ -96,14 +109,20 @@ pimcore.object.klass = Class.create({
                             iconCls: "pimcore_icon_class pimcore_icon_overlay_add",
                             handler: this.suggestIdentifier.bind(this),
                             disabled: !pimcore.settings['class-definition-writeable']
-                        }
-                    ]
-                }
+                        },
+                        '-',
+                        filterField,
+                        filterButton
+                    ],
+                },
             });
 
             this.tree.on("render", function () {
                 this.getRootNode().expand();
             });
+
+            filterField.on("keyup", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
+            filterButton.on("click", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
         }
 
         return this.tree;
