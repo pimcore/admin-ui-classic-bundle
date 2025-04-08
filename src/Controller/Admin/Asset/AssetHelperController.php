@@ -730,7 +730,9 @@ class AssetHelperController extends AdminAbstractController
                 ]
             );
         } finally {
-            fclose($temp);
+            if (is_resource($temp)) {
+                fclose($temp);
+            }
         }
 
         return $this->adminJson(['success' => true]);

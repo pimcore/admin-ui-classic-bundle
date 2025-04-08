@@ -10,7 +10,7 @@ reverse_object_relation: Reverse Object Relation
 url_slug: URL Slug
 url_slug_datatype_info: >-
     Enter the controller & action in the following
-    format:<br>App\Controller\ProductController:slugAction
+    format:<br>App\Controller\ProductController::slugAction
 controller_action: Controller & Action
 admin_interface: Admin Interface
 admin_interface_background: Admin Interface Background
