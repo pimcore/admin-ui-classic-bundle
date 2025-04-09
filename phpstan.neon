@@ -12,6 +12,8 @@ parameters:
         - phpstan-bootstrap.php
 
     ergebnis:
+        declareStrictTypes:
+            enabled: false
         final:
             enabled: false
         finalInAbstractClass:
