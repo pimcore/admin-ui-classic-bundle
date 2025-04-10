@@ -854,16 +854,20 @@ class GridHelperService
 
         //filtering for tags
         if (!empty($allParams['tagIds'])) {
-            $tagIds = $allParams['tagIds'];
-            foreach ($tagIds as $tagId) {
+            foreach ($allParams['tagIds'] as $tagId) {
+                $tagId = (int) $tagId;
                 if ($allParams['considerChildTags'] ?? false) {
                     $tag = Model\Element\Tag::getById($tagId);
                     if ($tag) {
                         $tagPath = $tag->getFullIdPath();
-                        $conditionFilters[] = 'id IN (SELECT cId FROM `tags_assignment` INNER JOIN `tags` ON tags.id = tags_assignment.tagid WHERE `ctype` = "asset" AND (`id` = ' .(int)$tagId. ' OR `idPath` LIKE ' . $db->quote($tagPath . '%') . '))';
+                        $conditionFilters[] =
+                            'id IN (SELECT cId FROM `tags_assignment` INNER JOIN `tags` ON
+                            tags.id = tags_assignment.tagid WHERE `ctype` = "asset"
+                            AND (`id` = ' .$tagId. ' OR `idPath` LIKE ' . $db->quote($tagPath . '%') . '))';
                     }
                 } else {
-                    $conditionFilters[] = 'id IN (SELECT cId FROM `tags_assignment` WHERE `ctype` = "asset" AND tagid = ' .(int)$tagId. ')';
+                    $conditionFilters[] =
+                        'id IN (SELECT cId FROM `tags_assignment` WHERE `ctype` = "asset" AND tagid = ' .$tagId. ')';
                 }
             }
         }

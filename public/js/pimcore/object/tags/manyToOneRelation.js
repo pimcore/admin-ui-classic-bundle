@@ -671,8 +671,9 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         if (!this.object) {
             return;
         }
+
         let targets, responseHandler;
-        if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo') {
+        if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo' && !this.fieldConfig.noteditable) {
             targets = this.store.data;
             responseHandler = function (responseData) {
                 this.component.removeCls('grid_nicepath_requested');
