@@ -855,7 +855,7 @@ class GridHelperService
             $tagIds = $allParams['tagIds'];
             foreach ($tagIds as $tagId) {
                 if ($allParams['considerChildTags'] ?? false) {
-                    $tag = Model\Element\Tag::getById($tagId);
+                    $tag = Model\Element\Tag::getById((int)$tagId);
                     if ($tag) {
                         $tagPath = $tag->getFullIdPath();
                         $conditionFilters[] = 'id IN (SELECT cId FROM `tags_assignment` INNER JOIN `tags` ON tags.id = tags_assignment.tagid WHERE `ctype` = "asset" AND (`id` = ' .(int)$tagId. ' OR `idPath` LIKE ' . $db->quote($tagPath . '%') . '))';
