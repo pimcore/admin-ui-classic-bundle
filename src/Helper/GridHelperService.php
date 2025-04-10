@@ -852,8 +852,8 @@ class GridHelperService
 
         //filtering for tags
         if (!empty($allParams['tagIds'])) {
-            $tagIds = array_map('intval', $allParams['tagIds']);
-            foreach ($tagIds as $tagId) {
+            foreach ($allParams['tagIds'] as $tagId) {
+                $tagId = (int) $tagId;
                 if ($allParams['considerChildTags'] ?? false) {
                     $tag = Model\Element\Tag::getById($tagId);
                     if ($tag) {
