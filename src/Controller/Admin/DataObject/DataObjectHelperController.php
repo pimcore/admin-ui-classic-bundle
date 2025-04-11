@@ -111,7 +111,7 @@ class DataObjectHelperController extends AdminAbstractController
         $db = Db::get();
 
         $query = 'select distinct c1.id from gridconfigs c1, gridconfig_shares s
-                    where (c1.searchType = ' . $db->quote($searchType) . ' and ((c1.id = s.gridConfigId
+                    where (c1.searchType = ' . $db->quote($searchType ?? '') . ' and ((c1.id = s.gridConfigId
                     and s.sharedWithUserId IN (' . $userIds . '))) and c1.classId = ' . $db->quote($classId) . ')
                     UNION
                     distinct select c2.id from gridconfigs c2
