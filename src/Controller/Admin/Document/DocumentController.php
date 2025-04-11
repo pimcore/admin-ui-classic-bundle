@@ -33,7 +33,7 @@ use Pimcore\Cache\RuntimeCache;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
-use Pimcore\Document\Renderer\DocumentRenderer;
+use Pimcore\Document\Renderer\DocumentRendererInterface;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
 use Pimcore\Image\HtmlToImage;
 use Pimcore\Logger;
@@ -979,7 +979,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
     }
 
     #[Route('/diff-versions/from/{from}/to/{to}', name: 'pimcore_admin_document_document_diffversions', requirements: ['from' => '\d+', 'to' => '\d+'], methods: ['GET'])]
-    public function diffVersionsAction(Request $request, int $from, int $to, DocumentRenderer $documentRenderer, RouterInterface $router): Response
+    public function diffVersionsAction(Request $request, int $from, int $to, DocumentRendererInterface $documentRenderer, RouterInterface $router): Response
     {
         // return with error if prerequisites do not match
         if (!HtmlToImage::isSupported() || !class_exists('Imagick')) {
