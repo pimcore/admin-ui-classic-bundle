@@ -1050,9 +1050,13 @@ class ClassController extends AdminAbstractController implements KernelControlle
             if ($request->get('values')) {
                 $values = $this->decodeJson($request->get('values'));
 
+                // remove duplicates
+                $classDefinitions = array_values(array_unique(array_map('serialize', $values['classDefinitions'])));
+                $classDefinitions = array_map('unserialize', $classDefinitions);
+
                 $brickDef->setParentClass($values['parentClass']);
                 $brickDef->setImplementsInterfaces($values['implementsInterfaces']);
-                $brickDef->setClassDefinitions($values['classDefinitions']);
+                $brickDef->setClassDefinitions($classDefinitions);
             }
 
             if ($request->get('configuration')) {
