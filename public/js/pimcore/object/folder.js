@@ -295,22 +295,6 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                 handler: this.save.bind(this, "publish")
             });
 
-            this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete'),
-                iconCls: "pimcore_material_icon_delete pimcore_material_icon",
-                scale: "medium",
-                handler: function () {
-                    var options = this.search.onRawDeleteSelectedRows();
-                    if (!options) {
-                        options = {
-                            "elementType" : "object",
-                            "id": this.id
-                        };
-                    }
-                    pimcore.elementservice.deleteElement(options);
-                }.bind(this)
-            });
-
             this.toolbarButtons.rename = new Ext.Button({
                 tooltip: t('rename'),
                 iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -351,8 +335,6 @@ pimcore.object.folder = Class.create(pimcore.object.abstract, {
                             pimcore.elementservice.deleteElement(options);
                         }.bind(this)
                     });
-                } else {
-                    buttons.push(this.toolbarButtons.remove);
                 }
             }
 

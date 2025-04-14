@@ -230,9 +230,6 @@ pimcore.asset.asset = Class.create(pimcore.element.abstract, {
 
                 if (pimcore.helpers.checkIfNewHeadbarLayoutIsEnabled()) {
                     this.toolbarSubmenu.menu.add(deleteConfig);
-                } else {
-                    this.toolbarButtons.remove = new Ext.Button(deleteConfig);
-                    buttons.push(this.toolbarButtons.remove);
                 }
             }
 

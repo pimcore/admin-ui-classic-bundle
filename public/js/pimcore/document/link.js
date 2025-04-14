@@ -257,13 +257,6 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                 })
             }
 
-            this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t('delete'),
-                iconCls: "pimcore_material_icon_delete pimcore_material_icon",
-                scale: "medium",
-                handler: this.remove.bind(this)
-            });
-
             this.toolbarButtons.rename = new Ext.Button({
                 tooltip: t('rename'),
                 iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -300,8 +293,6 @@ pimcore.document.link = Class.create(pimcore.document.document, {
                         scale: "medium",
                         handler: this.remove.bind(this)
                     });
-                } else {
-                    buttons.push(this.toolbarButtons.remove);
                 }
             }
             if (this.isAllowed("rename") && !this.data.locked) {
@@ -360,11 +351,6 @@ pimcore.document.link = Class.create(pimcore.document.document, {
 
             this.toolbar.on("afterrender", function () {
                 window.setTimeout(function () {
-                    // it's not possible to delete the root-node
-                    if (this.id == 1) {
-                        this.toolbarButtons.remove.hide();
-                    }
-
                     if (!this.data.published) {
                         this.toolbarButtons.unpublish.hide();
                     }
@@ -628,4 +614,3 @@ pimcore.document.link = Class.create(pimcore.document.document, {
         }
     }
 });
-

@@ -521,13 +521,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 })
             }
 
-            this.toolbarButtons.remove = new Ext.Button({
-                tooltip: t("delete"),
-                iconCls: "pimcore_material_icon_delete pimcore_material_icon",
-                scale: "medium",
-                handler: this.remove.bind(this)
-            });
-
             this.toolbarButtons.rename = new Ext.Button({
                 tooltip: t('rename'),
                 iconCls: "pimcore_material_icon_rename pimcore_material_icon",
@@ -571,8 +564,6 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                         scale: "medium",
                         handler: this.remove.bind(this)
                     });
-                } else {
-                    buttons.push(this.toolbarButtons.remove);
                 }
             }
 
