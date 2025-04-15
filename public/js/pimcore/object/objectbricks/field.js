@@ -199,15 +199,7 @@ pimcore.object.objectbricks.field = Class.create(pimcore.object.classes.klass, {
         }.bind(this));
     },
 
-    removeFromOthers: function (name, store) {
-        delete (this.baseStore[name]);
-    },
-
     getClassDefinitionElements: function (currentData) {
-        if (currentData) {
-            this.removeFromOthers(currentData.classname);
-        }
-
         var fieldComboStore = new Ext.data.Store({
             proxy: {
                 type: 'ajax',
