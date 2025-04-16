@@ -201,7 +201,7 @@ class GridHelperService
 
                     if ($filter['type'] == 'string') {
                         $filter['value'] = str_getcsv($filter['value'], ',');
-                        if(count($filter['value']) === 1) {
+                        if (count($filter['value']) === 1) {
                             $filter['value'] = $filter['value'][0];
                             $operator = 'LIKE';
                         }
