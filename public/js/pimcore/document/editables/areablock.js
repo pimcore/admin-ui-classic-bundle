@@ -56,7 +56,7 @@ pimcore.document.editables.areablock = Class.create(pimcore.document.area_abstra
         }
 
         // click outside, hide all block buttons
-        if(this.config['controlsTrigger'] === 'hover') {
+        if(this.config['controlsTrigger'] === 'hover' || this.config['controlsTrigger'] === 'click') {
             Ext.getBody().on('click', function (event) {
                 if (Ext.get(id) && !Ext.get(id).isAncestor(event.target)) {
                     Ext.get(id).query('.pimcore_area_buttons', false).forEach(function (el) {
