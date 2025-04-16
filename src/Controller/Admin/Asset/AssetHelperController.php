@@ -747,8 +747,11 @@ class AssetHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true]);
     }
 
-    public function encodeFunc(?string $value): string
+    public function encodeFunc(null|string|array $value): string
     {
+        if (is_array($value)) {
+            $value = implode(',', $value);
+        }
         $value = str_replace('"', '""', $value ?? '');
 
         //force wrap value in quotes and return
