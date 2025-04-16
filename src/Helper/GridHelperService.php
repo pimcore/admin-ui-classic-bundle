@@ -193,7 +193,7 @@ class GridHelperService
             $filters = json_decode($filterJson, true);
 
             foreach ($filters as $filter) {
-                if (!isset($filter['value'])) {
+                if (isset($filter['value'])) {
                     $operator = '=';
 
                     $filterField = $filter['property'];
