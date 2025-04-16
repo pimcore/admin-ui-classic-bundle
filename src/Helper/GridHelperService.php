@@ -200,7 +200,11 @@ class GridHelperService
                     $filterOperator = $filter['operator'];
 
                     if ($filter['type'] == 'string') {
-                        $operator = 'LIKE';
+                        $filter['value'] = str_getcsv($filter['value'], ',');
+                        if(count($filter['value']) === 1) {
+                            $filter['value'] = $filter['value'][0];
+                            $operator = 'LIKE';
+                        }
                     } elseif ($filter['type'] == 'date') {
                         if ($filterOperator == 'lt') {
                             $operator = '<';
