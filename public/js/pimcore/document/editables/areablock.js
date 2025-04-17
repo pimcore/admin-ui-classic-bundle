@@ -152,7 +152,7 @@ pimcore.document.editables.areablock = Class.create(pimcore.document.area_abstra
                             }
                         });
 
-                        var buttonContainer = Ext.get(component).selectNode('.pimcore_area_buttons', false);
+                        let buttonContainer = Ext.get(component).selectNode('.pimcore_area_buttons', false);
                         buttonContainer.show();
 
                         if (activeBlockEl != component) {
