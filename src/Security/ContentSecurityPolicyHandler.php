@@ -54,7 +54,7 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     private array $allowedUrls = [
         self::CONNECT_OPT => [
-            'https://license.pimcore.com/', // AdminBundle statistics & update-check service
+            'https://license.pimcore.com/', // Statistics
             'https://nominatim.openstreetmap.org/', // CoreBundle geocoding_url_template
         ],
         self::SCRIPT_OPT => [
