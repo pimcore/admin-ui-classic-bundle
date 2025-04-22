@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Doctrine\DBAL\Connection;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
@@ -25,6 +24,7 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Tool\StatisticsManager;
 use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
@@ -54,6 +54,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use function array_merge;
 
 /**
  * @internal
@@ -62,8 +63,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
-        protected TranslatorInterface $translator,
-        protected ClientInterface $httpClient
+        protected TranslatorInterface      $translator,
+        protected ClientInterface          $httpClient,
     ) {
     }
 
@@ -120,56 +121,18 @@ class IndexController extends AdminAbstractController implements KernelResponseE
      * @throws \Exception
      */
     #[Route('/index/statistics', name: 'pimcore_admin_index_statistics', methods: ['GET'])]
-    public function statisticsAction(Request $request, Connection $db, KernelInterface $kernel): JsonResponse
+    public function statisticsAction(Request $request, StatisticsManager $statisticsManager): JsonResponse
     {
         if (!$request->isXmlHttpRequest()) {
             throw $this->createAccessDeniedHttpException();
         }
 
-        // DB
-        try {
-            $tables = $db->fetchAllAssociative('SELECT TABLE_NAME as name,TABLE_ROWS as `rows` from information_schema.TABLES
-                WHERE TABLE_ROWS IS NOT NULL AND TABLE_SCHEMA = ?', [$db->getDatabase()]);
-        } catch (\Exception $e) {
-            $tables = [];
-        }
-
-        try {
-            $mysqlVersion = $db->fetchOne('SELECT VERSION()');
-        } catch (\Exception $e) {
-            $mysqlVersion = null;
-        }
-
-        try {
-            $data = [
-                'instanceId' => $this->getInstanceId(),
-                'pimcore_major_version' => Version::getMajorVersion(),
-                'pimcore_version' => Version::getVersion(),
-                'pimcore_hash' => Version::getRevision(),
-                'pimcore_platform_version' => Version::getPlatformVersion(),
-                'php_version' => PHP_VERSION,
-                'mysql_version' => $mysqlVersion,
-                'bundles' => array_keys($kernel->getBundles()),
-                'tables' => $tables,
-            ];
-        } catch (\Exception $e) {
-            $data = [];
-        }
-
         if ($this->getAdminUser()->isAdmin()) {
-            return $this->adminJson($data);
+            return $this->adminJson($statisticsManager->getData());
         }
-
-        $response = $this->httpClient->request(
-            'POST',
-            'https://liveupdate.pimcore.org/statistics',
-            [
-                'body' => json_encode($data),
-            ]
-        );
 
         return $this->adminJson([
-            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400),
+            'success' => $statisticsManager->submit(),
         ]);
     }
 
