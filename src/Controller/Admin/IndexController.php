@@ -24,7 +24,6 @@ use Pimcore\Bundle\AdminBundle\Event\IndexActionSettingsEvent;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\System\AdminConfig;
-use Pimcore\Tool\StatisticsManager;
 use Pimcore\Bundle\CoreBundle\OptionsProvider\SelectOptionsOptionsProvider;
 use Pimcore\Config;
 use Pimcore\Controller\KernelResponseEventInterface;
@@ -44,7 +43,6 @@ use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
 use Pimcore\Video;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -116,24 +114,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
     }
 
-    /**
-     * @throws \Exception
-     */
-    #[Route('/index/statistics', name: 'pimcore_admin_index_statistics', methods: ['GET'])]
-    public function statisticsAction(Request $request, StatisticsManager $statisticsManager): JsonResponse
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedHttpException();
-        }
 
-        if ($this->getAdminUser()->isAdmin()) {
-            return $this->adminJson($statisticsManager->getData());
-        }
-
-        return $this->adminJson([
-            'success' => $statisticsManager->submit(),
-        ]);
-    }
 
     protected function addRuntimePerspective(array &$templateParams, User $user): static
     {

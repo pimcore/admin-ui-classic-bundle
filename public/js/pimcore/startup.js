@@ -517,7 +517,7 @@ Ext.onReady(function () {
     // submit statistics
     window.setTimeout(function () {
         const request = new XMLHttpRequest();
-        request.open('GET', Routing.generate('pimcore_admin_index_statistics'));
+        request.open('GET', Routing.generate('pimcore_statistics'));
         request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
         if (pimcore.currentuser.admin) {
