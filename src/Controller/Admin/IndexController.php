@@ -60,8 +60,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
-        protected TranslatorInterface      $translator,
-        protected ClientInterface          $httpClient,
+        protected TranslatorInterface $translator,
+        protected ClientInterface $httpClient,
     ) {
     }
 
@@ -113,8 +113,6 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 
         return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
     }
-
-
 
     protected function addRuntimePerspective(array &$templateParams, User $user): static
     {
