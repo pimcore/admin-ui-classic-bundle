@@ -16,7 +16,6 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Doctrine\DBAL\Connection;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
@@ -44,7 +43,6 @@ use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
 use Pimcore\Video;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -62,8 +60,8 @@ class IndexController extends AdminAbstractController implements KernelResponseE
 {
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
-        protected TranslatorInterface $translator,
-        protected ClientInterface $httpClient
+        protected TranslatorInterface      $translator,
+        protected ClientInterface          $httpClient,
     ) {
     }
 
@@ -116,62 +114,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
     }
 
-    /**
-     * @throws \Exception
-     */
-    #[Route('/index/statistics', name: 'pimcore_admin_index_statistics', methods: ['GET'])]
-    public function statisticsAction(Request $request, Connection $db, KernelInterface $kernel): JsonResponse
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedHttpException();
-        }
 
-        // DB
-        try {
-            $tables = $db->fetchAllAssociative('SELECT TABLE_NAME as name,TABLE_ROWS as `rows` from information_schema.TABLES
-                WHERE TABLE_ROWS IS NOT NULL AND TABLE_SCHEMA = ?', [$db->getDatabase()]);
-        } catch (\Exception $e) {
-            $tables = [];
-        }
-
-        try {
-            $mysqlVersion = $db->fetchOne('SELECT VERSION()');
-        } catch (\Exception $e) {
-            $mysqlVersion = null;
-        }
-
-        try {
-            $data = [
-                'instanceId' => $this->getInstanceId(),
-                'pimcore_major_version' => Version::getMajorVersion(),
-                'pimcore_version' => Version::getVersion(),
-                'pimcore_hash' => Version::getRevision(),
-                'pimcore_platform_version' => Version::getPlatformVersion(),
-                'php_version' => PHP_VERSION,
-                'mysql_version' => $mysqlVersion,
-                'bundles' => array_keys($kernel->getBundles()),
-                'tables' => $tables,
-            ];
-        } catch (\Exception $e) {
-            $data = [];
-        }
-
-        if ($this->getAdminUser()->isAdmin()) {
-            return $this->adminJson($data);
-        }
-
-        $response = $this->httpClient->request(
-            'POST',
-            'https://liveupdate.pimcore.org/statistics',
-            [
-                'body' => json_encode($data),
-            ]
-        );
-
-        return $this->adminJson([
-            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400),
-        ]);
-    }
 
     protected function addRuntimePerspective(array &$templateParams, User $user): static
     {
