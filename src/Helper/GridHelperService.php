@@ -348,7 +348,7 @@ class GridHelperService
                     } elseif (in_array($filterField, $systemFields)) {
                         // system fields
                         $filterValue = $filter['value'];
-                        if(is_string($filterValue)) {
+                        if (is_string($filterValue)) {
                             $filterValue = strtolower($filterValue); // lowercase for case-insensitive search
                             $filterValue = str_replace('*', '%', $filterValue); // replace wildcard
                         }
