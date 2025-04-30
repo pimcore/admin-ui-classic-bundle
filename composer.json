@@ -1,6 +1,6 @@
 {
   "name": "pimcore/admin-ui-classic-bundle",
-  "license": "Pimcore Open Core License (POCL)",
+  "license": "proprietary",
   "type": "pimcore-bundle",
   "config": {
     "sort-packages": true,
