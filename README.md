@@ -1,5 +1,9 @@
 # Pimcore Admin Classic Bundle
 
+> **IMPORTANT: This bundle requires an additional license to be used with the Pimcore Community Edition.**
+> You can obtain this perpetual license by contacting sales@pimcore.com at a price of €1,480.
+> Unrestricted usage is included with the Pimcore Professional Edition and Enterprise Edition.
+
 The Admin Classic Bundle provides a Backend UI for Pimcore.
 It is based on the [ExtJS](https://www.sencha.com/products/extjs/) framework.
 
