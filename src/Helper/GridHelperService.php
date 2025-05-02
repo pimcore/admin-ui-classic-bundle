@@ -836,7 +836,7 @@ class GridHelperService
                     $value = '(' . implode(',', $quoted) . ')';
                 } elseif ($operator == 'BETWEEN') {
                 } else {
-                    $value = $db->quote($value);
+                    $value = $db->quote((string)$value);
                 }
 
                 if (isset($filterDef[1]) && $filterDef[1] == 'system') {
