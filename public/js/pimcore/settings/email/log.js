@@ -273,7 +273,7 @@ pimcore.settings.email.log = Class.create({
 
                                         var data = record.data.data;
                                         if (data.type == 'simple') {
-                                            return data.value;
+                                            return Ext.util.Format.htmlEncode(data.value);
                                         } else {
                                             //when the objectPath is set -> the object is still available otherwise it was
                                             // deleted in the meantime
