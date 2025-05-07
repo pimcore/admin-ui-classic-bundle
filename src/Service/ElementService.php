@@ -17,6 +17,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Service;
 
+use Pimcore;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\CustomView;
 use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
@@ -31,6 +32,7 @@ use Pimcore\Model\Site;
 use Pimcore\Security\User\UserLoader;
 use Pimcore\Tool\Frontend;
 
+use Pimcore\Workflow\Manager;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -97,6 +99,8 @@ class ElementService implements ElementServiceInterface
 
             $this->assignDataObjectTreeConfig($element, $tmpNode);
         }
+
+        $tmpNode['permissions'] = $this->mergeWorkflowPermissions($element, $tmpNode['permissions']);
 
         $this->addAdminStyle($element, ElementAdminStyleEvent::CONTEXT_TREE, $tmpNode);
 
@@ -355,5 +359,24 @@ class ElementService implements ElementServiceInterface
         if (!$document->isPublished()) {
             $tmpDocument['cls'] .= 'pimcore_unpublished ';
         }
+    }
+
+    private function mergeWorkflowPermissions(ElementInterface $element, array $permissions): array
+    {
+        $workflowManager = Pimcore::getContainer()->get(Manager::class);
+
+        $workflowPermission = [
+            'settings' => !$workflowManager->isDeniedInWorkflow($element, 'settings'),
+            'rename' => !$workflowManager->isDeniedInWorkflow($element, 'rename'),
+            'publish' => !$workflowManager->isDeniedInWorkflow($element, 'publish')
+        ];
+
+        if ($element instanceof Asset) {
+            $workflowPermission['remove'] = !$workflowManager->isDeniedInWorkflow($element, 'delete');
+        } elseif ($element instanceof DataObject) {
+            $workflowPermission['delete'] = !$workflowManager->isDeniedInWorkflow($element, 'delete');
+        }
+
+        return array_merge($permissions, $workflowPermission);
     }
 }
