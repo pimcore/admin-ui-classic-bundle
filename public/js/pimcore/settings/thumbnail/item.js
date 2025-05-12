@@ -158,6 +158,11 @@ pimcore.settings.thumbnail.item = Class.create({
                         checked: this.data.preserveColor
                     }, {
                         xtype: "checkbox",
+                        name: "forceProcessICCProfiles",
+                        boxLabel: t("force_process_ICC_profiles") + " (Imagick, ORIGINAL)",
+                        checked: this.data.forceProcessICCProfiles
+                    }, {
+                        xtype: "checkbox",
                         name: "preserveMetaData",
                         style: "margin-bottom:0",
                         boxLabel: t("preserve_meta_data") + " (Imagick, ORIGINAL)",
