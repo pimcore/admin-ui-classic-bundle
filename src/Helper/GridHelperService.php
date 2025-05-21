@@ -200,9 +200,9 @@ class GridHelperService
                     $filterOperator = $filter['operator'];
 
                     if ($filter['type'] == 'string') {
-                        $filter['value'] = str_getcsv($filter['value'], ',');
-                        if (count($filter['value']) === 1) {
-                            $filter['value'] = $filter['value'][0];
+                        if(preg_match('/^IN\((.*)\)$/i', $filter['value'], $matches)) {
+                            $filter['value'] = str_getcsv($matches[1], ',');
+                        } else {
                             $operator = 'LIKE';
                         }
                     } elseif ($filter['type'] == 'date') {
