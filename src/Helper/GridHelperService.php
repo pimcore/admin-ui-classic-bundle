@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Helper;
@@ -348,30 +345,42 @@ class GridHelperService
                             $conditionPartsFilters[] = $field->getFilterCondition($filter['value'] ?? null, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
                         }
                     } elseif (in_array($filterField, $systemFields)) {
-                        // system field
-                        $lowerCasedFilterValue = strtolower($filter['value']); // lowercase for case insensitive search
-                        $lowerCasedFilterValue = str_replace('*', '%', $lowerCasedFilterValue); // replace wildcard
+                        // system fields
+                        $filterValue = $filter['value'];
+                        if (is_string($filterValue)) {
+                            $filterValue = strtolower($filterValue); // lowercase for case-insensitive search
+                            $filterValue = str_replace('*', '%', $filterValue); // replace wildcard
+                        }
                         if ($filterField == 'fullpath') {
-                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
+                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $filterValue . '%');
                         } elseif ($filterField == 'key') {
-                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
+                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $filterValue . '%');
                         } elseif ($filterField == 'id' && $operator !== 'in') {
-                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $filterValue;
                         } elseif ($filterField == 'id' && $operator === 'in') {
-                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filter['value'] . ')';
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filterValue . ')';
                         } else {
                             $filterField = $db->quoteIdentifier($filterField);
                             if ($filter['type'] == 'date' && $operator == '=') {
                                 //if the equal operator is chosen with the date type, condition has to be changed
-                                $maxTime = $filter['value'] + (86400 - 1); //specifies the top point of the range used in the condition
-                                $conditionPartsFilters[] = $filterField . ' BETWEEN ' .
-                                    $db->quote($filter['value']) . ' AND ' . $db->quote((string)$maxTime);
+                                $maxTime = $filterValue + (86400 - 1); //specifies the top point of the range used in the condition
+                                $conditionPartsFilters[] = sprintf(
+                                    '%s BETWEEN %s AND %s',
+                                    $filterField,
+                                    is_string($filterValue) ? $db->quote($filterValue) : $filterValue,
+                                    $maxTime
+                                );
                             } else {
                                 // @see \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::getFilterConditionExt()
                                 if ($filter['type'] === 'boolean') {
                                     $filterField = 'IFNULL(' . $filterField . ', 0)';
                                 }
-                                $conditionPartsFilters[] = $filterField . ' ' . $operator . ' ' . $db->quote($filter['value']);
+                                $conditionPartsFilters[] = sprintf(
+                                    '%s %s %s',
+                                    $filterField,
+                                    $operator,
+                                    is_string($filterValue) ? $db->quote($filterValue) : $filterValue
+                                );
                             }
                         }
                     }

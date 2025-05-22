@@ -14,6 +14,7 @@ jobs:
                 ref:
                     [
                         { "base": "2.x", "destination": "2.x" },
+                        { "base": "2.0", "destination": "2.0" },
                         { "base": "1.7", "destination": "1.7" },
                     ]
         with:
