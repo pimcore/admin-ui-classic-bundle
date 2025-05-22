@@ -65,6 +65,19 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
                 }
             });
 
+            let metadataTreeHelper = new pimcore.object.helpers.classTree(true);
+            let filterField = new Ext.form.field.Text(
+              {
+                width: 130,
+                hideLabel: true,
+                enableKeyEvents: true
+              }
+            );
+
+            let filterButton = new Ext.button.Button({
+              iconCls: "pimcore_icon_search"
+            });
+
             this.tree = Ext.create('Ext.tree.Panel', {
                 id: "pimcore_panel_objectbricks_tree",
                 store: this.store,
@@ -72,7 +85,7 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
                 autoScroll:true,
                 animate:false,
                 containerScroll: true,
-                width: 200,
+                width: 300,
                 split: true,
                 root: {
                     id: '0'
@@ -87,7 +100,10 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
                             iconCls: "pimcore_icon_objectbricks pimcore_icon_overlay_add",
                             handler: this.addField.bind(this),
                             disabled: !pimcore.settings['class-definition-writeable']
-                        }
+                        },
+                        '-',
+                        filterField,
+                        filterButton
                     ]
                 }
             });
@@ -95,6 +111,9 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
             this.tree.on("render", function () {
                 this.getRootNode().expand();
             });
+
+            filterField.on("keyup", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
+            filterButton.on("click", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
         }
 
         return this.tree;
