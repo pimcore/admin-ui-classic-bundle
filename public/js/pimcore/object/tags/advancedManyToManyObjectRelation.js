@@ -495,7 +495,14 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             plugins: [
                 this.cellEditing,
                 'gridfilters'
-            ]
+            ],
+            listeners: {
+                celldblclick: function (grid, cell, cellIndex, record) {
+                    if (cellIndex < visibleFields.length) {
+                        this.gridRowDblClickHandler(grid, record);
+                    }
+                }.bind(this)
+            }
         });
 
         if (!readOnly) {
