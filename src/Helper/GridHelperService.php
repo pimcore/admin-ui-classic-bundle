@@ -198,7 +198,7 @@ class GridHelperService
 
                     if ($filter['type'] == 'string' && preg_match('/^IN\((.*)\)$/i', $filter['value'], $matches)) {
                         $filter['value'] = str_getcsv($matches[1], ',');
-                    } elseif($filter['type'] == 'string') {
+                    } elseif ($filter['type'] == 'string') {
                         $operator = 'LIKE';
                     } elseif ($filter['type'] == 'date') {
                         if ($filterOperator == 'lt') {
