@@ -78,7 +78,12 @@ pimcore.document.editables.relations = Class.create(pimcore.document.editable, {
             store: this.store,
             bodyStyle: "color:#000",
             selModel: Ext.create('Ext.selection.RowModel', {}),
-
+            viewConfig: {
+                plugins: {
+                    ptype: 'gridviewdragdrop',
+                    draggroup: 'element'
+                },
+            },
             columns: {
                 defaults: {
                     sortable: false
