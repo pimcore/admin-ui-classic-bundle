@@ -167,6 +167,11 @@ pimcore.document.editables.relations = Class.create(pimcore.document.editable, {
                     }
                 ]
             },
+            viewConfig: {
+                plugins: {
+                    gridviewdragdrop: {}
+                }
+            },
             tbar: {
                 items: tbar
             }
