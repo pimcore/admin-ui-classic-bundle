@@ -99,6 +99,9 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
     },
 
+    isColumnReadOnly: function (fieldConfigColumn){
+        return false;
+    },
 
     createLayout: function (readOnly) {
         var autoHeight = false;
@@ -116,9 +119,10 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
         let filterType = 'list';
         for (i = 0; i < this.fieldConfig.columns.length; i++) {
+            const fieldConfigColumn = this.fieldConfig.columns[i];
             var width = 100;
-            if (this.fieldConfig.columns[i].width) {
-                width = this.fieldConfig.columns[i].width;
+            if (fieldConfigColumn.width) {
+                width = fieldConfigColumn.width;
             }
 
             var cellEditor = null;
@@ -127,23 +131,25 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
 
             filterType = 'list';
 
-            if (this.fieldConfig.columns[i].type == "number") {
-                if(!readOnly) {
+            const columnReadOnly = readOnly || this.isColumnReadOnly(fieldConfigColumn);
+
+            if (fieldConfigColumn.type == "number") {
+                if(!columnReadOnly) {
                     cellEditor = function () {
                         return new Ext.form.NumberField({});
                     };
                 }
 
                 renderer = Ext.util.Format.numberRenderer();
-            } else if (this.fieldConfig.columns[i].type == "text" && !readOnly) {
+            } else if (fieldConfigColumn.type == "text" && !columnReadOnly) {
                 cellEditor = function () {
                     return new Ext.form.TextField({});
                 };
-            } else if (this.fieldConfig.columns[i].type == "select") {
-                if(!readOnly) {
+            } else if (fieldConfigColumn.type == "select") {
+                if(!columnReadOnly) {
                     var selectData = [];
-                    if (this.fieldConfig.columns[i].value) {
-                        var selectDataRaw = this.fieldConfig.columns[i].value.split(";");
+                    if (fieldConfigColumn.value) {
+                        const selectDataRaw = fieldConfigColumn.value.split(";");
                         for (var j = 0; j < selectDataRaw.length; j++) {
                             selectData.push([selectDataRaw[j], t(selectDataRaw[j])]);
                         }
@@ -175,13 +181,13 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 renderer = function (value, metaData, record, rowIndex, colIndex, store) {
                     return t(value);
                 }
-            } else if (this.fieldConfig.columns[i].type == "multiselect") {
-                if(!readOnly) {
+            } else if (fieldConfigColumn.type == "multiselect") {
+                if(!columnReadOnly) {
                     cellEditor = function (fieldInfo) {
                         return new pimcore.object.helpers.metadataMultiselectEditor({
                             fieldInfo: fieldInfo
                         });
-                    }.bind(this, this.fieldConfig.columns[i]);
+                    }.bind(this, fieldConfigColumn);
                 }
 
                 renderer = function (value, metaData, record, rowIndex, colIndex, store) {
@@ -197,7 +203,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                         return value;
                     }
                 }
-            } else if (this.fieldConfig.columns[i].type === "bool" || this.fieldConfig.columns[i].type === "columnbool") {
+            } else if (fieldConfigColumn.type === "bool" || fieldConfigColumn.type === "columnbool") {
                 renderer = function (value, metaData, record, rowIndex, colIndex, store) {
                     if (this.fieldConfig.noteditable) {
                         metaData.tdCls += ' grid_cbx_noteditable';
@@ -207,15 +213,15 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
                 }.bind(this);
 
                 listeners = {
-                    "mousedown": this.cellMousedown.bind(this, this.fieldConfig.columns[i].key, this.fieldConfig.columns[i].type, readOnly)
+                    "mousedown": this.cellMousedown.bind(this, fieldConfigColumn.key, fieldConfigColumn.type, columnReadOnly)
                 };
 
                 filterType = 'boolean';
 
-                if (readOnly) {
+                if (columnReadOnly) {
                     columns.push(Ext.create('Ext.grid.column.Check', {
-                        text: t(this.fieldConfig.columns[i].label),
-                        dataIndex: this.fieldConfig.columns[i].key,
+                        text: t(fieldConfigColumn.label),
+                        dataIndex: fieldConfigColumn.key,
                         width: width,
                         renderer: renderer,
                         filter: {
@@ -227,8 +233,8 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             }
 
             var columnConfig = {
-                text: t(this.fieldConfig.columns[i].label),
-                dataIndex: this.fieldConfig.columns[i].key,
+                text: t(fieldConfigColumn.label),
+                dataIndex: fieldConfigColumn.key,
                 renderer: renderer,
                 listeners: listeners,
                 width: width,
