@@ -353,6 +353,8 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
 
         var plugins = ['gridfilters', cellEditing];
 
+        this.initSearchComponents();
+
         var gridConfig = {
             frame: false,
             store: this.groupsStore,
@@ -373,6 +375,10 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
             selModel: Ext.create('Ext.selection.RowModel', {}),
             bbar: this.groupsPagingtoolbar,
             tbar: [
+                this.searchField,
+                this.clearFilterButton,
+                this.searchButton,
+                '-',
                 {
                     text: t('add'),
                     handler: this.onAdd.bind(this),
@@ -523,6 +529,10 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
         this.container.setActiveTab(this.layout);
         this.groupsStore.clearFilter(true);
 
+        this.searchField.setValue('');
+        this.groupsStore.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+        this.clearFilterButton.hide();
+
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_dataobject_classificationstore_getpage'),
             params: params,
@@ -556,6 +566,71 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
         });
 
 
+    },
+
+    initSearchComponents: function() {
+        this.searchField = new Ext.form.TextField(
+            {
+                name: 'query',
+                width: 200,
+                hideLabel: true,
+                enableKeyEvents: true,
+                value: '',
+                triggers: {
+                    search: {
+                        weight: 1,
+                        cls: 'x-form-search-trigger',
+                        scope: 'this',
+                        handler: function(field) {
+                            this.searchQuery(field);
+                        }.bind(this)
+                    }
+                },
+                listeners: {
+                    'keydown' : function (field, key) {
+                        if (key.getKey() === key.ENTER) {
+                            this.searchQuery(field);
+                        }
+                    }.bind(this)
+                }
+            }
+        );
+
+        this.searchQuery = function() {
+            if (Ext.isEmpty(this.searchField.getValue())) {
+                return;
+            }
+
+            this.relationsPanel.setTitle(t("relations"));
+            this.relationsPanel.disable();
+            this.relationsGrid.hide();
+
+            this.groupsStore.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+            this.groupsPagingtoolbar.moveFirst();
+
+            this.clearFilterButton.show();
+        }.bind(this);
+
+        this.searchButton = new Ext.Button({
+            text: t('search'),
+            handler: this.searchQuery,
+            iconCls: 'pimcore_icon_search'
+        });
+
+        this.clearFilterButton = new Ext.Button({
+            hidden: true,
+            tooltip: t('clear_filters'),
+            iconCls: 'pimcore_icon_clear_filters',
+            handler: function () {
+                this.searchField.setValue('');
+
+                this.groupsStore.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+
+                this.groupsPagingtoolbar.moveFirst();
+
+                this.clearFilterButton.hide();
+            }.bind(this)
+        });
     }
 
 });
