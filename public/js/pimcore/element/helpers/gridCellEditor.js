@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 /**
  * @private
@@ -90,12 +87,16 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             items: [tag.getLayoutEdit()],
             bodyStyle: "padding: 10px;"
         });
+        let width = 700;
+        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.width && fieldInfo.layout.width !== '100%') {
+            width = sumWidths(fieldInfo.layout.width, 25);
+        }
         this.editWin = new Ext.Window({
             modal: false,
             title: t("edit") + " " + fieldInfo.layout.title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: width,
             maxHeight: 600,
             autoScroll: true,
             preventRefocus: true,      // nasty hack because this is an internal property

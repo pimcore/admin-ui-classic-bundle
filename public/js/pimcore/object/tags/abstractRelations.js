@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.abstractRelations");
 /**
@@ -205,5 +202,47 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             subtype = "object";
         }
         pimcore.helpers.openElement(record.get('id'), record.get('type'), subtype);
+    },
+
+    getColumnWidthLocalStorageKey: function (column) {
+        let context = { ...this.context };
+        delete context.objectId;
+        context.column = column;
+
+        return Object.values(context).join('_');
+    },
+
+    getColumnWidth: function (column) {
+        let width = parseInt(localStorage.getItem(this.getColumnWidthLocalStorageKey(column)));
+
+        if (width > 0) {
+            return width;
+        }
+        return null;
+    },
+
+    getSortedStore: function (store, sortField) {
+        return Ext.create('Ext.data.ChainedStore', {
+            source: store, sorters: [
+                {
+                    sorterFn: function (record1, record2) {
+                        let value1, value2;
+                        try {
+                            value1 = (record1.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value1 = '';
+                        }
+
+                        try {
+                            value2 = (record2.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value2 = '';
+                        }
+
+                        return value1 > value2 ? 1 : (value1 === value2) ? 0 : -1;
+                    }
+                }
+            ]
+        });
     }
 });

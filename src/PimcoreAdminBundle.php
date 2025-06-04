@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle;
@@ -21,15 +18,30 @@ use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\GDPRDataProviderPass
 use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\ImportExportLocatorsPass;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\SerializerPass;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\Compiler\TranslatorPass;
+use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\GDPR\DataProvider\DataProviderInterface;
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
+use Pimcore\Extension\Bundle\Traits\PackageVersionTrait;
 use Pimcore\HttpKernel\Bundle\DependentBundleInterface;
 use Pimcore\HttpKernel\BundleCollection\BundleCollection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
 class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundleInterface
 {
+    use PackageVersionTrait;
+
+    public function getComposerPackageName(): string
+    {
+        return 'pimcore/admin-ui-classic-bundle';
+    }
+
+    public function getContainerExtension(): ExtensionInterface
+    {
+        return new PimcoreAdminExtension();
+    }
+
     public function build(ContainerBuilder $container): void
     {
         // auto-tag GDPR data providers

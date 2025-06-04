@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.manyToManyObjectRelation");
 /**
@@ -371,7 +368,6 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
 
                 var fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.width = 100;
                 fc.flex = 100;
                 fc.hidden = false;
                 fc.layout = field;
@@ -389,19 +385,41 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
-                let filterType = 'list';
+                fc.filter = {
+                    type: 'list'
+                };
 
                 if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
-                    filterType = 'boolean';
-                }
-
-                fc.filter = {
-                    type: filterType
+                    fc.filter.type = 'boolean';
+                } else {
+                    fc.filter.labelField = field.key;
+                    fc.filter.idField = field.key;
+                    fc.filter.store = this.getSortedStore(this.store, field.key);
                 }
 
                 columns.push(fc);
             }
         }
+
+        columns = Ext.Array.map(columns, function(column) {
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
+            }
+
+            if (typeof column.width !== "undefined") {
+                delete column.flex;
+            }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         return columns;
     },
@@ -439,7 +457,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     focus: function() {
                         this.store.getProxy().setExtraParam('data', '');
                     }.bind(this)
-                }
+                },
+                plugins: 'dragdroptag'
             });
         } else {
             let columns = this.getVisibleColumns();
@@ -749,7 +768,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                         this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
-            }
+            },
+            plugins: [
+                'gridfilters'
+            ]
         });
 
         return this.component;

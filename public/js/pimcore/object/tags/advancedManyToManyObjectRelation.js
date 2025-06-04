@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) 2009-2013 pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.advancedManyToManyObjectRelation");
 /**
@@ -141,7 +138,13 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
 
                 let fc = pimcore.object.tags[layout.fieldtype].prototype.getGridColumnConfig(field);
 
-                fc.flex = 1;
+                let columnWidth = this.getColumnWidth(visibleFields[i]);
+                if (columnWidth > 0) {
+                    fc.width = columnWidth;
+                } else {
+                    fc.flex = 1;
+                }
+
                 fc.hidden = false;
                 fc.layout = field;
                 fc.editor = null;
@@ -157,13 +160,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     });
                 }
 
-                let filterType = 'list';
+                fc.filter = {
+                    type: 'list'
+                };
 
                 if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
-                    filterType = 'boolean';
-                }
-                fc.filter = {
-                    type: filterType
+                    fc.filter.type = 'boolean';
+                } else {
+                    fc.filter.labelField = visibleFields[i];
+                    fc.filter.idField = visibleFields[i];
+                    fc.filter.store = this.getSortedStore(this.store, visibleFields[i]);
                 }
 
                 columns.push(fc);
@@ -174,11 +180,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             let width = 100;
             if (this.fieldConfig.columns[i].width) {
                 width = this.fieldConfig.columns[i].width;
+            } else {
+                let columnWidth = this.getColumnWidth(this.fieldConfig.columns[i].key);
+                if(columnWidth > 0) {
+                    width = columnWidth;
+                }
             }
 
             let cellEditor = null;
             let renderer = null;
-            let listeners = null;
+            let listeners = {};
 
             let filterType = 'list';
             if (this.fieldConfig.columns[i].type == "number") {
@@ -293,6 +304,12 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                 }
             };
 
+            if (filterType === 'list') {
+                columnConfig.filter.labelField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.idField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.store = this.getSortedStore(this.store, this.fieldConfig.columns[i].key);
+            }
+
             if (cellEditor) {
                 columnConfig.getEditor = cellEditor;
             }
@@ -300,6 +317,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             columns.push(columnConfig);
         }
 
+        columns = Ext.Array.map(columns, function(column) {
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
+            return column;
+        }.bind(this));
 
         if (!readOnly) {
             columns.push({
@@ -468,7 +495,14 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             plugins: [
                 this.cellEditing,
                 'gridfilters'
-            ]
+            ],
+            listeners: {
+                celldblclick: function (grid, cell, cellIndex, record) {
+                    if (cellIndex < visibleFields.length) {
+                        this.gridRowDblClickHandler(grid, record);
+                    }
+                }.bind(this)
+            }
         });
 
         if (!readOnly) {
@@ -648,6 +682,5 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
 
     getCellEditValue: function () {
         return this.getValue();
-    },
-
+    }
 });

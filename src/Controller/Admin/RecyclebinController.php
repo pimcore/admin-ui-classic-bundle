@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
@@ -23,16 +20,14 @@ use Pimcore\Model\Element\Recyclebin;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @internal
  */
 class RecyclebinController extends AdminAbstractController implements KernelControllerEventInterface
 {
-    /**
-     * @Route("/recyclebin/list", name="pimcore_admin_recyclebin_list", methods={"POST"})
-     */
+    #[Route('/recyclebin/list', name: 'pimcore_admin_recyclebin_list', methods: ['POST'])]
     public function listAction(Request $request): JsonResponse
     {
         if ($request->get('xaction') == 'destroy') {
@@ -113,7 +108,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
 
                     if ($filter['type'] == 'date' && $operator == '=') {
                         $maxTime = $value + (86400 - 1); //specifies the top point of the range used in the condition
-                        $condition = $field . ' BETWEEN ' . $db->quote($value) . ' AND ' . $db->quote($maxTime);
+                        $condition = $field . ' BETWEEN ' . $db->quote($value) . ' AND ' . $db->quote((string)$maxTime);
                         $conditionFilters[] = $condition;
                     } else {
                         $conditionFilters[] = $field . $operator . ' ' . $db->quote($value);
@@ -138,9 +133,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         }
     }
 
-    /**
-     * @Route("/recyclebin/restore", name="pimcore_admin_recyclebin_restore", methods={"POST"})
-     */
+    #[Route('/recyclebin/restore', name: 'pimcore_admin_recyclebin_restore', methods: ['POST'])]
     public function restoreAction(Request $request): JsonResponse
     {
         $item = Recyclebin\Item::getById((int) $request->get('id'));
@@ -152,9 +145,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/flush", name="pimcore_admin_recyclebin_flush", methods={"DELETE"})
-     */
+    #[Route('/recyclebin/flush', name: 'pimcore_admin_recyclebin_flush', methods: ['DELETE'])]
     public function flushAction(): JsonResponse
     {
         $bin = new Element\Recyclebin();
@@ -163,9 +154,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/recyclebin/add", name="pimcore_admin_recyclebin_add", methods={"POST"})
-     */
+    #[Route('/recyclebin/add', name: 'pimcore_admin_recyclebin_add', methods: ['POST'])]
     public function addAction(Request $request): JsonResponse
     {
         try {

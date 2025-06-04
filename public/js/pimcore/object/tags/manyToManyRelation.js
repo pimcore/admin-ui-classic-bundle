@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.manyToManyRelation");
 /**
@@ -448,10 +445,26 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
 
         columns = Ext.Array.map(columns, function(column) {
             column.filter = {
-                type: 'list'
+                type: 'list',
+                labelField: column.dataIndex,
+                idField: column.dataIndex,
+                store: this.getSortedStore(this.store, column.dataIndex)
+            };
+
+            let columnWidth = this.getColumnWidth(column.dataIndex);
+            if (columnWidth > 0) {
+                column.width = columnWidth;
             }
+
+            if(typeof column.listeners === "undefined") {
+                column.listeners = {};
+            }
+            column.listeners.resize = function (columnKey, column, width) {
+                localStorage.setItem(this.getColumnWidthLocalStorageKey(columnKey), width);
+            }.bind(this, column.dataIndex);
+
             return column;
-        });
+        }.bind(this));
 
         return columns;
     },
@@ -488,6 +501,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
             cls: "multihref_field",
+            componentCls: this.getWrapperClassNames(),
+            bodyCssClass: "pimcore_object_tag_multihref",
             autoExpandColumn: 'fullpath',
             border: true,
             style: "margin-bottom: 10px",

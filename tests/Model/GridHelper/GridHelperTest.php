@@ -3,16 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Tests\Model\GridHelper;
@@ -21,6 +18,7 @@ use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Db;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Tests\Support\Test\ModelTestCase;
+use ReflectionClass;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class GridHelperTest extends ModelTestCase
@@ -75,30 +73,35 @@ class GridHelperTest extends ModelTestCase
         $method->invokeArgs($dao, [$queryBuilder]);
 
         $expectedJoin0 = [
-            'joinType' => 'left',
-            'joinTable' => 'object_classificationstore_data_inheritance',
-            'joinAlias' => 'cskey_teststore_1_1',
-            'joinCondition' => "(cskey_teststore_1_1.id = object_localized_inheritance_en.id and cskey_teststore_1_1.fieldname = 'teststore' and cskey_teststore_1_1.groupId=1 and cskey_teststore_1_1.keyId=1 and cskey_teststore_1_1.language = 'default')",
+            'type' => 'LEFT',
+            'table' => 'object_classificationstore_data_inheritance',
+            'alias' => 'cskey_teststore_1_1',
+            'condition' => "(cskey_teststore_1_1.id = object_localized_inheritance_en.id and cskey_teststore_1_1.fieldname = 'teststore' and cskey_teststore_1_1.groupId=1 and cskey_teststore_1_1.keyId=1 and cskey_teststore_1_1.language = 'default')",
         ];
 
         $expectedJoin1 = [
-            'joinType' => 'left',
-            'joinTable' => 'object_classificationstore_data_inheritance',
-            'joinAlias' => 'cskey_teststore_1_2',
-            'joinCondition' => "(cskey_teststore_1_2.id = object_localized_inheritance_en.id and cskey_teststore_1_2.fieldname = 'teststore' and cskey_teststore_1_2.groupId=1 and cskey_teststore_1_2.keyId=2 and cskey_teststore_1_2.language = 'default')",
+            'type' => 'LEFT',
+            'table' => 'object_classificationstore_data_inheritance',
+            'alias' => 'cskey_teststore_1_2',
+            'condition' => "(cskey_teststore_1_2.id = object_localized_inheritance_en.id and cskey_teststore_1_2.fieldname = 'teststore' and cskey_teststore_1_2.groupId=1 and cskey_teststore_1_2.keyId=2 and cskey_teststore_1_2.language = 'default')",
         ];
 
-        $selectParts = $queryBuilder->getQueryPart('select');
+        $reflector = new ReflectionClass($queryBuilder);
+        $selectParts = $reflector->getProperty('select')->getValue($queryBuilder);
 
         $this->assertTrue(in_array('cskey_teststore_1_1.value AS cskey_teststore_1_1', $selectParts));
         $this->assertTrue(in_array('cskey_teststore_1_2.value AS cskey_teststore_1_2', $selectParts));
 
-        $joins = $queryBuilder->getQueryPart('join')['object_localized_inheritance_en'];
+        $joins = $reflector->getProperty('join')->getValue($queryBuilder);
+        $localizedJoins= $joins['object_localized_inheritance_en'];
 
-        $this->assertEquals($expectedJoin0, $joins[0]);
-        $this->assertEquals($expectedJoin1, $joins[1]);
+        $this->assertEquals($expectedJoin0, (array)$localizedJoins[0]);
+        $this->assertEquals($expectedJoin1, (array)$localizedJoins[1]);
 
-        $this->assertEquals("`cskey_teststore_1_1` LIKE '%t%' AND `cskey_teststore_1_2` LIKE '%t77%'", $queryBuilder->getQueryPart('having')->__toString());
+        $this->assertEquals(
+            "`cskey_teststore_1_1` LIKE '%t%' AND `cskey_teststore_1_2` LIKE '%t77%'",
+            $reflector->getProperty('having')->getValue($queryBuilder)
+        );
     }
 
     public function getPrivateMethod(mixed $className, string $methodName): \ReflectionMethod

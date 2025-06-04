@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.helpers.classTree");
 /**
@@ -29,40 +26,36 @@ pimcore.object.helpers.classTree = Class.create({
     },
 
     updateFilter: function (tree, filterField) {
+        const store = tree.getStore();
+        const filterValue = filterField.getValue().toLowerCase();
 
-        tree.getStore().clearFilter();
-        var currentFilterValue = filterField.getValue().toLowerCase();
+        store.clearFilter();
 
-        tree.getStore().filterBy(function (item) {
-            if (item.data.text.toLowerCase().indexOf(currentFilterValue) !== -1) {
+        const searchFilter = (node) => {
+            if (node.data.text.toLowerCase().includes(filterValue)) {
                 return true;
             }
 
-            if (!item.data.leaf) {
-                if (item.data.root) {
-                    return true;
+            return !node.data.leaf && node.childNodes.some(searchFilter);
+        };
+
+        store.filterBy(searchFilter);
+
+        const rootNode = tree.getRootNode();
+
+        rootNode.set(
+            'text',
+            filterValue ? t('element_tag_filtered_tags') : t('element_tag_all_tags')
+        );
+
+        if (filterValue) {
+            rootNode.expand(false);
+            rootNode.eachChild((child) => {
+                if (searchFilter(child)) {
+                    child.expand(false);
                 }
-
-                var childNodes = item.childNodes;
-                var hide = true;
-                if (childNodes) {
-                    var i;
-                    for (i = 0; i < childNodes.length; i++) {
-                        var childNode = childNodes[i];
-                        if (childNode.get("visible")) {
-                            hide = false;
-                            break;
-                        }
-                    }
-                }
-
-                return !hide;
-            }
-        }.bind(this));
-
-        var rootNode = tree.getRootNode()
-        rootNode.set('text', currentFilterValue ? t('element_tag_filtered_tags') : t('element_tag_all_tags'));
-        rootNode.expand(true);
+            });
+        }
     },
 
     getClassTree: function (url, classId, objectId) {
@@ -124,7 +117,10 @@ pimcore.object.helpers.classTree = Class.create({
             success: this.initLayoutFields.bind(this, tree)
         });
 
-        filterField.on("keyup", this.updateFilter.bind(this, tree, filterField));
+        filterField.on(
+            "keyup",
+            Ext.Function.createBuffered(this.updateFilter.bind(this, tree, filterField), 300)
+        );
         filterButton.on("click", this.updateFilter.bind(this, tree, filterField));
 
         return tree;

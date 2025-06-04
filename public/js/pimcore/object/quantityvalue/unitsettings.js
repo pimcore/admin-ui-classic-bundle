@@ -1,16 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @category   Pimcore
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.quantityValue.unitsettings");
 /**
@@ -143,7 +139,11 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                 tooltip: t('delete'),
                 iconCls: "pimcore_icon_delete",
                 handler: function (grid, rowIndex) {
-                    grid.getStore().removeAt(rowIndex);
+                    Ext.Msg.confirm(t('warning'), t('delete_quantity_value_unit_confirmation'), function(btn){
+                        if (btn === 'yes'){
+                            grid.getStore().removeAt(rowIndex);
+                        }
+                    });
                 }.bind(this)
             }]
         });
@@ -183,7 +183,7 @@ pimcore.object.quantityValue.unitsettings = Class.create({
                     try {
                         baseUnitStore.reload({
                             page: this.store.currentPage,
-                            start: 1,
+                            start: 0,
                             limit: 9999
                         });
                         Ext.apply(baseUnitStore, {pageSize: this.pagingtoolbar.pageSize});
@@ -322,11 +322,15 @@ pimcore.object.quantityValue.unitsettings = Class.create({
     },
 
     onDelete: function () {
-        const selections = this.grid.getSelectionModel().getSelected();
-        if (!selections || selections.length < 1) {
-            return false;
-        }
-        const rec = selections.getAt(0);
-        this.grid.store.remove(rec);
+        Ext.Msg.confirm(t('warning'), t('delete_quantity_value_unit_confirmation'), function(btn){
+            if (btn === 'yes'){
+                const selections = this.grid.getSelectionModel().getSelected();
+                if (!selections || selections.length < 1) {
+                    return false;
+                }
+                const rec = selections.getAt(0);
+                this.grid.store.remove(rec);
+            }
+        }.bind(this));
     }
 });

@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\GDPR;
@@ -23,15 +20,14 @@ use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class DataObjectController
  *
- * @Route("/data-object")
- *
  * @internal
  */
+#[Route('/data-object')]
 class DataObjectController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -43,9 +39,7 @@ class DataObjectController extends AdminAbstractController implements KernelCont
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-data-objects", name="pimcore_admin_gdpr_dataobject_searchdataobjects", methods={"GET"})
-     */
+    #[Route('/search-data-objects', name: 'pimcore_admin_gdpr_dataobject_searchdataobjects', methods: ['GET'])]
     public function searchDataObjectsAction(Request $request, DataObjects $service): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -64,10 +58,9 @@ class DataObjectController extends AdminAbstractController implements KernelCont
     }
 
     /**
-     * @Route("/export", name="pimcore_admin_gdpr_dataobject_exportdataobject", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/export', name: 'pimcore_admin_gdpr_dataobject_exportdataobject', methods: ['GET'])]
     public function exportDataObjectAction(Request $request, DataObjects $service): JsonResponse
     {
         $object = DataObject::getById((int) $request->get('id'));

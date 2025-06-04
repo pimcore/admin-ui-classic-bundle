@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
@@ -45,21 +42,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/object-helper", name="pimcore_admin_dataobject_dataobjecthelper_")
- *
  * @internal
  */
+#[Route('/object-helper', name: 'pimcore_admin_dataobject_dataobjecthelper_')]
 class DataObjectHelperController extends AdminAbstractController
 {
     const SYSTEM_COLUMNS = ['id', 'fullpath', 'key', 'published', 'creationDate', 'modificationDate', 'filename', 'classname'];
 
-    /**
-     * @Route("/load-object-data", name="loadobjectdata", methods={"GET"})
-     */
+    #[Route('/load-object-data', name: 'loadobjectdata', methods: ['GET'])]
     public function loadObjectDataAction(Request $request): JsonResponse
     {
         $object = DataObject::getById((int) $request->get('id'));
@@ -75,7 +69,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($result);
     }
 
-    public function getMyOwnGridColumnConfigs(int $userId, string $classId, string $searchType = null): array
+    public function getMyOwnGridColumnConfigs(int $userId, string $classId, ?string $searchType = null): array
     {
         $db = Db::get();
         $configListingConditionParts = [];
@@ -103,7 +97,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    public function getSharedGridColumnConfigs(User $user, string $classId, string $searchType = null): array
+    public function getSharedGridColumnConfigs(User $user, string $classId, ?string $searchType = null): array
     {
         $configListing = [];
 
@@ -114,8 +108,12 @@ class DataObjectHelperController extends AdminAbstractController
         $db = Db::get();
 
         $query = 'select distinct c1.id from gridconfigs c1, gridconfig_shares s
-                    where (c1.searchType = ' . $db->quote($searchType) . ' and ((c1.id = s.gridConfigId and s.sharedWithUserId IN (' . $userIds . '))) and c1.classId = ' . $db->quote($classId) . ')
-                            UNION distinct select c2.id from gridconfigs c2 where shareGlobally = 1 and c2.classId = '. $db->quote($classId) . '  and c2.ownerId != ' . $db->quote($user->getId());
+                    where (c1.searchType = ' . $db->quote($searchType ?? '') . ' and ((c1.id = s.gridConfigId
+                    and s.sharedWithUserId IN (' . $userIds . '))) and c1.classId = ' . $db->quote($classId) . ')
+                    UNION
+                    distinct select c2.id from gridconfigs c2
+                    where shareGlobally = 1 and c2.classId = '. $db->quote($classId) .
+                    '  and c2.ownerId != ' . $db->quote((string)$user->getId());
 
         $ids = $db->fetchFirstColumn($query);
 
@@ -138,9 +136,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $configData;
     }
 
-    /**
-     * @Route("/get-export-configs", name="getexportconfigs", methods={"GET"})
-     */
+    #[Route('/get-export-configs', name: 'getexportconfigs', methods: ['GET'])]
     public function getExportConfigsAction(Request $request): JsonResponse
     {
         $classId = $request->get('classId');
@@ -169,9 +165,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'data' => $result]);
     }
 
-    /**
-     * @Route("/grid-delete-column-config", name="griddeletecolumnconfig", methods={"DELETE"})
-     */
+    #[Route('/grid-delete-column-config', name: 'griddeletecolumnconfig', methods: ['DELETE'])]
     public function gridDeleteColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
         $gridConfigId = (int)$request->get('gridConfigId');
@@ -202,9 +196,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson($newGridConfig);
     }
 
-    /**
-     * @Route("/grid-get-column-config", name="gridgetcolumnconfig", methods={"GET"})
-     */
+    #[Route('/grid-get-column-config', name: 'gridgetcolumnconfig', methods: ['GET'])]
     public function gridGetColumnConfigAction(Request $request, EventDispatcherInterface $eventDispatcher, Config $config): JsonResponse
     {
         $result = $this->doGetGridColumnConfig($request, $config);
@@ -317,7 +309,7 @@ class DataObjectHelperController extends AdminAbstractController
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
                 $saveFilters = $savedGridConfig->isSaveFilters();
 
-                foreach($gridConfig['columns'] as &$column) {
+                foreach ($gridConfig['columns'] as &$column) {
                     if (array_key_exists('isOperator', $column) && $column['isOperator']) {
                         $colAttributes = &$column['fieldConfig']['attributes'];
                         SecurityHelper::convertHtmlSpecialCharsArrayKeys($colAttributes, ['label', 'attribute', 'param1']);
@@ -360,12 +352,9 @@ class DataObjectHelperController extends AdminAbstractController
                             'key' => $key,
                             'type' => 'system',
                             'label' => $key,
-                            'locked' => $sc['locked'] ?? null,
                             'position' => $sc['position'],
                         ];
-                        if (isset($sc['width'])) {
-                            $colConfig['width'] = $sc['width'];
-                        }
+                        $this->injectCustomLayoutValues($colConfig, $sc);
                         $availableFields[] = $colConfig;
                     } else {
                         $keyParts = explode('~', $key);
@@ -387,9 +376,7 @@ class DataObjectHelperController extends AdminAbstractController
                                         if ($fieldConfig) {
                                             $fieldConfig['key'] = $key;
                                             $fieldConfig['label'] = '#' . $keyFieldDef->getTitle();
-                                            if (isset($sc['locked'])) {
-                                                $fieldConfig['locked'] = $sc['locked'];
-                                            }
+                                            $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                             $availableFields[] = $fieldConfig;
                                         }
                                     }
@@ -427,12 +414,7 @@ class DataObjectHelperController extends AdminAbstractController
                             if ($fd !== null) {
                                 $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, $keyPrefix, $class, $objectId);
                                 if (!empty($fieldConfig)) {
-                                    if (isset($sc['width'])) {
-                                        $fieldConfig['width'] = $sc['width'];
-                                    }
-                                    if (isset($sc['locked'])) {
-                                        $fieldConfig['locked'] = $sc['locked'];
-                                    }
+                                    $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                     $availableFields[] = $fieldConfig;
                                 }
                             }
@@ -457,12 +439,7 @@ class DataObjectHelperController extends AdminAbstractController
                                 if (!empty($fd)) {
                                     $fieldConfig = $this->getFieldGridConfig($fd, $gridType, (string)$sc['position'], true, null, $class, $objectId);
                                     if (!empty($fieldConfig)) {
-                                        if (isset($sc['width'])) {
-                                            $fieldConfig['width'] = $sc['width'];
-                                        }
-                                        if (isset($sc['locked'])) {
-                                            $fieldConfig['locked'] = $sc['locked'];
-                                        }
+                                        $fieldConfig = $this->injectCustomLayoutValues($fieldConfig, $sc);
                                         $availableFields[] = $fieldConfig;
                                     }
                                 }
@@ -528,6 +505,26 @@ class DataObjectHelperController extends AdminAbstractController
             'searchFilter' => $gridConfig['searchFilter'] ?? '',
             'filter' => $gridConfig['filter'] ?? [],
         ];
+    }
+
+    private function injectCustomLayoutValues(array $fieldConfig, array $savedColumn): array
+    {
+        $keys = ['width', 'locked'];
+        foreach ($keys as $key) {
+            if (isset($savedColumn[$key])) {
+                $fieldConfig[$key] = $savedColumn[$key];
+            }
+        }
+
+        $fieldConfigKeys = ['noteditable'];
+        foreach ($fieldConfigKeys as $fieldConfigKey) {
+            if (isset($savedColumn['fieldConfig']['layout'][$fieldConfigKey])) {
+                $setter = 'set' . ucfirst($fieldConfigKey);
+                $fieldConfig['layout']->$setter($savedColumn['fieldConfig']['layout'][$fieldConfigKey]);
+            }
+        }
+
+        return $fieldConfig;
     }
 
     /**
@@ -607,7 +604,7 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * @param DataObject\ClassDefinition\Data[] $brickFields
      */
-    protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, array $context = null): void
+    protected function appendBrickFields(DataObject\ClassDefinition\Data $field, array $brickFields, array &$availableFields, string $gridType, int &$count, string $brickType, DataObject\ClassDefinition $class, int $objectId, ?array $context = null): void
     {
         if (!empty($brickFields)) {
             foreach ($brickFields as $bf) {
@@ -684,9 +681,7 @@ class DataObjectHelperController extends AdminAbstractController
         return null;
     }
 
-    /**
-     * @Route("/prepare-helper-column-configs", name="preparehelpercolumnconfigs", methods={"POST"})
-     */
+    #[Route('/prepare-helper-column-configs', name: 'preparehelpercolumnconfigs', methods: ['POST'])]
     public function prepareHelperColumnConfigs(Request $request): JsonResponse
     {
         $helperColumns = [];
@@ -714,9 +709,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'columns' => $newData]);
     }
 
-    /**
-     * @Route("/grid-config-apply-to-all", name="gridconfigapplytoall", methods={"POST"})
-     */
+    #[Route('/grid-config-apply-to-all', name: 'gridconfigapplytoall', methods: ['POST'])]
     public function gridConfigApplyToAllAction(Request $request): JsonResponse
     {
         $objectId = $request->request->getInt('objectId');
@@ -739,9 +732,7 @@ class DataObjectHelperController extends AdminAbstractController
         throw $this->createAccessDeniedHttpException();
     }
 
-    /**
-     * @Route("/grid-mark-favourite-column-config", name="gridmarkfavouritecolumnconfig", methods={"POST"})
-     */
+    #[Route('/grid-mark-favourite-column-config', name: 'gridmarkfavouritecolumnconfig', methods: ['POST'])]
     public function gridMarkFavouriteColumnConfigAction(Request $request): JsonResponse
     {
         $objectId = (int)$request->get('objectId');
@@ -823,9 +814,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $result;
     }
 
-    /**
-     * @Route("/grid-save-column-config", name="gridsavecolumnconfig", methods={"POST"})
-     */
+    #[Route('/grid-save-column-config', name: 'gridsavecolumnconfig', methods: ['POST'])]
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
         $objectId = $request->request->getInt('id');
@@ -1054,7 +1043,7 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, string $keyPrefix = null, DataObject\ClassDefinition $class = null, int $objectId = null): ?array
+    protected function getFieldGridConfig(DataObject\ClassDefinition\Data $field, string $gridType, string $position, bool $force = false, ?string $keyPrefix = null, ?DataObject\ClassDefinition $class = null, ?int $objectId = null): ?array
     {
         $key = $keyPrefix . $field->getName();
         $config = null;
@@ -1121,10 +1110,7 @@ class DataObjectHelperController extends AdminAbstractController
     /**
      * IMPORTER
      */
-
-    /**
-     * @Route("/import-upload", name="importupload", methods={"POST"})
-     */
+    #[Route('/import-upload', name: 'importupload', methods: ['POST'])]
     public function importUploadAction(Request $request, Filesystem $filesystem): JsonResponse
     {
         $data = file_get_contents($_FILES['Filedata']['tmp_name']);
@@ -1168,9 +1154,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $fileHandle . '.csv';
     }
 
-    /**
-     * @Route("/get-export-jobs", name="getexportjobs", methods={"POST"})
-     */
+    #[Route('/get-export-jobs', name: 'getexportjobs', methods: ['POST'])]
     public function getExportJobsAction(Request $request, GridHelperService $gridHelperService, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $requestedLanguage = $this->extractLanguage($request);
@@ -1179,7 +1163,7 @@ class DataObjectHelperController extends AdminAbstractController
         //prepare fields
         $fieldnames = [];
         $fields = json_decode($allParams['fields'][0], true);
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $fieldnames[] = $field['key'];
         }
         $allParams['fields'] = $fieldnames;
@@ -1207,10 +1191,9 @@ class DataObjectHelperController extends AdminAbstractController
     }
 
     /**
-     * @Route("/do-export", name="doexport", methods={"POST"})
-     *
      * @throws \Exception|FilesystemException
      */
+    #[Route('/do-export', name: 'doexport', methods: ['POST'])]
     public function doExportAction(
         Request $request,
         LocaleServiceInterface $localeService,
@@ -1283,13 +1266,14 @@ class DataObjectHelperController extends AdminAbstractController
             $context
         );
 
+        $temp = tmpfile();
+
         try {
             $storage = Storage::get('temp');
             $csvFile = $this->getCsvFile($fileHandle);
 
             $fileStream = $storage->readStream($csvFile);
 
-            $temp = tmpfile();
             stream_copy_to_stream($fileStream, $temp, null, 0);
 
             $firstLine = true;
@@ -1328,6 +1312,10 @@ class DataObjectHelperController extends AdminAbstractController
                     'message' => sprintf('export file not found: %s', $fileHandle),
                 ]
             );
+        } finally {
+            if (is_resource($temp)) {
+                fclose($temp);
+            }
         }
 
         return $this->adminJson(['success' => true]);
@@ -1341,9 +1329,7 @@ class DataObjectHelperController extends AdminAbstractController
         return '"' . $value . '"';
     }
 
-    /**
-     * @Route("/download-csv-file", name="downloadcsvfile", methods={"GET"})
-     */
+    #[Route('/download-csv-file', name: 'downloadcsvfile', methods: ['GET'])]
     public function downloadCsvFileAction(Request $request): Response
     {
         $storage = Storage::get('temp');
@@ -1369,9 +1355,7 @@ class DataObjectHelperController extends AdminAbstractController
         }
     }
 
-    /**
-     * @Route("/download-xlsx-file", name="downloadxlsxfile", methods={"GET"})
-     */
+    #[Route('/download-xlsx-file', name: 'downloadxlsxfile', methods: ['GET'])]
     public function downloadXlsxFileAction(Request $request, GridHelperService $gridHelperService): BinaryFileResponse
     {
         $storage = Storage::get('temp');
@@ -1406,9 +1390,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $o;
     }
 
-    /**
-     * @Route("/get-batch-jobs", name="getbatchjobs", methods={"POST"})
-     */
+    #[Route('/get-batch-jobs', name: 'getbatchjobs', methods: ['POST'])]
     public function getBatchJobsAction(Request $request, GridHelperService $gridHelperService): JsonResponse
     {
         if ($request->get('language')) {
@@ -1423,9 +1405,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'jobs' => $jobs]);
     }
 
-    /**
-     * @Route("/batch", name="batch", methods={"PUT"})
-     */
+    #[Route('/batch', name: 'batch', methods: ['PUT'])]
     public function batchAction(Request $request): JsonResponse
     {
         $success = true;
@@ -1632,9 +1612,7 @@ class DataObjectHelperController extends AdminAbstractController
         return $this->adminJson(['success' => $success]);
     }
 
-    /**
-     * @Route("/get-available-visible-vields", name="getavailablevisiblefields", methods={"GET"})
-     */
+    #[Route('/get-available-visible-vields', name: 'getavailablevisiblefields', methods: ['GET'])]
     public function getAvailableVisibleFieldsAction(Request $request): JsonResponse
     {
         $class = null;

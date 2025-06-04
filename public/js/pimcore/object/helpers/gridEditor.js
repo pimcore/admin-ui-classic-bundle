@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 
 /**
@@ -23,25 +20,34 @@ pimcore.registerNS("pimcore.object.helpers.gridEditor");
  */
 pimcore.object.helpers.gridEditor = Class.create({
 
-    initialize: function (store) {
+    initialize: function (
+        store,
+        columnNames = [
+            'key',
+            'value',
+        ]
+    ) {
         this.store = store;
+        this.columnNames = columnNames;
     },
 
     edit: function() {
-
-        var displayField = {
+        let displayField = {
             xtype: "displayfield",
             region: "north",
             hideLabel: true,
-            value: t('csv_seperated_options_info')
+            value: t('csv_separated_options_info')
         };
 
-
-        var data = [];
-        this.store.each(function (rec) {
-                data.push([rec.get("key"), rec.get("value")]);
-            }
-        );
+        let data = [];
+        this.store.each(function (record) {
+            // Map column value to row data
+            let row = [];
+            this.iterateColumnNames(function (columnName) {
+                row.push(record.get(columnName));
+            });
+            data.push(row);
+        }.bind(this));
 
         data = Ext.util.CSV.encode(data);
 
@@ -56,11 +62,10 @@ pimcore.object.helpers.gridEditor = Class.create({
             items: [displayField, this.textarea]
         });
 
-
         this.window = new Ext.Window({
             width: 800,
             height: 500,
-            title: t('csv_seperated_options'),
+            title: t('csv_separated_options'),
             iconCls: "pimcore_icon_edit",
             layout: "fit",
             closeAction:'close',
@@ -73,24 +78,25 @@ pimcore.object.helpers.gridEditor = Class.create({
                     iconCls: "pimcore_icon_save",
                     handler: function(){
                         this.store.removeAll();
-                        var content = this.textarea.getValue();
+                        let content = this.textarea.getValue();
                         if (content.length > 0) {
-                           var csvData = Ext.util.CSV.decode(content);
+                            let csvData = Ext.util.CSV.decode(content);
 
-                            for(var i = 0;i < csvData.length;i++){
-                                var pair = csvData[i];
-                                var key = pair[0];
-                                var value = pair[1];
+                            for (let i = 0;i < csvData.length;i++) {
+                                let row = csvData[i];
 
-                                if(!value) {
-                                    value = key;
+                                // Set value with key if empty
+                                if (!row[1]) {
+                                    row[1] = row[0];
                                 }
 
-                                var u = {
-                                    key: key,
-                                    value: value
-                                };
-                                this.store.add(u);
+                                // Map row data to column value
+                                let record = {};
+                                this.iterateColumnNames(function (columnName, index) {
+                                    record[columnName] = row[index];
+                                });
+
+                                this.store.add(record);
                             }
                         }
 
@@ -111,5 +117,13 @@ pimcore.object.helpers.gridEditor = Class.create({
 
         this.window.add(this.configPanel);
         this.window.show();
+    },
+
+    iterateColumnNames: function (callable) {
+        let columnName;
+        for (let i = 0; i < this.columnNames.length; i++) {
+            columnName = this.columnNames[i];
+            callable(columnName, i);
+        }
     }
 });

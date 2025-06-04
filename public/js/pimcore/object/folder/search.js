@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.search");
 /**
@@ -422,6 +419,29 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
         return config;
     },
 
+    onRawDeleteSelectedRows: function () {
+        if (typeof this.grid === "undefined") {
+            return null;
+        }
+
+        var ids = [];
+        var selectedRows = this.grid.getSelectionModel().getSelection();
+        for (var i = 0; i < selectedRows.length; i++) {
+            ids.push(selectedRows[i].data.id);
+        }
+        ids = ids.join(',');
+
+        var options = {
+            "elementType" : "object",
+            "id": ids,
+            "success": function() {
+                this.store.reload();
+            }.bind(this)
+        };
+
+        return ids.length ? options : null;
+    },
+
     onRowContextmenu: function (grid, record, tr, rowIndex, e, eOpts) {
 
         var menu = new Ext.menu.Menu();
@@ -458,7 +478,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
             }
 
             menu.add(new Ext.menu.Item({
-                hidden: data.data.locked,
+                hidden: data.data.locked || !data.data.permissions.delete,
                 text: t('delete'),
                 iconCls: "pimcore_icon_delete",
                 handler: function (data) {

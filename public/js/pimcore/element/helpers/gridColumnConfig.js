@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.element.helpers.gridColumnConfig");
 /**
@@ -386,9 +383,9 @@ pimcore.element.helpers.gridColumnConfig = {
     },
 
     filterPrepare: function (column) {
-        var dataIndexName = column.dataIndex
-        var gridColumns = this.grid.getColumns();
-        var columnIndex = -1;
+        const dataIndexName = column.dataIndex
+        const gridColumns = this.grid.getColumns();
+        let columnIndex = -1;
         for (let i = 0; i < gridColumns.length; i++) {
             let dataIndex = gridColumns[i].dataIndex;
             if (dataIndex == dataIndexName) {
@@ -404,23 +401,39 @@ pimcore.element.helpers.gridColumnConfig = {
             return;
         }
 
-        var fieldInfo = this.grid.getColumns()[columnIndex].config;
+        const fieldInfo = this.grid.getColumns()[columnIndex].config;
 
-        if((this.objecttype === "object") || (this.objecttype === "variant")) {
+        let editor;
+        let tagType;
+        if (this.objecttype === "object" || this.objecttype === "variant") {
             if (!fieldInfo.layout || !fieldInfo.layout.layout) {
                 return;
             }
 
-            var tagType = fieldInfo.layout.type;
-            var editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
+            tagType = fieldInfo.layout.type;
+            editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
+        } else if (this.gridType === 'asset') {
+            let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
+            tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
+            try {
+                if (typeof pimcore.asset.metadata.tags[tagType].prototype.prepareFilterLayout == "function") {
+                    layoutInfo = pimcore.asset.metadata.tags[tagType].prototype.prepareFilterLayout(layoutInfo);
+                }
+            } catch (e) {
+                console.log(e);
+            }
+            editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
+            editor.setAsset(this.asset);
+        } else {
+            return;
         }
 
         editor.updateContext({
             containerType: "filterByRelationWindow"
         });
 
-        var formPanel = Ext.create('Ext.form.Panel', {
+        const formPanel = Ext.create('Ext.form.Panel', {
             xtype: "form",
             border: false,
             items: [editor.getLayoutEdit()],
@@ -449,14 +462,18 @@ pimcore.element.helpers.gridColumnConfig = {
             ]
         });
 
-        var title = t("filter_by_relation_field") + " " + fieldInfo.text;
+        const title = t("filter_by_relation_field") + " " + fieldInfo.text;
+        let width = 700;
+        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
+            width = sumWidths(fieldInfo.layout.layout.width, 25);
+        }
         this.filterByRelationWindow = new Ext.Window({
             autoScroll: true,
             modal: false,
             title: title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: width,
             maxHeight: 650
         });
         this.filterByRelationWindow.show();
@@ -543,7 +560,7 @@ pimcore.element.helpers.gridColumnConfig = {
             var tagType = fieldInfo.layout.type;
             var editor = new pimcore.object.tags[tagType](null, fieldInfo.layout.layout);
             editor.setObject(this.object);
-        } else {
+        } else if (this.gridType === 'asset') {
             let layoutInfo = this.fieldObject[fieldInfo.dataIndex].layout;
             const tagType = this.fieldObject[fieldInfo.dataIndex].type ?? layout.fieldtype;
             try {
@@ -556,6 +573,8 @@ pimcore.element.helpers.gridColumnConfig = {
 
             var editor = new pimcore.asset.metadata.tags[tagType](null, layoutInfo);
             editor.setAsset(this.asset);
+        } else {
+            return;
         }
 
         editor.updateContext({
@@ -692,6 +711,12 @@ pimcore.element.helpers.gridColumnConfig = {
                     jobErrors.push(this.batchErrors[i].job + ' - ' + this.batchErrors[i].error);
                 }
                 Ext.Msg.alert(t("error"), t("error_jobs") + ":<br>" + jobErrors.join("<br>"));
+            }
+
+            // Due to some ExtJS bug, when using a lock, the selection is visually cleared after batch operation
+            // To avoid confusion and disalignment on what we see from what is actually selected, everything is unselected
+            if (this.grid.hasOwnProperty('enableLocking') && this.grid.enableLocking){
+                this.grid.getSelectionModel().deselectAll();
             }
 
             return;

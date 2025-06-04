@@ -3,7 +3,7 @@ scheb_two_factor:
     google:
         enabled: true                                       # If Google Authenticator should be enabled, default false
         server_name: Pimcore                                # Server name used in QR code
-        issuer: Pimcore 2 Factor Authentication             # Issuer name used in QR code
+        issuer: Pimcore                                     # Issuer name used in QR code
 
     security_tokens:
         - Pimcore\Bundle\AdminBundle\Security\Authentication\Token\TwoFactorRequiredToken

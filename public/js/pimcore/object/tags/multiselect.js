@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.multiselect");
 /**
@@ -179,7 +176,8 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
                             params: {
                                 objectId: this.object.id,
                                 changedData: this.object.getSaveData().data,
-                                fieldDefinition: JSON.stringify(this.fieldConfig)
+                                fieldDefinition: JSON.stringify(this.fieldConfig),
+                                context: JSON.stringify(this.context)
                             },
                             success: function (response) {
                                 response = Ext.decode(response.responseText);
@@ -244,6 +242,7 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
             if(hasHTMLContent) {
                 options.labelTpl = '{[Ext.util.Format.stripTags(values.text)]}';
             }
+            options.plugins = 'dragdroptag';
             this.component = Ext.create('Ext.form.field.Tag', options);
         } else {
             this.component = Ext.create('Ext.ux.form.MultiSelect', options);

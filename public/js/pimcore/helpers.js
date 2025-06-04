@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 /*global localStorage */
 pimcore.registerNS("pimcore.helpers.x");
@@ -1078,7 +1075,6 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                     autoHeight: true,
                     autoScroll: true
                 });
-                win.show();
 
                 const finishedErrorHandler = function (pbar) {
                     activeUploads--;
@@ -1100,6 +1096,10 @@ pimcore.helpers.uploadDialog = function (url, filename, success, failure, descri
                         text: file.name,
                         style: "margin-bottom: 5px"
                     });
+
+                    if (!win.isVisible()){
+                        win.show();
+                    }
 
                     win.add(pbar);
                     win.updateLayout();

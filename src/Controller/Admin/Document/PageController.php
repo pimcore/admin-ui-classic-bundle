@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
@@ -38,23 +35,21 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 
 /**
- * @Route("/page", name="pimcore_admin_document_page_")
- *
  * @internal
  */
+#[Route('/page', name: 'pimcore_admin_document_page_')]
 class PageController extends DocumentControllerBase
 {
     use RecursionBlockingEventDispatchHelperTrait;
 
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/get-data-by-id', name: 'getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
     {
         $page = Document\Page::getById((int)$request->get('id'));
@@ -106,10 +101,9 @@ class PageController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"PUT", "POST"})
-     *
      * @throws \Exception
      */
+    #[Route('/save', name: 'save', methods: ['PUT', 'POST'])]
     public function saveAction(Request $request, StaticPageGenerator $staticPageGenerator): JsonResponse
     {
         $oldPage = Document\Page::getById((int) $request->get('id'));
@@ -181,9 +175,7 @@ class PageController extends DocumentControllerBase
         }
     }
 
-    /**
-     * @Route("/generate-previews", name="generatepreviews", methods={"GET"})
-     */
+    #[Route('/generate-previews', name: 'generatepreviews', methods: ['GET'])]
     public function generatePreviewsAction(Request $request, MessageBusInterface $messengerBusPimcoreCore): JsonResponse
     {
         $list = new Document\Listing();
@@ -200,9 +192,7 @@ class PageController extends DocumentControllerBase
         return $this->adminJson(['success' => true]);
     }
 
-    /**
-     * @Route("/display-preview-image", name="display_preview_image", methods={"GET"})
-     */
+    #[Route('/display-preview-image', name: 'display_preview_image', methods: ['GET'])]
     public function displayPreviewImageAction(Request $request): BinaryFileResponse
     {
         $document = Document\Page::getById((int) $request->get('id'));
@@ -215,9 +205,7 @@ class PageController extends DocumentControllerBase
         throw $this->createNotFoundException('Page not found');
     }
 
-    /**
-     * @Route("/check-pretty-url", name="checkprettyurl", methods={"POST"})
-     */
+    #[Route('/check-pretty-url', name: 'checkprettyurl', methods: ['POST'])]
     public function checkPrettyUrlAction(Request $request): JsonResponse
     {
         $docId = $request->request->getInt('id');
@@ -284,9 +272,7 @@ class PageController extends DocumentControllerBase
         ]);
     }
 
-    /**
-     * @Route("/clear-editable-data", name="cleareditabledata", methods={"PUT"})
-     */
+    #[Route('/clear-editable-data', name: 'cleareditabledata', methods: ['PUT'])]
     public function clearEditableDataAction(Request $request): JsonResponse
     {
         $docId = $request->request->getInt('id');
@@ -312,10 +298,9 @@ class PageController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/qr-code", name="qrcode", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/qr-code', name: 'qrcode', methods: ['GET'])]
     public function qrCodeAction(Request $request): BinaryFileResponse
     {
         $page = Document\Page::getById((int) $request->query->get('id'));
@@ -326,14 +311,14 @@ class PageController extends DocumentControllerBase
 
         $url = $page->getUrl();
 
-        $result = Builder::create()
-            ->writer(new PngWriter())
-            ->data($url)
-            ->size($request->query->get('download') ? 4000 : 500)
-            ->build();
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $url,
+            size: $request->query->get('download') ? 4000 : 500
+        );
 
         $tmpFile = PIMCORE_SYSTEM_TEMP_DIRECTORY . '/qr-code-' . uniqid() . '.png';
-        $result->saveToFile($tmpFile);
+        $builder->build()->saveToFile($tmpFile);
 
         $response = new BinaryFileResponse($tmpFile);
         $response->headers->set('Content-Type', 'image/png');
@@ -348,10 +333,9 @@ class PageController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/areabrick-render-index-editmode", name="areabrick-render-index-editmode", methods={"POST"})
-     *
      * @throws NotFoundHttpException|\Exception
      */
+    #[Route('/areabrick-render-index-editmode', name: 'areabrick-render-index-editmode', methods: ['POST'])]
     public function areabrickRenderIndexEditmode(
         Request $request,
         BlockStateStack $blockStateStack,

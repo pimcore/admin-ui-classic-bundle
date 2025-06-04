@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.video");
 /**
@@ -301,10 +298,13 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
                 var match, regExp;
 
                 if (values["type"] == "youtube") {
-                    regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-                    match = values["data"].match(regExp);
-                    if (match && match[2].length == 11) {
-                        values["data"] = match[2];
+                    // https://gist.github.com/afeld/1254889
+                    const ytRegex = /^(?:https?:\/\/|\/\/)?(?:www\.|m\.|.+\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|feeds\/api\/videos\/|watch\?v=|watch\?.+&v=))(?<videoId>[\w-]{11})(?![\w-])/g;
+                    match = values["data"].matchAll(ytRegex);
+                    let matches = [...match]
+                    let videoIds = Array.from(matches, m => m[1]);
+                    if (videoIds && (videoIds[0] ?? null)) {
+                        values["data"] = videoIds[0];
                     }
                 } else if (values["type"] == "vimeo") {
                     regExp = /vimeo.com\/(\d+)($|\/)/;

@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS('pimcore.object.selectoptions');
 
@@ -168,12 +165,14 @@ pimcore.object.selectoptions = Class.create({
         e.stopEvent();
         tree.select();
 
-        var menu = new Ext.menu.Menu();
-        menu.add(new Ext.menu.Item({
-            text: t('delete'),
-            iconCls: 'pimcore_icon_select pimcore_icon_overlay_delete',
-            handler: this.deleteDefinition.bind(this, tree, record)
-        }));
+        let menu = new Ext.menu.Menu();
+        if (pimcore.currentuser.admin || record.data.adminOnly !== true) {
+            menu.add(new Ext.menu.Item({
+                text: t('delete'),
+                iconCls: 'pimcore_icon_select pimcore_icon_overlay_delete',
+                handler: this.deleteDefinition.bind(this, tree, record)
+            }));
+        }
 
         menu.showAt(e.pageX, e.pageY);
     },

@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
@@ -33,7 +30,7 @@ use Pimcore\Model\Element\ElementInterface;
 use Pimcore\Model\Element\Service;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -54,9 +51,7 @@ abstract class ElementControllerBase extends AdminAbstractController
         return [];
     }
 
-    /**
-     * @Route("/tree-get-root", name="treegetroot", methods={"GET"})
-     */
+    #[Route('/tree-get-root', name: 'treegetroot', methods: ['GET'])]
     public function treeGetRootAction(Request $request): JsonResponse
     {
         $type = $request->get('elementType');
@@ -80,10 +75,9 @@ abstract class ElementControllerBase extends AdminAbstractController
     }
 
     /**
-     * @Route("/delete-info", name="deleteinfo", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/delete-info', name: 'deleteinfo', methods: ['GET'])]
     public function deleteInfoAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
         $hasDependency = false;
@@ -128,6 +122,18 @@ abstract class ElementControllerBase extends AdminAbstractController
                     $event = new DataObjectDeleteInfoEvent($element);
                     $eventName = DataObjectEvents::DELETE_INFO;
                 }
+                if ($element->isLocked()) {
+                    $itemResults[] = [
+                        'id' => $element->getId(),
+                        'type' => $element->getType(),
+                        'key' => $element->getKey(),
+                        'reason' => 'Element is locked',
+                        'allowed' => false,
+                    ];
+                    $errors |= true;
+
+                    continue;
+                }
 
                 if ($event instanceof ElementDeleteInfoEventInterface) {
                     $eventDispatcher->dispatch($event, $eventName);
@@ -150,6 +156,7 @@ abstract class ElementControllerBase extends AdminAbstractController
                     'id' => $element->getId(),
                     'type' => $element->getType(),
                     'key' => $element->getKey(),
+                    'path' => $element->getPath(),
                     'allowed' => true,
                 ];
 

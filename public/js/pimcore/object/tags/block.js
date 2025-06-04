@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.block");
 /**
@@ -311,6 +308,23 @@ pimcore.object.tags.block = Class.create(pimcore.object.tags.abstract, {
 
         this.dataFields = {};
         this.currentData = {};
+
+        this.updateBlockIndices();
+    },
+
+    updateBlockIndices: function() {
+        for (let itemIndex = 0; itemIndex < this.component.items.items.length; itemIndex++) {
+            let item = this.component.items.items[itemIndex];
+
+            for (let j = 0; j < this.currentElements.length; j++) {
+                if (item !== this.currentElements[j].container) continue;
+
+                const fields = this.currentElements[j].fields;
+                for (const fieldName in fields) {
+                    fields[fieldName].context.index = itemIndex;
+                }
+            }
+        }
     },
 
     getDataForField: function (fieldConfig) {

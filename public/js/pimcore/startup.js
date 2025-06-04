@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 /**
  * @private
@@ -182,6 +179,8 @@ Ext.onReady(function () {
     Ext.Ajax.on('requestexception', function (conn, response, options) {
         if(response.aborted){
             console.log("xhr request to " + options.url + " aborted");
+        }else if(response.timedout){
+            console.error("xhr request to " + options.url + " timed out");
         }else{
             console.error("xhr request to " + options.url + " failed");
         }
@@ -197,7 +196,15 @@ Ext.onReady(function () {
 
         var date = new Date();
         var errorMessage = "Timestamp: " + date.toString() + "\n";
-        var errorDetailMessage = "\n" + response.responseText;
+        let errorDetailMessage = "";
+
+        if (response.responseText){
+            errorDetailMessage += "\n" + response.responseText;
+        }
+
+        if (response.timedout){
+            errorDetailMessage += "\nRequest timed out";
+        }
 
         try {
             errorMessage += "Status: " + response.status + " | " + response.statusText + "\n";
@@ -504,100 +511,28 @@ Ext.onReady(function () {
     sitesStore.load();
     pimcore.globalmanager.add("sites", sitesStore);
 
-    // check for updates
+    // submit statistics
     window.setTimeout(function () {
+        const request = new XMLHttpRequest();
+        request.open('GET', Routing.generate('pimcore_statistics'));
+        request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-        var domains = '';
-        pimcore.globalmanager.get("sites").each(function (rec) {
-            if(rec.get('rootId') !== 1) {
-                if(!empty(rec.get('domain'))) {
-                    domains += rec.get('domain') + ",";
-                }
-                if(!empty(rec.get('domains'))) {
-                    domains += rec.get('domains') + ",";
-                }
-            }
-        });
+        if (pimcore.currentuser.admin) {
+            request.onload = function () {
+                if (this.status >= 200 && this.status < 400) {
+                    var res = Ext.decode(this.response);
 
-        // use vanilla javascript instead of ExtJS to bypass default error handling
-        var request = new XMLHttpRequest();
-        request.open('POST', "https://liveupdate.pimcore.org/update-check");
+                    var request = new XMLHttpRequest();
+                    request.open('POST', "https://license.pimcore.com/statistics");
 
-        request.onload = function() {
-            if (this.status >= 200 && this.status < 400) {
-                var data = Ext.decode(this.response);
-                if (data.latestVersion) {
-                    if (pimcore.currentuser.admin) {
+                    var data = new FormData();
+                    data.append('data', encodeURIComponent(JSON.stringify(res)));
 
-                        pimcore.notification.helper.incrementCount();
-
-                        var toolbar = pimcore.globalmanager.get("layout_toolbar");
-                        toolbar.notificationMenu.add({
-                            text: t("update_available"),
-                            iconCls: "pimcore_icon_reload",
-                            handler: function () {
-                                var html = '<div class="pimcore_about_window" xmlns="http://www.w3.org/1999/html">';
-                                html += '<h2 style="text-decoration: underline">New Version Available!</h2>';
-                                html += '<br><b>Your Version: ' + pimcore.settings.version + '</b>';
-                                html += '<br><b style="color: darkgreen;">New Version: ' + data.latestVersion + '</b>';
-                                html += '<h3 style="color: darkred">Please update as soon as possible!</h3>';
-                                html += '</div>';
-
-                                var win = new Ext.Window({
-                                    title: "New Version Available!",
-                                    width: 500,
-                                    height: 220,
-                                    bodyStyle: "padding: 10px;",
-                                    modal: true,
-                                    html: html
-                                });
-                                win.show();
-                            }
-                        });
-                    }
-                }
-
-                if (data.pushStatistics) {
-                    const request = new XMLHttpRequest();
-                    request.open('GET', Routing.generate('pimcore_admin_index_statistics'));
-                    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-                    if (pimcore.currentuser.admin) {
-                        request.onload = function () {
-                            if (this.status >= 200 && this.status < 400) {
-                                var res = Ext.decode(this.response);
-
-                                var request = new XMLHttpRequest();
-                                request.open('POST', "https://liveupdate.pimcore.org/statistics");
-
-                                var data = new FormData();
-                                data.append('data', encodeURIComponent(JSON.stringify(res)));
-
-                                request.send(data);
-                            }
-                        };
-                    }
                     request.send(data);
                 }
-            }
-        };
-
-        var data = new FormData();
-        data.append('id', pimcore.settings.instanceId);
-        data.append('revision', pimcore.settings.build);
-        data.append('version', pimcore.settings.version);
-        data.append('platform_version', pimcore.settings.platform_version);
-        data.append('debug', pimcore.settings.debug);
-        data.append('devmode', pimcore.settings.devmode);
-        data.append('environment', pimcore.settings.environment);
-        data.append("language", pimcore.settings.language);
-        data.append("main_domain", pimcore.settings.main_domain);
-        data.append("domains", domains);
-        data.append("timezone", pimcore.settings.timezone);
-        data.append("websiteLanguages", pimcore.settings.websiteLanguages.join(','));
-
-        request.send(data);
-
+            };
+        }
+        request.send();
     }, 5000);
 
 
@@ -978,7 +913,6 @@ pimcore.helpers.unload = function () {
 
 };
 
-L.Icon.Default.imagePath = '../bundles/pimcoreadmin/build/admin/images/';
 if (!pimcore.wysiwyg) {
     pimcore.wysiwyg = {};
     pimcore.wysiwyg.editors = [];
