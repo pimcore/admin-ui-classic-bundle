@@ -263,10 +263,22 @@
                      pimcore.elementservice.refreshNodeAllTrees("asset", parentNode.get("id"));
                  }
              }.bind(this);
- 
+
              var errorHandler = function (e) {
-                 var res = Ext.decode(e["responseText"]);
-                 pimcore.helpers.showNotification(t("error"), res.message ? res.message : t("error"), "error", e["responseText"]);
+                 const res = Ext.decode(e["responseText"]);
+                 const addAssetError = new CustomEvent(pimcore.events.assetTreeAddAssetError, {
+                     detail: res,
+                     cancelable: true
+                 });
+
+                 /*
+                     The default return value of dispatchEvent is true, but if you add event.preventDefault() in the listener,
+                     it will return false and the default action will not be triggered.
+                  */
+                 const addAssetErrorCancelled = document.dispatchEvent(addAssetError);
+                 if (addAssetErrorCancelled) {
+                     pimcore.helpers.showNotification(t("error"), res.message ? res.message : t("error"), "error", e["responseText"]);
+                 }
                  finishedErrorHandler();
              }.bind(this);
  
