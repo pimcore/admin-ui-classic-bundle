@@ -334,8 +334,19 @@ class GridHelperService
                         // custom field
                         if (is_array($filter['value'] ?? false)) {
                             $fieldConditions = [];
-                            foreach ($filter['value'] as $filterValue) {
-                                $fieldConditions[] = $field->getFilterCondition($filterValue, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
+                            // If filter is empty we want to match NULL or empty values.
+                            if (empty($filter['value'])) {
+                                $fieldConditions[] = '(' . $db->quoteIdentifier(
+                                        $filterField
+                                    ) . ' IS NULL OR ' . $db->quoteIdentifier($filterField) . " = '')";
+                            } else {
+                                foreach ($filter['value'] as $filterValue) {
+                                    $fieldConditions[] = $field->getFilterCondition(
+                                        $filterValue,
+                                        $operator,
+                                        ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]
+                                    );
+                                }
                             }
 
                             if (!empty($fieldConditions)) {
@@ -807,6 +818,25 @@ class GridHelperService
                     }
                 } elseif ($filterType == 'list') {
                     $operator = 'IN';
+                    // If filter value is empty, we want to receive all assets that do not have this metadata assigned.
+                    if (empty($filter['value'] ?? '')) {
+                        $list->onCreateQueryBuilder(
+                            function (DoctrineQueryBuilder $select) use (
+                                $filterField,
+                                $db,
+                            ) {
+                                $select->leftJoin(
+                                    'assets',
+                                    'assets_metadata',
+                                    'am',
+                                    'am.cid = id AND am.name = ' . $db->quote($filterField)
+                                );
+                                $select->where('am.cid IS NULL');
+                            }
+                        );
+
+                        continue;
+                    }
                 } elseif ($filterType == 'boolean') {
                     $operator = '=';
                     $filter['value'] = (int) $filter['value'];
