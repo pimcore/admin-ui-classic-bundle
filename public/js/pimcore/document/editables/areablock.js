@@ -53,7 +53,7 @@ pimcore.document.editables.areablock = Class.create(pimcore.document.area_abstra
         }
 
         // click outside, hide all block buttons
-        if(this.config['controlsTrigger'] === 'hover') {
+        if(this.config['controlsTrigger'] === 'hover' || this.config['controlsTrigger'] === 'click') {
             Ext.getBody().on('click', function (event) {
                 if (Ext.get(id) && !Ext.get(id).isAncestor(event.target)) {
                     Ext.get(id).query('.pimcore_area_buttons', false).forEach(function (el) {
@@ -104,7 +104,6 @@ pimcore.document.editables.areablock = Class.create(pimcore.document.area_abstra
 
                 if(this.config['controlsTrigger'] === 'hover') {
                     Ext.get(this.elements[i]).on('mouseenter', function (event) {
-
                         if (Ext.dd.DragDropMgr.dragCurrent) {
                             return;
                         }
@@ -134,6 +133,30 @@ pimcore.document.editables.areablock = Class.create(pimcore.document.area_abstra
                             hideTimeout = null;
                         }, 10000);
                     });
+                } else if (this.config['controlsTrigger'] === 'click') {
+                    Ext.get(this.elements[i]).on('click', function (event) {
+                        let component = Ext.get(event.target);
+                        if(!component.hasCls('.pimcore_block_entry')) {
+                            component = component.up('.pimcore_block_entry');
+                        }
+                        if (Ext.dd.DragDropMgr.dragCurrent) {
+                            return;
+                        }
+
+                        Ext.get(this.id).query('.pimcore_area_buttons', false).forEach(function (el) {
+                            if (component != el.dom) {
+                                el.hide();
+                            }
+                        });
+
+                        let buttonContainer = Ext.get(component).selectNode('.pimcore_area_buttons', false);
+                        buttonContainer.show();
+
+                        if (activeBlockEl != component) {
+                            Ext.menu.Manager.hideAll();
+                        }
+                        activeBlockEl = component;
+                    }.bind(this));
                 }
             }
         }
