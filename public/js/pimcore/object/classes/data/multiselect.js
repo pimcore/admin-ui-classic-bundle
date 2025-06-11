@@ -394,7 +394,6 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     createdefaultvaluegrid: function (store) {
-        console.log(store);
         return Ext.create('Ext.grid.Panel', {
             itemId: "defaultvalueeditor",
             viewConfig: {
