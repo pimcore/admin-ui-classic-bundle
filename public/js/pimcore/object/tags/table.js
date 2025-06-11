@@ -227,6 +227,9 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             viewConfig: {
                 markDirty: false,
                 forceFit: true,
+                plugins: {
+                    ptype: 'gridviewdragdrop'
+                },
                 listeners: {
                     refresh: function (dataview) {
                         Ext.suspendLayouts();

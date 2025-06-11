@@ -545,10 +545,12 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     public function getSelectOptions(Request $request): JsonResponse
     {
         $objectId = $request->request->getInt('objectId');
-        $object = DataObject\Concrete::getById($objectId);
-        if (!$object instanceof DataObject\Concrete) {
+        $objectFromDatabase = DataObject\Concrete::getById($objectId);
+        if (!$objectFromDatabase instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
         }
+        // set the latest available version for editmode
+        $object = $this->getLatestVersion($objectFromDatabase);
 
         if ($request->get('changedData')) {
             $this->applyChanges($object, $this->decodeJson($request->get('changedData')));
