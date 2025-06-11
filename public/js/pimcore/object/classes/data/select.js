@@ -164,7 +164,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
                             icon: "/bundles/pimcoreadmin/img/flat-color-icons/up.svg",
                             handler: function (grid, rowIndex) {
                                 if (rowIndex > 0) {
-                                    var rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(--rowIndex, [rec]);
                                     this.selectionModel.select(rowIndex);
@@ -319,7 +319,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
     },
 
     showgrideditor: function (valueStore) {
-        var editor = new pimcore.object.helpers.gridEditor(valueStore);
+        const editor = new pimcore.object.helpers.gridEditor(valueStore);
         editor.edit();
     }
 });

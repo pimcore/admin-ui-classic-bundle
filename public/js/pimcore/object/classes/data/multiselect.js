@@ -152,7 +152,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 name: "optionsProviderData"
             },
             {
-                xtype: "hidden",
+                xtype: "textfield",
                 fieldLabel: t("default_value"),
                 name: "defaultValue",
                 value: datax.defaultValue
@@ -168,7 +168,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
         ]);
 
         appendedStylingItems = appendedStylingItems.concat(
-            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, optionsGrid)
+            pimcore.object.helpers.selectField.getOptionsProviderFields(datax, optionsGrid, defaultValueGrid)
         );
         appendedStylingItems.push(optionsGrid);
         appendedStylingItems.push(defaultValueGrid);
@@ -314,7 +314,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                             icon: "/bundles/pimcoreadmin/img/flat-color-icons/up.svg",
                             handler: function (grid, rowIndex) {
                                 if (rowIndex > 0) {
-                                    var rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(--rowIndex, [rec]);
                                     this.optionsModel.select(rowIndex);
@@ -465,7 +465,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                             icon: "/bundles/pimcoreadmin/img/flat-color-icons/up.svg",
                             handler: function (grid, rowIndex) {
                                 if (rowIndex > 0) {
-                                    var rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(--rowIndex, [rec]);
                                     model.select(rowIndex);
@@ -525,7 +525,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     showgrideditor: function (valueStore) {
-        var editor = new pimcore.object.helpers.gridEditor(valueStore, ['value']);
+        const editor = new pimcore.object.helpers.gridEditor(valueStore, ['value']);
         editor.edit();
     }
 });
