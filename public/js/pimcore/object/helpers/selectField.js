@@ -23,7 +23,7 @@ pimcore.object.helpers.selectField = {
     /**
      * @param {Object} datax
      * @param {Ext.grid.Panel} valueGrid
-     * @param {Ext.grid.Panel} defaultValueGrid
+     * @param {Ext.grid.Panel|null} defaultValueGrid only for multiselect
      * @returns {[
      *     Ext.form.field.ComboBox,
      *     Ext.form.field.Text,
@@ -76,14 +76,14 @@ pimcore.object.helpers.selectField = {
                     optionsProviderData.hide();
                     selectOptionsSelector.show();
                     valueGrid.hide();
-                    defaultValueGrid.hide();
+                    defaultValueGrid?.hide();
                     break;
                 case this.OPTIONS_PROVIDER_TYPE_CLASS:
                     optionsProviderClass.show();
                     optionsProviderData.show();
                     selectOptionsSelector.hide();
                     valueGrid.hide();
-                    defaultValueGrid.hide();
+                    defaultValueGrid?.hide();
                     break;
                 // Configure
                 default:
@@ -91,7 +91,7 @@ pimcore.object.helpers.selectField = {
                     optionsProviderData.hide();
                     selectOptionsSelector.hide();
                     valueGrid.show();
-                    defaultValueGrid.show();
+                    defaultValueGrid?.show();
             }
         }.bind(this)
 
