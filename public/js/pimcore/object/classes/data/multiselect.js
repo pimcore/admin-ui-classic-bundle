@@ -425,7 +425,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                         idx = count;
                     }
 
-                    if (count >= this.datax.maxItems){
+                    if (this.datax.maxItems > 0 && count >= this.datax.maxItems){
                         Ext.Msg.alert(' ', t('limit_reached'));
                         return false;
                     }
