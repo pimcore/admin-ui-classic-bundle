@@ -155,7 +155,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 name: "optionsProviderData"
             },
             {
-                xtype: "textfield",
+                xtype: "hidden",
                 fieldLabel: t("default_value"),
                 name: "defaultValue",
                 value: datax.defaultValue
