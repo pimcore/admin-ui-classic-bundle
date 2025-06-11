@@ -394,6 +394,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     createdefaultvaluegrid: function (store) {
+        console.log(store);
         return Ext.create('Ext.grid.Panel', {
             itemId: "defaultvalueeditor",
             viewConfig: {
@@ -431,7 +432,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                     iconCls: "pimcore_icon_edit",
                     handler: this.showgrideditor.bind(this, store)
 
-                }],
+            }],
             style: "margin-top: 10px",
             store: store,
             selModel: Ext.create('Ext.selection.RowModel', {}),
@@ -515,4 +516,9 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
             ]
         });
     },
+
+    showgrideditor: function (valueStore) {
+        var editor = new pimcore.object.helpers.gridEditor(valueStore, ['value']);
+        editor.edit();
+    }
 });
