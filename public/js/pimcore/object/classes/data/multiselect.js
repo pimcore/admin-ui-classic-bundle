@@ -417,12 +417,20 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                     };
                     let selection = this.defaultValueModel.getSelection();
                     let idx;
+                    let count = store.getCount();
+
                     if (selection.length > 0) {
                         let selectedRow = selection[0];
                         idx = store.indexOf(selectedRow) + 1;
                     } else {
-                        idx = store.getCount();
+                        idx = count;
                     }
+
+                    if (count >= this.datax.maxItems){
+                        Ext.Msg.alert(' ', t('limit_reached'));
+                        return false;
+                    }
+
                     store.insert(idx, u);
                     this.defaultValueModel.select(idx);
                 }.bind(this)
