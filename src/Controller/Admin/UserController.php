@@ -325,11 +325,11 @@ class UserController extends AdminAbstractController implements KernelController
                 foreach ($workspaces as $type => $spaces) {
                     $newWorkspaces = [];
                     foreach ($spaces as $space) {
-                        if (in_array($space['path'], $processedPaths[$type])) {
-                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['path'] .'" in '.$translator->trans((string)$type, [], 'admin') . 's');
+                        if (in_array($space['cpath'], $processedPaths[$type])) {
+                            throw new \Exception('Error saving workspaces as multiple entries found for path "' . $space['cpath'] .'" in '.$translator->trans((string)$type, [], 'admin') . 's');
                         }
 
-                        $element = Element\Service::getElementByPath($type, $space['path']);
+                        $element = Element\Service::getElementByPath($type, $space['cpath']);
                         if ($element) {
                             $className = '\\Pimcore\\Model\\User\\Workspace\\' . Element\Service::getBaseClassNameForElement($type);
                             $workspace = new $className();
@@ -340,7 +340,7 @@ class UserController extends AdminAbstractController implements KernelController
                             $workspace->setUserId($user->getId());
 
                             $newWorkspaces[] = $workspace;
-                            $processedPaths[$type][] = $space['path'];
+                            $processedPaths[$type][] = $space['cpath'];
                         }
                     }
                     $user->{'setWorkspaces' . ucfirst($type)}($newWorkspaces);

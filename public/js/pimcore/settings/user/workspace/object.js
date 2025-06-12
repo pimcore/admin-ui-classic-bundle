@@ -34,10 +34,10 @@ pimcore.settings.user.workspace.object = Class.create({
                                                                 "versions","properties"];
 
         var gridPlugins = [];
-        var storeFields = ["path"];
+        var storeFields = ["cpath"];
 
         var typesColumns = [
-            {text: t("path"), width: 200, sortable: false, dataIndex: 'path',
+            {text: t("path"), width: 200, sortable: false, dataIndex: 'cpath',
                                 editor: new Ext.form.TextField({}),
                                 renderer: Ext.util.Format.htmlEncode,
                                 tdCls: "pimcore_property_droptarget"
@@ -81,10 +81,10 @@ pimcore.settings.user.workspace.object = Class.create({
                         lView: data.data.lView,
                         lEdit: data.data.lEdit,
                         layouts: data.data.layouts,
-                        path: data.data.path
+                        cpath: data.data.cpath
                     };
 
-                    var dialog = new pimcore.settings.user.workspace.special(callback, specialData, data.data.path);
+                    var dialog = new pimcore.settings.user.workspace.special(callback, specialData, data.data.cpath);
                     dialog.show();
                 }.bind(this)
             }]
@@ -132,7 +132,7 @@ pimcore.settings.user.workspace.object = Class.create({
             trackMouseOver: true,
             columnLines: true,
             stripeRows: true,
-            autoExpandColumn: "path",
+            autoExpandColumn: "cpath",
             autoHeight: true,
             style: "margin-bottom:20px;",
             plugins: [
@@ -192,7 +192,7 @@ pimcore.settings.user.workspace.object = Class.create({
                             var data = record.data;
 
                             // check for duplicate records
-                            var index = this.grid.getStore().findExact("path", data.path);
+                            var index = this.grid.getStore().findExact("cpath", data.path);
                             if (index >= 0) {
                                 return false;
                             }
@@ -202,7 +202,7 @@ pimcore.settings.user.workspace.object = Class.create({
                             }
 
                             var rec = this.grid.getStore().getAt(myRowIndex);
-                            rec.set("path", data.path);
+                            rec.set("cpath", data.path);
 
                             this.updateRows();
 
@@ -219,7 +219,7 @@ pimcore.settings.user.workspace.object = Class.create({
 
     onAdd: function (btn, ev) {
         this.grid.store.insert(0, {
-            path: ""
+            cpath: ""
         });
 
         this.updateRows();
