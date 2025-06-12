@@ -1,3 +1,6 @@
+#### v2.1.0
+- Added the possibility to set default values for multi select fields in class definitions.
+
 #### v1.6.0
 - Show tree search even if all child elements fit on one page (according to `tree_paging_limit`) - if there are at least 30 children in total
 - Prevent accidental deletion of folder if items get selected in grid and then the "Delete folder" button gets clicked. Instead: If grid items are selected, delete button asks if the selected items should be deleted. If no grid items are selected, the folder gets deleted (after confirmation).

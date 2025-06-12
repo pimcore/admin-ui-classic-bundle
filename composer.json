@@ -1,6 +1,6 @@
 {
   "name": "pimcore/admin-ui-classic-bundle",
-  "license": "GPL-3.0+",
+  "license": "proprietary",
   "type": "pimcore-bundle",
   "config": {
     "sort-packages": true,
@@ -15,8 +15,9 @@
     "php": "~8.3.0 || ~8.4.0",
     "cbschuld/browser.php": "^1.9.6",
     "endroid/qr-code": "^6.0.1",
+    "nesbot/carbon": "^3.8.4",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
-    "pimcore/pimcore": "^12.x-dev",
+    "pimcore/pimcore": "^12.0",
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "require-dev": {
@@ -24,6 +25,7 @@
     "codeception/module-asserts": "^2.0.1",
     "codeception/module-symfony": "^3.1.1",
     "codeception/phpunit-wrapper": "^9",
+    "ergebnis/phpstan-rules": "^2.0",
     "phpstan/phpstan": "1.12.15",
     "phpstan/phpstan-symfony": "^1.3.5",
     "phpunit/phpunit": "^9.3"

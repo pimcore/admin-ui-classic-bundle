@@ -12,8 +12,8 @@ services:
 
     php:
         #user: '1000:1000' # set to your uid:gid
-        #image: pimcore/pimcore:PHP8.1-fpm-debug
-        image: pimcore/pimcore:PHP8.1-fpm
+        #image: pimcore/pimcore:php8.3-debug-latest
+        image: pimcore/pimcore:php8.3-latest
         environment:
             PHP_IDE_CONFIG: "serverName=localhost"
             COMPOSER_HOME: /var/www/html
@@ -21,6 +21,9 @@ services:
             APP_ENV: test
             PIMCORE_TEST: 1
             PIMCORE_TEST_DB_DSN: "mysql://pimcore:pimcore@db:3306/pimcore_test"
+            PIMCORE_INSTANCE_IDENTIFIER: '<your_identifier>'
+            PIMCORE_ENCRYPTION_SECRET: '<your_secret>'
+            PIMCORE_PRODUCT_KEY: '<your_key>'
         depends_on:
             - db
         volumes:

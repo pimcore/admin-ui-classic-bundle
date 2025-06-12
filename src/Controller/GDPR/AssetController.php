@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\GDPR;
@@ -24,17 +21,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class AssetController
- *
- * @Route("/asset")
  *
  * @package GDPRDataExtractorBundle\Controller
  *
  * @internal
  */
+#[Route('/asset')]
 class AssetController extends AdminAbstractController implements KernelControllerEventInterface
 {
     public function onKernelControllerEvent(ControllerEvent $event): void
@@ -46,9 +42,7 @@ class AssetController extends AdminAbstractController implements KernelControlle
         $this->checkActionPermission($event, 'gdpr_data_extractor');
     }
 
-    /**
-     * @Route("/search-assets", name="pimcore_admin_gdpr_asset_searchasset", methods={"GET"})
-     */
+    #[Route('/search-assets', name: 'pimcore_admin_gdpr_asset_searchasset', methods: ['GET'])]
     public function searchAssetAction(Request $request, Assets $service): JsonResponse
     {
         $allParams = array_merge($request->request->all(), $request->query->all());
@@ -67,10 +61,9 @@ class AssetController extends AdminAbstractController implements KernelControlle
     }
 
     /**
-     * @Route("/export", name="pimcore_admin_gdpr_asset_exportassets", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/export', name: 'pimcore_admin_gdpr_asset_exportassets', methods: ['GET'])]
     public function exportAssetsAction(Request $request, Assets $service): Response
     {
         $asset = Asset::getById((int) $request->get('id'));

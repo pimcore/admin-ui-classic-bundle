@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.classificationstore.collectionsPanel");
 /**
@@ -194,7 +191,6 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
             selModel: Ext.create('Ext.selection.RowModel', {}),
             bbar: this.relationsPagingtoolbar,
             tbar: [
-
                 {
                     text: t('add'),
                     handler: this.onAddGroup.bind(this),
@@ -344,6 +340,8 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
 
         var plugins = ['gridfilters', cellEditing];
 
+        this.initSearchComponents();
+
         var gridConfig = {
             frame: false,
             store: this.collectionsStore,
@@ -363,6 +361,10 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
             selModel: Ext.create('Ext.selection.RowModel', {}),
             bbar: this.collectionsPagingtoolbar,
             tbar: [
+                this.searchField,
+                this.clearFilterButton,
+                this.searchButton,
+                '-',
                 {
                     text: t('add'),
                     handler: this.onAdd.bind(this),
@@ -490,7 +492,71 @@ pimcore.object.classificationstore.collectionsPanel = Class.create({
 
     requestPending: function() {
         // nothing to do
-    }
+    },
 
+    initSearchComponents: function() {
+        this.searchField = new Ext.form.TextField(
+            {
+                name: 'query',
+                width: 200,
+                hideLabel: true,
+                enableKeyEvents: true,
+                value: '',
+                triggers: {
+                    search: {
+                        weight: 1,
+                        cls: 'x-form-search-trigger',
+                        scope: 'this',
+                        handler: function(field) {
+                            this.searchQuery(field);
+                        }.bind(this)
+                    }
+                },
+                listeners: {
+                    'keydown' : function (field, key) {
+                        if (key.getKey() === key.ENTER) {
+                            this.searchQuery(field);
+                        }
+                    }.bind(this)
+                }
+            }
+        );
+
+        this.searchQuery = function() {
+            if (Ext.isEmpty(this.searchField.getValue())) {
+                return;
+            }
+
+            this.relationsPanel.setTitle(t("relations"));
+            this.relationsPanel.disable();
+            this.relationsGrid.hide();
+
+            this.collectionsStore.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+            this.collectionsPagingtoolbar.moveFirst();
+
+            this.clearFilterButton.show();
+        }.bind(this);
+
+        this.searchButton = new Ext.Button({
+            text: t('search'),
+            handler: this.searchQuery,
+            iconCls: 'pimcore_icon_search'
+        });
+
+        this.clearFilterButton = new Ext.Button({
+            hidden: true,
+            tooltip: t('clear_filters'),
+            iconCls: 'pimcore_icon_clear_filters',
+            handler: function () {
+                this.searchField.setValue('');
+
+                this.collectionsStore.getProxy().setExtraParam('searchfilter', this.searchField.getValue());
+
+                this.collectionsPagingtoolbar.moveFirst();
+
+                this.clearFilterButton.hide();
+            }.bind(this)
+        });
+    }
 });
 

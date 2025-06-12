@@ -10,7 +10,7 @@ reverse_object_relation: Reverse Object Relation
 url_slug: URL Slug
 url_slug_datatype_info: >-
     Enter the controller & action in the following
-    format:<br>App\Controller\ProductController:slugAction
+    format:<br>App\Controller\ProductController::slugAction
 controller_action: Controller & Action
 admin_interface: Admin Interface
 admin_interface_background: Admin Interface Background
@@ -299,6 +299,7 @@ allow_inherit: Allow inheritance
 parent_php_class: Parent PHP Class
 implements_interfaces: Implements interface(s)
 use_traits: Use (traits)
+admin_only: Admin only
 general_settings: General Settings
 layout_settings: Layout Settings (Pimcore Admin)
 region: Region
@@ -485,6 +486,7 @@ high_resolution_info_text: >-
 advanced_settings: Advanced settings
 preserve_meta_data: Preserve meta data (don't strip)
 preserve_color: 'Preserve color (profile, space)'
+force_process_ICC_profiles: Force process ICC profiles
 thumbnail_preserve_info_text: >-
     'Preserve meta data' and 'preserve color' only works for transitions without
     compositions (frame, background color, ...) and color modifications
@@ -500,7 +502,7 @@ rows_fixed: Rows fixed
 cols_fixed: Cols fixed
 force_resize: Force resize
 site_ids: Site IDs
-site_ids_tooltip: Provide a comma-seperated list of site IDs
+site_ids_tooltip: Provide a comma-separated list of site IDs
 predefined_hotspot_data_templates: Predefined data templates
 hide_locale_labels_when_tabs_reached: Hide locale labels after number of tabs
 classificationstore_error_addkey_msg: Error adding Key

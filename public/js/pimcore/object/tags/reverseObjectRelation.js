@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.reverseObjectRelation");
 /**
@@ -199,6 +196,9 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             listeners: {
                 rowdblclick: this.gridRowDblClickHandler,
             },
+            plugins: [
+                'gridfilters'
+            ]
         });
 
         this.component.on("rowcontextmenu", this.onRowContextmenu);
@@ -344,15 +344,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                         Ext.MessageBox.confirm(t("element_is_locked"), t("element_lock_message") + lockDetails,
                                 function (lock, buttonValue) {
                                     if (buttonValue == "yes") {
-                                        let storeItemData = {
-                                            id: item.id,
-                                            path: item.fullpath,
-                                            type: item.classname
-                                        };
-                                        this.store.add(storeItemData);
+                                        this.store.add(item);
 
                                         const toBeRequested = new Ext.util.Collection();
-                                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                                         this.requestNicePathData(toBeRequested, true);
                                     }
                                 }.bind(this, arguments));
@@ -364,16 +359,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
                             params: {id: item.id, type: 'object'}
                         });
 
-                        let storeItemData = {
-                            id: item.id,
-                            path: item.fullpath,
-                            type: item.classname,
-                            published: item.published
-                        };
-                        this.store.add(storeItemData);
+                        this.store.add(item);
 
                         const toBeRequested = new Ext.util.Collection();
-                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                         this.requestNicePathData(toBeRequested, true);
                     }
 
@@ -386,16 +375,10 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
             Ext.MessageBox.confirm(' ', t("element_open_message") + lockDetails,
                 function (item, buttonValue) {
                     if (buttonValue == "yes") {
-                        let storeItemData = {
-                            id: item.id,
-                            path: item.fullpath,
-                            type: item.classname,
-                            published: item.published
-                        };
-                        this.store.add(storeItemData);
+                        this.store.add(item);
 
                         const toBeRequested = new Ext.util.Collection();
-                        toBeRequested.add(this.loadObjectData(storeItemData, this.visibleFields));
+                        toBeRequested.add(this.loadObjectData(item, this.visibleFields));
                         this.requestNicePathData(toBeRequested, true);
                     }
                 }.bind(this, item)

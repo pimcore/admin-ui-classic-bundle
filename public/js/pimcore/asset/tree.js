@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
  pimcore.registerNS("pimcore.asset.tree");
 /**
@@ -266,10 +263,22 @@
                      pimcore.elementservice.refreshNodeAllTrees("asset", parentNode.get("id"));
                  }
              }.bind(this);
- 
+
              var errorHandler = function (e) {
-                 var res = Ext.decode(e["responseText"]);
-                 pimcore.helpers.showNotification(t("error"), res.message ? res.message : t("error"), "error", e["responseText"]);
+                 const res = Ext.decode(e["responseText"]);
+                 const addAssetError = new CustomEvent(pimcore.events.assetTreeAddAssetError, {
+                     detail: res,
+                     cancelable: true
+                 });
+
+                 /*
+                     The default return value of dispatchEvent is true, but if you add event.preventDefault() in the listener,
+                     it will return false and the default action will not be triggered.
+                  */
+                 const addAssetErrorCancelled = document.dispatchEvent(addAssetError);
+                 if (addAssetErrorCancelled) {
+                     pimcore.helpers.showNotification(t("error"), res.message ? res.message : t("error"), "error", e["responseText"]);
+                 }
                  finishedErrorHandler();
              }.bind(this);
  

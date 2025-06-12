@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.elementservice.x");
 
@@ -33,7 +30,6 @@ pimcore.elementservice.deleteElement = function (options) {
 pimcore.elementservice.deleteElementsComplete = function(options, response) {
     try {
         var res = Ext.decode(response.responseText);
-
         if (res.errors) {
             var message = res.batchDelete ? t('delete_error_batch') : t('delete_error');
             var hasDeleteable = true;
@@ -51,11 +47,11 @@ pimcore.elementservice.deleteElementsComplete = function(options, response) {
 
                 message += "<br /><b style='display: block; text-align: center; padding: 10px 0;'>" + reasons.join('<br/>') + "</b>";
 
-                hasDeleteable = res.itemResults.filter(function (result) {
-                    return result.allowed;
-                }).length > 0;
-            }
+                // remove all items that are not allowed to be deleted
+                res.itemResults = res.itemResults.filter(item => item.allowed);
 
+                hasDeleteable = res.itemResults.length > 0;
+            }
             Ext.MessageBox.show({
                 title:t('delete'),
                 msg: message,
@@ -474,8 +470,8 @@ pimcore.elementservice.editDocumentKeyComplete =  function (options, button, val
 
                     document.dispatchEvent(postEditDocumentKey);
                 }  else {
-                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                        t(rdata.message));
+                    const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
+                    pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error", message);
                 }
             } catch (e) {
                 pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error");
@@ -540,8 +536,8 @@ pimcore.elementservice.editObjectKeyComplete = function (options, button, value,
 
                         document.dispatchEvent(postEditObjectKey);
                     }  else {
-                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error",
-                            t(rdata.message));
+                        const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
+                        pimcore.helpers.showNotification(t("error"), t("error_renaming_item"), "error", message);
                         for (index = 0; index < affectedNodes.length; index++) {
                             record = affectedNodes[index];
                             pimcore.elementservice.refreshNode(record.parentNode);
@@ -612,8 +608,10 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
                             record.set("text", originalText);
                             record.set("path", originalPath);
                         }
+
+                        const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                            "error");
+                        "error", message);
                         return;
                     }
 
@@ -645,8 +643,9 @@ pimcore.elementservice.editAssetKeyComplete = function (options, button, value, 
 
                             document.dispatchEvent(postEditAssetKey);
                         }  else {
+                            const message = typeof rdata.message !== 'undefined' ? t(rdata.message) : '';
                             pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),
-                                "error", t(rdata.message));
+                                "error", message);
                         }
                     } catch (e) {
                         pimcore.helpers.showNotification(t("error"), t("error_renaming_item"),

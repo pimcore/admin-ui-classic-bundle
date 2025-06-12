@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
@@ -25,22 +22,19 @@ use Pimcore\Model\Translation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/quantity-value", name="pimcore_admin_dataobject_quantityvalue_")
- *
  * @internal
  */
+#[Route('/quantity-value', name: 'pimcore_admin_dataobject_quantityvalue_')]
 class QuantityValueController extends AdminAbstractController
 {
     public function __construct(protected QuantityValueService $service)
     {
     }
 
-    /**
-     * @Route("/unit-import",name="unitimport", methods={"POST","PUT"})
-     */
+    #[Route('/unit-import', name: 'unitimport', methods: ['POST', 'PUT'])]
     public function unitImportAction(Request $request): JsonResponse
     {
         $json = file_get_contents($_FILES['Filedata']['tmp_name']);
@@ -51,9 +45,7 @@ class QuantityValueController extends AdminAbstractController
         return $response;
     }
 
-    /**
-     * @Route("/unit-export", name="unitexport", methods={"GET"})
-     */
+    #[Route('/unit-export', name: 'unitexport', methods: ['GET'])]
     public function unitExportAction(Request $request): Response
     {
         $result = $this->service->generateDefinitionJson();
@@ -65,10 +57,9 @@ class QuantityValueController extends AdminAbstractController
     }
 
     /**
-     * @Route("/unit-proxy", name="unitproxyget", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/unit-proxy', name: 'unitproxyget', methods: ['GET'])]
     public function unitProxyGetAction(Request $request): JsonResponse
     {
         $this->checkPermission('quantityValueUnits');
@@ -120,10 +111,9 @@ class QuantityValueController extends AdminAbstractController
     }
 
     /**
-     * @Route("/unit-proxy", name="unitproxy", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route('/unit-proxy', name: 'unitproxy', methods: ['POST', 'PUT'])]
     public function unitProxyAction(Request $request): JsonResponse
     {
         $this->checkPermission('quantityValueUnits');
@@ -191,9 +181,7 @@ class QuantityValueController extends AdminAbstractController
         return $mapper[$comparison];
     }
 
-    /**
-     * @Route("/unit-list", name="unitlist", methods={"GET"})
-     */
+    #[Route('/unit-list', name: 'unitlist', methods: ['GET'])]
     public function unitListAction(Request $request): JsonResponse
     {
         $list = new Unit\Listing();
@@ -231,9 +219,7 @@ class QuantityValueController extends AdminAbstractController
         return $this->adminJson(['data' => $result, 'success' => true, 'total' => $list->getTotalCount()]);
     }
 
-    /**
-     * @Route("/convert", name="convert", methods={"GET"})
-     */
+    #[Route('/convert', name: 'convert', methods: ['GET'])]
     public function convertAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
         $this->checkPermission('objects');
@@ -256,9 +242,7 @@ class QuantityValueController extends AdminAbstractController
         return $this->adminJson(['value' => $convertedValue->getValue(), 'success' => true]);
     }
 
-    /**
-     * @Route("/convert-all", name="convertall", methods={"GET"})
-     */
+    #[Route('/convert-all', name: 'convertall', methods: ['GET'])]
     public function convertAllAction(Request $request, UnitConversionService $conversionService): JsonResponse
     {
         $this->checkPermission('objects');

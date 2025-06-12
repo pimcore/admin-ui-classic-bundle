@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.classes.data.fieldcollections");
 /**
@@ -96,33 +93,37 @@ pimcore.object.classes.data.fieldcollections = Class.create(pimcore.object.class
                     valueField: "key",
                     width: 500,
                     height: 200,
-                }), {
-                    xtype: "checkbox",
-                    fieldLabel: t("lazy_loading"),
-                    name: "lazyLoading",
-                    checked: this.datax.lazyLoading
-                }, {
-                    xtype: "numberfield",
-                    fieldLabel: t("maximum_items"),
-                    name: "maxItems",
-                    value: this.datax.maxItems,
-                    minValue: 0
-                },
-                {
-                    xtype: "checkbox",
-                    fieldLabel: t("disallow_addremove"),
-                    name: "disallowAddRemove",
-                    checked: this.datax.disallowAddRemove
-                },
-                {
-                    xtype: "checkbox",
-                    fieldLabel: t("disallow_reorder"),
-                    name: "disallowReorder",
-                    checked: this.datax.disallowReorder
-                }
-            ]);
-            this.specificPanel.updateLayout();
+                })
+            ]);            
         }
+        this.specificPanel.add([
+            {
+                xtype: "checkbox",
+                fieldLabel: t("lazy_loading"),
+                name: "lazyLoading",
+                checked: this.datax.lazyLoading
+            }, {
+                xtype: "numberfield",
+                fieldLabel: t("maximum_items"),
+                name: "maxItems",
+                value: this.datax.maxItems,
+                minValue: 0
+            },
+            {
+                xtype: "checkbox",
+                fieldLabel: t("disallow_addremove"),
+                name: "disallowAddRemove",
+                checked: this.datax.disallowAddRemove
+            },
+            {
+                xtype: "checkbox",
+                fieldLabel: t("disallow_reorder"),
+                name: "disallowReorder",
+                checked: this.datax.disallowReorder
+            }
+        ]);
+        this.specificPanel.updateLayout();
+    
 
         this.standardSettingsForm.add(
             [

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <style>
+
+        /* hide from ie on mac \*/
+        html {
+            height: 100%;
+        }
+        /* end hide */
+
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #EEE;
+        }
+
+        #container {
+            text-align: center;
+            width: 100%;
+        }
+
+        {% if not thumbnailPath %}
+            #container {
+                padding-top: 200px;
+            }
+        {% endif %}
+
+
+        img {
+            height: 600px;
+            margin: 4px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div id="container">
+    {% if thumbnailPath %}
+        <a href="{{ assetPath }}" target="_blank">
+            <img alt="preview" src="{{ thumbnailPath }}" />
+        </a>
+    {% else %}
+        <span>{{ 'no_preview_available'|trans([], 'admin') }}</span>
+    {% endif %}
+    <div>
+        <a href="{{ assetPath }}" target="_blank">{{ 'open_in_new_window'|trans([], 'admin') }}</a>
+    </div>
+</div>
+
+
+</body>
+</html>

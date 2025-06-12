@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
@@ -23,21 +20,18 @@ use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
- * @Route("/variants", name="pimcore_admin_dataobject_variants_")
- *
  * @internal
  */
+#[Route('/variants', name: 'pimcore_admin_dataobject_variants_')]
 class VariantsController extends AdminAbstractController
 {
     use DataObjectActionsTrait;
 
-    /**
-     * @Route("/update-key", name="updatekey", methods={"PUT"})
-     */
+    #[Route('/update-key', name: 'updatekey', methods: ['PUT'])]
     public function updateKeyAction(Request $request): JsonResponse
     {
         $id = $request->request->getInt('id');
@@ -48,10 +42,9 @@ class VariantsController extends AdminAbstractController
     }
 
     /**
-     * @Route("/get-variants", name="getvariants", methods={"GET", "POST"})
-     *
      * @throws \Exception
      */
+    #[Route('/get-variants', name: 'getvariants', methods: ['GET', 'POST'])]
     public function getVariantsAction(
         Request $request,
         EventDispatcherInterface $eventDispatcher,
