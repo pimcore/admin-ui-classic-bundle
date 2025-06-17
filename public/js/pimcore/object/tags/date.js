@@ -91,12 +91,8 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
         }
 
         if (this.data) {
+            // this.data already has the correct value
             var tmpDate = new Date(intval(this.data) * 1000);
-
-            if (!this.isRespectTimezone()) {
-                tmpDate = dateToServerTimezone(tmpDate);
-            }
-
             date.value = tmpDate;
         }
 
