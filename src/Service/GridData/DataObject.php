@@ -180,7 +180,7 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~') && empty($data[$key]['value'])) {
+                    if (str_starts_with($key, '~')) {
                         $curClassAttributeValue = $data[$key] ?? null;
                         $isValueEmpty = is_array($curClassAttributeValue) ? empty($curClassAttributeValue['value'] ?? null) : empty($curClassAttributeValue);
 
