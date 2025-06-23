@@ -38,7 +38,7 @@ final class Alias extends AbstractOperator
             $childResult = $c->getLabeledValue($element);
             $isArrayType = $childResult->isArrayType ?? null;
             $childValues = $childResult->value;
-            if ($childValues && !$isArrayType) {
+            if (isset($childValues) && !$isArrayType) {
                 $childValues = [$childValues];
             }
 
