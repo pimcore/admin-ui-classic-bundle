@@ -1,7 +1,8 @@
 # Pimcore Admin Classic Bundle
 
 > [!IMPORTANT]
-> This bundle as reached **end of feature development.** We will no longer
+> This bundle has reached **end of feature development.** We will no longer
+
 > accept or review any pull requests related to new features or improvements for this bundle.
 >
 > However, bug fixes will continue to be accepted, reviewed, and merged at least until the end of 2025.
