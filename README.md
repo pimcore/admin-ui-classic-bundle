@@ -5,7 +5,8 @@
 
 > accept or review any pull requests related to new features or improvements for this bundle.
 >
-> However, bug fixes will continue to be accepted, reviewed, and merged at least until the end of 2025.
+> However, we will continue to accept, review and merge bug fixes at least until the end of 2025.
+
 > 
 > Going forward, our focus will shift to finalizing Pimcore Studio.
 
