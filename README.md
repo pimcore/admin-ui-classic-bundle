@@ -2,7 +2,6 @@
 
 > [!IMPORTANT]
 > This bundle has reached **end of feature development.** We will no longer
-
 > accept or review any pull requests related to new features or improvements for this bundle.
 >
 > However, we will continue to accept, review and merge bug fixes at least until the end of 2025.
