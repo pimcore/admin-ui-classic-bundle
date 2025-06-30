@@ -12,28 +12,28 @@
 
 <table class="preview" border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <th>Name</th>
-        <th>Key</th>
-        <th>Value</th>
+        <th>{{ 'Name'|trans([], 'admin') }}</th>
+        <th>{{ 'Key'|trans([], 'admin') }}</th>
+        <th>{{ 'Value'|trans([], 'admin') }}</th>
     </tr>
     <tr class="system">
-        <td>Date</td>
+        <td>{{ 'Date'|trans([], 'admin') }}</td>
         <td>modificationDate</td>
         <td>{{ object.getModificationDate()|date('Y-m-d H:i:s') }}</td>
     </tr>
     <tr class="system">
-        <td>Path</td>
+        <td>{{ 'Path'|trans([], 'admin') }}</td>
         <td>path</td>
         <td>{{ object.getRealFullPath() }}</td>
     </tr>
     <tr class="system">
-        <td>Published</td>
+        <td>{{ 'Published'|trans([], 'admin') }}</td>
         <td>published</td>
         <td>{{ object.getPublished() ? 'true' : 'false' }}</td>
     </tr>
     {% if versionNote %}
         <tr class="system">
-            <td>Version Note</td>
+            <td>{{ 'Version Note'|trans([], 'admin') }}</td>
             <td>&nbsp;</td>
             <td>{{ versionNote|nl2br }}</td>
         </tr>

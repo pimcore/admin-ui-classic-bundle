@@ -1483,6 +1483,7 @@ class DataObjectHelperController extends AdminAbstractController
                                     $dataDefinition->getDataFromEditmode($value),
                                     $csLanguage
                                 );
+                                $object->markFieldDirty($field);
                             }
                         }
                     } elseif (count($parts) > 1) {

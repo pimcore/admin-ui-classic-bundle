@@ -206,6 +206,8 @@ trait DataObjectActionsTrait
                             }
                         }
 
+                        $object->markFieldDirty($field);
+
                         $activeGroups = $classificationStoreData->getActiveGroups() ?: [];
                         $activeGroups[$groupId] = true;
                         $classificationStoreData->setActiveGroups($activeGroups);
