@@ -202,9 +202,9 @@ class GridConfig extends AbstractModel
         return $this->saveFilters;
     }
 
-    public function setSaveFilters(bool $saveFilters): void
+    public function setSaveFilters(?bool $saveFilters): void
     {
-        $this->saveFilters = $saveFilters;
+        $this->saveFilters = (bool)$saveFilters;
     }
 
     /**
