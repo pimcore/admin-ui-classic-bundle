@@ -180,13 +180,18 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~') && empty($data[$key]['value'])) {
-                        $type = $keyParts[1];
+                    if (str_starts_with($key, '~')) {
+                        $curClassAttributeValue = $data[$key] ?? null;
+                        $isValueEmpty = is_array($curClassAttributeValue) ? empty($curClassAttributeValue['value'] ?? null) : empty($curClassAttributeValue);
 
-                        if ($type === 'classificationstore') {
-                            if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
-                                $data[$dataKey] = $inheritedData['value'];
-                                $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
+                        if ($isValueEmpty) {
+                            $type = $keyParts[1];
+
+                            if ($type === 'classificationstore') {
+                                if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
+                                    $data[$dataKey] = $inheritedData['value'];
+                                    $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
+                                }
                             }
                         }
                     }
