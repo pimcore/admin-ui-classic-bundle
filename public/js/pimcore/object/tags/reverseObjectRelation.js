@@ -16,12 +16,6 @@ pimcore.object.tags.reverseObjectRelation = Class.create(pimcore.object.tags.man
 
     pathProperty: "fullpath",
 
-    getGridColumnConfig: function ($super, fieldConfig) {
-        const gridColumnConfig = $super(fieldConfig);
-        delete gridColumnConfig.getRelationFilter;
-        return gridColumnConfig;
-    },
-
     removeObject: function (index) {
 
         if (pimcore.globalmanager.exists("object_" + this.getStore().getAt(index).data.id) == false) {
