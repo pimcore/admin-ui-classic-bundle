@@ -394,8 +394,11 @@ class UserController extends AdminAbstractController implements KernelController
             foreach ($workspaces as $wKey => $workspace) {
                 $el = Element\Service::getElementById($type, $workspace->getCid());
                 if ($el) {
-                    // direct injection => not nice but in this case ok ;-)
-                    $workspace->path = $el->getRealFullPath();
+                    if ($el instanceof User\Workspace\Asset || $el instanceof User\Workspace\DataObject || $el instanceof User\Workspace\Document) {
+                        if (method_exists($el, 'setCpath')) {
+                            $workspace->setCpath($el->getRealFullPath());
+                        }
+                    }
                     $workspaces[$wKey] = $workspace->getObjectVars();
                 }
             }

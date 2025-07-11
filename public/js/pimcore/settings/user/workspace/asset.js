@@ -159,7 +159,7 @@ pimcore.settings.user.workspace.asset = Class.create({
                             var data = record.data;
 
                             // check for duplicate records
-                            var index = this.grid.getStore().findExact("cpath", data.path);
+                            var index = this.grid.getStore().findExact("cpath", data.cpath);
                             if (index >= 0) {
                                 return false;
                             }
@@ -169,7 +169,7 @@ pimcore.settings.user.workspace.asset = Class.create({
                             }
 
                             var rec = this.grid.getStore().getAt(myRowIndex);
-                            rec.set("cpath", data.path);
+                            rec.set("cpath", data.cpath);
 
                             this.updateRows();
 
