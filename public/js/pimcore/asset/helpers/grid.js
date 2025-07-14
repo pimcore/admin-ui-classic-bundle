@@ -248,7 +248,7 @@ pimcore.asset.helpers.grid = Class.create({
                 } else if (key == "type") {
                     gridColumns.push({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,
-                        dataIndex: field.key, filter: {type: 'list', options: ['image', 'text', 'audio', 'video', 'document', 'archive', 'unknown']}
+                        dataIndex: field.key, filter: {type: 'list', options: pimcore.globalmanager.get("asset_search_types")}
                     });
                 } else if (key == "mimetype") {
                     gridColumns.push({
