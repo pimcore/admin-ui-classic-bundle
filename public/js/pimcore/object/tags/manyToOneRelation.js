@@ -286,7 +286,11 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                     iconCls: "pimcore_icon_help",
                     tooltip: t("help"),
                     handler: function () {
-                        window.open("https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html");
+                        window.open(
+                            "https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html",
+                            "mysql",
+                            "noopener"
+                        );
                     }.bind(this)
                 });
             }
