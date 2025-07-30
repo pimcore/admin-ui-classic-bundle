@@ -279,6 +279,21 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                 style: "margin-left: 5px",
                 handler: this.openSearchEditor.bind(this)
             });
+
+            if (this.fieldConfig.displayMode === 'combo') {
+                items.push({
+                    xtype: "button",
+                    iconCls: "pimcore_icon_help",
+                    tooltip: t("help"),
+                    handler: function () {
+                        window.open(
+                            "https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html",
+                            "mysql",
+                            "noopener"
+                        );
+                    }.bind(this)
+                });
+            }
         }
 
         const compositeCfg = {
