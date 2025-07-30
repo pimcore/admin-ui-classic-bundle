@@ -89,6 +89,7 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
         this.relationsStore = new Ext.data.Store({
             autoSync: true,
             proxy: this.getRelationsProxy(),
+            remoteSort: true,
             fields: readerFields,
             listeners: listeners
         });
