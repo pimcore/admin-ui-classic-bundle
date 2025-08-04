@@ -154,6 +154,11 @@ pimcore.object.classes.data.countrymultiselect = Class.create(pimcore.object.cla
 
     applyData: function ($super) {
         $super();
+
+        if(this.isInCustomLayoutEditor()) {
+            return;
+        }
+
         delete this.datax.options;
     },
 
