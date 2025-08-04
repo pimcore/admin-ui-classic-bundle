@@ -293,6 +293,10 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
 
         $super();
 
+        if(this.isInCustomLayoutEditor()) {
+            return;
+        }
+
         var options = [];
 
         var valueEditor = this.specificPanel.getComponent("valueeditor");
