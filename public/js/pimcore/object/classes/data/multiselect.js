@@ -180,6 +180,10 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
 
         $super();
 
+        if(this.isInCustomLayoutEditor()) {
+            return;
+        }
+
         let options = [];
 
         let optionsEditor = this.specificPanel.getComponent("optionseditor");
