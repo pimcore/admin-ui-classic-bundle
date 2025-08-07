@@ -61,7 +61,7 @@ class GridHelperService
 
                 if ($filter['type'] == 'string') {
                     $operator = 'LIKE';
-                } elseif ($filter['type'] == 'numeric') {
+                } elseif ($filter['type'] == 'numeric' || $filter['type'] == 'quantityValue') {
                     if ($filterOperator == 'lt') {
                         $operator = '<';
                     } elseif ($filterOperator == 'gt') {
@@ -118,8 +118,12 @@ class GridHelperService
                     $field = \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
 
                     if ($field instanceof Model\DataObject\ClassDefinition\Data) {
+                        if ($field instanceof Model\DataObject\ClassDefinition\Data\QuantityValue) {
+                            $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language, 'value2' => $filter['value'][0][1] ?? null];
+                        }else{
+                            $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language];
+                        }
                         $mappedKey = 'cskey_' . $fieldName . '_' . $groupId . '_' . $keyid;
-                        $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language];
                         if (isset($filter['value'])) {
                             $featureCondition = $field->getFilterConditionExt(
                                 $filter['value'],
@@ -129,7 +133,16 @@ class GridHelperService
                             );
 
                             if (!empty($featureCondition)) {
-                                $featureConditions[$mappedKey] = $featureCondition;
+                                // if both greater than and less than are used, we need to combine them
+                                if (
+                                    $field instanceof Model\DataObject\ClassDefinition\Data\QuantityValue &&
+                                    isset($featureConditions[$mappedKey])
+                                ) {
+                                    $featureConditions[$mappedKey] =
+                                        '(' . $featureConditions[$mappedKey] . ' AND ' . $featureCondition . ')';
+                                } else {
+                                    $featureConditions[$mappedKey] = $featureCondition;
+                                }
                             }
                         }
                     }
@@ -454,8 +467,13 @@ class GridHelperService
                     }
                     $alreadyJoined[$mappedKey] = 1;
 
+                    if (isset($featureJoin['value2'])){
+                        $secondValue = ' and ' . $mappedKey . '.value2 = ' . $db->quote($featureJoin['value2']);
+                    }
+
                     $table = $me->getDao()->getTableName();
                     $select->addSelect($mappedKey . '.value AS ' . $mappedKey);
+
                     $select->leftJoin(
                         $table,
                         'object_classificationstore_data_' . $class->getId(),
@@ -466,6 +484,7 @@ class GridHelperService
                         . ' and ' . $mappedKey . '.groupId=' . $featureJoin['groupId']
                         . ' and ' . $mappedKey . '.keyId=' . $featureJoin['keyId']
                         . ' and ' . $mappedKey . '.language = ' . $db->quote($featureJoin['language'])
+                        . ($secondValue ?? '')
                         . ')'
                     );
                 }
