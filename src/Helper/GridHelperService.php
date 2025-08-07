@@ -118,11 +118,19 @@ class GridHelperService
                     $field = \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
 
                     if ($field instanceof Model\DataObject\ClassDefinition\Data) {
+                        $featureJoin = [
+                            'fieldname' => $fieldName,
+                            'groupId' => $groupId,
+                            'keyId' => $keyid,
+                            'language' => $language
+                        ];
+
+                        // Some fields need a secondary value, e.g. the unit of a QuantityValue
                         if ($field instanceof Model\DataObject\ClassDefinition\Data\QuantityValue) {
-                            $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language, 'value2' => $filter['value'][0][1] ?? null];
-                        }else{
-                            $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language];
+                            $featureJoin['secondaryValue'] = $filter['value'][0][1] ?? null;
                         }
+                        $featureJoins[] = $featureJoin;
+
                         $mappedKey = 'cskey_' . $fieldName . '_' . $groupId . '_' . $keyid;
                         if (isset($filter['value'])) {
                             $featureCondition = $field->getFilterConditionExt(
@@ -467,8 +475,8 @@ class GridHelperService
                     }
                     $alreadyJoined[$mappedKey] = 1;
 
-                    if (isset($featureJoin['value2'])){
-                        $secondValue = ' and ' . $mappedKey . '.value2 = ' . $db->quote($featureJoin['value2']);
+                    if (isset($featureJoin['secondaryValue'])){
+                        $secondValue = ' and ' . $mappedKey . '.value2 = ' . $db->quote($featureJoin['secondaryValue']);
                     }
 
                     $table = $me->getDao()->getTableName();
