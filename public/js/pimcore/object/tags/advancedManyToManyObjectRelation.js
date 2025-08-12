@@ -622,6 +622,8 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             }.bind(this));
         }
 
+        this.addFilterChangeListener();
+
         return this.component;
     },
 

@@ -17,6 +17,34 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
     getFilterEditToolbarItems: function () {
         return [
             {
+                iconCls: "pimcore_icon_clear_filters",
+                itemId: "clearFilters",
+                hidden: true,
+                text: t("clear_filters"),
+                handler: function (button) {
+                    this.component.filters.clearFilters();
+                    this.component.getStore().clearFilter();
+
+                    let columns = this.component.getColumns();
+                    for (let i = 0; i < columns.length; i++) {
+                        if(columns[i].filter?.menu?.items) {
+                            columns[i].filter.menu.items.each(function (filterOption) {
+                                if (filterOption.setChecked) {
+                                    filterOption.setChecked(false);
+                                }
+                            });
+                        }
+                    }
+
+                    const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+                    if (filterInput) {
+                        filterInput.setValue('');
+                        this.hideFilterInput(filterInput);
+                    }
+                    button.hide();
+                }.bind(this)
+            },
+            {
                 xtype: 'textfield',
                 hidden: true,
                 cls: 'relations_grid_filter_input',
@@ -43,6 +71,29 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
                 handler: this.showFilterInput.bind(this)
             }
         ];
+    },
+
+    addFilterChangeListener: function() {
+        this.component.on("filterchange", function () {
+            const filterData = this.component.getStore().getFilters().items;
+
+            const hasStoreFilters = filterData.some(function (filter) {
+                return filter.getValue() !== null && filter.getValue() !== '';
+            });
+
+            const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+            const hasTextFilter = filterInput?.getValue() !== '';
+
+            const clearFilters = this.component.queryById('clearFilters');
+            
+            if (clearFilters){
+                  if (hasStoreFilters || hasTextFilter) {
+                      clearFilters.show();
+                  } else {
+                      clearFilters.hide();
+                  }
+            }
+        }.bind(this));
     },
 
     showFilterInput: function (filterBtn) {

@@ -370,6 +370,8 @@ pimcore.object.tags.manyToManyRelation = Class.create(pimcore.object.tags.abstra
             });
         }.bind(this));
 
+        this.addFilterChangeListener();
+
         return this.component;
     },
 
