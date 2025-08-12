@@ -30,7 +30,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
 
                     let columns = this.component.getColumns();
                     for (let i = 0; i < columns.length; i++) {
-                        if(columns[i].filter.menu) {
+                        if(columns[i].filter?.menu?.items) {
                             columns[i].filter.menu.items.each(function (filterOption) {
                                 if (filterOption.setChecked) {
                                     filterOption.setChecked(false);
@@ -85,12 +85,16 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             });
 
             const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
-            const hasTextFilter = filterInput && filterInput.getValue() !== '';
+            const hasTextFilter = filterInput?.getValue() !== '';
 
-            if (hasStoreFilters || hasTextFilter) {
-                this.component.queryById('clearFilters').show();
-            } else {
-                this.component.queryById('clearFilters').hide();
+            const clearFilters = this.component.queryById('clearFilters');
+            
+            if (clearFilters){
+                  if (hasStoreFilters || hasTextFilter) {
+                      clearFilters.show();
+                  } else {
+                      clearFilters.hide();
+                  }
             }
         }.bind(this));
     },
