@@ -335,14 +335,14 @@ class GridHelperService
                         if (is_array($filter['value'] ?? false)) {
                             $fieldConditions = [];
                             foreach ($filter['value'] as $filterValue) {
-                                $fieldConditions[] = $field->getFilterCondition($filterValue, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
+                                $fieldConditions[] = $field->getFilterCondition($filterValue, $operator, []);
                             }
 
                             if (!empty($fieldConditions)) {
                                 $conditionPartsFilters[] = '(' . implode(' OR ', $fieldConditions) . ')';
                             }
                         } else {
-                            $conditionPartsFilters[] = $field->getFilterCondition($filter['value'] ?? null, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
+                            $conditionPartsFilters[] = $field->getFilterCondition($filter['value'] ?? null, $operator, ['tablePrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
                         }
                     } elseif (in_array($filterField, $systemFields)) {
                         // system fields
