@@ -555,15 +555,15 @@ pimcore.registerNS("pimcore.object.tree");
                      var pasteMenu = [];
 
                      if (perspectiveCfg.inTreeContextMenu("object.paste")) {
-                         var classId = null;
+                         let classId = null;
 
                          // Determine ClassId if copiedObject exists
                          if (typeof pimcore.copiedObject !== 'undefined' && pimcore.copiedObject !== null) {
                              if (typeof pimcore.copiedObject.get('className') !== "undefined") {
-                                 var className = pimcore.copiedObject.get('className');
+                                 let className = pimcore.copiedObject.get('className');
                                  if (className) {
-                                     var objectTypesStore = pimcore.globalmanager.get("object_types_store");
-                                     var classRecord = objectTypesStore.findRecord('text', className);
+                                     let objectTypesStore = pimcore.globalmanager.get("object_types_store");
+                                     let classRecord = objectTypesStore.findRecord('text', className);
                                      if (classRecord) {
                                          classId = classRecord.get('id');
                                      }
