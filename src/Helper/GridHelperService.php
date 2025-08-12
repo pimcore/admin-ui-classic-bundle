@@ -122,7 +122,7 @@ class GridHelperService
                             'fieldname' => $fieldName,
                             'groupId' => $groupId,
                             'keyId' => $keyid,
-                            'language' => $language
+                            'language' => $language,
                         ];
 
                         // Some fields need a secondary value, e.g. the unit of a QuantityValue
@@ -475,7 +475,7 @@ class GridHelperService
                     }
                     $alreadyJoined[$mappedKey] = 1;
 
-                    if (isset($featureJoin['secondaryValue'])){
+                    if (isset($featureJoin['secondaryValue'])) {
                         $secondValue = ' and ' . $mappedKey . '.value2 = ' . $db->quote($featureJoin['secondaryValue']);
                     }
 
