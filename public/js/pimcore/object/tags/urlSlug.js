@@ -125,7 +125,7 @@ pimcore.object.tags.urlSlug = Class.create(pimcore.object.tags.abstract, {
             domain = " (" + domain + ")";
         }
 
-        var title = this.fieldConfig.title ? t(this.fieldConfig.title) : this.fieldConfig.name;
+        let title = this.fieldConfig.title ? t(this.fieldConfig.title) : this.fieldConfig.name;
 
         var textConfig = {
             xtype: "textfield",
