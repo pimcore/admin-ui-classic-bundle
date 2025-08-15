@@ -101,7 +101,7 @@ pimcore.object.tags.image = Class.create(pimcore.object.tags.abstract, {
             },
             {
                 xtype: "tbtext",
-                text: "<b>" + this.fieldConfig.title + "</b>"
+                text: "<b>" + t(this.fieldConfig.title) + "</b>"
             }, "->", {
                 xtype: "button",
                 iconCls: "pimcore_icon_upload",

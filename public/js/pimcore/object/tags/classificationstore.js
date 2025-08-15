@@ -92,7 +92,7 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
         }
 
         if(this.fieldConfig.title) {
-            wrapperConfig.title = this.fieldConfig.title;
+            wrapperConfig.title = t(this.fieldConfig.title);
         }
 
         var nrOfLanguages = this.frontendLanguages.length;

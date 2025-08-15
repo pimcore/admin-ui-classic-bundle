@@ -109,7 +109,7 @@ pimcore.object.tags.rgbaColor = Class.create(pimcore.object.tags.abstract, {
                     color: this.data ? this.data : 'FFFFFFFF'
                 }
             },
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelWidth: labelWidth,
             layout: 'hbox',
             width: width,

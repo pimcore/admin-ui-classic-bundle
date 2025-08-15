@@ -174,7 +174,7 @@ pimcore.object.tags.hotspotimage = Class.create(pimcore.object.tags.image, {
 
             items.push({
                 xtype: "tbtext",
-                text: "<b>" + this.fieldConfig.title + "</b>"
+                text: "<b>" + t(this.fieldConfig.title) + "</b>"
             });
 
             items.push("->");

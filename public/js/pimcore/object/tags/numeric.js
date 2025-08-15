@@ -74,7 +74,7 @@ pimcore.object.tags.numeric = Class.create(pimcore.object.tags.abstract, {
     getLayoutEdit: function () {
 
         var input = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             name: this.fieldConfig.name,
             componentCls: this.getWrapperClassNames(),
             mouseWheelEnabled: false,
@@ -132,7 +132,7 @@ pimcore.object.tags.numeric = Class.create(pimcore.object.tags.abstract, {
     getLayoutShow: function () {
 
         var input = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             name: this.fieldConfig.name,
             labelWidth: 100,
             width: 175,

@@ -30,7 +30,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
 
     getLayoutEdit: function () {
         const options = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             format: "H:i",
             emptyText: "",
             width: this.fieldConfig.width ? this.fieldConfig.width : 200,

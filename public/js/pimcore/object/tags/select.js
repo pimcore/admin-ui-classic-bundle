@@ -259,7 +259,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
             autoComplete: false,
             forceSelection: true,
             selectOnFocus: true,
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             store: store,
             listeners: {
                 focusenter: function(selectField, e) {

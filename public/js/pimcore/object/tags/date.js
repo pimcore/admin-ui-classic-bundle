@@ -75,7 +75,7 @@ pimcore.object.tags.date = Class.create(pimcore.object.tags.abstract, {
     getLayoutEdit:function () {
 
         var date = {
-            fieldLabel:this.fieldConfig.title,
+            fieldLabel:t(this.fieldConfig.title),
             name:this.fieldConfig.name,
             componentCls: this.getWrapperClassNames(),
             width:130,

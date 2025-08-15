@@ -190,7 +190,7 @@ pimcore.object.tags.structuredTable = Class.create(pimcore.object.tags.abstract,
             tbar: [
                 {
                     xtype: "tbtext",
-                    text: "<b>" + this.fieldConfig.title + "</b>"
+                    text: "<b>" + t(this.fieldConfig.title) + "</b>"
                 },
                 "->",
                 {
@@ -263,7 +263,7 @@ pimcore.object.tags.structuredTable = Class.create(pimcore.object.tags.abstract,
                 },
                 {
                     xtype: "tbtext",
-                    text: "<b>" + this.fieldConfig.title + "</b>"
+                    text: "<b>" + t(this.fieldConfig.title) + "</b>"
                 },
                 "->",
                 {

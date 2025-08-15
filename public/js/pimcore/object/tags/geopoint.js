@@ -85,7 +85,7 @@ pimcore.object.tags.geopoint = Class.create(pimcore.object.tags.geo.abstract, {
                 },
             ],
             tbar: [
-                this.fieldConfig.title,
+                t(this.fieldConfig.title),
                 "->",
                 this.searchfield,
                 {

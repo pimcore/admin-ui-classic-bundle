@@ -141,7 +141,7 @@ pimcore.object.tags.fieldcollections = Class.create(pimcore.object.tags.abstract
             collapsed: this.fieldConfig.collapsed
         };
         if(this.fieldConfig.title) {
-            panelConf.title = this.fieldConfig.title;
+            panelConf.title = t(this.fieldConfig.title);
         }
 
         this.component = new Ext.Panel(panelConf);

@@ -117,7 +117,7 @@ pimcore.object.tags.checkbox = Class.create(pimcore.object.tags.abstract, {
         this.checkbox = new Ext.form.Checkbox(checkbox);
 
         var componentCfg = {
-            fieldLabel:this.fieldConfig.title,
+            fieldLabel:t(this.fieldConfig.title),
             layout: 'hbox',
             items: [
                 this.checkbox,

@@ -205,7 +205,7 @@ pimcore.object.tags.imageGallery = Class.create(pimcore.object.tags.abstract, {
         let toolBarItems = [];
         toolBarItems.push({
             xtype: "tbtext",
-            text: "<b>" + this.fieldConfig.title + "</b>"
+            text: "<b>" + t(this.fieldConfig.title) + "</b>"
         });
         toolBarItems.push({
             xtype: "button",

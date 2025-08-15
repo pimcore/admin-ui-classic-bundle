@@ -96,7 +96,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
         }
 
         if (this.fieldConfig.title && this.dropdownLayout) {
-            wrapperConfig.title = this.fieldConfig.title;
+            wrapperConfig.title = t(this.fieldConfig.title);
         }
 
         if (this.context.containerType == "fieldcollection") {
@@ -212,7 +212,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                 border: true,
                 style: "margin-bottom: 10px",
                 tbar: [
-                    this.fieldConfig.title,  '->', disableSplitViewButton, configureSplitViewButton
+                    t(this.fieldConfig.title),  '->', disableSplitViewButton, configureSplitViewButton
                 ],
                 height: 'auto',
                 layout: {
@@ -389,10 +389,10 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                         tbarItems.push(
                             {
                                 xtype: "tbtext",
-                                text: this.fieldConfig.title
+                                text: t(this.fieldConfig.title)
                             });
                     } else {
-                        wrapperConfig.title = this.fieldConfig.title;
+                        wrapperConfig.title = t(this.fieldConfig.title);
                     }
                 }
 
