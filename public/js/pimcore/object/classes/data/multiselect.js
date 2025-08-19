@@ -238,7 +238,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     showoptioneditor: function (store) {
-        let editor = new pimcore.object.helpers.gridEditor(store);
+        let editor = new pimcore.object.helpers.optionEditor(store);
         editor.edit();
     },
 
@@ -529,7 +529,7 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
     },
 
     showgrideditor: function (valueStore) {
-        const editor = new pimcore.object.helpers.gridEditor(valueStore, ['value']);
+        const editor = new pimcore.object.helpers.optionEditor(valueStore, ['value']);
         editor.edit();
     }
 });

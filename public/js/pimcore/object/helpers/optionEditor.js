@@ -14,11 +14,11 @@
  * pimcore.object.tags.localizedfields
  */
 
-pimcore.registerNS("pimcore.object.helpers.gridEditor");
+pimcore.registerNS("pimcore.object.helpers.optionEditor");
 /**
  * @private
  */
-pimcore.object.helpers.gridEditor = Class.create({
+pimcore.object.helpers.optionEditor = Class.create({
 
     initialize: function (
         store,
