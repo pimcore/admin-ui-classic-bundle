@@ -323,7 +323,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
     },
 
     showgrideditor: function (valueStore) {
-        const editor = new pimcore.object.helpers.gridEditor(valueStore);
+        const editor = new pimcore.object.helpers.optionEditor(valueStore);
         editor.edit();
     }
 });
