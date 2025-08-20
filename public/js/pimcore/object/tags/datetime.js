@@ -97,7 +97,7 @@ pimcore.object.tags.datetime = Class.create(pimcore.object.tags.abstract, {
 
         var componentCfg = {
             layout: 'hbox',
-            fieldLabel:this.fieldConfig.title,
+            fieldLabel:t(this.fieldConfig.title),
             combineErrors:false,
             items:[this.datefield, this.timefield],
             componentCls: this.getWrapperClassNames(),

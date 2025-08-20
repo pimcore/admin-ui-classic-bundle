@@ -116,7 +116,7 @@ pimcore.object.tags.slider = Class.create(pimcore.object.tags.abstract, {
         }
 
         var componentCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             layout: 'hbox',
             items: items,
             componentCls: this.getWrapperClassNames(),

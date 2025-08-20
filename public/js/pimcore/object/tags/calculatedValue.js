@@ -25,7 +25,7 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
     getLayoutEdit: function () {
 
         var input = {
-            fieldLabel: '<img src="/bundles/pimcoreadmin/img/flat-color-icons/calculator.svg" style="height: 1.8em; display: inline-block; vertical-align: middle;"/>' + this.fieldConfig.title,
+            fieldLabel: '<img src="/bundles/pimcoreadmin/img/flat-color-icons/calculator.svg" style="height: 1.8em; display: inline-block; vertical-align: middle;"/>' + t(this.fieldConfig.title),
             componentCls: this.getWrapperClassNames(),
             labelWidth: 100,
             readOnly: true,

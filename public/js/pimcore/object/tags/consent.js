@@ -87,7 +87,7 @@ pimcore.object.tags.consent = Class.create(pimcore.object.tags.abstract, {
         var componentCfg = {
             layout: 'vbox',
             margin: '0 0 10 0',
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             combineErrors: false,
             items: [this.checkBox, this.textLabel],
             componentCls: this.getWrapperClassNames(),

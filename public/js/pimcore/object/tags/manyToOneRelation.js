@@ -297,7 +297,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         }
 
         const compositeCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelWidth: labelWidth,
             layout: 'hbox',
             items: items,
@@ -350,7 +350,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         }
 
         const compositeCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelWidth: labelWidth,
             layout: 'hbox',
             items: [this.component, {

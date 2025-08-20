@@ -80,10 +80,10 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
 
         toolbarItems.push({
             xtype: "tbtext",
-            text: "<b>" + this.fieldConfig.title + "</b>",
+            text: "<b>" + t(this.fieldConfig.title) + "</b>",
         }, "->", {
             xtype: "button",
-            overflowText: this.fieldConfig.title,
+            overflowText: t(this.fieldConfig.title),
             iconCls: "pimcore_icon_video pimcore_icon_overlay_edit",
             handler: this.openEdit.bind(this)
         });
@@ -194,7 +194,7 @@ pimcore.object.tags.video = Class.create(pimcore.object.tags.abstract, {
         var conf = {
             width: this.fieldConfig.width,
             height: this.fieldConfig.height,
-            title: this.fieldConfig.title,
+            title: t(this.fieldConfig.title),
             border: true,
             style: "padding-bottom: 10px",
             cls: "object_field object_field_type_" + this.type,

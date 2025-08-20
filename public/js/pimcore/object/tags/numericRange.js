@@ -80,7 +80,7 @@ pimcore.object.tags.numericRange = Class.create(pimcore.object.tags.abstract, {
         this.component = new Ext.form.FieldContainer({
             layout: 'hbox',
             margin: '0 0 10 0',
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelAlign: labelAlign,
             labelWidth: labelWidth,
             width: width,
@@ -129,7 +129,7 @@ pimcore.object.tags.numericRange = Class.create(pimcore.object.tags.abstract, {
         this.component = new Ext.form.FieldContainer({
             layout: 'hbox',
             margin: '0 0 10 0',
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelAlign: labelAlign,
             labelWidth: labelWidth,
             width: width,

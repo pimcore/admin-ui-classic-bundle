@@ -444,7 +444,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 triggerAction: "all",
                 displayField: "label",
                 valueField: "id",
-                fieldLabel: this.fieldConfig.title,
+                fieldLabel: t(this.fieldConfig.title),
                 tpl: new Ext.XTemplate(
                     '<tpl for="."><li role="option" unselectable="on" class="x-boundlist-item" data-recordid="{id}" style="display:flex;">',
                     '  {label}',
@@ -679,7 +679,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             },
             {
                 xtype: "tbtext",
-                text: "<b>" + this.fieldConfig.title + "</b>"
+                text: "<b>" + t(this.fieldConfig.title) + "</b>"
             },
             "->"
         ];
@@ -762,7 +762,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             cls: "object_field object_field_type_" + this.type,
             autoExpandColumn: 'path',
             style: "margin-bottom: 10px",
-            title: this.fieldConfig.title,
+            title: t(this.fieldConfig.title),
             viewConfig: {
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {

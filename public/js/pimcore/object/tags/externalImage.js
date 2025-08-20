@@ -112,7 +112,7 @@ pimcore.object.tags.externalImage = Class.create(pimcore.object.tags.abstract, {
         var panelConf = {
             border: true,
             style: "margin-bottom: 20px",
-            title:  this.fieldConfig.title,
+            title:  t(this.fieldConfig.title),
             viewConfig: {
                 forceFit: true
             },

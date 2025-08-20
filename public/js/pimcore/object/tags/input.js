@@ -55,7 +55,7 @@ pimcore.object.tags.input = Class.create(pimcore.object.tags.abstract, {
     getLayoutEdit: function () {
 
         var input = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             name: this.fieldConfig.name,
             labelWidth: 100,
             labelAlign: "left"

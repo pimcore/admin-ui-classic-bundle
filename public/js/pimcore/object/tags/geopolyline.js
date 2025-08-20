@@ -57,7 +57,7 @@ pimcore.object.tags.geopolyline = Class.create(pimcore.object.tags.geo.abstract,
                 }.bind(this)
             }],
             tbar: [
-                this.fieldConfig.title,
+                t(this.fieldConfig.title),
                 "->",
                 this.searchfield,
                 {

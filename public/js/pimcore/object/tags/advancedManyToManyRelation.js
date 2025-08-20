@@ -639,7 +639,7 @@ pimcore.object.tags.advancedManyToManyRelation = Class.create(pimcore.object.tag
             },
             {
                 xtype: "tbtext",
-                text: "<b>" + this.fieldConfig.title + "</b>"
+                text: "<b>" + t(this.fieldConfig.title) + "</b>"
             },
             "->"
         ];

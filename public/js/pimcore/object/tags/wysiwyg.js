@@ -79,7 +79,7 @@ pimcore.object.tags.wysiwyg = Class.create(pimcore.object.tags.abstract, {
         var html = '<div class="pimcore_editable_wysiwyg" id="' + this.editableDivId + '" contenteditable="true">' + this.data + '</div>';
         var pConf = {
             iconCls: iconCls,
-            title: this.fieldConfig.title,
+            title: t(this.fieldConfig.title),
             html: html,
             border: true,
             bodyStyle: 'background: #fff',

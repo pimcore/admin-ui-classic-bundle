@@ -100,7 +100,7 @@ pimcore.object.tags.link = Class.create(pimcore.object.tags.abstract, {
         });
 
         var componentCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             layout: 'hbox',
             border: false,
             combineErrors: false,
