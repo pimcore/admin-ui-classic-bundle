@@ -335,7 +335,7 @@ class GridHelperService
                         if (is_array($filter['value'] ?? false)) {
                             $fieldConditions = [];
                             foreach ($filter['value'] as $filterValue) {
-                                $fieldConditions[] = $field->getFilterCondition($filterValue, $operator, []);
+                                $fieldConditions[] = $field->getFilterCondition($filterValue, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
                             }
 
                             if (!empty($fieldConditions)) {
