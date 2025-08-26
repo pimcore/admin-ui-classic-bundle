@@ -368,7 +368,7 @@ class GridHelperService
                                 $operator,
                                 [
                                     'brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null),
-                                    'tablePrefix' => ($tablePrefix ? $tablePrefix . '.' : null)
+                                    'tablePrefix' => ($tablePrefix ? $tablePrefix . '.' : null),
                                 ]
                             );
                         }
