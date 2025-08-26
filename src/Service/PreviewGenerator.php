@@ -34,7 +34,9 @@ class PreviewGenerator implements PreviewGeneratorInterface
             $filteredParameters = $this->filterParameters($object, $params);
 
             $locale = $filteredParameters[PreviewGeneratorInterface::PARAMETER_LOCALE] ?? Tool::getDefaultLanguage();
-            $site = array_key_exists(PreviewGeneratorInterface::PARAMETER_SITE, $filteredParameters) ? Site::getById($filteredParameters[PreviewGeneratorInterface::PARAMETER_SITE]) : (new Site\Listing())->current();
+            $site = array_key_exists(PreviewGeneratorInterface::PARAMETER_SITE, $filteredParameters)
+                ? Site::getById((int)$filteredParameters[PreviewGeneratorInterface::PARAMETER_SITE])
+                : (new Site\Listing())->current();
 
             return $linkGenerator->generate($object, [
                 PreviewGeneratorInterface::PARAMETER_LOCALE => $locale,
