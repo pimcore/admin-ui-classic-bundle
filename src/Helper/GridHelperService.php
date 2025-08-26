@@ -363,7 +363,14 @@ class GridHelperService
                                 $conditionPartsFilters[] = '(' . implode(' OR ', $fieldConditions) . ')';
                             }
                         } else {
-                            $conditionPartsFilters[] = $field->getFilterCondition($filter['value'] ?? null, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
+                            $conditionPartsFilters[] = $field->getFilterCondition(
+                                $filter['value'] ?? null,
+                                $operator,
+                                [
+                                    'brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null),
+                                    'tablePrefix' => ($tablePrefix ? $tablePrefix . '.' : null)
+                                ]
+                            );
                         }
                     } elseif (in_array($filterField, $systemFields)) {
                         // system fields
