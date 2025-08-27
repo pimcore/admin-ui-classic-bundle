@@ -272,8 +272,10 @@ pimcore.workflow.transitionPanel = Class.create({
                         field.setHeight(100);
                     }
 
-                    if (typeof field.applyDefaultValue !== "undefined") {
-                        field.applyDefaultValue();
+                    if (typeof field.setValue !== "undefined") {
+                        field.setValue(c.defaultValue);
+                    } else {
+                        field.config.items[0]?.setValue(c.defaultValue);
                     }
                 } catch(e) {
                     console.error('Could not add additional field');
