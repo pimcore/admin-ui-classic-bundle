@@ -233,11 +233,21 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
                 listeners: {
                     refresh: function (dataview) {
                         Ext.suspendLayouts();
-                        Ext.each(dataview.panel.columns, function (column) {
-                            column.autoSize();
+                        let totalWidth = 0;
+                        const columns = dataview.panel.columns;
+                        
+                        Ext.each(columns, function (column) {
+                            totalWidth += column.getWidth();
                         });
+                        
+                        if (totalWidth > this.fieldConfig.width){
+                            Ext.each(columns, function (column) {
+                                column.autoSize();
+                            });
+                        }
+
                         Ext.resumeLayouts(true);
-                    }
+                    }.bind(this)
                 }
             }
         });
