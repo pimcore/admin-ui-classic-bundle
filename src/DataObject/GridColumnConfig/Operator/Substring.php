@@ -71,22 +71,7 @@ final class Substring extends AbstractOperator
                     }
 
                     if (!is_string($childValue)) {
-                        if (is_array($childValue)) {
-                            $childValue = implode(
-                                ' ',
-                                array_map(
-                                    fn($v) => is_scalar($v) ? (string)$v : '',
-                                    array_values($childValue)
-                                )
-                            );
-                        } elseif (is_object($childValue)) {
-                            $childValue = method_exists($childValue, '__toString')
-                                ? (string) $childValue
-                                : '';
-                        } else {
-                            // fallback for other types (int, float, bool)
-                            $childValue = (string) $childValue;
-                        }
+                        $childValue = $this->convertToString($childValue);
                     }
 
                     $showEllipses = $useEllipses && mb_strlen($childValue) > ($start + $length);
@@ -111,6 +96,28 @@ final class Substring extends AbstractOperator
         }
 
         return $result;
+    }
+
+    private function convertToString(mixed $value): string
+    {
+        if (is_array($value)) {
+            $output = implode(
+                ' ',
+                array_map(
+                    fn($v) => is_scalar($v) ? (string)$v : '',
+                    array_values($value)
+                )
+            );
+        } elseif (is_object($value)) {
+            $output = method_exists($value, '__toString')
+                ? (string) $value
+                : '';
+        } else {
+            // fallback for other types (int, float, bool)
+            $output = (string) $value;
+        }
+
+        return $output;
     }
 
     public function getStart(): int
