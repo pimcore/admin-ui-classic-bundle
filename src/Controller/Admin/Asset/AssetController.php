@@ -1416,7 +1416,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
                 ($openPdfConfig === 'only-unsafe' && $scanResponse === PdfScanStatus::UNSAFE)) {
                     $thumbnail = $asset->getImageThumbnail(Asset\Image\Thumbnail\Config::getPreviewConfig());
                     $previewData = ['thumbnailPath' => $thumbnail->getPath()];
-                    $previewData['assetPath'] = $asset->getRealFullPath();
+                    $previewData['assetPath'] = $asset->getFrontendFullPath();
 
                     return $this->render(
                         '@PimcoreAdmin/admin/asset/get_preview_pdf_open_in_new_tab.html.twig',
