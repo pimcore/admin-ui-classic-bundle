@@ -80,12 +80,11 @@ final class Substring extends AbstractOperator
                                 )
                             );
                         } elseif (is_object($childValue)) {
-                            // Convert object safely, prefer __toString if available
                             $childValue = method_exists($childValue, '__toString')
                                 ? (string) $childValue
                                 : '';
                         } else {
-                            // fallback for other types (int, float, bool, null)
+                            // fallback for other types (int, float, bool)
                             $childValue = (string) $childValue;
                         }
                     }
