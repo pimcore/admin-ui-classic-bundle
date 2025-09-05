@@ -58,18 +58,25 @@ final class Substring extends AbstractOperator
             }
 
             if (is_array($childValues)) {
-                /** @var string $childValue */
+
+                $start = $this->getStart();
+                $length = $this->getLength();
+                $useEllipses = $this->getEllipses();
+
+                /** @var string|array $childValue */
                 foreach ($childValues as $childValue) {
-                    $showEllipses = false;
-                    if ($childValue && $this->getEllipses()) {
-                        $start = $this->getStart() ? $this->getStart() : 0;
-                        $length = $this->getLength() ? $this->getLength() : 0;
-                        if (strlen($childValue) > ($start + $length)) {
-                            $showEllipses = true;
-                        }
+
+                    if (!$childValue) {
+                        continue;
+                    }
+                    // try to implode if it's a plain array of strings
+                    if (is_array($childValue)){
+                        $childValue = implode(' ', array_map('strval', array_values($childValue)));
                     }
 
-                    $childValue = substr($childValue, $this->getStart(), $this->getLength());
+                    $showEllipses = $useEllipses && mb_strlen($childValue) > ($start + $length);
+
+                    $childValue = mb_substr($childValue, $start, $length);
                     if ($showEllipses) {
                         $childValue .= '...';
                     }
