@@ -69,9 +69,25 @@ final class Substring extends AbstractOperator
                     if (!$childValue) {
                         continue;
                     }
-                    // try to implode if it's a plain array of strings
-                    if (is_array($childValue)){
-                        $childValue = implode(' ', array_map('strval', array_values($childValue)));
+
+                    if (!is_string($childValue)) {
+                        if (is_array($childValue)) {
+                            $childValue = implode(
+                                ' ',
+                                array_map(
+                                    fn($v) => is_scalar($v) ? (string)$v : '',
+                                    array_values($childValue)
+                                )
+                            );
+                        } elseif (is_object($childValue)) {
+                            // Convert object safely, prefer __toString if available
+                            $childValue = method_exists($childValue, '__toString')
+                                ? (string) $childValue
+                                : '';
+                        } else {
+                            // fallback for other types (int, float, bool, null)
+                            $childValue = (string) $childValue;
+                        }
                     }
 
                     $showEllipses = $useEllipses && mb_strlen($childValue) > ($start + $length);
@@ -91,7 +107,7 @@ final class Substring extends AbstractOperator
             if ($isArrayType) {
                 $result->value = $valueArray;
             } else {
-                $result->value = $valueArray[0];
+                $result->value = $valueArray[0] ?? '';
             }
         }
 
