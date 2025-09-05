@@ -104,12 +104,12 @@ final class Substring extends AbstractOperator
             $output = implode(
                 ' ',
                 array_map(
-                    fn($v) => is_scalar($v) ? (string)$v : '',
-                    array_values($value)
+                    fn($v) => is_scalar($v) || $v instanceof \Stringable ? (string)$v : '',
+                    $value
                 )
             );
         } elseif (is_object($value)) {
-            $output = method_exists($value, '__toString')
+            $output = $value instanceof \Stringable
                 ? (string) $value
                 : '';
         } else {
