@@ -58,7 +58,6 @@ final class Substring extends AbstractOperator
             }
 
             if (is_array($childValues)) {
-
                 $start = $this->getStart();
                 $length = $this->getLength();
                 $useEllipses = $this->getEllipses();
