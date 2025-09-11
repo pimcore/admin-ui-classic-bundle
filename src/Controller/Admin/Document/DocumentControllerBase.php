@@ -180,7 +180,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
                 $document->getEditables();
             } else {
                 // ensure no editables (e.g. from session, version, ...) are still referenced
-                $document->setEditables(null);
+                $document->setEditables([]);
             }
 
             if ($request->get('data')) {
