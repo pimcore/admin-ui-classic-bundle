@@ -136,11 +136,13 @@ class LinkController extends DocumentControllerBase
                     } else {
                         $data['linktype'] = 'direct';
                         $data['internalType'] = null;
+                        $data['internal'] = null;
                         $data['direct'] = $path;
                     }
 
                     if ($target) {
                         $data['linktype'] = 'internal';
+                        $data['direct'] = '';
                     }
                 }
             } else {
