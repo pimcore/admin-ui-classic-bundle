@@ -103,7 +103,7 @@ final class Substring extends AbstractOperator
             $output = implode(
                 ' ',
                 array_map(
-                    fn($v) => is_scalar($v) || $v instanceof \Stringable ? (string)$v : '',
+                    fn ($v) => is_scalar($v) || $v instanceof \Stringable ? (string)$v : '',
                     $value
                 )
             );
