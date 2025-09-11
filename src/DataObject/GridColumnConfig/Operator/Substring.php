@@ -58,18 +58,24 @@ final class Substring extends AbstractOperator
             }
 
             if (is_array($childValues)) {
-                /** @var string $childValue */
+                $start = $this->getStart();
+                $length = $this->getLength();
+                $useEllipses = $this->getEllipses();
+
+                /** @var string|array $childValue */
                 foreach ($childValues as $childValue) {
-                    $showEllipses = false;
-                    if ($childValue && $this->getEllipses()) {
-                        $start = $this->getStart() ? $this->getStart() : 0;
-                        $length = $this->getLength() ? $this->getLength() : 0;
-                        if (strlen($childValue) > ($start + $length)) {
-                            $showEllipses = true;
-                        }
+
+                    if (!$childValue) {
+                        continue;
                     }
 
-                    $childValue = substr($childValue, $this->getStart(), $this->getLength());
+                    if (!is_string($childValue)) {
+                        $childValue = $this->convertToString($childValue);
+                    }
+
+                    $showEllipses = $useEllipses && mb_strlen($childValue) > ($start + $length);
+
+                    $childValue = mb_substr($childValue, $start, $length);
                     if ($showEllipses) {
                         $childValue .= '...';
                     }
@@ -84,11 +90,33 @@ final class Substring extends AbstractOperator
             if ($isArrayType) {
                 $result->value = $valueArray;
             } else {
-                $result->value = $valueArray[0];
+                $result->value = $valueArray[0] ?? '';
             }
         }
 
         return $result;
+    }
+
+    private function convertToString(mixed $value): string
+    {
+        if (is_array($value)) {
+            $output = implode(
+                ' ',
+                array_map(
+                    fn($v) => is_scalar($v) || $v instanceof \Stringable ? (string)$v : '',
+                    $value
+                )
+            );
+        } elseif (is_object($value)) {
+            $output = $value instanceof \Stringable
+                ? (string) $value
+                : '';
+        } else {
+            // fallback for other types (int, float, bool)
+            $output = (string) $value;
+        }
+
+        return $output;
     }
 
     public function getStart(): int
