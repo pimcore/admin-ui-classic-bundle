@@ -1,2 +1,11 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Call to protected method addToUpdateTaskQueue\\(\\) of class Pimcore\\\\Model\\\\Asset\\.$#"
+			count: 1
+			path: src/Controller/Admin/Asset/AssetController.php
+
+		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: src/Controller/Admin/Asset/AssetController.php
