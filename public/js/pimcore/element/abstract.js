@@ -207,7 +207,7 @@ pimcore.element.abstract = Class.create({
                         type: elementType
                     },
                     success: function (response) {
-                        var result = Ext.decode(response.responseText);
+                        const result = Ext.decode(response.responseText);
 
                         if (result.editlock) {
                             pimcore.helpers.lockManager(this.id, elementType, null, result);

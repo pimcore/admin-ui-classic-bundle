@@ -43,7 +43,10 @@ class ElementController extends AdminAbstractController
     #[Route('/element/lock-element', name: 'pimcore_admin_element_lockelement', methods: ['PUT'])]
     public function isLockedAction(Request $request): JsonResponse
     {
-        $isLocked = Element\Editlock::isLocked($request->query->getInt('id'), $request->query->get('type'), $request->getSession()->getId());
+        $isLocked = Element\Editlock::isLocked(
+            $request->query->getInt('id'), 
+            $request->query->get('type'), $request->getSession()->getId()
+        );
         if($isLocked) {
             return $this->getEditLockResponse($request->query->getInt('id'), $request->query->get('type'));
         }
