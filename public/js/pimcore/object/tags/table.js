@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.table");
 /**
@@ -107,7 +104,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
         options.border = true;
         options.layout = "fit";
         options.style = "margin-bottom: 10px";
-        options.title = this.fieldConfig.title;
+        options.title = t(this.fieldConfig.title);
         options.componentCls = this.getWrapperClassNames();
         if (this.fieldConfig.width) {
             options.width = this.fieldConfig.width;
@@ -230,6 +227,9 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             viewConfig: {
                 markDirty: false,
                 forceFit: true,
+                plugins: {
+                    ptype: 'gridviewdragdrop'
+                },
                 listeners: {
                     refresh: function (dataview) {
                         Ext.suspendLayouts();
@@ -451,30 +451,7 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
             width: '100%',
             emptyText: t("paste_here"),
             validateOnChange: false,
-            enableKeyEvents: true,
-            listeners: {
-                change: function(){
-                    var value = this.pasteField.getValue();
-                    if (value) {
-
-                        var lines = value.split("\n");
-
-                        var result = [];
-
-                        if (lines) {
-                            for (var i = 0; i < lines.length; i++) {
-                                var line = lines[i];
-                                line = line.split("\t");
-                                result.push(line);
-                            }
-                            this.dirty = true;
-                        }
-                    }
-
-                    this.initStore(result);
-                    this.pasteWindow.close();
-                }.bind(this)
-            }
+            enableKeyEvents: true
         });
 
         this.pasteWindow = new Ext.Window({
@@ -491,6 +468,31 @@ pimcore.object.tags.table = Class.create(pimcore.object.tags.abstract, {
                 this.pasteField,
             ],
             buttons: [
+                {
+                    text: t("save"),
+                    iconCls: "pimcore_icon_save",
+                    handler: function () {
+                        let value = this.pasteField.getValue();
+
+                        if (value) {
+                            let lines = value.split("\n");
+                            let result = [];
+
+                            if (lines) {
+                                for (let i = 0; i < lines.length; i++) {
+                                    let line = lines[i];
+                                    line = line.split("\t");
+                                    result.push(line);
+                                }
+
+                                this.dirty = true;
+                            }
+                            this.initStore(result);
+                        }
+
+                        this.pasteWindow.close();
+                    }.bind(this)
+                },
                 {
                     text: t("cancel"),
                     iconCls: "pimcore_icon_cancel",

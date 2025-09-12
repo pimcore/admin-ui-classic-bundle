@@ -2,21 +2,17 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Doctrine\DBAL\Connection;
 use Exception;
 use GuzzleHttp\ClientInterface;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
@@ -44,12 +40,11 @@ use Pimcore\Tool;
 use Pimcore\Tool\Admin;
 use Pimcore\Version;
 use Pimcore\Video;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
@@ -63,15 +58,14 @@ class IndexController extends AdminAbstractController implements KernelResponseE
     public function __construct(
         protected EventDispatcherInterface $eventDispatcher,
         protected TranslatorInterface $translator,
-        protected ClientInterface $httpClient
+        protected ClientInterface $httpClient,
     ) {
     }
 
     /**
-     * @Route("/", name="pimcore_admin_index", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/', name: 'pimcore_admin_index', methods: ['GET'])]
     public function indexAction(
         Request $request,
         KernelInterface $kernel,
@@ -115,64 +109,6 @@ class IndexController extends AdminAbstractController implements KernelResponseE
         $templateParams['settings'] = $settingsEvent->getSettings();
 
         return $this->render($settingsEvent->getTemplate() ?: '@PimcoreAdmin/admin/index/index.html.twig', $templateParams);
-    }
-
-    /**
-     * @Route("/index/statistics", name="pimcore_admin_index_statistics", methods={"GET"})
-     *
-     * @throws \Exception
-     */
-    public function statisticsAction(Request $request, Connection $db, KernelInterface $kernel): JsonResponse
-    {
-        if (!$request->isXmlHttpRequest()) {
-            throw $this->createAccessDeniedHttpException();
-        }
-
-        // DB
-        try {
-            $tables = $db->fetchAllAssociative('SELECT TABLE_NAME as name,TABLE_ROWS as `rows` from information_schema.TABLES
-                WHERE TABLE_ROWS IS NOT NULL AND TABLE_SCHEMA = ?', [$db->getDatabase()]);
-        } catch (\Exception $e) {
-            $tables = [];
-        }
-
-        try {
-            $mysqlVersion = $db->fetchOne('SELECT VERSION()');
-        } catch (\Exception $e) {
-            $mysqlVersion = null;
-        }
-
-        try {
-            $data = [
-                'instanceId' => $this->getInstanceId(),
-                'pimcore_major_version' => Version::getMajorVersion(),
-                'pimcore_version' => Version::getVersion(),
-                'pimcore_hash' => Version::getRevision(),
-                'pimcore_platform_version' => Version::getPlatformVersion(),
-                'php_version' => PHP_VERSION,
-                'mysql_version' => $mysqlVersion,
-                'bundles' => array_keys($kernel->getBundles()),
-                'tables' => $tables,
-            ];
-        } catch (\Exception $e) {
-            $data = [];
-        }
-
-        if ($this->getAdminUser()->isAdmin()) {
-            return $this->adminJson($data);
-        }
-
-        $response = $this->httpClient->request(
-            'POST',
-            'https://liveupdate.pimcore.org/statistics',
-            [
-                'body' => json_encode($data),
-            ]
-        );
-
-        return $this->adminJson([
-            'success' => ($response->getStatusCode() >= 200 && $response->getStatusCode() < 400),
-        ]);
     }
 
     protected function addRuntimePerspective(array &$templateParams, User $user): static
@@ -237,7 +173,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'devmode'             => \Pimcore::inDevMode(),
             'disableMinifyJs'     => \Pimcore::disableMinifyJs(),
             'environment'         => $kernel->getEnvironment(),
-            'cached_environments' => Tool::getCachedSymfonyEnvironments(),
+            'cached_environments' => [Config::getEnvironment()],
             'sessionId'           => htmlentities($request->getSession()->getId(), ENT_QUOTES, 'UTF-8'),
 
             // languages
@@ -261,7 +197,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
-            'timezone'                       => $config['general']['timezone'],
+            'timezone'                       => $config['general']['timezone'] ?: date_default_timezone_get(),
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
             'geocoding_url_template'         => $config['maps']['geocoding_url_template'],
             'reverse_geocoding_url_template' => $config['maps']['reverse_geocoding_url_template'],

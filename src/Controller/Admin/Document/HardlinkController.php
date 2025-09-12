@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
@@ -20,20 +17,18 @@ use Pimcore\Model\Document;
 use Pimcore\Model\Schedule\Task;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
- * @Route("/hardlink", name="pimcore_admin_document_hardlink_")
- *
  * @internal
  */
+#[Route('/hardlink', name: 'pimcore_admin_document_hardlink_')]
 class HardlinkController extends DocumentControllerBase
 {
     /**
-     * @Route("/get-data-by-id", name="getdatabyid", methods={"GET"})
-     *
      * @throws \Exception
      */
+    #[Route('/get-data-by-id', name: 'getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int)$request->get('id'));
@@ -70,10 +65,9 @@ class HardlinkController extends DocumentControllerBase
     }
 
     /**
-     * @Route("/save", name="save", methods={"POST", "PUT"})
-     *
      * @throws \Exception
      */
+    #[Route('/save', name: 'save', methods: ['PUT', 'POST'])]
     public function saveAction(Request $request): JsonResponse
     {
         $link = Document\Hardlink::getById((int) $request->get('id'));

@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) 2009-2013 pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.advancedManyToManyObjectRelation");
 /**
@@ -163,13 +160,16 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     });
                 }
 
-                let filterType = 'list';
+                fc.filter = {
+                    type: 'list'
+                };
 
                 if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
-                    filterType = 'boolean';
-                }
-                fc.filter = {
-                    type: filterType
+                    fc.filter.type = 'boolean';
+                } else {
+                    fc.filter.labelField = visibleFields[i];
+                    fc.filter.idField = visibleFields[i];
+                    fc.filter.store = this.getSortedStore(this.store, visibleFields[i]);
                 }
 
                 columns.push(fc);
@@ -303,6 +303,12 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                     type: filterType
                 }
             };
+
+            if (filterType === 'list') {
+                columnConfig.filter.labelField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.idField = this.fieldConfig.columns[i].key;
+                columnConfig.filter.store = this.getSortedStore(this.store, this.fieldConfig.columns[i].key);
+            }
 
             if (cellEditor) {
                 columnConfig.getEditor = cellEditor;
@@ -489,7 +495,17 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
             plugins: [
                 this.cellEditing,
                 'gridfilters'
-            ]
+            ],
+            listeners: {
+                celldblclick: function (grid, cell, cellIndex, record) {
+                    if (
+                        cellIndex >= 0 &&
+                        (visibleFields.length === 0 || cellIndex < visibleFields.length)
+                    ) {
+                        this.gridRowDblClickHandler(grid, record);
+                    }
+                }.bind(this)
+            }
         });
 
         if (!readOnly) {
@@ -605,6 +621,8 @@ pimcore.object.tags.advancedManyToManyObjectRelation = Class.create(pimcore.obje
                 }
             }.bind(this));
         }
+
+        this.addFilterChangeListener();
 
         return this.component;
     },

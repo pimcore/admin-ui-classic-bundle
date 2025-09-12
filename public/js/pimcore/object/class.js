@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.klass");
 /**
@@ -74,6 +71,19 @@ pimcore.object.klass = Class.create({
                 }
             });
 
+            let metadataTreeHelper = new pimcore.object.helpers.classTree(true);
+            let filterField = new Ext.form.field.Text(
+              {
+                width: 130,
+                hideLabel: true,
+                enableKeyEvents: true
+              }
+            );
+
+            let filterButton = new Ext.button.Button({
+              iconCls: "pimcore_icon_search"
+            });
+
             this.tree = Ext.create('Ext.tree.Panel', {
                 id: "pimcore_panel_classes_tree",
                 store: this.store,
@@ -81,7 +91,7 @@ pimcore.object.klass = Class.create({
                 autoScroll: true,
                 animate: false,
                 containerScroll: true,
-                width: 250,
+                width: 300,
                 split: true,
                 root: {
                     id: '0'
@@ -96,14 +106,20 @@ pimcore.object.klass = Class.create({
                             iconCls: "pimcore_icon_class pimcore_icon_overlay_add",
                             handler: this.suggestIdentifier.bind(this),
                             disabled: !pimcore.settings['class-definition-writeable']
-                        }
-                    ]
-                }
+                        },
+                        '-',
+                        filterField,
+                        filterButton
+                    ],
+                },
             });
 
             this.tree.on("render", function () {
                 this.getRootNode().expand();
             });
+
+            filterField.on("keyup", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
+            filterButton.on("click", metadataTreeHelper.updateFilter.bind(this, this.tree, filterField));
         }
 
         return this.tree;

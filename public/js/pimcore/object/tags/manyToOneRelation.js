@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.manyToOneRelation");
 /**
@@ -282,10 +279,25 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
                 style: "margin-left: 5px",
                 handler: this.openSearchEditor.bind(this)
             });
+
+            if (this.fieldConfig.displayMode === 'combo') {
+                items.push({
+                    xtype: "button",
+                    iconCls: "pimcore_icon_help",
+                    tooltip: t("help"),
+                    handler: function () {
+                        window.open(
+                            "https://dev.mysql.com/doc/refman/8.0/en/fulltext-boolean.html",
+                            "mysql",
+                            "noopener"
+                        );
+                    }.bind(this)
+                });
+            }
         }
 
         const compositeCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelWidth: labelWidth,
             layout: 'hbox',
             items: items,
@@ -338,7 +350,7 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         }
 
         const compositeCfg = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             labelWidth: labelWidth,
             layout: 'hbox',
             items: [this.component, {
@@ -671,8 +683,9 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
         if (!this.object) {
             return;
         }
+
         let targets, responseHandler;
-        if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo') {
+        if (pimcore.helpers.hasSearchImplementation() && this.fieldConfig.displayMode === 'combo' && !this.fieldConfig.noteditable) {
             targets = this.store.data;
             responseHandler = function (responseData) {
                 this.component.removeCls('grid_nicepath_requested');

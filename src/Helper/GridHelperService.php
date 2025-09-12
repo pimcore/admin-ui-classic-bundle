@@ -1,16 +1,14 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Helper;
@@ -22,11 +20,13 @@ use PhpOffice\PhpSpreadsheet\Reader\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
+use Pimcore\Db;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition;
 use Pimcore\Model\DataObject\Objectbrick;
+use Pimcore\Model\Element\Service;
 use Pimcore\Model\User;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -61,7 +61,7 @@ class GridHelperService
 
                 if ($filter['type'] == 'string') {
                     $operator = 'LIKE';
-                } elseif ($filter['type'] == 'numeric') {
+                } elseif ($filter['type'] == 'numeric' || $filter['type'] == 'quantityValue') {
                     if ($filterOperator == 'lt') {
                         $operator = '<';
                     } elseif ($filterOperator == 'gt') {
@@ -118,8 +118,20 @@ class GridHelperService
                     $field = \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
 
                     if ($field instanceof Model\DataObject\ClassDefinition\Data) {
+                        $featureJoin = [
+                            'fieldname' => $fieldName,
+                            'groupId' => $groupId,
+                            'keyId' => $keyid,
+                            'language' => $language,
+                        ];
+
+                        // Some fields need a secondary value, e.g. the unit of a QuantityValue
+                        if ($field instanceof Model\DataObject\ClassDefinition\Data\QuantityValue) {
+                            $featureJoin['secondaryValue'] = $filter['value'][0][1] ?? null;
+                        }
+                        $featureJoins[] = $featureJoin;
+
                         $mappedKey = 'cskey_' . $fieldName . '_' . $groupId . '_' . $keyid;
-                        $featureJoins[] = ['fieldname' => $fieldName, 'groupId' => $groupId, 'keyId' => $keyid, 'language' => $language];
                         if (isset($filter['value'])) {
                             $featureCondition = $field->getFilterConditionExt(
                                 $filter['value'],
@@ -129,7 +141,16 @@ class GridHelperService
                             );
 
                             if (!empty($featureCondition)) {
-                                $featureConditions[$mappedKey] = $featureCondition;
+                                // if both greater than and less than are used, we need to combine them
+                                if (
+                                    $field instanceof Model\DataObject\ClassDefinition\Data\QuantityValue &&
+                                    isset($featureConditions[$mappedKey])
+                                ) {
+                                    $featureConditions[$mappedKey] =
+                                        '(' . $featureConditions[$mappedKey] . ' AND ' . $featureCondition . ')';
+                                } else {
+                                    $featureConditions[$mappedKey] = $featureCondition;
+                                }
                             }
                         }
                     }
@@ -186,7 +207,7 @@ class GridHelperService
         $conditionPartsFilters = [];
 
         if ($filterJson) {
-            $db = \Pimcore\Db::get();
+            $db = Db::get();
             $filters = json_decode($filterJson, true);
 
             foreach ($filters as $filter) {
@@ -196,7 +217,9 @@ class GridHelperService
                     $filterField = $filter['property'];
                     $filterOperator = $filter['operator'];
 
-                    if ($filter['type'] == 'string') {
+                    if ($filter['type'] == 'string' && preg_match('/^IN\((.*)\)$/i', $filter['value'], $matches)) {
+                        $filter['value'] = str_getcsv($matches[1], ',');
+                    } elseif ($filter['type'] == 'string') {
                         $operator = 'LIKE';
                     } elseif ($filter['type'] == 'date') {
                         if ($filterOperator == 'lt') {
@@ -297,7 +320,7 @@ class GridHelperService
                             $brickFilterField = $field->getName();
                         }
 
-                        $db = \Pimcore\Db::get();
+                        $db = Db::get();
 
                         if ($isLocalized) {
                             $brickPrefix = $db->quoteIdentifier($brickType . '_localized') . '.';
@@ -340,32 +363,52 @@ class GridHelperService
                                 $conditionPartsFilters[] = '(' . implode(' OR ', $fieldConditions) . ')';
                             }
                         } else {
-                            $conditionPartsFilters[] = $field->getFilterCondition($filter['value'] ?? null, $operator, ['brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null)]);
+                            $conditionPartsFilters[] = $field->getFilterCondition(
+                                $filter['value'] ?? null,
+                                $operator,
+                                [
+                                    'brickPrefix' => ($tablePrefix ? $tablePrefix . '.' : null),
+                                    'tablePrefix' => ($tablePrefix ? $tablePrefix . '.' : null),
+                                ]
+                            );
                         }
                     } elseif (in_array($filterField, $systemFields)) {
-                        // system field
-                        $lowerCasedFilterValue = strtolower($filter['value']); // lowercase for case insensitive search
-                        $lowerCasedFilterValue = str_replace('*', '%', $lowerCasedFilterValue); // replace wildcard
+                        // system fields
+                        $filterValue = $filter['value'];
+                        if (is_string($filterValue)) {
+                            $filterValue = strtolower($filterValue); // lowercase for case-insensitive search
+                            $filterValue = str_replace('*', '%', $filterValue); // replace wildcard
+                        }
                         if ($filterField == 'fullpath') {
-                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
+                            $conditionPartsFilters[] = 'concat(lower(`path`), lower(`key`)) ' . $operator . ' ' . $db->quote('%' . $filterValue . '%');
                         } elseif ($filterField == 'key') {
-                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $lowerCasedFilterValue . '%');
+                            $conditionPartsFilters[] = 'lower(`key`) ' . $operator . ' ' . $db->quote('%' . $filterValue . '%');
                         } elseif ($filterField == 'id' && $operator !== 'in') {
-                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $db->quote($filter['value']);
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' ' . $filterValue;
                         } elseif ($filterField == 'id' && $operator === 'in') {
-                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filter['value'] . ')';
+                            $conditionPartsFilters[] = 'oo_id ' . $operator . ' (' . $filterValue . ')';
                         } else {
                             $filterField = $db->quoteIdentifier($filterField);
                             if ($filter['type'] == 'date' && $operator == '=') {
                                 //if the equal operator is chosen with the date type, condition has to be changed
-                                $maxTime = $filter['value'] + (86400 - 1); //specifies the top point of the range used in the condition
-                                $conditionPartsFilters[] = $filterField . ' BETWEEN ' . $db->quote($filter['value']) . ' AND ' . $db->quote($maxTime);
+                                $maxTime = $filterValue + (86400 - 1); //specifies the top point of the range used in the condition
+                                $conditionPartsFilters[] = sprintf(
+                                    '%s BETWEEN %s AND %s',
+                                    $filterField,
+                                    is_string($filterValue) ? $db->quote($filterValue) : $filterValue,
+                                    $maxTime
+                                );
                             } else {
                                 // @see \Pimcore\Model\DataObject\ClassDefinition\Data\Checkbox::getFilterConditionExt()
                                 if ($filter['type'] === 'boolean') {
                                     $filterField = 'IFNULL(' . $filterField . ', 0)';
                                 }
-                                $conditionPartsFilters[] = $filterField . ' ' . $operator . ' ' . $db->quote($filter['value']);
+                                $conditionPartsFilters[] = sprintf(
+                                    '%s %s %s',
+                                    $filterField,
+                                    $operator,
+                                    is_string($filterValue) ? $db->quote($filterValue) : $filterValue
+                                );
                             }
                         }
                     }
@@ -427,7 +470,7 @@ class GridHelperService
                 $featureAndSlugFilters,
                 $me
             ) {
-                $db = \Pimcore\Db::get();
+                $db = Db::get();
 
                 $alreadyJoined = [];
 
@@ -439,8 +482,13 @@ class GridHelperService
                     }
                     $alreadyJoined[$mappedKey] = 1;
 
+                    if (isset($featureJoin['secondaryValue'])) {
+                        $secondValue = ' and ' . $mappedKey . '.value2 = ' . $db->quote($featureJoin['secondaryValue']);
+                    }
+
                     $table = $me->getDao()->getTableName();
                     $select->addSelect($mappedKey . '.value AS ' . $mappedKey);
+
                     $select->leftJoin(
                         $table,
                         'object_classificationstore_data_' . $class->getId(),
@@ -451,6 +499,7 @@ class GridHelperService
                         . ' and ' . $mappedKey . '.groupId=' . $featureJoin['groupId']
                         . ' and ' . $mappedKey . '.keyId=' . $featureJoin['keyId']
                         . ' and ' . $mappedKey . '.language = ' . $db->quote($featureJoin['language'])
+                        . ($secondValue ?? '')
                         . ')'
                     );
                 }
@@ -477,7 +526,7 @@ class GridHelperService
                 $featureAndSlugFilters,
                 $me
             ) {
-                $db = \Pimcore\Db::get();
+                $db = Db::get();
 
                 $alreadyJoined = [];
 
@@ -533,7 +582,6 @@ class GridHelperService
         $orderKey = 'id';
         $order = 'ASC';
 
-        $fields = [];
         $bricks = [];
         if (!empty($requestParams['fields'])) {
             $fields = $requestParams['fields'];
@@ -541,10 +589,10 @@ class GridHelperService
         }
 
         if (isset($requestParams['limit'])) {
-            $limit = $requestParams['limit'];
+            $limit = (int)$requestParams['limit'];
         }
         if (isset($requestParams['start'])) {
-            $start = $requestParams['start'];
+            $start = (int)$requestParams['start'];
         }
 
         $sortingSettings = \Pimcore\Bundle\AdminBundle\Helper\QueryParams::extractSortingSettings($requestParams);
@@ -614,13 +662,7 @@ class GridHelperService
         }
 
         if (!$adminUser->isAdmin()) {
-            $userIds = $adminUser->getRoles();
-            $userIds[] = $adminUser->getId();
-            $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_object where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`,`key`),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_object where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`,`key`))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+            $conditionFilters[] = $this->getPermittedPathsByUser('object', $adminUser);
         }
 
         $featureJoins = [];
@@ -732,7 +774,7 @@ class GridHelperService
 
     public function prepareAssetListingForGrid(array $allParams, User $adminUser): Model\Asset\Listing
     {
-        $db = \Pimcore\Db::get();
+        $db = Db::get();
         $folder = Model\Asset::getById((int) $allParams['folderId']);
 
         $start = 0;
@@ -741,10 +783,10 @@ class GridHelperService
         $order = 'ASC';
 
         if (isset($allParams['limit'])) {
-            $limit = $allParams['limit'];
+            $limit = (int)$allParams['limit'];
         }
         if (isset($allParams['start'])) {
-            $start = $allParams['start'];
+            $start = (int)$allParams['start'];
         }
 
         $orderKeyQuote = true;
@@ -807,7 +849,8 @@ class GridHelperService
                         $operator = 'BETWEEN';
                         //if the equal operator is chosen with the date type, condition has to be changed
                         $maxTime = $filter['value'] + (86400 - 1); //specifies the top point of the range used in the condition
-                        $filter['value'] = $db->quote($filter['value']) . ' AND ' . $db->quote($maxTime);
+                        $filter['value'] =
+                            $db->quote((string)$filter['value']) . ' AND ' . $db->quote((string)$maxTime);
                     }
                 } elseif ($filterType == 'list') {
                     $operator = 'IN';
@@ -829,7 +872,7 @@ class GridHelperService
                     $value = '(' . implode(',', $quoted) . ')';
                 } elseif ($operator == 'BETWEEN') {
                 } else {
-                    $value = $db->quote($value);
+                    $value = $db->quote((string)$value);
                 }
 
                 if (isset($filterDef[1]) && $filterDef[1] == 'system') {
@@ -851,27 +894,25 @@ class GridHelperService
         }
 
         if (!$adminUser->isAdmin()) {
-            $userIds = $adminUser->getRoles();
-            $userIds[] = $adminUser->getId();
-            $conditionFilters[] = ' (
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(CONCAT(`path`, filename),cpath)=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                    OR
-                                                    (select list from users_workspaces_asset where userId in (' . implode(',', $userIds) . ') and LOCATE(cpath,CONCAT(`path`, filename))=1  ORDER BY LENGTH(cpath) DESC LIMIT 1)=1
-                                                 )';
+            $conditionFilters[] = $this->getPermittedPathsByUser('asset', $adminUser);
         }
 
         //filtering for tags
         if (!empty($allParams['tagIds'])) {
-            $tagIds = $allParams['tagIds'];
-            foreach ($tagIds as $tagId) {
+            foreach ($allParams['tagIds'] as $tagId) {
+                $tagId = (int) $tagId;
                 if ($allParams['considerChildTags'] ?? false) {
                     $tag = Model\Element\Tag::getById($tagId);
                     if ($tag) {
                         $tagPath = $tag->getFullIdPath();
-                        $conditionFilters[] = 'id IN (SELECT cId FROM `tags_assignment` INNER JOIN `tags` ON tags.id = tags_assignment.tagid WHERE `ctype` = "asset" AND (`id` = ' .(int)$tagId. ' OR `idPath` LIKE ' . $db->quote($tagPath . '%') . '))';
+                        $conditionFilters[] =
+                            'id IN (SELECT cId FROM `tags_assignment` INNER JOIN `tags` ON
+                            tags.id = tags_assignment.tagid WHERE `ctype` = "asset"
+                            AND (`id` = ' .$tagId. ' OR `idPath` LIKE ' . $db->quote($tagPath . '%') . '))';
                     }
                 } else {
-                    $conditionFilters[] = 'id IN (SELECT cId FROM `tags_assignment` WHERE `ctype` = "asset" AND tagid = ' .(int)$tagId. ')';
+                    $conditionFilters[] =
+                        'id IN (SELECT cId FROM `tags_assignment` WHERE `ctype` = "asset" AND tagid = ' .$tagId. ')';
                 }
             }
         }
@@ -931,5 +972,119 @@ class GridHelperService
         $storage->delete($csvFile);
 
         return $response;
+    }
+
+    /**
+     * A more performant alternative to "CONCAT(`path`,`key`) LIKE $fullpath"
+     */
+    private function optimizedConcatLike(string $fullpath, string $type = 'object'): string
+    {
+        //special case for the root folder
+        if ($fullpath === '/') {
+            return '`path` LIKE "/%"';
+        }
+
+        $pathParts = explode('/', $fullpath);
+        $leaf = array_pop($pathParts);
+        $path = implode('/', $pathParts);
+        $queryColumn = $type === 'asset' ? '`filename`' : '`key`';
+
+        return '(
+            (`path` = "' . $path . '/" AND ' . $queryColumn .  ' = "' . $leaf . '")
+            OR
+            `path` LIKE "' . $fullpath . '/%"
+        )';
+    }
+
+    /**
+     * A more performant alternative to "CONCAT(`path`,`key`) NOT LIKE $fullpath"
+     * Set $onlyChildren to true when you want to exclude the folder/element itself
+     */
+    private function optimizedConcatNotLike(
+        string $fullpath,
+        bool $onlyChildren = false,
+        string $type = 'object'
+    ): string {
+        $pathParts = explode('/', $fullpath);
+        $leaf = array_pop($pathParts);
+        $path = implode('/', $pathParts);
+        $queryColumn = $type === 'asset' ? '`filename`' : '`key`';
+
+        if ($onlyChildren) {
+            return '`path` NOT LIKE "' . $fullpath . '/%"';
+        }
+
+        return '(
+            NOT (`path` = "' . $path . '/" AND ' . $queryColumn .  ' = "' . $leaf . '")
+            AND
+            `path` NOT LIKE "' . $fullpath . '/%"
+        )';
+
+    }
+
+    /**
+     *
+     *
+     * @internal
+     */
+    public function getPermittedPathsByUser(string $type, User $user): string
+    {
+        $allowedTypes = [];
+
+        if ($user->isAllowed($type . 's')) { //the permissions are just plural
+            $elementPaths = Service::findForbiddenPaths($type, $user);
+            $onlyChildren = false;
+            $forbiddenPathSql = [];
+            $allowedPathSql = [];
+            foreach ($elementPaths['forbidden'] as $forbiddenPath => $allowedPaths) {
+                $exceptions = '';
+                if ($allowedPaths) {
+                    $exceptionsConcat = '';
+                    foreach ($allowedPaths as $path) {
+                        if ($exceptionsConcat !== '') {
+                            $exceptionsConcat.= ' OR ';
+                        }
+                        $exceptionsConcat.= $this->optimizedConcatLike($path, $type);
+                    }
+                    $exceptions = ' OR (' . $exceptionsConcat . ')';
+                    //if any allowed child is found, the current folder can be listed but its content is still blocked
+                    $onlyChildren = true;
+                }
+                $forbiddenPathSql[] =
+                    '(' . $this->optimizedConcatNotLike($forbiddenPath, $onlyChildren, $type) . $exceptions . ')'
+                ;
+            }
+            foreach ($elementPaths['allowed'] as $allowedPaths) {
+                $allowedPathSql[] = $this->optimizedConcatLike($allowedPaths, $type);
+            }
+
+            // this is to avoid query error when implode is empty.
+            // the result would be like `(((path1 OR path2) AND (not_path3 AND not_path4)))`
+            $forbiddenAndAllowedSql = '(';
+
+            if (!empty($allowedPathSql) || !empty($forbiddenPathSql)) {
+                $forbiddenAndAllowedSql .= '(';
+                $forbiddenAndAllowedSql .= $allowedPathSql ? '( ' . implode(' OR ', $allowedPathSql) . ' )' : '';
+
+                if (!empty($forbiddenPathSql)) {
+                    //if $allowedPathSql "implosion" is present, we need `AND` in between
+                    $forbiddenAndAllowedSql .= $allowedPathSql ? ' AND ' : '';
+                    $forbiddenAndAllowedSql .= implode(' AND ', $forbiddenPathSql);
+                }
+                $forbiddenAndAllowedSql .= ' )';
+            }
+
+            $forbiddenAndAllowedSql.= ' )';
+
+            $allowedTypes[] = $forbiddenAndAllowedSql;
+        }
+
+        //if allowedTypes is still empty after getting the workspaces, it means that there are no any main permissions set
+        // by setting a `false` condition in the query makes sure that nothing would be displayed.
+        if (!$allowedTypes) {
+            $allowedTypes = ['false'];
+        }
+
+        return '('.implode(' OR ', $allowedTypes) .')';
     }
 }

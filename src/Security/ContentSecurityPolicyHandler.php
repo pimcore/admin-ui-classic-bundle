@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Security;
@@ -54,11 +51,12 @@ class ContentSecurityPolicyHandler implements LoggerAwareInterface
 
     private array $allowedUrls = [
         self::CONNECT_OPT => [
-            'https://liveupdate.pimcore.org/', // AdminBundle statistics & update-check service
+            'https://license.pimcore.com/', // Statistics
             'https://nominatim.openstreetmap.org/', // CoreBundle geocoding_url_template
         ],
         self::SCRIPT_OPT => [
             'https://buttons.github.io/buttons.js', // GitHub star button on login page
+            'https://code.jquery.com/', // jQuery for the icon library
         ],
         self::FRAME_OPT => [
             'https://www.youtube-nocookie.com/', // Video preview thumbnail for YouTube

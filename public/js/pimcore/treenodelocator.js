@@ -154,7 +154,7 @@ pimcore.treenodelocator = function()
             var locateConfig = globalState.locateConfigs[globalState.currentTreeIndex];
             var tree = locateConfig.tree;
             var rootNode = tree.tree.getRootNode();
-            var rootNodeId = rootNode.getId();
+            var rootNodeId = rootNode.getId().toString();
 
             // Tree root may be shifted to a subnode and the item to be shown
             // is out of tree scope - don't continue if this is the case:

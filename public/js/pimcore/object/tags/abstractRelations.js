@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.abstractRelations");
 /**
@@ -19,6 +16,34 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
 
     getFilterEditToolbarItems: function () {
         return [
+            {
+                iconCls: "pimcore_icon_clear_filters",
+                itemId: "clearFilters",
+                hidden: true,
+                text: t("clear_filters"),
+                handler: function (button) {
+                    this.component.filters.clearFilters();
+                    this.component.getStore().clearFilter();
+
+                    let columns = this.component.getColumns();
+                    for (let i = 0; i < columns.length; i++) {
+                        if(columns[i].filter?.menu?.items) {
+                            columns[i].filter.menu.items.each(function (filterOption) {
+                                if (filterOption.setChecked) {
+                                    filterOption.setChecked(false);
+                                }
+                            });
+                        }
+                    }
+
+                    const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+                    if (filterInput) {
+                        filterInput.setValue('');
+                        this.hideFilterInput(filterInput);
+                    }
+                    button.hide();
+                }.bind(this)
+            },
             {
                 xtype: 'textfield',
                 hidden: true,
@@ -46,6 +71,29 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
                 handler: this.showFilterInput.bind(this)
             }
         ];
+    },
+
+    addFilterChangeListener: function() {
+        this.component.on("filterchange", function () {
+            const filterData = this.component.getStore().getFilters().items;
+
+            const hasStoreFilters = filterData.some(function (filter) {
+                return filter.getValue() !== null && filter.getValue() !== '';
+            });
+
+            const filterInput = this.component.down('textfield[cls~=relations_grid_filter_input]');
+            const hasTextFilter = filterInput?.getValue() !== '';
+
+            const clearFilters = this.component.queryById('clearFilters');
+            
+            if (clearFilters){
+                  if (hasStoreFilters || hasTextFilter) {
+                      clearFilters.show();
+                  } else {
+                      clearFilters.hide();
+                  }
+            }
+        }.bind(this));
     },
 
     showFilterInput: function (filterBtn) {
@@ -208,7 +256,7 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
     },
 
     getColumnWidthLocalStorageKey: function (column) {
-        let context = this.context;
+        let context = { ...this.context };
         delete context.objectId;
         context.column = column;
 
@@ -222,5 +270,30 @@ pimcore.object.tags.abstractRelations = Class.create(pimcore.object.tags.abstrac
             return width;
         }
         return null;
+    },
+
+    getSortedStore: function (store, sortField) {
+        return Ext.create('Ext.data.ChainedStore', {
+            source: store, sorters: [
+                {
+                    sorterFn: function (record1, record2) {
+                        let value1, value2;
+                        try {
+                            value1 = (record1.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value1 = '';
+                        }
+
+                        try {
+                            value2 = (record2.get(sortField)+'').toLowerCase();
+                        } catch (e) {
+                            value2 = '';
+                        }
+
+                        return value1 > value2 ? 1 : (value1 === value2) ? 0 : -1;
+                    }
+                }
+            ]
+        });
     }
 });

@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 /**
  * @private
@@ -251,7 +248,6 @@ Ext.define('pimcore.tree.View', {
         },
         beforeitemupdate: function(record) {
             if(record.ptb) {
-                record.ptb.destroy();
                 delete record.ptb;
             }
         },
@@ -284,7 +280,9 @@ Ext.define('pimcore.tree.View', {
 
     doUpdatePaging: function(node) {
 
-        if (node.data.expanded && node.needsPaging) {
+        const tree = node.getOwnerTree();
+
+        if (node.data.expanded && node.needsPaging && tree) {
 
             node.ptb = ptb = Ext.create('pimcore.toolbar.Paging', {
                     node: node,
@@ -296,7 +294,6 @@ Ext.define('pimcore.tree.View', {
             node.ptb.store = this.store;
 
 
-            var tree = node.getOwnerTree();
             var view = tree.getView();
             var nodeEl = Ext.fly(view.getNodeByRecord(node));
             if (!nodeEl) {
@@ -404,7 +401,8 @@ Ext.define('pimcore.data.PagingTreeStore', {
             node.pagingData = {
                 total: data.total,
                 offset: data.offset,
-                limit: data.limit
+                limit: data.limit,
+                canSortManually: data.total < data.limit
             }
 
             me.superclass.onProxyLoad.call(this, operation);

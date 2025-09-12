@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.classificationstore");
 /**
@@ -92,7 +89,7 @@ pimcore.object.tags.classificationstore = Class.create(pimcore.object.tags.abstr
         }
 
         if(this.fieldConfig.title) {
-            wrapperConfig.title = this.fieldConfig.title;
+            wrapperConfig.title = t(this.fieldConfig.title);
         }
 
         var nrOfLanguages = this.frontendLanguages.length;

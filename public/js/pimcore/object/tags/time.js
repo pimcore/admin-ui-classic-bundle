@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.time");
 /**
@@ -30,7 +27,7 @@ pimcore.object.tags.time = Class.create(pimcore.object.tags.abstract, {
 
     getLayoutEdit: function () {
         const options = {
-            fieldLabel: this.fieldConfig.title,
+            fieldLabel: t(this.fieldConfig.title),
             format: "H:i",
             emptyText: "",
             width: this.fieldConfig.width ? this.fieldConfig.width : 200,

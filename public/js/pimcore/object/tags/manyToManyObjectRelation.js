@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.manyToManyObjectRelation");
 /**
@@ -388,14 +385,16 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     });
                 }
 
-                let filterType = 'list';
+                fc.filter = {
+                    type: 'list'
+                };
 
                 if (fc.layout.layout.fieldtype === 'checkbox' || fc.layout.key === 'published') {
-                    filterType = 'boolean';
-                }
-
-                fc.filter = {
-                    type: filterType
+                    fc.filter.type = 'boolean';
+                } else {
+                    fc.filter.labelField = field.key;
+                    fc.filter.idField = field.key;
+                    fc.filter.store = this.getSortedStore(this.store, field.key);
                 }
 
                 columns.push(fc);
@@ -445,7 +444,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                 triggerAction: "all",
                 displayField: "label",
                 valueField: "id",
-                fieldLabel: this.fieldConfig.title,
+                fieldLabel: t(this.fieldConfig.title),
                 tpl: new Ext.XTemplate(
                     '<tpl for="."><li role="option" unselectable="on" class="x-boundlist-item" data-recordid="{id}" style="display:flex;">',
                     '  {label}',
@@ -663,6 +662,8 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                     }.bind(this)
                 });
             }.bind(this));
+
+            this.addFilterChangeListener();
         }
 
         return this.component;
@@ -678,7 +679,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             },
             {
                 xtype: "tbtext",
-                text: "<b>" + this.fieldConfig.title + "</b>"
+                text: "<b>" + t(this.fieldConfig.title) + "</b>"
             },
             "->"
         ];
@@ -761,7 +762,7 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
             cls: "object_field object_field_type_" + this.type,
             autoExpandColumn: 'path',
             style: "margin-bottom: 10px",
-            title: this.fieldConfig.title,
+            title: t(this.fieldConfig.title),
             viewConfig: {
                 enableTextSelection: this.fieldConfig.enableTextSelection,
                 listeners: {
@@ -769,7 +770,10 @@ pimcore.object.tags.manyToManyObjectRelation = Class.create(pimcore.object.tags.
                         this.requestNicePathData(this.store.data, true);
                     }.bind(this)
                 }
-            }
+            },
+            plugins: [
+                'gridfilters'
+            ]
         });
 
         return this.component;

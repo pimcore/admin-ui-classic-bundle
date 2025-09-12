@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.settings.thumbnail.item");
 /**
@@ -156,6 +153,11 @@ pimcore.settings.thumbnail.item = Class.create({
                         name: "preserveColor",
                         boxLabel: t("preserve_color") + " (Imagick, ORIGINAL)",
                         checked: this.data.preserveColor
+                    }, {
+                        xtype: "checkbox",
+                        name: "forceProcessICCProfiles",
+                        boxLabel: t("force_process_ICC_profiles") + " (Imagick, ORIGINAL)",
+                        checked: this.data.forceProcessICCProfiles
                     }, {
                         xtype: "checkbox",
                         name: "preserveMetaData",

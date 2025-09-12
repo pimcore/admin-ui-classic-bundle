@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS('pimcore.object.selectoptionsitems.definition');
 
@@ -22,6 +19,7 @@ pimcore.object.selectoptionsitems.definition = Class.create({
         id: null,
         enumName: null,
         group: null,
+        adminOnly: false,
         useTraits: '',
         implementsInterfaces: '',
         selectOptions: []
@@ -32,16 +30,22 @@ pimcore.object.selectoptionsitems.definition = Class.create({
     panel: null,
     formPanel: null,
     groupField: null,
+    adminOnlyField: null,
     useTraitsField: null,
     implementsInterfacesField: null,
     optionsEditorGrid: null,
     selectionModel: null,
+
+    readOnly: false,
 
     initialize: function (data, parentPanel, reopen, editorPrefix) {
         this.parentPanel = parentPanel;
         this.data = data;
         this.editorPrefix = editorPrefix;
         this.reopen = reopen;
+
+        // Only allow admin users to edit the select options when enabled
+        this.readOnly = data.adminOnly && !pimcore.currentuser.admin;
 
         this.addLayout();
     },
@@ -83,19 +87,24 @@ pimcore.object.selectoptionsitems.definition = Class.create({
     },
 
     createPanelButtons: function () {
-        return [
+        let buttons = [
             {
                 text: t('reload_definition'),
-                handler: this.onRefresh.bind(this),
-                iconCls: 'pimcore_icon_reload'
+                handler: this.reload.bind(this),
+                iconCls: 'pimcore_icon_reload',
             },
-            {
+        ];
+
+        if (!this.readOnly) {
+            buttons.push({
                 text: t('save'),
                 iconCls: 'pimcore_icon_apply',
                 handler: this.save.bind(this),
-                disabled: !this.data.isWriteable
-            }
-        ];
+                disabled: !this.data.isWriteable,
+            });
+        }
+
+        return buttons;
     },
 
     getFormPanel: function () {
@@ -111,6 +120,7 @@ pimcore.object.selectoptionsitems.definition = Class.create({
                 this.createUseTraitsField(),
                 this.createImplementsInterfacesField(),
                 this.createGroupField(),
+                this.createAdminOnlyField(),
                 this.createOptionsEditorGrid(),
                 {
                     xtype: 'displayfield',
@@ -150,7 +160,8 @@ pimcore.object.selectoptionsitems.definition = Class.create({
             width: 600,
             name: 'useTraits',
             fieldLabel: t('use_traits'),
-            value: this.data.useTraits
+            value: this.data.useTraits,
+            disabled: this.readOnly,
         });
         return this.useTraitsField;
     },
@@ -163,7 +174,8 @@ pimcore.object.selectoptionsitems.definition = Class.create({
             width: 600,
             name: 'implementsInterfaces',
             fieldLabel: t('implements_interfaces'),
-            value: this.data.implementsInterfaces
+            value: this.data.implementsInterfaces,
+            disabled: this.readOnly,
         });
         return this.implementsInterfacesField;
     },
@@ -176,16 +188,31 @@ pimcore.object.selectoptionsitems.definition = Class.create({
             width: 600,
             name: 'group',
             fieldLabel: t('group'),
-            value: this.data.group
+            value: this.data.group,
+            disabled: this.readOnly,
         });
         return this.groupField;
+    },
+
+    /**
+     * @returns {Ext.form.field.Text}
+     */
+    createAdminOnlyField: function () {
+        this.adminOnlyField = Ext.create('Ext.form.field.Checkbox', {
+            name: 'adminOnly',
+            fieldLabel: t('admin_only'),
+            value: this.data.adminOnly,
+            checked: this.data.adminOnly,
+            disabled: this.readOnly,
+        });
+        return this.adminOnlyField;
     },
 
     /**
      * @returns {Ext.grid.Panel}
      */
     createOptionsEditorGrid: function () {
-        var valueStore = new Ext.data.Store({
+        let valueStore = new Ext.data.Store({
             fields: [
                 'label',
                 {name: 'value', allowBlank: false},
@@ -194,24 +221,19 @@ pimcore.object.selectoptionsitems.definition = Class.create({
             proxy: {
                 type: 'memory'
             },
-            data: this.data.selectOptions
+            data: this.data.selectOptions,
         });
 
-        // Modified copy of the select field implementation
-        this.optionsEditorGrid = Ext.create('Ext.grid.Panel', {
-            viewConfig: {
-                plugins: [
-                    {
-                        ptype: 'gridviewdragdrop',
-                        dragroup: 'selectoptionsselect'
-                    }
-                ]
+        let toolbarItems = [
+            {
+                xtype: 'tbtext',
+                text: t('selection_options'),
             },
-            tbar: [
-                {
-                    xtype: 'tbtext',
-                    text: t('selection_options')
-                },
+        ];
+        let plugins = [];
+
+        if (!this.readOnly) {
+            toolbarItems.push(
                 '-',
                 {
                     xtype: 'button',
@@ -232,17 +254,16 @@ pimcore.object.selectoptionsitems.definition = Class.create({
                         }
                         valueStore.insert(idx, u);
                         this.selectionModel.select(idx);
-                    }.bind(this)
-                }
-            ],
-            style: 'margin-top: 10px',
-            store: valueStore,
-            selModel: Ext.create('Ext.selection.RowModel', {}),
-            clicksToEdit: 1,
-            columnLines: true,
-            columns: this.createOptionsEditorGridColumns(),
-            autoHeight: true,
-            plugins: [
+                    }.bind(this),
+                },
+                {
+                    xtype: 'button',
+                    iconCls: 'pimcore_icon_edit',
+                    handler: this.showoptioneditor.bind(this, valueStore)
+                },
+            );
+
+            plugins.push(
                 Ext.create('Ext.grid.plugin.CellEditing', {
                     clicksToEdit: 1,
                     listeners: {
@@ -270,10 +291,31 @@ pimcore.object.selectoptionsitems.definition = Class.create({
                                 }
                             }
                             return true;
-                        }
-                    }
+                        },
+                    },
                 })
-            ]
+            );
+        }
+
+        // Modified copy of the select field implementation
+        this.optionsEditorGrid = Ext.create('Ext.grid.Panel', {
+            viewConfig: {
+                plugins: [
+                    {
+                        ptype: 'gridviewdragdrop',
+                        dragroup: 'selectoptionsselect'
+                    }
+                ]
+            },
+            tbar: toolbarItems,
+            style: 'margin-top: 10px',
+            store: valueStore,
+            selModel: Ext.create('Ext.selection.RowModel', {}),
+            clicksToEdit: 1,
+            columnLines: true,
+            columns: this.createOptionsEditorGridColumns(),
+            autoHeight: true,
+            plugins: plugins,
         });
 
         this.selectionModel = this.optionsEditorGrid.getSelectionModel();
@@ -281,7 +323,7 @@ pimcore.object.selectoptionsitems.definition = Class.create({
     },
 
     createOptionsEditorGridColumns: function () {
-        return [
+        let columns = [
             {
                 text: t('display_name'),
                 sortable: true,
@@ -322,59 +364,66 @@ pimcore.object.selectoptionsitems.definition = Class.create({
                 },
                 flex: 1
             },
-            {
-                xtype: 'actioncolumn',
-                menuText: t('up'),
-                width: 40,
-                items: [
-                    {
-                        tooltip: t('up'),
-                        icon: '/bundles/pimcoreadmin/img/flat-color-icons/up.svg',
-                        handler: function (grid, rowIndex) {
-                            if (rowIndex > 0) {
-                                var rec = grid.getStore().getAt(rowIndex);
-                                grid.getStore().removeAt(rowIndex);
-                                grid.getStore().insert(--rowIndex, [rec]);
-                                this.selectionModel.select(rowIndex);
-                            }
-                        }.bind(this)
-                    }
-                ]
-            },
-            {
-                xtype: 'actioncolumn',
-                menuText: t('down'),
-                width: 40,
-                items: [
-                    {
-                        tooltip: t('down'),
-                        icon: '/bundles/pimcoreadmin/img/flat-color-icons/down.svg',
-                        handler: function (grid, rowIndex) {
-                            if (rowIndex < (grid.getStore().getCount() - 1)) {
-                                var rec = grid.getStore().getAt(rowIndex);
-                                grid.getStore().removeAt(rowIndex);
-                                grid.getStore().insert(++rowIndex, [rec]);
-                                this.selectionModel.select(rowIndex);
-                            }
-                        }.bind(this)
-                    }
-                ]
-            },
-            {
-                xtype: 'actioncolumn',
-                menuText: t('remove'),
-                width: 40,
-                items: [
-                    {
-                        tooltip: t('remove'),
-                        icon: '/bundles/pimcoreadmin/img/flat-color-icons/delete.svg',
-                        handler: function (grid, rowIndex) {
-                            grid.getStore().removeAt(rowIndex);
-                        }.bind(this)
-                    }
-                ]
-            }
         ];
+
+        if (!this.readOnly) {
+            columns.push(
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('up'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('up'),
+                            icon: '/bundles/pimcoreadmin/img/flat-color-icons/up.svg',
+                            handler: function (grid, rowIndex) {
+                                if (rowIndex > 0) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    grid.getStore().removeAt(rowIndex);
+                                    grid.getStore().insert(--rowIndex, [rec]);
+                                    this.selectionModel.select(rowIndex);
+                                }
+                            }.bind(this)
+                        }
+                    ]
+                },
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('down'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('down'),
+                            icon: '/bundles/pimcoreadmin/img/flat-color-icons/down.svg',
+                            handler: function (grid, rowIndex) {
+                                if (rowIndex < (grid.getStore().getCount() - 1)) {
+                                    var rec = grid.getStore().getAt(rowIndex);
+                                    grid.getStore().removeAt(rowIndex);
+                                    grid.getStore().insert(++rowIndex, [rec]);
+                                    this.selectionModel.select(rowIndex);
+                                }
+                            }.bind(this)
+                        }
+                    ]
+                },
+                {
+                    xtype: 'actioncolumn',
+                    menuText: t('remove'),
+                    width: 40,
+                    items: [
+                        {
+                            tooltip: t('remove'),
+                            icon: '/bundles/pimcoreadmin/img/flat-color-icons/delete.svg',
+                            handler: function (grid, rowIndex) {
+                                grid.getStore().removeAt(rowIndex);
+                            }.bind(this)
+                        }
+                    ]
+                }
+            );
+        }
+
+        return columns;
     },
 
     /**
@@ -420,20 +469,26 @@ pimcore.object.selectoptionsitems.definition = Class.create({
     },
 
     save: function (showSuccess = true) {
-        var reload = false;
-        var newGroup = this.groupField.getValue();
+        let reloadTree = false;
+        let newGroup = this.groupField.getValue();
         if (newGroup !== this.data.group) {
             this.data.group = newGroup;
-            reload = true;
+            reloadTree = true;
         }
 
-        var formData = this.getFormData();
+        // Reload if 'admin only' is enabled and user is not admin
+        let reload = this.adminOnlyField.getValue() === true && this.data.adminOnly !== true && !pimcore.currentuser.admin;
+        if (reload) {
+            reloadTree = true;
+        }
+
+        let formData = this.getFormData();
 
         Ext.Ajax.request({
             url: Routing.generate('pimcore_admin_dataobject_class_selectoptionsupdate'),
             method: 'PUT',
             params: formData,
-            success: showSuccess ? this.saveOnComplete.bind(this, reload) : null
+            success: showSuccess ? this.saveOnComplete.bind(this, reloadTree, reload) : null
         });
     },
 
@@ -453,17 +508,21 @@ pimcore.object.selectoptionsitems.definition = Class.create({
         return {
             id: this.data.id,
             group: this.groupField.getValue(),
+            adminOnly: this.adminOnlyField.getValue(),
             useTraits: this.useTraitsField.getValue(),
             implementsInterfaces: this.implementsInterfacesField.getValue(),
             selectOptions: Ext.encode(selectOptions)
         };
     },
 
-    saveOnComplete: function (reload, response) {
+    saveOnComplete: function (reloadTree, reload, response) {
         var rdata = Ext.decode(response.responseText);
         if (rdata && rdata.success) {
+            if (reloadTree) {
+                this.reloadTree();
+            }
             if (reload) {
-                this.parentPanel.tree.getStore().load();
+                this.reload();
             }
             pimcore.helpers.showNotification(t('success'), t('saved_successfully'), 'success');
             return;
@@ -476,8 +535,24 @@ pimcore.object.selectoptionsitems.definition = Class.create({
         }
     },
 
-    onRefresh: function() {
+    reloadTree: function () {
+        this.parentPanel.tree.getStore().load();
+    },
+
+    reload: function() {
         this.parentPanel.getEditPanel().remove(this.panel);
         this.reopen();
+    },
+
+    showoptioneditor: function (valueStore) {
+        let editor = new pimcore.object.helpers.optionEditor(
+            valueStore,
+            [
+                'label',
+                'value',
+                'name',
+            ],
+        );
+        editor.edit();
     }
 });

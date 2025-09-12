@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 
 /**
@@ -251,7 +248,17 @@ pimcore.asset.helpers.grid = Class.create({
                 } else if (key == "type") {
                     gridColumns.push({
                         text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true,
-                        dataIndex: field.key, filter: {type: 'list', options: ['image', 'text', 'audio', 'video', 'document', 'archive', 'unknown']}
+                        dataIndex: field.key, filter: {type: 'list', options: pimcore.globalmanager.get("asset_search_types")}
+                    });
+                } else if (key == "mimetype") {
+                    gridColumns.push({
+                        text: t(field.label), sortable: true, dataIndex: field.key, editable: false,
+                        width: this.getColumnWidth(field, 210), locked: this.getColumnLock(field), filter: 'string', renderer: Ext.util.Format.htmlEncode
+                    });
+                } else if (key === "id") {
+                    gridColumns.push({
+                        text: t(field.label), width: this.getColumnWidth(field, 130), locked: this.getColumnLock(field), sortable: true, filter: 'numeric',
+                        dataIndex: field.key
                     });
                 } else {
                     gridColumns.push({

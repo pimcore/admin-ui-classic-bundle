@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.classes.data.select");
 /**
@@ -129,7 +126,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
                 {
                     xtype: "button",
                     iconCls: "pimcore_icon_edit",
-                    handler: this.showoptioneditor.bind(this, valueStore)
+                    handler: this.showgrideditor.bind(this, valueStore)
 
                 }],
             style: "margin-top: 10px",
@@ -167,7 +164,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
                             icon: "/bundles/pimcoreadmin/img/flat-color-icons/up.svg",
                             handler: function (grid, rowIndex) {
                                 if (rowIndex > 0) {
-                                    var rec = grid.getStore().getAt(rowIndex);
+                                    const rec = grid.getStore().getAt(rowIndex);
                                     grid.getStore().removeAt(rowIndex);
                                     grid.getStore().insert(--rowIndex, [rec]);
                                     this.selectionModel.select(rowIndex);
@@ -286,6 +283,10 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
 
         $super();
 
+        if(this.isInCustomLayoutEditor()) {
+            return;
+        }
+
         let options = [];
 
         let valueEditor = this.specificPanel.getComponent("valueeditor") ?? null;
@@ -321,8 +322,8 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
         }
     },
 
-    showoptioneditor: function (valueStore) {
-        var editor = new pimcore.object.helpers.optionEditor(valueStore);
+    showgrideditor: function (valueStore) {
+        const editor = new pimcore.object.helpers.optionEditor(valueStore);
         editor.edit();
     }
 });

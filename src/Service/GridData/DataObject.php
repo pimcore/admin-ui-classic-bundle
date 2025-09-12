@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Service\GridData;
@@ -37,7 +34,7 @@ class DataObject extends Element
     /**
      * Language only user for classification store !!!
      */
-    public static function getData(AbstractObject $object, array $fields = null, string $requestedLanguage = null, array $params = []): array
+    public static function getData(AbstractObject $object, ?array $fields = null, ?string $requestedLanguage = null, array $params = []): array
     {
         $data = self::gridElementData($object);
         $csvMode = $params['csvMode'] ?? false;
@@ -180,13 +177,18 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~') && empty($data[$key])) {
-                        $type = $keyParts[1];
+                    if (str_starts_with($key, '~')) {
+                        $curClassAttributeValue = $data[$key] ?? null;
+                        $isValueEmpty = is_array($curClassAttributeValue) ? empty($curClassAttributeValue['value'] ?? null) : empty($curClassAttributeValue);
 
-                        if ($type === 'classificationstore') {
-                            if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
-                                $data[$dataKey] = $inheritedData['value'];
-                                $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
+                        if ($isValueEmpty) {
+                            $type = $keyParts[1];
+
+                            if ($type === 'classificationstore') {
+                                if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
+                                    $data[$dataKey] = $inheritedData['value'];
+                                    $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
+                                }
                             }
                         }
                     }
@@ -238,7 +240,7 @@ class DataObject extends Element
      *
      * @return \stdClass value and objectid where the value comes from
      */
-    private static function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null, ClassDefinition\Data $fieldDefinition = null, array $context = [], array $brickDescriptor = null, string $requestedLanguage = null): \stdClass
+    private static function getValueForObject(Concrete $object, string $key, ?string $brickType = null, ?string $brickKey = null, ?ClassDefinition\Data $fieldDefinition = null, array $context = [], ?array $brickDescriptor = null, ?string $requestedLanguage = null): \stdClass
     {
         $getter = 'get' . ucfirst($key);
         $value = null;
@@ -348,7 +350,8 @@ class DataObject extends Element
             return [];
         }
 
-        if ($inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage)) {
+        $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
+        if ((!is_array($inheritedValue) && $inheritedValue !== null) || !empty($inheritedValue['value'])) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,

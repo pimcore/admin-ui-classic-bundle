@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\DataObject\GridColumnConfig\Value;
@@ -40,7 +37,7 @@ final class DefaultValue extends AbstractValue
     /**
      * @throws \Exception
      */
-    private function getValueForObject(Concrete $object, string $key, string $brickType = null, string $brickKey = null): \stdClass
+    private function getValueForObject(Concrete $object, string $key, ?string $brickType = null, ?string $brickKey = null): \stdClass
     {
         if (!$key) {
             throw new \Exception('Empty key');
@@ -119,7 +116,7 @@ final class DefaultValue extends AbstractValue
                     $csFieldDefinition = $object->getClass()->getFieldDefinition($field);
                     $csLanguage = $this->localeService->getLocale();
 
-                    if (!$csFieldDefinition->isLocalized()) {
+                    if ($csLanguage === null || !$csFieldDefinition->isLocalized()) {
                         $csLanguage = 'default';
                     }
 

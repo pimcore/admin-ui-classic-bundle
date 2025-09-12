@@ -2,16 +2,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
@@ -34,17 +31,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Workflow\Registry;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/workflow")
- *
  * @internal
  */
+#[Route('/workflow')]
 class WorkflowController extends AdminAbstractController implements KernelControllerEventInterface
 {
     private ConcreteObject|Document|Asset|null $element;
@@ -55,9 +51,8 @@ class WorkflowController extends AdminAbstractController implements KernelContro
 
     /**
      * Returns a JSON of the available workflow actions to the admin panel
-     *
-     * @Route("/get-workflow-form", name="pimcore_admin_workflow_getworkflowform")
      */
+    #[Route('/get-workflow-form', name: 'pimcore_admin_workflow_getworkflowform')]
     public function getWorkflowFormAction(Request $request, Manager $workflowManager): JsonResponse
     {
         try {
@@ -98,9 +93,7 @@ class WorkflowController extends AdminAbstractController implements KernelContro
         return $this->adminJson($wfConfig);
     }
 
-    /**
-     * @Route("/submit-workflow-transition", name="pimcore_admin_workflow_submitworkflowtransition", methods={"POST"})
-     */
+    #[Route('/submit-workflow-transition', name: 'pimcore_admin_workflow_submitworkflowtransition', methods: ['POST'])]
     public function submitWorkflowTransitionAction(Request $request, Registry $workflowRegistry, Manager $workflowManager): JsonResponse
     {
         $workflowOptions = $request->get('workflow', []);
@@ -152,9 +145,7 @@ class WorkflowController extends AdminAbstractController implements KernelContro
         return $this->adminJson($data);
     }
 
-    /**
-     * @Route("/submit-global-action", name="pimcore_admin_workflow_submitglobal", methods={"POST"})
-     */
+    #[Route('/submit-global-action', name: 'pimcore_admin_workflow_submitglobal', methods: ['POST'])]
     public function submitGlobalAction(
         Request $request,
         Registry $workflowRegistry,
@@ -208,10 +199,9 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     /**
      * Returns the JSON needed by the workflow elements detail tab store
      *
-     * @Route("/get-workflow-details", name="pimcore_admin_workflow_getworkflowdetailsstore")
-     *
      * @throws \Exception
      */
+    #[Route('/get-workflow-details', name: 'pimcore_admin_workflow_getworkflowdetailsstore')]
     public function getWorkflowDetailsStore(Request $request, Manager $workflowManager, StatusInfo $placeStatusInfo, RouterInterface $router, ActionsButtonService $actionsButtonService): JsonResponse
     {
         $data = [];
@@ -259,10 +249,9 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     /**
      * Returns the JSON needed by the workflow elements detail tab store
      *
-     * @Route("/show-graph", name="pimcore_admin_workflow_show_graph")
-     *
      * @throws \Exception
      */
+    #[Route('/show-graph', name: 'pimcore_admin_workflow_show_graph')]
     public function showGraph(Request $request, Manager $workflowManager): Response
     {
         $workflow = $workflowManager->getWorkflowByName($request->get('workflow'));
@@ -276,10 +265,9 @@ class WorkflowController extends AdminAbstractController implements KernelContro
     /**
      * Get custom HTML for the workflow transition submit modal, depending whether it is configured or not.
      *
-     * @Route("/modal-custom-html", name="pimcore_admin_workflow_modal_custom_html", methods={"POST"})
-     *
      * @throws \Exception
      */
+    #[Route('/modal-custom-html', name: 'pimcore_admin_workflow_modal_custom_html', methods: ['POST'])]
     public function getModalCustomHtml(Request $request, Registry $workflowRegistry, Manager $manager): JsonResponse
     {
         $workflow = $workflowRegistry->get($this->element, $request->get('workflowName'));

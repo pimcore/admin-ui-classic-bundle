@@ -11,22 +11,22 @@
 
 <table class="preview" border="0" cellpadding="0" cellspacing="0">
     <tr>
-        <th>Name</th>
-        <th>Key</th>
+        <th>{{ 'Name'|trans([], 'admin') }}</th>
+        <th>{{ 'Key'|trans([], 'admin') }}</th>
         {% if isImportPreview is defined %}
             {% if isNew  is defined %}
-                <th>New Object or unable to resolve</th>
+                <th>{{ 'New Object or unable to resolve'|trans([], 'admin') }}</th>
             {% else %}
-                <th>Before</th>
-                <th>After</th>
+                <th>{{ 'Before'|trans([], 'admin') }}</th>
+                <th>{{ 'After'|trans([], 'admin') }}</th>
             {% endif %}
         {% else %}
-            <th>Version 1</th>
-            <th>Version 2</th>
+            <th>{{ 'Version'|trans([], 'admin') }} 1</th>
+            <th>{{ 'Version'|trans([], 'admin') }} 2</th>
         {% endif %}
     </tr>
     <tr class="system">
-        <td>Date</td>
+        <td>{{ 'Date'|trans([], 'admin') }}</td>
         <td>modificationDate</td>
         {% if isImportPreview is not defined or isNew is not defined %}
             <td>{{ object1.getModificationDate()|date('Y-m-d H:i:s') }}</td>
@@ -34,7 +34,7 @@
         <td>{{ object2.getModificationDate()|date('Y-m-d H:i:s') }}</td>
     </tr>
     <tr class="system">
-        <td>Path</td>
+        <td>{{ 'Path'|trans([], 'admin') }}</td>
         <td>path</td>
         {% if isImportPreview is not defined or isNew is not defined %}
             <td> {{ object1.getRealFullPath() }} </td>
@@ -43,7 +43,7 @@
         <td class="{{ modifiedPathClass }}">{{ object2.getRealFullPath() }}</td>
     </tr>
     <tr class="system">
-        <td>Published</td>
+        <td>{{ 'Published'|trans([], 'admin') }}</td>
         <td>published</td>
         {% if isImportPreview is not defined or isNew is not defined %}
             <td> {{ object1.getPublished() }} </td>
@@ -53,14 +53,14 @@
     </tr>
     {% if versionNote1 or versionNote2 %}
         <tr class="system">
-            <td>Version Note</td>
+            <td>{{ 'Version Note'|trans([], 'admin') }}</td>
             <td>&nbsp;</td>
             <td>{{ versionNote1|nl2br }}</td>
             <td>{{ versionNote2|nl2br }}</td>
         </tr>
     {% endif %}
     <tr class="system">
-        <td>Id</td>
+        <td>{{ 'Id'|trans([], 'admin') }}</td>
         <td>id</td>
         {% if isImportPreview is not defined or isNew is not defined %}
             <td> {{ object1.getId() }} </td>

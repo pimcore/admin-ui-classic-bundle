@@ -7,7 +7,7 @@ on:
             - "[0-9]+.[0-9]+"
             - "[0-9]+.x"
             - "feature-*"
-    pull_request:
+    pull_request_target:
         types: [opened, synchronize, reopened]
 
 env:
@@ -22,8 +22,15 @@ jobs:
             matrix: ${{ steps.set-matrix.outputs.matrix }}
             private_repo: ${{ env.PRIVATE_REPO }}
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            - name: Checkout PR head (only for pull_request_target)
+              if: github.event_name == 'pull_request_target'
+              uses: "actions/checkout@v4"
+              with:
+                ref: "refs/pull/${{ github.event.pull_request.number }}/merge"
+
+            - name: Checkout PR head (for push or other events)
+              if: github.event_name != 'pull_request_target'
+              uses: "actions/checkout@v4"
 
             - name: Checkout reusable workflow repo
               uses: actions/checkout@v4
@@ -90,3 +97,6 @@ jobs:
         secrets:
             SSH_PRIVATE_KEY_PIMCORE_DEPLOYMENTS_USER: ${{ secrets.SSH_PRIVATE_KEY_PIMCORE_DEPLOYMENTS_USER }}
             COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN: ${{ secrets.COMPOSER_PIMCORE_REPO_PACKAGIST_TOKEN }}
+            PIMCORE_INSTANCE_IDENTIFIER: ${{ secrets.PIMCORE_CI_INSTANCE_IDENTIFIER }}
+            PIMCORE_ENCRYPTION_SECRET: ${{ secrets.PIMCORE_CI_ENCRYPTION_SECRET }}
+            PIMCORE_PRODUCT_KEY: ${{ secrets.PIMCORE_CI_PRODUCT_KEY }}            

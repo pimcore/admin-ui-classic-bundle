@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tags.localizedfields");
 /**
@@ -96,7 +93,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
         }
 
         if (this.fieldConfig.title && this.dropdownLayout) {
-            wrapperConfig.title = this.fieldConfig.title;
+            wrapperConfig.title = t(this.fieldConfig.title);
         }
 
         if (this.context.containerType == "fieldcollection") {
@@ -212,7 +209,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                 border: true,
                 style: "margin-bottom: 10px",
                 tbar: [
-                    this.fieldConfig.title,  '->', disableSplitViewButton, configureSplitViewButton
+                    t(this.fieldConfig.title),  '->', disableSplitViewButton, configureSplitViewButton
                 ],
                 height: 'auto',
                 layout: {
@@ -319,7 +316,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                         border: false,
                         padding: "10px",
                         items: items,
-                        hidden: (i > 0)     //TODO default language
+                        hidden: (this.globalLanguage ? this.globalLanguage !== currentLanguage : i > 0)
                     };
 
                     if (this.fieldConfig.height) {
@@ -389,10 +386,10 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                         tbarItems.push(
                             {
                                 xtype: "tbtext",
-                                text: this.fieldConfig.title
+                                text: t(this.fieldConfig.title)
                             });
                     } else {
-                        wrapperConfig.title = this.fieldConfig.title;
+                        wrapperConfig.title = t(this.fieldConfig.title);
                     }
                 }
 

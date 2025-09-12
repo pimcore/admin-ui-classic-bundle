@@ -1,15 +1,12 @@
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
- * Full copyright and license information is available in
- * LICENSE.md which is distributed with this source code.
- *
- * @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- * @license    http://www.pimcore.org/license     GPLv3 and PCL
- */
+* This source file is available under the terms of the
+* Pimcore Open Core License (POCL)
+* Full copyright and license information is available in
+* LICENSE.md which is distributed with this source code.
+*
+*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+*  @license    Pimcore Open Core License (POCL)
+*/
 
 pimcore.registerNS("pimcore.object.tree");
 /**
@@ -89,7 +86,6 @@ pimcore.registerNS("pimcore.object.tree");
 
          rootNodeConfig.text = rootNodeConfigText;
          rootNodeConfig.allowDrag = true;
-         rootNodeConfig.id = "" + rootNodeConfig.id;
          rootNodeConfig.iconCls = rootNodeConfigIconCls;
          rootNodeConfig.cls = "pimcore_tree_node_root";
          rootNodeConfig.expanded = true;
@@ -276,7 +272,10 @@ pimcore.registerNS("pimcore.object.tree");
                      this.onTreeNodeMove(record, record.parentNode, overModel, 0);
                  }
              }.bind(this));
+         }
 
+         // recheck wheter the getOwnerTree is a function after reassignment onTreeNodeMove()
+         if (typeof this.treeNodeMoveParameter.oldParent.getOwnerTree !== "function") {
              return;
          }
 
@@ -362,7 +361,7 @@ pimcore.registerNS("pimcore.object.tree");
          }
 
          // dropping objects not allowed if the tree/folder is paginated and sort by index (manual indexes) is enabled
-         if(((newParent.needsPaging) || (newParent.childNodes.length > pimcore.settings['object_tree_paging_limit'])) && (newParent.data.sortBy == "index")){
+         if(((!newParent.pagingData?.canSortManually) || (newParent.childNodes.length > pimcore.settings['object_tree_paging_limit'])) && (newParent.data.sortBy == "index")){
              pimcore.helpers.showNotification(t("error"), t("element_cannot_be_moved_because_target_is_paginated"), "error");
              return false;
          }
@@ -553,7 +552,7 @@ pimcore.registerNS("pimcore.object.tree");
                      var pasteMenu = [];
 
                      if (perspectiveCfg.inTreeContextMenu("object.paste")) {
-                         if (pimcore.cachedObjectId) {
+                         if (pimcore.cachedObjectId && (typeof perspectiveCfg.classes === "undefined" || typeof pimcore.copiedObject.get('className') === "undefined" || pimcore.copiedObject.get('className') in perspectiveCfg.classes)) {
                              pasteMenu.push({
                                  text: t("paste_recursive_as_child"),
                                  iconCls: "pimcore_icon_paste",
@@ -581,28 +580,26 @@ pimcore.registerNS("pimcore.object.tree");
                          }
                      }
 
-                     if (!isVariant) {
-                         if (pimcore.cutObject) {
-                             pasteMenu.push({
-                                 text: t("paste_cut_element"),
-                                 iconCls: "pimcore_icon_paste",
-                                 handler: function () {
-                                     this.pasteCutObject(pimcore.cutObject,
-                                         pimcore.cutObjectParentNode, record, this.tree);
-                                     pimcore.cutObjectParentNode = null;
-                                     pimcore.cutObject = null;
-                                 }.bind(this)
-                             });
-                         }
+                     if (pimcore.cutObject && (typeof perspectiveCfg.classes === "undefined" || typeof pimcore.cutObject.get('className') === "undefined" || pimcore.cutObject.get('className') in perspectiveCfg.classes)) {
+                         pasteMenu.push({
+                             text: t("paste_cut_element"),
+                             iconCls: "pimcore_icon_paste",
+                             handler: function () {
+                                 this.pasteCutObject(pimcore.cutObject,
+                                     pimcore.cutObjectParentNode, record, this.tree);
+                                 pimcore.cutObjectParentNode = null;
+                                 pimcore.cutObject = null;
+                             }.bind(this)
+                         });
+                     }
 
-                         if (pasteMenu.length > 0) {
-                             menu.add(new Ext.menu.Item({
-                                 text: t('paste'),
-                                 iconCls: "pimcore_icon_paste",
-                                 hideOnClick: false,
-                                 menu: pasteMenu
-                             }));
-                         }
+                     if (pasteMenu.length > 0) {
+                         menu.add(new Ext.menu.Item({
+                             text: t('paste'),
+                             iconCls: "pimcore_icon_paste",
+                             hideOnClick: false,
+                             menu: pasteMenu
+                         }));
                      }
                  }
              }
@@ -852,6 +849,7 @@ pimcore.registerNS("pimcore.object.tree");
 
      copy: function (tree, record) {
          pimcore.cachedObjectId = record.data.id;
+         pimcore.copiedObject = record;
      },
 
      cut: function (tree, record) {
@@ -1218,7 +1216,7 @@ pimcore.registerNS("pimcore.object.tree");
          if (currentSortMethod != sortBy && sortBy == "index") {
 
              // Do not allow sort by index(Manual Indexes) for a paginated tree/folder
-             if(record.needsPaging) {
+             if(!record.pagingData.canSortManually) {
                  Ext.MessageBox.alert(
                      t("error"),
                      t("error_object_change_children_sort_to_index"));

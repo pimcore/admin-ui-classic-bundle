@@ -3,16 +3,13 @@
 declare(strict_types=1);
 
 /**
- * Pimcore
- *
- * This source file is available under two different licenses:
- * - GNU General Public License version 3 (GPLv3)
- * - Pimcore Commercial License (PCL)
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
  * Full copyright and license information is available in
  * LICENSE.md which is distributed with this source code.
  *
- *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.org)
- *  @license    http://www.pimcore.org/license     GPLv3 and PCL
+ *  @copyright  Copyright (c) Pimcore GmbH (https://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
  */
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
@@ -37,6 +34,7 @@ use Pimcore\SystemSettingsConfig;
 use Pimcore\Tool;
 use Pimcore\Tool\Authentication;
 use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,11 +42,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -94,10 +91,8 @@ class LoginController extends AdminAbstractController implements KernelControlle
         $this->responseHelper->disableCache($response, true);
     }
 
-    /**
-     * @Route("/login", name="pimcore_admin_login")
-     * @Route("/login/", name="pimcore_admin_login_fallback")
-     */
+    #[Route('/login', name: 'pimcore_admin_login')]
+    #[Route('/login/', name: 'pimcore_admin_login_fallback')]
     public function loginAction(
         Request $request,
         AuthenticationUtils $authenticationUtils,
@@ -164,9 +159,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         return $this->render('@PimcoreAdmin/admin/login/login.html.twig', $params);
     }
 
-    /**
-     * @Route("/login/csrf-token", name="pimcore_admin_login_csrf_token")
-     */
+    #[Route('/login/csrf-token', name: 'pimcore_admin_login_csrf_token')]
     public function csrfTokenAction(Request $request, CsrfProtectionHandler $csrfProtection): \Symfony\Component\HttpFoundation\JsonResponse
     {
         if (!$this->getAdminUser()) {
@@ -178,9 +171,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         ]);
     }
 
-    /**
-     * @Route("/logout", name="pimcore_admin_logout" , methods={"POST"})
-     */
+    #[Route('/logout', name: 'pimcore_admin_logout', methods: ['POST'])]
     public function logoutAction(): void
     {
         // this route will never be matched, but will be handled by the logout handler
@@ -188,18 +179,15 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
     /**
      * Dummy route used to check authentication
-     *
-     * @Route("/login/login", name="pimcore_admin_login_check")
      */
+    #[Route('/login/login', name: 'pimcore_admin_login_check')]
     public function loginCheckAction(Request $request): RedirectResponse
     {
         // just in case the authenticator didn't redirect
         return new RedirectResponse($this->generateUrl('pimcore_admin_login', ['perspective' => strip_tags($request->get('perspective', ''))]));
     }
 
-    /**
-     * @Route("/login/lostpassword", name="pimcore_admin_login_lostpassword")
-     */
+    #[Route('/login/lostpassword', name: 'pimcore_admin_login_lostpassword')]
     public function lostpasswordAction(
         Request $request,
         CsrfProtectionHandler $csrfProtection,
@@ -274,24 +262,17 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
             if ($error) {
                 Logger::error('Lost password service: ' . $error);
+                //to avoid timing based enumeration
+                usleep(random_int(50, 200));
             }
         }
 
         $csrfProtection->regenerateCsrfToken($request->getSession());
 
-        if ($error) {
-            $params['reset_error'] = 'Please make sure you are entering a correct input.';
-            if ($error === 'user_reset_password_too_many_attempts') {
-                $params['reset_error'] = 'Too many attempts. Please retry later.';
-            }
-        }
-
         return $this->render('@PimcoreAdmin/admin/login/lost_password.html.twig', $params);
     }
 
-    /**
-     * @Route("/login/deeplink", name="pimcore_admin_login_deeplink")
-     */
+    #[Route('/login/deeplink', name: 'pimcore_admin_login_deeplink')]
     public function deeplinkAction(Request $request): Response
     {
         // check for deeplink
@@ -337,9 +318,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         ];
     }
 
-    /**
-     * @Route("/login/2fa", name="pimcore_admin_2fa")
-     */
+    #[Route('/login/2fa', name: 'pimcore_admin_2fa')]
     public function twoFactorAuthenticationAction(Request $request, Config $config): Response
     {
         $params = $this->buildLoginPageViewParams($config);
@@ -359,9 +338,7 @@ class LoginController extends AdminAbstractController implements KernelControlle
         return $this->render('@PimcoreAdmin/admin/login/two_factor_authentication.html.twig', $params);
     }
 
-    /**
-     * @Route("/login/2fa-setup", name="pimcore_admin_2fa_setup")
-     */
+    #[Route('/login/2fa-setup', name: 'pimcore_admin_2fa_setup')]
     public function twoFactorSetupAuthenticationAction(
         Request $request,
         Config $config,
@@ -407,20 +384,18 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
         $url = $twoFactor->getQRContent($proxyUser);
 
-        $result = Builder::create()
-            ->writer(new PngWriter())
-            ->data($url)
-            ->size(200)
-            ->build();
+        $builder = new Builder(
+            writer: new PngWriter(),
+            data: $url,
+            size: 200
+        );
 
-        $params['image'] = $result->getDataUri();
+        $params['image'] = $builder->build()->getDataUri();
 
         return $this->render('@PimcoreAdmin/admin/login/two_factor_setup.html.twig', $params);
     }
 
-    /**
-     * @Route("/login/2fa-verify", name="pimcore_admin_2fa-verify")
-     */
+    #[Route('/login/2fa-verify', name: 'pimcore_admin_2fa_verify')]
     public function twoFactorAuthenticationVerifyAction(Request $request): void
     {
     }

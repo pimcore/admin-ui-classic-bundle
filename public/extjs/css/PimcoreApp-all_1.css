@@ -13308,7 +13308,7 @@ a.x-color-picker-item:hover {
     position: absolute;
     top: -8px;
     left: -12px;
-    background-image: url(../images/grid/dd-insert-arrow-right.png);
+    background-image: url(../img/grid/dd-insert-arrow-right.png);
     height: 16px;
     width: 16px;
 }
@@ -13317,7 +13317,7 @@ a.x-color-picker-item:hover {
     position: absolute;
     top: -8px;
     right: -11px;
-    background-image: url(../images/grid/dd-insert-arrow-left.png);
+    background-image: url(../img/grid/dd-insert-arrow-left.png);
     height: 16px;
     width: 16px;
 }
@@ -13329,11 +13329,11 @@ a.x-color-picker-item:hover {
 }
 
 .x-col-move-top {
-    background-image: url(../images/grid/col-move-top.png);
+    background-image: url(../img/grid/col-move-top.png);
 }
 
 .x-col-move-bottom {
-    background-image: url(../images/grid/col-move-bottom.png);
+    background-image: url(../img/grid/col-move-bottom.png);
 }
 
 .x-grid-header-ct {
