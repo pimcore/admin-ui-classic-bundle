@@ -64,6 +64,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;
+use function is_callable;
 
 /**
  * @Route("/asset")
@@ -1500,9 +1501,14 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($scanStatus === null) {
             $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
             if ($processBackground) {
-                \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
-                    new AssetUpdateTasksMessage($asset->getId())
-                );
+                if(is_callable([$asset, 'addToUpdateTaskQueue'])) {
+                    $asset->addToUpdateTaskQueue();
+                } else {
+                    // Todo: BC layer, remove with 3.0 release
+                    \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                        new AssetUpdateTasksMessage($asset->getId())
+                    );
+                }
             }
         }
 
