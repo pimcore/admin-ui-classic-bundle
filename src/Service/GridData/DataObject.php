@@ -173,7 +173,7 @@ class DataObject extends Element
                                         $data[$dataKey . '%options'] = $def->getOptions();
                                     }
 
-                                    // to prevent malforded grids in case of empty fieldcollections         
+                                    // to prevent malforded grids in case of empty fieldcollections
                                     if ($def instanceof ClassDefinition\Data\Fieldcollections) {
                                         $data[$dataKey] ??= '';
                                     }
