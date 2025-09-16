@@ -52,7 +52,10 @@ class DataObject extends Element
             $data['classname'] = $object->getClassName();
             $data['idPath'] = Service::getIdPath($object);
             $data['inheritedFields'] = [];
-            $data['permissions'] = $object->getUserPermissions($user);
+            $data['permissions'] = $object->getUserPermissions($user);// to prevent malforded grids in case of empty fieldcollections         
+if ($def instanceof ClassDefinition\Data\Fieldcollections){             
+    $data[$dataKey] ??= '';                                             
+}                                                                       
             $data['locked'] = $object->isLocked();
 
             if (is_null($fields)) {
@@ -172,6 +175,11 @@ class DataObject extends Element
                                     ) {
                                         $data[$dataKey . '%options'] = $def->getOptions();
                                     }
+
+                                    // to prevent malforded grids in case of empty fieldcollections         
+                                    if ($def instanceof ClassDefinition\Data\Fieldcollections){             
+                                        $data[$dataKey] ??= '';                                             
+                                    }                                                                       
                                 }
                             } else {
                                 $data[$dataKey] = $valueObject->value;
