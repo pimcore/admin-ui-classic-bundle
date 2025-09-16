@@ -52,7 +52,7 @@ class DataObject extends Element
             $data['classname'] = $object->getClassName();
             $data['idPath'] = Service::getIdPath($object);
             $data['inheritedFields'] = [];
-            $data['permissions'] = $object->getUserPermissions($user);                                                           
+            $data['permissions'] = $object->getUserPermissions($user);
             $data['locked'] = $object->isLocked();
 
             if (is_null($fields)) {
