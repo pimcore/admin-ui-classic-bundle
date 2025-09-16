@@ -174,9 +174,9 @@ class DataObject extends Element
                                     }
 
                                     // to prevent malforded grids in case of empty fieldcollections         
-                                    if ($def instanceof ClassDefinition\Data\Fieldcollections){             
-                                        $data[$dataKey] ??= '';                                             
-                                    }                                                                       
+                                    if ($def instanceof ClassDefinition\Data\Fieldcollections) {
+                                        $data[$dataKey] ??= '';
+                                    }
                                 }
                             } else {
                                 $data[$dataKey] = $valueObject->value;
