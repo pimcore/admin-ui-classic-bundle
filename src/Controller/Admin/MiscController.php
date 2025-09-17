@@ -155,7 +155,7 @@ class MiscController extends AdminAbstractController
         // languages
         $languages = \Pimcore\Tool::getValidLanguages();
         $adminLanguages = \Pimcore\Tool\Admin::getLanguages();
-        $languages = array_unique(array_merge($languages, $adminLanguages));
+        $languages = array_unique(array_replace($languages, $adminLanguages));
 
         $response = $this->render('@PimcoreAdmin/admin/misc/admin_css.html.twig', [
             'customviews' => $cvData,
