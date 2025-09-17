@@ -1134,6 +1134,7 @@ td.x-frame-br {
 
 .x-autocontainer-outerCt {
     display: table;
+    table-layout: fixed;
 }
 
 .x-mobile-safari .x-autocontainer-outerCt {
