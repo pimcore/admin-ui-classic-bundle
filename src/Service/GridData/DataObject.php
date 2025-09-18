@@ -364,7 +364,7 @@ class DataObject extends Element
             (
                 is_array($inheritedValue) &&
                 (
-                    array_is_list($inheritedValue) ||
+                    array_is_list($inheritedValue) || //for table field types
                     !empty($inheritedValue['value'] ?? null)
                 )
             )
