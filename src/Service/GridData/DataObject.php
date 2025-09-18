@@ -344,7 +344,9 @@ class DataObject extends Element
                         $fielddata = $definition->getDataForGrid($fielddata, $object);
                     }
 
-                    return $fielddata;
+                     if (!$definition->isEmpty($fielddata)) {
+                        return $fielddata;
+                    }
                 }
             }
         }
@@ -359,16 +361,8 @@ class DataObject extends Element
         }
 
         $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if (
-            (!is_array($inheritedValue) && $inheritedValue !== null) ||
-            (
-                is_array($inheritedValue) &&
-                (
-                    array_is_list($inheritedValue) || //for table field types
-                    !empty($inheritedValue['value'] ?? null)
-                )
-            )
-        ) {
+
+        if ($inheritedValue) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,
