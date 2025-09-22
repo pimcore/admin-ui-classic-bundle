@@ -152,7 +152,9 @@ pimcore.settings.translation.editor = Class.create({
 
         document.addEventListener(pimcore.events.changeWysiwyg, function (e) {
             if (this.editableDivId === e.detail.e.target.id) {
-                this.value = e.detail.data;
+                this.value = e.detail.data
+                    .replace(/^<p[^>]*>/i, "") //removes unwanted automatic <p> tags that are added by WYSIWYG editors
+                    .replace(/<\/p>$/i, "");
             }
         }.bind(this));
 
