@@ -615,22 +615,6 @@ pimcore.settings.translation.domain = Class.create({
         if(!value || !Ext.isString(value)) {
             return;
         }
-
-        if(value) {
-            let html = /<\/?[a-z][\s\S]*>/i.test(value);
-            let plain = value.match(/\n/gm)
-
-            if (html || plain) {
-                field.setEditable(false);
-                field.addCls('pimcore_translation_cell_disabled');
-
-                if(html) {
-                    field.getTrigger('plain').hide();
-                } else {
-                    field.getTrigger('html').hide();
-                }
-            }
-        }
     },
 
     openEditorWindow: function (field, editorType) {
