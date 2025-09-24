@@ -169,6 +169,11 @@ class DataObject extends Element
                                     ) {
                                         $data[$dataKey . '%options'] = $def->getOptions();
                                     }
+
+                                    // to prevent malforded grids in case of empty fieldcollections
+                                    if ($def instanceof ClassDefinition\Data\Fieldcollections) {
+                                        $data[$dataKey] ??= '';
+                                    }
                                 }
                             } else {
                                 $data[$dataKey] = $valueObject->value;
@@ -351,7 +356,16 @@ class DataObject extends Element
         }
 
         $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if ((!is_array($inheritedValue) && $inheritedValue !== null) || !empty($inheritedValue['value'])) {
+        if (
+            (!is_array($inheritedValue) && $inheritedValue !== null) ||
+            (
+                is_array($inheritedValue) &&
+                (
+                    array_is_list($inheritedValue) || //for table field types
+                    !empty($inheritedValue['value'] ?? null)
+                )
+            )
+        ) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,

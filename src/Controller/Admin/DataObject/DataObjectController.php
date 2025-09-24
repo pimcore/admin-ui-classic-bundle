@@ -1478,6 +1478,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
                 // general settings
                 $general = $this->decodeJson($request->get('general'));
                 $object->setValues($general);
+                $object->setModificationDate(time());
                 $object->setUserModification($this->getAdminUser()->getId());
 
                 $this->assignPropertiesFromEditmode($request, $object);

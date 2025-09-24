@@ -255,7 +255,9 @@ trait DataObjectActionsTrait
                     $localizedFields = $brick->getLocalizedfields();
                     $localizedFields->setLocalizedValue($brickKey, $value);
                 } else {
-                    $brick->setObjectVar($brickKey, $value);
+                    $brickKeySetter = 'set' . ucfirst($brickKey);
+                    $brick->$brickKeySetter($value);
+                    $brick->markFieldDirty($brickKey);
                 }
             } else {
                 if ($languagePermissions) {
