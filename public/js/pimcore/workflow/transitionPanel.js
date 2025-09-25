@@ -270,6 +270,21 @@ pimcore.workflow.transitionPanel = Class.create({
 
                     if (c.fieldType === 'textarea') {
                         field.setHeight(100);
+                    } else if (c.fieldType === 'user') {        
+                        Ext.Ajax.request({
+                            url: Routing.generate('pimcore_admin_user_search'),
+                            method: "GET",
+                            success: (data) => {
+                                const response = JSON.parse(data.responseText);
+                                const users = response.users.map(user => ({key: user.name, value: user.id}));
+                                field.getStore().loadData(users);
+                            },
+                            failure: (data) => {
+                                console.error('Could not fetch user list');
+                                console.info(data);
+                            }
+                        });
+
                     }
 
                     if (typeof field.setValue !== "undefined") {
