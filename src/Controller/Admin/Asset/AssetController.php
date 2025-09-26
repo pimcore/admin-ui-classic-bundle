@@ -23,7 +23,6 @@ use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
-use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db\Helper;
 use Pimcore\Event\AssetEvents;
 use Pimcore\Event\Model\Asset\ResolveUploadTargetEvent;

@@ -48,11 +48,10 @@ class ElementController extends AdminAbstractController
             $request->query->get('type'),
             $request->getSession()->getId()
         );
-        
+
         if ($isLocked) {
             return $this->getEditLockResponse($request->query->getInt('id'), $request->query->get('type'));
         }
-
 
         return $this->adminJson(['success' => true, 'editLock' => null]);
     }
