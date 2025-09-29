@@ -288,9 +288,20 @@ pimcore.workflow.transitionPanel = Class.create({
                     }
 
                     if (typeof field.setValue !== "undefined") {
-                        field.setValue(c.defaultValue);
+                        if (c.fieldType === 'date' && intval(c.defaultValue)) {
+                            field.setValue(this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue));
+                        } else {
+                            field.setValue(c.defaultValue);
+                        }
                     } else {
-                        field.config.items[0]?.setValue(c.defaultValue);
+                        if (c.fieldType === 'datetime' && intval(c.defaultValue)) {
+                            const tmpDate = this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue);
+
+                            field.config.items[0]?.setValue(tmpDate);
+                            field.config.items[1]?.setValue(tmpDate);
+                        } else {
+                            field.config.items[0]?.setValue(c.defaultValue);
+                        }
                     }
                 } catch(e) {
                     console.error('Could not add additional field');
@@ -308,6 +319,21 @@ pimcore.workflow.transitionPanel = Class.create({
             additionalFieldset.hide();
         }
 
+    },
+
+    getDateValueWithRespectTimezoneConfig: function(tag, defaultValue) {
+
+        if (defaultValue) {
+            let tmpDate = new Date(intval(defaultValue) * 1000);
+
+            if (!tag.isRespectTimezone()) {
+                tmpDate = dateToServerTimezone(tmpDate);
+            }
+
+            return tmpDate;
+        }
+
+        return null;
     },
 
     /**
