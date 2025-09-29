@@ -287,22 +287,8 @@ pimcore.workflow.transitionPanel = Class.create({
 
                     }
 
-                    if (typeof field.setValue !== "undefined") {
-                        if (c.fieldType === 'date' && intval(c.defaultValue)) {
-                            field.setValue(this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue));
-                        } else {
-                            field.setValue(c.defaultValue);
-                        }
-                    } else {
-                        if (c.fieldType === 'datetime' && intval(c.defaultValue)) {
-                            const tmpDate = this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue);
-
-                            field.config.items[0]?.setValue(tmpDate);
-                            field.config.items[1]?.setValue(tmpDate);
-                        } else {
-                            field.config.items[0]?.setValue(c.defaultValue);
-                        }
-                    }
+                    this.setDefaultValueForAdditionalField(field, tag, c);
+                    
                 } catch(e) {
                     console.error('Could not add additional field');
                     console.info(e);
@@ -319,6 +305,23 @@ pimcore.workflow.transitionPanel = Class.create({
             additionalFieldset.hide();
         }
 
+    },
+
+    setDefaultValueForAdditionalField: function(field, tag, c) {
+        if (typeof field.setValue !== "undefined") {
+            if (c.fieldType === 'date' && intval(c.defaultValue)) {
+                field.setValue(this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue));
+            } else {
+                field.setValue(c.defaultValue);
+            }
+        } else if (c.fieldType === 'datetime' && intval(c.defaultValue)) {
+            const tmpDate = this.getDateValueWithRespectTimezoneConfig(tag, c.defaultValue);
+
+            field.config.items[0]?.setValue(tmpDate);
+            field.config.items[1]?.setValue(tmpDate);
+        } else {
+            field.config.items[0]?.setValue(c.defaultValue);
+        }
     },
 
     getDateValueWithRespectTimezoneConfig: function(tag, defaultValue) {
