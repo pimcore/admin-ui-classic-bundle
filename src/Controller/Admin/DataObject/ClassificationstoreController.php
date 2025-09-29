@@ -1456,7 +1456,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
             'addCollectionsAction',
             'searchRelationsAction',
         ];
-        $this->checkActionPermission($event, 'classes', $unrestrictedActions);
+        $this->checkActionPermission($event, 'classificationstore', $unrestrictedActions);
     }
 
     /**
