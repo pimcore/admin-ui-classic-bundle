@@ -766,8 +766,7 @@ pimcore.helpers.lockManager = function (cid, ctype, csubtype, data) {
                     }
                 });
             } else {
-                pimcore.helpers.closeElement(lock[0], lock[1]);
-                pimcore.helpers.openElement(lock[0], lock[1], lock[2]);
+                pimcore.layout.refresh();
             }
         }.bind(this, arguments));
 };
