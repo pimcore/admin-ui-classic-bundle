@@ -185,6 +185,10 @@ rasterize_svg: Rasterize SVGs
 rasterize_svg_info_text: >-
     SVGs get automatically rasterized when a transformation other than resize or
     scale by width/height is used.
+use_cropbox: Use Cropbox
+use_cropbox_info_text: >-
+    Sets the page size to the CropBox rather than the MediaBox, useful to exclude
+    some margins and non-content areas.
 preserve_animation: Preserve animations for GIF
 preserve_animation_info_text: >-
     Supported transformations are: Frame, Cover, Contain, Resize, ScaleByWidth,

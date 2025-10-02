@@ -180,6 +180,16 @@ pimcore.settings.thumbnail.item = Class.create({
                         style: "margin-bottom: 20px"
                     }, {
                         xtype: "checkbox",
+                        name: "useCropBox",
+                        style: "margin-bottom:0",
+                        boxLabel: t("use_cropbox") + " (Ghostscript)",
+                        checked: this.data.useCropBox
+                    }, {
+                        xtype: "container",
+                        html: "<small>(" + t("use_cropbox_info_text") + ")</small>",
+                        style: "margin-bottom: 20px"
+                    }, {
+                        xtype: "checkbox",
                         name: "preserveAnimation",
                         boxLabel: t("preserve_animation") + " (Imagick)",
                         checked: this.data.preserveAnimation
