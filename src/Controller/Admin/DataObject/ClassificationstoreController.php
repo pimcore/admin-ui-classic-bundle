@@ -1519,7 +1519,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         if ($user instanceof User) {
             $translationListing = new Listing();
             $translationListing->setDomain(Translation::DOMAIN_ADMIN);
-            $translationListing->setCondition('language=? AND text LIKE ?', [$user->getLanguage(), '%'.$searchTerm.'%']);
+            $translationListing->setCondition('language=? AND `text` LIKE ?', [$user->getLanguage(), '%'.$searchTerm.'%']);
 
             foreach ($translationListing as $translation) {
                 $terms[] = $translation->getKey();
