@@ -363,7 +363,11 @@
  
          if(dataTransfer["items"] && dataTransfer.items[0] && dataTransfer.items[0].webkitGetAsEntry) {
              // chrome
-             var traverseFileTree = function (item, path) {
+             var traverseFileTree = function (item, path, depth = 0) {
+                 if (depth > 100) {
+                     console.warn("Max depth reached:", path);
+                     return;
+                 }
                  path = path || "";
                  if (item.isFile) {
                      // Get file
@@ -373,11 +377,25 @@
                  } else if (item.isDirectory) {
                      // Get folder contents
                      var dirReader = item.createReader();
-                     dirReader.readEntries(function (entries) {
-                         for (var i = 0; i < entries.length; i++) {
-                             traverseFileTree(entries[i], path + item.name + "/");
-                         }
-                     });
+
+                     var readEntries = function () {
+                         dirReader.readEntries(function (entries) {
+                             if (entries.length === 0) {
+                                 return; // done reading this directory
+                             }
+
+                             for (var i = 0; i < entries.length; i++) {
+                                 traverseFileTree(entries[i], path + item.name + "/", depth + 1);
+                             }
+
+                             // Continue reading until empty array returned
+                             readEntries();
+                         }, function (err) {
+                             console.error("Error reading directory:", err);
+                         });
+                     };
+
+                     readEntries();
                  }
              }.bind(this);
  
