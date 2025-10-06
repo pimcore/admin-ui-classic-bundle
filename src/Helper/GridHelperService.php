@@ -810,7 +810,9 @@ class GridHelperService
                     $operator = 'IN';
                 } elseif ($filterType == 'boolean') {
                     $operator = '=';
-                    $notSubselect = 'NOT';
+                    if ((int) $filter['value'] === 0) {
+                        $notSubselect = 'NOT';
+                    }
                     $filter['value'] = 1;
                 }
                 // system field
