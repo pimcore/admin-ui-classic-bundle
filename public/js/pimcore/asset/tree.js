@@ -384,7 +384,7 @@
                                  return; // done reading this directory
                              }
 
-                             for (var i = 0; i < entries.length; i++) {
+                             for (let i = 0; i < entries.length; i++) {
                                  traverseFileTree(entries[i], path + item.name + "/", depth + 1);
                              }
 
