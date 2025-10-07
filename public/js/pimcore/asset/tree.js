@@ -376,9 +376,9 @@
                      }.bind(this));
                  } else if (item.isDirectory) {
                      // Get folder contents
-                     var dirReader = item.createReader();
+                     const dirReader = item.createReader();
 
-                     var readEntries = function () {
+                     const readEntries = function () {
                          dirReader.readEntries(function (entries) {
                              if (entries.length === 0) {
                                  return; // done reading this directory
