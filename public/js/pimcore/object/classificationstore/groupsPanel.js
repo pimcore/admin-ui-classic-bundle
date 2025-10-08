@@ -396,12 +396,13 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
                         this.relationsPanel.setTitle(t("relations") + " - " + t("group") + " " + record.data.id + " - " + groupName);
                         this.relationsPanel.enable();
                         this.relationsStore.getProxy().setExtraParam("groupId", groupId);
+                        
                         // reset paging params
-                        this.relationsStore.getProxy().setExtraParam("limit", "");
-                        this.relationsStore.getProxy().setExtraParam("page", "");
-                        this.relationsStore.getProxy().setExtraParam("start", "");
-
-                        this.relationsStore.reload();
+                        this.relationsStore.reload({
+                            page: 1,
+                            start: 0
+                        });
+                        
                         this.relationsGrid.show();
                     }
                 }.bind(this)
