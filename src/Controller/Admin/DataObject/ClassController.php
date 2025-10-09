@@ -630,7 +630,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
         }
 
         $filename = sprintf(
-            'class_%s_export_%s.json',
+            'class_%s_export_v%s.json',
             $class->getName(),
             \Pimcore\Version::getVersion()
         );
