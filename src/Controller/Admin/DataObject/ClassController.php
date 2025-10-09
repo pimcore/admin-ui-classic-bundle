@@ -629,11 +629,17 @@ class ClassController extends AdminAbstractController implements KernelControlle
             throw $this->createNotFoundException($errorMessage);
         }
 
+        $filename = sprintf(
+            'class_%s_export_%s.json',
+            $class->getName(),
+            \Pimcore\Version::getVersion()
+        );
+        
         $json = DataObject\ClassDefinition\Service::generateClassDefinitionJson($class);
 
         $response = new Response($json);
         $response->headers->set('Content-type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename="class_' . $class->getName() . '_export.json"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
         return $response;
     }
