@@ -369,9 +369,11 @@ pimcore.helpers.refreshElement = function () {
         // for document
         if (activeTab.initialConfig.document) {
             activeTab.initialConfig.document.reload();
+            return true;
         }
         else if (activeTab.initialConfig.object) {
             activeTab.initialConfig.object.reload();
+            return true;
         }
     }
 };
@@ -738,7 +740,9 @@ pimcore.helpers.handleF5 = function (keyCode, e) {
 
     e.stopEvent();
 
-    pimcore.helpers.refreshElement();
+    if (pimcore.helpers.refreshElement()){
+        return;
+    }
 
     var date = new Date();
     location.href = Routing.generate('pimcore_admin_index', {'_dc': date.getTime()});
