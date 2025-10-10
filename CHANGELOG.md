@@ -1,3 +1,7 @@
+#### v2.3.0
+- Added `pimcore_admin:export:add_suffix` configuration option to add the Core version as suffix to exported data object type configuration (e.g. `class_Product_export_v1211.json`).
+
+
 #### v2.1.0
 - Added the possibility to set default values for multi select fields in class definitions.
 
