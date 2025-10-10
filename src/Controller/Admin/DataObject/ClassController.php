@@ -629,6 +629,7 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $addVersionSuffix ? '_v' . \Pimcore\Version::getVersion() : ''
         );
     }
+
     #[Route('/export-class', name: 'exportclass', methods: ['GET'])]
     public function exportClassAction(Request $request): Response
     {
