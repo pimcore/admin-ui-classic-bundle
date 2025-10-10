@@ -361,6 +361,25 @@ pimcore.helpers.closeElement = function (id, type) {
     }
 };
 
+pimcore.helpers.refreshElement = function () {
+    var tabpanel = Ext.getCmp("pimcore_panel_tabs");
+    var activeTab = tabpanel.getActiveTab();
+
+    if (activeTab) {
+        // for document
+        if (activeTab.initialConfig.document) {
+            activeTab.initialConfig.document.reload();
+            return true;
+        }
+        else if (activeTab.initialConfig.object) {
+            activeTab.initialConfig.object.reload();
+            return true;
+        }
+    }
+    
+    return false;
+};
+
 pimcore.helpers.getElementTypeByObject = function (object) {
     var type = null;
     if (object instanceof pimcore.document.document) {
@@ -723,19 +742,8 @@ pimcore.helpers.handleF5 = function (keyCode, e) {
 
     e.stopEvent();
 
-    var tabpanel = Ext.getCmp("pimcore_panel_tabs");
-    var activeTab = tabpanel.getActiveTab();
-
-    if (activeTab) {
-        // for document
-        if (activeTab.initialConfig.document) {
-            activeTab.initialConfig.document.reload();
-            return;
-        }
-        else if (activeTab.initialConfig.object) {
-            activeTab.initialConfig.object.reload();
-            return;
-        }
+    if (pimcore.helpers.refreshElement()){
+        return;
     }
 
     var date = new Date();
@@ -766,8 +774,7 @@ pimcore.helpers.lockManager = function (cid, ctype, csubtype, data) {
                     }
                 });
             } else {
-                pimcore.helpers.closeElement(lock[0], lock[1]);
-                pimcore.helpers.openElement(lock[0], lock[1], lock[2]);
+                pimcore.helpers.refreshElement();
             }
         }.bind(this, arguments));
 };
