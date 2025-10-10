@@ -376,6 +376,8 @@ pimcore.helpers.refreshElement = function () {
             return true;
         }
     }
+    
+    return false;
 };
 
 pimcore.helpers.getElementTypeByObject = function (object) {
