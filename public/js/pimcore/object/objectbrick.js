@@ -182,13 +182,12 @@ pimcore.object.objectbrick = Class.create(pimcore.object.fieldcollection, {
     },
 
     addField: function () {
-        Ext.MessageBox.prompt(' ', t('enter_the_name_of_the_new_item'),
+        Ext.MessageBox.prompt(' ', t('enter_the_name_of_the_new_object_brick'),
                                                     this.addFieldComplete.bind(this), null, null, "");
     },
 
     addFieldComplete: function (button, value, object) {
-
-        var isValidName = /^[a-zA-Z][a-zA-Z0-9]*$/;
+        const isValidName = /^[a-zA-Z]\w*$/;
 
         if (button == "ok" && value.length > 2 && isValidName.test(value) && !in_arrayi(value, this.forbiddenNames)) {
             Ext.Ajax.request({

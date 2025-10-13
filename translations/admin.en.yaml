@@ -1028,3 +1028,4 @@ invalid_option: 'Invalid Option field [ {field} ]: Please choose a valid option 
 respect_timezone: 'Respect timezone'
 delete_quantity_value_unit_confirmation: 'Deleting this unit will impact all related elements that reference it. Are you sure you want to proceed?'
 no_preview_available: 'Sorry, no preview available'
+enter_the_name_of_the_new_object_brick: 'Enter the name of the new brick (a-z, A-Z, 0-9, must start with letter)'
