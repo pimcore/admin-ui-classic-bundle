@@ -581,7 +581,6 @@ restrict_to_locales: 'Restrict to locales'
 predefined: Predefined
 save_as_copy: 'Save as copy'
 set_as_favourite: 'Set as favourite'
-save_filters: Save filters
 grid_configuration: 'Grid Configuration'
 shared_users: 'Shared Users'
 shared_roles: 'Shared Roles'

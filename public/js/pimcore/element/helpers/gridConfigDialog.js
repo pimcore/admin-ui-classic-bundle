@@ -285,7 +285,7 @@ pimcore.element.helpers.gridConfigDialog = Class.create({
 
         this.saveFilters = new Ext.form.field.Checkbox(
             {
-                fieldLabel: t("save_filters"),
+                fieldLabel: "Save filters",
                 inputValue: true,
                 name: "saveFilters",
                 value: this.settings.saveFilters

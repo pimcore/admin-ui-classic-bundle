@@ -45,7 +45,7 @@ class GridConfig extends AbstractModel
 
     protected bool $setAsFavourite = false;
 
-    protected ?bool $saveFilters = null;
+    protected bool $saveFilters = false;
 
     protected string $type = 'object';
 
@@ -199,16 +199,6 @@ class GridConfig extends AbstractModel
 
     public function isSaveFilters(): bool
     {
-        if ($this->saveFilters === null) {
-            $config = json_decode($this->getConfig());
-
-            if (isset($config->filter)) {
-                $this->saveFilters = (bool) $config->filter;
-            } else {
-                $this->saveFilters = false;
-            }
-        }
-
         return $this->saveFilters;
     }
 
