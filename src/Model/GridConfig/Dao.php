@@ -57,6 +57,12 @@ class Dao extends Model\Dao\AbstractDao
             }
         }
 
+        if (!$gridconfigs['saveFilters']){
+            $configData = json_decode($data['config'], true);
+            unset($configData['filter']);
+            $data['config'] = json_encode($configData);
+        }
+
         $lastInsertId = Helper::upsert($this->db, 'gridconfigs', $data, $this->getPrimaryKey('gridconfigs'));
         if ($lastInsertId !== null && !$this->model->getId()) {
             $this->model->setId((int) $lastInsertId);

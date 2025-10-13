@@ -350,6 +350,13 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
             tbar: this.getToolbar(fromConfig, save)
         });
 
+        if (this.filter) {
+            this.filter.forEach(filt => {
+                this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
+            });
+        }
+
+
         this.grid.on("columnmove", function () {
             this.saveColumnConfigButton.show()
         }.bind(this));
