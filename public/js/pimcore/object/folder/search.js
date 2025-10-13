@@ -285,8 +285,8 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                     needGridFilter = true;
 
                     if (this.filter) {
-                        var filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
-                        if(filterValue) {
+                        const filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
+                        if (filterValue) {
                             if (typeof col.filter !== "object") {
                                 col.filter = { type: col.filter };
                             }

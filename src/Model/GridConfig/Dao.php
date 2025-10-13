@@ -57,7 +57,7 @@ class Dao extends Model\Dao\AbstractDao
             }
         }
 
-        if (!$gridconfigs['saveFilters']){
+        if (!$gridconfigs['saveFilters']) {
             $configData = json_decode($data['config'], true);
             unset($configData['filter']);
             $data['config'] = json_encode($configData);
