@@ -364,7 +364,7 @@
          if(dataTransfer["items"] && dataTransfer.items[0] && dataTransfer.items[0].webkitGetAsEntry) {
              // chrome
              var traverseFileTree = function (item, path, depth = 0) {
-                 if (depth > 100) {
+                 if (depth > 50) {
                      console.warn("Max depth reached:", path);
                      return;
                  }
