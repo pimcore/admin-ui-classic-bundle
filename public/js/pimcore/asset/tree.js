@@ -361,79 +361,90 @@
              });
          }.bind(this);
  
-         if(dataTransfer["items"] && dataTransfer.items[0] && dataTransfer.items[0].webkitGetAsEntry) {
-             // chrome
-             var traverseFileTree = function (item, path, depth = 0) {
-                 if (depth > 50) {
-                     console.warn("Max depth reached:", path);
-                     return;
-                 }
-                 path = path || "";
-                 if (item.isFile) {
-                     // Get file
-                     item.file(function (file) {
-                         doFileUpload(file, path);
-                     }.bind(this));
-                 } else if (item.isDirectory) {
-                     // Get folder contents
-                     const dirReader = item.createReader();
-
-                     const readEntries = function () {
-                         dirReader.readEntries(function (entries) {
-                             if (entries.length === 0) {
-                                 return; // done reading this directory
-                             }
-
-                             for (let i = 0; i < entries.length; i++) {
-                                 traverseFileTree(entries[i], path + item.name + "/", depth + 1);
-                             }
-
-                             // Continue reading until empty array returned
-                             readEntries();
-                         }, function (err) {
-                             console.error("Error reading directory:", err);
-                         });
-                     };
-
-                     readEntries();
-                 }
-             }.bind(this);
- 
-             for (var i = 0; i < dataTransfer.items.length; i++) {
-                 // webkitGetAsEntry is where the magic happens
-                 var item = dataTransfer.items[i].webkitGetAsEntry();
-                 if (item) {
-                     traverseFileTree(item);
-                 }
-             }
-         } else if(dataTransfer["files"]) {
-             // default filelist upload
-             for (var i=0; i<dataTransfer["files"].length; i++) {
-                 file = dataTransfer["files"][i];
- 
-                 if (window.FileList && file.name && file.size) { // check for size (folder has size=0)
-                     doFileUpload(file);
-                 } else if (!empty(file.type) && file.size < 1) { //throw error for 0 byte file
-                     Ext.MessageBox.alert(t('error'), t('error_empty_file_upload'));
-                     win.close();
-                 }
-             }
- 
-             // if no files are uploaded (doesn't match criteria, ...) close the progress win immediately
-             if(!this.activeUploads) {
-                 win.close();
-             }
-         }
- 
-         // check in 5 sec. if there're active uploads
-         // if not, close the progressbar
-         // this is necessary since the folder upload is async, so we don't know if the progress is
-         // necessary or not, not really perfect solution, but works as it should
-         window.setTimeout(function () {
-             if(!this.activeUploads) {
-                 win.close();
-             }
-         }.bind(this), 5000);
+         if (dataTransfer["items"] && dataTransfer.items[0] && dataTransfer.items[0].webkitGetAsEntry) {
+            // Chrome-specific folder support
+            const MAX_DEPTH = 10;
+            const stack = [];
+        
+            for (let i = 0; i < dataTransfer.items.length; i++) {
+                const item = dataTransfer.items[i].webkitGetAsEntry();
+                if (item) {
+                    stack.push({ item, path: "", depth: 0 });
+                }
+            }
+        
+            const processNext = () => {
+                if (stack.length === 0) return;
+        
+                const { item, path, depth } = stack.pop();
+        
+                if (depth > MAX_DEPTH) {
+                    setTimeout(processNext, 0);
+                    return;
+                }
+        
+                if (item.isFile) {
+                    item.file((file) => {
+                        doFileUpload(file, path);
+                        setTimeout(processNext, 0);
+                    }, () => {
+                        setTimeout(processNext, 0);
+                    });
+                } else if (item.isDirectory) {
+                    const dirReader = item.createReader();
+        
+                    const readEntries = () => {
+                        dirReader.readEntries((entries) => {
+                            if (entries.length === 0) {
+                                setTimeout(processNext, 0);
+                                return;
+                            }
+        
+                            for (let i = 0; i < entries.length; i++) {
+                            stack.push({
+                                item: entries[i],
+                                path: path + item.name + "/",
+                                depth: depth + 1
+                            });
+                            }
+        
+                            readEntries();
+                        }, () => {
+                            setTimeout(processNext, 0);
+                        });
+                    };
+        
+                    readEntries();
+                } else {
+                    setTimeout(processNext, 0);
+                }
+            };
+        
+            processNext();
+        } else if (dataTransfer["files"]) {
+            // Fallback: flat file list
+            for (let i = 0; i < dataTransfer["files"].length; i++) {
+                const file = dataTransfer["files"][i];
+        
+                if (window.FileList && file.name && file.size) {
+                    doFileUpload(file);
+                } else if (!empty(file.type) && file.size < 1) {
+                    Ext.MessageBox.alert(t('error'), t('error_empty_file_upload'));
+                    win.close();
+                }
+            }
+        
+            if (!this.activeUploads) {
+                win.close();
+            }
+        }
+        
+        // Close progress window if no uploads detected after delay
+        setTimeout(function () {
+            if (!this.activeUploads) {
+                win.close();
+            }
+        }.bind(this), 5000);
      },
  
      getTreeNodeListeners: function () {
