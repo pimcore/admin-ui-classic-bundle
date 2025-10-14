@@ -369,6 +369,7 @@ pimcore.object.classificationstore.keySelectionWindow = Class.create({
         var postFix;
         var route;
         var nameWidth = 200;
+        var titleWidth = 200;
         var descWidth = 590;
 
         if (this.config.isCollectionSearch) {
@@ -444,6 +445,14 @@ pimcore.object.classificationstore.keySelectionWindow = Class.create({
                 width: nameWidth,
                 sortable: true,
                 dataIndex: 'name',
+                renderer: pimcore.helpers.grid.getTranslationColumnRenderer.bind(this)
+            });
+
+            gridColumns.push({
+                text: t("title"),
+                width: titleWidth,
+                sortable: true,
+                dataIndex: 'title',
                 renderer: pimcore.helpers.grid.getTranslationColumnRenderer.bind(this)
             });
 
