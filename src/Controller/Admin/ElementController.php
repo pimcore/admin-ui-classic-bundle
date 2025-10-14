@@ -56,9 +56,7 @@ class ElementController extends AdminAbstractController
         return $this->adminJson(['success' => true, 'editLock' => null]);
     }
 
-    /**
-     * @Route("/element/lock-element", name="pimcore_admin_element_lockelement", methods={"PUT"})
-     */
+    #[Route('/element/lock-element', name: 'pimcore_admin_element_lockelement', methods: ['PUT'])]
     public function lockElementAction(Request $request): Response
     {
         Element\Editlock::lock($request->request->getInt('id'), $request->request->get('type'), $request->getSession()->getId());
