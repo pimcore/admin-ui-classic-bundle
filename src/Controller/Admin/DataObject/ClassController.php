@@ -616,6 +616,20 @@ class ClassController extends AdminAbstractController implements KernelControlle
         return $this->adminJson(['data' => $resultList]);
     }
 
+    private function getExportFileName(string $prefix, ?string $filename = null, ?bool $add_suffix = null): string
+    {
+        $addVersionSuffix = $add_suffix
+            ?? \Pimcore::getContainer()
+                ->getParameter('pimcore_admin.config')['export']['version_suffix'];
+
+        return sprintf(
+            '%s%s_export%s.json',
+            $prefix,
+            $filename ? '_' . $filename : '',
+            $addVersionSuffix ? '_v' . \Pimcore\Version::getVersion() : ''
+        );
+    }
+
     #[Route('/export-class', name: 'exportclass', methods: ['GET'])]
     public function exportClassAction(Request $request): Response
     {
@@ -629,11 +643,13 @@ class ClassController extends AdminAbstractController implements KernelControlle
             throw $this->createNotFoundException($errorMessage);
         }
 
+        $filename = $this->getExportFileName('class', $class->getName());
+
         $json = DataObject\ClassDefinition\Service::generateClassDefinitionJson($class);
 
         $response = new Response($json);
         $response->headers->set('Content-type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename="class_' . $class->getName() . '_export.json"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
         return $response;
     }
@@ -647,11 +663,13 @@ class ClassController extends AdminAbstractController implements KernelControlle
             $customLayout = DataObject\ClassDefinition\CustomLayout::getById($id);
             if ($customLayout) {
                 $name = $customLayout->getName();
+                $filename = $this->getExportFileName('custom_definition', $name);
+
                 $json = DataObject\ClassDefinition\Service::generateCustomLayoutJson($customLayout);
 
                 $response = new Response($json);
                 $response->headers->set('Content-type', 'application/json');
-                $response->headers->set('Content-Disposition', 'attachment; filename="custom_definition_' . $name . '_export.json"');
+                $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
                 return $response;
             }
@@ -765,10 +783,12 @@ class ClassController extends AdminAbstractController implements KernelControlle
             throw $this->createNotFoundException($errorMessage);
         }
 
+        $filename = $this->getExportFileName('fieldcollection', $fieldCollection->getKey());
+
         $json = DataObject\ClassDefinition\Service::generateFieldCollectionJson($fieldCollection);
         $response = new Response($json);
         $response->headers->set('Content-type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename="fieldcollection_' . $fieldCollection->getKey() . '_export.json"');
+        $response->headers->set('Content-Disposition', 'attachment;  filename="' . $filename . '"');
 
         return $response;
     }
@@ -1117,10 +1137,12 @@ class ClassController extends AdminAbstractController implements KernelControlle
             throw $this->createNotFoundException($errorMessage);
         }
 
+        $filename = $this->getExportFileName('objectbrick', $objectBrick->getKey());
+
         $xml = DataObject\ClassDefinition\Service::generateObjectBrickJson($objectBrick);
         $response = new Response($xml);
         $response->headers->set('Content-type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename="objectbrick_' . $objectBrick->getKey() . '_export.json"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
         return $response;
     }
@@ -1629,11 +1651,12 @@ class ClassController extends AdminAbstractController implements KernelControlle
                 }
             }
         }
+        $filename = $this->getExportFileName('bulk');
 
         $result = json_encode($result, JSON_PRETTY_PRINT);
         $response = new Response($result);
         $response->headers->set('Content-type', 'application/json');
-        $response->headers->set('Content-Disposition', 'attachment; filename="bulk_export.json"');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
 
         return $response;
     }
