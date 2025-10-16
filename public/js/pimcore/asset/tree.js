@@ -363,20 +363,20 @@
  
          if (dataTransfer["items"] && dataTransfer.items[0] && dataTransfer.items[0].webkitGetAsEntry) {
             // Chrome-specific folder support
-            const MAX_DEPTH = 10;
-            const stack = [];
+            const MAX_DEPTH = 20;
+            const queue = [];
         
             for (let i = 0; i < dataTransfer.items.length; i++) {
                 const item = dataTransfer.items[i].webkitGetAsEntry();
                 if (item) {
-                    stack.push({ item, path: "", depth: 0 });
+                    queue.push({ item, path: "", depth: 0 });
                 }
             }
         
             const processNext = () => {
-                if (stack.length === 0) return;
+                if (queue.length === 0) return;
         
-                const { item, path, depth } = stack.pop();
+                const { item, path, depth } = queue.shift();
         
                 if (depth > MAX_DEPTH) {
                     setTimeout(processNext, 0);
@@ -384,34 +384,40 @@
                 }
         
                 if (item.isFile) {
-                    item.file((file) => {
-                        doFileUpload(file, path);
-                        setTimeout(processNext, 0);
-                    }, () => {
-                        setTimeout(processNext, 0);
-                    });
+                    item.file(
+                        (file) => {
+                            doFileUpload(file, path);
+                            setTimeout(processNext, 0);
+                        },
+                        () => {
+                            setTimeout(processNext, 0);
+                        }
+                    );
                 } else if (item.isDirectory) {
                     const dirReader = item.createReader();
         
                     const readEntries = () => {
-                        dirReader.readEntries((entries) => {
-                            if (entries.length === 0) {
+                        dirReader.readEntries(
+                            (entries) => {
+                                if (entries.length === 0) {
+                                    setTimeout(processNext, 0);
+                                    return;
+                                }
+        
+                                for (let i = 0; i < entries.length; i++) {
+                                    queue.push({
+                                        item: entries[i],
+                                        path: path + item.name + "/",
+                                        depth: depth + 1,
+                                    });
+                                }
+        
+                                readEntries();
+                            },
+                            () => {
                                 setTimeout(processNext, 0);
-                                return;
                             }
-        
-                            for (let i = 0; i < entries.length; i++) {
-                            stack.push({
-                                item: entries[i],
-                                path: path + item.name + "/",
-                                depth: depth + 1
-                            });
-                            }
-        
-                            readEntries();
-                        }, () => {
-                            setTimeout(processNext, 0);
-                        });
+                        );
                     };
         
                     readEntries();
@@ -422,6 +428,7 @@
         
             processNext();
         } else if (dataTransfer["files"]) {
+
             // Fallback: flat file list
             for (let i = 0; i < dataTransfer["files"].length; i++) {
                 const file = dataTransfer["files"][i];
