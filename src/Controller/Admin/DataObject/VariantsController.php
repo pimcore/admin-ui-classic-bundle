@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
@@ -34,7 +35,7 @@ class VariantsController extends AdminAbstractController
     #[Route('/update-key', name: 'updatekey', methods: ['PUT'])]
     public function updateKeyAction(Request $request): JsonResponse
     {
-        $id = $request->request->getInt('id');
+        $id = ParameterBagHelper::getInt($request->request, 'id');
         $key = $request->request->get('key');
         $object = DataObject\Concrete::getById($id);
 

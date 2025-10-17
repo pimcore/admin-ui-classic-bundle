@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
 use Pimcore\Document\Editable\Block\BlockStateStack;
@@ -208,7 +209,7 @@ class PageController extends DocumentControllerBase
     #[Route('/check-pretty-url', name: 'checkprettyurl', methods: ['POST'])]
     public function checkPrettyUrlAction(Request $request): JsonResponse
     {
-        $docId = $request->request->getInt('id');
+        $docId = ParameterBagHelper::getInt($request->request, 'id');
         $path = trim($request->request->get('path', ''));
 
         $success = true;
@@ -275,7 +276,7 @@ class PageController extends DocumentControllerBase
     #[Route('/clear-editable-data', name: 'cleareditabledata', methods: ['PUT'])]
     public function clearEditableDataAction(Request $request): JsonResponse
     {
-        $docId = $request->request->getInt('id');
+        $docId = ParameterBagHelper::getInt($request->request, 'id');
         $doc = Document\PageSnippet::getById($docId);
 
         if (!$doc) {

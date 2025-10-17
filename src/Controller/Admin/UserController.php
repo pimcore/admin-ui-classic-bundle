@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
 use Pimcore\Bundle\AdminBundle\Perspective\Config;
@@ -109,7 +110,7 @@ class UserController extends AdminAbstractController implements KernelController
 
             $className = User\Service::getClassNameForType($type);
             $user = $className::create([
-                'parentId' => $request->request->getInt('parentId'),
+                'parentId' => ParameterBagHelper::getInt($request->request, 'parentId'),
                 'name' => trim($request->request->get('name', '')),
                 'password' => '',
                 'active' => $request->request->getBoolean('active'),
@@ -255,7 +256,7 @@ class UserController extends AdminAbstractController implements KernelController
     public function updateAction(Request $request, TranslatorInterface $translator): JsonResponse
     {
         /** @var User|User\Role|null $user */
-        $user = User\UserRole::getById($request->request->getInt('id'));
+        $user = User\UserRole::getById(ParameterBagHelper::getInt($request->request, 'id'));
         $currentUserIsAdmin = $this->getAdminUser()->isAdmin();
 
         if (!$user) {

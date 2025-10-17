@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Controller\KernelControllerEventInterface;
@@ -150,7 +151,7 @@ class PortalController extends AdminAbstractController implements KernelControll
             $colCount++;
         }
 
-        array_splice($newConfig[$request->get('column')], $request->request->getInt('row'), 0, [$toMove]);
+        array_splice($newConfig[$request->get('column')], ParameterBagHelper::getInt($request->request, 'row'), 0, [$toMove]);
 
         $config['positions'] = $newConfig;
         $this->saveConfiguration($request, $config);

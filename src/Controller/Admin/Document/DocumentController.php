@@ -12,6 +12,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
+use Pimcore\Helper\ParameterBagHelper;
 use function base64_encode;
 use function basename;
 use function date;
@@ -731,9 +732,9 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $domains = str_replace(' ', '', $domains);
         $domains = $domains ? explode("\n", $domains) : [];
 
-        if (!$site = Site::getByRootId($request->request->getInt('id'))) {
+        if (!$site = Site::getByRootId(ParameterBagHelper::getInt($request->request, 'id'))) {
             $site = Site::create([
-                'rootId' => $request->request->getInt('id'),
+                'rootId' => ParameterBagHelper::getInt($request->request, 'id'),
             ]);
         }
 

@@ -12,6 +12,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
@@ -281,7 +282,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     #[Route('/get', name: 'get', methods: ['GET'])]
     public function getAction(Request $request, EventDispatcherInterface $eventDispatcher, PreviewGeneratorInterface $defaultPreviewGenerator): JsonResponse
     {
-        $objectId = $request->query->getInt('id');
+        $objectId = ParameterBagHelper::getInt($request->query, 'id');
         $objectFromDatabase = DataObject\Concrete::getById($objectId);
         if ($objectFromDatabase === null) {
             return $this->adminJson(['success' => false, 'message' => 'element_not_found'], JsonResponse::HTTP_NOT_FOUND);
@@ -518,7 +519,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     #[Route('/get-select-options', name: 'getSelectOptions', methods: ['POST'])]
     public function getSelectOptions(Request $request): JsonResponse
     {
-        $objectId = $request->request->getInt('objectId');
+        $objectId = ParameterBagHelper::getInt($request->request, 'objectId');
         $objectFromDatabase = DataObject\Concrete::getById($objectId);
         if (!$objectFromDatabase instanceof DataObject\Concrete) {
             return new JsonResponse(['success'=> false, 'message' => 'Object not found.']);
@@ -834,14 +835,14 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         $object->setOmitMandatoryCheck(true); // allow to save the object although there are mandatory fields
         $classId = $request->request->get('classId');
         if ($request->get('variantViaTree')) {
-            $parentId = $request->request->getInt('parentId');
+            $parentId = ParameterBagHelper::getInt($request->request, 'parentId');
             $parent = DataObject\Concrete::getById($parentId);
             $classId = $parent->getClass()->getId();
         }
 
         $object->setClassId($classId);
         $object->setClassName($request->request->get('className'));
-        $object->setParentId($request->request->getInt('parentId'));
+        $object->setParentId(ParameterBagHelper::getInt($request->request, 'parentId'));
         $object->setKey($request->request->get('key'));
         $object->setCreationDate(time());
         $object->setUserOwner($this->getAdminUser()->getId());
@@ -1866,7 +1867,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
     #[Route('/preview', name: 'preview', methods: ['GET'])]
     public function previewAction(Request $request, PreviewGeneratorInterface $defaultPreviewGenerator): RedirectResponse|Response
     {
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $object = DataObject\Service::getElementFromSession('object', $id, $request->getSession()->getId());
 
         if ($object instanceof DataObject\Concrete) {
@@ -1893,7 +1894,7 @@ class DataObjectController extends ElementControllerBase implements KernelContro
 
             $redirectParameters = array_filter([
                 'pimcore_object_preview' => $id,
-                'site' => $request->query->getInt(PreviewGeneratorInterface::PARAMETER_SITE),
+                'site' => ParameterBagHelper::getInt($request->query, PreviewGeneratorInterface::PARAMETER_SITE),
                 'dc' => time(),
             ]);
 
