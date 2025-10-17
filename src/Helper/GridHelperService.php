@@ -838,6 +838,18 @@ class GridHelperService
                         $operator = '>';
                     } elseif ($filterOperator == 'eq') {
                         $operator = '=';
+                    } elseif ($filterOperator == 'in') {
+                        $operator = 'IN';
+                        
+                        $filterValue = $filter['value'] ?? '';
+                        if (!is_array($filterValue)) {
+                            $matches = preg_split('/[^0-9\.]+/', $filterValue, -1, PREG_SPLIT_NO_EMPTY);
+                            if (is_array($matches) && count($matches) > 0) {
+                                $filter['value'] = array_unique(array_map(floatval(...), $matches));
+                            } else {
+                                continue;
+                            }
+                        }
                     }
                 } elseif ($filterType == 'date') {
                     $filter['value'] = strtotime($filter['value']);
@@ -866,8 +878,9 @@ class GridHelperService
                     if (empty($value)) {
                         continue;
                     }
+
                     $quoted = array_map(function ($val) use ($db) {
-                        return $db->quote($val);
+                        return $db->quote((string)$val);
                     }, $value);
                     $value = '(' . implode(',', $quoted) . ')';
                 } elseif ($operator == 'BETWEEN') {
