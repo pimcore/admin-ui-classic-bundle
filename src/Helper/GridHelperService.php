@@ -840,7 +840,7 @@ class GridHelperService
                         $operator = '=';
                     } elseif ($filterOperator == 'in') {
                         $operator = 'IN';
-                        
+
                         $filterValue = $filter['value'] ?? '';
                         if (!is_array($filterValue)) {
                             $matches = preg_split('/[^0-9\.]+/', $filterValue, -1, PREG_SPLIT_NO_EMPTY);
