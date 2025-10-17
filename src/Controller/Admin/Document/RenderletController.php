@@ -63,13 +63,6 @@ class RenderletController extends AdminAbstractController
 
         $controller = $request->get('controller');
 
-        $moduleOrBundle = null;
-        if ($request->get('bundle')) {
-            $moduleOrBundle = $request->get('bundle');
-        } elseif ($request->get('module')) {
-            $moduleOrBundle = $request->get('bundle');
-        }
-
         // set document if set in request
         if ($documentId = $request->get('pimcore_parentDocument')) {
             $document = Document\PageSnippet::getById((int) $documentId);
