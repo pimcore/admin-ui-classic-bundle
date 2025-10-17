@@ -62,7 +62,6 @@ class RenderletController extends AdminAbstractController
         $eventDispatcher->dispatch($event, DocumentEvents::EDITABLE_RENDERLET_PRE_RENDER);
 
         $controller = $request->get('controller');
-        $action = $request->get('action');
 
         $moduleOrBundle = null;
         if ($request->get('bundle')) {
