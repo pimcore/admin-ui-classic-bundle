@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Model\DataObject;
 use Symfony\Component\HttpFoundation\JsonResponse;

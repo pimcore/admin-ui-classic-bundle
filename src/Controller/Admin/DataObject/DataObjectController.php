@@ -12,7 +12,6 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
@@ -23,6 +22,7 @@ use Pimcore\Bundle\AdminBundle\Helper\GridHelperService;
 use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model;

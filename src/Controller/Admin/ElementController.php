@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\DependencyInjection\PimcoreAdminExtension;
 use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
 use Pimcore\Event\Model\ResolveElementEvent;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Asset;

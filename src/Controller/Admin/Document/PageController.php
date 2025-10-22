@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Endroid\QrCode\Builder\Builder;
 use Endroid\QrCode\Writer\PngWriter;
 use Pimcore\Document\Editable\Block\BlockStateStack;
@@ -22,6 +21,7 @@ use Pimcore\Document\StaticPageGenerator;
 use Pimcore\Event\DocumentEvents;
 use Pimcore\Event\Model\DocumentEvent;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Http\Request\Resolver\DocumentResolver;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Localization\LocaleServiceInterface;

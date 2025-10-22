@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Controller\KernelControllerEventInterface;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Document;

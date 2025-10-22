@@ -12,7 +12,6 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Asset;
 
-use Pimcore\Helper\ParameterBagHelper;
 use function is_callable;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
@@ -30,6 +29,7 @@ use Pimcore\Event\AssetEvents;
 use Pimcore\Event\Model\Asset\ResolveUploadTargetEvent;
 use Pimcore\File;
 use Pimcore\Helper\MimeTypeHelper;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;

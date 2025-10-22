@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\Recyclebin;
 use Symfony\Component\HttpFoundation\JsonResponse;

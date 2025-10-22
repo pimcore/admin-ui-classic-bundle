@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\User as UserHelper;
 use Pimcore\Bundle\AdminBundle\Perspective\Config;
 use Pimcore\Controller\KernelControllerEventInterface;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Logger;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;

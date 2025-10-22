@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\DataObject\ClassDefinition\Data\LayoutDefinitionEnrichmentInterface;
 use Pimcore\Model\DataObject\Classificationstore;

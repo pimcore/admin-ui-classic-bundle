@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
-use Pimcore\Helper\ParameterBagHelper;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\UnableToReadFile;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
@@ -26,6 +25,7 @@ use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Db;
 use Pimcore\File;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
