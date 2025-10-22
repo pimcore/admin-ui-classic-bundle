@@ -12,6 +12,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Asset;
 
+use Pimcore\Helper\ParameterBagHelper;
 use function is_callable;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
@@ -91,7 +92,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     #[Route('/get-data-by-id', name: 'pimcore_admin_asset_getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
-        $assetId = $request->query->getInt('id');
+        $assetId = ParameterBagHelper::getInt($request->query, 'id');
         $type = $request->query->get('type');
 
         $asset = Asset::getById($assetId);
@@ -414,7 +415,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw new \Exception('The filename of the asset is empty');
         }
 
-        $parentId = $request->query->getInt('parentId');
+        $parentId = ParameterBagHelper::getInt($request->query, 'parentId');
         $parentPath = $request->query->get('parentPath');
 
         if ($request->get('dir') && $request->get('parentId')) {

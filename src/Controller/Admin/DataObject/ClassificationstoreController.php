@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject;
 
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
@@ -40,7 +41,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
     {
         $this->checkPermission('classificationstore');
 
-        $id = $request->request->getInt('id');
+        $id = ParameterBagHelper::getInt($request->request, 'id');
 
         $configRelations = new Classificationstore\CollectionGroupRelation\Listing();
         $configRelations->setCondition('colId = ?', $id);
@@ -60,8 +61,8 @@ class ClassificationstoreController extends AdminAbstractController implements K
     {
         $this->checkPermission('classificationstore');
 
-        $colId = $request->request->getInt('colId');
-        $groupId = $request->request->getInt('groupId');
+        $colId = ParameterBagHelper::getInt($request->request, 'colId');
+        $groupId = ParameterBagHelper::getInt($request->request, 'groupId');
 
         $config = new Classificationstore\CollectionGroupRelation();
         $config->setColId($colId);
@@ -94,7 +95,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
     {
         $this->checkPermission('classificationstore');
 
-        $id = $request->request->getInt('id');
+        $id = ParameterBagHelper::getInt($request->request, 'id');
 
         $config = Classificationstore\GroupConfig::getById($id);
         $config->delete();
@@ -392,7 +393,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
             $conditionParts[] = '('.implode(' OR ', $searchFilterConditions).')';
         }
 
-        if ($storeId = $request->query->getInt('storeId')) {
+        if ($storeId = ParameterBagHelper::getInt($request->query, 'storeId')) {
             $conditionParts[] = '(storeId = ' . $db->quote((string)$storeId) . ')';
         }
 
@@ -547,7 +548,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
             }
         }
 
-        $colId = $request->query->getInt('colId');
+        $colId = ParameterBagHelper::getInt($request->query, 'colId');
         if ($condition) {
             $condition = '( ' . $condition . ' ) AND';
         }
@@ -915,7 +916,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
 
             $allowedGroupIds = null;
 
-            $oid = $request->request->getInt('oid');
+            $oid = ParameterBagHelper::getInt($request->request, 'oid');
             $object = DataObject\Concrete::getById($oid);
             if ($object) {
                 $class = $object->getClass();
@@ -1005,7 +1006,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         $this->checkPermission('objects');
 
         $ids = $this->decodeJson($request->get('groupIds'));
-        $oid = $request->request->getInt('oid');
+        $oid = ParameterBagHelper::getInt($request->request, 'oid');
         $object = DataObject\Concrete::getById($oid);
         $fieldname = $request->get('fieldname');
 
@@ -1318,7 +1319,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
     #[Route('/delete-property', name: 'deleteproperty', methods: ['DELETE'])]
     public function deletePropertyAction(Request $request): JsonResponse
     {
-        $id = $request->request->getInt('id');
+        $id = ParameterBagHelper::getInt($request->request, 'id');
 
         $config = Classificationstore\KeyConfig::getById($id);
         //        $config->delete();
@@ -1334,7 +1335,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
     #[Route('/edit-store', name: 'editstore', methods: ['PUT'])]
     public function editStoreAction(Request $request): JsonResponse
     {
-        $id = $request->request->getInt('id');
+        $id = ParameterBagHelper::getInt($request->request, 'id');
         $data = json_decode($request->request->get('data'), true);
         $name = $data['name'];
         if (!$name) {

@@ -12,52 +12,53 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Document;
 
-use function base64_encode;
-use function basename;
-use function date;
-use Exception;
-use function file_exists;
-use function file_get_contents;
-use function file_put_contents;
 use Imagick;
 use Pimcore;
-use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
-use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
-use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
-use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
-use Pimcore\Cache\RuntimeCache;
-use Pimcore\Config;
-use Pimcore\Controller\KernelControllerEventInterface;
+use Exception;
 use Pimcore\Db;
-use Pimcore\Document\Renderer\DocumentRendererInterface;
-use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
-use Pimcore\Image\HtmlToImage;
-use Pimcore\Logger;
-use Pimcore\Model\Document;
-use Pimcore\Model\Document\DocType;
-use Pimcore\Model\Element\ElementInterface;
-use Pimcore\Model\Element\Service;
-use Pimcore\Model\Exception\ConfigWriteException;
-use Pimcore\Model\Site;
-use Pimcore\Model\Version;
 use Pimcore\Tool;
-use Pimcore\Tool\Session;
-use RuntimeException;
-use function sprintf;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use function date;
+use Pimcore\Config;
+use Pimcore\Logger;
 use function uniqid;
 use function unlink;
+use function sprintf;
+use RuntimeException;
+use function basename;
+use Pimcore\Model\Site;
+use function file_exists;
+use Pimcore\Tool\Session;
+use Pimcore\Model\Version;
+use function base64_encode;
+use Pimcore\Model\Document;
+use Pimcore\Image\HtmlToImage;
+use function file_get_contents;
+use function file_put_contents;
+use Pimcore\Cache\RuntimeCache;
+use Pimcore\Model\Element\Service;
+use Pimcore\Model\Document\DocType;
+use Pimcore\Helper\ParameterBagHelper;
+use Pimcore\Model\Element\ElementInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
+use Pimcore\Model\Exception\ConfigWriteException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Pimcore\Controller\KernelControllerEventInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Pimcore\Document\Renderer\DocumentRendererInterface;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Pimcore\Bundle\AdminBundle\Event\ElementAdminStyleEvent;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\UserNameTrait;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
+use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
+use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
  * @internal
@@ -730,10 +731,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $domains = $request->request->getString('domains');
         $domains = str_replace(' ', '', $domains);
         $domains = $domains ? explode("\n", $domains) : [];
-
-        if (!$site = Site::getByRootId($request->request->getInt('id'))) {
+        $site = Site::getByRootId(ParameterBagHelper::getInt($request->request, 'id'));
+        if (!$site) {
             $site = Site::create([
-                'rootId' => $request->request->getInt('id'),
+                'rootId' => ParameterBagHelper::getInt($request->request, 'id'),
             ]);
         }
 
