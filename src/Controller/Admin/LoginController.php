@@ -14,43 +14,44 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Writer\PngWriter;
-use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
-use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
-use Pimcore\Bundle\AdminBundle\Event\Login\LoginRedirectEvent;
-use Pimcore\Bundle\AdminBundle\Event\Login\LostPasswordEvent;
-use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
-use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Tool;
 use Pimcore\Config;
-use Pimcore\Controller\KernelControllerEventInterface;
-use Pimcore\Controller\KernelResponseEventInterface;
-use Pimcore\Extension\Bundle\PimcoreBundleManager;
-use Pimcore\Http\ResponseHelper;
 use Pimcore\Logger;
 use Pimcore\Model\User;
-use Pimcore\Security\SecurityHelper;
-use Pimcore\SystemSettingsConfig;
-use Pimcore\Tool;
+use Pimcore\Http\ResponseHelper;
 use Pimcore\Tool\Authentication;
-use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
+use Pimcore\SystemSettingsConfig;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
+use Pimcore\Security\SecurityHelper;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\EventDispatcher\GenericEvent;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\RouterInterface;
+use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
+use Pimcore\Bundle\AdminBundle\System\AdminConfig;
+use Pimcore\Extension\Bundle\PimcoreBundleManager;
+use Symfony\Component\EventDispatcher\GenericEvent;
+use Pimcore\Controller\KernelResponseEventInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Pimcore\Controller\KernelControllerEventInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Pimcore\Bundle\AdminBundle\Event\Login\LostPasswordEvent;
+use Pimcore\Bundle\AdminBundle\Event\Login\LoginRedirectEvent;
+use Pimcore\Bundle\AdminBundle\Security\CsrfProtectionHandler;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Scheb\TwoFactorBundle\Security\TwoFactor\Provider\Google\GoogleAuthenticatorInterface;
 
 /**
  * @internal
@@ -325,9 +326,9 @@ class LoginController extends AdminAbstractController implements KernelControlle
 
         if ($request->hasSession()) {
             $session = $request->getSession();
-            $authException = $session->get(Security::AUTHENTICATION_ERROR);
+            $authException = $session->get(SecurityRequestAttributes::AUTHENTICATION_ERROR);
             if ($authException instanceof AuthenticationException) {
-                $session->remove(Security::AUTHENTICATION_ERROR);
+                $session->remove(SecurityRequestAttributes::AUTHENTICATION_ERROR);
 
                 $params['error'] = $authException->getMessage();
             }
