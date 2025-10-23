@@ -418,7 +418,21 @@ pimcore.element.helpers.gridColumnConfig = {
                 containerType: "filterByRelationWindow"
             });
 
-            editor.fieldConfig.width = 300;
+            editor.fieldConfig.width = '100%';
+
+            const activeFilter = this.grid.getStore().getFilters().items;
+
+            for (let i = 0; i < activeFilter.length; i++) {
+                if (activeFilter[i].dataIndex !== fieldInfo.dataIndex) {
+                    continue;
+                }
+                editor.data = activeFilter[i].getValue()
+                    .split(",")
+                    .map(v => ({ id: parseInt(v.trim()) }))
+                    .filter(v => !isNaN(v.id));
+                editor.store.loadData(items, false);
+                break;
+            }
 
             const formPanel = Ext.create('Ext.form.Panel', {
                 xtype: "form",
@@ -439,10 +453,20 @@ pimcore.element.helpers.gridColumnConfig = {
                         iconCls: "pimcore_icon_filter pimcore_icon_overlay_add",
                         handler: function () {
                             if (formPanel.isValid() && typeof fieldInfo.getRelationFilter === "function") {
-                                this.grid.filters.getStore().addFilter(
-                                    fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)
-                                );
-                                this.filterByRelationWindow.close();
+                                try {
+                                    // Sync editor store with its current value (if applicable)
+                                    const value = editor.getValue();
+                                    const items = Array.isArray(value) ? value : value ? [value] : [];
+                                    editor.store.loadData(items, false);
+
+                                    this.grid.filters.getStore().addFilter(
+                                        fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)
+                                    );
+                                    this.filterByRelationWindow.close();
+                                } catch (e) {
+                                    console.error("Error applying relation filter:", e);
+                                    pimcore.helpers.showNotification(t("error"), e.message || e, "error");
+                                }
                             }
                         }.bind(this)
                     }
@@ -952,6 +976,10 @@ pimcore.element.helpers.gridColumnConfig = {
         //only direct children filter
         if (this.checkboxOnlyDirectChildren) {
             params["only_direct_children"] = this.checkboxOnlyDirectChildren.getValue();
+        }
+
+        if (typeof this.selectObjectType !=='undefined') {
+            params['filter_by_object_type'] = this.selectObjectType.getValue();
         }
 
         //only unreferenced filter
