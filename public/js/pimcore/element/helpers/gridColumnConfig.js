@@ -422,14 +422,14 @@ pimcore.element.helpers.gridColumnConfig = {
 
             const activeFilter = this.grid.getStore().getFilters().items;
 
-            for (let i = 0; i < activeFilter.length; i++) {
-                if (activeFilter[i].dataIndex !== fieldInfo.dataIndex) {
+            for (let filter of activeFilter) {
+                if (filter.dataIndex !== fieldInfo.dataIndex) {
                     continue;
                 }
-                editor.data = activeFilter[i].getValue()
+                editor.data = filter.getValue()
                     .split(",")
-                    .map(v => ({ id: parseInt(v.trim()) }))
-                    .filter(v => !isNaN(v.id));
+                    .map(v => ({ id: Number.parseInt(v.trim()) }))
+                    .filter(v => !Number.isNaN(v.id));
                 editor.store.loadData(items, false);
                 break;
             }
