@@ -456,7 +456,12 @@ pimcore.element.helpers.gridColumnConfig = {
                                 try {
                                     // Sync editor store with its current value (if applicable)
                                     const value = editor.getValue();
-                                    const items = Array.isArray(value) ? value : value ? [value] : [];
+                                    let items = [];
+                                    if (Array.isArray(value)) {
+                                        items = value;
+                                    } else if (value) {
+                                        items = [value];
+                                    }
                                     editor.store.loadData(items, false);
 
                                     this.grid.filters.getStore().addFilter(
