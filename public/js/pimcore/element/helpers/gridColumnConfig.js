@@ -981,7 +981,7 @@ pimcore.element.helpers.gridColumnConfig = {
         if (typeof this.selectObjectType !=='undefined') {
             params['filter_by_object_type'] = this.selectObjectType.getValue();
         }
-
+        
         //only unreferenced filter
         if (this.checkboxOnlyUnreferenced) {
             params["only_unreferenced"] = this.checkboxOnlyUnreferenced.getValue();
