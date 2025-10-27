@@ -186,16 +186,27 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~') && self::getClassificationStoreFieldDefinition($key)->isEmpty(is_array($data[$key]) ? $data[$key]['value'] : $data[$key])) {
-                        $type = $keyParts[1];
+                    if (
+                        str_starts_with($key, '~') &&
+                        ($keyParts[1] ?? null) === 'classificationstore'
+                    ) {
+                        $fieldDef = self::getClassificationStoreFieldDefinition($key);
+                        $value = static::normalizeValue($data[$key]);
 
-                        if ($type === 'classificationstore') {
-                            if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
+                        if ($fieldDef->isEmpty($value)) {
+                            $inheritedData = static::getInheritedData($object, $key, $requestedLanguage);
+
+                            if (!empty($inheritedData)) {
+                                $parent = $inheritedData['parent'];
                                 $data[$dataKey] = $inheritedData['value'];
-                                $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
+                                $data['inheritedFields'][$dataKey] = [
+                                    'inherited' => $parent->getId() !== $object->getId(),
+                                    'objectid'  => $parent->getId(),
+                                ];
                             }
                         }
                     }
+
                     if ($needLocalizedPermissions) {
                         if (!$user->isAdmin()) {
                             $locale = \Pimcore::getContainer()->get(LocaleServiceInterface::class)->findLocale();
@@ -354,8 +365,9 @@ class DataObject extends Element
             return [];
         }
 
-        $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if (!self::getClassificationStoreFieldDefinition($key)->isEmpty(is_array($inheritedValue) ? $inheritedValue['value'] : $inheritedValue)) {
+        $inheritedValue = static::normalizeValue(self::getStoreValueForObject($parent, $key, $requestedLanguage));
+
+        if (!static::getClassificationStoreFieldDefinition($key)->isEmpty($inheritedValue)) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,
@@ -363,6 +375,24 @@ class DataObject extends Element
         }
 
         return self::getInheritedData($parent, $key, $requestedLanguage);
+    }
+
+    /**
+     * The actual data could be a plain array for tables,
+     * an associative array for RGB or Quantity Value where the value is a key.
+     *
+     */
+    private static function normalizeValue(mixed $data): mixed
+    {
+        if (is_array($data)){
+            if (array_is_list($data)) {
+                return $data;
+            }
+            if (array_key_exists('value', $data)){
+                return $data['value'];
+            }
+        }
+        return $data;
     }
 
     protected static function getClassificationStoreFieldDefinition(string $key): Data
