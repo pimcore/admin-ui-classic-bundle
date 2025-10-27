@@ -191,7 +191,7 @@ class DataObject extends Element
                         ($keyParts[1] ?? null) === 'classificationstore'
                     ) {
                         $fieldDef = self::getClassificationStoreFieldDefinition($key);
-                        $value = static::normalizeValue($data[$key]);
+                        $value = self::normalizeValue($data[$key]);
 
                         if ($fieldDef->isEmpty($value)) {
                             $inheritedData = static::getInheritedData($object, $key, $requestedLanguage);
@@ -365,7 +365,7 @@ class DataObject extends Element
             return [];
         }
 
-        $inheritedValue = static::normalizeValue(self::getStoreValueForObject($parent, $key, $requestedLanguage));
+        $inheritedValue = self::normalizeValue(self::getStoreValueForObject($parent, $key, $requestedLanguage));
 
         if (!static::getClassificationStoreFieldDefinition($key)->isEmpty($inheritedValue)) {
             return [
