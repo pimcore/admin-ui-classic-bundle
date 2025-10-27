@@ -239,7 +239,13 @@ class GridHelperService
                         $operator = 'in';
                         $matches = preg_split('/[^0-9\.]+/', $filter['value'][0][0] ?? [], -1, PREG_SPLIT_NO_EMPTY);
                         if (is_array($matches) && count($matches) > 0) {
-                            $filter['value'][0][0] = implode(',', array_unique(array_map(floatval(...), $matches)));
+                            $uniqueIds = array_unique(array_map(floatval(...), $matches));
+                            if (count($uniqueIds) > 1) {
+                                $filter['value'][0][0] = implode(',', $uniqueIds);
+                            } else {
+                                $filter['value'][0][0] = $uniqueIds[0];
+                                $operator = '=';
+                            }
                         } else {
                             continue;
                         }
