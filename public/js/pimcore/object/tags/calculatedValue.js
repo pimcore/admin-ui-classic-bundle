@@ -65,6 +65,8 @@ pimcore.object.tags.calculatedValue = Class.create(pimcore.object.tags.abstract,
             this.component = new Ext.form.field.Display(input);
         } else if (this.fieldConfig.elementType === 'date') {
             this.component = new Ext.form.DateField(input);
+        } else if(this.fieldConfig.elementType === 'boolean'){
+            this.component = new Ext.form.field.Checkbox(input);
         } else {
             this.component = new Ext.form.field.Text(input);
         }

@@ -123,6 +123,10 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
             data: options
         });
 
+        if (!field.layout.mandatory) {
+            options.unshift({'value': '', 'key': '(' + t('empty') + ')'});
+        }
+
         let editorConfig = this.initEditorConfig(field);
 
         editorConfig = Object.assign(editorConfig, {

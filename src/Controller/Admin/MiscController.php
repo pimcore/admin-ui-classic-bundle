@@ -103,7 +103,7 @@ class MiscController extends AdminAbstractController
         }
 
         foreach (['admin', 'admin_ext'] as $domain) {
-            $translations = array_merge($translations, $translator->getCatalogue($language)->all($domain));
+            $translations = array_replace($translations, $translator->getCatalogue($language)->all($domain));
 
             foreach ($fallbackLanguages as $fallbackLanguage) {
                 $translator->lazyInitialize($domain, $fallbackLanguage);

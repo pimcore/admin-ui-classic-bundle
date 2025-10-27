@@ -261,7 +261,7 @@ class IndexController extends AdminAbstractController implements KernelResponseE
             'videoconverter'                 => Video::isAvailable(),
             'main_domain'                    => $systemSettings['general']['domain'],
             'custom_admin_entrypoint_url'    => $adminEntrypointUrl,
-            'timezone'                       => $config['general']['timezone'],
+            'timezone'                       => $config['general']['timezone'] ?: date_default_timezone_get(),
             'tile_layer_url_template'        => $config['maps']['tile_layer_url_template'],
             'geocoding_url_template'         => $config['maps']['geocoding_url_template'],
             'reverse_geocoding_url_template' => $config['maps']['reverse_geocoding_url_template'],

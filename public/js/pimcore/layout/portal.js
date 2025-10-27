@@ -124,7 +124,7 @@ pimcore.layout.portal = Class.create({
             this.panel = Ext.create('Portal.view.PortalPanel', {
                 id: "pimcore_portal_" + this.key,
                 layout: 'column',
-                title: this.key == "welcome" ? t("welcome") : this.key,
+                title: t(this.key),
                 border: true,
                 bodyCls: 'x-portal-body',
                 iconCls: "pimcore_icon_welcome",

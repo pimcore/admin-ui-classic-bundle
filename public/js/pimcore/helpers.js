@@ -2743,7 +2743,7 @@ pimcore.helpers.requestNicePathData = function (source, targets, config, fieldCo
         return;
     }
 
-    if (!config.loadEditModeData && (typeof targets === "undefined" || !fieldConfig.pathFormatterClass)) {
+    if (!config.loadEditModeData && (typeof targets === "undefined" || !fieldConfig.pathFormatterClass || (typeof fieldConfig.visibleFields === "string" && fieldConfig.visibleFields !== '' && fieldConfig.visibleFields.split(',').indexOf('fullpath') === -1))) {
         return;
     }
 

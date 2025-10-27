@@ -82,7 +82,7 @@ class PreviewGenerator implements PreviewGeneratorInterface
 
         $locales = [];
         foreach (Tool::getValidLanguages() as $locale) {
-            $label = \Locale::getDisplayLanguage($locale, $userLocale);
+            $label = sprintf('%s (%s)', \Locale::getDisplayLanguage($locale, $userLocale), $locale);
             $locales[$label] = $locale;
         }
 

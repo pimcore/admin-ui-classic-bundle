@@ -92,6 +92,7 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
         this.relationsStore = new Ext.data.Store({
             autoSync: true,
             proxy: this.getRelationsProxy(),
+            remoteSort: true,
             fields: readerFields,
             listeners: listeners
         });
@@ -395,7 +396,13 @@ pimcore.object.classificationstore.groupsPanel = Class.create({
                         this.relationsPanel.setTitle(t("relations") + " - " + t("group") + " " + record.data.id + " - " + groupName);
                         this.relationsPanel.enable();
                         this.relationsStore.getProxy().setExtraParam("groupId", groupId);
-                        this.relationsStore.reload();
+                        
+                        // reset paging params
+                        this.relationsStore.reload({
+                            page: 1,
+                            start: 0
+                        });
+                        
                         this.relationsGrid.show();
                     }
                 }.bind(this)

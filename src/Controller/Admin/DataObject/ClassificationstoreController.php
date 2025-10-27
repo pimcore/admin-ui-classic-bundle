@@ -548,7 +548,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
         $list->setOffset($start);
         $list->setOrder($order);
-        $list->setOrderKey($orderKey);
+        $list->setOrderKey($mapping[$orderKey] ?? $orderKey);
         $condition = '';
 
         if ($request->get('filter')) {
@@ -797,7 +797,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
         $sortingSettings = \Pimcore\Bundle\AdminBundle\Helper\QueryParams::extractSortingSettings($allParams);
 
         if ($sortingSettings['orderKey'] && $sortingSettings['order']) {
-            $orderKey = $sortingSettings['orderKey'];
+            $orderKey = $mapping[$sortingSettings['orderKey']] ?? $sortingSettings['orderKey'];
             $order = $sortingSettings['order'];
         }
 
@@ -1505,7 +1505,7 @@ class ClassificationstoreController extends AdminAbstractController implements K
             'addCollectionsAction',
             'searchRelationsAction',
         ];
-        $this->checkActionPermission($event, 'classes', $unrestrictedActions);
+        $this->checkActionPermission($event, 'classificationstore', $unrestrictedActions);
     }
 
     /**
@@ -1519,7 +1519,14 @@ class ClassificationstoreController extends AdminAbstractController implements K
         if ($user instanceof User) {
             $translationListing = new Listing();
             $translationListing->setDomain(Translation::DOMAIN_ADMIN);
-            $translationListing->setCondition('language=? AND text LIKE ?', [$user->getLanguage(), '%'.$searchTerm.'%']);
+            $translationListing->setCondition(
+                $translationListing->quoteIdentifier('language') . ' = ? AND ' .
+                $translationListing->quoteIdentifier('text') . ' LIKE ?',
+                [
+                    $user->getLanguage(),
+                    '%' . $searchTerm . '%',
+                ]
+            );
 
             foreach ($translationListing as $translation) {
                 $terms[] = $translation->getKey();

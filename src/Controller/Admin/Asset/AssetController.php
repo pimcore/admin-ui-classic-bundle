@@ -15,6 +15,7 @@
 
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin\Asset;
 
+use function is_callable;
 use Pimcore\Bundle\AdminBundle\Controller\Admin\ElementControllerBase;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\AdminStyleTrait;
 use Pimcore\Bundle\AdminBundle\Controller\Traits\ApplySchedulerDataTrait;
@@ -1500,9 +1501,14 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($scanStatus === null) {
             $scanStatus = Asset\Enum\PdfScanStatus::IN_PROGRESS;
             if ($processBackground) {
-                \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
-                    new AssetUpdateTasksMessage($asset->getId())
-                );
+                if (is_callable([$asset, 'addToUpdateTaskQueue'])) {
+                    $asset->addToUpdateTaskQueue();
+                } else {
+                    // Todo: BC layer, remove with 3.0 release
+                    \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
+                        new AssetUpdateTasksMessage($asset->getId())
+                    );
+                }
             }
         }
 
@@ -2169,7 +2175,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             for ($i = $offset; $i < ($offset + $limit); $i++) {
                 $path = $zip->getNameIndex($i);
 
-                if (str_starts_with($path, '__MACOSX/') || str_ends_with($path, '/Thumbs.db')) {
+                if (str_starts_with($path, '__MACOSX/') || str_ends_with($path, '/Thumbs.db') || str_ends_with($path, '/.DS_Store')) {
                     continue;
                 }
 

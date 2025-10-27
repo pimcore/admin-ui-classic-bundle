@@ -319,7 +319,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                         border: false,
                         padding: "10px",
                         items: items,
-                        hidden: (i > 0)     //TODO default language
+                        hidden: (this.globalLanguage ? this.globalLanguage !== currentLanguage : i > 0)
                     };
 
                     if (this.fieldConfig.height) {

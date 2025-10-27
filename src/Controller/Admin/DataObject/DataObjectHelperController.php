@@ -1335,7 +1335,9 @@ class DataObjectHelperController extends AdminAbstractController
                 ]
             );
         } finally {
-            fclose($temp);
+            if (is_resource($temp)) {
+                fclose($temp);
+            }
         }
 
         return $this->adminJson(['success' => true]);
@@ -1511,6 +1513,7 @@ class DataObjectHelperController extends AdminAbstractController
                                     $dataDefinition->getDataFromEditmode($value),
                                     $csLanguage
                                 );
+                                $object->markFieldDirty($field);
                             }
                         }
                     } elseif (count($parts) > 1) {

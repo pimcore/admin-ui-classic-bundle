@@ -33,7 +33,6 @@ pimcore.elementservice.deleteElement = function (options) {
 pimcore.elementservice.deleteElementsComplete = function(options, response) {
     try {
         var res = Ext.decode(response.responseText);
-
         if (res.errors) {
             var message = res.batchDelete ? t('delete_error_batch') : t('delete_error');
             var hasDeleteable = true;
@@ -51,11 +50,11 @@ pimcore.elementservice.deleteElementsComplete = function(options, response) {
 
                 message += "<br /><b style='display: block; text-align: center; padding: 10px 0;'>" + reasons.join('<br/>') + "</b>";
 
-                hasDeleteable = res.itemResults.filter(function (result) {
-                    return result.allowed;
-                }).length > 0;
-            }
+                // remove all items that are not allowed to be deleted
+                res.itemResults = res.itemResults.filter(item => item.allowed);
 
+                hasDeleteable = res.itemResults.length > 0;
+            }
             Ext.MessageBox.show({
                 title:t('delete'),
                 msg: message,

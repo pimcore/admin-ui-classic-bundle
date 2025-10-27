@@ -418,6 +418,8 @@ pimcore.element.helpers.gridColumnConfig = {
                 containerType: "filterByRelationWindow"
             });
 
+            editor.fieldConfig.width = 300;
+
             const formPanel = Ext.create('Ext.form.Panel', {
                 xtype: "form",
                 border: false,
@@ -952,6 +954,10 @@ pimcore.element.helpers.gridColumnConfig = {
             params["only_direct_children"] = this.checkboxOnlyDirectChildren.getValue();
         }
 
+        if (typeof this.selectObjectType !=='undefined') {
+            params['filter_by_object_type'] = this.selectObjectType.getValue();
+        }
+        
         //only unreferenced filter
         if (this.checkboxOnlyUnreferenced) {
             params["only_unreferenced"] = this.checkboxOnlyUnreferenced.getValue();

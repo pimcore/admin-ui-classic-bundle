@@ -394,9 +394,9 @@ class UserController extends AdminAbstractController implements KernelController
             foreach ($workspaces as $wKey => $workspace) {
                 $el = Element\Service::getElementById($type, $workspace->getCid());
                 if ($el) {
-                    // direct injection => not nice but in this case ok ;-)
-                    $workspace->path = $el->getRealFullPath();
-                    $workspaces[$wKey] = $workspace->getObjectVars();
+                    $workspaceVars = $workspace->getObjectVars();
+                    $workspaceVars['path'] = $el->getRealFullPath();
+                    $workspaces[$wKey] = $workspaceVars;
                 }
             }
             $user->{'setWorkspaces' . ucfirst($type)}($workspaces);
@@ -709,9 +709,9 @@ class UserController extends AdminAbstractController implements KernelController
             foreach ($workspaces as $wKey => $workspace) {
                 $el = Element\Service::getElementById($type, $workspace->getCid());
                 if ($el) {
-                    // direct injection => not nice but in this case ok ;-)
-                    $workspace->path = $el->getRealFullPath();
-                    $workspaces[$wKey] = $workspace->getObjectVars();
+                    $workspaceVars = $workspace->getObjectVars();
+                    $workspaceVars['path'] = $el->getRealFullPath();
+                    $workspaces[$wKey] = $workspaceVars;
                 }
             }
             $role->{'setWorkspaces' . ucfirst($type)}($workspaces);

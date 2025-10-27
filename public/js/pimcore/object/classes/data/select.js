@@ -286,6 +286,10 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
 
         $super();
 
+        if(this.isInCustomLayoutEditor()) {
+            return;
+        }
+
         let options = [];
 
         let valueEditor = this.specificPanel.getComponent("valueeditor") ?? null;

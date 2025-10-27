@@ -555,7 +555,23 @@ pimcore.registerNS("pimcore.object.tree");
                      var pasteMenu = [];
 
                      if (perspectiveCfg.inTreeContextMenu("object.paste")) {
-                         if (pimcore.cachedObjectId) {
+                         let classId = null;
+
+                         // Determine ClassId if copiedObject exists
+                         if (typeof pimcore.copiedObject !== 'undefined' && pimcore.copiedObject !== null) {
+                             if (typeof pimcore.copiedObject.get('className') !== "undefined") {
+                                 let className = pimcore.copiedObject.get('className');
+                                 if (className) {
+                                     let objectTypesStore = pimcore.globalmanager.get("object_types_store");
+                                     let classRecord = objectTypesStore.findRecord('text', className);
+                                     if (classRecord) {
+                                         classId = classRecord.get('id');
+                                     }
+                                 }
+                             }
+                         }
+
+                         if (pimcore.cachedObjectId && (typeof perspectiveCfg.classes === "undefined" || classId === null || classId in perspectiveCfg.classes)) {
                              pasteMenu.push({
                                  text: t("paste_recursive_as_child"),
                                  iconCls: "pimcore_icon_paste",
@@ -583,28 +599,26 @@ pimcore.registerNS("pimcore.object.tree");
                          }
                      }
 
-                     if (!isVariant) {
-                         if (pimcore.cutObject) {
-                             pasteMenu.push({
-                                 text: t("paste_cut_element"),
-                                 iconCls: "pimcore_icon_paste",
-                                 handler: function () {
-                                     this.pasteCutObject(pimcore.cutObject,
-                                         pimcore.cutObjectParentNode, record, this.tree);
-                                     pimcore.cutObjectParentNode = null;
-                                     pimcore.cutObject = null;
-                                 }.bind(this)
-                             });
-                         }
+                     if (pimcore.cutObject && (typeof perspectiveCfg.classes === "undefined" || typeof pimcore.cutObject.get('className') === "undefined" || pimcore.cutObject.get('className') in perspectiveCfg.classes)) {
+                         pasteMenu.push({
+                             text: t("paste_cut_element"),
+                             iconCls: "pimcore_icon_paste",
+                             handler: function () {
+                                 this.pasteCutObject(pimcore.cutObject,
+                                     pimcore.cutObjectParentNode, record, this.tree);
+                                 pimcore.cutObjectParentNode = null;
+                                 pimcore.cutObject = null;
+                             }.bind(this)
+                         });
+                     }
 
-                         if (pasteMenu.length > 0) {
-                             menu.add(new Ext.menu.Item({
-                                 text: t('paste'),
-                                 iconCls: "pimcore_icon_paste",
-                                 hideOnClick: false,
-                                 menu: pasteMenu
-                             }));
-                         }
+                     if (pasteMenu.length > 0) {
+                         menu.add(new Ext.menu.Item({
+                             text: t('paste'),
+                             iconCls: "pimcore_icon_paste",
+                             hideOnClick: false,
+                             menu: pasteMenu
+                         }));
                      }
                  }
              }
@@ -854,6 +868,7 @@ pimcore.registerNS("pimcore.object.tree");
 
      copy: function (tree, record) {
          pimcore.cachedObjectId = record.data.id;
+         pimcore.copiedObject = record;
      },
 
      cut: function (tree, record) {

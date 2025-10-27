@@ -92,7 +92,7 @@ pimcore.layout.toolbar = Class.create({
                          var data = Ext.decode(response.responseText);
                          for (var i = 0; i < data.length; i++) {
                              this.dashboardMenu.menu.add({
-                                 text: data[i],
+                                 text: t(data[i]),
                                  iconCls: "pimcore_nav_icon_dashboards",
                                  itemId: 'pimcore_menu_file_dashboards_custom_' + data[i],
                                  handler: function (key) {

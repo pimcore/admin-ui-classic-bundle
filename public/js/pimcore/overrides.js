@@ -251,7 +251,6 @@ Ext.define('pimcore.tree.View', {
         },
         beforeitemupdate: function(record) {
             if(record.ptb) {
-                record.ptb.destroy();
                 delete record.ptb;
             }
         },
