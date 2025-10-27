@@ -20,13 +20,13 @@ use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Model;
 use Pimcore\Model\DataObject\AbstractObject;
 use Pimcore\Model\DataObject\ClassDefinition;
+use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Pimcore\Model\DataObject\Classificationstore;
 use Pimcore\Model\DataObject\Concrete;
 use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\DataObject\Service;
 use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
-use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
@@ -384,14 +384,15 @@ class DataObject extends Element
      */
     private static function normalizeValue(mixed $data): mixed
     {
-        if (is_array($data)){
+        if (is_array($data)) {
             if (array_is_list($data)) {
                 return $data;
             }
-            if (array_key_exists('value', $data)){
+            if (array_key_exists('value', $data)) {
                 return $data['value'];
             }
         }
+
         return $data;
     }
 
@@ -405,6 +406,7 @@ class DataObject extends Element
         $keyConfig = Model\DataObject\Classificationstore\KeyConfig::getById($keyid);
         $type = $keyConfig->getType();
         $definition = json_decode($keyConfig->getDefinition(), true);
+
         return \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
     }
 }
