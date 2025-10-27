@@ -26,6 +26,7 @@ use Pimcore\Model\DataObject\Objectbrick;
 use Pimcore\Model\DataObject\Service;
 use Pimcore\Tool\Admin as AdminTool;
 use Pimcore\Tool\Session;
+use Pimcore\Model\DataObject\ClassDefinition\Data;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBagInterface;
 
 /**
@@ -185,21 +186,27 @@ class DataObject extends Element
                     }
 
                     // because the key for the classification store has not a direct getter, you have to check separately if the data is inheritable
-                    if (str_starts_with($key, '~')) {
-                        $curClassAttributeValue = $data[$key] ?? null;
-                        $isValueEmpty = is_array($curClassAttributeValue) ? empty($curClassAttributeValue['value'] ?? null) : empty($curClassAttributeValue);
+                    if (
+                        str_starts_with($key, '~') &&
+                        ($keyParts[1] ?? null) === 'classificationstore'
+                    ) {
+                        $fieldDef = self::getClassificationStoreFieldDefinition($key);
+                        $value = self::normalizeValue($data[$key]);
 
-                        if ($isValueEmpty) {
-                            $type = $keyParts[1];
+                        if ($fieldDef->isEmpty($value)) {
+                            $inheritedData = static::getInheritedData($object, $key, $requestedLanguage);
 
-                            if ($type === 'classificationstore') {
-                                if (!empty($inheritedData = self::getInheritedData($object, $key, $requestedLanguage))) {
-                                    $data[$dataKey] = $inheritedData['value'];
-                                    $data['inheritedFields'][$dataKey] = ['inherited' => $inheritedData['parent']->getId() != $object->getId(), 'objectid' => $inheritedData['parent']->getId()];
-                                }
+                            if (!empty($inheritedData)) {
+                                $parent = $inheritedData['parent'];
+                                $data[$dataKey] = $inheritedData['value'];
+                                $data['inheritedFields'][$dataKey] = [
+                                    'inherited' => $parent->getId() !== $object->getId(),
+                                    'objectid'  => $parent->getId(),
+                                ];
                             }
                         }
                     }
+
                     if ($needLocalizedPermissions) {
                         if (!$user->isAdmin()) {
                             $locale = \Pimcore::getContainer()->get(LocaleServiceInterface::class)->findLocale();
@@ -358,17 +365,9 @@ class DataObject extends Element
             return [];
         }
 
-        $inheritedValue = self::getStoreValueForObject($parent, $key, $requestedLanguage);
-        if (
-            (!is_array($inheritedValue) && $inheritedValue !== null) ||
-            (
-                is_array($inheritedValue) &&
-                (
-                    array_is_list($inheritedValue) || //for table field types
-                    !empty($inheritedValue['value'] ?? null)
-                )
-            )
-        ) {
+        $inheritedValue = self::normalizeValue(self::getStoreValueForObject($parent, $key, $requestedLanguage));
+
+        if (!static::getClassificationStoreFieldDefinition($key)->isEmpty($inheritedValue)) {
             return [
                 'parent' => $parent,
                 'value' => $inheritedValue,
@@ -376,5 +375,36 @@ class DataObject extends Element
         }
 
         return self::getInheritedData($parent, $key, $requestedLanguage);
+    }
+
+    /**
+     * The actual data could be a plain array for tables,
+     * an associative array for RGB or Quantity Value where the value is a key.
+     *
+     */
+    private static function normalizeValue(mixed $data): mixed
+    {
+        if (is_array($data)){
+            if (array_is_list($data)) {
+                return $data;
+            }
+            if (array_key_exists('value', $data)){
+                return $data['value'];
+            }
+        }
+        return $data;
+    }
+
+    protected static function getClassificationStoreFieldDefinition(string $key): Data
+    {
+        $keyParts = explode('~', $key);
+        $groupKeyId = explode('-', $keyParts[3]);
+
+        $keyid = (int) $groupKeyId[1];
+
+        $keyConfig = Model\DataObject\Classificationstore\KeyConfig::getById($keyid);
+        $type = $keyConfig->getType();
+        $definition = json_decode($keyConfig->getDefinition(), true);
+        return \Pimcore\Model\DataObject\Classificationstore\Service::getFieldDefinitionFromJson($definition, $type);
     }
 }
