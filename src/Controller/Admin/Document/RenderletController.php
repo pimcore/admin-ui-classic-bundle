@@ -62,14 +62,6 @@ class RenderletController extends AdminAbstractController
         $eventDispatcher->dispatch($event, DocumentEvents::EDITABLE_RENDERLET_PRE_RENDER);
 
         $controller = $request->get('controller');
-        $action = $request->get('action');
-
-        $moduleOrBundle = null;
-        if ($request->get('bundle')) {
-            $moduleOrBundle = $request->get('bundle');
-        } elseif ($request->get('module')) {
-            $moduleOrBundle = $request->get('bundle');
-        }
 
         // set document if set in request
         if ($documentId = $request->get('pimcore_parentDocument')) {
