@@ -418,7 +418,7 @@ pimcore.element.helpers.gridColumnConfig = {
                 containerType: "filterByRelationWindow"
             });
 
-            editor.fieldConfig.width = '100%';
+            editor.fieldConfig.width = '300';
 
             const activeFilter = this.grid.getStore().getFilters().items;
 
