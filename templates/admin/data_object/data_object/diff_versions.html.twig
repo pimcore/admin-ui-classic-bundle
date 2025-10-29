@@ -211,7 +211,7 @@
                                         {% if isImportPreview is not defined or isNew is not defined %}
                                             <td>{{ v1 | raw }}</td>
                                         {% endif %}
-                                        {% set fieldIsEqual = localizedFieldDefinition is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not localizedFieldDefinition.isEqual(localizedBrickValue1, localizedBrickValue2) ? 'modified1' : '' %}
+                                        {% set fieldIsEqual = localizedFieldDefinition is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\EqualComparisonInterface') and not localizedFieldDefinition.isEqual(localizedBrickValue1, localizedBrickValue2) ? 'modified' : '' %}
                                         <td class="{{ fieldIsEqual }}">{{ v2 }}</td>
                                     </tr>
                                 {% endfor %}
