@@ -19,9 +19,12 @@ pimcore.object.klass = Class.create({
 
     forbiddenNames: [
         "abstract", "class", "data", "folder", "list", "permissions", "resource", "concrete", "interface",
-        "service", "fieldcollection", "localizedfield", "objectbrick", "default"
+        "service", "fieldcollection", "localizedfield", "objectbrick", "default",
+        "abstractobject", "classdefinition", "classdefinitioninterface", "classificationstore",
+        "definitionmodifier", "importdataserviceinterface", "lazyloadedfieldsinterface", "listing",
+        "objectawarefieldinterface", "ownerawarefieldinterface", "pregetvaluehookinterface",
+        "selectoptionsinterface"
     ],
-
     initialize: function () {
 
         this.getTabPanel();
