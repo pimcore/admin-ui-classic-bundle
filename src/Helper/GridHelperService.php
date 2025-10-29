@@ -829,6 +829,7 @@ class GridHelperService
             $filters = json_decode($filterJson, true);
             foreach ($filters as $filter) {
                 $operator = '=';
+                $notSubselect = '';
 
                 $filterDef = explode('~', $filter['property']);
                 $filterField = $filterDef[0];
@@ -874,7 +875,10 @@ class GridHelperService
                     $operator = 'IN';
                 } elseif ($filterType == 'boolean') {
                     $operator = '=';
-                    $filter['value'] = (int) $filter['value'];
+                    if ((int) $filter['value'] === 0) {
+                        $notSubselect = 'NOT';
+                    }
+                    $filter['value'] = 1;
                 }
                 // system field
                 $value = $filter['value'] ?? '';
@@ -907,7 +911,12 @@ class GridHelperService
                         $language = $filterDef[1];
                     }
                     $language = str_replace(['none', 'default'], '', $language);
-                    $conditionFilters[] = 'id IN (SELECT cid FROM assets_metadata WHERE `name` = ' . $db->quote($filterField) . ' AND `data` ' . $operator . ' ' . $value . ' AND `language` = ' . $db->quote($language). ')';
+                    $conditionFilters[] =
+                        'id ' . $notSubselect .
+                        ' IN (SELECT cid FROM assets_metadata WHERE `name` = ' . $db->quote($filterField) .
+                        ' AND `data` ' . $operator . ' ' . $value .
+                        ' AND `language` = ' . $db->quote($language).
+                        ')';
                 }
             }
         }
