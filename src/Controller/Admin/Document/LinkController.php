@@ -122,25 +122,24 @@ class LinkController extends DocumentControllerBase
 
                 if (!$target) {
                     if ($target = Document::getByPath($path)) {
-                        $data['linktype'] = 'internal';
                         $data['internalType'] = 'document';
                         $data['internal'] = $target->getId();
                     } elseif ($target = Asset::getByPath($path)) {
-                        $data['linktype'] = 'internal';
                         $data['internalType'] = 'asset';
                         $data['internal'] = $target->getId();
                     } elseif ($target = Concrete::getByPath($path)) {
-                        $data['linktype'] = 'internal';
                         $data['internalType'] = 'object';
                         $data['internal'] = $target->getId();
                     } else {
                         $data['linktype'] = 'direct';
                         $data['internalType'] = null;
+                        $data['internal'] = null;
                         $data['direct'] = $path;
                     }
 
                     if ($target) {
                         $data['linktype'] = 'internal';
+                        $data['direct'] = '';
                     }
                 }
             } else {

@@ -51,6 +51,7 @@ final class PimcoreAdminExtension extends Extension implements PrependExtensionI
         $loader->load('event_listeners.yaml');
         $loader->load('export.yaml');
 
+        // Merge
         //Set Config for GDPR data providers to container parameters
         $container->setParameter('pimcore.gdpr-data-extrator.dataobjects', $config['gdpr_data_extractor']['dataObjects']);
         $container->setParameter('pimcore.gdpr-data-extrator.assets', $config['gdpr_data_extractor']['assets']);

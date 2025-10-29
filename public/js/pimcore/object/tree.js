@@ -555,7 +555,23 @@ pimcore.registerNS("pimcore.object.tree");
                      var pasteMenu = [];
 
                      if (perspectiveCfg.inTreeContextMenu("object.paste")) {
-                         if (pimcore.cachedObjectId && (typeof perspectiveCfg.classes === "undefined" || typeof pimcore.copiedObject.get('className') === "undefined" || pimcore.copiedObject.get('className') in perspectiveCfg.classes)) {
+                         let classId = null;
+
+                         // Determine ClassId if copiedObject exists
+                         if (typeof pimcore.copiedObject !== 'undefined' && pimcore.copiedObject !== null) {
+                             if (typeof pimcore.copiedObject.get('className') !== "undefined") {
+                                 let className = pimcore.copiedObject.get('className');
+                                 if (className) {
+                                     let objectTypesStore = pimcore.globalmanager.get("object_types_store");
+                                     let classRecord = objectTypesStore.findRecord('text', className);
+                                     if (classRecord) {
+                                         classId = classRecord.get('id');
+                                     }
+                                 }
+                             }
+                         }
+
+                         if (pimcore.cachedObjectId && (typeof perspectiveCfg.classes === "undefined" || classId === null || classId in perspectiveCfg.classes)) {
                              pasteMenu.push({
                                  text: t("paste_recursive_as_child"),
                                  iconCls: "pimcore_icon_paste",
