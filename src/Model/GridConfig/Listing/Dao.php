@@ -36,6 +36,7 @@ class Dao extends Model\Listing\Dao\AbstractDao
             $configData['setAsFavourite'] = (bool)$configData['setAsFavourite'];
             $gridConfig = new GridConfig();
             $gridConfig->setValues($configData);
+            $gridConfig->isSaveFilters();
             $gridConfigs[] = $gridConfig;
         }
 
