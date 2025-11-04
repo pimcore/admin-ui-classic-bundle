@@ -1014,8 +1014,13 @@ class DocumentController extends ElementControllerBase implements KernelControll
     /**
      * @Route("/diff-versions/from/{from}/to/{to}", name="pimcore_admin_document_document_diffversions", requirements={"from": "\d+", "to": "\d+"}, methods={"GET"})
      */
-    public function diffVersionsAction(Request $request, int $from, int $to, DocumentRendererInterface $documentRenderer, RouterInterface $router): Response
-    {
+    public function diffVersionsAction(
+        Request $request,
+        int $from,
+        int $to,
+        DocumentRendererInterface $documentRenderer,
+        RouterInterface $router
+    ): Response {
         // return with error if prerequisites do not match
         if (!HtmlToImage::isSupported() || !class_exists('Imagick')) {
             return $this->render('@PimcoreAdmin/admin/document/document/diff_versions_unsupported.html.twig');
