@@ -1215,14 +1215,14 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if ($request->get('treepreview')) {
             $thumbnailConfig = Asset\Image\Thumbnail\Config::getPreviewConfig();
             $exists = $image->getThumbnail($thumbnailConfig)->exists();
-            if(!$exists) {
+            if (!$exists) {
                 if ($request->get('origin') === 'treeNode') {
                     \Pimcore::getContainer()->get('messenger.bus.pimcore-core')->dispatch(
                         new AssetPreviewImageMessage($image->getId())
                     );
 
                     throw $this->createNotFoundException(sprintf('Tree preview thumbnail not available for asset %s', $image->getId()));
-                } elseif($request->get('origin') === 'folderPreview') {
+                } elseif ($request->get('origin') === 'folderPreview') {
                     return new BinaryFileResponse(PIMCORE_WEB_ROOT . '/bundles/pimcoreadmin/img/video-loading.gif');
                 }
             }
