@@ -60,7 +60,7 @@ class AssetHelperController extends AdminAbstractController
         $db = Db::get();
         $configListingConditionParts = [];
         $configListingConditionParts[] = 'ownerId = ' . $userId;
-        $configListingConditionParts[] = 'classId = ' . $db->quote($classId);
+        $configListingConditionParts[] = '(shareBetweenFolders = 1 or classId = ' . $db->quote($classId) . ')';
 
         if ($searchType) {
             $configListingConditionParts[] = 'searchType = ' . $db->quote($searchType);
@@ -97,10 +97,11 @@ class AssetHelperController extends AdminAbstractController
         $query = 'select distinct c1.id from gridconfigs c1, gridconfig_shares s
                     where (c1.searchType = ' . $db->quote($searchType) . ' and (
                     (c1.id = s.gridConfigId and s.sharedWithUserId IN (' . $userIds . '))
-                    ) and c1.classId = ' . $db->quote($classId) . ')
+                    ) and (shareBetweenFolders = 1 or c1.classId = ' . $db->quote($classId) . '))
                     UNION
                     distinct select c2.id from gridconfigs c2
-                    where shareGlobally = 1 and c2.classId = '. $db->quote($classId) . '
+                    where shareGlobally = 1 and
+                    (shareBetweenFolders = 1 or c2.classId = '. $db->quote($classId) . ')
                     and c2.ownerId != ' . $db->quote((string)$user->getId());
 
         $ids = $db->fetchFirstColumn($query);
@@ -208,6 +209,7 @@ class AssetHelperController extends AdminAbstractController
                 $gridConfigName = $savedGridConfig->getName();
                 $gridConfigDescription = $savedGridConfig->getDescription();
                 $sharedGlobally = $savedGridConfig->isShareGlobally();
+                $shareBetweenFolders = $savedGridConfig->isShareBetweenFolders();
                 $setAsFavourite = $savedGridConfig->isSetAsFavourite();
             }
         }
@@ -249,6 +251,7 @@ class AssetHelperController extends AdminAbstractController
         $settings['gridConfigName'] = $gridConfigName ?? null;
         $settings['gridConfigDescription'] = $gridConfigDescription ?? null;
         $settings['shareGlobally'] = $sharedGlobally ?? null;
+        $settings['shareBetweenFolders'] = $shareBetweenFolders ?? null;
         $settings['setAsFavourite'] = $setAsFavourite ?? null;
         $settings['isShared'] = !$gridConfigId || ($shared ?? null);
 
@@ -500,6 +503,7 @@ class AssetHelperController extends AdminAbstractController
                 if ($metadata) {
                     $gridConfig->setName($metadata['gridConfigName']);
                     $gridConfig->setDescription($metadata['gridConfigDescription']);
+                    $gridConfig->setShareBetweenFolders($metadata['shareBetweenFolders']);
                     $gridConfig->setShareGlobally($metadata['shareGlobally'] && $this->getAdminUser()->isAdmin());
                     $gridConfig->setSetAsFavourite($metadata['setAsFavourite'] && $this->getAdminUser()->isAdmin());
                 }
@@ -520,6 +524,7 @@ class AssetHelperController extends AdminAbstractController
                 $settings['shareGlobally'] = $gridConfig->isShareGlobally();
                 $settings['setAsFavourite'] = $gridConfig->isSetAsFavourite();
                 $settings['isShared'] = $gridConfig->getOwnerId() != $this->getAdminUser()->getId();
+                $settings['shareBetweenFolders'] = $gridConfig->isShareBetweenFolders();
 
                 return $this->adminJson([
                     'success' => true,

@@ -47,6 +47,8 @@ class GridConfig extends AbstractModel
 
     protected ?bool $saveFilters = null;
 
+    protected ?bool $shareBetweenFolders = null;
+
     protected string $type = 'object';
 
     public static function getById(int $id): ?GridConfig
@@ -231,5 +233,15 @@ class GridConfig extends AbstractModel
     public function setType(string $type): void
     {
         $this->type = $type;
+    }
+
+    public function isShareBetweenFolders(): ?bool
+    {
+        return $this->shareBetweenFolders;
+    }
+
+    public function setShareBetweenFolders(?bool $shareBetweenFolders): void
+    {
+        $this->shareBetweenFolders = $shareBetweenFolders;
     }
 }
