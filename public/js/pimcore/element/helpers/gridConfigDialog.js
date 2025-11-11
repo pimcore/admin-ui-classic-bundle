@@ -295,7 +295,7 @@ pimcore.element.helpers.gridConfigDialog = Class.create({
         
         items.push(this.saveFilters);
 
-        if (this.context && this.context.type === "asset") {
+        if (this.context?.type === "asset") {
             this.shareBetweenFolders = new Ext.form.field.Checkbox({
                 fieldLabel: t("share_between_folders"),
                 inputValue: true,
