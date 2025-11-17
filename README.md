@@ -1,5 +1,7 @@
 # Pimcore Admin Classic Bundle
 
+> [!WARNING]
+> This bundle won't be migrated to Pimcore Studio and therefore will be deprecated with 2.3.
 > [!IMPORTANT]
 > This bundle has reached **end of feature development.** We will no longer
 > accept or review any pull requests related to new features or improvements for this bundle.

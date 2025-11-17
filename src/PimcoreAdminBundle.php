@@ -28,10 +28,22 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\WebpackEncoreBundle\WebpackEncoreBundle;
 
+/**
+ * @deprecated version 2.3
+ */
 class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundleInterface
 {
     use PackageVersionTrait;
 
+    public function __construct()
+    {
+        trigger_deprecation(
+            'pimcore/admin-ui-classic-bundle',
+            '2.3',
+            'The AdminUiClassicBundle is deprecated and will be discontinued with Pimcore Studio.'
+        );
+    }
+    
     public function getComposerPackageName(): string
     {
         return 'pimcore/admin-ui-classic-bundle';
