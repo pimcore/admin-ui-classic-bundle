@@ -43,7 +43,7 @@ class PimcoreAdminBundle extends AbstractPimcoreBundle implements DependentBundl
             'The AdminUiClassicBundle is deprecated and will be discontinued with Pimcore Studio.'
         );
     }
-    
+
     public function getComposerPackageName(): string
     {
         return 'pimcore/admin-ui-classic-bundle';
