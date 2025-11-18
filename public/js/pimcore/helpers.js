@@ -2114,28 +2114,7 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
                             internalTypeField,
                             linkTypeField,
                             textField,
-                            {
-                                xtype: "fieldcontainer",
-                                layout: 'hbox',
-                                border: false,
-                                items: [pathField, {
-                                    xtype: "button",
-                                    iconCls: "pimcore_icon_search",
-                                    style: "margin-left: 5px",
-                                    handler: function () {
-                                        pimcore.helpers.itemselector(false, function (item) {
-                                            if (item) {
-                                                internalTypeField.setValue(item.type);
-                                                linkTypeField.setValue('internal');
-                                                pathField.setValue(item.fullpath);
-                                                return true;
-                                            }
-                                        }, {
-                                            type: Ext.Array.intersect(["asset", "document", "object"], allowedTypes)
-                                        });
-                                    }
-                                }]
-                            },
+                            fieldContainer,
                             propertiesFieldSet
                         ]
                     },
