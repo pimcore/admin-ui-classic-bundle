@@ -254,6 +254,9 @@ visibility_of_system_properties: Visibility of system properties
 translate: translate
 translations_admin_hint: 'HINT: Please Reload UI to apply translation changes!'
 allowed_types: Allowed Types
+allowed_asset_subtypes: Allowed Subtypes for Assets
+allowed_document_subtypes: Allowed Subtypes for Documents
+allowed_object_subtypes: Allowed Subtypes for Objects
 allowed_targets: Allowed Targets
 disabled_fields: Disabled Fields
 columnlength: Columnlength
