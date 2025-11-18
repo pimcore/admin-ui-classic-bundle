@@ -142,7 +142,7 @@ pimcore.object.tags.link = Class.create(pimcore.object.tags.abstract, {
     },
 
     openEditor: function () {
-        let config = [];
+        let config = {};
         let allowedSubtypes = {};
 
         if (!empty(this.fieldConfig.allowedTypes)){
