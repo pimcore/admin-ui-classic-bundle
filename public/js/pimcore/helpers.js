@@ -1891,11 +1891,41 @@ pimcore.helpers.editmode = {};
 pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
     const TARGETS = ["", "_blank", "_self", "_top", "_parent"];
     const TYPES = ["asset", "document", "object"];
+    const SUBTYPES = {
+        document: pimcore.globalmanager.get("document_search_types").filter(v => v !== "folder"),
+        asset: pimcore.globalmanager.get("asset_search_types").filter(v => v !== "folder"),
+        object: pimcore.globalmanager.get("object_search_types").filter(v => v !== "folder"),
+    };
 
     config = config || {};
     const disabledFields = config.disabledFields || [];
     const allowedTargets = Ext.Array.intersect(TARGETS, config.allowedTargets || TARGETS);
     const allowedTypes = Ext.Array.intersect(TYPES, config.allowedTypes || TYPES);
+    const allowedSubtypes = Object.fromEntries(Object.entries(SUBTYPES).map(([key, value]) => [
+        key,
+        config.allowedSubtypes?.[key]?.filter(v => v !== "folder").length
+            ? Ext.Array.intersect(value, config.allowedSubtypes[key])
+            : value
+    ]));
+    const allowedClasses = config.allowedClasses;
+
+    const dndAllowed = (data) => {
+        const type = data.elementType;
+
+        if (!allowedTypes.includes(type)) {
+            return false;
+        }
+
+        if (Array.isArray(allowedSubtypes?.[type]) && !allowedSubtypes[type].includes(data.type)) {
+            return false;
+        }
+
+        if (type === "object" && Array.isArray(allowedClasses) && !allowedClasses.includes(data.className)) {
+            return false;
+        }
+
+        return true;
+    };
 
     const internalTypeField = new Ext.form.Hidden({
         fieldLabel: 'internalType',
@@ -1948,7 +1978,7 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
                 }
 
                 data = data.records[0].data;
-                if (data.type !== "folder" && allowedTypes.includes(data.elementType)) {
+                if (dndAllowed(data)) {
                     return Ext.dd.DropZone.prototype.dropAllowed;
                 }
             }.bind(this),
@@ -1959,7 +1989,7 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
                 }
 
                 data = data.records[0].data;
-                if (data.type !== "folder" && allowedTypes.includes(data.elementType)) {
+                if (dndAllowed(data)) {
                     internalTypeField.setValue(data.elementType);
                     linkTypeField.setValue('internal');
                     pathField.setValue(data.path);
@@ -1994,7 +2024,11 @@ pimcore.helpers.editmode.openLinkEditPanel = function (data, callback, config) {
                         return true;
                     }
                 }, {
-                    type: allowedTypes
+                    type: allowedTypes,
+                    subtype: allowedSubtypes,
+                    specific: {
+                        classes: allowedClasses,
+                    },
                 });
             }
         });
