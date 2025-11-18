@@ -283,7 +283,19 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                 let col = gridColumns[i];
                 if (col.filter) {
                     needGridFilter = true;
-                    break;
+
+                    if (this.filter) {
+                        const filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
+                        if (filterValue) {
+                            if (typeof col.filter !== "object") {
+                                col.filter = { type: col.filter };
+                            }
+
+                            col.filter.value = filterValue;
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
         }
@@ -340,10 +352,10 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
 
         if (this.filter) {
             this.filter.forEach(filt => {
-                this.store.setFilters(new Ext.util.Filter(filt))
                 this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
             });
         }
+
 
         this.grid.on("columnmove", function () {
             this.saveColumnConfigButton.show()

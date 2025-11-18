@@ -239,7 +239,13 @@ class GridHelperService
                         $operator = 'in';
                         $matches = preg_split('/[^0-9\.]+/', $filter['value'][0][0] ?? [], -1, PREG_SPLIT_NO_EMPTY);
                         if (is_array($matches) && count($matches) > 0) {
-                            $filter['value'][0][0] = implode(',', array_unique(array_map(floatval(...), $matches)));
+                            $uniqueIds = array_unique(array_map(floatval(...), $matches));
+                            if (count($uniqueIds) > 1) {
+                                $filter['value'][0][0] = implode(',', $uniqueIds);
+                            } else {
+                                $filter['value'][0][0] = $uniqueIds[0];
+                                $operator = '=';
+                            }
                         } else {
                             continue;
                         }
@@ -823,6 +829,7 @@ class GridHelperService
             $filters = json_decode($filterJson, true);
             foreach ($filters as $filter) {
                 $operator = '=';
+                $notSubselect = '';
 
                 $filterDef = explode('~', $filter['property']);
                 $filterField = $filterDef[0];
@@ -838,6 +845,18 @@ class GridHelperService
                         $operator = '>';
                     } elseif ($filterOperator == 'eq') {
                         $operator = '=';
+                    } elseif ($filterOperator == 'in') {
+                        $operator = 'IN';
+
+                        $filterValue = $filter['value'] ?? '';
+                        if (!is_array($filterValue)) {
+                            $matches = preg_split('/[^0-9\.]+/', $filterValue, -1, PREG_SPLIT_NO_EMPTY);
+                            if (is_array($matches) && count($matches) > 0) {
+                                $filter['value'] = array_unique(array_map(floatval(...), $matches));
+                            } else {
+                                continue;
+                            }
+                        }
                     }
                 } elseif ($filterType == 'date') {
                     $filter['value'] = strtotime($filter['value']);
@@ -856,7 +875,10 @@ class GridHelperService
                     $operator = 'IN';
                 } elseif ($filterType == 'boolean') {
                     $operator = '=';
-                    $filter['value'] = (int) $filter['value'];
+                    if ((int) $filter['value'] === 0) {
+                        $notSubselect = 'NOT';
+                    }
+                    $filter['value'] = 1;
                 }
                 // system field
                 $value = $filter['value'] ?? '';
@@ -866,8 +888,9 @@ class GridHelperService
                     if (empty($value)) {
                         continue;
                     }
+
                     $quoted = array_map(function ($val) use ($db) {
-                        return $db->quote($val);
+                        return $db->quote((string)$val);
                     }, $value);
                     $value = '(' . implode(',', $quoted) . ')';
                 } elseif ($operator == 'BETWEEN') {
@@ -888,7 +911,12 @@ class GridHelperService
                         $language = $filterDef[1];
                     }
                     $language = str_replace(['none', 'default'], '', $language);
-                    $conditionFilters[] = 'id IN (SELECT cid FROM assets_metadata WHERE `name` = ' . $db->quote($filterField) . ' AND `data` ' . $operator . ' ' . $value . ' AND `language` = ' . $db->quote($language). ')';
+                    $conditionFilters[] =
+                        'id ' . $notSubselect .
+                        ' IN (SELECT cid FROM assets_metadata WHERE `name` = ' . $db->quote($filterField) .
+                        ' AND `data` ' . $operator . ' ' . $value .
+                        ' AND `language` = ' . $db->quote($language).
+                        ')';
                 }
             }
         }

@@ -106,7 +106,7 @@ pimcore.document.area_abstract = Class.create(pimcore.document.editable, {
 
                 if (config['description']) {
                     var descriptionHTML = '<div style="font-size: 14px; margin-bottom: 10px;">'
-                        + config['description']
+                        + nl2br(config['description'])
                         + '</div>';
 
                     templateHTML = descriptionHTML + templateHTML;
