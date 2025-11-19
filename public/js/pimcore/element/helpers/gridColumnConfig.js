@@ -482,6 +482,13 @@ pimcore.element.helpers.gridColumnConfig = {
                                     this.grid.filters.getStore().addFilter(
                                         fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)
                                     );
+
+                                    Ext.each(this.grid.getColumns(), function(column) {
+                                        if(column.getDataIndex() === fieldInfo.dataIndex) {
+                                            column.setText('<i>'+column.text+'</i>');
+                                        }
+                                    });
+
                                     this.filterByRelationWindow.close();
                                 } catch (e) {
                                     console.error("Error applying relation filter:", e);
