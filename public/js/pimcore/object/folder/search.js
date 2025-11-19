@@ -299,7 +299,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                         const filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
 
                         if(filterValue) {
-                            col.text = '<i>'+col.text+'</i>';
+                            col.cls = 'x-grid-filters-filtered-column';
                         }
                     }
                 }

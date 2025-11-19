@@ -461,6 +461,12 @@ pimcore.element.helpers.gridColumnConfig = {
                         handler: function () {
                             this.filterByRelationWindow.close();
                             this.grid.store.filters.removeByKey("x-gridfilter-"+fieldInfo.dataIndex);
+
+                            Ext.each(this.grid.getColumns(), function (column) {
+                                if (column.dataIndex === fieldInfo.dataIndex) {
+                                    column.removeClass('x-grid-filters-filtered-column');
+                                }
+                            });
                         }.bind(this)
                     },
                     {
@@ -484,8 +490,8 @@ pimcore.element.helpers.gridColumnConfig = {
                                     );
 
                                     Ext.each(this.grid.getColumns(), function(column) {
-                                        if(column.getDataIndex() === fieldInfo.dataIndex) {
-                                            column.setText('<i>'+column.text+'</i>');
+                                        if(column.dataIndex === fieldInfo.dataIndex) {
+                                            column.addCls('x-grid-filters-filtered-column');
                                         }
                                     });
 
