@@ -294,13 +294,11 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                             col.filter.value = filterValue;
                         }
                     }
-                } else {
-                    if (this.filter) {
-                        const filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
+                } else if (this.filter) {
+                    const filterValue = this.filter.find(filter => filter.property === col.dataIndex)?.value || null;
 
-                        if(filterValue) {
-                            col.cls = 'x-grid-filters-filtered-column';
-                        }
+                    if(filterValue) {
+                        col.cls = 'x-grid-filters-filtered-column';
                     }
                 }
             }
