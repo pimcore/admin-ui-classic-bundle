@@ -91,9 +91,20 @@ Ext.define('pimcore.element.helpers.gridCellEditor', {
             bodyStyle: "padding: 10px;"
         });
         let width = 700;
-        if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.width && fieldInfo.layout.width !== '100%') {
+
+        if (tagType === 'manyToOneRelation') {
+            width = sumWidths(
+                formPanel.config.items[0].items.items[0].width,
+                formPanel.config.items[0].labelWidth + 140
+            );
+        } else if (
+            tagType.endsWith('Relation') &&
+            fieldInfo.layout?.width &&
+            fieldInfo.layout?.width !== '100%'
+        ) {
             width = sumWidths(fieldInfo.layout.width, 25);
         }
+
         this.editWin = new Ext.Window({
             modal: false,
             title: t("edit") + " " + fieldInfo.layout.title,
