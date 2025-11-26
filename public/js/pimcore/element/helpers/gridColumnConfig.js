@@ -476,17 +476,21 @@ pimcore.element.helpers.gridColumnConfig = {
                 ]
             });
 
-        const title = t("filter_by_relation_field") + " " + fieldInfo.text;
-        let width = 700;
-
-        // for asset metadata the layout is not set
-        if (fieldInfo.layout?.layout.width && fieldInfo.layout.layout.width !== '100%') {
-            if (tagType === 'manyToManyObjectRelation') {
+            const title = t("filter_by_relation_field") + " " + fieldInfo.text;
+            let width = 700;
+    
+            if (tagType === 'manyToOneRelation') {
+                width = sumWidths(
+                    formPanel.config.items[0].items.items[0].width,
+                    formPanel.config.items[0].labelWidth + 140
+                );
+            } else if (
+                tagType === 'manyToManyObjectRelation' &&
+                fieldInfo.layout?.layout.width &&
+                fieldInfo.layout?.layout.width !== '100%'
+            ) {
                 width = sumWidths(fieldInfo.layout.layout.width, 25);
-            } else if (tagType === 'manyToOneRelation') {
-                width = sumWidths(fieldInfo.layout.layout.width, formPanel.config.items[0].labelWidth + 140);
             }
-        }
 
             this.filterByRelationWindow = new Ext.Window({
                 autoScroll: true,
