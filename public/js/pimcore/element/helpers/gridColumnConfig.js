@@ -479,7 +479,8 @@ pimcore.element.helpers.gridColumnConfig = {
         const title = t("filter_by_relation_field") + " " + fieldInfo.text;
         let width = 700;
 
-        if (fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
+        // for asset metadata the layout is not set
+        if (fieldInfo.layout?.layout.width && fieldInfo.layout.layout.width !== '100%') {
             if (tagType === 'manyToManyObjectRelation') {
                 width = sumWidths(fieldInfo.layout.layout.width, 25);
             } else if (tagType === 'manyToOneRelation') {
@@ -638,7 +639,7 @@ pimcore.element.helpers.gridColumnConfig = {
             title: title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 1000,
+            width: 700,
             maxHeight: 600
         });
         this.batchWin.show();
