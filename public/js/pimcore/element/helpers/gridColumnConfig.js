@@ -418,8 +418,6 @@ pimcore.element.helpers.gridColumnConfig = {
                 containerType: "filterByRelationWindow"
             });
 
-            editor.fieldConfig.width = 300;
-
             const activeFilter = this.grid.getStore().getFilters().items;
 
             for (let filter of activeFilter) {
@@ -478,11 +476,17 @@ pimcore.element.helpers.gridColumnConfig = {
                 ]
             });
 
-            const title = t("filter_by_relation_field") + " " + fieldInfo.text;
-            let width = 700;
-            if (tagType === 'manyToManyObjectRelation' && fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
+        const title = t("filter_by_relation_field") + " " + fieldInfo.text;
+        let width = 700;
+
+        if (fieldInfo.layout.layout.width && fieldInfo.layout.layout.width !== '100%') {
+            if (tagType === 'manyToManyObjectRelation') {
                 width = sumWidths(fieldInfo.layout.layout.width, 25);
+            } else if (tagType === 'manyToOneRelation') {
+                width = sumWidths(fieldInfo.layout.layout.width, formPanel.config.items[0].labelWidth + 140);
             }
+        }
+
             this.filterByRelationWindow = new Ext.Window({
                 autoScroll: true,
                 modal: false,
@@ -634,7 +638,7 @@ pimcore.element.helpers.gridColumnConfig = {
             title: title,
             items: [formPanel],
             bodyStyle: "background: #fff;",
-            width: 700,
+            width: 1000,
             maxHeight: 600
         });
         this.batchWin.show();
@@ -986,7 +990,7 @@ pimcore.element.helpers.gridColumnConfig = {
         if (typeof this.selectObjectType !=='undefined') {
             params['filter_by_object_type'] = this.selectObjectType.getValue();
         }
-        
+
         //only unreferenced filter
         if (this.checkboxOnlyUnreferenced) {
             params["only_unreferenced"] = this.checkboxOnlyUnreferenced.getValue();
