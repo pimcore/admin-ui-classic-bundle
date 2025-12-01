@@ -2,13 +2,13 @@ parameters:
     level: 6
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-    		-
-    		    identifier: missingType.iterableValue
-    		-
-    		    identifier: missingType.generics
-            -
-                message: '#Call to method (arrayNode|append|integerNode|scalarNode|booleanNode|enumNode|variableNode)\(\) on an unknown class#'
-                path: src/DependencyInjection/Configuration.php
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
+        -
+            message: '#Call to method (arrayNode|append|integerNode|scalarNode|booleanNode|enumNode|variableNode)\(\) on an unknown class#'
+            path: src/DependencyInjection/Configuration.php
     paths:
         - src
     bootstrapFiles:
