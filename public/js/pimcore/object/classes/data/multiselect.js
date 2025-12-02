@@ -145,6 +145,11 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 checked: datax["enforceValidation"] === true
             },
             {
+                xtype: "displayfield",
+                hideLabel: true,
+                value: t('enforce_validation_explanation')
+            },
+            {
                 xtype: "textfield",
                 fieldLabel: t("options_provider_class"),
                 width: 600,

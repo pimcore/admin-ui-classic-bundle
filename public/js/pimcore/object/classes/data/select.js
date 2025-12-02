@@ -274,13 +274,17 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
             pimcore.object.helpers.selectField.getOptionsProviderFields(datax, valueGrid)
         )
 
-
         appendedStylingItems.push({
             xtype: "checkbox",
             fieldLabel: t("enforce_validation"),
             name: "enforceValidation",
             itemId: "enforceValidation",
-            checked: datax["enforceValidation"] === true
+            checked: datax["enforceValiation"] === true
+        });
+        appendedStylingItems.push({
+            xtype: "displayfield",
+                hideLabel: true,
+            value: t('enforce_validation_explanation')
         });
 
         appendedStylingItems.push(valueGrid);
