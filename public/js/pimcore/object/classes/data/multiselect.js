@@ -138,6 +138,13 @@ pimcore.object.classes.data.multiselect = Class.create(pimcore.object.classes.da
                 forceSelection: true
             },
             {
+                xtype: "checkbox",
+                fieldLabel: t("enforce_validation"),
+                name: "enforceValidation",
+                itemId: "enforceValidation",
+                checked: datax["enforceValidation"] === true
+            },
+            {
                 xtype: "textfield",
                 fieldLabel: t("options_provider_class"),
                 width: 600,
