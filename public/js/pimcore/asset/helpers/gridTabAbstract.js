@@ -136,7 +136,8 @@ pimcore.asset.helpers.gridTabAbstract = Class.create(pimcore.element.helpers.gri
                 allowPreview: true,
                 folderId: this.element.id
             },
-            eventData.additionalConfig
+            eventData.additionalConfig,
+            { type: 'asset' }   
         );
     },
 

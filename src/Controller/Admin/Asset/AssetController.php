@@ -29,6 +29,7 @@ use Pimcore\Event\AssetEvents;
 use Pimcore\Event\Model\Asset\ResolveUploadTargetEvent;
 use Pimcore\File;
 use Pimcore\Helper\MimeTypeHelper;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Loader\ImplementationLoader\Exception\UnsupportedException;
 use Pimcore\Logger;
 use Pimcore\Messenger\AssetPreviewImageMessage;
@@ -91,7 +92,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
     #[Route('/get-data-by-id', name: 'pimcore_admin_asset_getdatabyid', methods: ['GET'])]
     public function getDataByIdAction(Request $request, EventDispatcherInterface $eventDispatcher): JsonResponse
     {
-        $assetId = $request->query->getInt('id');
+        $assetId = ParameterBagHelper::getInt($request->query, 'id');
         $type = $request->query->get('type');
 
         $asset = Asset::getById($assetId);
@@ -414,7 +415,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
             throw new \Exception('The filename of the asset is empty');
         }
 
-        $parentId = $request->query->getInt('parentId');
+        $parentId = ParameterBagHelper::getInt($request->query, 'parentId');
         $parentPath = $request->query->get('parentPath');
 
         if ($request->get('dir') && $request->get('parentId')) {

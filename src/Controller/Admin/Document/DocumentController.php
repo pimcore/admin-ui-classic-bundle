@@ -32,6 +32,7 @@ use Pimcore\Controller\KernelControllerEventInterface;
 use Pimcore\Db;
 use Pimcore\Document\Renderer\DocumentRendererInterface;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Image\HtmlToImage;
 use Pimcore\Logger;
 use Pimcore\Model\Document;
@@ -730,10 +731,10 @@ class DocumentController extends ElementControllerBase implements KernelControll
         $domains = $request->request->getString('domains');
         $domains = str_replace(' ', '', $domains);
         $domains = $domains ? explode("\n", $domains) : [];
-
-        if (!$site = Site::getByRootId($request->request->getInt('id'))) {
+        $site = Site::getByRootId(ParameterBagHelper::getInt($request->request, 'id'));
+        if (!$site) {
             $site = Site::create([
-                'rootId' => $request->request->getInt('id'),
+                'rootId' => ParameterBagHelper::getInt($request->request, 'id'),
             ]);
         }
 

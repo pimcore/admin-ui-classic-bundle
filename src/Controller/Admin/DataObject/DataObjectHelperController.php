@@ -25,6 +25,7 @@ use Pimcore\Bundle\AdminBundle\Service\GridData;
 use Pimcore\Config;
 use Pimcore\Db;
 use Pimcore\File;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Localization\LocaleServiceInterface;
 use Pimcore\Logger;
 use Pimcore\Model\DataObject;
@@ -712,7 +713,7 @@ class DataObjectHelperController extends AdminAbstractController
     #[Route('/grid-config-apply-to-all', name: 'gridconfigapplytoall', methods: ['POST'])]
     public function gridConfigApplyToAllAction(Request $request): JsonResponse
     {
-        $objectId = $request->request->getInt('objectId');
+        $objectId = ParameterBagHelper::getInt($request->request, 'objectId');
         $object = DataObject::getById($objectId);
 
         if ($object->isAllowed('list')) {
@@ -817,7 +818,7 @@ class DataObjectHelperController extends AdminAbstractController
     #[Route('/grid-save-column-config', name: 'gridsavecolumnconfig', methods: ['POST'])]
     public function gridSaveColumnConfigAction(Request $request): JsonResponse
     {
-        $objectId = $request->request->getInt('id');
+        $objectId = ParameterBagHelper::getInt($request->request, 'id');
         $object   = DataObject::getById($objectId);
 
         if ($object->isAllowed('list')) {

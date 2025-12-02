@@ -16,6 +16,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Bundle\AdminBundle\Helper\Dashboard;
 use Pimcore\Controller\KernelControllerEventInterface;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\Asset;
 use Pimcore\Model\DataObject;
 use Pimcore\Model\Document;
@@ -150,7 +151,7 @@ class PortalController extends AdminAbstractController implements KernelControll
             $colCount++;
         }
 
-        array_splice($newConfig[$request->get('column')], $request->request->getInt('row'), 0, [$toMove]);
+        array_splice($newConfig[$request->get('column')], ParameterBagHelper::getInt($request->request, 'row'), 0, [$toMove]);
 
         $config['positions'] = $newConfig;
         $this->saveConfiguration($request, $config);

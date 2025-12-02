@@ -11,6 +11,9 @@ pimcore_admin:
     translations:
         path: "@PimcoreCoreBundle/translations"
 
+    export:
+        version_suffix: false
+
     user:
         default_key_bindings:
             save:

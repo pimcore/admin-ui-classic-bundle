@@ -19,6 +19,7 @@ use Pimcore\Bundle\AdminBundle\Event\AdminEvents;
 use Pimcore\Controller\Traits\ElementEditLockHelperTrait;
 use Pimcore\Db;
 use Pimcore\Event\Model\ResolveElementEvent;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Logger;
 use Pimcore\Model;
 use Pimcore\Model\Asset;
@@ -44,13 +45,13 @@ class ElementController extends AdminAbstractController
     public function isLockedAction(Request $request): JsonResponse
     {
         $isLocked = Element\Editlock::isLocked(
-            $request->query->getInt('id'),
+            ParameterBagHelper::getInt($request->query, 'id'),
             $request->query->get('type'),
             $request->getSession()->getId()
         );
 
         if ($isLocked) {
-            return $this->getEditLockResponse($request->query->getInt('id'), $request->query->get('type'));
+            return $this->getEditLockResponse(ParameterBagHelper::getInt($request->query, 'id'), $request->query->get('type'));
         }
 
         return $this->adminJson(['success' => true, 'editLock' => null]);
@@ -59,7 +60,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/lock-element', name: 'pimcore_admin_element_lockelement', methods:['PUT'])]
     public function lockElementAction(Request $request): Response
     {
-        Element\Editlock::lock($request->request->getInt('id'), $request->request->get('type'), $request->getSession()->getId());
+        Element\Editlock::lock(ParameterBagHelper::getInt($request->request, 'id'), $request->request->get('type'), $request->getSession()->getId());
 
         return $this->adminJson(['success' => true]);
     }
@@ -311,7 +312,7 @@ class ElementController extends AdminAbstractController
     {
         $element = null;
         if ($request->query->get('id')) {
-            $element = Element\Service::getElementById($request->query->get('type'), $request->query->getInt('id'));
+            $element = Element\Service::getElementById($request->query->get('type'), ParameterBagHelper::getInt($request->query, 'id'));
         } elseif ($request->query->get('path')) {
             $element = Element\Service::getElementByPath($request->query->get('type'), $request->query->get('path'));
         }
@@ -375,7 +376,7 @@ class ElementController extends AdminAbstractController
         $element = null;
 
         if ($request->query->get('id')) {
-            $element = Element\Service::getElementById($request->query->get('type'), $request->query->getInt('id'));
+            $element = Element\Service::getElementById($request->query->get('type'), ParameterBagHelper::getInt($request->query, 'id'));
         } elseif ($request->query->get('path')) {
             $element = Element\Service::getElementByPath($request->query->get('type'), $request->query->get('path'));
         }
@@ -395,9 +396,9 @@ class ElementController extends AdminAbstractController
     {
         $success = false;
         $message = '';
-        $element = Element\Service::getElementById($request->request->get('type'), $request->request->getInt('id'));
-        $sourceEl = Element\Service::getElementById($request->request->get('sourceType'), $request->request->getInt('sourceId'));
-        $targetEl = Element\Service::getElementById($request->request->get('targetType'), $request->request->getInt('targetId'));
+        $element = Element\Service::getElementById($request->request->get('type'), ParameterBagHelper::getInt($request->request, 'id'));
+        $sourceEl = Element\Service::getElementById($request->request->get('sourceType'), ParameterBagHelper::getInt($request->request, 'sourceId'));
+        $targetEl = Element\Service::getElementById($request->request->get('targetType'), ParameterBagHelper::getInt($request->request, 'targetId'));
 
         if ($element && $sourceEl && $targetEl
             && $request->get('sourceType') == $request->get('targetType')
@@ -437,7 +438,7 @@ class ElementController extends AdminAbstractController
     {
         $success = false;
 
-        $element = Element\Service::getElementById($request->request->get('type'), $request->request->getInt('id'));
+        $element = Element\Service::getElementById($request->request->get('type'), ParameterBagHelper::getInt($request->request, 'id'));
         if ($element) {
             $element->unlockPropagate();
             $success = true;
@@ -451,7 +452,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/type-path', name: 'pimcore_admin_element_typepath', methods: ['GET'])]
     public function typePathAction(Request $request): JsonResponse
     {
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $type = $request->query->get('type');
         $data = [];
 
@@ -634,7 +635,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/delete-all-versions', name: 'pimcore_admin_element_deleteallversion', methods: ['DELETE'])]
     public function deleteAllVersionAction(Request $request): JsonResponse
     {
-        $elementId = $request->request->getInt('id');
+        $elementId = ParameterBagHelper::getInt($request->request, 'id');
         $elementModificationdate = $request->request->get('date');
         $elementType = $request->request->get('type');
 
@@ -653,7 +654,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/get-requires-dependencies', name: 'pimcore_admin_element_getrequiresdependencies', methods: ['GET'])]
     public function getRequiresDependenciesAction(Request $request): JsonResponse
     {
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $type = $request->query->get('elementType');
         $allowedTypes = ['asset', 'document', 'object'];
         $offset = (int) $request->get('start', 0);
@@ -713,7 +714,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/get-required-by-dependencies', name: 'pimcore_admin_element_getrequiredbydependencies', methods: ['GET'])]
     public function getRequiredByDependenciesAction(Request $request): JsonResponse
     {
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $type = $request->query->get('elementType');
         $allowedTypes = ['asset', 'document', 'object'];
         $offset = (int) $request->get('start', 0);
@@ -802,7 +803,7 @@ class ElementController extends AdminAbstractController
     #[Route('/element/analyze-permissions', name: 'pimcore_admin_element_analyzepermissions', methods: ['POST'])]
     public function analyzePermissionsAction(Request $request): Response
     {
-        $userId = $request->request->getInt('userId');
+        $userId = ParameterBagHelper::getInt($request->request, 'userId');
         if ($userId) {
             $userList = [];
             if ($user = Model\User::getById($userId)) {
@@ -815,7 +816,7 @@ class ElementController extends AdminAbstractController
         }
 
         $elementType = $request->request->get('elementType');
-        $elementId = $request->request->getInt('elementId');
+        $elementId = ParameterBagHelper::getInt($request->request, 'elementId');
 
         $element = Element\Service::getElementById($elementType, $elementId);
 

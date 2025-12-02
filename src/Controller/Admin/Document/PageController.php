@@ -21,6 +21,7 @@ use Pimcore\Document\StaticPageGenerator;
 use Pimcore\Event\DocumentEvents;
 use Pimcore\Event\Model\DocumentEvent;
 use Pimcore\Event\Traits\RecursionBlockingEventDispatchHelperTrait;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Http\Request\Resolver\DocumentResolver;
 use Pimcore\Http\Request\Resolver\EditmodeResolver;
 use Pimcore\Localization\LocaleServiceInterface;
@@ -208,7 +209,7 @@ class PageController extends DocumentControllerBase
     #[Route('/check-pretty-url', name: 'checkprettyurl', methods: ['POST'])]
     public function checkPrettyUrlAction(Request $request): JsonResponse
     {
-        $docId = $request->request->getInt('id');
+        $docId = ParameterBagHelper::getInt($request->request, 'id');
         $path = trim($request->request->get('path', ''));
 
         $success = true;
@@ -275,7 +276,7 @@ class PageController extends DocumentControllerBase
     #[Route('/clear-editable-data', name: 'cleareditabledata', methods: ['PUT'])]
     public function clearEditableDataAction(Request $request): JsonResponse
     {
-        $docId = $request->request->getInt('id');
+        $docId = ParameterBagHelper::getInt($request->request, 'id');
         $doc = Document\PageSnippet::getById($docId);
 
         if (!$doc) {

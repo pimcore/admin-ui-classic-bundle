@@ -15,6 +15,7 @@ namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
 use Pimcore\Controller\KernelControllerEventInterface;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\Element;
 use Pimcore\Model\Element\Recyclebin;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -158,7 +159,7 @@ class RecyclebinController extends AdminAbstractController implements KernelCont
     public function addAction(Request $request): JsonResponse
     {
         try {
-            $element = Element\Service::getElementById($request->request->get('type'), $request->request->getInt('id'));
+            $element = Element\Service::getElementById($request->request->get('type'), ParameterBagHelper::getInt($request->request, 'id'));
 
             if ($element) {
                 $list = $element::getList(['unpublished' => true]);

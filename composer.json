@@ -17,7 +17,7 @@
     "endroid/qr-code": "^6.0.1",
     "nesbot/carbon": "^3.8.4",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
-    "pimcore/pimcore": "^12.2",
+    "pimcore/pimcore": "^12.3",
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "require-dev": {
@@ -45,7 +45,7 @@
   },
   "extra": {
     "branch-alias": {
-      "1.x-dev": "1.8.x-dev"
+      "2.x-dev": "2.3.x-dev"
     },
     "pimcore": {
       "bundles": [

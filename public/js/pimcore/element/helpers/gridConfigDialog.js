@@ -295,6 +295,16 @@ pimcore.element.helpers.gridConfigDialog = Class.create({
         
         items.push(this.saveFilters);
 
+        if (this.context?.type === "asset") {
+            this.shareBetweenFolders = new Ext.form.field.Checkbox({
+                fieldLabel: t("share_between_folders"),
+                inputValue: true,
+                name: "shareBetweenFolders",
+                value: this.settings.shareBetweenFolders
+            });
+            items.push(this.shareBetweenFolders);
+        }
+
         if (user.isAllowed("share_configurations")) {
             items.push(this.userSharingField);
             items.push(this.rolesSharingField);

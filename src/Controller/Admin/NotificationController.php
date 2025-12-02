@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Pimcore\Bundle\AdminBundle\Controller\Admin;
 
 use Pimcore\Bundle\AdminBundle\Controller\AdminAbstractController;
+use Pimcore\Helper\ParameterBagHelper;
 use Pimcore\Model\Element\Service;
 use Pimcore\Model\Notification\Service\NotificationService;
 use Pimcore\Model\Notification\Service\NotificationServiceFilterParser;
@@ -56,12 +57,12 @@ class NotificationController extends AdminAbstractController
     {
         $this->checkPermission('notifications_send');
 
-        $recipientId = $request->request->getInt('recipientId');
+        $recipientId = ParameterBagHelper::getInt($request->request, 'recipientId');
         $fromUser = (int) $this->getAdminUser()->getId();
         $title = $request->request->get('title', '');
         $message = $request->request->get('message', '');
         $element = null;
-        $elementId = $request->request->getInt('elementId');
+        $elementId = ParameterBagHelper::getInt($request->request, 'elementId');
         $elementType = $request->request->get('elementType');
 
         if ($elementId && $elementType) {
@@ -82,7 +83,7 @@ class NotificationController extends AdminAbstractController
     {
         $this->checkPermission('notifications');
 
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
 
         try {
             $notification = $service->findAndMarkAsRead($id, $this->getAdminUser()->getId());
@@ -115,8 +116,8 @@ class NotificationController extends AdminAbstractController
         }
 
         $options = [
-            'offset' => $request->request->getInt('start'),
-            'limit' => $request->request->getInt('limit', 40),
+            'offset' => ParameterBagHelper::getInt($request->request, 'start'),
+            'limit' => ParameterBagHelper::getInt($request->request, 'limit', 40),
         ];
 
         $result = $service->findAll($filter, $options);
@@ -140,7 +141,7 @@ class NotificationController extends AdminAbstractController
         $this->checkPermission('notifications');
 
         $user = $this->getAdminUser();
-        $lastUpdate = $request->query->getInt('lastUpdate', time());
+        $lastUpdate = ParameterBagHelper::getInt($request->query, 'lastUpdate', time());
         $result = $service->findLastUnread((int) $user->getId(), $lastUpdate);
         $unread = $service->countAllUnread((int) $user->getId());
 
@@ -163,7 +164,7 @@ class NotificationController extends AdminAbstractController
     {
         $this->checkPermission('notifications');
 
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $service->findAndMarkAsRead($id, $this->getAdminUser()->getId());
 
         return $this->adminJson(['success' => true]);
@@ -174,7 +175,7 @@ class NotificationController extends AdminAbstractController
     {
         $this->checkPermission('notifications');
 
-        $id = $request->query->getInt('id');
+        $id = ParameterBagHelper::getInt($request->query, 'id');
         $service->delete($id, $this->getAdminUser()->getId());
 
         return $this->adminJson(['success' => true]);
