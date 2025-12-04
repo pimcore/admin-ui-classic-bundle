@@ -279,7 +279,7 @@ pimcore.object.classes.data.select = Class.create(pimcore.object.classes.data.da
             fieldLabel: t("enforce_validation"),
             name: "enforceValidation",
             itemId: "enforceValidation",
-            checked: datax["enforceValiation"] === true
+            checked: datax["enforceValidation"] === true
         });
         appendedStylingItems.push({
             xtype: "displayfield",
