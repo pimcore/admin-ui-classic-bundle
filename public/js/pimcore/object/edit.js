@@ -86,6 +86,12 @@ pimcore.object.edit = Class.create({
 
                 //only include changed values in save response.
                 if(currentField.isDirty()) {
+                    if (currentField.context?.subContainerType === 'block') {
+                        currentField.getValue().map((item, index) => {
+                            if('oIndex' in item)
+                                item.oIndex = index;
+                        });
+                    }
                     values[currentField.getName()] =  currentField.getValue();
                 }
             }
