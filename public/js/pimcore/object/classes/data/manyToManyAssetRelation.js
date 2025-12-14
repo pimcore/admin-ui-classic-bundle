@@ -27,8 +27,8 @@ pimcore.object.classes.data.manyToManyAssetRelation = Class.create(pimcore.objec
         block: true
     },
 
-    initialize: function (treeNode, initData) {
-        pimcore.object.classes.data.manyToManyRelation.prototype.initialize.call(this, treeNode, initData);
+    initialize: function ($super, treeNode, initData) {
+        $super(treeNode, initData);
 
         this.type = "manyToManyAssetRelation";
         this.datax.fieldtype = this.getType();
