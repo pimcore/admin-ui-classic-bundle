@@ -5,7 +5,6 @@ Thumbs.db
 /bin
 /config
 /kernel
-/templates
 /var
 
 # PHP-CS-Fixer
