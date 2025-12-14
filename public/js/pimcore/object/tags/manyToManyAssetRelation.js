@@ -15,6 +15,7 @@ pimcore.registerNS("pimcore.object.tags.manyToManyAssetRelation");
 pimcore.object.tags.manyToManyAssetRelation = Class.create(pimcore.object.tags.manyToManyRelation, {
 
     type: "manyToManyAssetRelation",
+    idProperty: "id",
 
     initialize: function ($super, data, fieldConfig) {
         $super(data, fieldConfig);
