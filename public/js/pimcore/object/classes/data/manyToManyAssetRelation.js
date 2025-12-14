@@ -56,8 +56,8 @@ pimcore.object.classes.data.manyToManyAssetRelation = Class.create(pimcore.objec
         return "pimcore_icon_manyToManyAssetRelation";
     },
 
-    getLayout: function () {
-        pimcore.object.classes.data.manyToManyRelation.prototype.getLayout.call(this);
+    getLayout: function ($super) {
+        $super();
 
         this.datax.assetsAllowed = true;
         this.datax.objectsAllowed = false;
@@ -100,8 +100,8 @@ pimcore.object.classes.data.manyToManyAssetRelation = Class.create(pimcore.objec
         return this.layout;
     },
 
-    applySpecialData: function(source) {
-        pimcore.object.classes.data.manyToManyRelation.prototype.applySpecialData.call(this, source);
+    applySpecialData: function($super, source) {
+        $super(source);
 
         if (source.datax) {
             this.datax.visibleFields = source.datax.visibleFields;
