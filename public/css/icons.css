@@ -1262,6 +1262,10 @@
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/multihref.svg) center center no-repeat !important;
 }
 
+.pimcore_icon_manyToManyAssetRelation {
+    background: url(/bundles/pimcoreadmin/img/flat-color-icons/asset.svg) center center no-repeat !important;
+}
+
 .pimcore_icon_table {
     background: url(/bundles/pimcoreadmin/img/flat-color-icons/grid.svg) center center no-repeat !important;
 }
