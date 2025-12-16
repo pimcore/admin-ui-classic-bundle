@@ -1043,14 +1043,14 @@ class DataObjectController extends ElementControllerBase implements KernelContro
         if (is_array($ids)) {
             $return = ['success' => true];
             foreach ($ids as $id) {
-                $object = DataObject::getById((int)$id);
+                $object = DataObject::getById((int)$id, ['force' => true]);
                 $return = $this->executeUpdateAction($object, $values);
                 if (!$return['success']) {
                     return $this->adminJson($return);
                 }
             }
         } else {
-            $object = DataObject::getById((int)$ids);
+            $object = DataObject::getById((int)$ids, ['force' => true]);
             $return = $this->executeUpdateAction($object, $values);
         }
 
