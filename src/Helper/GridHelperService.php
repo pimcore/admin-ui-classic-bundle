@@ -33,8 +33,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-use function PHPSTORM_META\map;
-
 /**
  * @internal
  */
