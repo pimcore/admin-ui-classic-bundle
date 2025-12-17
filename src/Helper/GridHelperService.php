@@ -33,6 +33,8 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+use function PHPSTORM_META\map;
+
 /**
  * @internal
  */
@@ -419,9 +421,21 @@ class GridHelperService
                         }
                     }
                 } elseif ($filter['property'] !== 'fullpath') {
-                    $conditionPartsFilters[] = '( ' .
-                        $db->quoteIdentifier($filter['property']) . ' IS NULL OR ' .
-                        $db->quoteIdentifier($filter['property']) . " = '' )";
+                    $filterProperty = $filter['property'];
+
+                    if (strpos($filterProperty, '~') !== false) {
+                        $filterParts = explode('~', $filterProperty);
+                        $filterParts = array_map(fn($part) => $db->quoteIdentifier($part), $filterParts);
+                        $filterProperty = implode('.', $filterParts);
+
+                        $conditionPartsFilters[] = '( ' .
+                            $filterProperty . ' IS NULL OR ' .
+                            $filterProperty . " = '' )";
+                    } else {
+                        $conditionPartsFilters[] = '( ' .
+                            $db->quoteIdentifier($filter['property']) . ' IS NULL OR ' .
+                            $db->quoteIdentifier($filter['property']) . " = '' )";
+                    }
                 }
             }
         }
