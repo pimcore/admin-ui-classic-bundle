@@ -423,7 +423,7 @@ class GridHelperService
 
                     if (strpos($filterProperty, '~') !== false) {
                         $filterParts = explode('~', $filterProperty);
-                        $filterParts = array_map(fn($part) => $db->quoteIdentifier($part), $filterParts);
+                        $filterParts = array_map(fn ($part) => $db->quoteIdentifier($part), $filterParts);
                         $filterProperty = implode('.', $filterParts);
 
                         $conditionPartsFilters[] = '( ' .
