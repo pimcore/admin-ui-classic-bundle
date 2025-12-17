@@ -262,7 +262,7 @@ class SettingsController extends AdminAbstractController
     public function propertiesAction(Request $request): JsonResponse
     {
         $this->checkPermission('predefined_properties');
-        
+
         if ($request->get('data')) {
             if ($request->get('xaction') == 'destroy') {
                 $data = $this->decodeJson($request->get('data'));
