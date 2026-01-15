@@ -297,7 +297,16 @@ class DataObject extends Element
         if ($fieldDefinition->isEmpty($value) && $fieldDefinition->supportsInheritance()) {
             $parent = Service::hasInheritableParentObject($object);
             if (!empty($parent)) {
-                return self::getValueForObject($parent, $key, $brickType, $brickKey, $fieldDefinition, $context, $brickDescriptor, $requestedLanguage);
+                return self::getValueForObject(
+                    $parent,
+                    $key,
+                    $brickType,
+                    $brickKey,
+                    $fieldDefinition,
+                    $context,
+                    $brickDescriptor,
+                    $requestedLanguage
+                );
             }
         }
 
