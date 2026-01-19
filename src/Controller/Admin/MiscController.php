@@ -88,7 +88,7 @@ class MiscController extends AdminAbstractController
             $fallbackLanguages[] = \Locale::getPrimaryLanguage($language);
         }
         if ($language != 'en') {
-            $fallbackLanguages[] = \Locale::getPrimaryLanguage(Tool::getDefaultLanguage());;
+            $fallbackLanguages[] = \Locale::getPrimaryLanguage(Tool::getDefaultLanguage());
             // add en as a fallback
             $fallbackLanguages[] = 'en';
         }
