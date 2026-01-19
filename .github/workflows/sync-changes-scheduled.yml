@@ -13,8 +13,7 @@ jobs:
             matrix:
                 ref:
                     [
-                        { "base": "2.3", "destination": "2.3" },
-                        { "base": "1.7", "destination": "1.7" },
+                        { "base": "2.3", "destination": "2.3" }
                     ]
         with:
             base_ref: ${{ matrix.ref.base }}
