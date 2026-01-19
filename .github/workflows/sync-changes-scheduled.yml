@@ -13,8 +13,7 @@ jobs:
             matrix:
                 ref:
                     [
-                        { "base": "2.x", "destination": "2.x" },
-                        { "base": "2.2", "destination": "2.2" },
+                        { "base": "2.3", "destination": "2.3" },
                         { "base": "1.7", "destination": "1.7" },
                     ]
         with:
