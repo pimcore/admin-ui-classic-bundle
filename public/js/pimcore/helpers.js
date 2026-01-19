@@ -968,9 +968,7 @@ pimcore.helpers.openMemorizedTabs = function () {
     var openTabs = pimcore.helpers.getOpenTab();
 
     // limit to the latest 10
-    openTabs.reverse();
-    openTabs.splice(10, 1000);
-    openTabs.reverse();
+    openTabs = openTabs.slice(-10);
 
     var openedTabs = [];
 
