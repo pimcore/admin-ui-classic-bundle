@@ -247,9 +247,9 @@ class SettingsController extends AdminAbstractController
     #[Route('/properties', name: 'pimcore_admin_settings_properties', methods: ['POST'])]
     public function propertiesAction(Request $request): JsonResponse
     {
-        if ($request->get('data')) {
-            $this->checkPermission('predefined_properties');
+        $this->checkPermission('predefined_properties');
 
+        if ($request->get('data')) {
             if ($request->get('xaction') == 'destroy') {
                 $data = $this->decodeJson($request->get('data'));
                 $id = $data['id'];

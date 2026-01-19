@@ -375,7 +375,8 @@ class TranslationController extends AdminAbstractController
                 $t->setModificationDate(time());
                 $t->setType($data['type'] ?? null);
 
-                foreach (Tool::getValidLanguages() as $lang) {
+                $validLanguages = $admin ? Tool\Admin::getLanguages() : $this->getAdminUser()->getAllowedLanguagesForViewingWebsiteTranslations();
+                foreach ($validLanguages as $lang) {
                     $t->addTranslation($lang, '');
                 }
                 $t->save();

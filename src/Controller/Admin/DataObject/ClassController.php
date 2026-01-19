@@ -1278,7 +1278,9 @@ class ClassController extends AdminAbstractController implements KernelControlle
             }
         }
 
+        usort($groups, static fn ($a, $b) => $a['text'] <=> $b['text']);
         foreach ($groups as $group) {
+            usort($group['children'], static fn ($a, $b) => $a['title'] <=> $b['title']);
             $definitions[] = $group;
         }
 
