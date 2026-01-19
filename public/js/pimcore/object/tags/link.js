@@ -139,26 +139,10 @@ pimcore.object.tags.link = Class.create(pimcore.object.tags.abstract, {
     },
 
     openEditor: function () {
-        let config = {};
-        let allowedSubtypes = {};
+        let config = [];
 
         if (!empty(this.fieldConfig.allowedTypes)){
             config['allowedTypes'] = this.fieldConfig.allowedTypes;
-        }
-        if (!empty(this.fieldConfig.allowedAssetSubtypes)){
-            allowedSubtypes['asset'] = this.fieldConfig.allowedAssetSubtypes;
-        }
-        if (!empty(this.fieldConfig.allowedDocumentSubtypes)){
-            allowedSubtypes['document'] = this.fieldConfig.allowedDocumentSubtypes;
-        }
-        if (!empty(this.fieldConfig.allowedObjectSubtypes)){
-            allowedSubtypes['object'] = this.fieldConfig.allowedObjectSubtypes;
-        }
-        if (!empty(allowedSubtypes)) {
-            config['allowedSubtypes'] = allowedSubtypes;
-        }
-        if (!empty(this.fieldConfig.allowedClasses)){
-            config['allowedClasses'] = this.fieldConfig.allowedClasses;
         }
         if (!empty(this.fieldConfig.allowedTargets)){
             config['allowedTargets'] = this.fieldConfig.allowedTargets;
