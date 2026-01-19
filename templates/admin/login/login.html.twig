@@ -1,8 +1,14 @@
 {% extends '@PimcoreAdmin/admin/login/layout.html.twig' %}
 
+{% set perspective =
+    app.request.get('perspective') is iterable
+        ? app.request.get('perspective')|first
+        : app.request.get('perspective')|default('')
+%}
+
 {% block content %}
 <div id="loginform" {% if not browserSupported %}style="display:none;"{% endif %}>
-    <form id="form-element" method="post" action="{{ path('pimcore_admin_login_check', {'perspective' : app.request.get('perspective')|striptags}) }}">
+    <form id="form-element" method="post" action="{{ path('pimcore_admin_login_check', {'perspective' : perspective|striptags}) }}">
 
         {% if error is defined %}
         <div class="text error">
