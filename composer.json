@@ -47,6 +47,9 @@
     ]
   },
   "extra": {
+    "branch-alias": {
+      "2.x-dev": "2.3"
+    },
     "pimcore": {
       "bundles": [
         "Pimcore\\Bundle\\AdminBundle\\PimcoreAdminBundle"
