@@ -73,6 +73,31 @@
         <td colspan="3">&nbsp;</td>
     </tr>
 
+    {% set properties1 = object1.getProperties() %}
+    {% set properties2 = object2.getProperties() %}
+    {% set allProperties = properties1|merge(properties2) %}
+
+    {% for propertyName, property in allProperties %}
+        {% set prop1 = properties1[propertyName] ?? null %}
+        {% set prop2 = properties2[propertyName] ?? null %}
+        {% set propData1 = prop1 ? prop1.getData() : null %}
+        {% set propData2 = prop2 ? prop2.getData() : null %}
+
+        <tr {% if loop.index is odd %}class="odd"{% endif %}>
+            <td>property.{{ propertyName }}</td>
+            <td>{{ propertyName }}</td>
+            {% if isImportPreview is not defined or isNew is not defined %}
+                <td>{{ propData1 }}</td>
+            {% endif %}
+            {% set modifiedPropertyClass = propData1 is not same as(propData2) ? 'modified' : '' %}
+            <td class="{{ modifiedPropertyClass }}">{{ propData2 }}</td>
+        </tr>
+    {% endfor %}
+
+    <tr class="">
+        <td colspan="3">&nbsp;</td>
+    </tr>
+
     {% for fieldName, definition in fields %}
         {% if definition is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
             {% for language in validLanguages %}

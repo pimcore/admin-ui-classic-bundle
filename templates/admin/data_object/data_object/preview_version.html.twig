@@ -42,6 +42,22 @@
     <tr class="">
         <td colspan="3">&nbsp;</td>
     </tr>
+
+    {% set properties = object.getProperties() %}
+    {% for propertyName, property in properties %}
+        {% set propData = property.getData() %}
+
+        <tr {% if loop.index is odd %}class="odd"{% endif %}>
+            <td>property.{{ propertyName }}</td>
+            <td>{{ propertyName }}</td>
+            <td>{{ propData }}</td>
+        </tr>
+    {% endfor %}
+
+    <tr class="">
+        <td colspan="3">&nbsp;</td>
+    </tr>
+
     {% for fieldName, definition in fields %}
         {% if definition is instanceof('\\Pimcore\\Model\\DataObject\\ClassDefinition\\Data\\Localizedfields') %}
             {% for language in validLanguages %}
