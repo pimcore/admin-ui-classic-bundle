@@ -1105,6 +1105,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
             type: this.data.general.type,
             modificationdate: this.data.general.modificationDate,
             creationdate: this.data.general.creationDate,
+            versiondate: this.data.general.versionDate,
             usermodification: this.data.general.userModification,
             usermodification_name: this.data.general.userModificationFullname,
             userowner: this.data.general.userOwner,
@@ -1115,6 +1116,15 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
 
     showMetaInfo: function () {
         var metainfo = this.getMetaInfo();
+
+        let extraDates = [];
+        if (metainfo.versiondate && metainfo.versiondate !== metainfo.modificationdate) {
+            extraDates.push({
+                name: "publishdate",
+                type: "date",
+                value: metainfo.versiondate
+            });
+        }
 
         new pimcore.element.metainfo([
             {
@@ -1140,7 +1150,7 @@ pimcore.object.object = Class.create(pimcore.object.abstract, {
                 name: "modificationdate",
                 type: "date",
                 value: metainfo.modificationdate
-            }, {
+            }, ...extraDates, {
                 name: "creationdate",
                 type: "date",
                 value: metainfo.creationdate

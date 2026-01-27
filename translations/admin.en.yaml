@@ -19,6 +19,7 @@ classid: "Class ID"
 parentid: "Parent ID"
 mimetype: MIME-Type
 creationdate: "Creation Date"
+publishdate: "Publish Date"
 usermodification: "User Modification"
 userowner: Owner
 languages: Languages
