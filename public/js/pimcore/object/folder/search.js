@@ -359,8 +359,8 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
             this.filter.forEach(filt => {
                 const newFilter = new Ext.util.Filter(filt);
                 this.store.addFilter(newFilter);
-                this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
             });
+            this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
         }
 
 
