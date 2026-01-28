@@ -223,11 +223,17 @@ class UserController extends AdminAbstractController implements KernelController
     #[Route('/user/delete', name: 'pimcore_admin_user_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request): JsonResponse
     {
-        $user = User\AbstractUser::getById((int)$request->get('id'));
+        $userId = (int)$request->get('id');
+        $user = User\AbstractUser::getById($userId);
 
         // only admins are allowed to delete admins and folders
         // because a folder might contain an admin user, so it is simply not allowed for users with the "users" permission
-        if (($user instanceof User\Folder && !$this->getAdminUser()->isAdmin()) || ($user instanceof User && $user->isAdmin() && !$this->getAdminUser()->isAdmin())) {
+        // additionally, added a guard to prevent users from deleting themselves, like in the frontend
+        if (
+            ($user instanceof User\Folder && !$this->getAdminUser()->isAdmin()) ||
+            ($user instanceof User && $user->isAdmin() && !$this->getAdminUser()->isAdmin()) ||
+            ($this->getAdminUser()->getId() === $userId)
+        ) {
             throw new \Exception('You are not allowed to delete this user');
         } else {
             if ($user instanceof User\Role\Folder) {
