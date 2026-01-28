@@ -851,6 +851,14 @@ pimcore.helpers.getObjectRelationInlineSearchRoute = function () {
     return null;
 }
 
+pimcore.helpers.getObjectRelationInlineSearchRouteMethod = function () {
+    if(pimcore.helpers.hasSearchImplementation()) {
+        return pimcore.globalmanager.get('searchImplementationRegistry').getObjectRelationInlineSearchRouteMethod();
+    }
+
+    return null;
+}
+
 pimcore.helpers.activateMaintenance = function () {
 
     Ext.Ajax.request({

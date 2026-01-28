@@ -49,6 +49,16 @@ pimcore.element.selector.searchFacade = new Class.create({
             return this.getImplementation().getObjectRelationInlineSearchRoute();
         }
         return null;
+    },
+
+    getObjectRelationInlineSearchRouteMethod: function () {
+        if(this.hasImplementation()) {
+            if(typeof this.getImplementation().getObjectRelationInlineSearchRouteMethod === "function") {
+                return this.getImplementation().getObjectRelationInlineSearchRouteMethod();
+            }
+            return 'GET';
+        }
+        return null;
     }
 });
 
