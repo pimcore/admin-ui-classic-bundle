@@ -28,7 +28,7 @@ pimcore.element.helpers.gridColumnConfig = {
     },
 
     removeAllFilteredColumnClass: function (grid) {
-        grid.getColumns().map(col => col.removeCls('x-grid-filters-filtered-column'));
+        grid.getColumns().forEach(col => col.removeCls('x-grid-filters-filtered-column'));
     },
 
     getSaveAsDialog: function () {
