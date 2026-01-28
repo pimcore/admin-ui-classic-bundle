@@ -227,7 +227,7 @@ class UserController extends AdminAbstractController implements KernelController
 
         // only admins are allowed to delete admins and folders
         // because a folder might contain an admin user, so it is simply not allowed for users with the "users" permission
-        // additionally, added guard to prevent from self deleting like in frontend
+        // additionally, added a guard to prevent users from deleting themselves, like in the frontend
         if (
             ($user instanceof User\Folder && !$this->getAdminUser()->isAdmin()) ||
             ($user instanceof User && $user->isAdmin() && !$this->getAdminUser()->isAdmin()) ||
