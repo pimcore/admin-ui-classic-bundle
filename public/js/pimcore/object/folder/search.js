@@ -296,7 +296,7 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                     } else {
                         break;
                     }
-                } else if (this.filter.length > 0) {
+                } else if (this.filter && this.filter.length > 0) {
                     const filterObj = this.filter.find(filt => filt.property === col.dataIndex); 
                     if (filterObj) {
                         col.cls = 'x-grid-filters-filtered-column';
