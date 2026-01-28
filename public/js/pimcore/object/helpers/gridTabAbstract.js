@@ -189,6 +189,7 @@ pimcore.object.helpers.gridTabAbstract = Class.create({
                 text: t("clear_filters"),
                 tooltip: t("clear_filters"),
                 handler: function (button) {
+                    pimcore.element.helpers.gridColumnConfig.removeAllFilteredColumnClass(this.grid);
                     this.grid.filters.clearFilters();
                     this.grid.getStore().clearFilter();
                     this.toolbarFilterInfo.hide();
