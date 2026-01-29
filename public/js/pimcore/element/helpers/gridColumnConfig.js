@@ -16,6 +16,21 @@ pimcore.element.helpers.gridColumnConfig = {
 
     batchJobDelay: 50,
 
+    toggleFilteredColumnClass: function (grid, dataIndex, action) {
+        const column = grid.getColumns().find(col => col.dataIndex === dataIndex);
+        if (column) {
+            if (action === 'add') {
+                column.addCls('x-grid-filters-filtered-column');
+            } else if (action === 'remove') {
+                column.removeCls('x-grid-filters-filtered-column');
+            }
+        }
+    },
+
+    removeAllFilteredColumnClass: function (grid) {
+        grid.getColumns().forEach(col => col.removeCls('x-grid-filters-filtered-column'));
+    },
+
     getSaveAsDialog: function () {
         var defaultName = new Date();
 
@@ -458,6 +473,11 @@ pimcore.element.helpers.gridColumnConfig = {
                         iconCls: "pimcore_icon_filter_condition pimcore_icon_overlay_delete",
                         handler: function () {
                             this.filterByRelationWindow.close();
+                            pimcore.element.helpers.gridColumnConfig.toggleFilteredColumnClass(
+                                this.grid,
+                                fieldInfo.dataIndex,
+                                'remove'
+                            );
                             this.grid.store.filters.removeByKey("x-gridfilter-"+fieldInfo.dataIndex);
                         }.bind(this)
                     },
@@ -476,6 +496,12 @@ pimcore.element.helpers.gridColumnConfig = {
                                         items = [value];
                                     }
                                     editor.store.loadData(items, false);
+
+                                    pimcore.element.helpers.gridColumnConfig.toggleFilteredColumnClass(
+                                        this.grid,
+                                        fieldInfo.dataIndex,
+                                        'add'
+                                    );
 
                                     this.grid.filters.getStore().addFilter(
                                         fieldInfo.getRelationFilter(fieldInfo.dataIndex, editor)

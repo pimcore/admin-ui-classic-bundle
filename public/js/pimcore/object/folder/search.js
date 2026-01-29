@@ -296,6 +296,11 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
                     } else {
                         break;
                     }
+                } else if (this.filter && this.filter.length > 0) {
+                    const filterObj = this.filter.find(filt => filt.property === col.dataIndex);
+                    if (filterObj) {
+                        col.cls = 'x-grid-filters-filtered-column';
+                    }
                 }
             }
         }
@@ -352,8 +357,14 @@ pimcore.object.search = Class.create(pimcore.object.helpers.gridTabAbstract, {
 
         if (this.filter) {
             this.filter.forEach(filt => {
-                this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
+                const newFilter = new Ext.util.Filter(filt);
+                if (this.grid?.filters && typeof this.grid.filters.getStore === 'function') {
+                    this.grid.filters.getStore().addFilter(newFilter);
+                } else {
+                    this.store.addFilter(newFilter);
+                }
             });
+            this.filterUpdateFunction(this.grid, this.toolbarFilterInfo, this.clearFilterButton);
         }
 
 
