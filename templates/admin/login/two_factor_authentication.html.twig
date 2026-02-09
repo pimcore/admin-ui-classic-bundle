@@ -11,7 +11,7 @@
         </div>
     {% endif %}
 
-    <form method="post" action="{{ path('pimcore_admin_2fa_verify') }}" autocomplete="off">
+    <form method="post" action="{{ path('pimcore_admin_2fa_verify') }}">
         <input name="_auth_code" id="_auth_code" autocomplete="one-time-code" type="text" inputmode="numeric" placeholder="{{ '2fa_code'|trans([],'admin') }}" required autofocus>
         <input type="hidden" name="csrfToken" value="{{ pimcore_csrf.getCsrfToken(app.request.session) }}">
 
