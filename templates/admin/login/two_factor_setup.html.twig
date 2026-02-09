@@ -16,8 +16,8 @@
         <p>{{ '2fa_alert_text'|trans([], 'admin')|raw }}</p>
     </div>
 
-    <form method="post" action="{{ path('pimcore_admin_2fa_setup') }}">
-        <input name="_auth_code" id="_auth_code" autocomplete="one-time-code" type="password" placeholder="{{ '2fa_code'|trans([],'admin') }}" required autofocus>
+    <form method="post" action="{{ path('pimcore_admin_2fa_setup') }}" autocomplete="off">
+        <input name="_auth_code" id="_auth_code" autocomplete="one-time-code" type="text" inputmode="numeric" placeholder="{{ '2fa_code'|trans([],'admin') }}" required autofocus>
         <input type="hidden" name="csrfToken" value="{{ pimcore_csrf.getCsrfToken(app.request.session) }}">
 
         <button type="submit">{{ 'Login'|trans([],'admin') }}</button>
