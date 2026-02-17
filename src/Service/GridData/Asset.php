@@ -105,9 +105,26 @@ class Asset extends Element
         }
 
         if (!empty($thumbnailMethod)) {
-            $thumbnailUrl = '/admin/asset/get-' . $asset->getType() . '-thumbnail?id=' . $asset->getId();
-            if (count($params) > 0) {
-                $thumbnailUrl .= '&' . http_build_query($params);
+            // Get URL generator from service container
+            $urlGenerator = \Pimcore::getContainer()->get('router');
+            
+            // Merge asset ID with params
+            $routeParams = array_merge(['id' => $asset->getId()], $params);
+            
+            // Generate URL using the appropriate route
+            switch (true) {
+                case $asset instanceof Model\Asset\Image:
+                    $thumbnailUrl = $urlGenerator->generate('pimcore_admin_asset_getimagethumbnail', $routeParams);
+                    break;
+                case $asset instanceof Model\Asset\Video:
+                    $thumbnailUrl = $urlGenerator->generate('pimcore_admin_asset_getvideothumbnail', $routeParams);
+                    break;
+                case $asset instanceof Model\Asset\Document:
+                    $thumbnailUrl = $urlGenerator->generate('pimcore_admin_asset_getdocumentthumbnail', $routeParams);
+                    break;
+                case $asset instanceof Model\Asset\Folder:
+                    $thumbnailUrl = $urlGenerator->generate('pimcore_admin_asset_getfolderthumbnail', $routeParams);
+                    break;
             }
         }
 
