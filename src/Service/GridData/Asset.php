@@ -107,10 +107,10 @@ class Asset extends Element
         if (!empty($thumbnailMethod)) {
             // Get URL generator from service container
             $urlGenerator = \Pimcore::getContainer()->get('router');
-            
+
             // Merge asset ID with params
             $routeParams = array_merge(['id' => $asset->getId()], $params);
-            
+
             // Generate URL using the appropriate route
             switch (true) {
                 case $asset instanceof Model\Asset\Image:
@@ -124,6 +124,8 @@ class Asset extends Element
                     break;
                 case $asset instanceof Model\Asset\Folder:
                     $thumbnailUrl = $urlGenerator->generate('pimcore_admin_asset_getfolderthumbnail', $routeParams);
+                    break;
+                default:
                     break;
             }
         }
