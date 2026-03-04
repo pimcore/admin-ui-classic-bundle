@@ -12,12 +12,12 @@
   "prefer-stable": true,
   "minimum-stability": "dev",
   "require": {
-    "php": "~8.3.0 || ~8.4.0",
+    "php": "~8.4.0 || ~8.5.0",
     "cbschuld/browser.php": "^1.9.6",
     "endroid/qr-code": "^6.0.1",
     "nesbot/carbon": "^3.8.4",
     "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
-    "pimcore/pimcore": "^12.3",
+    "pimcore/pimcore": "^2026.1",
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "conflict": {
