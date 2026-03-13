@@ -21,7 +21,7 @@
     "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
   },
   "conflict": {
-    "symfony/http-foundation": ">=7.4"
+    "symfony/http-foundation": ">=7.4.0 <7.4.1"
   },
   "require-dev": {
     "codeception/codeception": "^5.0.11",
