@@ -380,7 +380,7 @@ abstract class DocumentControllerBase extends AdminAbstractController implements
 
                 break;
             case in_array($task, [self::TASK_SAVE, self::TASK_VERSION, self::TASK_AUTOSAVE])
-            && $document->isAllowed(self::TASK_SAVE):
+                && $document->isAllowed(self::TASK_SAVE):
                 if ($document instanceof Model\Document\PageSnippet) {
                     $this->setValuesToDocument($request, $document);
                     if ($task === self::TASK_AUTOSAVE || $document->isPublished()) {
