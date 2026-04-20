@@ -1,56 +1,55 @@
 {
-  "name": "pimcore/admin-ui-classic-bundle",
-  "license": "proprietary",
-  "type": "pimcore-bundle",
-  "config": {
-    "sort-packages": true,
-    "preferred-install": {
-      "pimcore/pimcore": "source",
-      "*": "dist"
-    }
-  },
-  "prefer-stable": true,
-  "minimum-stability": "dev",
-  "require": {
-    "php": "~8.3.0 || ~8.4.0",
-    "cbschuld/browser.php": "^1.9.6",
-    "endroid/qr-code": "^6.0.1",
-    "nesbot/carbon": "^3.8.4",
-    "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
-    "pimcore/pimcore": "^12.3",
-    "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
-  },
-  "conflict": {
-    "symfony/http-foundation": ">=7.4.0 <7.4.1"
-  },
-  "require-dev": {
-    "codeception/codeception": "^5.0.11",
-    "codeception/module-asserts": "^2.0.1",
-    "codeception/module-symfony": "^3.1.1",
-    "codeception/phpunit-wrapper": "^9",
-    "ergebnis/phpstan-rules": "^2.0",
-    "phpstan/phpstan": "^1.12.15",
-    "phpstan/phpstan-symfony": "^1.3.5",
-    "phpunit/phpunit": "^9.3"
-  },
-  "autoload": {
-    "psr-4": {
-      "Pimcore\\Bundle\\AdminBundle\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Pimcore\\Bundle\\AdminBundle\\Tests\\": "tests"
+    "name": "pimcore/admin-ui-classic-bundle",
+    "license": "proprietary",
+    "type": "pimcore-bundle",
+    "config": {
+        "sort-packages": true,
+        "preferred-install": {
+            "pimcore/pimcore": "source",
+            "*": "dist"
+        }
     },
-    "files": [
-      "kernel/Kernel.php"
-    ]
-  },
-  "extra": {
-    "pimcore": {
-      "bundles": [
-        "Pimcore\\Bundle\\AdminBundle\\PimcoreAdminBundle"
-      ]
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require": {
+        "php": "~8.3.0 || ~8.4.0",
+        "cbschuld/browser.php": "^1.9.6",
+        "endroid/qr-code": "^6.0.1",
+        "nesbot/carbon": "^3.8.4",
+        "phpoffice/phpspreadsheet": "^2.2 || ^3.3",
+        "pimcore/pimcore": "^12.3",
+        "symfony/webpack-encore-bundle": "^1.17 || ^2.0"
+    },
+    "conflict": {
+        "symfony/http-foundation": ">=7.4.0 <7.4.1"
+    },
+    "require-dev": {
+        "codeception/codeception": "^5.3.5",
+        "codeception/module-asserts": "^2.0.1",
+        "codeception/module-symfony": "^3.1.1",
+        "ergebnis/phpstan-rules": "^2.0",
+        "phpstan/phpstan": "^1.12.15",
+        "phpstan/phpstan-symfony": "^1.3.5",
+        "phpunit/phpunit": "^12.5.23 || ^13.1.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Pimcore\\Bundle\\AdminBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pimcore\\Bundle\\AdminBundle\\Tests\\": "tests"
+        },
+        "files": [
+            "kernel/Kernel.php"
+        ]
+    },
+    "extra": {
+        "pimcore": {
+            "bundles": [
+                "Pimcore\\Bundle\\AdminBundle\\PimcoreAdminBundle"
+            ]
+        }
     }
-  }
 }
