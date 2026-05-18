@@ -529,10 +529,22 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
 
         for (var i = 0; i < this.frontendLanguages.length; i++) {
             currentLanguage = this.frontendLanguages[i];
+            localizedData[currentLanguage] = {};
+
+            // If the language tab was never rendered (deferred rendering, user never visited it),
+            // languageElements is empty. Preserve the original data to avoid wiping it when the
+            // whole block becomes dirty due to an unrelated add/remove of a sibling block item.
+            if (
+                    (!this.languageElements[currentLanguage] || this.languageElements[currentLanguage].length === 0) &&
+                    this.data[currentLanguage]
+               ) {
+                localizedData[currentLanguage] = Ext.clone(this.data[currentLanguage]);
+                continue;
+            }
+
             if (!this.languageElements[currentLanguage]) {
                 continue;
             }
-            localizedData[currentLanguage] = {};
 
             for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
                 try {
