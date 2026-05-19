@@ -58,9 +58,12 @@ final class Dashboard
 
         if (empty($this->dashboards)) {
             if (is_file($this->getConfigFile())) {
-                $dashboards = Serialize::unserialize(file_get_contents($this->getConfigFile()));
-                if (!empty($dashboards)) {
-                    $this->dashboards = $dashboards;
+                $dashboardFile = file_get_contents($this->getConfigFile());
+                if ($dashboardFile !== false) {
+                    $dashboards = unserialize($dashboardFile, ['allowed_classes' => false]);
+                    if (is_array($dashboards) && !empty($dashboards)) {
+                        $this->dashboards = $dashboards;
+                    }
                 }
             }
 
