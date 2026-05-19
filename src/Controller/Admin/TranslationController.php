@@ -543,7 +543,7 @@ class TranslationController extends AdminAbstractController
             'creationDate',
             'modificationDate',
             'userOwner',
-            'userModification'
+            'userModification',
         ];
 
         $db = \Pimcore\Db::get();
