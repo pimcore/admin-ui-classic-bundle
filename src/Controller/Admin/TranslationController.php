@@ -535,6 +535,17 @@ class TranslationController extends AdminAbstractController
         $conditions = [];
         $validLanguages = $admin ? Tool\Admin::getLanguages() : $this->getAdminUser()->getAllowedLanguagesForViewingWebsiteTranslations();
 
+        $allowedNonLanguageFields = [
+            'key',
+            'type',
+            'language',
+            'text',
+            'creationDate',
+            'modificationDate',
+            'userOwner',
+            'userModification'
+        ];
+
         $db = \Pimcore\Db::get();
         $conditionFilters = [];
 
@@ -555,9 +566,17 @@ class TranslationController extends AdminAbstractController
                 }
                 $fieldname = str_replace('--', '', $fieldname);
 
-                if (!$languageMode && in_array($fieldname, $validLanguages)
-                    || $languageMode && !in_array($fieldname, $validLanguages)) {
-                    continue;
+                $isLanguageField = in_array($fieldname, $validLanguages);
+                $isAllowedNonLanguage = in_array($fieldname, $allowedNonLanguageFields, true);
+
+                if ($languageMode) {
+                    if (!$isLanguageField) {
+                        continue;
+                    }
+                } else {
+                    if (!$isAllowedNonLanguage && !$isLanguageField) {
+                        continue;
+                    }
                 }
 
                 if (!$languageMode) {
@@ -573,20 +592,23 @@ class TranslationController extends AdminAbstractController
                         (in_array($fieldname, ['modificationDate', 'creationDate']))) {
                         if ($filter[$operatorField] == 'lt') {
                             $operator = '<';
+                            $field = $db->quoteIdentifier($fieldname);
                         } elseif ($filter[$operatorField] == 'gt') {
                             $operator = '>';
+                            $field = $db->quoteIdentifier($fieldname);
                         } elseif ($filter[$operatorField] == 'eq') {
                             $operator = '=';
-                            $fieldname = "UNIX_TIMESTAMP(DATE(FROM_UNIXTIME({$fieldname})))";
+                            $field = sprintf('UNIX_TIMESTAMP(DATE(FROM_UNIXTIME(%s)))', $db->quoteIdentifier($fieldname));
                         }
-                        $filter['value'] = strtotime($filter['value']);
-                        $field = $fieldname;
-                        $value = $filter['value'];
+                        $value = strtotime($filter['value']);
+                        if ($value === false) {
+                            continue;
+                        }
                     }
                 }
 
-                if ($field && $value) {
-                    $condition = $db->quoteIdentifier($field) . ' ' . $operator . ' ' . $db->quote($value);
+                if ($field !== null && $value !== null) {
+                    $condition = $field . ' ' . $operator . ' ' . $db->quote($value);
 
                     if ($languageMode) {
                         $conditions[$fieldname] = $condition;
