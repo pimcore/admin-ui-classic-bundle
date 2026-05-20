@@ -454,11 +454,47 @@ pimcore.element.helpers.gridColumnConfig = {
                 if (filter.dataIndex !== fieldInfo.dataIndex) {
                     continue;
                 }
-                editor.data = filter.getValue()
-                    .split(",")
-                    .map(v => ({ id: Number.parseInt(v.trim()) }))
-                    .filter(v => !Number.isNaN(v.id));
-                editor.store.loadData(items, false);
+                
+                const filterValue = filter.getValue();
+                if (!filterValue || filterValue === 'null') {
+                    break;
+                }
+
+                let parsedItems;
+
+                if (filterValue.includes('|')) {
+                    parsedItems = filterValue.split(",").map(function(v) {
+                        var parts = v.trim().split('|');
+                        return { type: parts[0], id: Number.parseInt(parts[1]) };
+                    }).filter(function(v) { return !Number.isNaN(v.id); });
+                } else {
+                    parsedItems = filterValue.split(",")
+                        .map(function(v) { return { id: Number.parseInt(v.trim()) }; })
+                        .filter(function(v) { return !Number.isNaN(v.id); });
+                }
+
+                if (typeof editor.loadObjectData === 'function' && editor.visibleFields) {
+                    // manyToManyObjectRelation: loadObjectData adds to store AND fetches field metadata
+                    parsedItems.forEach(function(item) {
+                        editor.loadObjectData(item, editor.visibleFields);
+                    });
+                } else {
+                    // manyToManyRelation / advancedManyToManyRelation: load into store, resolve fullpath
+                    editor.store.loadData(parsedItems, false);
+                    editor.store.each(function(rec) {
+                        Ext.Ajax.request({
+                            url: Routing.generate('pimcore_admin_element_typepath'),
+                            params: { id: rec.get('id'), type: rec.get('type') || 'object' },
+                            success: function(response) {
+                                var rdata = Ext.decode(response.responseText);
+                                if (rdata.success) {
+                                    rec.set('fullpath', rdata.fullpath, { dirty: false });
+                                }
+                            }
+                        });
+                    });
+                }
+
                 break;
             }
 
