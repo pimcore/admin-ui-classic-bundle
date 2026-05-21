@@ -460,9 +460,8 @@ pimcore.element.helpers.gridColumnConfig = {
                     break;
                 }
 
-
                 let parsedItems = [];
-                
+
                 if (typeof filterValue === 'number') {
                     parsedItems = [{ id: filterValue }];
                 } else {
@@ -483,7 +482,21 @@ pimcore.element.helpers.gridColumnConfig = {
                     parsedItems.forEach(function(item) {
                         editor.loadObjectData(item, editor.visibleFields);
                     });
-                } else {
+
+                    // loadObjectData skips fullpath — resolve it separately
+                    editor.store.each(function(rec) {
+                        Ext.Ajax.request({
+                            url: Routing.generate('pimcore_admin_element_typepath'),
+                            params: { id: rec.get('id'), type: 'object' },
+                            success: function(response) {
+                                var rdata = Ext.decode(response.responseText);
+                                if (rdata.success) {
+                                    rec.set('fullpath', rdata.fullpath, { dirty: false });
+                                }
+                            }
+                        });
+                    });
+                } else if (editor.store) {
                     // manyToManyRelation / advancedManyToManyRelation: load into store, resolve fullpath
                     editor.store.loadData(parsedItems, false);
                     editor.store.each(function(rec) {
@@ -498,6 +511,26 @@ pimcore.element.helpers.gridColumnConfig = {
                             }
                         });
                     });
+                } else {
+                    // manyToOneRelation: uses editor.data directly, no store
+                    var item = parsedItems[0];
+
+                    if (item) {
+                        editor.data = { id: item.id, type: item.type || 'object', path: '' };
+                        Ext.Ajax.request({
+                            url: Routing.generate('pimcore_admin_element_typepath'),
+                            params: { id: item.id, type: item.type || 'object' },
+                            success: function(response) {
+                                var rdata = Ext.decode(response.responseText);
+                                if (rdata.success) {
+                                    editor.data.path = rdata.fullpath;
+                                    if (editor.component) {
+                                        editor.component.setValue(rdata.fullpath);
+                                    }
+                                }
+                            }
+                        });
+                    }
                 }
 
                 break;
