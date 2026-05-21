@@ -460,17 +460,22 @@ pimcore.element.helpers.gridColumnConfig = {
                     break;
                 }
 
-                let parsedItems;
 
-                if (filterValue.includes('|')) {
-                    parsedItems = filterValue.split(",").map(function(v) {
-                        var parts = v.trim().split('|');
-                        return { type: parts[0], id: Number.parseInt(parts[1]) };
-                    }).filter(function(v) { return !Number.isNaN(v.id); });
+                let parsedItems = [];
+                
+                if (typeof filterValue === 'number') {
+                    parsedItems = [{ id: filterValue }];
                 } else {
-                    parsedItems = filterValue.split(",")
-                        .map(function(v) { return { id: Number.parseInt(v.trim()) }; })
-                        .filter(function(v) { return !Number.isNaN(v.id); });
+                    if (filterValue.includes('|')) {
+                        parsedItems = filterValue.split(",").map(function(v) {
+                            var parts = v.trim().split('|');
+                            return { type: parts[0], id: Number.parseInt(parts[1]) };
+                        }).filter(function(v) { return !Number.isNaN(v.id); });
+                    } else {
+                        parsedItems = filterValue.split(",")
+                            .map(function(v) { return { id: Number.parseInt(v.trim()) }; })
+                            .filter(function(v) { return !Number.isNaN(v.id); });
+                    }
                 }
 
                 if (typeof editor.loadObjectData === 'function' && editor.visibleFields) {
