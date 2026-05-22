@@ -120,8 +120,9 @@ pimcore.document.editables.textarea = Class.create(pimcore.document.editable, {
         }
 
         value = strip_tags(value, '<br>'); // strip out nasty HTML, eg. inserted by highlighting feature (ExtJS masks)
+        value = value.replace(/<br>\s*&nbsp;/gi, "\n"); // replace <br>&nbsp; pair (cursor placeholder after Enter) as a single newline
         value = value.replace(/<br>/g, "\n");
-        value = trim(value);
+        value = value.replace(/^\s+/, '').replace(/[^\S\n]+$/, ''); // trim leading whitespace and trailing non-newline whitespace, preserving intentional trailing newlines
         return value;
     },
 
