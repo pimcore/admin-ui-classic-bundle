@@ -1,12 +1,12 @@
 /**
-* This source file is available under the terms of the
-* Pimcore Open Core License (POCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
-*  @license    Pimcore Open Core License (POCL)
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 pimcore.registerNS("pimcore.object.tags.select");
 /**
@@ -33,7 +33,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
 
             this.applyPermissionStyle(key, value, metaData, record);
 
-            if (record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
+            if (record.data.inheritedFields && record.data.inheritedFields[key] && record.data.inheritedFields[key].inherited == true) {
                 try {
                     metaData.tdCls += " grid_value_inherited";
                 } catch (e) {
@@ -41,7 +41,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
                 }
             }
 
-            if (options) {
+            if (Array.isArray(options)) {
                 for (var i = 0; i < options.length; i++) {
                     if (options[i]["value"] == value) {
                         return replace_html_event_attributes(strip_tags(options[i]["key"], 'div,span,b,strong,em,i,small,sup,sub'));
@@ -75,9 +75,11 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
                 }
             }
 
-            for(var i=0; i < field.layout.options.length; i++) {
-                if(field.layout.options[i]["value"] == value) {
-                    return replace_html_event_attributes(strip_tags(field.layout.options[i]["key"], 'div,span,b,strong,em,i,small,sup,sub'));
+            if (Array.isArray(field.layout.options)) {
+                for (var i = 0; i < field.layout.options.length; i++) {
+                    if (field.layout.options[i]["value"] == value) {
+                        return replace_html_event_attributes(strip_tags(field.layout.options[i]["key"], 'div,span,b,strong,em,i,small,sup,sub'));
+                    }
                 }
             }
 
@@ -96,8 +98,14 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnConfig:function (field) {
-        if (field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE
-            && field.layout.optionsProviderClass) {
+        // Route to dynamic config when a non-configure options provider is set
+        // (select_options or class), even if optionsProviderClass is not explicitly populated.
+        var isDynamic = (field.layout.optionsProviderType
+                && field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE)
+            || (field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE
+                && field.layout.optionsProviderClass);
+
+        if (isDynamic) {
             return this.getGridColumnConfigDynamic(field);
         } else {
             return this.getGridColumnConfigStatic(field);
@@ -154,7 +162,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
         }
 
         const storeData = this.prepareStoreDataAndFilterLabels(field.layout.options);
-        
+
         if (!field.layout.mandatory) {
             storeData.unshift({'value': '', 'key': '(' + t('empty') + ')'});
         }
@@ -206,7 +214,12 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter: function(field) {
-        if (field.layout.dynamicOptions) {
+        // Check if options are dynamic (dynamicOptions flag or options provider type is not 'configure')
+        var isDynamicOptions = field.layout.dynamicOptions ||
+            (field.layout.optionsProviderType &&
+                field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE);
+
+        if (isDynamicOptions) {
             return {type: 'string', dataIndex: field.key};
         } else {
             var store = Ext.create('Ext.data.JsonStore', {
@@ -254,6 +267,10 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
             data : storeData
         });
 
+        // Check if options need to be loaded dynamically
+        var isDynamicOptions = this.fieldConfig.dynamicOptions ||
+            (this.fieldConfig.optionsProviderType &&
+                this.fieldConfig.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE);
 
         var options = {
             name: this.fieldConfig.name,
@@ -268,7 +285,7 @@ pimcore.object.tags.select = Class.create(pimcore.object.tags.abstract, {
             store: store,
             listeners: {
                 focusenter: function(selectField, e) {
-                    if (this.fieldConfig.dynamicOptions) {
+                    if (isDynamicOptions) {
                         Ext.Ajax.request({
                             url: Routing.generate('pimcore_admin_dataobject_dataobject_getSelectOptions'),
                             method: 'POST',
