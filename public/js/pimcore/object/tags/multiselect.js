@@ -1,12 +1,12 @@
 /**
-* This source file is available under the terms of the
-* Pimcore Open Core License (POCL)
-* Full copyright and license information is available in
-* LICENSE.md which is distributed with this source code.
-*
-*  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
-*  @license    Pimcore Open Core License (POCL)
-*/
+ * This source file is available under the terms of the
+ * Pimcore Open Core License (POCL)
+ * Full copyright and license information is available in
+ * LICENSE.md which is distributed with this source code.
+ *
+ *  @copyright  Copyright (c) Pimcore GmbH (http://www.pimcore.com)
+ *  @license    Pimcore Open Core License (POCL)
+ */
 
 pimcore.registerNS("pimcore.object.tags.multiselect");
 /**
@@ -81,7 +81,12 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter: function(field) {
-        if (field.layout.dynamicOptions) {
+        // Check if options are dynamic (dynamicOptions flag or options provider type is not 'configure')
+        var isDynamicOptions = field.layout.dynamicOptions ||
+            (field.layout.optionsProviderType &&
+                field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE);
+
+        if (isDynamicOptions) {
             return {
                 type: 'string',
                 dataIndex: field.key
@@ -145,6 +150,10 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
             data: storeData
         });
 
+        // Check if options need to be loaded dynamically
+        var isDynamicOptions = this.fieldConfig.dynamicOptions ||
+            (this.fieldConfig.optionsProviderType &&
+                this.fieldConfig.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE);
 
         var options = {
             name: this.fieldConfig.name,
@@ -169,7 +178,7 @@ pimcore.object.tags.multiselect = Class.create(pimcore.object.tags.abstract, {
                     return true;
                 }.bind(this),
                 focusenter: function(selectField, e) {
-                    if (this.fieldConfig.dynamicOptions) {
+                    if (isDynamicOptions) {
                         Ext.Ajax.request({
                             url: Routing.generate('pimcore_admin_dataobject_dataobject_getSelectOptions'),
                             method: 'POST',

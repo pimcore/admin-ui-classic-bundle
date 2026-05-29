@@ -117,7 +117,12 @@ pimcore.object.tags.booleanSelect = Class.create(pimcore.object.tags.abstract, {
     },
 
     getGridColumnFilter: function(field) {
-        if (field.layout.dynamicOptions) {
+        // Check if options are dynamic (dynamicOptions flag or options provider type is not 'configure')
+        var isDynamicOptions = field.layout.dynamicOptions ||
+            (field.layout.optionsProviderType &&
+                field.layout.optionsProviderType !== pimcore.object.helpers.selectField.OPTIONS_PROVIDER_TYPE_CONFIGURE);
+
+        if (isDynamicOptions) {
             return {type: 'string', dataIndex: field.key};
         } else {
             var store = Ext.create('Ext.data.JsonStore', {
