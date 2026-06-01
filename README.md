@@ -2,13 +2,10 @@
 
 > [!WARNING]
 > This bundle won't be migrated to Pimcore Studio and therefore will be deprecated with 2.3.
+
 > [!IMPORTANT]
-> This bundle has reached **end of feature development.** We will no longer
-> accept or review any pull requests related to new features or improvements for this bundle.
->
-> However, we will continue to accept, review and merge bug fixes at least until the end of 2025.
+> This bundle has **reached end of life**. We will no longer accept, review, or merge pull requests for new features, improvements, or bug fixes.
 > 
-> Going forward, our focus will shift to finalizing Pimcore Studio.
 
 > [!WARNING]
 > **IMPORTANT: This bundle requires an additional license to be used with the Pimcore Community Edition.**
