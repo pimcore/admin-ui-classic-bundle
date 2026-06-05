@@ -627,7 +627,7 @@ class GridHelperService
                 } elseif ($orderKey === 'fullpath') {
                     $orderKey = 'CAST(CONCAT(`path`, `key`) AS CHAR CHARACTER SET utf8) COLLATE utf8_general_ci';
                     $doNotQuote = true;
-                } elseif ($class->getFieldDefinition($orderKey) instanceof ClassDefinition\Data\QuantityValue) {
+                } elseif ($class->getFieldDefinition($orderKey) instanceof ClassDefinition\Data\AbstractQuantityValue) {
                     $orderKey = 'concat(' . $orderKey . '__unit, ' . $orderKey . '__value)';
                     $doNotQuote = true;
                 } elseif ($class->getFieldDefinition($orderKey) instanceof ClassDefinition\Data\RgbaColor) {
@@ -651,7 +651,7 @@ class GridHelperService
                         if ($brickDefinition instanceof Objectbrick\Definition) {
                             $brickFieldDefinition = $brickDefinition->getFieldDefinition($orderKeyParts[1]);
 
-                            if ($brickFieldDefinition instanceof ClassDefinition\Data\QuantityValue) {
+                            if ($brickFieldDefinition instanceof ClassDefinition\Data\AbstractQuantityValue) {
                                 $orderKey = 'CONCAT('.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__unit').', '.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__value').')';
                             } elseif ($brickFieldDefinition instanceof ClassDefinition\Data\RgbaColor) {
                                 $orderKey = 'CONCAT('.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__rgb').', '.$list->quoteIdentifier($orderKeyParts[0]).'.'.$list->quoteIdentifier($orderKeyParts[1].'__a').')';
