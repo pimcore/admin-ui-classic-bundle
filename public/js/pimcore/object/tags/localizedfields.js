@@ -539,6 +539,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
                     this.data[currentLanguage]
                ) {
                 localizedData[currentLanguage] = Ext.clone(this.data[currentLanguage]);
+                continue;
             }
 
             if (!this.languageElements[currentLanguage]) {
@@ -547,7 +548,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
 
             for (var s = 0; s < this.languageElements[currentLanguage].length; s++) {
                 try {
-                    if (ignoreIsDirty || this.languageElements[currentLanguage][s].isDirty()) {
+                    if (this.languageElements[currentLanguage][s].isDirty()) {
                         localizedData[currentLanguage][this.languageElements[currentLanguage][s].getName()]
                             = this.languageElements[currentLanguage][s].getValue();
                     }
