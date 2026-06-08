@@ -91,6 +91,7 @@ pimcore.object.edit = Class.create({
                         newValue = newValue.map((item, index) => {
                             if('oIndex' in item)
                                 item.oIndex = index;
+                            return item;
                         });
                     }
                     values[currentField.getName()] = newValue;
