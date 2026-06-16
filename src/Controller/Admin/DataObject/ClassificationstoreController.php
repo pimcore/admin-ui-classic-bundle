@@ -1455,13 +1455,19 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
 
         $unrestrictedActions = [
-            'collectionsActionGet',
-            'groupsActionGet',
-            'relationsActionGet',
-            'addGroupsAction',
-            'addCollectionsAction',
-            'searchRelationsAction',
+            'collectionsActionGet',        // checkPermission('objects')
+            'groupsActionGet',             // checkPermission('objects')
+            'keysActionGet',               // checkPermission('objects')
+            'addCollectionRelation',       // checkPermission('classificationstore')
+            'deleteCollectionRelation',    // checkPermission('classificationstore')
+            'createGroup',                 // checkPermission('classificationstore')
+            'deleteGroup',                 // checkPermission('classificationstore')
+            'createCollection',            // checkPermission('classificationstore')
+            'deleteCollection',            // checkPermission('classificationstore')
+            'createStore',                 // checkPermission('classificationstore')
+            'deleteRelation',              // checkPermission('classificationstore')
         ];
+        
         $this->checkActionPermission($event, 'classificationstore', $unrestrictedActions);
     }
 
