@@ -1455,6 +1455,10 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
 
         $unrestrictedActions = [
+            'getKeyDefinitions',           // GET /get-key-definitions  (already present, keep)
+            'getStores',                   // GET /getstores
+            'propertiesGet',               // GET /properties
+            'storedata',                   // GET store data for editor panel
             'collectionsActionGet',        // checkPermission('objects')
             'groupsActionGet',             // checkPermission('objects')
             'keysActionGet',               // checkPermission('objects')
