@@ -1455,21 +1455,16 @@ class ClassificationstoreController extends AdminAbstractController implements K
         }
 
         $unrestrictedActions = [
-            'getKeyDefinitions',           // GET /get-key-definitions  (already present, keep)
-            'getStores',                   // GET /getstores
-            'propertiesGet',               // GET /properties
-            'storedata',                   // GET store data for editor panel
-            'collectionsActionGet',        // checkPermission('objects')
-            'groupsActionGet',             // checkPermission('objects')
-            'keysActionGet',               // checkPermission('objects')
-            'addCollectionRelation',       // checkPermission('classificationstore')
-            'deleteCollectionRelation',    // checkPermission('classificationstore')
-            'createGroup',                 // checkPermission('classificationstore')
-            'deleteGroup',                 // checkPermission('classificationstore')
-            'createCollection',            // checkPermission('classificationstore')
-            'deleteCollection',            // checkPermission('classificationstore')
-            'createStore',                 // checkPermission('classificationstore')
-            'deleteRelation',              // checkPermission('classificationstore')
+            'propertiesGetAction',              // GET /properties
+            'collectionsActionGet',             // checkPermission('objects')
+            'groupsActionGet',                  // checkPermission('objects')
+            'deleteCollectionRelationAction',   // checkPermission('classificationstore')
+            'createGroupAction',                // checkPermission('classificationstore')
+            'deleteGroupAction',                // checkPermission('classificationstore')
+            'createCollectionAction',           // checkPermission('classificationstore')
+            'deleteCollectionAction',           // checkPermission('classificationstore')
+            'createStoreAction',                // checkPermission('classificationstore')
+            'deleteRelationAction',             // checkPermission('classificationstore')
         ];
         
         $this->checkActionPermission($event, 'classificationstore', $unrestrictedActions);
