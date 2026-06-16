@@ -1458,6 +1458,11 @@ class ClassificationstoreController extends AdminAbstractController implements K
             'propertiesGetAction',              // GET /properties
             'collectionsActionGet',             // checkPermission('objects')
             'groupsActionGet',                  // checkPermission('objects')
+            'relationsActionGet',               // checkPermission('objects')
+            'addGroupsAction',                  // checkPermission('classificationstore')
+            'addCollectionsAction',             // checkPermission('classificationstore')
+            'searchRelationsAction',            // no internal permission check — must remain here
+            'propertiesGetAction',              // checkPermission('classificationstore')
             'deleteCollectionRelationAction',   // checkPermission('classificationstore')
             'createGroupAction',                // checkPermission('classificationstore')
             'deleteGroupAction',                // checkPermission('classificationstore')
