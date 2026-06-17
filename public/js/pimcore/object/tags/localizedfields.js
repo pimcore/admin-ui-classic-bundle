@@ -535,6 +535,7 @@ pimcore.object.tags.localizedfields = Class.create(pimcore.object.tags.abstract,
             // languageElements is empty. Preserve the original data to avoid wiping it when the
             // whole block becomes dirty due to an unrelated add/remove of a sibling block item.
             if (
+                    ignoreIsDirty &&
                     (!this.languageElements[currentLanguage] || this.languageElements[currentLanguage].length === 0) &&
                     this.data[currentLanguage]
                ) {
