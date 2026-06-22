@@ -9,6 +9,7 @@
 */
 
 pimcore.registerNS("pimcore.object.classes.data.link");
+
 /**
  * @private
  */
