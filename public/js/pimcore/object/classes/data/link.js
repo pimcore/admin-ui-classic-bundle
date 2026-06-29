@@ -66,33 +66,21 @@ pimcore.object.classes.data.link = Class.create(pimcore.object.classes.data.data
             },
             {
                 xtype: "multiselect",
-                fieldLabel: t("allowed_asset_subtypes") + '<br />' + t('allowed_types_hint'),
-                name: "allowedAssetSubtypes",
-                id: 'allowedAssetSubtypes',
-                store: pimcore.globalmanager.get('asset_search_types').filter(v => v !== "folder").map((text) => ({text})),
-                value: this.datax.allowedAssetSubtypes,
+                store: pimcore.globalmanager.get('asset_search_types').filter(v => v !== "folder"),
                 displayField: "text",
                 valueField: "text",
                 width: 400
             },
             {
                 xtype: "multiselect",
-                fieldLabel: t("allowed_document_subtypes") + '<br />' + t('allowed_types_hint'),
-                name: "allowedDocumentSubtypes",
-                id: 'allowedDocumentSubtypes',
-                store: pimcore.globalmanager.get('document_search_types').filter(v => v !== "folder").map((text) => ({text})),
-                value: this.datax.allowedDocumentSubtypes,
+                store: pimcore.globalmanager.get('document_search_types').filter(v => v !== "folder"),
                 displayField: "text",
                 valueField: "text",
                 width: 400
             },
             {
                 xtype: "multiselect",
-                fieldLabel: t("allowed_object_subtypes") + '<br />' + t('allowed_types_hint'),
-                name: "allowedObjectSubtypes",
-                id: 'allowedObjectSubtypes',
-                store: pimcore.globalmanager.get('object_search_types').filter(v => v !== "folder").map((text) => ({text})),
-                value: this.datax.allowedObjectSubtypes,
+                store: pimcore.globalmanager.get('object_search_types').filter(v => v !== "folder"),
                 displayField: "text",
                 valueField: "text",
                 width: 400
