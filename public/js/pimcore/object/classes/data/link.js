@@ -9,6 +9,7 @@
 */
 
 pimcore.registerNS("pimcore.object.classes.data.link");
+
 /**
  * @private
  */
@@ -59,6 +60,50 @@ pimcore.object.classes.data.link = Class.create(pimcore.object.classes.data.data
                 id: 'allowedTypes',
                 store: this.types,
                 value: this.datax.allowedTypes,
+                displayField: "text",
+                valueField: "text",
+                width: 400
+            },
+            {
+                xtype: "multiselect",
+                fieldLabel: t("allowed_asset_subtypes") + '<br />' + t('allowed_types_hint'),
+                name: "allowedAssetSubtypes",
+                id: 'allowedAssetSubtypes',
+                store: pimcore.globalmanager.get('asset_search_types').filter(v => v !== "folder"),
+                value: this.datax.allowedAssetSubtypes,
+                displayField: "text",
+                valueField: "text",
+                width: 400
+            },
+            {
+                xtype: "multiselect",
+                fieldLabel: t("allowed_document_subtypes") + '<br />' + t('allowed_types_hint'),
+                name: "allowedDocumentSubtypes",
+                id: 'allowedDocumentSubtypes',
+                store: pimcore.globalmanager.get('document_search_types').filter(v => v !== "folder"),
+                value: this.datax.allowedDocumentSubtypes,
+                displayField: "text",
+                valueField: "text",
+                width: 400
+            },
+            {
+                xtype: "multiselect",
+                fieldLabel: t("allowed_object_subtypes") + '<br />' + t('allowed_types_hint'),
+                name: "allowedObjectSubtypes",
+                id: 'allowedObjectSubtypes',
+                store: pimcore.globalmanager.get('object_search_types').filter(v => v !== "folder"),
+                value: this.datax.allowedObjectSubtypes,
+                displayField: "text",
+                valueField: "text",
+                width: 400
+            },
+            {
+                xtype: "multiselect",
+                fieldLabel: t("allowed_classes") + '<br />' + t('allowed_types_hint'),
+                name: "allowedClasses",
+                id: 'allowedClasses',
+                store: pimcore.globalmanager.get("object_types_store"),
+                value: this.datax.allowedClasses,
                 displayField: "text",
                 valueField: "text",
                 width: 400
