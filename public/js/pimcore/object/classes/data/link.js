@@ -113,7 +113,7 @@ pimcore.object.classes.data.link = Class.create(pimcore.object.classes.data.data
                 fieldLabel: t("allowed_targets") + '<br />' + t('allowed_types_hint'),
                 name: "allowedTargets",
                 id: 'allowedTargets',
-                store: this.targets.map((text) => ({text})),
+                store: this.targets,
                 value: this.datax.allowedTargets,
                 displayField: "text",
                 valueField: "text",
