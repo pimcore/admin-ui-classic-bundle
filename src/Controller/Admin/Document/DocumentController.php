@@ -687,6 +687,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         if (!$document) {
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
+        $this->checkVersionAuthorization($version, 'document');
         Document\Service::saveElementToSession($document, $request->getSession()->getId());
 
         return new Response();
@@ -703,7 +704,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         if (!$document) {
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
-        $this->checkVersionAuthorization($version);
+        $this->checkVersionAuthorization($version, 'document');
 
         $currentDocument = Document::getById($document->getId());
         if ($currentDocument->isAllowed('publish')) {
