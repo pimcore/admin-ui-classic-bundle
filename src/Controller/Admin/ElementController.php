@@ -492,6 +492,11 @@ class ElementController extends AdminAbstractController
         $data = $this->decodeJson($request->get('data'));
 
         $version = Version::getById($data['id']);
+        if (!$version) {
+            throw $this->createNotFoundException('Version with id [' . $data['id'] . "] doesn't exist");
+        }
+
+        $this->checkVersionAuthorization($version);
 
         if ($data['public'] != $version->getPublic() || $data['note'] != $version->getNote()) {
             $version->setPublic($data['public']);
@@ -500,6 +505,20 @@ class ElementController extends AdminAbstractController
         }
 
         return $this->adminJson(['success' => true]);
+    }
+
+    /**
+     * Ensures the current admin user has 'versions' permission on the element a version
+     * belongs to. Version-management endpoints act on an attacker-suppliable version id,
+     * so this must be checked per-request rather than relying on the /admin firewall
+     * (which only requires ROLE_PIMCORE_USER for every backend user).
+     */
+    private function checkVersionAuthorization(Version $version): void
+    {
+        $element = Element\Service::getElementById($version->getCtype(), $version->getCid());
+        if (!$element || !$element->isAllowed('versions')) {
+            throw $this->createAccessDeniedException('Permission denied, version id [' . $version->getId() . ']');
+        }
     }
 
     /**
@@ -617,6 +636,7 @@ class ElementController extends AdminAbstractController
     {
         $version = Version::getById((int) $request->get('id'));
         if ($version) {
+            $this->checkVersionAuthorization($version);
             $version->delete();
         }
 
@@ -626,7 +646,13 @@ class ElementController extends AdminAbstractController
     #[Route('/element/delete-version', name: 'pimcore_admin_element_deleteversion', methods: ['DELETE'])]
     public function deleteVersionAction(Request $request): JsonResponse
     {
-        $version = Model\Version::getById((int) $request->get('id'));
+        $id = (int) $request->get('id');
+        $version = Model\Version::getById($id);
+        if (!$version) {
+            throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
+        }
+
+        $this->checkVersionAuthorization($version);
         $version->delete();
 
         return $this->adminJson(['success' => true]);
@@ -638,6 +664,15 @@ class ElementController extends AdminAbstractController
         $elementId = ParameterBagHelper::getInt($request->request, 'id');
         $elementModificationdate = $request->request->get('date');
         $elementType = $request->request->get('type');
+
+        $element = Element\Service::getElementById($elementType, $elementId);
+        if (!$element) {
+            throw $this->createNotFoundException($elementType . ' with id [' . $elementId . "] doesn't exist");
+        }
+
+        if (!$element->isAllowed('versions')) {
+            throw $this->createAccessDeniedException('Permission denied, ' . $elementType . ' id [' . $elementId . ']');
+        }
 
         $versions = new Model\Version\Listing();
         $versions->setCondition('cid = ' . $versions->quote($elementId) .
