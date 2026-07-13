@@ -45,7 +45,7 @@ abstract class AdminAbstractController extends UserAwareController
 
     /**
      * Ensures the current admin user has 'versions' permission on the element a version
-     * belongs to. Version-management endpoints act on an attacker-suppliable version id,
+     * belongs to. Version-management endpoints act on an attacker-supplied version id,
      * so this must be checked per-request rather than relying on the /admin firewall
      * (which only requires ROLE_PIMCORE_USER for every backend user).
      *
