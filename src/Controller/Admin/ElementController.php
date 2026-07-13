@@ -620,11 +620,14 @@ class ElementController extends AdminAbstractController
     #[Route('/element/delete-draft', name: 'pimcore_admin_element_deletedraft', methods: ['DELETE'])]
     public function deleteDraftAction(Request $request): JsonResponse
     {
-        $version = Version::getById((int) $request->get('id'));
-        if ($version) {
-            $this->checkVersionAuthorization($version);
-            $version->delete();
+        $id = (int) $request->get('id');
+        $version = Version::getById($id);
+        if (!$version) {
+            throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
+
+        $this->checkVersionAuthorization($version);
+        $version->delete();
 
         return $this->adminJson(['success' => true]);
     }
