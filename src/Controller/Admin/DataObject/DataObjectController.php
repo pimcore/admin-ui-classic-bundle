@@ -1514,7 +1514,6 @@ class DataObjectController extends ElementControllerBase implements KernelContro
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
         $this->checkVersionAuthorization($version, 'object');
-        $object = $version->loadData();
 
         $currentObject = DataObject::getById($object->getId());
         if ($currentObject->isAllowed('publish')) {
