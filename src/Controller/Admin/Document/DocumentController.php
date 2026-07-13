@@ -683,7 +683,12 @@ class DocumentController extends ElementControllerBase implements KernelControll
     {
         $id = (int)$request->get('id');
         $version = Version::getById($id);
-        $document = $version?->loadData();
+        if (!$version) {
+            throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
+        }
+        $this->checkVersionAuthorization($version, 'document');
+
+        $document = $version->loadData();
         if (!$document) {
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
