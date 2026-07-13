@@ -881,6 +881,7 @@ class AssetController extends ElementControllerBase implements KernelControllerE
         if (!$asset) {
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
+        $this->checkVersionAuthorization($version);
 
         $currentAsset = Asset::getById($asset->getId());
         if ($currentAsset->isAllowed('publish')) {

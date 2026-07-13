@@ -508,20 +508,6 @@ class ElementController extends AdminAbstractController
     }
 
     /**
-     * Ensures the current admin user has 'versions' permission on the element a version
-     * belongs to. Version-management endpoints act on an attacker-suppliable version id,
-     * so this must be checked per-request rather than relying on the /admin firewall
-     * (which only requires ROLE_PIMCORE_USER for every backend user).
-     */
-    private function checkVersionAuthorization(Version $version): void
-    {
-        $element = Element\Service::getElementById($version->getCtype(), $version->getCid());
-        if (!$element || !$element->isAllowed('versions')) {
-            throw $this->createAccessDeniedException('Permission denied, version id [' . $version->getId() . ']');
-        }
-    }
-
-    /**
      * @throws \Exception
      */
     #[Route('/element/get-nice-path', name: 'pimcore_admin_element_getnicepath', methods: ['POST'])]

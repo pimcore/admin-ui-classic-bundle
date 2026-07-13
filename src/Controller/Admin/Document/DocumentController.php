@@ -703,6 +703,7 @@ class DocumentController extends ElementControllerBase implements KernelControll
         if (!$document) {
             throw $this->createNotFoundException('Version with id [' . $id . "] doesn't exist");
         }
+        $this->checkVersionAuthorization($version);
 
         $currentDocument = Document::getById($document->getId());
         if ($currentDocument->isAllowed('publish')) {
