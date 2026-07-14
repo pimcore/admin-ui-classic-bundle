@@ -705,11 +705,15 @@ class ElementController extends AdminAbstractController
      * $fetchChunk(rawOffset, chunkSize)), skipping hidden rows, to fill one page in
      * visible-item space. $offset/$limit are visible-space indices - what the frontend sends.
      *
-     * The scan budget scales with $offset so that legitimately paging forward always has
-     * enough headroom to make progress, rather than hitting a flat cap that becomes an
-     * unreachable wall for deep pages; each chunk request is itself bounded by the remaining
-     * budget so a single oversized $limit (e.g. the grid's "show all" option) can't blow past
-     * the cap before it's accounted for.
+     * How many raw rows need scanning to reach $offset visible ones depends entirely on how
+     * many hidden rows happen to precede them in the data - not on $offset itself - so no
+     * fixed, offset-derived budget can *guarantee* every page is reachable without either
+     * scanning without bound (unbounded per-request cost) or filtering permissions inside the
+     * query (a much larger change - ACL checks aren't expressible in SQL here). This is a
+     * deliberate, bounded trade-off: each page number gets its own full scan cap, so the budget
+     * grows quickly enough that even a large hidden run is typically crossed within the first
+     * couple of page requests, rather than only after many (a flat cap shared across all pages
+     * would need roughly hiddenRunLength/$limit requests to cross the same run).
      *
      * @return array{items: array, hasHidden: bool, total: int}
      */
@@ -720,17 +724,13 @@ class ElementController extends AdminAbstractController
         $page = [];
         $rawOffset = 0;
         $scannedRows = 0;
-        $scanBudget = $offset + $limit + self::REQUIRED_BY_SCAN_CAP;
+        $pageNumber = intdiv($offset, max($limit, 1)) + 1;
+        $scanBudget = $pageNumber * self::REQUIRED_BY_SCAN_CAP;
         $reachedEnd = false;
 
         while (count($page) < $limit && $scannedRows < $scanBudget) {
             $chunkSize = min(max($limit, self::REQUIRED_BY_SCAN_CHUNK), $scanBudget - $scannedRows);
             $rows = $fetchChunk($rawOffset, $chunkSize);
-            if (empty($rows)) {
-                $reachedEnd = true;
-
-                break;
-            }
 
             foreach ($rows as $row) {
                 $el = $this->resolveDependencyElement($row);
@@ -750,12 +750,24 @@ class ElementController extends AdminAbstractController
 
             $rawOffset += count($rows);
             $scannedRows += count($rows);
+
+            // Fewer rows than requested means the underlying (possibly filtered) raw set is
+            // exhausted - this must be checked even when the requested page already filled,
+            // otherwise a result that exactly fills $limit never reaches this and $reachedEnd
+            // stays false even though nothing more exists.
+            if (count($rows) < $chunkSize) {
+                $reachedEnd = true;
+
+                break;
+            }
         }
 
-        // If the scan actually reached the end of the (filtered) raw set, the total is exact.
-        // Otherwise the budget was hit first - report enough headroom for at least one more
-        // page rather than a truncated, too-small total that would strand navigation.
-        $total = $reachedEnd ? ($offset + count($page)) : ($offset + $limit + self::REQUIRED_BY_SCAN_CHUNK);
+        // If the scan actually reached the end of the (filtered) raw set, $visibleSeen is the
+        // exact total - not $offset + count($page), which overstates it whenever $offset lands
+        // beyond the last visible row (that would report $offset itself as the total). If the
+        // budget was hit first, report enough headroom for at least one more page rather than a
+        // truncated, too-small total that would strand navigation.
+        $total = $reachedEnd ? $visibleSeen : ($offset + $limit + self::REQUIRED_BY_SCAN_CHUNK);
 
         return ['items' => $page, 'hasHidden' => $hasHidden, 'total' => $total];
     }
@@ -893,10 +905,13 @@ class ElementController extends AdminAbstractController
                     $limit
                 );
 
-                // Authoritative, briefly-cached permission-filtered total and hidden-dependency
-                // flag (see Model\Element\Service::getRequiredByVisibleTotalCount()/
-                // getRequiredByHasHiddenDependencies()) so both are accurate and stable on
-                // every page, not just an artifact of what this one page's scan happened to see.
+                // Briefly-cached permission-filtered total and hidden-dependency flag (see
+                // Model\Element\Service::getRequiredByVisibleTotalCount()/
+                // getRequiredByHasHiddenDependencies()), sourced from a scan spanning up to
+                // ~5000 rows rather than whatever this one page's own (much shorter) scan
+                // happened to see - exact within that scan, not an unconditional guarantee: a
+                // raw dependency set larger than that shares the same bounded-scan trade-off as
+                // scanDependencyPage() above and falls back conservatively rather than exactly.
                 $total = Model\Element\Service::getRequiredByVisibleTotalCount($dependencies);
                 $hasHidden = Model\Element\Service::getRequiredByHasHiddenDependencies($dependencies);
 
