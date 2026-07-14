@@ -931,6 +931,32 @@ Ext.override(Ext.picker.Date, {
     }
 });
 
+//Fix - Ext.toolbar.Paging disables all navigation once a page returns 0 rows, even when
+//store.getTotalCount() indicates more pages exist (e.g. a page that came back empty because
+//every row on it was filtered out by permission checks). Only intervene in that exact case;
+//defer to the original behavior otherwise.
+Ext.override(Ext.toolbar.Paging, {
+    onLoad: function () {
+        var me = this,
+            store = me.store,
+            pageData;
+
+        if (store.getCount() === 0 && store.getTotalCount() > 0) {
+            pageData = me.getPageData();
+
+            me.setChildDisabled('#first', pageData.currentPage <= 1);
+            me.setChildDisabled('#prev', pageData.currentPage <= 1);
+            me.setChildDisabled('#next', pageData.currentPage >= pageData.pageCount);
+            me.setChildDisabled('#last', pageData.currentPage >= pageData.pageCount);
+            me.updateInfo();
+
+            return;
+        }
+
+        me.callParent(arguments);
+    }
+});
+
 
 /** workaround for [DataObject] Advanced Image Dropzone only works once #9115
  * Issue: on node drop the component gets destroyed. On mouse up it then tries to focus an already destroyed element.

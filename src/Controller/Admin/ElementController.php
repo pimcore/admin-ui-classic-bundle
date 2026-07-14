@@ -675,6 +675,31 @@ class ElementController extends AdminAbstractController
         return $this->adminJson(['success' => true]);
     }
 
+    private const REQUIRED_BY_SCAN_CHUNK = 200;
+
+    private const REQUIRED_BY_SCAN_CAP = 5000;
+
+    private function resolveDependencyElement(array $row): Asset|Document|DataObject\AbstractObject|null
+    {
+        return match ($row['type']) {
+            'asset' => Asset::getById((int) $row['id']),
+            'object' => DataObject::getById((int) $row['id']),
+            'document' => Document::getById((int) $row['id']),
+            default => null,
+        };
+    }
+
+    private function dependencyToFrontendArray(Element\ElementInterface $element): array
+    {
+        return [
+            'id' => $element->getId(),
+            'path' => $element->getRealFullPath(),
+            'type' => Element\Service::getElementType($element),
+            'subtype' => $element->getType(),
+            'published' => Element\Service::isPublished($element),
+        ];
+    }
+
     #[Route('/element/get-requires-dependencies', name: 'pimcore_admin_element_getrequiresdependencies', methods: ['GET'])]
     public function getRequiresDependenciesAction(Request $request): JsonResponse
     {
@@ -722,13 +747,31 @@ class ElementController extends AdminAbstractController
             }
 
             if ($element instanceof Model\Element\ElementInterface) {
-                $dependenciesResult = Model\Element\Service::getRequiresDependenciesForFrontend($dependencies, $offset, $limit);
+                // getRequires() without offset/limit returns the full in-memory set that
+                // getDependencies() already loaded unconditionally, so filtering it fully
+                // before slicing costs nothing extra and gives an exact total immediately.
+                $all = $dependencies->getRequires();
 
-                $dependenciesResult['start'] = $offset;
-                $dependenciesResult['limit'] = $limit;
-                $dependenciesResult['total'] = $dependencies->getRequiresTotalCount();
+                $visible = [];
+                $hasHidden = false;
+                foreach ($all as $row) {
+                    $el = $this->resolveDependencyElement($row);
+                    if ($el instanceof Element\ElementInterface) {
+                        if ($el->isAllowed('list')) {
+                            $visible[] = $this->dependencyToFrontendArray($el);
+                        } else {
+                            $hasHidden = true;
+                        }
+                    }
+                }
 
-                return $this->adminJson($dependenciesResult);
+                return $this->adminJson([
+                    'requires' => array_slice($visible, $offset, $limit),
+                    'hasHidden' => $hasHidden,
+                    'start' => $offset,
+                    'limit' => $limit,
+                    'total' => count($visible),
+                ]);
             }
         }
 
@@ -782,13 +825,61 @@ class ElementController extends AdminAbstractController
             }
 
             if ($element instanceof Model\Element\ElementInterface) {
-                $dependenciesResult = Model\Element\Service::getRequiredByDependenciesForFrontend($dependencies, $offset, $limit);
+                // "Required By" is a live paginated SQL query with no free full-load, unlike
+                // "Requires" above, so permission filtering has to happen alongside a bounded
+                // scan: keep pulling raw chunks (skipping hidden rows) until enough VISIBLE
+                // items are collected to fill this page, the raw table is exhausted, or the
+                // safety cap is hit. $offset/$limit are indices in visible-item space (what the
+                // frontend sends), so every request re-derives the raw->visible mapping from
+                // raw offset 0 rather than resuming from the raw offset it was given - that is
+                // what keeps this correct across independent page requests.
+                $rawTotal = $dependencies->getRequiredByTotalCount();
 
-                $dependenciesResult['start'] = $offset;
-                $dependenciesResult['limit'] = $limit;
-                $dependenciesResult['total'] = $dependencies->getRequiredByTotalCount();
+                $visibleSeen = 0;
+                $hasHidden = false;
+                $page = [];
+                $rawOffset = 0;
+                $scannedRows = 0;
 
-                return $this->adminJson($dependenciesResult);
+                while (count($page) < $limit && $rawOffset < $rawTotal && $scannedRows < self::REQUIRED_BY_SCAN_CAP) {
+                    $chunkSize = max($limit, self::REQUIRED_BY_SCAN_CHUNK);
+                    $rows = $dependencies->getRequiredBy($rawOffset, $chunkSize);
+                    if (empty($rows)) {
+                        break;
+                    }
+
+                    foreach ($rows as $row) {
+                        $el = $this->resolveDependencyElement($row);
+                        if (!$el instanceof Element\ElementInterface) {
+                            continue;
+                        }
+                        if (!$el->isAllowed('list')) {
+                            $hasHidden = true;
+
+                            continue;
+                        }
+                        if ($visibleSeen >= $offset && count($page) < $limit) {
+                            $page[] = $this->dependencyToFrontendArray($el);
+                        }
+                        $visibleSeen++;
+                    }
+
+                    $rawOffset += count($rows);
+                    $scannedRows += count($rows);
+                }
+
+                // The exact permission-filtered total (cached briefly per element+user in core,
+                // see Model\Element\Service::getRequiredByVisibleTotalCount()) so the page count
+                // is accurate from the very first request, not just once paging reaches the end.
+                $total = Model\Element\Service::getRequiredByVisibleTotalCount($dependencies);
+
+                return $this->adminJson([
+                    'requiredBy' => $page,
+                    'hasHidden' => $hasHidden,
+                    'start' => $offset,
+                    'limit' => $limit,
+                    'total' => $total,
+                ]);
             }
         }
 
