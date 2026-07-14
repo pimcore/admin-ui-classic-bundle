@@ -295,16 +295,18 @@ pimcore.treenodelocator = function()
                     }
                 }
 
+                var pagingBounds = self.calculatePagingBounds(offset, limit, total);
+
                 pagingState = {
                     node: node,
                     childNodeId: childNodeId,
                     total: total,
                     limit: limit,
                     offset: offset,
-                    activePage: (offset / limit) + 1,
-                    pageCount: Math.ceil(total / limit),
-                    minPage: 1,
-                    maxPage: Math.ceil(total / limit),
+                    activePage: pagingBounds.activePage,
+                    pageCount: pagingBounds.pageCount,
+                    minPage: pagingBounds.minPage,
+                    maxPage: pagingBounds.maxPage,
                     sortBy: sortBy,
                     elementKey: elementKey,
                     elementType: elementType
@@ -525,6 +527,21 @@ pimcore.treenodelocator = function()
                 pimcore.helpers.removeTreeNodeLoadingIndicator(loadingIndicators[i].type, loadingIndicators[i].id);
             }
             loadingIndicators = [];
+        },
+
+
+        /**
+         * Pure page-bounds calculation for the paging binary search. Kept
+         * side-effect-free and exposed publicly so it can be exercised
+         * directly by tests without needing the full Ext/pimcore environment.
+         */
+        calculatePagingBounds: function (offset, limit, total) {
+            return {
+                activePage: (offset / limit) + 1,
+                pageCount: Math.ceil(total / limit),
+                minPage: 1,
+                maxPage: Math.ceil(total / limit)
+            };
         }
 
     };
@@ -534,9 +551,14 @@ pimcore.treenodelocator = function()
      * Expose public functions
      */
     return {
-        showInTree: self.showInTree
+        showInTree: self.showInTree,
+        calculatePagingBounds: self.calculatePagingBounds
     };
 
 }();
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = pimcore.treenodelocator;
+}
 
 
