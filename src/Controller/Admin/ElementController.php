@@ -700,6 +700,66 @@ class ElementController extends AdminAbstractController
         ];
     }
 
+    /**
+     * Chunk-scans a raw, permission-unaware dependency fetch (live SQL LIMIT/OFFSET, via
+     * $fetchChunk(rawOffset, chunkSize)), skipping hidden rows, to fill one page in
+     * visible-item space. $offset/$limit are visible-space indices - what the frontend sends.
+     *
+     * The scan budget scales with $offset so that legitimately paging forward always has
+     * enough headroom to make progress, rather than hitting a flat cap that becomes an
+     * unreachable wall for deep pages; each chunk request is itself bounded by the remaining
+     * budget so a single oversized $limit (e.g. the grid's "show all" option) can't blow past
+     * the cap before it's accounted for.
+     *
+     * @return array{items: array, hasHidden: bool, total: int}
+     */
+    private function scanDependencyPage(callable $fetchChunk, int $offset, int $limit): array
+    {
+        $visibleSeen = 0;
+        $hasHidden = false;
+        $page = [];
+        $rawOffset = 0;
+        $scannedRows = 0;
+        $scanBudget = $offset + $limit + self::REQUIRED_BY_SCAN_CAP;
+        $reachedEnd = false;
+
+        while (count($page) < $limit && $scannedRows < $scanBudget) {
+            $chunkSize = min(max($limit, self::REQUIRED_BY_SCAN_CHUNK), $scanBudget - $scannedRows);
+            $rows = $fetchChunk($rawOffset, $chunkSize);
+            if (empty($rows)) {
+                $reachedEnd = true;
+
+                break;
+            }
+
+            foreach ($rows as $row) {
+                $el = $this->resolveDependencyElement($row);
+                if (!$el instanceof Element\ElementInterface) {
+                    continue;
+                }
+                if (!$el->isAllowed('list')) {
+                    $hasHidden = true;
+
+                    continue;
+                }
+                if ($visibleSeen >= $offset && count($page) < $limit) {
+                    $page[] = $this->dependencyToFrontendArray($el);
+                }
+                $visibleSeen++;
+            }
+
+            $rawOffset += count($rows);
+            $scannedRows += count($rows);
+        }
+
+        // If the scan actually reached the end of the (filtered) raw set, the total is exact.
+        // Otherwise the budget was hit first - report enough headroom for at least one more
+        // page rather than a truncated, too-small total that would strand navigation.
+        $total = $reachedEnd ? ($offset + count($page)) : ($offset + $limit + self::REQUIRED_BY_SCAN_CHUNK);
+
+        return ['items' => $page, 'hasHidden' => $hasHidden, 'total' => $total];
+    }
+
     #[Route('/element/get-requires-dependencies', name: 'pimcore_admin_element_getrequiresdependencies', methods: ['GET'])]
     public function getRequiresDependenciesAction(Request $request): JsonResponse
     {
@@ -710,7 +770,6 @@ class ElementController extends AdminAbstractController
         $limit = (int) $request->get('limit', 25);
         $filterRequires = $request->get('filter');
         $value = null;
-        $elements = null;
 
         if ($id && in_array($type, $allowedTypes)) {
             $element = Model\Element\Service::getElementById($type, $id);
@@ -720,30 +779,28 @@ class ElementController extends AdminAbstractController
                 $filters = $this->decodeJson($filterRequires);
 
                 foreach ($filters as $filter) {
-
                     if ($filter['type'] == 'string') {
                         $value = ($filter['value']??'');
                     }
-
-                    $elements = $element->getDependencies()->getFilterRequiresByPath($offset, $limit, $value);
-
                 }
 
-                $result = [
+                // getFilterRequiresByPath() is a live, permission-unaware SQL LIMIT/OFFSET
+                // query - same class of issue as the unfiltered "Required By" listing below,
+                // so it needs the same permission-aware chunk scan rather than filtering just
+                // the one raw page that happens to land on $offset/$limit.
+                $scan = $this->scanDependencyPage(
+                    fn (int $rawOffset, int $chunkSize) => $dependencies->getFilterRequiresByPath($rawOffset, $chunkSize, $value),
+                    $offset,
+                    $limit
+                );
+
+                return $this->adminJson([
+                    'requires' => $scan['items'],
+                    'hasHidden' => $scan['hasHidden'],
                     'start' => $offset,
                     'limit' => $limit,
-                    'requires' => [],  // Initialize 'requires' as an empty array
-                ];
-
-                if (count($elements) > 0) {
-                    $result = Model\Element\Service::getFilterRequiresForFrontend($elements);
-                    $result['total'] = count($result['requires']);
-
-                    return $this->adminJson($result);
-                } else {
-                    return $this->adminJson($elements);
-                }
-
+                    'total' => $scan['total'],
+                ]);
             }
 
             if ($element instanceof Model\Element\ElementInterface) {
@@ -788,7 +845,6 @@ class ElementController extends AdminAbstractController
         $limit = (int) $request->get('limit', 25);
         $filterRequiredBy = $request->get('filter');
         $value = null;
-        $elements = null;
 
         if ($id && in_array($type, $allowedTypes)) {
             $element = Model\Element\Service::getElementById($type, $id);
@@ -798,30 +854,28 @@ class ElementController extends AdminAbstractController
                 $filters = $this->decodeJson($filterRequiredBy);
 
                 foreach ($filters as $filter) {
-
                     if ($filter['type'] == 'string') {
                         $value = ($filter['value']??'');
                     }
-
-                    $elements = $element->getDependencies()->getFilterRequiredByPath($offset, $limit, $value);
-
                 }
 
-                $result = [
+                // getFilterRequiredByPath() is a live, permission-unaware SQL LIMIT/OFFSET
+                // query, same as the unfiltered listing below, so it needs the same
+                // permission-aware chunk scan rather than filtering just the one raw page that
+                // happens to land on $offset/$limit.
+                $scan = $this->scanDependencyPage(
+                    fn (int $rawOffset, int $chunkSize) => $dependencies->getFilterRequiredByPath($rawOffset, $chunkSize, $value),
+                    $offset,
+                    $limit
+                );
+
+                return $this->adminJson([
+                    'requiredBy' => $scan['items'],
+                    'hasHidden' => $scan['hasHidden'],
                     'start' => $offset,
                     'limit' => $limit,
-                    'requiredBy' => [], // Initialize 'requiredBy' as an empty array
-                ];
-
-                if (count($elements) > 0) {
-                    $result = Model\Element\Service::getFilterRequiredByPathForFrontend($elements);
-                    $result['total'] = count($result['requiredBy']);
-
-                    return $this->adminJson($result);
-                } else {
-                    return $this->adminJson($elements);
-                }
-
+                    'total' => $scan['total'],
+                ]);
             }
 
             if ($element instanceof Model\Element\ElementInterface) {
@@ -833,48 +887,21 @@ class ElementController extends AdminAbstractController
                 // frontend sends), so every request re-derives the raw->visible mapping from
                 // raw offset 0 rather than resuming from the raw offset it was given - that is
                 // what keeps this correct across independent page requests.
-                $rawTotal = $dependencies->getRequiredByTotalCount();
+                $scan = $this->scanDependencyPage(
+                    fn (int $rawOffset, int $chunkSize) => $dependencies->getRequiredBy($rawOffset, $chunkSize),
+                    $offset,
+                    $limit
+                );
 
-                $visibleSeen = 0;
-                $hasHidden = false;
-                $page = [];
-                $rawOffset = 0;
-                $scannedRows = 0;
-
-                while (count($page) < $limit && $rawOffset < $rawTotal && $scannedRows < self::REQUIRED_BY_SCAN_CAP) {
-                    $chunkSize = max($limit, self::REQUIRED_BY_SCAN_CHUNK);
-                    $rows = $dependencies->getRequiredBy($rawOffset, $chunkSize);
-                    if (empty($rows)) {
-                        break;
-                    }
-
-                    foreach ($rows as $row) {
-                        $el = $this->resolveDependencyElement($row);
-                        if (!$el instanceof Element\ElementInterface) {
-                            continue;
-                        }
-                        if (!$el->isAllowed('list')) {
-                            $hasHidden = true;
-
-                            continue;
-                        }
-                        if ($visibleSeen >= $offset && count($page) < $limit) {
-                            $page[] = $this->dependencyToFrontendArray($el);
-                        }
-                        $visibleSeen++;
-                    }
-
-                    $rawOffset += count($rows);
-                    $scannedRows += count($rows);
-                }
-
-                // The exact permission-filtered total (cached briefly per element+user in core,
-                // see Model\Element\Service::getRequiredByVisibleTotalCount()) so the page count
-                // is accurate from the very first request, not just once paging reaches the end.
+                // Authoritative, briefly-cached permission-filtered total and hidden-dependency
+                // flag (see Model\Element\Service::getRequiredByVisibleTotalCount()/
+                // getRequiredByHasHiddenDependencies()) so both are accurate and stable on
+                // every page, not just an artifact of what this one page's scan happened to see.
                 $total = Model\Element\Service::getRequiredByVisibleTotalCount($dependencies);
+                $hasHidden = Model\Element\Service::getRequiredByHasHiddenDependencies($dependencies);
 
                 return $this->adminJson([
-                    'requiredBy' => $page,
+                    'requiredBy' => $scan['items'],
                     'hasHidden' => $hasHidden,
                     'start' => $offset,
                     'limit' => $limit,
