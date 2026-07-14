@@ -301,7 +301,7 @@ pimcore.treenodelocator = function()
                     total: total,
                     limit: limit,
                     offset: offset,
-                    activePage: (offset / total) + 1,
+                    activePage: (offset / limit) + 1,
                     pageCount: Math.ceil(total / limit),
                     minPage: 1,
                     maxPage: Math.ceil(total / limit),
