@@ -479,6 +479,10 @@ pimcore.element.helpers.gridColumnConfig = {
 
                 if (typeof editor.loadObjectData === 'function' && editor.visibleFields) {
                     // manyToManyObjectRelation: loadObjectData adds to store AND fetches field metadata
+                    // getLayoutEdit() (combo mode) reads selected ids from editor.data, not the store,
+                    // so it needs to be kept in sync before the layout is built.
+                    editor.data = parsedItems;
+
                     parsedItems.forEach(function(item) {
                         editor.loadObjectData(item, editor.visibleFields);
                     });
@@ -496,8 +500,11 @@ pimcore.element.helpers.gridColumnConfig = {
                             }
                         });
                     });
-                } else if (editor.store) {
-                    // manyToManyRelation / advancedManyToManyRelation: load into store, resolve fullpath
+                } else if (editor.store && editor.type !== 'manyToOneRelation') {
+                    // manyToManyRelation / advancedManyToManyRelation: load into store, resolve path.
+                    // advancedManyToManyRelation displays "path", not "fullpath" - use the editor's
+                    // declared pathProperty so both variants are populated correctly.
+                    var pathProperty = editor.pathProperty || 'fullpath';
                     editor.store.loadData(parsedItems, false);
                     editor.store.each(function(rec) {
                         Ext.Ajax.request({
@@ -506,7 +513,7 @@ pimcore.element.helpers.gridColumnConfig = {
                             success: function(response) {
                                 var rdata = Ext.decode(response.responseText);
                                 if (rdata.success) {
-                                    rec.set('fullpath', rdata.fullpath, { dirty: false });
+                                    rec.set(pathProperty, rdata.fullpath, { dirty: false });
                                 }
                             }
                         });
