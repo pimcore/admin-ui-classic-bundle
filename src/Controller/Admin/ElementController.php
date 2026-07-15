@@ -707,13 +707,23 @@ class ElementController extends AdminAbstractController
      *
      * How many raw rows need scanning to reach $offset visible ones depends entirely on how
      * many hidden rows happen to precede them in the data - not on $offset itself - so no
-     * fixed, offset-derived budget can *guarantee* every page is reachable without either
-     * scanning without bound (unbounded per-request cost) or filtering permissions inside the
-     * query (a much larger change - ACL checks aren't expressible in SQL here). This is a
-     * deliberate, bounded trade-off: each page number gets its own full scan cap, so the budget
-     * grows quickly enough that even a large hidden run is typically crossed within the first
-     * couple of page requests, rather than only after many (a flat cap shared across all pages
-     * would need roughly hiddenRunLength/$limit requests to cross the same run).
+     * fixed budget can *guarantee* every page is reachable without either scanning without
+     * bound (unbounded per-request cost) or filtering permissions inside the query (a much
+     * larger change - ACL checks aren't expressible in SQL here). This is a deliberate, bounded
+     * trade-off: a run of hidden rows longer than the cap can require paging forward several
+     * times before visible content past it becomes reachable.
+     *
+     * The budget MUST grow in lockstep with $offset (by exactly $limit per page, i.e.
+     * `offset + limit + cap`) rather than any faster/independent function of the page number.
+     * Every page's scan restarts at raw offset 0 and skips the first $offset visible rows it
+     * finds, trusting that an earlier page with a smaller budget would have already returned
+     * them if they were reachable. If a later page's budget could outgrow $offset's own pace
+     * (e.g. scaling by page number instead), that page's larger budget can reach visible rows
+     * an earlier page's smaller budget never got to - but its own offset-based skip then
+     * discards them as "already shown by that earlier page", when nothing ever actually
+     * returned them. That permanently orphans those rows: they're skipped by every later page
+     * too, since each one skips exactly $offset of whatever it finds, not what previous pages
+     * actually returned. Keeping budget and offset in the same units avoids this.
      *
      * @return array{items: array, hasHidden: bool, total: int}
      */
@@ -724,8 +734,7 @@ class ElementController extends AdminAbstractController
         $page = [];
         $rawOffset = 0;
         $scannedRows = 0;
-        $pageNumber = intdiv($offset, max($limit, 1)) + 1;
-        $scanBudget = $pageNumber * self::REQUIRED_BY_SCAN_CAP;
+        $scanBudget = $offset + $limit + self::REQUIRED_BY_SCAN_CAP;
         $reachedEnd = false;
 
         while (count($page) < $limit && $scannedRows < $scanBudget) {
