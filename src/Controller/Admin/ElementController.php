@@ -705,41 +705,38 @@ class ElementController extends AdminAbstractController
      * $fetchChunk(rawOffset, chunkSize)), skipping hidden rows, to fill one page in
      * visible-item space. $offset/$limit are visible-space indices - what the frontend sends.
      *
-     * How many raw rows need scanning to reach $offset visible ones depends entirely on how
-     * many hidden rows happen to precede them in the data - not on $offset itself - so no
-     * fixed budget can *guarantee* every page is reachable without either scanning without
-     * bound (unbounded per-request cost) or filtering permissions inside the query (a much
-     * larger change - ACL checks aren't expressible in SQL here). This is a deliberate, bounded
-     * trade-off: a run of hidden rows longer than the cap can require paging forward several
-     * times before visible content past it becomes reachable.
+     * Two earlier designs tried to bound total *raw rows scanned* with a single counter scaled
+     * off $offset (or page number) - both let a hidden-row run near the cap boundary silently
+     * and permanently drop a handful of real visible rows, because whether a scan can get past
+     * a given hidden run ended up depending on which page was asking, so a later page's skip
+     * logic could discard rows an earlier page's smaller budget never actually returned.
      *
-     * The budget MUST grow in lockstep with $offset (by exactly $limit per page, i.e.
-     * `offset + limit + cap`) rather than any faster/independent function of the page number.
-     * Every page's scan restarts at raw offset 0 and skips the first $offset visible rows it
-     * finds, trusting that an earlier page with a smaller budget would have already returned
-     * them if they were reachable. If a later page's budget could outgrow $offset's own pace
-     * (e.g. scaling by page number instead), that page's larger budget can reach visible rows
-     * an earlier page's smaller budget never got to - but its own offset-based skip then
-     * discards them as "already shown by that earlier page", when nothing ever actually
-     * returned them. That permanently orphans those rows: they're skipped by every later page
-     * too, since each one skips exactly $offset of whatever it finds, not what previous pages
-     * actually returned. Keeping budget and offset in the same units avoids this.
+     * This tracks hidden rows and visible rows as two INDEPENDENT counters instead:
+     * $hiddenSeen is capped at a fixed constant that does not depend on $offset/$limit at all,
+     * so whether a given hidden run can be crossed is the same answer for every page. Either
+     * every page gets past it (and the normal offset-based skip/collect logic below is safe,
+     * since all of them then see the same visible rows in the same order), or none do (every
+     * page consistently stops at the same point with an empty result) - there's no longer a
+     * page-dependent partial state that strands specific rows between two pages' worth of work.
+     *
+     * A hidden run longer than the cap is still not scannable - that's an inherent limit of
+     * bounded, stateless, non-SQL-filtered pagination - but it now fails the same way for every
+     * page instead of silently losing a few rows right at the boundary.
      *
      * @return array{items: array, hasHidden: bool, total: int}
      */
     private function scanDependencyPage(callable $fetchChunk, int $offset, int $limit): array
     {
         $visibleSeen = 0;
+        $hiddenSeen = 0;
         $hasHidden = false;
         $page = [];
         $rawOffset = 0;
-        $scannedRows = 0;
-        $scanBudget = $offset + $limit + self::REQUIRED_BY_SCAN_CAP;
+        $visibleTarget = $offset + $limit;
         $reachedEnd = false;
 
-        while (count($page) < $limit && $scannedRows < $scanBudget) {
-            $chunkSize = min(max($limit, self::REQUIRED_BY_SCAN_CHUNK), $scanBudget - $scannedRows);
-            $rows = $fetchChunk($rawOffset, $chunkSize);
+        while (count($page) < $limit && $hiddenSeen < self::REQUIRED_BY_SCAN_CAP) {
+            $rows = $fetchChunk($rawOffset, self::REQUIRED_BY_SCAN_CHUNK);
 
             foreach ($rows as $row) {
                 $el = $this->resolveDependencyElement($row);
@@ -748,6 +745,7 @@ class ElementController extends AdminAbstractController
                 }
                 if (!$el->isAllowed('list')) {
                     $hasHidden = true;
+                    $hiddenSeen++;
 
                     continue;
                 }
@@ -758,24 +756,28 @@ class ElementController extends AdminAbstractController
             }
 
             $rawOffset += count($rows);
-            $scannedRows += count($rows);
 
             // Fewer rows than requested means the underlying (possibly filtered) raw set is
             // exhausted - this must be checked even when the requested page already filled,
             // otherwise a result that exactly fills $limit never reaches this and $reachedEnd
             // stays false even though nothing more exists.
-            if (count($rows) < $chunkSize) {
+            if (count($rows) < self::REQUIRED_BY_SCAN_CHUNK) {
                 $reachedEnd = true;
 
+                break;
+            }
+
+            if ($visibleSeen >= $visibleTarget) {
                 break;
             }
         }
 
         // If the scan actually reached the end of the (filtered) raw set, $visibleSeen is the
         // exact total - not $offset + count($page), which overstates it whenever $offset lands
-        // beyond the last visible row (that would report $offset itself as the total). If the
-        // budget was hit first, report enough headroom for at least one more page rather than a
-        // truncated, too-small total that would strand navigation.
+        // beyond the last visible row (that would report $offset itself as the total). Otherwise
+        // (the page filled, or the hidden-row cap was hit first) report enough headroom for at
+        // least one more page rather than a truncated, too-small total that would strand
+        // navigation.
         $total = $reachedEnd ? $visibleSeen : ($offset + $limit + self::REQUIRED_BY_SCAN_CHUNK);
 
         return ['items' => $page, 'hasHidden' => $hasHidden, 'total' => $total];
