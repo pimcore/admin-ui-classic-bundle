@@ -33,6 +33,15 @@ class UserControllerReset2FaSecretTest extends ModelTestCase
 
     protected function tearDown(): void
     {
+        foreach ([
+            'reset2fa-actor-vs-user', 'reset2fa-target-user',
+            'reset2fa-actor-vs-admin', 'reset2fa-admin-target',
+            'reset2fa-self',
+            'reset2fa-admin-actor', 'reset2fa-other-target',
+        ] as $name) {
+            User::getByName($name)?->delete();
+        }
+
         TestHelper::cleanUp();
         parent::tearDown();
     }
@@ -69,8 +78,8 @@ class UserControllerReset2FaSecretTest extends ModelTestCase
 
     public function testNonAdminCannotResetAnotherUsersSecret(): void
     {
-        $actor = $this->createUser('reset2fa-actor', false);
-        $target = $this->createUser('reset2fa-target', false);
+        $actor = $this->createUser('reset2fa-actor-vs-user', false);
+        $target = $this->createUser('reset2fa-target-user', false);
 
         $controller = $this->buildController($actor);
 
@@ -80,7 +89,7 @@ class UserControllerReset2FaSecretTest extends ModelTestCase
 
     public function testNonAdminCannotResetAnAdminsSecret(): void
     {
-        $actor = $this->createUser('reset2fa-actor', false);
+        $actor = $this->createUser('reset2fa-actor-vs-admin', false);
         $admin = $this->createUser('reset2fa-admin-target', true);
 
         $controller = $this->buildController($actor);
