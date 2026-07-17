@@ -816,6 +816,23 @@ class UserController extends AdminAbstractController implements KernelController
         if (!$user) {
             throw $this->createNotFoundException();
         }
+
+        $adminUser = $this->getAdminUser();
+
+        if (!$adminUser->isAdmin()) {
+            if ($user->isAdmin()) {
+                throw $this->createAccessDeniedHttpException(
+                    'Only admin users are allowed to reset 2FA for admin users'
+                );
+            }
+
+            if ($adminUser->getId() !== $user->getId()) {
+                throw $this->createAccessDeniedHttpException(
+                    'Only admin users are allowed to reset 2FA for users other than themselves'
+                );
+            }
+        }
+
         $user->setTwoFactorAuthentication('enabled', false);
         $user->setTwoFactorAuthentication('secret', '');
         $user->save();
