@@ -841,7 +841,7 @@ pimcore.helpers.itemselector = function (multiselect, callback, restrictions, co
 
 pimcore.helpers.hasSearchImplementation = function () {
     return pimcore.globalmanager.get('searchImplementationRegistry').hasImplementation();
-}
+};
 
 pimcore.helpers.getObjectRelationInlineSearchRoute = function () {
     if(pimcore.helpers.hasSearchImplementation()) {
@@ -849,7 +849,7 @@ pimcore.helpers.getObjectRelationInlineSearchRoute = function () {
     }
 
     return null;
-}
+};
 
 pimcore.helpers.getObjectRelationInlineSearchRouteMethod = function () {
     if(pimcore.helpers.hasSearchImplementation()) {
