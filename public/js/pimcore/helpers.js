@@ -857,7 +857,7 @@ pimcore.helpers.getObjectRelationInlineSearchRouteMethod = function () {
     }
 
     return null;
-}
+};
 
 pimcore.helpers.activateMaintenance = function () {
 
