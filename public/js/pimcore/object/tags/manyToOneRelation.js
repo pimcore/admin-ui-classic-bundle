@@ -56,6 +56,9 @@ pimcore.object.tags.manyToOneRelation = Class.create(pimcore.object.tags.abstrac
             storeConfig.proxy = {
                 type: 'ajax',
                 url: pimcore.helpers.getObjectRelationInlineSearchRoute(),
+                actionMethods: {
+                    read: pimcore.helpers.getObjectRelationInlineSearchRouteMethod()
+                },
                 extraParams: {
                     fieldConfig: JSON.stringify(this.fieldConfig),
                     data: JSON.stringify(
