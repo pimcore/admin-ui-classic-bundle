@@ -139,18 +139,14 @@ pimcore.element.dependencies = Class.create({
         this.requiresGrid.on("rowclick", this.click.bind(this));
         this.requiresGrid.on("rowcontextmenu", this.onRowContextmenu.bind(this));
 
-        this.requiresStore.load({
-            callback : function(records, operation, success) {
-                if (success) {
-                    var response = operation.getResponse();
-                    this.requiresData = response.responseJson;
-
-                    if (this.requiresData.hasHidden) {
-                        this.requiresNote.show();
-                    }
-                }
-            }.bind(this)
-        });
+        this.requiresStore.on('load', function(store, records, success, operation) {
+            if (success) {
+                var response = operation.getResponse();
+                this.requiresData = response.responseJson;
+                this.requiresNote.setVisible(!!this.requiresData.hasHidden);
+            }
+        }.bind(this));
+        this.requiresStore.load();
 
         this.requiresNote = new Ext.Panel({
             html:t('hidden_dependencies'),
@@ -249,18 +245,14 @@ pimcore.element.dependencies = Class.create({
         this.requiredByGrid.on("rowclick", this.click.bind(this));
         this.requiredByGrid.on("rowcontextmenu", this.onRowContextmenu.bind(this));
 
-        this.requiredByStore.load({
-            callback : function(records, operation, success) {
-                if (success) {
-                    var response = operation.getResponse();
-                    this.requiredByData = response.responseJson;
-
-                    if (this.requiredByData.hasHidden) {
-                        this.requiredByNote.show();
-                    }
-                }
-            }.bind(this)
-        });
+        this.requiredByStore.on('load', function(store, records, success, operation) {
+            if (success) {
+                var response = operation.getResponse();
+                this.requiredByData = response.responseJson;
+                this.requiredByNote.setVisible(!!this.requiredByData.hasHidden);
+            }
+        }.bind(this));
+        this.requiredByStore.load();
 
         this.requiredByNote = new Ext.Panel({
             html:t('hidden_dependencies'),

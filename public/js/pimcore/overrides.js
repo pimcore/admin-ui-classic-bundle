@@ -931,6 +931,77 @@ Ext.override(Ext.picker.Date, {
     }
 });
 
+//Fix - Ext.toolbar.Paging disables all navigation (and resets the page indicator) once a page
+//returns 0 rows, even when store.getTotalCount() indicates more pages exist (e.g. a page that
+//came back empty because every row on it was filtered out by permission checks). This is a
+//full copy of the stock onLoad() (see ext-all-debug.js, Ext.define('Ext.toolbar.Paging', ...))
+//with a single change: "isEmpty" is based on the store's total record count, not how many rows
+//this particular page happened to return, so the rest of the method's normal state handling
+//(refresh button, page input, "change" event) runs exactly as it would for any other page.
+Ext.override(Ext.toolbar.Paging, {
+    onLoad: function () {
+        var me = this,
+            pageData, currPage, pageCount, afterText, count, isEmpty, item;
+
+        count = me.store.getCount();
+        isEmpty = count === 0 && me.store.getTotalCount() === 0;
+
+        if (!isEmpty) {
+            pageData = me.getPageData();
+            currPage = pageData.currentPage;
+            pageCount = pageData.pageCount;
+
+            // Check for invalid current page.
+            if (currPage > pageCount) {
+                // If the current page is beyond the loaded end,
+                // jump back to the loaded end if there is a valid page count.
+                if (pageCount > 0) {
+                    me.store.loadPage(pageCount);
+                }
+                // If no pages, reset the page field.
+                else {
+                    me.getInputItem().reset();
+                }
+
+                return;
+            }
+
+            afterText = Ext.String.format(me.afterPageText, isNaN(pageCount) ? 1 : pageCount);
+        } else {
+            currPage = 0;
+            pageCount = 0;
+            afterText = Ext.String.format(me.afterPageText, 0);
+        }
+
+        Ext.suspendLayouts();
+        item = me.child('#afterTextItem');
+
+        if (item) {
+            item.update(afterText);
+        }
+
+        item = me.getInputItem();
+
+        if (item) {
+            item.setDisabled(isEmpty).setValue(currPage);
+        }
+
+        me.setChildDisabled('#first', currPage === 1 || isEmpty);
+        me.setChildDisabled('#prev', currPage === 1 || isEmpty);
+        me.setChildDisabled('#next', currPage === pageCount || isEmpty);
+        me.setChildDisabled('#last', currPage === pageCount || isEmpty);
+        me.setChildDisabled('#refresh', false);
+
+        me.updateInfo();
+
+        Ext.resumeLayouts(true);
+
+        if (!me.calledInternal) {
+            me.fireEvent('change', me, pageData || me.emptyPageData);
+        }
+    }
+});
+
 
 /** workaround for [DataObject] Advanced Image Dropzone only works once #9115
  * Issue: on node drop the component gets destroyed. On mouse up it then tries to focus an already destroyed element.
