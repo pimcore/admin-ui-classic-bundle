@@ -477,27 +477,49 @@ pimcore.element.helpers.gridColumnConfig = {
                     }
                 }
 
+                // Combo-mode editors (manyToOneRelation / manyToManyObjectRelation) back their
+                // combo/tag field with a store whose ajax proxy is seeded from editor.data at
+                // construction time - before this filter-restore code has run. Setting editor.data
+                // afterwards doesn't reach that proxy, so the store must be explicitly reloaded with
+                // the real ids/types to get back records with a proper "label".
+                var isComboMode = pimcore.helpers.hasSearchImplementation() && editor.fieldConfig
+                    && editor.fieldConfig.displayMode === 'combo';
+
                 if (typeof editor.loadObjectData === 'function' && editor.visibleFields) {
                     // manyToManyObjectRelation: loadObjectData adds to store AND fetches field metadata
-                    parsedItems.forEach(function(item) {
-                        editor.loadObjectData(item, editor.visibleFields);
-                    });
+                    // getLayoutEdit() (combo mode) reads selected ids from editor.data, not the store,
+                    // so it needs to be kept in sync before the layout is built.
+                    editor.data = parsedItems;
 
-                    // loadObjectData skips fullpath — resolve it separately
-                    editor.store.each(function(rec) {
-                        Ext.Ajax.request({
-                            url: Routing.generate('pimcore_admin_element_typepath'),
-                            params: { id: rec.get('id'), type: 'object' },
-                            success: function(response) {
-                                var rdata = Ext.decode(response.responseText);
-                                if (rdata.success) {
-                                    rec.set('fullpath', rdata.fullpath, { dirty: false });
-                                }
-                            }
+                    if (isComboMode) {
+                        editor.store.getProxy().setExtraParam('data', JSON.stringify(parsedItems.map(function(item) {
+                            return { id: item.id, type: item.type || 'object' };
+                        })));
+                        editor.store.load();
+                    } else {
+                        parsedItems.forEach(function(item) {
+                            editor.loadObjectData(item, editor.visibleFields);
                         });
-                    });
-                } else if (editor.store) {
-                    // manyToManyRelation / advancedManyToManyRelation: load into store, resolve fullpath
+
+                        // loadObjectData skips fullpath — resolve it separately
+                        editor.store.each(function(rec) {
+                            Ext.Ajax.request({
+                                url: Routing.generate('pimcore_admin_element_typepath'),
+                                params: { id: rec.get('id'), type: 'object' },
+                                success: function(response) {
+                                    var rdata = Ext.decode(response.responseText);
+                                    if (rdata.success) {
+                                        rec.set('fullpath', rdata.fullpath, { dirty: false });
+                                    }
+                                }
+                            });
+                        });
+                    }
+                } else if (editor.store && editor.type !== 'manyToOneRelation') {
+                    // manyToManyRelation / advancedManyToManyRelation: load into store, resolve path.
+                    // advancedManyToManyRelation displays "path", not "fullpath" - use the editor's
+                    // declared pathProperty so both variants are populated correctly.
+                    var pathProperty = editor.pathProperty || 'fullpath';
                     editor.store.loadData(parsedItems, false);
                     editor.store.each(function(rec) {
                         Ext.Ajax.request({
@@ -506,7 +528,7 @@ pimcore.element.helpers.gridColumnConfig = {
                             success: function(response) {
                                 var rdata = Ext.decode(response.responseText);
                                 if (rdata.success) {
-                                    rec.set('fullpath', rdata.fullpath, { dirty: false });
+                                    rec.set(pathProperty, rdata.fullpath, { dirty: false });
                                 }
                             }
                         });
@@ -517,19 +539,35 @@ pimcore.element.helpers.gridColumnConfig = {
 
                     if (item) {
                         editor.data = { id: item.id, type: item.type || 'object', path: '' };
-                        Ext.Ajax.request({
-                            url: Routing.generate('pimcore_admin_element_typepath'),
-                            params: { id: item.id, type: item.type || 'object' },
-                            success: function(response) {
-                                var rdata = Ext.decode(response.responseText);
-                                if (rdata.success) {
-                                    editor.data.path = rdata.fullpath;
+
+                        if (isComboMode) {
+                            // combo: valueField is "id" with forceSelection - setting a fullpath
+                            // string here would be rejected/cleared, so keep the value as the id.
+                            editor.store.getProxy().setExtraParam('data', JSON.stringify([
+                                { id: item.id, type: item.type || 'object' }
+                            ]));
+                            editor.store.load({
+                                callback: function() {
                                     if (editor.component) {
-                                        editor.component.setValue(rdata.fullpath);
+                                        editor.component.setValue(item.id);
                                     }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            Ext.Ajax.request({
+                                url: Routing.generate('pimcore_admin_element_typepath'),
+                                params: { id: item.id, type: item.type || 'object' },
+                                success: function(response) {
+                                    var rdata = Ext.decode(response.responseText);
+                                    if (rdata.success) {
+                                        editor.data.path = rdata.fullpath;
+                                        if (editor.component) {
+                                            editor.component.setValue(rdata.fullpath);
+                                        }
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
 
