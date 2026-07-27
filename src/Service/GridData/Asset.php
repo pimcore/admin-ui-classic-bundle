@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Pimcore\Bundle\AdminBundle\Service\GridData;
 
+use Pimcore\Bundle\AdminBundle\Service\ElementService;
 use Pimcore\Model;
 use Pimcore\Model\Asset\MetaData\ClassDefinition\Data\Data;
 use Pimcore\Model\Element\Service;
@@ -48,7 +49,7 @@ class Asset extends Element
                 $fieldDef = explode('~', $field);
                 if (isset($fieldDef[1]) && $fieldDef[1] === 'system') {
                     if ($fieldDef[0] === 'preview') {
-                        $data[$field] = self::getPreviewThumbnail($asset, ['treepreview' => true, 'width' => 108, 'height' => 70, 'frame' => true]);
+                        $data[$field] = self::getPreviewThumbnail($asset, ['treepreview' => true, 'origin' => 'folderPreview', 'width' => 108, 'height' => 70, 'frame' => true]);
                     } elseif ($fieldDef[0] === 'size') {
                         $size = $asset->getFileSize();
                         $data[$field] = formatBytes($size);
@@ -90,7 +91,6 @@ class Asset extends Element
     public static function getPreviewThumbnail(Model\Asset $asset, array $params = [], bool $onlyMethod = false): ?string
     {
         $thumbnailMethod = '';
-        $thumbnailUrl = null;
 
         if ($asset instanceof Model\Asset\Image) {
             $thumbnailMethod = 'getThumbnail';
@@ -104,13 +104,9 @@ class Asset extends Element
             return $thumbnailMethod;
         }
 
-        if (!empty($thumbnailMethod)) {
-            $thumbnailUrl = '/admin/asset/get-' . $asset->getType() . '-thumbnail?id=' . $asset->getId();
-            if (count($params) > 0) {
-                $thumbnailUrl .= '&' . http_build_query($params);
-            }
-        }
+        // Delegate to ElementService to keep list view and tile view behavior aligned
+        $elementService = \Pimcore::getContainer()->get(ElementService::class);
 
-        return $thumbnailUrl;
+        return $elementService->getThumbnailUrl($asset, $params);
     }
 }
