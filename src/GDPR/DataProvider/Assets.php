@@ -145,9 +145,16 @@ class Assets extends Elements implements DataProviderInterface
                 $sort = $sortMapping[$sortingSettings['orderKey']];
             }
 
-            $order = $sortingSettings['order'] ?? null;
+            // The sort column originates from the request and DBAL's orderBy()
+            // concatenates it into the SQL without quoting, so only let it through
+            // once it is confirmed to be a real column of the queried table.
+            $sort = $this->getValidSortColumn($db, 'assets', $sort);
 
-            $query->orderBy($sort, $order);
+            if ($sort !== null) {
+                $order = $sortingSettings['order'] ?? null;
+
+                $query->orderBy($sort, $order);
+            }
         }
 
         $query = $query->executeQuery();
