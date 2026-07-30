@@ -147,7 +147,9 @@ class Assets extends Elements implements DataProviderInterface
 
             $order = $sortingSettings['order'] ?? null;
 
-            $query->orderBy($sort, $order);
+            // the sort column is an attacker-controlled identifier and cannot be bound as a
+            // parameter, so it must be quoted to prevent SQL injection via the ORDER BY clause
+            $query->orderBy($db->quoteIdentifier($sort), $order);
         }
 
         $query = $query->executeQuery();
