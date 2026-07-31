@@ -22,11 +22,13 @@ jobs:
             matrix: ${{ steps.set-matrix.outputs.matrix }}
             private_repo: ${{ env.PRIVATE_REPO }}
         steps:
-            - name: Checkout PR head (only for pull_request_target)
+            - name: Checkout base ref (matrix source)
               if: github.event_name == 'pull_request_target'
               uses: "actions/checkout@v4"
               with:
-                ref: "refs/pull/${{ github.event.pull_request.number }}/merge"
+                # Build the test matrix from the PR base branch's composer.json, not the
+                # PR's -- the matrix must not be attacker-controlled.
+                ref: ${{ github.event.pull_request.base.ref || github.ref }}
 
             - name: Checkout PR head (for push or other events)
               if: github.event_name != 'pull_request_target'
