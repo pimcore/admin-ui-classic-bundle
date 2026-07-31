@@ -22,7 +22,7 @@ jobs:
             matrix: ${{ steps.set-matrix.outputs.matrix }}
             private_repo: ${{ env.PRIVATE_REPO }}
         steps:
-            - name: Checkout PR head (only for pull_request_target)
+            - name: Checkout base ref (matrix source)
               if: github.event_name == 'pull_request_target'
               uses: "actions/checkout@v4"
               with:
